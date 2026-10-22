@@ -18,6 +18,10 @@ const DEFAULT_TIMEOUT := 8.0
 const BLINK_TIME := 2.0
 const BLINK_INTERVAL := 0.1
 const PICKUP_RADIUS := 36.0
+## Ammo granted when a placed sub-item pickup is collected for the first time. The plan says pitch pot
+## ammo "starts 0" (GameState.acquire_item still grants none); the pickup in the world gives 6 so
+## the first cracked wall can be opened without farming drops (WP7 decision).
+const ITEM_FOUND_AMMO := {&"pitch_pot": 6}
 const KINDS: Array[StringName] = [
 	&"ember", &"brass_bit", &"brass_coin", &"pitch_pot_bundle", &"key", &"wick_core", &"item"
 ]
@@ -143,7 +147,10 @@ func _apply_effect(_collector: Node) -> void:
 			GameState.add_max_heart(1)
 		&"item":
 			if item_id != &"":
+				var first_time := not GameState.has_item(item_id)
 				GameState.acquire_item(item_id)
+				if first_time and ITEM_FOUND_AMMO.has(item_id):
+					GameState.add_pitch_pots(int(ITEM_FOUND_AMMO[item_id]))
 
 
 func _physics_process(delta: float) -> void:

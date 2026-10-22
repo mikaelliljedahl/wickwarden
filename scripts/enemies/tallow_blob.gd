@@ -54,22 +54,18 @@ func _start_pause() -> void:
 	_step_dir = Vector2.ZERO
 
 
-## Splits into two tallow drops. Nodes are added with call_deferred because death can happen
-## inside a physics callback; the drops are positioned in the parent's space before they are added.
+## Splits into two tallow drops. They are adopted deferred (EnemyBase.adopt_deferred) because death
+## can happen inside a physics callback.
 func _on_death() -> void:
-	var parent := get_parent()
 	var drop_scene := load(DROP_SCENE_PATH) as PackedScene
-	if parent == null or drop_scene == null:
+	if get_parent() == null or drop_scene == null:
 		return
 	for side: float in [-1.0, 1.0]:
 		var drop := drop_scene.instantiate() as EnemyBase
 		if drop == null:
 			continue
-		drop.room_rect = room_rect
 		var at := _inside_room(global_position + Vector2(SPLIT_OFFSET * side, 0.0), drop.body_radius)
-		var parent_2d := parent as Node2D
-		drop.position = parent_2d.to_local(at) if parent_2d != null else at
-		parent.call_deferred(&"add_child", drop)
+		adopt_deferred(drop, at)
 
 
 ## Keeps a drop's spawn point inside the room, so a split next to a wall stays in the room.

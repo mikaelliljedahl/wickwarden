@@ -28,6 +28,7 @@ func run() -> void:
 	await _drop_table()
 	await _confinement()
 	await _contact_damage()
+	await _adopt()
 	await _projectile()
 	await _fire_projectile()
 
@@ -263,4 +264,28 @@ func _projectile() -> void:
 	check_eq(GameState.health, 5, "a projectile hit deals 1 half-heart")
 	check_eq(hit_reasons, [&"hit"] as Array[StringName], "the projectile is destroyed by hitting")
 	check(player.is_invulnerable() or GameState.health == 5, "player is hurt by it")
+	await dispose(arena)
+
+
+func _adopt() -> void:
+	reset_state()
+	var arena := make_arena()
+	arena.position = Vector2(100, 50)
+	var parent := make_dummy(arena, Vector2(500, 500))
+	parent.room_rect = Rect2(0, 0, 2000, 2000)
+	var now := EnemyBase.new()
+	now.drops_enabled = false
+	parent.adopt(now, Vector2(600, 500))
+	check(now.is_inside_tree(), "adopt adds the child at once")
+	check_near(now.global_position.x, 600.0, 0.5, "adopt places the child at the global position")
+	check_eq(now.room_rect, parent.room_rect, "adopt shares the room rect")
+	var later := EnemyBase.new()
+	later.drops_enabled = false
+	parent.adopt_deferred(later, Vector2(700, 500))
+	check(not later.is_inside_tree(), "adopt_deferred waits until the end of the frame")
+	await frames(2)
+	check(later.is_inside_tree(), "the deferred child is in the tree afterwards")
+	check_near(later.global_position.x, 700.0, 0.5, "the deferred child is at the global position")
+	check_near(later.global_position.y, 500.0, 0.5, "also on the other axis (arena offset)")
+	check_eq(later.room_rect, parent.room_rect, "the deferred child shares the room rect")
 	await dispose(arena)

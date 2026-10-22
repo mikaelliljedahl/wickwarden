@@ -212,11 +212,27 @@ func direction_to_player() -> Vector2:
 	return (p.global_position - global_position).normalized()
 
 
-## Adds `child` (an EnemyBase you built) next to this enemy at `at`, sharing the room rect.
+## Adds `child` (an EnemyBase you built) next to this enemy at `at`, sharing the room rect. The child
+## enters the tree immediately, so do NOT call this from a physics callback (area/body signals, a
+## hit handler): use adopt_deferred() there.
 func adopt(child: EnemyBase, at: Vector2) -> EnemyBase:
 	child.room_rect = room_rect
 	get_parent().add_child(child)
 	child.global_position = at
+	return child
+
+
+## Same as adopt(), but the child enters the tree at the end of the frame (call_deferred), which is
+## safe inside physics callbacks and `_on_death()`. The child's position is set before it is added;
+## it is not in the tree yet when this returns. Returns `child`.
+func adopt_deferred(child: EnemyBase, at: Vector2) -> EnemyBase:
+	var parent := get_parent()
+	if parent == null:
+		return child
+	child.room_rect = room_rect
+	var parent_2d := parent as Node2D
+	child.position = parent_2d.to_local(at) if parent_2d != null else at
+	parent.call_deferred(&"add_child", child)
 	return child
 
 
