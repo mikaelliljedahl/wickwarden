@@ -20,6 +20,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
+	add_to_group(&"hurtboxes")
 	setup(team)
 
 

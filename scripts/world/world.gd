@@ -35,6 +35,11 @@ const DARK_COLOR := Color(0.06, 0.06, 0.12)
 const PLAYER_SCENE := "res://scenes/player/player.tscn"
 const HUD_SCENE := "res://scenes/ui/hud.tscn"
 const PAUSE_SCENE := "res://scenes/ui/pause_menu.tscn"
+## Launch argument (`godot --path . -- --dev-mode`, `make dev`): all sub-items, 10 pitch pots, 5 keys
+## and F1 toggles the hitbox / hurtbox overlay. Normal runs never see it.
+const DEV_ARG := "--dev-mode"
+const DEV_KEYS := 5
+const DEV_PITCH_POTS := 10
 
 var player: Player
 var camera: Camera2D
@@ -43,6 +48,8 @@ var rooms: Dictionary = {}  # room id -> Room
 var phase: Phase = Phase.NONE
 var hud: Node
 var fade_rect: ColorRect
+var dev_mode: bool = false
+var debug_overlay: DebugOverlay
 
 var _rooms_node: Node2D
 var _actors: Node2D
@@ -83,10 +90,39 @@ func _ready() -> void:
 	_actors.add_child(player)
 	player.died.connect(_on_player_died)
 	_build_overlay()
+	debug_overlay = DebugOverlay.new()
+	debug_overlay.name = "DebugOverlay"
+	add_child(debug_overlay)
+	if DEV_ARG in OS.get_cmdline_user_args():
+		dev_mode = true
+		apply_dev_loadout()
 	start_at(START_ROOM, START_SPAWN)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not dev_mode or not event is InputEventKey:
+		return
+	var key := event as InputEventKey
+	if key.pressed and not key.echo and key.keycode == KEY_F1:
+		set_debug_draw(not debug_overlay.visible)
+		get_viewport().set_input_as_handled()
+
+
 # ---- Public API ------------------------------------------------------------------------------
+
+
+## Dev loadout: every sub-item, DEV_PITCH_POTS pitch pots, DEV_KEYS keys. Does not set any flags.
+func apply_dev_loadout() -> void:
+	for id in ItemRegistry.ids():
+		GameState.acquire_item(id)
+	GameState.add_pitch_pots(DEV_PITCH_POTS)
+	GameState.add_key(DEV_KEYS - GameState.keys)
+
+
+## Shows or hides the hitbox / hurtbox overlay (F1 in dev mode).
+func set_debug_draw(on: bool) -> void:
+	debug_overlay.visible = on
+	debug_overlay.queue_redraw()
 
 
 func is_transitioning() -> bool:

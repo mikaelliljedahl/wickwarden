@@ -1,10 +1,14 @@
 GODOT ?= godot
 GDTOOLKIT = uv tool run --from gdtoolkit==4.5.0
 
-.PHONY: run import test lint format check
+.PHONY: run dev import test lint format check
 
 run:
 	$(GODOT) --path .
+
+# Dev start: all sub-items, 10 pitch pots, 5 keys, F1 toggles hitbox drawing.
+dev:
+	$(GODOT) --path . -- --dev-mode
 
 # Rebuilds the class cache and .uid files. Run after adding or renaming a script with class_name.
 import:
