@@ -1,7 +1,7 @@
 # Wickwarden — state after step 2
 
 Step 2 (the painterly art pass) is done and committed on `main`. Every entity and room uses GPT Image
-art; the step-1 game logic is unchanged. `make check` passes (import, 21 headless test files, gdlint)
+art; the step-1 game logic is unchanged. `make check` passes (import, 22 headless test files, gdlint)
 and `make art-test` passes (the Python tests of the cut tool).
 
 ## What step 2 adds
@@ -9,11 +9,14 @@ and `make art-test` passes (the Python tests of the cut tool).
 - **Art pipeline**: [asset-contract.md](asset-contract.md) (normative: cells for 96 px tiles, foot line,
   strips, non-destructive post-processing), [art-brief.md](art-brief.md) (style and one prompt per sheet),
   [art-provenance.md](art-provenance.md) (every source sheet with its Codex session, output ID and hash).
-  22 source sheets in `tools/source_art/`; `make art` cuts them into `assets/sprites/` and `sprites.json`.
+  24 source sheets in `tools/source_art/`; `make art` cuts them into `assets/sprites/` and `sprites.json`.
 - **Runtime**: `SpriteVisual` (an `AnimatedSprite2D`) replaces `Placeholder` as each entity's `Visual`; it
   builds its frames from the manifest, draws a soft contact shadow and falls back to `Placeholder` for a
   kind without art. `PlayerVisual` picks Tamsin's walk, swing, charge, ward and hurt from her public state.
-  Rooms and wall/water blocks draw world-aligned tiled terrain textures.
+  Rooms draw world-aligned tiled terrain textures. Water and wall blocks are painted by terrain
+  shaders (`assets/shaders/`): touching blocks form one pond with soft, irregular mud banks and a shore
+  line, or one ruined wall with a front face, broken top edges and a soft shadow (three-quarter view).
+  The collision rectangles are unchanged.
 - **Effects**: the hook swing trail (`scripts/art/swing_trail.gd`) and the flare ring
   (`scripts/art/flare_ring.gd`) are procedural, additive light drawn exactly on the hit shapes. The pitch
   pot explosion and the enemy and bush death puffs use the painted explosion strip.
@@ -26,8 +29,6 @@ and `make art-test` passes (the Python tests of the cut tool).
   (`SWING_ARC_DEG`, `SWING_REACH` in `scripts/player/player.gd`) rather wide. The numbers are unchanged; the
   swing trail draws exactly that sector so the width can be judged with the real art in play.
 - No human visual approval yet. Judge the art in play with `make run` / `make dev`.
-- The pond and the ruin walls are rectangular texture blocks with hard edges; soft banks and wall faces
-  would read better.
 - The tallow blob rests on its flattest pose, so a still blob looks low.
 - A faint olive tint remains in the explosion smoke and near Tamsin's braid tip in the charge poses
   (green-key spill that the despill cannot tell apart from painted colour).

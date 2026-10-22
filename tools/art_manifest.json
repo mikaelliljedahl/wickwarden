@@ -71,7 +71,9 @@
   "wall_hedge": {"cell": [384, 384], "align": "center", "texture": true},
   "wall_cave": {"cell": [384, 384], "align": "center", "texture": true},
   "wall_ruin": {"cell": [384, 384], "align": "center", "texture": true},
-  "water": {"cell": [384, 384], "align": "center", "texture": true}
+  "water": {"cell": [384, 384], "align": "center", "texture": true},
+  "pond_bank": {"cell": [384, 384], "align": "center", "texture": true},
+  "wall_ruin_face": {"cell": [384, 384], "align": "center", "texture": true}
  },
  "sheets": {
   "tamsin_walk": {
@@ -803,6 +805,8 @@
   "tex_wall_hedge": {"type": "texture", "output": "wall_hedge", "size": 384, "blend": 0.2},
   "tex_wall_cave": {"type": "texture", "output": "wall_cave", "size": 384, "blend": 0.2},
   "tex_wall_ruin": {"type": "texture", "output": "wall_ruin", "size": 384, "blend": 0.2},
-  "tex_water": {"type": "texture", "output": "water", "size": 384, "blend": 0.2}
+  "tex_water": {"type": "texture", "output": "water", "size": 384, "blend": 0.2},
+  "tex_pond_bank": {"type": "texture", "output": "pond_bank", "size": 384, "blend": 0.2},
+  "tex_wall_ruin_face": {"type": "texture", "output": "wall_ruin_face", "size": 384, "blend": 0.2}
  }
 }

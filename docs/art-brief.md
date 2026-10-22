@@ -188,3 +188,17 @@ a cave, the opening filled with pale cold blue dusk light, the rock around it da
 | `tex_water` | dark still pond water with faint dusk reflections and a few small lily pads |
 | `tex_ground_cave` | a cave floor of packed dark earth and flat slate, with small pebbles and faint damp sheen |
 | `tex_wall_cave` | rough dark cave rock with cracks and a faint wet sheen |
+| `tex_pond_bank` | the wet, muddy shore of a dusk pond: dark brown silt, small rounded pebbles, flattened sedge blades, short olive rush tufts and a few broken reed stems lying flat, muted brown, olive and slate |
+
+**Face textures** (no key). The game draws the front face of a wall with these. Use the shared
+block, then the **face block** instead of the texture block, then the subject. The face block wins
+over the three-quarter view in the shared block.
+
+> Face block: *A seamless tileable texture of a vertical surface seen straight on from the front,
+> filling the whole square image edge to edge, even lighting with no vignette and no single
+> dominant feature, so that it repeats without visible seams. A flat elevation with no
+> perspective, no sky, no ground and no top edge.*
+
+| Sheet | Prompt subject |
+|---|---|
+| `tex_wall_ruin_face` | the front face of an old dry-stone wall: rough flat grey stones laid in irregular horizontal courses, dark gaps between the stones, moss and small ferns in the joints, muted grey, slate and moss green |

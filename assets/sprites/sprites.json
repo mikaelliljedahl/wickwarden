@@ -1092,5 +1092,45 @@
         "loop": true
       }
     }
+  },
+  "pond_bank": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/pond_bank.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "wall_ruin_face": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/wall_ruin_face.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
   }
 }

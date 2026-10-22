@@ -8,7 +8,9 @@ from other games, publishers or third-party asset packs are included, and no pro
 game, franchise or artist. A commercial release still needs a review of the image generator's terms.
 
 The procedural parts (the swing trail in `scripts/art/swing_trail.gd`, the contact shadows, the
-step-1 `Placeholder` shapes and the HUD hearts) are hand-written code.
+step-1 `Placeholder` shapes, the HUD hearts, and the pond banks and ruin wall faces in
+`assets/shaders/`) are hand-written code. The two terrain shaders only mask, shade and combine the
+GPT Image terrain textures below; they add no other image.
 
 ## How the sources were made (2026-10-22)
 
@@ -24,6 +26,11 @@ step-1 `Placeholder` shapes and the HUD hearts) are hand-written code.
   stopped in a daemon fault before they wrote a log. For those sheets (`items`, `fx_explosion`,
   `tamsin_walk`) the lead session reviewed the outputs and wrote the log; their exact prompt text is
   not recorded.
+- `tex_pond_bank` and `tex_wall_ruin_face` came later (terrain pass, same day) from one Codex job at
+  tier `cheapest`, one attempt each. The wall face prompt used the face block in `art-brief.md`,
+  and its log names `tex_wall_ruin.png` as the reference image. Full SHA-256:
+  `tex_pond_bank.png` `07448dcf0d67fd325271131bf6681b73615800c60fae60be681239e831a725d1`,
+  `tex_wall_ruin_face.png` `dae6d22650c92bb18baa02da52c576374a93bf7d25b00c64c9490ffa03b47456`.
 - No source image was resized or edited by hand. The textures and some sheets are 1254×1254 or
   2172×724 because the tool returned those sizes.
 
@@ -53,6 +60,8 @@ step-1 `Placeholder` shapes and the HUD hearts) are hand-written code.
 | `tex_water.png` | 1254×1254 | `01a16348-3d13-7a42-8be4-1450d98d7fc9` | `exec-8dd28f5d-e18c-41af-ab39-3b23e316eac1` | `e2be33fa288ffcd6` | `log_world.md` |
 | `tex_ground_cave.png` | 1254×1254 | `01a16348-3d13-7a42-8be4-1450d98d7fc9` | `exec-03f3e9c5-a5a3-4919-a665-86916a86a647` | `1c649df700c17b8f` | `log_world.md` |
 | `tex_wall_cave.png` | 1254×1254 | `01a16348-3d13-7a42-8be4-1450d98d7fc9` | `exec-a1bf1da6-551a-4089-b53b-6df41d9533ae` | `6446404de64b0241` | `log_world.md` |
+| `tex_pond_bank.png` | 1254×1254 | `01a163da-a933-7313-9e9a-43e7e436266e` | `exec-5ce69000-6ba2-4781-b41d-ae1d36510bf7` | `07448dcf0d67fd32` | `log_terrain.md` |
+| `tex_wall_ruin_face.png` | 1254×1254 | `01a163da-a933-7313-9e9a-43e7e436266e` | `exec-38baea37-8d44-45c4-82d6-1d08749b7e79` | `dae6d22650c92bb1` | `log_terrain.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion

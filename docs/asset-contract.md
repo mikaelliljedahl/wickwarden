@@ -141,9 +141,18 @@ collision circle, so the soles sit `r` px below it (`r` = body radius).
 | `wall_cave` | cave border ring |
 | `wall_ruin` | `wall` blocks (ruined stone wall top) |
 | `water` | `water` blocks (dark pond water) |
+| `pond_bank` | the mud bank around a pond (outside the `water` blocks) |
+| `wall_ruin_face` | the front face of `wall` blocks (dry-stone wall seen from the front) |
 
 Room floors keep `floor_color` as a soft tint on the texture, so the six overworld rooms still
 read as different places.
+
+Touching `water` blocks (and touching `wall` blocks) in one container form one group.
+`SolidBlock` paints each group with a shader in `assets/shaders/`: a pond with a soft, irregular
+mud bank and shore line around the union (`pond.gdshader`), or a ruined wall whose top sits
+48 px above its footprint, with a front face and broken top edges (`ruin_wall.gdshader`). The
+collision is always the plain block rectangle. The pond lies under everything in its room; a wall
+block y-sorts on the south edge of its footprint.
 
 ## 8. The manifest `assets/sprites/sprites.json`
 
