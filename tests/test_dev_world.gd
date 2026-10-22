@@ -30,6 +30,8 @@ func run() -> void:
 	_room_contents(world)
 	for id in ENEMIES:
 		await _layout(world, id)
+	for id in ENEMIES:
+		await _soak(world, id)
 	_dev_loadout(world)
 	await dispose(world)
 
@@ -246,6 +248,23 @@ func _in_any(p: Vector2, radius: float, rects: Array[Rect2]) -> bool:
 		if r.grow(radius - 1.0).has_point(p):
 			return true
 	return false
+
+
+## Lets a room's enemies run for a few seconds: they stay in the room and never end up inside an obstacle.
+func _soak(world: World, id: StringName) -> void:
+	reset_state()
+	world.start_at(id)
+	var room := world.get_room(id)
+	world.player.hurtbox.enabled = false
+	await seconds(5.0)
+	var both := _blockers(room)
+	var closed: Array[Rect2] = both["fixed"]
+	closed.append_array(both["openable"])
+	var interior := room.interior_rect()
+	for enemy in room.get_enemies():
+		check(interior.grow(1.0).has_point(enemy.global_position), "%s: %s stays in the room" % [id, enemy.name])
+		check(not _in_any(enemy.position, 0.0, closed), "%s: %s is not inside an obstacle" % [id, enemy.name])
+	world.player.hurtbox.enabled = true
 
 
 # ---- dev mode ---------------------------------------------------------------------------------

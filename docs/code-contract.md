@@ -46,7 +46,7 @@ scripts/enemies/           enemy_base.gd (EnemyBase)  enemy_projectile.gd (Enemy
 scripts/pickups/           pickup_base.gd (PickupBase)  pickup_collector.gd (PickupCollector)  drop_table.gd (DropTable)
 scripts/world/             world.gd (World)  room.gd (Room)  room_door.gd  solid_block.gd  brazier.gd
                            gate.gd  locked_door.gd  bush.gd                              [+ WP6 cracked_wall.gd]
-scripts/ui/                hud.gd (Hud)  pause_menu.gd (PauseMenu)
+scripts/ui/                hud.gd (Hud)  pause_menu.gd (PauseMenu)  debug_overlay.gd (DebugOverlay, dev mode)
 scenes/player/player.tscn
 scenes/enemies/            dummy_walker.tscn                                             [+ WP1-5 scenes]
 scenes/items/              (empty)                                                       [+ WP6 scenes]
@@ -66,7 +66,7 @@ tools/                     run_godot_check.py  godot_env.py  capture.gd/.tscn (s
 | WP4 Tallow blob + drop | Haiku | `scripts/enemies/tallow_blob.gd`, `scenes/enemies/tallow_blob.tscn`, `scripts/enemies/tallow_drop.gd`, `scenes/enemies/tallow_drop.tscn`, `tests/test_tallow_blob.gd` |
 | WP5 Hollow | Haiku | `scripts/enemies/hollow.gd`, `scenes/enemies/hollow.tscn`, `tests/test_hollow.gd` |
 | WP6 Items + cracked wall | Haiku | `scripts/items/tether_moth.gd`, `scenes/items/tether_moth.tscn`, `scripts/items/pitch_pot.gd`, `scenes/items/pitch_pot.tscn`, `scripts/world/cracked_wall.gd`, `scenes/world/cracked_wall.tscn`, `tests/test_tether_moth.gd`, `tests/test_pitch_pot.gd`, `tests/test_cracked_wall.gd` |
-| WP7 Integration | Sonnet | `scenes/world/rooms/*.tscn` (content), pickup/prop placement, `tests/test_dev_world.gd`, `docs/` updates, uid files, final commit |
+| WP7 Integration | Sonnet | `scenes/world/rooms/*.tscn` (content), pickup/prop placement, `tests/test_dev_world.gd`, `tests/test_dev_world_route.gd`, `docs/` updates, uid files, final commit. After WP7 the core files (world, hitbox/hurtbox groups, placeholder, hud, enemy_base `adopt_deferred`, capture tool, dev mode) were extended by WP7 as listed in section 15 |
 
 The scene paths above are fixed: `ItemRegistry` and the other WPs load them by path.
 
@@ -227,9 +227,15 @@ set_contact_enabled(enabled: bool)         # airborne hop: set_contact_enabled(f
 get_player() / player_position(fallback) / direction_to_player()
 set_facing_dir(dir)
 fire_projectile(scene: PackedScene, dir, speed := -1.0, damage := -1, from := Vector2.INF) -> EnemyProjectile
-adopt(child: EnemyBase, at: Vector2) -> EnemyBase     # add a child enemy next to this one (tallow drops)
+adopt(child: EnemyBase, at: Vector2) -> EnemyBase     # add a child enemy next to this one, in the tree at once
+adopt_deferred(child, at) -> EnemyBase                # same, but call_deferred: safe in physics callbacks and _on_death()
 signals: damaged(amount), died(enemy), stunned(seconds)
 ```
+
+Use `adopt_deferred()` whenever the call can run inside a physics callback (area/body signals, hit handlers,
+`_on_death()`): `adopt()` adds the child to the tree immediately and Godot rejects that while physics queries
+flush. `adopt_deferred()` sets the child's position in the parent's space first and adds it at the end of the
+frame (the child is not in the tree yet when it returns). The tallow blob splits with it.
 
 On death the base: calls `_on_death()`, adds a puff, rolls the drop table (section 8), emits `died` and
 `Events.enemy_died`, then `queue_free()`. Hit flash, knockback, i-frames, stun and confinement are all in
@@ -249,6 +255,33 @@ is half a heart and the hollow's `2` is one heart):
 | hollow | 4 | 2 | 140 (dash 300 for 0.5 s) | `hollow` |
 
 Behaviour text is in the plan; this contract only fixes the interfaces.
+
+**Optional per-enemy test hooks.** Some enemies expose a read-only state query so tests can assert on a
+state without reading private fields. They are not part of the base API and nothing in the game depends on
+them: `Skitterwick.is_airborne()` (in the hop), `Duskmoth.is_flying()` (in its flight state),
+`Hollow.is_charging()` (in the 0.5 s dash). A new enemy may add its own in the same style.
+
+**Decisions where the plan and this contract were silent** (made by the WPs, kept as the rule):
+
+- **Stun mid-hop lands the skitterwick.** A stun that arrives while it is airborne ends the hop at once: it
+  lands where it is, is hittable again and has contact damage again. Its next wait timer is drawn at the landing
+  and only runs once the stun is over.
+- **Stun mid-flight pauses the duskmoth.** The base does not call `_enemy_physics` while stunned, so the
+  flight/rest timers stand still; it carries on with the rest of its flight afterwards.
+- **The hollow's cooldown is stationary.** After a dash (0.5 s at 300 px/s) it stands still for 0.6 s and cannot
+  dash again; then it snaps back onto the 96 px grid. A hit or a stun during the dash ends it early (same
+  recovery).
+- **The tether moth stuns on both legs and turns back at any WORLD body.** Its stun hitbox is re-armed when it
+  turns, so an enemy can be stunned on the way out and again on the way back. A ray along its path that hits
+  anything on the `WORLD` layer (rock, bush, brazier, closed door or gate, cracked wall, wall ring) makes it
+  turn back early.
+- **An opened cracked wall stays in the tree with its collision off.** `_open()` disables the shape
+  (deferred), hides the `Visual`, leaves the `explodable` group and sets `cracked_<wall_id>`; the node is
+  not freed, so a later visit finds it open (flag) without respawning anything.
+- **Finding the pitch pot item grants 6 pitch pots** (WP7). The plan says the pitch pot ammo "starts 0": that
+  is the count before the item exists, and `GameState.acquire_item` still grants none (unit tests rely on it).
+  The placed item pickup (`PickupBase.ITEM_FOUND_AMMO`, kind `item`) adds 6 the first time it is collected, so
+  the first cracked wall can be opened without farming drops. Change the one constant to tune it.
 
 ## 8. EnemyProjectile, pickups, drops
 
@@ -402,7 +435,7 @@ entity only and is the one permitted edit in a core file. Step 2 replaces `Visua
   (`door_id`, touching with a key spends it), `Bush`, `RoomDoor` (`target_room`, `target_spawn`; put the
   target spawn marker outside the target door's trigger), `PickupBase` placed with `persistent_id` (and
   `item_id` for kind `item`; pedestal = a `SolidBlock` of kind `pedestal`).
-- `CrackedWall` does not exist in WP0; WP6 builds it against the explodable contract (section 9).
+- `CrackedWall` (WP6, `scenes/world/cracked_wall.tscn`) is placed in `Props` with `wall_id` (and a `size`).
 
 ## 12. Writing an enemy: worked example
 
@@ -519,3 +552,33 @@ func run() -> void:
 - Tile collision polygons (step 2) are measured from the tile centre. Verify real collision visually.
 - Metrics do not replace looking: `godot --path . res://tools/capture.tscn -- --room=ow_1_1 --out=/tmp/x.png`
   saves a screenshot (needs a display; not `--headless`).
+
+## 15. Dev world content and tooling (WP7)
+
+**Groups added to the combat components:** every `Hitbox` is in group `hitboxes`, every `Hurtbox` in
+`hurtboxes` (the debug overlay reads them; nothing else should).
+
+**Room authoring.** The seven rooms are plain `.tscn` files built on the 96 px grid: a tile `(c, r)` of the
+20x10 grid has its centre at `(96c + 48, 96r + 48)` in room-local pixels, the interior is tiles 1..18 x 1..8,
+exits are 2 tiles wide (tiles 9-10 on the n/s sides, rows 4-5 on the w/e sides). Keep a corridor of 3 tiles
+in front of each exit free, put hollows on tile centres (they walk the grid) and keep sealed spots (secret
+cache, key chamber, the pitch pot closet) closed on every side by solid blocks plus exactly one opener
+(cracked wall, gate, locked door). `tests/test_dev_world.gd` checks all of that on the real scenes: enemy
+counts per room, nothing on an obstacle, exits clear and reachable, sealed pickups unreachable while closed.
+Placed pickups use these persistent ids: `tether_moth`, `pitch_pot`, `cave_key`, `wick_core_cache`; ids of
+the openers: brazier `cave_west` / `cave_east`, gate `cave_gate`, door `ow_2_1_pitch`, wall `ow_2_0_cache`.
+Pedestal items sit 22 px in front (south) of the solid pedestal so the player's pickup circle can reach them.
+
+**Route (tested in `tests/test_dev_world_route.gd`):** tether moth (`ow_0_1`, pedestal) -> cave entrance in
+`ow_1_1` -> light both cave braziers with the hook (gate opens) -> key (`cave_1`) -> locked door in `ow_2_1`
+(spends the key) -> pitch pot item (+6 pots) -> place a pot at the cracked wall in `ow_2_0` -> wick core
+(+1 max heart, full heal).
+
+**Dev mode.** `godot --path . -- --dev-mode` (`make dev`): all sub-items, 10 pitch pots, 5 keys
+(`World.apply_dev_loadout()`), and F1 toggles `DebugOverlay` (active hitboxes red, hurtboxes green). Without the
+argument nothing changes: `make run` is the real start. `World.dev_mode`, `World.set_debug_draw(on)`.
+
+**Screenshots.** `tools/capture.tscn` renders into a 1920x1080 SubViewport (size independent of the window):
+`godot --path . res://tools/capture.tscn -- --room=ow_1_1 --out=docs/screens/step1/ow_1_1.png`. Options:
+`--spawn --frames --place=x,y --facing=up|down|left|right --dev --hitboxes --action=flare|charge|pot`.
+The step-1 shots are in `docs/screens/step1/` (`docs/.gdignore` keeps Godot from importing them).
