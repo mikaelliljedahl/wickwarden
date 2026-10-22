@@ -47,7 +47,9 @@ func cut_down() -> void:
 	hurtbox.enabled = false
 	var parent := get_parent()
 	if parent != null:
-		Placeholder.puff(parent, global_position, Placeholder.color_of(&"bush"), 36.0)
+		var tint := Color(0.6, 0.8, 0.45)
+		if SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.25, 3, tint) == null:
+			Placeholder.puff(parent, global_position, Placeholder.color_of(&"bush"), 36.0)
 		if drops_enabled:
 			var kind := DropTable.roll(drop_roll_override)
 			if kind != &"":

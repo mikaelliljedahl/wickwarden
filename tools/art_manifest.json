@@ -2,16 +2,31 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
-  "player": {"measure": "height", "value": 140, "ref": [{"sheet": "tamsin_walk", "row": 0}]},
+  "player": {"measure": "body_height", "thin": 0.08, "value": 140, "ref": [{"sheet": "tamsin_walk", "row": 0}]},
+  "player_swing": {
+   "measure": "match",
+   "like": "player",
+   "thin": 0.08,
+   "like_ref": [{"sheet": "tamsin_walk"}],
+   "ref": [{"sheet": "tamsin_swing"}]
+  },
+  "player_states": {
+   "measure": "match",
+   "like": "player",
+   "thin": 0.08,
+   "like_ref": [{"sheet": "tamsin_walk"}],
+   "ref": [{"sheet": "tamsin_states"}]
+  },
   "spitcap": {"measure": "height", "value": 90, "ref": [{"sheet": "hush_spitcap", "row": 0}]},
   "spore": {"measure": "height", "value": 28, "ref": [{"sheet": "hush_spitcap", "row": 1, "poses": [2, 4]}]},
-  "skitterwick": {"measure": "height", "value": 70, "ref": [{"sheet": "hush_skitterwick", "row": 0, "poses": [0, 2]}]},
-  "duskmoth": {"measure": "height", "value": 60, "ref": [{"sheet": "hush_duskmoth", "row": 0}]},
-  "tallow_blob": {"measure": "height", "value": 80, "ref": [{"sheet": "hush_tallow", "row": 0}]},
+  "skitterwick": {"measure": "fit", "value": [100, 90], "ref": [{"sheet": "hush_skitterwick", "row": 0, "poses": [0, 2]}]},
+  "duskmoth": {"measure": "height", "value": 70, "ref": [{"sheet": "hush_duskmoth", "row": 0}]},
+  "duskmoth_fly": {"measure": "width", "value": 110, "ref": [{"sheet": "hush_duskmoth_fly", "row": 0, "poses": [2, 3]}]},
+  "tallow_blob": {"measure": "height", "value": 110, "ref": [{"sheet": "hush_tallow", "row": 0}]},
   "tallow_drop": {"measure": "height", "value": 40, "ref": [{"sheet": "hush_tallow", "row": 1}]},
   "hollow": {"measure": "height", "value": 150, "ref": [{"sheet": "hush_hollow", "row": 0}]},
   "tether_moth": {"measure": "extent", "value": 80, "ref": [{"sheet": "items", "row": 0}]},
-  "pitch_pot": {"measure": "height", "value": 60, "ref": [{"sheet": "items", "row": 1}]},
+  "pitch_pot": {"measure": "height", "value": 56, "ref": [{"sheet": "items", "row": 1, "poses": [0, 1]}]},
   "explosion": {"measure": "extent", "value": 360, "ref": [{"sheet": "fx_explosion", "row": 0}]},
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
@@ -61,6 +76,7 @@
  "sheets": {
   "tamsin_walk": {
    "key": "green",
+   "params": {"rim_despill_px": 5, "chroma_band": 28, "despill_margin": 60},
    "rows": [
     {
      "poses": 6,
@@ -111,6 +127,7 @@
   },
   "tamsin_swing": {
    "key": "green",
+   "params": {"rim_despill_px": 5, "chroma_band": 28, "despill_margin": 60, "band_floor": 0.9, "min_gap_y": 1},
    "rows": [
     {
      "poses": 4,
@@ -120,9 +137,10 @@
        "kind": "player",
        "anim": "swing_down",
        "poses": [0, 4],
-       "scale": "player",
+       "scale": "player_swing",
        "fps": 14,
-       "loop": false
+       "loop": false,
+       "cell": [288, 192]
       }
      ]
     },
@@ -134,9 +152,10 @@
        "kind": "player",
        "anim": "swing_up",
        "poses": [0, 4],
-       "scale": "player",
+       "scale": "player_swing",
        "fps": 14,
-       "loop": false
+       "loop": false,
+       "cell": [288, 192]
       }
      ]
     },
@@ -148,9 +167,10 @@
        "kind": "player",
        "anim": "swing_side",
        "poses": [0, 4],
-       "scale": "player",
+       "scale": "player_swing",
        "fps": 14,
-       "loop": false
+       "loop": false,
+       "cell": [288, 192]
       }
      ]
     }
@@ -158,6 +178,7 @@
   },
   "tamsin_states": {
    "key": "green",
+   "params": {"rim_despill_px": 5, "chroma_band": 60, "despill_margin": 60, "band_floor": 0.9, "min_gap_y": 1},
    "rows": [
     {
      "poses": 4,
@@ -167,7 +188,7 @@
        "kind": "player",
        "anim": "charge_down",
        "poses": [0, 2],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 6,
        "loop": true
       },
@@ -176,7 +197,7 @@
        "kind": "player",
        "anim": "ward_down",
        "poses": [2, 3],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 1,
        "loop": false
       },
@@ -185,9 +206,10 @@
        "kind": "player",
        "anim": "hurt_down",
        "poses": [3, 4],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 1,
-       "loop": false
+       "loop": false,
+       "cell": [256, 192]
       }
      ]
     },
@@ -199,7 +221,7 @@
        "kind": "player",
        "anim": "charge_up",
        "poses": [0, 2],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 6,
        "loop": true
       },
@@ -208,7 +230,7 @@
        "kind": "player",
        "anim": "ward_up",
        "poses": [2, 3],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 1,
        "loop": false
       },
@@ -217,7 +239,7 @@
        "kind": "player",
        "anim": "hurt_up",
        "poses": [3, 4],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 1,
        "loop": false
       }
@@ -231,7 +253,7 @@
        "kind": "player",
        "anim": "charge_side",
        "poses": [0, 2],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 6,
        "loop": true
       },
@@ -240,16 +262,17 @@
        "kind": "player",
        "anim": "ward_side",
        "poses": [2, 3],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 1,
-       "loop": false
+       "loop": false,
+       "cell": [256, 192]
       },
       {
        "file": "player_hurt_side",
        "kind": "player",
        "anim": "hurt_side",
        "poses": [3, 4],
-       "scale": "player",
+       "scale": "player_states",
        "fps": 1,
        "loop": false
       }
@@ -362,13 +385,14 @@
    "rows": [
     {
      "poses": 4,
+     "params": {"split": "components"},
      "outputs": [
       {
        "file": "duskmoth_fly",
        "kind": "duskmoth",
        "anim": "fly",
        "poses": [0, 4],
-       "scale": "duskmoth",
+       "scale": "duskmoth_fly",
        "fps": 12,
        "loop": true,
        "ground": "row"
@@ -464,9 +488,11 @@
   },
   "items": {
    "key": "green",
+   "params": {"chroma_band": 16},
    "rows": [
     {
      "poses": 4,
+     "params": {"split": "components"},
      "outputs": [
       {
        "file": "tether_moth_fly",
@@ -498,6 +524,7 @@
   },
   "fx_explosion": {
    "key": "green",
+   "params": {"chroma_band": 40},
    "rows": [
     {
      "poses": 6,
@@ -526,7 +553,7 @@
        "kind": "ember",
        "anim": "idle",
        "poses": 0,
-       "scale": {"measure": "fit", "value": [40, 48]},
+       "scale": {"measure": "fit", "value": [48, 56]},
        "fps": 1,
        "loop": true,
        "shadow_src": true
@@ -536,7 +563,7 @@
        "kind": "brass_bit",
        "anim": "idle",
        "poses": 1,
-       "scale": {"measure": "fit", "value": [34, 34]},
+       "scale": {"measure": "fit", "value": [40, 40]},
        "fps": 1,
        "loop": true,
        "shadow_src": true
@@ -546,7 +573,7 @@
        "kind": "brass_coin",
        "anim": "idle",
        "poses": 2,
-       "scale": {"measure": "fit", "value": [40, 40]},
+       "scale": {"measure": "fit", "value": [48, 48]},
        "fps": 1,
        "loop": true,
        "shadow_src": true
@@ -556,7 +583,7 @@
        "kind": "pitch_pot_bundle",
        "anim": "idle",
        "poses": 3,
-       "scale": {"measure": "fit", "value": [52, 52]},
+       "scale": {"measure": "fit", "value": [56, 54]},
        "fps": 1,
        "loop": true,
        "shadow_src": true
@@ -566,7 +593,7 @@
        "kind": "key",
        "anim": "idle",
        "poses": 4,
-       "scale": {"measure": "fit", "value": [34, 54]},
+       "scale": {"measure": "fit", "value": [40, 56]},
        "fps": 1,
        "loop": true,
        "shadow_src": true
@@ -576,7 +603,7 @@
        "kind": "wick_core",
        "anim": "idle",
        "poses": 5,
-       "scale": {"measure": "fit", "value": [48, 54]},
+       "scale": {"measure": "fit", "value": [50, 56]},
        "fps": 1,
        "loop": true,
        "shadow_src": true

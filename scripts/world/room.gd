@@ -57,21 +57,32 @@ func _exit_tree() -> void:
 
 
 func _draw() -> void:
-	# Terrain textures tile over the room; floor_color stays as a soft tint. Flat colours when a
-	# texture is missing.
+	# Terrain textures are sampled by world position, so neighbouring rooms line up. floor_color
+	# stays as a soft tint. Flat colours when a texture is missing.
 	var floor_tex := SpriteVisual.texture_of(&"ground_cave" if dark else &"ground_grass")
 	var room_rect := Rect2(Vector2.ZERO, WorldConst.ROOM_SIZE)
 	if floor_tex != null:
-		draw_texture_rect(floor_tex, room_rect, true, floor_color.lerp(Color.WHITE, 0.55))
+		_draw_world_tiled(floor_tex, room_rect, floor_color.lerp(Color.WHITE, 0.55))
 	else:
 		draw_rect(room_rect, floor_color)
 	if build_walls:
 		var wall_tex := SpriteVisual.texture_of(&"wall_cave" if dark else &"wall_hedge")
 		for r in wall_rects():
 			if wall_tex != null:
-				draw_texture_rect(wall_tex, r, true)
+				_draw_world_tiled(wall_tex, r)
 			else:
 				draw_rect(r, Placeholder.color_of(&"wall"))
+
+
+## Fills `rect` (room-local) with `tex`, repeated. The texture phase comes from the world position,
+## so the pattern continues across room and block borders. Needs texture_repeat (set in _ready).
+func _draw_world_tiled(tex: Texture2D, rect: Rect2, tint := Color.WHITE) -> void:
+	var tex_size := tex.get_size()
+	var world := global_position + rect.position
+	var src := Rect2(
+		Vector2(fposmod(world.x, tex_size.x), fposmod(world.y, tex_size.y)), rect.size
+	)
+	draw_texture_rect_region(tex, rect, src, tint, false, false)
 
 
 # ---- Geometry --------------------------------------------------------------------------------

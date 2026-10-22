@@ -354,6 +354,19 @@ class SegmentationModes(unittest.TestCase):
             self.assertEqual(Image.open(root / "out" / "sk_a.png").size, (192, 96))
 
 
+class BodyHeight(unittest.TestCase):
+    def test_thin_pole_does_not_count_toward_the_figure_height(self):
+        canvas = np.zeros((300, 200, 3), np.float32) + KEY
+        draw_figure(canvas, 100, 250, 40, 100, 1)
+        canvas[110:160, 128:131] = (180, 150, 60)  # a 3 px pole sticking up beside the head
+        rgb, alpha = cut.matte(canvas, KEY, cut.DEFAULTS, "magenta")
+        rgba = np.concatenate([rgb, alpha[..., None]], axis=2)
+        box = cut.alpha_bbox(alpha, 0.1)
+        pose = cut.Pose("t", 0, 0, rgba, (0, 0), box)
+        self.assertGreaterEqual(pose.height, 135)
+        self.assertAlmostEqual(cut.body_height(pose, 0.08, 0.1), 100, delta=3)
+
+
 class TextureCase(unittest.TestCase):
     def test_texture_tiles_seamlessly(self):
         rng = np.random.default_rng(3)

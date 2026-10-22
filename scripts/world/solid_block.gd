@@ -36,5 +36,13 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	if _tile != null:
-		draw_texture_rect(_tile, Rect2(-size * 0.5, size), true)
+	if _tile == null:
+		return
+	# Sampled by world position, so neighbouring blocks continue one texture (no seams).
+	var rect := Rect2(-size * 0.5, size)
+	var tex_size := _tile.get_size()
+	var world := global_position + rect.position
+	var src := Rect2(
+		Vector2(fposmod(world.x, tex_size.x), fposmod(world.y, tex_size.y)), rect.size
+	)
+	draw_texture_rect_region(_tile, rect, src, Color.WHITE, false, false)

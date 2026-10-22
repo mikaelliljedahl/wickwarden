@@ -39,6 +39,9 @@ DEFAULTS: dict = {
     "chroma_kc": -40.0,  # assumed key-hue lean of the subject colour at full coverage
     "chroma_span": 40.0,  # lean range over which the chroma term fades in
     "chroma_band": 8,  # px around the background where the chroma term may act
+    "despill_avg": 1.0,  # green key: partly transparent pixels also limit g toward (r+b)/2
+    "rim_despill_px": 0,  # green key: pixels this close to the background also lose green excess
+    "despill_margin": 10.0,  # partly transparent pixels lose key-hue lean above -margin
     "refine": True,  # re-estimate alpha on the 1-2 px rim from the nearest interior colour
     "residual_tol": 30.0,  # a rim pixel must lie this close to the line subject..key
     "det_floor": 0.04,  # alpha floor used ONLY to detect content (segmentation)
@@ -208,6 +211,7 @@ def matte(rgb: np.ndarray, key: np.ndarray, params: dict, key_name: str = "magen
     dist = np.linalg.norm(rgb - key, axis=2)
     a_dist = np.clip((dist - lo) / (hi - lo), 0.0, 1.0).astype(np.float32)
     a0 = a_dist
+    outside = None
     if params["chroma"]:
         kn = keyness(rgb, key_name)
         raw = np.clip((255.0 - kn) / (255.0 - params["chroma_kc"]), 0.0, 1.0)
@@ -237,8 +241,23 @@ def matte(rgb: np.ndarray, key: np.ndarray, params: dict, key_name: str = "magen
     unpremult = np.clip(key + (rgb - key) / safe, 0.0, 255.0)
     mix = smoothstep((alpha - 0.08) / 0.37)[..., None]
     blended = np.where(fg_valid[..., None], fg + (unpremult - fg) * mix, unpremult)
-    blended = despill_partial(blended, key_name)
+    blended = despill_partial(blended, key_name, float(params["despill_margin"]))
+    if key_name == "green" and params["despill_avg"] > 0:
+        # classic average despill, weighted by (1 - alpha): glow over a green key is yellow-green,
+        # it should be amber. Opaque pixels have weight 0.
+        w = np.clip((1.0 - alpha) / 0.5, 0.0, 1.0)[..., None] * float(params["despill_avg"])
+        limit = (blended[..., 0:1] + blended[..., 2:3]) * 0.5
+        blended = blended.copy()
+        blended[..., 1:2] -= w * np.maximum(blended[..., 1:2] - limit, 0.0)
     out = np.where(partial[..., None], blended, rgb)
+    if key_name == "green" and params["rim_despill_px"] > 0 and outside is not None:
+        # a thin translucent fringe (scarf tail, hair) over the key turns olive but measures opaque:
+        # within a few px of the background, limit g to (r+b)/2 + 25
+        rim = dilate3(outside, int(params["rim_despill_px"])) & (alpha > 0.0)
+        limit = (out[..., 0:1] + out[..., 2:3]) * 0.5 + 25.0
+        fixed = out.copy()
+        fixed[..., 1:2] = np.minimum(out[..., 1:2], limit)
+        out = np.where(rim[..., None], fixed, out)
     # transparent pixels take the nearest subject colour so bilinear filtering never bleeds the key
     clear = alpha <= 0.0
     out = np.where(clear[..., None], np.where(fg_valid[..., None], fg, 0.0), out)
@@ -402,9 +421,27 @@ def segment(alpha: np.ndarray, params: dict, row_params: list[dict]) -> list[lis
     """Row bands, then real column gaps inside each band (or components, per row)."""
     mask = alpha > params["det_floor"]
     rowcnt = mask.sum(axis=1)
-    bands = merge_close(runs_of(rowcnt > 0), params["min_gap_y"])
-    sizes = [int(rowcnt[a:b].sum()) for a, b in bands]
-    bands = _split_tiny(bands, sizes, params["noise_area"], params["merge_dist"])
+    band_floor = params.get("band_floor")
+    if band_floor:
+        # rows whose glow/trails touch: find the bands with a higher floor, then give each band
+        # the rows of faint content down to the emptiest row between it and its neighbour
+        strong = (alpha > band_floor).sum(axis=1)
+        bands = merge_close(runs_of(strong > 0), params["min_gap_y"])
+        sizes = [int(strong[a:b].sum()) for a, b in bands]
+        bands = sorted(_split_tiny(bands, sizes, params["noise_area"], params["merge_dist"]))
+        edges = [0]
+        for (a0, a1), (b0, b1) in zip(bands, bands[1:]):
+            edges.append(a1 + int(np.argmin(rowcnt[a1:b0 + 1])))
+        edges.append(len(rowcnt))
+        bands = [[edges[i], edges[i + 1]] for i in range(len(bands))]
+        # trim empty rows at the outer edges
+        nz = np.flatnonzero(rowcnt > 0)
+        bands[0][0] = max(bands[0][0], int(nz[0]))
+        bands[-1][1] = min(bands[-1][1], int(nz[-1]) + 1)
+    else:
+        bands = merge_close(runs_of(rowcnt > 0), params["min_gap_y"])
+        sizes = [int(rowcnt[a:b].sum()) for a, b in bands]
+        bands = _split_tiny(bands, sizes, params["noise_area"], params["merge_dist"])
     bands.sort()
     result = []
     for band_idx, (y0, y1) in enumerate(bands):
@@ -529,8 +566,48 @@ def select_poses(spec, count: int) -> list[int]:
     return list(range(spec[0], spec[1]))
 
 
+def body_height(pose: Pose, thin_frac: float, floor: float) -> int:
+    """Figure height without thin parts that stick out (a lamp pole above the head): rows whose
+    widest horizontal run is shorter than thin_frac * pose height do not count toward the top."""
+    alpha = pose.rgba[..., 3] > floor
+    x0, y0, x1, y1 = pose.bbox
+    thin_px = max(2, int(round(thin_frac * pose.height)))
+    for y in range(y0, y1):
+        if any(e - s >= thin_px for s, e in runs_of(alpha[y, x0:x1])):
+            return y1 - y
+    return pose.height
+
+
+def refs_to_poses(refs: list[dict], ctx: Context) -> list[Pose]:
+    out: list[Pose] = []
+    for ref in refs:
+        sheet = ctx.sheet(ref["sheet"])
+        rows = [ref["row"]] if "row" in ref else range(len(sheet.rows))
+        for r in rows:
+            row = sheet.rows[r]
+            out += [row[i] for i in select_poses(ref.get("poses"), len(row))]
+    return out
+
+
+def match_factor(gdef: dict, ctx: Context) -> float:
+    """A sheet from another generation: scale it so the median body height (head top to soles,
+    thin parts such as the pole excluded) of its poses matches the median of the `like` group's
+    own sheet, after that group's scale. The factor is still ONE per group, never per frame."""
+    thin = float(gdef.get("thin", 0.08))
+    floor = float(ctx.manifest.get("defaults", {}).get("measure_floor", DEFAULTS["measure_floor"]))
+    like = ctx.manifest["scale_groups"][gdef["like"]]
+    like_factor = scale_factor(like, ctx, [])
+    like_poses = refs_to_poses(gdef["like_ref"], ctx)
+    mine = refs_to_poses(gdef["ref"], ctx)
+    like_med = float(np.median([body_height(p, thin, floor) for p in like_poses]))
+    my_med = float(np.median([body_height(p, thin, floor) for p in mine]))
+    return like_factor * like_med / my_med
+
+
 def scale_factor(gdef: dict, ctx: Context, own: list[Pose]) -> float:
     """One factor for a whole scale group, from the reference poses (or the output's own poses)."""
+    if gdef["measure"] == "match":
+        return match_factor(gdef, ctx)
     refs: list[Pose] = []
     if gdef.get("ref"):
         for ref in gdef["ref"]:
@@ -539,9 +616,12 @@ def scale_factor(gdef: dict, ctx: Context, own: list[Pose]) -> float:
     else:
         refs = own
     measure, value = gdef["measure"], gdef["value"]
+    ctx_floor = float(ctx.manifest.get("defaults", {}).get("measure_floor", DEFAULTS["measure_floor"]))
     if measure == "fit":
         return min(min(value[0] / p.width, value[1] / p.height) for p in refs)
+    thin = float(gdef.get("thin", 0.08))
     pick = {
+        "body_height": lambda p: body_height(p, thin, ctx_floor),
         "height": lambda p: p.height,
         "width": lambda p: p.width,
         "extent": lambda p: max(p.width, p.height),
@@ -621,7 +701,7 @@ def build_output(out_def: dict, kind_def: dict, ctx: Context, sheet: SheetData, 
     if isinstance(gdef, str):
         gdef = ctx.manifest["scale_groups"][gdef]
     factor = scale_factor(gdef, ctx, poses)
-    cell_w, cell_h = kind_def["cell"]
+    cell_w, cell_h = out_def.get("cell", kind_def["cell"])  # an animation may have a wider cell
     align = kind_def.get("align", "foot")
     foot = int(kind_def.get("foot", cell_h - 1))
     params = sheet.params
@@ -859,13 +939,18 @@ def kind_entry(kind: str, kdef: dict) -> dict:
     return entry
 
 
-def anim_record(out: OutputResult) -> dict:
-    return {
+def anim_record(out: OutputResult, kdef: dict) -> dict:
+    rec = {
         "file": f"{RES_PREFIX}{out.name}.png",
         "frames": len(out.frames),
         "fps": out.fps,
         "loop": out.loop,
     }
+    if list(out.cell) != list(kdef["cell"]):  # per-animation cell: same foot row, anchor x centred
+        anchor_y = kind_entry(out.kind, kdef)["anchor"][1]
+        rec["cell"] = [out.cell[0], out.cell[1]]
+        rec["anchor"] = [out.cell[0] / 2, anchor_y]
+    return rec
 
 
 def owned_anims(manifest: dict, sheet: str) -> set[tuple[str, str]]:
@@ -889,7 +974,7 @@ def build_sprites_json(manifest: dict, existing: dict, results: list[OutputResul
             store.pop(key, None)
     new_widths: dict[str, list[float]] = {}
     for out in results:
-        store[(out.kind, out.anim)] = anim_record(out)
+        store[(out.kind, out.anim)] = anim_record(out, manifest["kinds"][out.kind])
         new_widths.setdefault(out.kind, []).extend(out.shadow_widths)
     for name, size in textures.items():
         store[(name, "idle")] = {"file": f"{RES_PREFIX}{name}.png", "frames": 1, "fps": 1, "loop": True}

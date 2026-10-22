@@ -366,7 +366,8 @@ func _die() -> void:
 	_on_death()
 	var parent := get_parent()
 	if parent != null:
-		Placeholder.puff(parent, global_position, Placeholder.color_of(visual_kind))
+		if SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.3, 3) == null:
+			Placeholder.puff(parent, global_position, Placeholder.color_of(visual_kind))
 		if drops_enabled:
 			var kind := DropTable.roll(drop_roll_override)
 			if kind != &"":

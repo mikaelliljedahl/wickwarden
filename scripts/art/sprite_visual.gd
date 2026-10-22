@@ -26,18 +26,21 @@ static var _frames_cache: Dictionary = {}
 static var _texture_cache: Dictionary = {}
 static var _shadow_texture: Texture2D
 
+## The state that defines the visual is exported so Node.duplicate() copies it (rooms spawn enemies
+## from templates with duplicate()); _ready always rebuilds the frames from it.
 ## The manifest kind this node shows (may be a variant parent such as "rock").
-var kind: StringName = &""
+@export var kind: StringName = &""
 ## Presentation only: plays the motion animation while the parent CharacterBody2D moves. The
 ## player wiring turns this off and drives play_anim itself.
-var auto_motion: bool = true
+@export var auto_motion: bool = true
 ## >= 0 picks the variant directly; otherwise the parent's position decides (deterministic).
-var variant_seed: int = -1
+@export var variant_seed: int = -1
 ## Overrides given to attach(): body radius (moves the anchor) and collision rectangle size (props).
-var radius_override: float = 0.0
-var size_override: Vector2 = Vector2.ZERO
+@export var radius_override: float = 0.0
+@export var size_override: Vector2 = Vector2.ZERO
 
 var _once: bool = false
+var _start_frame: int = 0
 var _art_kind: StringName = &""
 var _entry: Dictionary = {}
 var _cell: Vector2 = Vector2.ZERO
@@ -50,6 +53,7 @@ var _body: CharacterBody2D
 var _moving: bool = false
 var _check_variant: bool = false
 var _shadow: Sprite2D
+var _shadow_target: Transform2D = Transform2D.IDENTITY
 
 
 ## Creates (or replaces) the "Visual" child of `parent`. A SpriteVisual when the manifest has the
@@ -110,15 +114,27 @@ static func icon_of(entity_kind: StringName) -> Texture2D:
 
 
 ## A top-level SpriteVisual at `at` that plays its default animation once and frees itself.
-static func spawn_effect(parent: Node, entity_kind: StringName, at: Vector2) -> Node2D:
+## `effect_scale` scales the node, `from_frame` starts the animation partway (a small puff from
+## the late explosion frames), `tint` multiplies the colour. Null (nothing added) without art.
+static func spawn_effect(
+	parent: Node,
+	entity_kind: StringName,
+	at: Vector2,
+	effect_scale: float = 1.0,
+	from_frame: int = 0,
+	tint: Color = Color.WHITE
+) -> Node2D:
 	if not has_art(entity_kind):
 		return null
 	var fx := SpriteVisual.new()
-	fx.name = "Effect"
+	fx.name = "Puff"  # the node name Placeholder.puff uses; tests and wiring look for it
 	fx.kind = entity_kind
 	fx.auto_motion = false
 	fx._once = true
+	fx._start_frame = from_frame
 	fx.top_level = true
+	fx.scale = Vector2(effect_scale, effect_scale)
+	fx.modulate = tint
 	parent.add_child(fx)
 	fx.global_position = at
 	fx.animation_finished.connect(fx.queue_free)
@@ -197,7 +213,7 @@ static func _build_frames(entity_kind: StringName, once: bool) -> SpriteFrames:
 	var entry: Variant = _manifest.get(String(entity_kind))
 	if not entry is Dictionary:
 		return null
-	var cell := _cell_of(entry)
+	var kind_cell := _cell_of(entry)
 	var frames := SpriteFrames.new()
 	frames.remove_animation(&"default")
 	var anims: Dictionary = entry.get("animations", {})
@@ -206,6 +222,9 @@ static func _build_frames(entity_kind: StringName, once: bool) -> SpriteFrames:
 		var tex := _load_texture(String(rec.get("file", "")))
 		if tex == null:
 			continue
+		var cell := kind_cell
+		if rec.has("cell"):  # a per-animation cell (wide swing frames)
+			cell = Vector2(float(rec["cell"][0]), float(rec["cell"][1]))
 		var count := mini(int(rec.get("frames", 1)), int(tex.get_width() / cell.x))
 		if count <= 0:
 			continue
@@ -247,11 +266,21 @@ static func _default_anim(frames: SpriteFrames) -> StringName:
 func _init() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	centered = false
+	set_notify_local_transform(true)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_LOCAL_TRANSFORM_CHANGED:
+		_place_shadow()
 
 
 func _ready() -> void:
 	_body = get_parent() as CharacterBody2D
-	animation_finished.connect(_on_animation_finished)
+	if not animation_finished.is_connected(_on_animation_finished):
+		animation_finished.connect(_on_animation_finished)
+	if not animation_changed.is_connected(_apply_offset):
+		animation_changed.connect(_apply_offset)
+	_shadow = get_node_or_null(SHADOW_NAME) as Sprite2D  # a duplicate() copies the child
 	_build()
 	if _body == null and not _check_variant:
 		set_process(false)
@@ -341,6 +370,10 @@ func _build() -> void:
 	_apply_anchor()
 	_update_shadow()
 	_choose_default()
+	_apply_offset()
+	if _start_frame > 0 and sprite_frames.has_animation(animation):
+		var count := sprite_frames.get_frame_count(animation)
+		set_frame_and_progress(clampi(_start_frame, 0, count - 1), 0.0)
 
 
 func _pick_variant() -> StringName:
@@ -377,8 +410,17 @@ func _apply_anchor() -> void:
 	_apply_offset()
 
 
+## A mirrored sprite flips inside its cell, so the anchor x is measured from the right edge.
+## An animation with its own cell (and anchor) uses those for its x.
 func _apply_offset() -> void:
-	var x := _cell.x - _anchor.x if flip_h else _anchor.x
+	var cell_w := _cell.x
+	var anchor_x := _anchor.x
+	var anims: Dictionary = _entry.get("animations", {})
+	var rec: Variant = anims.get(String(animation))
+	if rec is Dictionary and rec.has("cell"):
+		cell_w = float(rec["cell"][0])
+		anchor_x = float(rec["anchor"][0]) if rec.has("anchor") else cell_w * 0.5
+	var x := cell_w - anchor_x if flip_h else anchor_x
 	offset = Vector2(-x, -_anchor.y)
 
 
@@ -404,11 +446,21 @@ func _update_shadow() -> void:
 		_shadow.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 		add_child(_shadow)
 	var foot_y := float(_entry.get("foot", _cell.y)) - _anchor.y
-	_shadow.visible = true
-	_shadow.position = Vector2(0.0, foot_y - 1.0)
-	_shadow.scale = Vector2(
-		float(size_list[0]) / SHADOW_TEXTURE_SIZE, float(size_list[1]) / SHADOW_TEXTURE_SIZE
+	_shadow_target = Transform2D(
+		0.0,
+		Vector2(float(size_list[0]) / SHADOW_TEXTURE_SIZE, float(size_list[1]) / SHADOW_TEXTURE_SIZE),
+		0.0,
+		Vector2(0.0, foot_y - 1.0)
 	)
+	_shadow.visible = true
+	_place_shadow()
+
+
+## The shadow stays on the ground: it cancels the Visual's own transform (a hop arc moves the
+## Visual up, a squash scales it), so it sits where the entity's feet are. Presentation only.
+func _place_shadow() -> void:
+	if _shadow != null and is_instance_valid(_shadow):
+		_shadow.transform = transform.affine_inverse() * _shadow_target
 
 
 static func _shadow_gradient() -> Texture2D:

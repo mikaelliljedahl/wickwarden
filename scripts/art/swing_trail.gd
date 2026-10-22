@@ -23,6 +23,10 @@ var _elapsed: float = Player.SWING_TOTAL
 
 
 func _ready() -> void:
+	# Additive blend: the bands add light to the ground instead of covering it.
+	var mat := CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	material = mat
 	visibility_changed.connect(_on_visibility_changed)
 
 

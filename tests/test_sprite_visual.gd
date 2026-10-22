@@ -14,6 +14,7 @@ func run() -> void:
 	await _auto_motion()
 	_variants()
 	_icons_and_textures()
+	await _duplicate_and_shadow()
 	await _spawn_effect()
 	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
@@ -42,9 +43,9 @@ func _known_kind() -> void:
 	check(not is_instance_valid(visual) or visual != again, "old visual is gone")
 	var sv := again as SpriteVisual
 	var names := sv.sprite_frames.get_animation_names()
-	for anim in ["walk_down", "walk_up", "walk_side", "swing_down"]:
+	for anim in ["walk_down", "walk_up", "walk_side", "swing_down", "swing_side"]:
 		check(sv.sprite_frames.has_animation(anim), "has animation %s" % anim)
-	check_eq(names.size(), 4, "exactly the manifest animations")
+	check_eq(names.size(), 5, "exactly the manifest animations")
 	check_eq(sv.sprite_frames.get_frame_count(&"walk_side"), 3, "walk_side has 3 frames")
 	check_eq(sv.sprite_frames.get_frame_count(&"swing_down"), 2, "swing_down has 2 frames")
 	check_near(sv.sprite_frames.get_animation_speed(&"walk_down"), 10.0, 0.01, "walk fps")
@@ -57,6 +58,17 @@ func _known_kind() -> void:
 	check(sv.get_node_or_null(SpriteVisual.SHADOW_NAME) != null, "bodies get a contact shadow")
 	check(not sv.is_playing(), "walk-only kind stands still on frame 0")
 	check_eq(sv.animation, &"walk_down", "default is walk_down")
+	# a per-animation cell: wider frames, own anchor x, flipping inside the wider cell
+	sv.set_facing(Vector2.RIGHT)
+	sv.play_anim(&"swing")
+	var wide_tex := sv.sprite_frames.get_frame_texture(&"swing_side", 1) as AtlasTexture
+	check_eq(wide_tex.region, Rect2(64, 0, 64, 32), "per-animation cell width")
+	check_eq(sv.offset, Vector2(-24, -26), "per-animation anchor x")
+	sv.set_facing(Vector2.LEFT)
+	check_eq(sv.offset, Vector2(-40, -26), "flipped wide cell mirrors the anchor inside its cell")
+	sv.play_anim(&"walk")
+	check_eq(sv.offset, Vector2(-16, -26), "back to the kind cell")
+	sv.set_facing(Vector2.DOWN)
 	# a radius override moves the anchor: soles at foot (30) land r px below the origin
 	var wide := SpriteVisual.attach(host, &"walker", 10.0) as SpriteVisual
 	check_eq(wide.offset, Vector2(-16, -20), "radius override moves the anchor")
@@ -208,8 +220,48 @@ func _spawn_effect() -> void:
 	check((fx as SpriteVisual).is_playing(), "effect plays its default animation")
 	await seconds(0.5)
 	check(not is_instance_valid(fx), "effect frees itself when the animation ends")
+	# scale, start frame and tint
+	var puff := SpriteVisual.spawn_effect(host, &"blast", Vector2(10, 20), 0.5, 1, Color(0.6, 0.8, 0.4))
+	check_eq(puff.scale, Vector2(0.5, 0.5), "effect scale")
+	check_eq(puff.modulate, Color(0.6, 0.8, 0.4), "effect tint")
+	check_eq((puff as SpriteVisual).frame, 1, "effect starts at from_frame")
+	check_eq((puff as SpriteVisual).animation, &"burst", "effect plays the default animation")
+	var late := SpriteVisual.spawn_effect(host, &"blast", Vector2.ZERO, 1.0, 99)
+	check_eq((late as SpriteVisual).frame, 2, "from_frame is clamped to the last frame")
+	var plain := SpriteVisual.spawn_effect(host, &"blast", Vector2.ZERO)
+	check_eq((plain as SpriteVisual).frame, 0, "default start frame is 0")
+	check_eq(plain.scale, Vector2.ONE, "default scale is 1")
+	await seconds(0.5)
+	check(not is_instance_valid(puff) and not is_instance_valid(late), "scaled effects free themselves")
 	# a looping animation is played once as an effect
 	var flame := SpriteVisual.spawn_effect(host, &"torch_lit", Vector2.ZERO)
 	await seconds(0.6)
 	check(not is_instance_valid(flame), "a looping animation is played once and freed")
 	await dispose(host)
+
+
+func _duplicate_and_shadow() -> void:
+	# Rooms spawn enemies from templates with duplicate(): the copy must show its art.
+	var template := CharacterBody2D.new()
+	SpriteVisual.attach(template, &"walker", 10.0)
+	var copy := template.duplicate() as CharacterBody2D
+	add_child(copy)
+	await frames(2)
+	var visual := copy.get_node_or_null("Visual") as SpriteVisual
+	check(visual != null, "the duplicate keeps its Visual")
+	check(visual.sprite_frames != null, "the duplicated Visual has frames")
+	check_eq(visual.animation, &"walk_down", "the duplicated Visual shows the default animation")
+	check_eq(visual.offset, Vector2(-16, -20), "the duplicate keeps the radius override")
+	var shadows := visual.get_children().filter(func(n: Node) -> bool: return n is Sprite2D)
+	check_eq(shadows.size(), 1, "exactly one contact shadow after duplicate")
+	visual.set_facing(Vector2.LEFT)
+	check_eq(visual.animation, &"walk_side", "the duplicated Visual reacts to facing")
+	template.free()
+	# the shadow stays on the ground when the Visual hops
+	var shadow := visual.get_node(SpriteVisual.SHADOW_NAME) as Sprite2D
+	var ground := shadow.global_position
+	visual.position = Vector2(0, -40)
+	check_near(shadow.global_position.y, ground.y, 0.01, "shadow ignores the Visual's hop offset")
+	visual.position = Vector2.ZERO
+	check_near(shadow.global_position.y, ground.y, 0.01, "shadow is still on the ground")
+	await dispose(copy)

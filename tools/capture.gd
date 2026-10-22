@@ -13,6 +13,7 @@ extends Node
 ##   --action=flare                 hold attack 0.9 s, release, shoot during the sweep
 ##   --action=charge                hold attack 0.9 s and shoot while the lamp glows
 ##   --action=pot                   place a pitch pot and shoot at the explosion
+##   --action=swing                 swing the hook and shoot in the middle of the sweep
 ##   --hitboxes                     draw hitboxes and hurtboxes (same as F1 in the game)
 
 var _viewport: SubViewport
@@ -81,6 +82,9 @@ func _run() -> void:
 			if action == "flare":
 				Input.action_release(&"attack")
 				await _frames(3)
+		"swing":
+			Input.action_press(&"attack")
+			await _frames(5)
 		"pot":
 			GameState.set_active_item(&"pitch_pot")
 			world.player.use_item()

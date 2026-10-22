@@ -1,4 +1,153 @@
 {
+  "player": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      150.0
+    ],
+    "foot": 176,
+    "radius": 26.0,
+    "mirror_side": true,
+    "shadow": [
+      32,
+      11
+    ],
+    "animations": {
+      "walk_down": {
+        "file": "res://assets/sprites/player_walk_down.png",
+        "frames": 6,
+        "fps": 10.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/player_walk_up.png",
+        "frames": 6,
+        "fps": 10.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/player_walk_side.png",
+        "frames": 6,
+        "fps": 10.0,
+        "loop": true
+      },
+      "swing_down": {
+        "file": "res://assets/sprites/player_swing_down.png",
+        "frames": 4,
+        "fps": 14.0,
+        "loop": false,
+        "cell": [
+          288,
+          192
+        ],
+        "anchor": [
+          144.0,
+          150.0
+        ]
+      },
+      "swing_up": {
+        "file": "res://assets/sprites/player_swing_up.png",
+        "frames": 4,
+        "fps": 14.0,
+        "loop": false,
+        "cell": [
+          288,
+          192
+        ],
+        "anchor": [
+          144.0,
+          150.0
+        ]
+      },
+      "swing_side": {
+        "file": "res://assets/sprites/player_swing_side.png",
+        "frames": 4,
+        "fps": 14.0,
+        "loop": false,
+        "cell": [
+          288,
+          192
+        ],
+        "anchor": [
+          144.0,
+          150.0
+        ]
+      },
+      "charge_down": {
+        "file": "res://assets/sprites/player_charge_down.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "ward_down": {
+        "file": "res://assets/sprites/player_ward_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": false
+      },
+      "hurt_down": {
+        "file": "res://assets/sprites/player_hurt_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": false,
+        "cell": [
+          256,
+          192
+        ],
+        "anchor": [
+          128.0,
+          150.0
+        ]
+      },
+      "charge_up": {
+        "file": "res://assets/sprites/player_charge_up.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "ward_up": {
+        "file": "res://assets/sprites/player_ward_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": false
+      },
+      "hurt_up": {
+        "file": "res://assets/sprites/player_hurt_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": false
+      },
+      "charge_side": {
+        "file": "res://assets/sprites/player_charge_side.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "ward_side": {
+        "file": "res://assets/sprites/player_ward_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": false,
+        "cell": [
+          256,
+          192
+        ],
+        "anchor": [
+          128.0,
+          150.0
+        ]
+      },
+      "hurt_side": {
+        "file": "res://assets/sprites/player_hurt_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": false
+      }
+    }
+  },
   "hollow": {
     "cell": [
       192,
@@ -80,8 +229,8 @@
     "radius": 22.0,
     "mirror_side": true,
     "shadow": [
-      48,
-      16
+      62,
+      21
     ],
     "animations": {
       "idle": {
@@ -117,14 +266,20 @@
     "radius": 22.0,
     "mirror_side": true,
     "shadow": [
-      64,
-      22
+      75,
+      26
     ],
     "animations": {
       "rest": {
         "file": "res://assets/sprites/duskmoth_rest.png",
         "frames": 2,
         "fps": 3.0,
+        "loop": true
+      },
+      "fly": {
+        "file": "res://assets/sprites/duskmoth_fly.png",
+        "frames": 4,
+        "fps": 12.0,
         "loop": true
       }
     }
@@ -142,8 +297,8 @@
     "radius": 34.0,
     "mirror_side": true,
     "shadow": [
-      62,
-      21
+      87,
+      30
     ],
     "animations": {
       "move": {
@@ -194,6 +349,265 @@
       "fly": {
         "file": "res://assets/sprites/spore_fly.png",
         "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "tether_moth": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "fly": {
+        "file": "res://assets/sprites/tether_moth_fly.png",
+        "frames": 4,
+        "fps": 12.0,
+        "loop": true
+      }
+    }
+  },
+  "pitch_pot": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      64.0
+    ],
+    "foot": 88,
+    "radius": 24.0,
+    "mirror_side": false,
+    "shadow": [
+      41,
+      14
+    ],
+    "animations": {
+      "fuse": {
+        "file": "res://assets/sprites/pitch_pot_fuse.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "explosion": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "burst": {
+        "file": "res://assets/sprites/explosion_burst.png",
+        "frames": 6,
+        "fps": 12.0,
+        "loop": false
+      }
+    }
+  },
+  "ember": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      42.0
+    ],
+    "foot": 58,
+    "radius": 16.0,
+    "mirror_side": false,
+    "shadow": [
+      36,
+      12
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/ember.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "brass_bit": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      46.0
+    ],
+    "foot": 58,
+    "radius": 12.0,
+    "mirror_side": false,
+    "shadow": [
+      34,
+      12
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/brass_bit.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "brass_coin": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      42.0
+    ],
+    "foot": 58,
+    "radius": 16.0,
+    "mirror_side": false,
+    "shadow": [
+      44,
+      15
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/brass_coin.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "pitch_pot_bundle": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      40.0
+    ],
+    "foot": 58,
+    "radius": 18.0,
+    "mirror_side": false,
+    "shadow": [
+      51,
+      17
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/pitch_pot_bundle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "key": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      40.0
+    ],
+    "foot": 58,
+    "radius": 18.0,
+    "mirror_side": false,
+    "shadow": [
+      19,
+      6
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/key.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "wick_core": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      36.0
+    ],
+    "foot": 58,
+    "radius": 22.0,
+    "mirror_side": false,
+    "shadow": [
+      30,
+      10
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/wick_core.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "brazier": {
+    "cell": [
+      128,
+      192
+    ],
+    "anchor": [
+      64.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 64,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/brazier.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "brazier_lit": {
+    "cell": [
+      128,
+      192
+    ],
+    "anchor": [
+      64.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 64,
+    "animations": {
+      "burn": {
+        "file": "res://assets/sprites/brazier_lit_burn.png",
+        "frames": 4,
         "fps": 8.0,
         "loop": true
       }

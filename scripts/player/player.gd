@@ -55,7 +55,7 @@ var visual: Node2D
 
 var _swing_polygon: CollisionPolygon2D
 var _swing_visual: Node2D
-var _flare_visual: Placeholder
+var _flare_visual: Node2D
 var _ward_visual: Placeholder
 var _state_time: float = 0.0
 var _hold_time: float = 0.0
@@ -85,7 +85,7 @@ func _ready() -> void:
 
 	visual = _make_player_visual()
 	_swing_visual = _make_swing_trail()
-	_flare_visual = _make_arc_visual(&"flare", FLARE_REACH, 360.0, "FlareVisual")
+	_flare_visual = _make_flare_ring()
 	_ward_visual = _make_arc_visual(&"ward", 64.0, WARD_ARC_DEG, "WardVisual")
 
 	hurtbox = Hurtbox.new()
@@ -313,7 +313,6 @@ func _update_attack(delta: float, held: bool, pressed: bool, released: bool) -> 
 			_state_time += delta
 			if _state_time >= FLARE_ACTIVE and flare_hitbox.active:
 				flare_hitbox.deactivate()
-				_flare_visual.visible = false
 			if _state_time >= FLARE_TOTAL:
 				state = State.NORMAL
 				_state_time = 0.0
@@ -341,6 +340,7 @@ func _start_flare() -> void:
 	charging = false
 	charge_ready = false
 	flare_hitbox.activate()
+	_flare_visual.visible = false  # toggle so the ring always restarts its sweep
 	_flare_visual.visible = true
 	flare_fired.emit()
 
@@ -533,6 +533,18 @@ func _make_swing_trail() -> Node2D:
 	trail.visible = false
 	add_child(trail)
 	return trail
+
+
+## The charge flare's ring: flare_ring.gd (a sweep, then a fade). Falls back to the Placeholder arc.
+func _make_flare_ring() -> Node2D:
+	var ring_script := load("res://scripts/art/flare_ring.gd") as GDScript
+	if ring_script == null:
+		return _make_arc_visual(&"flare", FLARE_REACH, 360.0, "FlareVisual")
+	var ring := ring_script.new() as Node2D
+	ring.name = "FlareVisual"
+	ring.visible = false
+	add_child(ring)
+	return ring
 
 
 func _make_arc_visual(
