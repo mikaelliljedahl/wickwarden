@@ -14,6 +14,7 @@ extends Node
 ##   --action=charge                hold attack 0.9 s and shoot while the lamp glows
 ##   --action=pot                   place a pitch pot and shoot at the explosion
 ##   --action=swing                 swing the hook and shoot in the middle of the sweep
+##   --action=pause                 open the pause menu and shoot
 ##   --hitboxes                     draw hitboxes and hurtboxes (same as F1 in the game)
 
 var _viewport: SubViewport
@@ -89,6 +90,11 @@ func _run() -> void:
 			GameState.set_active_item(&"pitch_pot")
 			world.player.use_item()
 			await _frames(97)
+		"pause":
+			for child in world.get_children():
+				if child is PauseMenu:
+					(child as PauseMenu).set_open(true)
+			await get_tree().process_frame
 	await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 	var image := _viewport.get_texture().get_image()

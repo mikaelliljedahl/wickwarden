@@ -3,15 +3,16 @@ extends CanvasLayer
 ## Pause menu with button help. This is the ONLY place controls are explained; never put
 ## tutorial text in the game world.
 
-const HELP_TEXT := (
-	"PAUSED\n\n"
-	+ "Move            WASD / Arrows / Left stick\n"
-	+ "Lamp hook       J / Space / A  (hold to charge a flare)\n"
-	+ "Use item        K / X\n"
-	+ "Ward            L / RB  (hold)\n"
-	+ "Change item     I / Y\n"
-	+ "Pause           Esc / Start"
-)
+const TITLE := "PAUSED"
+const HELP_ROWS := [
+	["Move", "WASD / Arrows / Left stick"],
+	["Lamp hook", "J / Space / A  (hold to charge a flare)"],
+	["Use item", "K / X"],
+	["Ward", "L / RB  (hold)"],
+	["Change item", "I / Y"],
+	["Pause", "Esc / Start"],
+]
+const FONT_SIZE := 36
 
 var is_open: bool = false
 var _root: Control
@@ -30,13 +31,30 @@ func _ready() -> void:
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(dim)
-	var label := Label.new()
-	label.name = "Help"
-	label.text = HELP_TEXT
-	label.add_theme_font_size_override("font_size", 36)
-	label.set_anchors_preset(Control.PRESET_CENTER)
-	label.position = Vector2(560, 300)
-	_root.add_child(label)
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_root.add_child(center)
+	var column := VBoxContainer.new()
+	column.name = "Help"
+	column.add_theme_constant_override("separation", 40)
+	center.add_child(column)
+	var title := Label.new()
+	title.text = TITLE
+	title.add_theme_font_size_override("font_size", FONT_SIZE + 12)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	column.add_child(title)
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 64)
+	grid.add_theme_constant_override("v_separation", 12)
+	column.add_child(grid)
+	for row: Array in HELP_ROWS:
+		for text: String in row:
+			var cell := Label.new()
+			cell.text = text
+			cell.add_theme_font_size_override("font_size", FONT_SIZE)
+			grid.add_child(cell)
 
 
 func _unhandled_input(event: InputEvent) -> void:
