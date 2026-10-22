@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/world/room_door.gd" id="2"]
+
+[node name="Ow11" type="Node2D"]
+script = ExtResource("1")
+room_id = &"ow_1_1"
+grid = Vector2i(1, 1)
+exits = Array[StringName]([&"n", &"w", &"e"])
+floor_color = Color(0.24, 0.24, 0.18, 1)
+
+[node name="Enemies" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Bushes" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Spawns" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="FromCave" type="Marker2D" parent="Spawns"]
+position = Vector2(1344, 420)
+
+[node name="CaveEntrance" type="Area2D" parent="Props"]
+position = Vector2(1344, 288)
+script = ExtResource("2")
+target_room = &"cave_1"
+target_spawn = &"Default"
+

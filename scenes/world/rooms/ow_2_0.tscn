@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+
+[node name="Ow20" type="Node2D"]
+script = ExtResource("1")
+room_id = &"ow_2_0"
+grid = Vector2i(2, 0)
+exits = Array[StringName]([&"w", &"s"])
+floor_color = Color(0.26, 0.25, 0.2, 1)
+
+[node name="Enemies" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Bushes" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Spawns" type="Node2D" parent="."]
+y_sort_enabled = true
+
