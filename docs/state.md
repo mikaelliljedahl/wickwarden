@@ -94,3 +94,6 @@ and `make art-test` passes (the Python tests of the cut tool).
 1. Play the dev world with the new art and decide the swing width (see "Open points after step 2").
 2. Playtest balance on `make dev` and `make run`; tune only through the constants named in the code contract.
 3. Sound, a real title/death screen and save slots are outside step 1.
+
+- Room border (presentation only): `scripts/art/border_edge.gd` gives the wall ring a wavy, per-room deterministic inner
+  edge (leaves / rough rock), a contact shadow, a dark band and a lit lip; drawn from `Room._draw`. Collision unchanged.
