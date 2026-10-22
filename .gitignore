@@ -4,3 +4,4 @@ export/
 __pycache__/
 *.tmp
 .claude/worktrees/
+tools/source_art/proofs/
