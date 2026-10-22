@@ -43,10 +43,12 @@ Room transitions:
 |---|---|---|
 | `move_*` | WASD and arrows | Left stick, D-pad |
 | `attack` | J or Space | A / Cross |
-| `use_item` | K | X / Square |
-| `ward` | L (hold) | RB / R1 (hold) |
-| `cycle_item` | I | Y / Triangle |
+| `use_item` | E or K | X / Square |
+| `ward` | Shift or L (hold) | RB / R1 (hold) |
+| `cycle_item` | Q or I | Y / Triangle |
 | `pause` | Esc | Start |
+
+NOTE: After the first playtest the primary keys moved to the left hand (E, Shift, Q). The old keys K, L and I stay as alternates.
 
 ## 4. Player (Tamsin)
 
