@@ -39,9 +39,13 @@ make check   # import, test and gdlint
 Step 1 (dev world) is complete: seven rooms (`ow_0_0` .. `ow_2_1` and the cave), all five monsters, tether
 moth and pitch pot, cracked wall, locked door, brazier gate, HUD, room slides and fades. The route
 tether moth -> cave key -> locked door -> pitch pot -> cracked wall -> wick core is covered by
-`tests/test_dev_world_route.gd`. Art is placeholder shapes; step 2 is the high-detail art pass.
+`tests/test_dev_world_route.gd`.
 
-Screenshots: `docs/screens/step1/` (made with `tools/capture.tscn`, see the code contract, section 15).
+Step 2 (the art pass) is complete: painterly GPT Image art for every entity and room, cut by
+`make art` (see the [asset contract](docs/asset-contract.md), the [art brief](docs/art-brief.md) and the
+[art provenance](docs/art-provenance.md)). The art is original; every source sheet is listed with its origin.
+
+Screenshots: `docs/screens/step2/` (step 1 placeholders: `docs/screens/step1/`), made with `tools/capture.tscn`.
 
 ## Layout
 

@@ -1,7 +1,40 @@
-# Wickwarden — state after step 1
+# Wickwarden — state after step 2
 
-Step 1 (the dev world with placeholder art) is done and committed on `main`. `make check` passes
-(import, 18 headless test files, gdlint).
+Step 2 (the painterly art pass) is done and committed on `main`. Every entity and room uses GPT Image
+art; the step-1 game logic is unchanged. `make check` passes (import, 21 headless test files, gdlint)
+and `make art-test` passes (the Python tests of the cut tool).
+
+## What step 2 adds
+
+- **Art pipeline**: [asset-contract.md](asset-contract.md) (normative: cells for 96 px tiles, foot line,
+  strips, non-destructive post-processing), [art-brief.md](art-brief.md) (style and one prompt per sheet),
+  [art-provenance.md](art-provenance.md) (every source sheet with its Codex session, output ID and hash).
+  22 source sheets in `tools/source_art/`; `make art` cuts them into `assets/sprites/` and `sprites.json`.
+- **Runtime**: `SpriteVisual` (an `AnimatedSprite2D`) replaces `Placeholder` as each entity's `Visual`; it
+  builds its frames from the manifest, draws a soft contact shadow and falls back to `Placeholder` for a
+  kind without art. `PlayerVisual` picks Tamsin's walk, swing, charge, ward and hurt from her public state.
+  Rooms and wall/water blocks draw world-aligned tiled terrain textures.
+- **Effects**: the hook swing trail (`scripts/art/swing_trail.gd`) and the flare ring
+  (`scripts/art/flare_ring.gd`) are procedural, additive light drawn exactly on the hit shapes. The pitch
+  pot explosion and the enemy and bush death puffs use the painted explosion strip.
+- **Screenshots**: `docs/screens/step2/` (every room, swing, charge, flare, pot, lit brazier, hitboxes).
+  `tools/capture.tscn` has a new `--action=swing`.
+
+## Open points after step 2
+
+- **The hook swing width is open for tuning.** The user finds the 110° arc with 120 px reach
+  (`SWING_ARC_DEG`, `SWING_REACH` in `scripts/player/player.gd`) rather wide. The numbers are unchanged; the
+  swing trail draws exactly that sector so the width can be judged with the real art in play.
+- No human visual approval yet. Judge the art in play with `make run` / `make dev`.
+- The pond and the ruin walls are rectangular texture blocks with hard edges; soft banks and wall faces
+  would read better.
+- The tallow blob rests on its flattest pose, so a still blob looks low.
+- A faint olive tint remains in the explosion smoke and near Tamsin's braid tip in the charge poses
+  (green-key spill that the despill cannot tell apart from painted colour).
+- The AgentTeamForge daemon restarted several times during generation; three Codex agents stopped
+  before they wrote their logs. The lead wrote those logs from the session folders (see the provenance).
+
+## What step 1 contains
 
 ## What step 1 contains
 
@@ -54,14 +87,9 @@ Step 1 (the dev world with placeholder art) is done and committed on `main`. `ma
 - Skitterwick hops and duskmoth flights slide along obstacles; no special pathing. Hollows walk tile centres, so
   obstacles must stay on the 96 px grid (the layout test enforces the rest).
 - The debug overlay draws hit/hurt boxes only, not body or wall shapes.
-- Placeholder rects/circles overlap a little in the y-sort (tall props are plain squares); this goes away with art.
 
 ## Next steps
 
-1. **Step 2: GPT Image art pass via Codex** (plan section 10): painterly high-detail source images in
-   `tools/source_art/`, a Python cutter to sprite strips under `assets/sprites/` (one scale factor per strip, real
-   gaps between poses, no palette quantizing or alpha thresholding), replace each `Visual` with an
-   `AnimatedSprite2D`, check every strip in the game with `tools/capture.tscn`. Keep to `modulate`, `visible` and
-   `set_facing` on `Visual`. If tiles replace the wall rectangles, test the real tile collision (centre-origin trap).
+1. Play the dev world with the new art and decide the swing width (see "Open points after step 2").
 2. Playtest balance on `make dev` and `make run`; tune only through the constants named in the code contract.
 3. Sound, a real title/death screen and save slots are outside step 1.

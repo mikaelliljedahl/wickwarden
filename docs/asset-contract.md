@@ -70,6 +70,10 @@ character, so Tamsin has the same size in every animation. The manifest names th
    to the key, with a soft ramp between two thresholds. It is continuous, never a hard cut.
 2. **Despill only the edge.** Remove key spill only on partly transparent pixels, and use alpha as
    the coverage rate when you un-premultiply. Never despill opaque pixels.
+   One exception, set per sheet in the manifest (`rim_despill_px`): a green-key sheet whose subject
+   has no green at all (the Tamsin sheets) may limit green on pixels within 5 px of the
+   background, because the generator paints a green rim into the outermost opaque pixels. Never
+   use it on a sheet whose subject contains green.
 3. **Find real gaps.** Find the empty columns (and rows) between poses from the alpha. Never cut a
    sheet into equal-width columns: the image model places poses at uneven intervals. Remove
    small islands (noise), but keep loose parts that belong to a pose (a hook tip, a flame).
@@ -91,7 +95,7 @@ collision circle, so the soles sit `r` px below it (`r` = body radius).
 
 | Kind | W | foot | Approx. figure height | Animations (frames) |
 |---|---|---|---|---|
-| `player` | 192 | 176 | 140 | `walk_{down,up,side}` (6), `swing_{down,up,side}` (4), `charge_{down,up,side}` (2), `ward_{down,up,side}` (1), `hurt_{down,up,side}` (1). Idle = walk frame 0. |
+| `player` | 192 | 176 | 140 | `walk_{down,up,side}` (6), `swing_{down,up,side}` (4), `charge_{down,up,side}` (2), `ward_{down,up,side}` (1), `hurt_{down,up,side}` (1). Idle = walk frame 0. The `swing_*` strips use a wider 288 × 192 cell (same foot row, anchor x at the body centre) because the extended hook is wider than 192 px; the manifest gives such an animation its own `cell` and `anchor`. |
 | `hollow` | 192 | 176 | 150 | `walk_{down,up,side}` (4) |
 | `spitcap` | 128 | 116 | 90 | `walk` (4), `spit` (2) |
 | `skitterwick` | 128 | 116 | 70 | `idle` (2), `crouch` (1), `hop` (2) |
