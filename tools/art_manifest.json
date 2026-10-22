@@ -3,6 +3,27 @@
  "defaults": {},
  "scale_groups": {
   "player": {"measure": "body_height", "thin": 0.08, "value": 140, "ref": [{"sheet": "tamsin_walk", "row": 0}]},
+  "player_walk_down": {
+   "measure": "match",
+   "like": "player",
+   "thin": 0.08,
+   "like_ref": [{"sheet": "tamsin_walk", "row": 0}],
+   "ref": [{"sheet": "tamsin_walk_down", "row": 0}]
+  },
+  "player_walk_up": {
+   "measure": "match",
+   "like": "player",
+   "thin": 0.08,
+   "like_ref": [{"sheet": "tamsin_walk", "row": 1}],
+   "ref": [{"sheet": "tamsin_walk_up", "row": 0}]
+  },
+  "player_walk_side": {
+   "measure": "match",
+   "like": "player",
+   "thin": 0.08,
+   "like_ref": [{"sheet": "tamsin_walk", "row": 2}],
+   "ref": [{"sheet": "tamsin_walk_side", "row": 0}]
+  },
   "player_swing": {
    "measure": "match",
    "like": "player",
@@ -25,6 +46,20 @@
   "tallow_blob": {"measure": "height", "value": 110, "ref": [{"sheet": "hush_tallow", "row": 0}]},
   "tallow_drop": {"measure": "height", "value": 40, "ref": [{"sheet": "hush_tallow", "row": 1}]},
   "hollow": {"measure": "height", "value": 150, "ref": [{"sheet": "hush_hollow", "row": 0}]},
+  "hollow_walk_side": {
+   "measure": "match",
+   "like": "hollow",
+   "thin": 0.08,
+   "like_ref": [{"sheet": "hush_hollow", "row": 0}],
+   "ref": [{"sheet": "hush_hollow_walk_side", "row": 0}]
+  },
+  "hollow_walk_up": {
+   "measure": "match",
+   "like": "hollow",
+   "thin": 0.08,
+   "like_ref": [{"sheet": "hush_hollow", "row": 0}],
+   "ref": [{"sheet": "hush_hollow_walk_up", "row": 0}]
+  },
   "tether_moth": {"measure": "extent", "value": 80, "ref": [{"sheet": "items", "row": 0}]},
   "pitch_pot": {"measure": "height", "value": 56, "ref": [{"sheet": "items", "row": 1, "poses": [0, 1]}]},
   "explosion": {"measure": "extent", "value": 360, "ref": [{"sheet": "fx_explosion", "row": 0}]},
@@ -77,49 +112,71 @@
  },
  "sheets": {
   "tamsin_walk": {
+   "_comment": "Design and scale reference only (the old 6-pose sheet): no outputs. Scale groups player, player_walk_*, player_swing and player_states measure it.",
+   "key": "green",
+   "params": {"rim_despill_px": 5, "chroma_band": 28, "despill_margin": 60},
+   "rows": [
+    {"poses": 6, "outputs": []},
+    {"poses": 6, "outputs": []},
+    {"poses": 6, "outputs": []}
+   ]
+  },
+  "tamsin_walk_down": {
    "key": "green",
    "params": {"rim_despill_px": 5, "chroma_band": 28, "despill_margin": 60},
    "rows": [
     {
-     "poses": 6,
+     "poses": 4,
      "outputs": [
       {
        "file": "player_walk_down",
        "kind": "player",
        "anim": "walk_down",
-       "poses": [0, 6],
-       "scale": "player",
-       "fps": 10,
+       "poses": [0, 4],
+       "scale": "player_walk_down",
+       "fps": 8,
        "loop": true,
        "shadow_src": true
       }
      ]
-    },
+    }
+   ]
+  },
+  "tamsin_walk_up": {
+   "key": "green",
+   "params": {"rim_despill_px": 5, "chroma_band": 28, "despill_margin": 60},
+   "rows": [
     {
-     "poses": 6,
+     "poses": 4,
      "outputs": [
       {
        "file": "player_walk_up",
        "kind": "player",
        "anim": "walk_up",
-       "poses": [0, 6],
-       "scale": "player",
-       "fps": 10,
+       "poses": [0, 4],
+       "scale": "player_walk_up",
+       "fps": 8,
        "loop": true,
        "shadow_src": false
       }
      ]
-    },
+    }
+   ]
+  },
+  "tamsin_walk_side": {
+   "key": "green",
+   "params": {"rim_despill_px": 5, "chroma_band": 28, "despill_margin": 60, "det_floor": 0.25},
+   "rows": [
     {
-     "poses": 6,
+     "poses": 4,
      "outputs": [
       {
        "file": "player_walk_side",
        "kind": "player",
        "anim": "walk_side",
-       "poses": [0, 6],
-       "scale": "player",
-       "fps": 10,
+       "poses": [0, 4],
+       "scale": "player_walk_side",
+       "fps": 8,
        "loop": true,
        "shadow_src": false
       }
@@ -456,21 +513,13 @@
       }
      ]
     },
-    {
-     "poses": 4,
-     "outputs": [
-      {
-       "file": "hollow_walk_up",
-       "kind": "hollow",
-       "anim": "walk_up",
-       "poses": [0, 4],
-       "scale": "hollow",
-       "fps": 8,
-       "loop": true,
-       "shadow_src": false
-      }
-     ]
-    },
+    {"poses": 4, "skip": true, "outputs": []},
+    {"poses": 4, "skip": true, "outputs": []}
+   ]
+  },
+  "hush_hollow_walk_side": {
+   "key": "magenta",
+   "rows": [
     {
      "poses": 4,
      "outputs": [
@@ -479,7 +528,27 @@
        "kind": "hollow",
        "anim": "walk_side",
        "poses": [0, 4],
-       "scale": "hollow",
+       "scale": "hollow_walk_side",
+       "fps": 8,
+       "loop": true,
+       "shadow_src": false
+      }
+     ]
+    }
+   ]
+  },
+  "hush_hollow_walk_up": {
+   "key": "magenta",
+   "rows": [
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "hollow_walk_up",
+       "kind": "hollow",
+       "anim": "walk_up",
+       "poses": [0, 4],
+       "scale": "hollow_walk_up",
        "fps": 8,
        "loop": true,
        "shadow_src": false

@@ -31,6 +31,11 @@ GPT Image terrain textures below; they add no other image.
   and its log names `tex_wall_ruin.png` as the reference image. Full SHA-256:
   `tex_pond_bank.png` `07448dcf0d67fd325271131bf6681b73615800c60fae60be681239e831a725d1`,
   `tex_wall_ruin_face.png` `dae6d22650c92bb18baa02da52c576374a93bf7d25b00c64c9490ffa03b47456`.
+- The v2 walk sheets (`tamsin_walk_{down,up,side}`, `hush_hollow_walk_{up,side}`) replace the walk rows
+  of `tamsin_walk.png` and `hush_hollow.png` in the game. `tamsin_walk.png` stays as the design and scale
+  reference, and `hush_hollow.png` still supplies `hollow_walk_down`. The v2 sheets are one row of four
+  poses each; the logs say the tool showed no session or call ID, so the IDs below are the output file
+  names the logs record, each checked byte-identical (SHA-256) against `~/.codex/generated_images/<session>/`.
 - No source image was resized or edited by hand. The textures and some sheets are 1254×1254 or
   2172×724 because the tool returned those sizes.
 
@@ -60,12 +65,17 @@ GPT Image terrain textures below; they add no other image.
 | `tex_water.png` | 1254×1254 | `01a16348-3d13-7a42-8be4-1450d98d7fc9` | `exec-8dd28f5d-e18c-41af-ab39-3b23e316eac1` | `e2be33fa288ffcd6` | `log_world.md` |
 | `tex_ground_cave.png` | 1254×1254 | `01a16348-3d13-7a42-8be4-1450d98d7fc9` | `exec-03f3e9c5-a5a3-4919-a665-86916a86a647` | `1c649df700c17b8f` | `log_world.md` |
 | `tex_wall_cave.png` | 1254×1254 | `01a16348-3d13-7a42-8be4-1450d98d7fc9` | `exec-a1bf1da6-551a-4089-b53b-6df41d9533ae` | `6446404de64b0241` | `log_world.md` |
+| `tamsin_walk_down.png` | 1536×1024 | `01a163ed-5cf5-7ea0-a18c-6213dc71318e` | `exec-2a3c4827-3e06-4915-8b1d-ae993820826e` | `192995d81e4d6370` | `log_tamsin_walk_v2.md` (redo) |
+| `tamsin_walk_up.png` | 1536×1024 | `01a163e1-bc66-7452-b66f-4edae8fc1e8f` | `exec-98d28a3d-da49-4e07-ab01-c720198b562e` | `beda31ec2e7a0416` | `log_tamsin_walk_v2.md` |
+| `tamsin_walk_side.png` | 1536×1024 | `01a163e1-bc66-7452-b66f-4edae8fc1e8f` | `exec-3281d230-6aa4-4f66-9ad3-77024638e612` | `1645331b48336e6a` | `log_tamsin_walk_v2.md` |
+| `hush_hollow_walk_up.png` | 1536×1024 | `01a163e2-105c-7f63-a1f6-19f0996eb728` | `exec-a095ea5a-b3bd-4fc6-8626-d6be6b9d3572` | `f17f8c4cfd2e161c` | `log_hollow_walk_v2.md` |
+| `hush_hollow_walk_side.png` | 2172×724 | `01a163e2-105c-7f63-a1f6-19f0996eb728` | `exec-0657a715-9683-4c6d-a9dd-f51a862f855b` | `3d937390de9276ad` | `log_hollow_walk_v2.md` |
 | `tex_pond_bank.png` | 1254×1254 | `01a163da-a933-7313-9e9a-43e7e436266e` | `exec-5ce69000-6ba2-4781-b41d-ae1d36510bf7` | `07448dcf0d67fd32` | `log_terrain.md` |
 | `tex_wall_ruin_face.png` | 1254×1254 | `01a163da-a933-7313-9e9a-43e7e436266e` | `exec-38baea37-8d44-45c4-82d6-1d08749b7e79` | `dae6d22650c92bb1` | `log_terrain.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
-attempts and the second Tamsin walk attempt.
+attempts and the second Tamsin walk attempt, and the rejected attempts of the v2 walk sheets (listed in `log_tamsin_walk_v2.md` and `log_hollow_walk_v2.md`; the first `tamsin_walk_down` output in the same session as `tamsin_walk_up` and `tamsin_walk_side` was replaced by the redo in a later session).
 
 ## Processing
 

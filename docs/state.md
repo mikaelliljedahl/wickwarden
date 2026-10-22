@@ -17,6 +17,10 @@ and `make art-test` passes (the Python tests of the cut tool).
   shaders (`assets/shaders/`): touching blocks form one pond with soft, irregular mud banks and a shore
   line, or one ruined wall with a front face, broken top edges and a soft shadow (three-quarter view).
   The collision rectangles are unchanged.
+- **Walk cycles remade**: the first walk sheets had six near-identical poses per row, so the feet looked still.
+  Tamsin's `walk_{down,up,side}` and the hollow's `walk_side` and `walk_up` now come from new sheets with four
+  distinct poses (stride, passing, stride, passing; 8 fps); `tamsin_walk.png` stays as the design and scale
+  reference only. The hollow's `walk_down` is still from `hush_hollow.png`.
 - **Effects**: the hook swing trail (`scripts/art/swing_trail.gd`) and the flare ring
   (`scripts/art/flare_ring.gd`) are procedural, additive light drawn exactly on the hit shapes. The pitch
   pot explosion and the enemy and bush death puffs use the painted explosion strip.

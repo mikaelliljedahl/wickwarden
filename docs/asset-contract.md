@@ -95,7 +95,7 @@ collision circle, so the soles sit `r` px below it (`r` = body radius).
 
 | Kind | W | foot | Approx. figure height | Animations (frames) |
 |---|---|---|---|---|
-| `player` | 192 | 176 | 140 | `walk_{down,up,side}` (6), `swing_{down,up,side}` (4), `charge_{down,up,side}` (2), `ward_{down,up,side}` (1), `hurt_{down,up,side}` (1). Idle = walk frame 0. The `swing_*` strips use a wider 288 × 192 cell (same foot row, anchor x at the body centre) because the extended hook is wider than 192 px; the manifest gives such an animation its own `cell` and `anchor`. |
+| `player` | 192 | 176 | 140 | `walk_{down,up,side}` (4: stride, passing, stride, passing), `swing_{down,up,side}` (4), `charge_{down,up,side}` (2), `ward_{down,up,side}` (1), `hurt_{down,up,side}` (1). Idle = walk frame 0. The `swing_*` strips use a wider 288 × 192 cell (same foot row, anchor x at the body centre) because the extended hook is wider than 192 px; the manifest gives such an animation its own `cell` and `anchor`. |
 | `hollow` | 192 | 176 | 150 | `walk_{down,up,side}` (4) |
 | `spitcap` | 128 | 116 | 90 | `walk` (4), `spit` (2) |
 | `skitterwick` | 128 | 116 | 70 | `idle` (2), `crouch` (1), `hop` (2) |
@@ -166,7 +166,7 @@ at run time from `AtlasTexture` regions. Nobody edits it by hand.
     "anchor": [96, 150],
     "mirror_side": true,
     "animations": {
-      "walk_down": {"file": "res://assets/sprites/player_walk_down.png", "frames": 6, "fps": 10, "loop": true}
+      "walk_down": {"file": "res://assets/sprites/player_walk_down.png", "frames": 4, "fps": 8, "loop": true}
     }
   },
   "rock": {

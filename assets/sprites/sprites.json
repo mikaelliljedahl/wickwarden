@@ -12,26 +12,26 @@
     "radius": 26.0,
     "mirror_side": true,
     "shadow": [
-      32,
+      34,
       11
     ],
     "animations": {
       "walk_down": {
         "file": "res://assets/sprites/player_walk_down.png",
-        "frames": 6,
-        "fps": 10.0,
+        "frames": 4,
+        "fps": 8.0,
         "loop": true
       },
       "walk_up": {
         "file": "res://assets/sprites/player_walk_up.png",
-        "frames": 6,
-        "fps": 10.0,
+        "frames": 4,
+        "fps": 8.0,
         "loop": true
       },
       "walk_side": {
         "file": "res://assets/sprites/player_walk_side.png",
-        "frames": 6,
-        "fps": 10.0,
+        "frames": 4,
+        "fps": 8.0,
         "loop": true
       },
       "swing_down": {
@@ -171,14 +171,14 @@
         "fps": 8.0,
         "loop": true
       },
-      "walk_up": {
-        "file": "res://assets/sprites/hollow_walk_up.png",
+      "walk_side": {
+        "file": "res://assets/sprites/hollow_walk_side.png",
         "frames": 4,
         "fps": 8.0,
         "loop": true
       },
-      "walk_side": {
-        "file": "res://assets/sprites/hollow_walk_side.png",
+      "walk_up": {
+        "file": "res://assets/sprites/hollow_walk_up.png",
         "frames": 4,
         "fps": 8.0,
         "loop": true
