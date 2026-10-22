@@ -64,6 +64,10 @@ Not covered: the hook has no hit detection against rocks or walls, so there is n
 - **The hook swing width is open for tuning.** The user finds the 110° arc with 120 px reach
   (`SWING_ARC_DEG`, `SWING_REACH` in `scripts/player/player.gd`) rather wide. The numbers are unchanged; the
   swing trail draws exactly that sector so the width can be judged with the real art in play.
+- **The new walk cycle looks a little lame (haltande).** The user judged it good enough for now, in play, for Tamsin
+  and for the Hollow. Open art item: check the leg order of the four poses (stride, passing, stride, passing) and the
+  frame timing at 8 fps (`walk_*` in `tools/art_manifest.json`). Try a six-pose cycle or another fps before a new
+  Codex sheet. The art is unchanged.
 - No human visual approval yet. Judge the art in play with `make run` / `make dev`.
 - The tallow blob rests on its flattest pose, so a still blob looks low.
 - A faint olive tint remains in the explosion smoke and near Tamsin's braid tip in the charge poses

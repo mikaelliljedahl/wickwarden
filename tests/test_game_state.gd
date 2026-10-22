@@ -80,9 +80,9 @@ func _input_map() -> void:
 		&"move_up": [KEY_W, KEY_UP],
 		&"move_down": [KEY_S, KEY_DOWN],
 		&"attack": [KEY_J, KEY_SPACE],
-		&"use_item": [KEY_K],
-		&"ward": [KEY_L],
-		&"cycle_item": [KEY_I],
+		&"use_item": [KEY_E, KEY_K],
+		&"ward": [KEY_SHIFT, KEY_L],
+		&"cycle_item": [KEY_Q, KEY_I],
 		&"pause": [KEY_ESCAPE],
 	}
 	for action in expected:

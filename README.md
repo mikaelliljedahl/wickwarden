@@ -27,10 +27,10 @@ make check   # import, test and gdlint
 | Action | Keyboard | Gamepad |
 |---|---|---|
 | Move | WASD / arrows | left stick / D-pad |
-| Lamp hook (hold 0.8 s to charge a flare) | J / Space | A |
-| Use item | K | X |
-| Ward (hold) | L | RB |
-| Change item | I | Y |
+| Lamp hook (hold 0.8 s to charge a flare) | Space / J | A |
+| Use item | E / K | X |
+| Ward (hold) | Shift / L | RB |
+| Change item | Q / I | Y |
 | Pause (shows this help in game) | Esc | Start |
 | Hitbox overlay (dev mode only) | F1 | - |
 

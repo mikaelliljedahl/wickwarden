@@ -6,10 +6,10 @@ extends CanvasLayer
 const TITLE := "PAUSED"
 const HELP_ROWS := [
 	["Move", "WASD / Arrows / Left stick"],
-	["Lamp hook", "J / Space / A  (hold to charge a flare)"],
-	["Use item", "K / X"],
-	["Ward", "L / RB  (hold)"],
-	["Change item", "I / Y"],
+	["Lamp hook", "Space / J / A  (hold to charge a flare)"],
+	["Use item", "E / K / X"],
+	["Ward", "Shift / L / RB  (hold)"],
+	["Change item", "Q / I / Y"],
 	["Pause", "Esc / Start"],
 ]
 const FONT_SIZE := 36
