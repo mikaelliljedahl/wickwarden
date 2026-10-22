@@ -13,6 +13,14 @@ signal lit_changed(is_lit: bool)
 
 var hurtbox: Hurtbox
 var light: PointLight2D
+## Faint pulsing ember glow while unlit (a visual hint; a light so the cave darkness cannot hide it).
+var ember: PointLight2D
+var _ember_tween: Tween
+
+const EMBER_RADIUS := 170.0
+const EMBER_ENERGY_LOW := 0.6
+const EMBER_ENERGY_HIGH := 1.1
+const EMBER_PERIOD := 2.6
 
 
 func _init() -> void:
@@ -40,6 +48,14 @@ func _ready() -> void:
 	light.color = Color(1.0, 0.7, 0.35)
 	light.enabled = false
 	add_child(light)
+	ember = PointLight2D.new()
+	ember.name = "Ember"
+	ember.texture = LightTexture.make()
+	ember.texture_scale = LightTexture.scale_for(EMBER_RADIUS)
+	ember.color = Color(1.0, 0.36, 0.12)
+	ember.energy = EMBER_ENERGY_LOW
+	ember.position = Vector2(0, -24)
+	add_child(ember)
 	SpriteVisual.attach(self, &"brazier", 0.0, Vector2(64, 64))
 	if brazier_id != &"" and GameState.has_flag(flag_name()):
 		lit = true
@@ -72,6 +88,16 @@ func _on_hurt(hitbox: Hitbox) -> void:
 
 func _refresh() -> void:
 	light.enabled = lit
+	ember.visible = not lit
+	ember.enabled = not lit
+	if _ember_tween != null:
+		_ember_tween.kill()
+		_ember_tween = null
+	if not lit and is_inside_tree():
+		_ember_tween = create_tween().set_loops()
+		_ember_tween.set_trans(Tween.TRANS_SINE)
+		_ember_tween.tween_property(ember, "energy", EMBER_ENERGY_HIGH, EMBER_PERIOD * 0.5)
+		_ember_tween.tween_property(ember, "energy", EMBER_ENERGY_LOW, EMBER_PERIOD * 0.5)
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
 	if visual != null and visual.has_method("set_kind"):
 		visual.call("set_kind", &"brazier_lit" if lit else &"brazier")

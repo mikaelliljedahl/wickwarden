@@ -7,6 +7,7 @@ func run() -> void:
 	await _bush()
 	await _brazier_and_gate()
 	await _locked_door()
+	await _visual_hints()
 
 
 func _swing_at_right(player: Player) -> void:
@@ -138,4 +139,50 @@ func _locked_door() -> void:
 	arena.add_child(again)
 	await frames(2)
 	check(again.is_open, "an opened door is open on the next visit")
+	await dispose(arena)
+
+
+func _visual_hints() -> void:
+	reset_state()
+	var arena := make_arena()
+	var first := Brazier.new()
+	first.name = "B1"
+	first.brazier_id = &"hint_a"
+	arena.add_child(first)
+	first.global_position = Vector2(490, 400)
+	var second := Brazier.new()
+	second.name = "B2"
+	second.brazier_id = &"hint_b"
+	arena.add_child(second)
+	second.global_position = Vector2(900, 400)
+	var gate := Gate.new()
+	gate.gate_id = &"hint_gate"
+	gate.braziers = [NodePath("../B1"), NodePath("../B2")]
+	arena.add_child(gate)
+	gate.global_position = Vector2(900, 800)
+	await frames(2)
+	check(first.ember.visible and first.ember.enabled, "an unlit brazier shows its ember glow")
+	check(not first.light.enabled, "the ember is not the flame light")
+	check(not gate.rune.visible, "the gate rune is dark while no brazier is lit")
+	var energy_a := first.ember.energy
+	await seconds(0.7)
+	check(absf(first.ember.energy - energy_a) > 0.01, "the ember pulses")
+	first.ignite()
+	await seconds(0.1)
+	check(not first.ember.visible, "a lit brazier has no ember glow")
+	check(second.ember.visible, "the other brazier keeps its ember glow")
+	check(gate.rune.visible, "the gate rune reacts when one brazier is lit")
+	var visual := gate.get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
+	await frames(2)
+	check(visual != null and absf(visual.position.x) > 0.0, "the gate shakes when one brazier is lit")
+	await seconds(0.9)
+	check_near(gate.rune.energy, Gate.RUNE_HALF_ENERGY, 0.05, "the rune fades in to half strength")
+	check_near(visual.position.x, 0.0, 0.01, "the shake settles")
+	check(not gate.is_open, "one lit brazier does not open the gate")
+	check(gate._shape != null and not gate._shape.disabled, "the gate stays solid")
+	check(not GameState.has_flag(&"gate_hint_gate"), "the gate flag is untouched")
+	second.ignite()
+	await seconds(0.8)
+	check(gate.is_open, "both lit: the gate opens as before")
+	check(not gate.rune.visible, "the rune gives way once the gate is open")
 	await dispose(arena)
