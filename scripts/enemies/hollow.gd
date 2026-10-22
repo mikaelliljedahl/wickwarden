@@ -157,6 +157,7 @@ func _start_charge(dir: Vector2) -> void:
 	_timer = CHARGE_TIME
 	set_facing_dir(dir)
 	velocity = facing_dir * CHARGE_SPEED
+	Audio.play_sfx(&"hollow_dash", global_position)
 
 
 func _enter_recover() -> void:

@@ -54,5 +54,6 @@ func cut_down() -> void:
 			var kind := DropTable.roll(drop_roll_override)
 			if kind != &"":
 				PickupBase.spawn(kind, parent, global_position)
+	Audio.play_sfx(&"bush_cut", global_position)
 	cut.emit()
 	queue_free()

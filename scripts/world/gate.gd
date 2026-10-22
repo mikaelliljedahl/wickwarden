@@ -54,6 +54,7 @@ func open() -> void:
 	if gate_id != &"":
 		GameState.set_flag(flag_name())
 	_set_open(true)
+	Audio.play_sfx(&"gate_open", global_position)
 	opened.emit()
 
 

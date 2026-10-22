@@ -61,5 +61,7 @@ func _open(persist: bool) -> void:
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as CanvasItem
 	if visual != null:
 		visual.visible = false
+	if persist:
+		Audio.play_sfx(&"wall_break", global_position)
 	if persist and wall_id != &"":
 		GameState.set_flag(flag_name())

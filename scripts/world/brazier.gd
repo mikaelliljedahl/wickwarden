@@ -55,6 +55,7 @@ func ignite() -> void:
 	if lit:
 		return
 	lit = true
+	Audio.play_sfx(&"brazier_lit", global_position)
 	if brazier_id != &"":
 		GameState.set_flag(flag_name())
 		Events.brazier_lit.emit(brazier_id)
@@ -64,6 +65,8 @@ func ignite() -> void:
 
 func _on_hurt(hitbox: Hitbox) -> void:
 	if hitbox.kind == &"hook" or hitbox.kind == &"flare":
+		if lit:
+			Audio.play_sfx(&"hook_clank", global_position)
 		ignite()
 
 

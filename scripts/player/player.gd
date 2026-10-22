@@ -295,8 +295,14 @@ func _update_attack(delta: float, held: bool, pressed: bool, released: bool) -> 
 				_start_flare()
 			elif held:
 				_hold_time += delta
+				var was_charging := charging
+				var was_ready := charge_ready
 				charging = _hold_time > SWING_TOTAL
 				charge_ready = _hold_time >= CHARGE_TIME
+				if charging and not was_charging:
+					Audio.play_sfx(&"charge_start")
+				if charge_ready and not was_ready:
+					Audio.play_sfx(&"charge_ready")
 			else:
 				_hold_time = 0.0
 				charging = false
@@ -330,6 +336,7 @@ func _start_swing() -> void:
 	_swing_visual.call("set_facing", facing)
 	_swing_visual.visible = false  # toggle so the trail always restarts its sweep
 	_swing_visual.visible = true
+	Audio.play_sfx(&"swing")
 	swing_started.emit(facing)
 
 
@@ -342,6 +349,7 @@ func _start_flare() -> void:
 	flare_hitbox.activate()
 	_flare_visual.visible = false  # toggle so the ring always restarts its sweep
 	_flare_visual.visible = true
+	Audio.play_sfx(&"flare")
 	flare_fired.emit()
 
 
@@ -455,6 +463,7 @@ func _tick_iframes(delta: float) -> void:
 func _hurtbox_filter(hitbox: Hitbox) -> bool:
 	if ward_blocks(hitbox):
 		hitbox.blocked.emit()
+		Audio.play_sfx(&"ward_block", global_position)
 		return false
 	return true
 

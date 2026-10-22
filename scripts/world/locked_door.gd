@@ -50,6 +50,7 @@ func try_unlock() -> bool:
 	if door_id != &"":
 		GameState.set_flag(flag_name())
 	_set_open(true)
+	Audio.play_sfx(&"door_unlock", global_position)
 	opened.emit()
 	return true
 

@@ -39,6 +39,7 @@ func activate() -> bool:
 	if player != null:
 		global_position = player.global_position + facing * TILE
 	_armed = true
+	Audio.play_sfx(&"pot_place", global_position)
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
 	if visual != null and visual.has_method(&"play_anim"):
 		visual.call(&"play_anim", &"fuse")

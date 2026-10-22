@@ -1,7 +1,7 @@
 GODOT ?= godot
 GDTOOLKIT = uv tool run --from gdtoolkit==4.5.0
 
-.PHONY: run dev import test lint format check art art-test
+.PHONY: run dev import test lint format check art art-test audio
 
 run:
 	$(GODOT) --path .
@@ -33,3 +33,7 @@ art:
 
 art-test:
 	uv run --with pillow==12.3.0 --with numpy python tools/test_cut_sprites.py
+
+# Synthesises every sound into assets/audio/ (stdlib Python + ffmpeg for the .ogg music). Subset: make audio ITEMS="swing cave"
+audio:
+	python3 tools/make_audio.py $(ITEMS)

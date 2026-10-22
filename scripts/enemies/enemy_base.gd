@@ -148,6 +148,7 @@ func stun(seconds: float) -> void:
 	var was_stunned := _stun_time > 0.0
 	_stun_time = maxf(_stun_time, seconds)
 	velocity = Vector2.ZERO
+	Audio.play_sfx(&"stun", global_position)
 	stunned.emit(_stun_time)
 	if not was_stunned:
 		_on_stunned(_stun_time)
@@ -265,6 +266,7 @@ func fire_projectile(
 	if proj_damage >= 0:
 		projectile.damage = proj_damage
 	projectile.room_rect = room_rect
+	Audio.play_sfx(&"spit", global_position)
 	get_parent().add_child(projectile)
 	projectile.launch(global_position if from == Vector2.INF else from, dir)
 	return projectile
@@ -335,6 +337,9 @@ func _on_hurtbox_hurt(hitbox: Hitbox) -> void:
 		return
 	hp -= amount
 	damaged.emit(amount)
+	if hitbox.kind == &"hook" or hitbox.kind == &"flare":
+		Audio.play_sfx(&"hook_hit", global_position)
+	Audio.play_sfx(&"enemy_hurt", global_position)
 	_after_hit(hitbox.origin(), hitbox.knockback, hitbox.knockback_time, hitbox)
 
 

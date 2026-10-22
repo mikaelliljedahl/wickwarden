@@ -23,6 +23,38 @@ and `make art-test` passes (the Python tests of the cut tool).
 - **Screenshots**: `docs/screens/step2/` (every room, swing, charge, flare, pot, lit brazier, hitboxes).
   `tools/capture.tscn` has a new `--action=swing`.
 
+## Audio
+
+All audio is synthesised by `tools/make_audio.py` (see [audio-provenance.md](audio-provenance.md)); rebuild
+with `make audio`. The `Audio` autoload (`scripts/audio/audio.gd`, process mode ALWAYS) offers
+`play_sfx(name, at := Vector2.INF, volume_db := 0.0, pitch_jitter := 0.05)` (16 pooled players, 2D when `at`
+is given) and `play_music(name)` (1 s crossfade). Buses in `default_bus_layout.tres`: Master, Music (-10 dB), SFX.
+Music follows `Events.room_entered`: `cave*` rooms play `cave`, all others `overworld`; it ducks while the tree is
+paused. Audio is presentation only: gameplay scripts hold one-line `Audio.play_sfx` calls.
+
+| Sound | Event |
+|---|---|
+| `swing` | hook swing starts (player) |
+| `charge_start`, `charge_ready` | charge begins / reaches full (player) |
+| `flare` | charge released (player) |
+| `hook_hit`, `enemy_hurt` | hook or flare damages an enemy; any damaging hit (enemy_base) |
+| `hook_clank` | hook hits an already lit brazier |
+| `bush_cut` | bush cut down |
+| `ward_block` | raised ward stops a hitbox |
+| `moth_launch`, `stun` | tether moth thrown; an enemy is stunned |
+| `pot_place`, `pot_explode` | pitch pot placed; `Events.explosion` |
+| `player_hurt`, `player_death` | `Events.player_hurt`, `Events.player_died` |
+| `enemy_death` | `Events.enemy_died` |
+| `spit` | an enemy fires a projectile (`fire_projectile`) |
+| `hollow_dash` | hollow starts its dash |
+| `pickup_heart/coin/key/pots/core/item` | `Events.pickup_collected` by kind |
+| `gate_open`, `door_unlock`, `wall_break`, `brazier_lit` | gate opens, key unlocks, cracked wall breaks, brazier ignites |
+| `room_transition` | `Events.room_entered` (not the first) |
+| `pause_open`, `pause_close` | the tree's paused flag changes (watched by the autoload) |
+| `menu_move`, `menu_select` | synthesised and loadable, unused: the pause menu has no selectable items |
+
+Not covered: the hook has no hit detection against rocks or walls, so there is no wall-hit sound.
+
 ## Open points after step 2
 
 - **The hook swing width is open for tuning.** The user finds the 110° arc with 120 px reach

@@ -55,6 +55,7 @@ func activate() -> bool:
 	_phase = Phase.OUT
 	_travelled = 0.0
 	_live = true
+	Audio.play_sfx(&"moth_launch", global_position)
 	_stun_box.activate()
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
 	if visual != null and visual.has_method(&"set_facing"):
