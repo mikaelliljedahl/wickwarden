@@ -3,3 +3,4 @@ export/
 .DS_Store
 __pycache__/
 *.tmp
+.claude/worktrees/
