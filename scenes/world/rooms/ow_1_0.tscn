@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/world/bush.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/skitterwick.tscn" id="4"]
 
 [node name="Ow10" type="Node2D"]
 script = ExtResource("1")
@@ -12,12 +15,98 @@ floor_color = Color(0.22, 0.28, 0.17, 1)
 [node name="Enemies" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Skitterwick1" parent="Enemies" instance=ExtResource("4")]
+position = Vector2(1200, 336)
+
+[node name="Skitterwick2" parent="Enemies" instance=ExtResource("4")]
+position = Vector2(720, 624)
+
+[node name="Skitterwick3" parent="Enemies" instance=ExtResource("4")]
+position = Vector2(1584, 720)
+
 [node name="Bushes" type="Node2D" parent="."]
 y_sort_enabled = true
+
+[node name="Bush1" type="StaticBody2D" parent="Bushes"]
+position = Vector2(720, 144)
+script = ExtResource("3")
+
+[node name="Bush2" type="StaticBody2D" parent="Bushes"]
+position = Vector2(720, 240)
+script = ExtResource("3")
+
+[node name="Bush3" type="StaticBody2D" parent="Bushes"]
+position = Vector2(816, 240)
+script = ExtResource("3")
+
+[node name="Bush4" type="StaticBody2D" parent="Bushes"]
+position = Vector2(912, 240)
+script = ExtResource("3")
+
+[node name="Bush5" type="StaticBody2D" parent="Bushes"]
+position = Vector2(1104, 624)
+script = ExtResource("3")
+
+[node name="Bush6" type="StaticBody2D" parent="Bushes"]
+position = Vector2(240, 720)
+script = ExtResource("3")
+
+[node name="Bush7" type="StaticBody2D" parent="Bushes"]
+position = Vector2(1200, 720)
+script = ExtResource("3")
+
+[node name="Bush8" type="StaticBody2D" parent="Bushes"]
+position = Vector2(1296, 720)
+script = ExtResource("3")
+
+[node name="Bush9" type="StaticBody2D" parent="Bushes"]
+position = Vector2(1392, 720)
+script = ExtResource("3")
 
 [node name="Props" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Rock1" type="StaticBody2D" parent="Props"]
+position = Vector2(336, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Rock2" type="StaticBody2D" parent="Props"]
+position = Vector2(1680, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Rock3" type="StaticBody2D" parent="Props"]
+position = Vector2(1296, 240)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Rock4" type="StaticBody2D" parent="Props"]
+position = Vector2(624, 528)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Rock5" type="StaticBody2D" parent="Props"]
+position = Vector2(1392, 528)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Rock6" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 816)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Rock7" type="StaticBody2D" parent="Props"]
+position = Vector2(1680, 816)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
 [node name="Spawns" type="Node2D" parent="."]
 y_sort_enabled = true
-

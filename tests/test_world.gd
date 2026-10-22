@@ -144,7 +144,7 @@ func _slide_pauses_and_respawns(world: World) -> void:
 		await frames(1)
 		guard += 1
 	release_inputs()
-	var enemies := next.get_enemies()
+	var enemies := _test_enemies(next)
 	check_eq(enemies.size(), 1, "entering a room spawns its enemies")
 	if enemies.size() == 1:
 		check(not enemies[0].can_process(), "enemies are paused during the slide")
@@ -154,12 +154,12 @@ func _slide_pauses_and_respawns(world: World) -> void:
 			"enemies are confined to the room interior"
 		)
 	await _wait_transition(world)
-	enemies = next.get_enemies()
+	enemies = _test_enemies(next)
 	check(enemies.size() == 1 and enemies[0].can_process(), "enemies run after the slide")
 	if enemies.size() == 1:
 		(enemies[0] as EnemyBase).kill()
 	await frames(3)
-	check_eq(next.get_enemies().size(), 0, "the enemy is dead")
+	check_eq(_test_enemies(next).size(), 0, "the enemy is dead")
 	# Leave and come back: it respawns.
 	player.place_at(Vector2(3840 + 96, 480))
 	await frames(2)
@@ -171,7 +171,7 @@ func _slide_pauses_and_respawns(world: World) -> void:
 	release_inputs()
 	await _wait_transition(world)
 	check_eq(world.get_current_room_id(), &"ow_1_0", "walked back west")
-	check_eq(next.get_enemies().size(), 0, "a room you left holds no live enemies")
+	check_eq(_test_enemies(next).size(), 0, "a room you left holds no live enemies")
 	player.place_at(Vector2(3840 - 96, 480))
 	await frames(2)
 	Input.action_press(&"move_right")
@@ -182,7 +182,12 @@ func _slide_pauses_and_respawns(world: World) -> void:
 	release_inputs()
 	await _wait_transition(world)
 	check_eq(world.get_current_room_id(), &"ow_2_0", "re-entered the room")
-	check_eq(next.get_enemies().size(), 1, "enemies respawn when the player re-enters the room")
+	check_eq(_test_enemies(next).size(), 1, "enemies respawn when the player re-enters the room")
+
+
+## The enemies a test registered itself (named "Template"); the room scene has its own.
+func _test_enemies(room: Room) -> Array[Node]:
+	return room.get_enemies().filter(func(e: Node) -> bool: return str(e.name).begins_with("Template"))
 
 
 func _slide_vertical(world: World) -> void:
@@ -253,7 +258,7 @@ func _cave(world: World) -> void:
 		world.get_current_room_id(), &"ow_1_1", "the player does not bounce back into the cave"
 	)
 	# And in through the entrance door by walking.
-	player.place_at(Vector2(1920 + 1344, 960 + 420))
+	player.place_at(Vector2(1920 + 1392, 960 + 432))
 	await frames(2)
 	Input.action_press(&"move_up")
 	guard = 0

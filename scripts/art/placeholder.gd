@@ -50,8 +50,31 @@ const KINDS := {
 	&"water": {"shape": "rect", "color": Color(0.15, 0.3, 0.6), "size": Vector2(96, 96)},
 	&"cracked_wall": {"shape": "rect", "color": Color(0.4, 0.35, 0.3), "size": Vector2(96, 96)},
 	&"pedestal": {"shape": "rect", "color": Color(0.6, 0.6, 0.65), "size": Vector2(72, 72)},
+	&"tree": {"shape": "circle", "color": Color(0.1, 0.38, 0.18), "radius": 46.0},
+	&"reed": {"shape": "rect", "color": Color(0.42, 0.52, 0.28), "size": Vector2(96, 96)},
+	&"sign_post": {"shape": "rect", "color": Color(0.55, 0.4, 0.2), "size": Vector2(48, 64)},
+	&"hut": {"shape": "rect", "color": Color(0.5, 0.33, 0.25), "size": Vector2(96, 96)},
 	&"door_marker": {"shape": "rect", "color": Color(0.05, 0.05, 0.08), "size": Vector2(96, 96)},
 }
+
+## Static props: drawn without the facing nub (the nub is for things that turn).
+const STATIC_KINDS: Array[StringName] = [
+	&"brazier",
+	&"brazier_lit",
+	&"locked_door",
+	&"gate",
+	&"bush",
+	&"rock",
+	&"wall",
+	&"water",
+	&"cracked_wall",
+	&"pedestal",
+	&"tree",
+	&"reed",
+	&"sign_post",
+	&"hut",
+	&"door_marker",
+]
 
 @export var kind: StringName = &"generic"
 ## Overrides for the table entry. 0 means "use the table".
@@ -153,7 +176,7 @@ func _draw() -> void:
 
 
 func _draw_facing_nub(extent: float, color: Color) -> void:
-	if kind == &"generic" or not KINDS.has(kind):
+	if kind == &"generic" or not KINDS.has(kind) or STATIC_KINDS.has(kind):
 		return
 	var shade := Color(color.r * 0.45, color.g * 0.45, color.b * 0.45, color.a)
 	draw_circle(facing * extent * 0.6, extent * 0.22, shade)

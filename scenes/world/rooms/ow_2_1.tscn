@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/item_pickup.tscn" id="3"]
+[ext_resource type="Script" path="res://scripts/world/locked_door.gd" id="4"]
 
 [node name="Ow21" type="Node2D"]
 script = ExtResource("1")
@@ -18,6 +21,105 @@ y_sort_enabled = true
 [node name="Props" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Wall1" type="StaticBody2D" parent="Props"]
+position = Vector2(1344, 528)
+script = ExtResource("2")
+size = Vector2(192, 96)
+kind = &"wall"
+
+[node name="Wall2" type="StaticBody2D" parent="Props"]
+position = Vector2(1728, 528)
+script = ExtResource("2")
+size = Vector2(192, 96)
+kind = &"wall"
+
+[node name="Wall3" type="StaticBody2D" parent="Props"]
+position = Vector2(1296, 720)
+script = ExtResource("2")
+size = Vector2(96, 288)
+kind = &"wall"
+
+[node name="Tree1" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree2" type="StaticBody2D" parent="Props"]
+position = Vector2(336, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Rock1" type="StaticBody2D" parent="Props"]
+position = Vector2(1104, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Rock2" type="StaticBody2D" parent="Props"]
+position = Vector2(1200, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Tree3" type="StaticBody2D" parent="Props"]
+position = Vector2(1584, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree4" type="StaticBody2D" parent="Props"]
+position = Vector2(1680, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree5" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 240)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree6" type="StaticBody2D" parent="Props"]
+position = Vector2(1680, 240)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Rock3" type="StaticBody2D" parent="Props"]
+position = Vector2(432, 624)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Rock4" type="StaticBody2D" parent="Props"]
+position = Vector2(528, 624)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="Pedestal1" type="StaticBody2D" parent="Props"]
+position = Vector2(1584, 720)
+script = ExtResource("2")
+size = Vector2(72, 72)
+kind = &"pedestal"
+
+[node name="ItemPickup1" parent="Props" instance=ExtResource("3")]
+position = Vector2(1584, 742)
+persistent_id = &"pitch_pot"
+item_id = &"pitch_pot"
+
+[node name="Rock5" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 816)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"rock"
+
+[node name="LockedDoor" type="StaticBody2D" parent="Props"]
+position = Vector2(1536, 528)
+script = ExtResource("4")
+door_id = &"ow_2_1_pitch"
+
 [node name="Spawns" type="Node2D" parent="."]
 y_sort_enabled = true
-

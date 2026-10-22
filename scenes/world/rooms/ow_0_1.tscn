@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/duskmoth.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/item_pickup.tscn" id="4"]
 
 [node name="Ow01" type="Node2D"]
 script = ExtResource("1")
@@ -12,12 +15,130 @@ floor_color = Color(0.16, 0.25, 0.25, 1)
 [node name="Enemies" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Duskmoth1" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(240, 240)
+
+[node name="Duskmoth2" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(1296, 240)
+
+[node name="Duskmoth3" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(1584, 720)
+
+[node name="Duskmoth4" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(816, 816)
+
 [node name="Bushes" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="Props" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Water1" type="StaticBody2D" parent="Props"]
+position = Vector2(624, 432)
+script = ExtResource("2")
+size = Vector2(480, 288)
+kind = &"water"
+
+[node name="Water2" type="StaticBody2D" parent="Props"]
+position = Vector2(336, 480)
+script = ExtResource("2")
+size = Vector2(96, 192)
+kind = &"water"
+
+[node name="Water3" type="StaticBody2D" parent="Props"]
+position = Vector2(528, 624)
+script = ExtResource("2")
+size = Vector2(288, 96)
+kind = &"water"
+
+[node name="Reed1" type="StaticBody2D" parent="Props"]
+position = Vector2(432, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed2" type="StaticBody2D" parent="Props"]
+position = Vector2(528, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed3" type="StaticBody2D" parent="Props"]
+position = Vector2(528, 240)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed4" type="StaticBody2D" parent="Props"]
+position = Vector2(336, 336)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed5" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 432)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed6" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 528)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed7" type="StaticBody2D" parent="Props"]
+position = Vector2(336, 624)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed8" type="StaticBody2D" parent="Props"]
+position = Vector2(720, 624)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed9" type="StaticBody2D" parent="Props"]
+position = Vector2(432, 720)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed10" type="StaticBody2D" parent="Props"]
+position = Vector2(528, 720)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed11" type="StaticBody2D" parent="Props"]
+position = Vector2(624, 720)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Pedestal1" type="StaticBody2D" parent="Props"]
+position = Vector2(1392, 720)
+script = ExtResource("2")
+size = Vector2(72, 72)
+kind = &"pedestal"
+
+[node name="ItemPickup1" parent="Props" instance=ExtResource("4")]
+position = Vector2(1392, 742)
+persistent_id = &"tether_moth"
+item_id = &"tether_moth"
+
+[node name="Reed12" type="StaticBody2D" parent="Props"]
+position = Vector2(1200, 816)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
+[node name="Reed13" type="StaticBody2D" parent="Props"]
+position = Vector2(1296, 816)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"reed"
+
 [node name="Spawns" type="Node2D" parent="."]
 y_sort_enabled = true
-

@@ -120,11 +120,11 @@ func _draw_item_frame() -> void:
 	var label := ItemRegistry.display_name(id)
 	canvas.draw_string(
 		ThemeDB.fallback_font,
-		frame.position + Vector2(4, 82),
-		label.left(9),
-		HORIZONTAL_ALIGNMENT_LEFT,
+		frame.position + Vector2(4, 80),
+		label,
+		HORIZONTAL_ALIGNMENT_CENTER,
 		80,
-		14
+		13
 	)
 
 

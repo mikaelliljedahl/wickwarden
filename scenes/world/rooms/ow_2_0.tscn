@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/wick_core.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/hollow.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/cracked_wall.tscn" id="5"]
+[ext_resource type="Script" path="res://scripts/world/bush.gd" id="6"]
 
 [node name="Ow20" type="Node2D"]
 script = ExtResource("1")
@@ -12,12 +17,89 @@ floor_color = Color(0.26, 0.25, 0.2, 1)
 [node name="Enemies" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Hollow1" parent="Enemies" instance=ExtResource("4")]
+position = Vector2(528, 240)
+
+[node name="Hollow2" parent="Enemies" instance=ExtResource("4")]
+position = Vector2(1200, 720)
+
 [node name="Bushes" type="Node2D" parent="."]
 y_sort_enabled = true
+
+[node name="Bush1" type="StaticBody2D" parent="Bushes"]
+position = Vector2(1392, 624)
+script = ExtResource("6")
 
 [node name="Props" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Wall1" type="StaticBody2D" parent="Props"]
+position = Vector2(432, 144)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"wall"
+
+[node name="Wall2" type="StaticBody2D" parent="Props"]
+position = Vector2(1488, 240)
+script = ExtResource("2")
+size = Vector2(96, 288)
+kind = &"wall"
+
+[node name="Wall3" type="StaticBody2D" parent="Props"]
+position = Vector2(1104, 240)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"wall"
+
+[node name="Wall4" type="StaticBody2D" parent="Props"]
+position = Vector2(576, 336)
+script = ExtResource("2")
+size = Vector2(192, 96)
+kind = &"wall"
+
+[node name="Wall5" type="StaticBody2D" parent="Props"]
+position = Vector2(1584, 336)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"wall"
+
+[node name="Wall6" type="StaticBody2D" parent="Props"]
+position = Vector2(1776, 336)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"wall"
+
+[node name="Wall7" type="StaticBody2D" parent="Props"]
+position = Vector2(816, 432)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"wall"
+
+[node name="Wall8" type="StaticBody2D" parent="Props"]
+position = Vector2(384, 624)
+script = ExtResource("2")
+size = Vector2(192, 96)
+kind = &"wall"
+
+[node name="Wall9" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 816)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"wall"
+
+[node name="Wall10" type="StaticBody2D" parent="Props"]
+position = Vector2(1680, 816)
+script = ExtResource("2")
+size = Vector2(96, 96)
+kind = &"wall"
+
+[node name="WickCore1" parent="Props" instance=ExtResource("3")]
+position = Vector2(1680, 144)
+persistent_id = &"wick_core_cache"
+
+[node name="CrackedWall1" parent="Props" instance=ExtResource("5")]
+position = Vector2(1680, 336)
+wall_id = &"ow_2_0_cache"
+
 [node name="Spawns" type="Node2D" parent="."]
 y_sort_enabled = true
-
