@@ -1,0 +1,682 @@
+{
+  "hollow": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      146.0
+    ],
+    "foot": 176,
+    "radius": 30.0,
+    "mirror_side": true,
+    "shadow": [
+      90,
+      30
+    ],
+    "animations": {
+      "walk_down": {
+        "file": "res://assets/sprites/hollow_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/hollow_walk_up.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/hollow_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "spitcap": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      86.0
+    ],
+    "foot": 116,
+    "radius": 30.0,
+    "mirror_side": true,
+    "shadow": [
+      58,
+      20
+    ],
+    "animations": {
+      "walk": {
+        "file": "res://assets/sprites/spitcap_walk.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "spit": {
+        "file": "res://assets/sprites/spitcap_spit.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": false
+      }
+    }
+  },
+  "skitterwick": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      94.0
+    ],
+    "foot": 116,
+    "radius": 22.0,
+    "mirror_side": true,
+    "shadow": [
+      48,
+      16
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/skitterwick_idle.png",
+        "frames": 2,
+        "fps": 4.0,
+        "loop": true
+      },
+      "crouch": {
+        "file": "res://assets/sprites/skitterwick_crouch.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": false
+      },
+      "hop": {
+        "file": "res://assets/sprites/skitterwick_hop.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": false
+      }
+    }
+  },
+  "duskmoth": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      94.0
+    ],
+    "foot": 116,
+    "radius": 22.0,
+    "mirror_side": true,
+    "shadow": [
+      64,
+      22
+    ],
+    "animations": {
+      "rest": {
+        "file": "res://assets/sprites/duskmoth_rest.png",
+        "frames": 2,
+        "fps": 3.0,
+        "loop": true
+      }
+    }
+  },
+  "tallow_blob": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      82.0
+    ],
+    "foot": 116,
+    "radius": 34.0,
+    "mirror_side": true,
+    "shadow": [
+      62,
+      21
+    ],
+    "animations": {
+      "move": {
+        "file": "res://assets/sprites/tallow_blob_move.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "tallow_drop": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      38.0
+    ],
+    "foot": 58,
+    "radius": 20.0,
+    "mirror_side": true,
+    "shadow": [
+      33,
+      11
+    ],
+    "animations": {
+      "move": {
+        "file": "res://assets/sprites/tallow_drop_move.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "spore": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      32.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "fly": {
+        "file": "res://assets/sprites/spore_fly.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "bush": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 80,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/bush.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "rock_a": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/rock_a.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "rock_b": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/rock_b.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "rock": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "variants": [
+      "rock_a",
+      "rock_b"
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/rock_a.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "tree_a": {
+    "cell": [
+      192,
+      288
+    ],
+    "anchor": [
+      96.0,
+      282
+    ],
+    "foot": 282,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 92,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tree_a.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "tree_b": {
+    "cell": [
+      192,
+      288
+    ],
+    "anchor": [
+      96.0,
+      282
+    ],
+    "foot": 282,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 92,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tree_b.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "tree": {
+    "cell": [
+      192,
+      288
+    ],
+    "anchor": [
+      96.0,
+      282
+    ],
+    "foot": 282,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 92,
+    "variants": [
+      "tree_a",
+      "tree_b"
+    ],
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tree_a.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "reed": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/reed.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "sign_post": {
+    "cell": [
+      96,
+      160
+    ],
+    "anchor": [
+      48.0,
+      154
+    ],
+    "foot": 154,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 64,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/sign_post.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "pedestal": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 72,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/pedestal.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "hut": {
+    "cell": [
+      384,
+      416
+    ],
+    "anchor": [
+      192.0,
+      410
+    ],
+    "foot": 410,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 288,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/hut.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "locked_door": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/locked_door.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "gate": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/gate.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "cracked_wall": {
+    "cell": [
+      128,
+      192
+    ],
+    "anchor": [
+      64.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/cracked_wall.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "cave_mouth": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/cave_mouth.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "cave_exit": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/cave_exit.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "ground_grass": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/ground_grass.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "ground_cave": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/ground_cave.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "wall_hedge": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/wall_hedge.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "wall_cave": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/wall_cave.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "wall_ruin": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/wall_ruin.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "water": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/water.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  }
+}

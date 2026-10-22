@@ -1,0 +1,781 @@
+{
+ "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
+ "defaults": {},
+ "scale_groups": {
+  "player": {"measure": "height", "value": 140, "ref": [{"sheet": "tamsin_walk", "row": 0}]},
+  "spitcap": {"measure": "height", "value": 90, "ref": [{"sheet": "hush_spitcap", "row": 0}]},
+  "spore": {"measure": "height", "value": 28, "ref": [{"sheet": "hush_spitcap", "row": 1, "poses": [2, 4]}]},
+  "skitterwick": {"measure": "height", "value": 70, "ref": [{"sheet": "hush_skitterwick", "row": 0, "poses": [0, 2]}]},
+  "duskmoth": {"measure": "height", "value": 60, "ref": [{"sheet": "hush_duskmoth", "row": 0}]},
+  "tallow_blob": {"measure": "height", "value": 80, "ref": [{"sheet": "hush_tallow", "row": 0}]},
+  "tallow_drop": {"measure": "height", "value": 40, "ref": [{"sheet": "hush_tallow", "row": 1}]},
+  "hollow": {"measure": "height", "value": 150, "ref": [{"sheet": "hush_hollow", "row": 0}]},
+  "tether_moth": {"measure": "extent", "value": 80, "ref": [{"sheet": "items", "row": 0}]},
+  "pitch_pot": {"measure": "height", "value": 60, "ref": [{"sheet": "items", "row": 1}]},
+  "explosion": {"measure": "extent", "value": 360, "ref": [{"sheet": "fx_explosion", "row": 0}]},
+  "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
+ },
+ "kinds": {
+  "player": {"cell": [192, 192], "foot": 176, "radius": 26, "mirror_side": true, "shadow": true},
+  "hollow": {"cell": [192, 192], "foot": 176, "radius": 30, "mirror_side": true, "shadow": true},
+  "spitcap": {"cell": [128, 128], "foot": 116, "radius": 30, "mirror_side": true, "shadow": true},
+  "skitterwick": {"cell": [128, 128], "foot": 116, "radius": 22, "mirror_side": true, "shadow": true},
+  "duskmoth": {"cell": [128, 128], "foot": 116, "radius": 22, "mirror_side": true, "shadow": true},
+  "tallow_blob": {"cell": [128, 128], "foot": 116, "radius": 34, "mirror_side": true, "shadow": true},
+  "tallow_drop": {"cell": [64, 64], "foot": 58, "radius": 20, "mirror_side": true, "shadow": true},
+  "spore": {"cell": [64, 64], "align": "center", "mirror_side": false},
+  "tether_moth": {"cell": [96, 96], "align": "center", "mirror_side": false},
+  "pitch_pot": {"cell": [96, 96], "foot": 88, "radius": 24, "shadow": true},
+  "explosion": {"cell": [384, 384], "align": "center"},
+  "ember": {"cell": [64, 64], "foot": 58, "radius": 16, "shadow": true},
+  "brass_bit": {"cell": [64, 64], "foot": 58, "radius": 12, "shadow": true},
+  "brass_coin": {"cell": [64, 64], "foot": 58, "radius": 16, "shadow": true},
+  "pitch_pot_bundle": {"cell": [64, 64], "foot": 58, "radius": 18, "shadow": true},
+  "key": {"cell": [64, 64], "foot": 58, "radius": 18, "shadow": true},
+  "wick_core": {"cell": [64, 64], "foot": 58, "radius": 22, "shadow": true},
+  "brazier": {"cell": [128, 192], "foot": 186, "prop": true, "rect_h": 64},
+  "brazier_lit": {"cell": [128, 192], "foot": 186, "prop": true, "rect_h": 64},
+  "bush": {"cell": [128, 128], "foot": 122, "prop": true, "rect_h": 80},
+  "rock_a": {"cell": [128, 128], "foot": 122, "prop": true, "rect_h": 96},
+  "rock_b": {"cell": [128, 128], "foot": 122, "prop": true, "rect_h": 96},
+  "rock": {"cell": [128, 128], "foot": 122, "prop": true, "rect_h": 96, "variants": ["rock_a", "rock_b"]},
+  "tree_a": {"cell": [192, 288], "foot": 282, "prop": true, "rect_h": 92},
+  "tree_b": {"cell": [192, 288], "foot": 282, "prop": true, "rect_h": 92},
+  "tree": {"cell": [192, 288], "foot": 282, "prop": true, "rect_h": 92, "variants": ["tree_a", "tree_b"]},
+  "reed": {"cell": [128, 128], "foot": 122, "prop": true, "rect_h": 96},
+  "sign_post": {"cell": [96, 160], "foot": 154, "prop": true, "rect_h": 64},
+  "pedestal": {"cell": [128, 128], "foot": 122, "prop": true, "rect_h": 72},
+  "hut": {"cell": [384, 416], "foot": 410, "prop": true, "rect_h": 288},
+  "locked_door": {"cell": [192, 192], "foot": 186, "prop": true, "rect_h": 96},
+  "gate": {"cell": [192, 192], "foot": 186, "prop": true, "rect_h": 96},
+  "cracked_wall": {"cell": [128, 192], "foot": 186, "prop": true, "rect_h": 96},
+  "cave_mouth": {"cell": [192, 192], "foot": 186, "prop": true, "rect_h": 96},
+  "cave_exit": {"cell": [192, 192], "foot": 186, "prop": true, "rect_h": 96},
+  "ground_grass": {"cell": [384, 384], "align": "center", "texture": true},
+  "ground_cave": {"cell": [384, 384], "align": "center", "texture": true},
+  "wall_hedge": {"cell": [384, 384], "align": "center", "texture": true},
+  "wall_cave": {"cell": [384, 384], "align": "center", "texture": true},
+  "wall_ruin": {"cell": [384, 384], "align": "center", "texture": true},
+  "water": {"cell": [384, 384], "align": "center", "texture": true}
+ },
+ "sheets": {
+  "tamsin_walk": {
+   "key": "green",
+   "rows": [
+    {
+     "poses": 6,
+     "outputs": [
+      {
+       "file": "player_walk_down",
+       "kind": "player",
+       "anim": "walk_down",
+       "poses": [0, 6],
+       "scale": "player",
+       "fps": 10,
+       "loop": true,
+       "shadow_src": true
+      }
+     ]
+    },
+    {
+     "poses": 6,
+     "outputs": [
+      {
+       "file": "player_walk_up",
+       "kind": "player",
+       "anim": "walk_up",
+       "poses": [0, 6],
+       "scale": "player",
+       "fps": 10,
+       "loop": true,
+       "shadow_src": false
+      }
+     ]
+    },
+    {
+     "poses": 6,
+     "outputs": [
+      {
+       "file": "player_walk_side",
+       "kind": "player",
+       "anim": "walk_side",
+       "poses": [0, 6],
+       "scale": "player",
+       "fps": 10,
+       "loop": true,
+       "shadow_src": false
+      }
+     ]
+    }
+   ]
+  },
+  "tamsin_swing": {
+   "key": "green",
+   "rows": [
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "player_swing_down",
+       "kind": "player",
+       "anim": "swing_down",
+       "poses": [0, 4],
+       "scale": "player",
+       "fps": 14,
+       "loop": false
+      }
+     ]
+    },
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "player_swing_up",
+       "kind": "player",
+       "anim": "swing_up",
+       "poses": [0, 4],
+       "scale": "player",
+       "fps": 14,
+       "loop": false
+      }
+     ]
+    },
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "player_swing_side",
+       "kind": "player",
+       "anim": "swing_side",
+       "poses": [0, 4],
+       "scale": "player",
+       "fps": 14,
+       "loop": false
+      }
+     ]
+    }
+   ]
+  },
+  "tamsin_states": {
+   "key": "green",
+   "rows": [
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "player_charge_down",
+       "kind": "player",
+       "anim": "charge_down",
+       "poses": [0, 2],
+       "scale": "player",
+       "fps": 6,
+       "loop": true
+      },
+      {
+       "file": "player_ward_down",
+       "kind": "player",
+       "anim": "ward_down",
+       "poses": [2, 3],
+       "scale": "player",
+       "fps": 1,
+       "loop": false
+      },
+      {
+       "file": "player_hurt_down",
+       "kind": "player",
+       "anim": "hurt_down",
+       "poses": [3, 4],
+       "scale": "player",
+       "fps": 1,
+       "loop": false
+      }
+     ]
+    },
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "player_charge_up",
+       "kind": "player",
+       "anim": "charge_up",
+       "poses": [0, 2],
+       "scale": "player",
+       "fps": 6,
+       "loop": true
+      },
+      {
+       "file": "player_ward_up",
+       "kind": "player",
+       "anim": "ward_up",
+       "poses": [2, 3],
+       "scale": "player",
+       "fps": 1,
+       "loop": false
+      },
+      {
+       "file": "player_hurt_up",
+       "kind": "player",
+       "anim": "hurt_up",
+       "poses": [3, 4],
+       "scale": "player",
+       "fps": 1,
+       "loop": false
+      }
+     ]
+    },
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "player_charge_side",
+       "kind": "player",
+       "anim": "charge_side",
+       "poses": [0, 2],
+       "scale": "player",
+       "fps": 6,
+       "loop": true
+      },
+      {
+       "file": "player_ward_side",
+       "kind": "player",
+       "anim": "ward_side",
+       "poses": [2, 3],
+       "scale": "player",
+       "fps": 1,
+       "loop": false
+      },
+      {
+       "file": "player_hurt_side",
+       "kind": "player",
+       "anim": "hurt_side",
+       "poses": [3, 4],
+       "scale": "player",
+       "fps": 1,
+       "loop": false
+      }
+     ]
+    }
+   ]
+  },
+  "hush_spitcap": {
+   "key": "magenta",
+   "params": {"chroma_band": 18},
+   "rows": [
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "spitcap_walk",
+       "kind": "spitcap",
+       "anim": "walk",
+       "poses": [0, 4],
+       "scale": "spitcap",
+       "fps": 8,
+       "loop": true,
+       "shadow_src": true
+      }
+     ]
+    },
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "spitcap_spit",
+       "kind": "spitcap",
+       "anim": "spit",
+       "poses": [0, 2],
+       "scale": "spitcap",
+       "fps": 6,
+       "loop": false
+      },
+      {"file": "spore_fly", "kind": "spore", "anim": "fly", "poses": [2, 4], "scale": "spore", "fps": 8, "loop": true}
+     ]
+    }
+   ]
+  },
+  "hush_skitterwick": {
+   "key": "green",
+   "params": {"chroma_band": 24},
+   "rows": [
+    {
+     "poses": 5,
+     "ground_poses": [0, 3],
+     "outputs": [
+      {
+       "file": "skitterwick_idle",
+       "kind": "skitterwick",
+       "anim": "idle",
+       "poses": [0, 2],
+       "scale": "skitterwick",
+       "fps": 4,
+       "loop": true,
+       "shadow_src": true
+      },
+      {
+       "file": "skitterwick_crouch",
+       "kind": "skitterwick",
+       "anim": "crouch",
+       "poses": [2, 3],
+       "scale": "skitterwick",
+       "fps": 1,
+       "loop": false
+      },
+      {
+       "file": "skitterwick_hop",
+       "kind": "skitterwick",
+       "anim": "hop",
+       "poses": [3, 5],
+       "scale": "skitterwick",
+       "fps": 6,
+       "loop": false,
+       "ground": "row"
+      }
+     ]
+    }
+   ]
+  },
+  "hush_duskmoth": {
+   "key": "green",
+   "params": {"chroma_band": 14},
+   "rows": [
+    {
+     "poses": 2,
+     "outputs": [
+      {
+       "file": "duskmoth_rest",
+       "kind": "duskmoth",
+       "anim": "rest",
+       "poses": [0, 2],
+       "scale": "duskmoth",
+       "fps": 3,
+       "loop": true,
+       "shadow_src": true
+      }
+     ]
+    },
+    {"poses": 4, "skip": true, "outputs": []}
+   ]
+  },
+  "hush_duskmoth_fly": {
+   "key": "green",
+   "params": {"chroma_band": 14},
+   "rows": [
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "duskmoth_fly",
+       "kind": "duskmoth",
+       "anim": "fly",
+       "poses": [0, 4],
+       "scale": "duskmoth",
+       "fps": 12,
+       "loop": true,
+       "ground": "row"
+      }
+     ]
+    }
+   ]
+  },
+  "hush_tallow": {
+   "key": "magenta",
+   "rows": [
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "tallow_blob_move",
+       "kind": "tallow_blob",
+       "anim": "move",
+       "poses": [0, 4],
+       "scale": "tallow_blob",
+       "fps": 6,
+       "loop": true,
+       "shadow_src": true
+      }
+     ]
+    },
+    {
+     "poses": 3,
+     "outputs": [
+      {
+       "file": "tallow_drop_move",
+       "kind": "tallow_drop",
+       "anim": "move",
+       "poses": [0, 3],
+       "scale": "tallow_drop",
+       "fps": 6,
+       "loop": true,
+       "shadow_src": true
+      }
+     ]
+    }
+   ]
+  },
+  "hush_hollow": {
+   "key": "magenta",
+   "rows": [
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "hollow_walk_down",
+       "kind": "hollow",
+       "anim": "walk_down",
+       "poses": [0, 4],
+       "scale": "hollow",
+       "fps": 8,
+       "loop": true,
+       "shadow_src": true
+      }
+     ]
+    },
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "hollow_walk_up",
+       "kind": "hollow",
+       "anim": "walk_up",
+       "poses": [0, 4],
+       "scale": "hollow",
+       "fps": 8,
+       "loop": true,
+       "shadow_src": false
+      }
+     ]
+    },
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "hollow_walk_side",
+       "kind": "hollow",
+       "anim": "walk_side",
+       "poses": [0, 4],
+       "scale": "hollow",
+       "fps": 8,
+       "loop": true,
+       "shadow_src": false
+      }
+     ]
+    }
+   ]
+  },
+  "items": {
+   "key": "green",
+   "rows": [
+    {
+     "poses": 4,
+     "outputs": [
+      {
+       "file": "tether_moth_fly",
+       "kind": "tether_moth",
+       "anim": "fly",
+       "poses": [0, 4],
+       "scale": "tether_moth",
+       "fps": 12,
+       "loop": true
+      }
+     ]
+    },
+    {
+     "poses": 2,
+     "outputs": [
+      {
+       "file": "pitch_pot_fuse",
+       "kind": "pitch_pot",
+       "anim": "fuse",
+       "poses": [0, 2],
+       "scale": "pitch_pot",
+       "fps": 6,
+       "loop": true,
+       "shadow_src": true
+      }
+     ]
+    }
+   ]
+  },
+  "fx_explosion": {
+   "key": "green",
+   "rows": [
+    {
+     "poses": 6,
+     "outputs": [
+      {
+       "file": "explosion_burst",
+       "kind": "explosion",
+       "anim": "burst",
+       "poses": [0, 6],
+       "scale": "explosion",
+       "fps": 12,
+       "loop": false
+      }
+     ]
+    }
+   ]
+  },
+  "pickups": {
+   "key": "magenta",
+   "rows": [
+    {
+     "poses": 6,
+     "outputs": [
+      {
+       "file": "ember",
+       "kind": "ember",
+       "anim": "idle",
+       "poses": 0,
+       "scale": {"measure": "fit", "value": [40, 48]},
+       "fps": 1,
+       "loop": true,
+       "shadow_src": true
+      },
+      {
+       "file": "brass_bit",
+       "kind": "brass_bit",
+       "anim": "idle",
+       "poses": 1,
+       "scale": {"measure": "fit", "value": [34, 34]},
+       "fps": 1,
+       "loop": true,
+       "shadow_src": true
+      },
+      {
+       "file": "brass_coin",
+       "kind": "brass_coin",
+       "anim": "idle",
+       "poses": 2,
+       "scale": {"measure": "fit", "value": [40, 40]},
+       "fps": 1,
+       "loop": true,
+       "shadow_src": true
+      },
+      {
+       "file": "pitch_pot_bundle",
+       "kind": "pitch_pot_bundle",
+       "anim": "idle",
+       "poses": 3,
+       "scale": {"measure": "fit", "value": [52, 52]},
+       "fps": 1,
+       "loop": true,
+       "shadow_src": true
+      },
+      {
+       "file": "key",
+       "kind": "key",
+       "anim": "idle",
+       "poses": 4,
+       "scale": {"measure": "fit", "value": [34, 54]},
+       "fps": 1,
+       "loop": true,
+       "shadow_src": true
+      },
+      {
+       "file": "wick_core",
+       "kind": "wick_core",
+       "anim": "idle",
+       "poses": 5,
+       "scale": {"measure": "fit", "value": [48, 54]},
+       "fps": 1,
+       "loop": true,
+       "shadow_src": true
+      }
+     ]
+    }
+   ]
+  },
+  "braziers": {
+   "key": "magenta",
+   "rows": [
+    {
+     "poses": 5,
+     "outputs": [
+      {"file": "brazier", "kind": "brazier", "anim": "idle", "poses": 0, "scale": "brazier", "fps": 1, "loop": true},
+      {
+       "file": "brazier_lit_burn",
+       "kind": "brazier_lit",
+       "anim": "burn",
+       "poses": [1, 5],
+       "scale": "brazier",
+       "fps": 8,
+       "loop": true
+      }
+     ]
+    }
+   ]
+  },
+  "ow_props": {
+   "key": "magenta",
+   "params": {"chroma_k0": 50},
+   "rows": [
+    {
+     "poses": 6,
+     "params": {"split": "components"},
+     "outputs": [
+      {
+       "file": "rock_a",
+       "kind": "rock_a",
+       "anim": "idle",
+       "poses": 0,
+       "scale": {"measure": "fit", "value": [120, 119]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "rock_b",
+       "kind": "rock_b",
+       "anim": "idle",
+       "poses": 1,
+       "scale": {"measure": "fit", "value": [120, 119]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "bush",
+       "kind": "bush",
+       "anim": "idle",
+       "poses": 2,
+       "scale": {"measure": "fit", "value": [120, 119]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "reed",
+       "kind": "reed",
+       "anim": "idle",
+       "poses": 3,
+       "scale": {"measure": "fit", "value": [120, 119]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "pedestal",
+       "kind": "pedestal",
+       "anim": "idle",
+       "poses": 4,
+       "scale": {"measure": "fit", "value": [120, 119]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "sign_post",
+       "kind": "sign_post",
+       "anim": "idle",
+       "poses": 5,
+       "scale": {"measure": "fit", "value": [88, 151]},
+       "fps": 1,
+       "loop": true
+      }
+     ]
+    },
+    {
+     "poses": 3,
+     "params": {"split": "components"},
+     "outputs": [
+      {
+       "file": "tree_a",
+       "kind": "tree_a",
+       "anim": "idle",
+       "poses": 0,
+       "scale": {"measure": "fit", "value": [184, 279]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "tree_b",
+       "kind": "tree_b",
+       "anim": "idle",
+       "poses": 1,
+       "scale": {"measure": "fit", "value": [184, 279]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "hut",
+       "kind": "hut",
+       "anim": "idle",
+       "poses": 2,
+       "scale": {"measure": "fit", "value": [376, 407]},
+       "fps": 1,
+       "loop": true
+      }
+     ]
+    }
+   ]
+  },
+  "ow_structures": {
+   "key": "magenta",
+   "params": {"chroma_k0": 50},
+   "rows": [
+    {
+     "poses": 4,
+     "params": {"split": "components"},
+     "outputs": [
+      {
+       "file": "locked_door",
+       "kind": "locked_door",
+       "anim": "idle",
+       "poses": 0,
+       "scale": {"measure": "fit", "value": [184, 183]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "gate",
+       "kind": "gate",
+       "anim": "idle",
+       "poses": 1,
+       "scale": {"measure": "fit", "value": [184, 183]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "cracked_wall",
+       "kind": "cracked_wall",
+       "anim": "idle",
+       "poses": 2,
+       "scale": {"measure": "fit", "value": [120, 183]},
+       "fps": 1,
+       "loop": true
+      },
+      {
+       "file": "cave_mouth",
+       "kind": "cave_mouth",
+       "anim": "idle",
+       "poses": 3,
+       "scale": {"measure": "fit", "value": [184, 183]},
+       "fps": 1,
+       "loop": true
+      }
+     ]
+    }
+   ]
+  },
+  "cave_exit": {
+   "key": "magenta",
+   "rows": [
+    {
+     "poses": 1,
+     "outputs": [
+      {
+       "file": "cave_exit",
+       "kind": "cave_exit",
+       "anim": "idle",
+       "poses": 0,
+       "scale": {"measure": "fit", "value": [184, 183]},
+       "fps": 1,
+       "loop": true
+      }
+     ]
+    }
+   ]
+  },
+  "tex_ground_grass": {"type": "texture", "output": "ground_grass", "size": 384, "blend": 0.2},
+  "tex_ground_cave": {"type": "texture", "output": "ground_cave", "size": 384, "blend": 0.2},
+  "tex_wall_hedge": {"type": "texture", "output": "wall_hedge", "size": 384, "blend": 0.2},
+  "tex_wall_cave": {"type": "texture", "output": "wall_cave", "size": 384, "blend": 0.2},
+  "tex_wall_ruin": {"type": "texture", "output": "wall_ruin", "size": 384, "blend": 0.2},
+  "tex_water": {"type": "texture", "output": "water", "size": 384, "blend": 0.2}
+ }
+}

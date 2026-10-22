@@ -1,7 +1,7 @@
 GODOT ?= godot
 GDTOOLKIT = uv tool run --from gdtoolkit==4.5.0
 
-.PHONY: run dev import test lint format check
+.PHONY: run dev import test lint format check art art-test
 
 run:
 	$(GODOT) --path .
@@ -26,3 +26,10 @@ format:
 	$(GDTOOLKIT) gdformat scripts tests
 
 check: import test lint
+
+# Cuts tools/source_art/*.png into assets/sprites/ (see docs/asset-contract.md). Subset: make art SHEETS="tamsin_walk items"
+art:
+	uv run --with pillow==12.3.0 --with numpy python tools/cut_sprites.py $(SHEETS)
+
+art-test:
+	uv run --with pillow==12.3.0 --with numpy python tools/test_cut_sprites.py

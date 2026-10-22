@@ -1,0 +1,226 @@
+{
+ "walker": {
+  "cell": [
+   32,
+   32
+  ],
+  "anchor": [
+   16,
+   26
+  ],
+  "foot": 30,
+  "radius": 4,
+  "mirror_side": true,
+  "shadow": [
+   20,
+   7
+  ],
+  "animations": {
+   "walk_down": {
+    "file": "res://tests/fixtures/sprites_fixture/walker_walk_down.png",
+    "frames": 3,
+    "fps": 10,
+    "loop": true
+   },
+   "walk_up": {
+    "file": "res://tests/fixtures/sprites_fixture/walker_walk_up.png",
+    "frames": 3,
+    "fps": 10,
+    "loop": true
+   },
+   "walk_side": {
+    "file": "res://tests/fixtures/sprites_fixture/walker_walk_side.png",
+    "frames": 3,
+    "fps": 10,
+    "loop": true
+   },
+   "swing_down": {
+    "file": "res://tests/fixtures/sprites_fixture/walker_swing_down.png",
+    "frames": 2,
+    "fps": 14,
+    "loop": false
+   }
+  }
+ },
+ "crawler": {
+  "cell": [
+   32,
+   32
+  ],
+  "anchor": [
+   16,
+   24
+  ],
+  "foot": 30,
+  "radius": 6,
+  "mirror_side": true,
+  "shadow": [
+   18,
+   6
+  ],
+  "animations": {
+   "rest": {
+    "file": "res://tests/fixtures/sprites_fixture/crawler_rest.png",
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "fly": {
+    "file": "res://tests/fixtures/sprites_fixture/crawler_fly.png",
+    "frames": 2,
+    "fps": 8,
+    "loop": true
+   }
+  }
+ },
+ "torch": {
+  "cell": [
+   32,
+   48
+  ],
+  "anchor": [
+   16,
+   42
+  ],
+  "foot": 42,
+  "prop": true,
+  "rect_h": 16,
+  "mirror_side": false,
+  "animations": {
+   "idle": {
+    "file": "res://tests/fixtures/sprites_fixture/torch.png",
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  }
+ },
+ "torch_lit": {
+  "cell": [
+   32,
+   48
+  ],
+  "anchor": [
+   16,
+   42
+  ],
+  "foot": 42,
+  "prop": true,
+  "rect_h": 16,
+  "mirror_side": false,
+  "animations": {
+   "burn": {
+    "file": "res://tests/fixtures/sprites_fixture/torch_lit_burn.png",
+    "frames": 2,
+    "fps": 8,
+    "loop": true
+   }
+  }
+ },
+ "stone_a": {
+  "cell": [
+   32,
+   32
+  ],
+  "anchor": [
+   16,
+   26
+  ],
+  "foot": 26,
+  "prop": true,
+  "rect_h": 16,
+  "animations": {
+   "idle": {
+    "file": "res://tests/fixtures/sprites_fixture/stone_a.png",
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  }
+ },
+ "stone_b": {
+  "cell": [
+   32,
+   32
+  ],
+  "anchor": [
+   16,
+   26
+  ],
+  "foot": 26,
+  "prop": true,
+  "rect_h": 16,
+  "animations": {
+   "idle": {
+    "file": "res://tests/fixtures/sprites_fixture/stone_b.png",
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  }
+ },
+ "stone": {
+  "cell": [
+   32,
+   32
+  ],
+  "anchor": [
+   16,
+   26
+  ],
+  "foot": 26,
+  "prop": true,
+  "rect_h": 16,
+  "animations": {
+   "idle": {
+    "file": "res://tests/fixtures/sprites_fixture/stone_a.png",
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "variants": [
+   "stone_a",
+   "stone_b"
+  ]
+ },
+ "blast": {
+  "cell": [
+   48,
+   48
+  ],
+  "anchor": [
+   24,
+   24
+  ],
+  "centered": true,
+  "mirror_side": false,
+  "animations": {
+   "burst": {
+    "file": "res://tests/fixtures/sprites_fixture/blast_burst.png",
+    "frames": 3,
+    "fps": 30,
+    "loop": false
+   }
+  }
+ },
+ "tex_fix": {
+  "cell": [
+   64,
+   64
+  ],
+  "anchor": [
+   32,
+   32
+  ],
+  "texture": true,
+  "animations": {
+   "idle": {
+    "file": "res://tests/fixtures/sprites_fixture/tex_fix.png",
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  }
+ }
+}
