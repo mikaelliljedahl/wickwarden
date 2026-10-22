@@ -27,7 +27,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	Placeholder.attach(self, &"tether_moth")
+	SpriteVisual.attach(self, &"tether_moth")
 	_stun_box = Hitbox.new()
 	_stun_box.name = "StunHitbox"
 	_stun_box.team = Layers.Team.PLAYER
@@ -56,9 +56,9 @@ func activate() -> bool:
 	_travelled = 0.0
 	_live = true
 	_stun_box.activate()
-	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Placeholder
-	if visual != null:
-		visual.set_facing(_dir)
+	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
+	if visual != null and visual.has_method(&"set_facing"):
+		visual.call(&"set_facing", _dir)
 	return true
 
 

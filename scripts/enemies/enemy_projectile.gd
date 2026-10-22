@@ -77,7 +77,7 @@ func _ready() -> void:
 	hitbox.blocked.connect(_on_blocked)
 	hitbox.hit_landed.connect(_on_hit_landed)
 	if get_node_or_null(Placeholder.VISUAL_NAME) == null:
-		Placeholder.attach(self, visual_kind, radius)
+		SpriteVisual.attach(self, visual_kind, radius)
 
 
 ## Places the projectile (global position) and sets its direction.

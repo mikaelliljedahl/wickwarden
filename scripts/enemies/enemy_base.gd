@@ -99,7 +99,7 @@ func _ready() -> void:
 	contact_hitbox.active = contact_damage > 0
 	visual = get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
 	if visual == null:
-		visual = Placeholder.attach(self, visual_kind, body_radius)
+		visual = SpriteVisual.attach(self, visual_kind, body_radius)
 	_enemy_ready()
 
 

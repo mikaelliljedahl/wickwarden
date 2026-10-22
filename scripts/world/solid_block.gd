@@ -7,6 +7,11 @@ extends StaticBody2D
 @export var size: Vector2 = Vector2(96, 96)
 @export var kind: StringName = &"rock"
 
+## Kinds drawn as a texture tiled over the block (no sprite), with their texture name.
+const TILED_TEXTURES := {&"wall": &"wall_ruin", &"water": &"water"}
+
+var _tile: Texture2D
+
 
 func _init() -> void:
 	collision_layer = Layers.WORLD
@@ -19,4 +24,17 @@ func _ready() -> void:
 	var node := CollisionShape2D.new()
 	node.shape = shape
 	add_child(node)
-	Placeholder.attach(self, kind, 0.0, size)
+	if TILED_TEXTURES.has(kind):
+		_tile = SpriteVisual.texture_of(TILED_TEXTURES[kind])
+	if _tile != null:
+		texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+		queue_redraw()
+	elif TILED_TEXTURES.has(kind):
+		Placeholder.attach(self, kind, 0.0, size)
+	else:
+		SpriteVisual.attach(self, kind, 0.0, size)
+
+
+func _draw() -> void:
+	if _tile != null:
+		draw_texture_rect(_tile, Rect2(-size * 0.5, size), true)

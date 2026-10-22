@@ -11,6 +11,7 @@ enum State { WALK, PAUSE }
 const WALK_MIN := 0.6
 const WALK_MAX := 1.6
 const SPIT_PAUSE := 0.5
+const SPIT_HOLD := 0.35
 const ALIGN_TOLERANCE := 48.0
 const SPORE_SPEED := 360.0
 const SPORE_DAMAGE := 1
@@ -20,6 +21,8 @@ const DIRECTIONS: Array[Vector2] = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vect
 var _state: State = State.WALK
 var _timer: float = 0.0
 var _spore_scene: PackedScene
+## Presentation only: seconds left in which the spit animation owns the Visual.
+var _spit_hold: float = 0.0
 
 
 func _init() -> void:
@@ -33,6 +36,16 @@ func _init() -> void:
 func _enemy_ready() -> void:
 	_spore_scene = load(SPORE_SCENE_PATH) as PackedScene   # null is fine: plain projectile
 	_start_walk()
+
+
+## Presentation only: the walk loop follows velocity; a spit holds its own animation for a moment.
+func _process(delta: float) -> void:
+	if visual == null or not visual.has_method("play_anim"):
+		return
+	if _spit_hold > 0.0:
+		_spit_hold -= delta
+		if _spit_hold <= 0.0:
+			visual.set(&"auto_motion", true)
 
 
 func _enemy_physics(delta: float) -> void:
@@ -70,8 +83,18 @@ func _stop_and_decide() -> void:
 		SPORE_DAMAGE,
 		global_position + aim * (body_radius + 14.0)
 	)
+	_present_spit()
 	_state = State.PAUSE
 	_timer = SPIT_PAUSE
+
+
+## Presentation only: plays the spit once and holds the Visual off the walk loop for SPIT_HOLD s.
+func _present_spit() -> void:
+	if visual == null or not visual.has_method("play_anim"):
+		return
+	visual.call("play_anim", &"spit")
+	visual.set(&"auto_motion", false)
+	_spit_hold = SPIT_HOLD
 
 
 ## Cardinal direction from this spitcap toward the player when the player is roughly on its row or

@@ -54,7 +54,7 @@ var lamp: PointLight2D
 var visual: Node2D
 
 var _swing_polygon: CollisionPolygon2D
-var _swing_visual: Placeholder
+var _swing_visual: Node2D
 var _flare_visual: Placeholder
 var _ward_visual: Placeholder
 var _state_time: float = 0.0
@@ -83,8 +83,8 @@ func _ready() -> void:
 	body.shape = circle
 	add_child(body)
 
-	visual = Placeholder.attach(self, &"player", 30.0)
-	_swing_visual = _make_arc_visual(&"hook_arc", SWING_REACH, SWING_ARC_DEG, "SwingVisual")
+	visual = _make_player_visual()
+	_swing_visual = _make_swing_trail()
 	_flare_visual = _make_arc_visual(&"flare", FLARE_REACH, 360.0, "FlareVisual")
 	_ward_visual = _make_arc_visual(&"ward", 64.0, WARD_ARC_DEG, "WardVisual")
 
@@ -306,7 +306,6 @@ func _update_attack(delta: float, held: bool, pressed: bool, released: bool) -> 
 			_state_time += delta
 			if _state_time >= SWING_ACTIVE and swing_hitbox.active:
 				swing_hitbox.deactivate()
-				_swing_visual.visible = false
 			if _state_time >= SWING_TOTAL:
 				state = State.NORMAL
 				_state_time = 0.0
@@ -329,7 +328,8 @@ func _start_swing() -> void:
 	charge_ready = false
 	_build_swing_polygon()
 	swing_hitbox.activate()
-	_swing_visual.set_facing(facing)
+	_swing_visual.call("set_facing", facing)
+	_swing_visual.visible = false  # toggle so the trail always restarts its sweep
 	_swing_visual.visible = true
 	swing_started.emit(facing)
 
@@ -502,6 +502,37 @@ func _die() -> void:
 	visual.modulate = Color(0.4, 0.4, 0.4, 0.7)
 	died.emit()
 	Events.player_died.emit()
+
+
+## Tamsin's Visual: a PlayerVisual (painted art) when the manifest has `player`, else Placeholder.
+## Same steps as SpriteVisual.attach (replace an old "Visual", name it, set kind, add it). The
+## radius override is 0.0 so the manifest body radius (26) is used.
+func _make_player_visual() -> Node2D:
+	var art_script := load("res://scripts/art/player_visual.gd") as GDScript
+	if art_script == null or not SpriteVisual.has_art(&"player"):
+		return Placeholder.attach(self, &"player", 30.0)
+	var old := get_node_or_null(SpriteVisual.VISUAL_NAME)
+	if old != null:
+		remove_child(old)
+		old.free()
+	var art := art_script.new() as SpriteVisual
+	art.name = SpriteVisual.VISUAL_NAME
+	art.kind = &"player"
+	art.radius_override = 0.0
+	add_child(art)
+	return art
+
+
+## The hook sweep: swing_trail.gd covers exactly the hit arc. Falls back to the Placeholder arc.
+func _make_swing_trail() -> Node2D:
+	var trail_script := load("res://scripts/art/swing_trail.gd") as GDScript
+	if trail_script == null:
+		return _make_arc_visual(&"hook_arc", SWING_REACH, SWING_ARC_DEG, "SwingVisual")
+	var trail := trail_script.new() as Node2D
+	trail.name = "SwingVisual"
+	trail.visible = false
+	add_child(trail)
+	return trail
 
 
 func _make_arc_visual(

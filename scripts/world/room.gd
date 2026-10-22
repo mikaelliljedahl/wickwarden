@@ -33,6 +33,7 @@ var _wall_body: StaticBody2D
 func _ready() -> void:
 	position = Vector2(grid) * WorldConst.ROOM_SIZE
 	y_sort_enabled = true
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	for container_name in [&"Enemies", &"Bushes", &"Props", &"Spawns"]:
 		_ensure_container(container_name)
 	for container_name in RESPAWN_CONTAINERS:
@@ -56,10 +57,21 @@ func _exit_tree() -> void:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(Vector2.ZERO, WorldConst.ROOM_SIZE), floor_color)
+	# Terrain textures tile over the room; floor_color stays as a soft tint. Flat colours when a
+	# texture is missing.
+	var floor_tex := SpriteVisual.texture_of(&"ground_cave" if dark else &"ground_grass")
+	var room_rect := Rect2(Vector2.ZERO, WorldConst.ROOM_SIZE)
+	if floor_tex != null:
+		draw_texture_rect(floor_tex, room_rect, true, floor_color.lerp(Color.WHITE, 0.55))
+	else:
+		draw_rect(room_rect, floor_color)
 	if build_walls:
+		var wall_tex := SpriteVisual.texture_of(&"wall_cave" if dark else &"wall_hedge")
 		for r in wall_rects():
-			draw_rect(r, Placeholder.color_of(&"wall"))
+			if wall_tex != null:
+				draw_texture_rect(wall_tex, r, true)
+			else:
+				draw_rect(r, Placeholder.color_of(&"wall"))
 
 
 # ---- Geometry --------------------------------------------------------------------------------

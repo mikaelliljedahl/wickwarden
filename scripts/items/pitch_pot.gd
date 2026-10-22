@@ -26,7 +26,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	Placeholder.attach(self, &"pitch_pot")
+	SpriteVisual.attach(self, &"pitch_pot")
 
 
 ## Refuses at the on-screen limit or with no pitch pots left. The limit is checked first so a
@@ -39,6 +39,9 @@ func activate() -> bool:
 	if player != null:
 		global_position = player.global_position + facing * TILE
 	_armed = true
+	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
+	if visual != null and visual.has_method(&"play_anim"):
+		visual.call(&"play_anim", &"fuse")
 	return true
 
 
@@ -86,7 +89,7 @@ func _explode() -> void:
 	if visual != null:
 		visual.visible = false
 	var parent := get_parent()
-	if parent != null:
+	if parent != null and SpriteVisual.spawn_effect(parent, &"explosion", at) == null:
 		Placeholder.puff(parent, at, Placeholder.color_of(&"explosion"), RADIUS)
 	Events.explosion.emit(at, RADIUS)
 	for node in get_tree().get_nodes_in_group(&"explodable"):

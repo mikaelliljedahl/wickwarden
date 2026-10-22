@@ -13,6 +13,8 @@ const HOP_MAX := 260.0
 const ARC_HEIGHT := 36.0
 const HOP_TRIES := 8
 const BODY_RADIUS := 22.0
+## Presentation only: the crouch cue shows this many seconds before a takeoff.
+const CROUCH_LEAD := 0.2
 
 ## Set at takeoff. Public for tests; game logic only writes them.
 var hop_start: Vector2 = Vector2.ZERO
@@ -23,6 +25,8 @@ var _wait_timer: float = 0.0
 var _air_total: int = 1
 var _air_frame: int = 0
 var _hop_velocity: Vector2 = Vector2.ZERO
+## Presentation only: the animation currently asked of the Visual.
+var _shown_state: StringName = &""
 
 
 func _init() -> void:
@@ -36,6 +40,22 @@ func _init() -> void:
 
 func _enemy_ready() -> void:
 	_wait_timer = randf_range(WAIT_MIN, WAIT_MAX)
+
+
+## Presentation only: hop in the air, crouch just before a takeoff, otherwise idle. The state is
+## only sent when it changes, so a finished hop is not restarted every frame.
+func _process(_delta: float) -> void:
+	if visual == null or not visual.has_method("play_anim"):
+		return
+	visual.set(&"auto_motion", false)
+	var state: StringName = &"idle"
+	if _airborne:
+		state = &"hop"
+	elif _wait_timer > 0.0 and _wait_timer <= CROUCH_LEAD:
+		state = &"crouch"
+	if state != _shown_state:
+		_shown_state = state
+		visual.call("play_anim", state)
 
 
 func _enemy_physics(delta: float) -> void:

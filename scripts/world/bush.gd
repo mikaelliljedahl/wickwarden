@@ -32,7 +32,7 @@ func _ready() -> void:
 	hurtbox.add_circle(48.0)
 	add_child(hurtbox)
 	hurtbox.hurt.connect(_on_hurt)
-	Placeholder.attach(self, &"bush", 40.0)
+	SpriteVisual.attach(self, &"bush", 40.0)
 
 
 func _on_hurt(hitbox: Hitbox) -> void:

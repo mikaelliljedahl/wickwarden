@@ -27,7 +27,7 @@ func _ready() -> void:
 	_shape = CollisionShape2D.new()
 	_shape.shape = rect
 	add_child(_shape)
-	Placeholder.attach(self, &"gate", 0.0, size)
+	SpriteVisual.attach(self, &"gate", 0.0, size)
 	if gate_id != &"" and GameState.has_flag(flag_name()):
 		_set_open(true)
 		return

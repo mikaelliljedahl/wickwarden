@@ -1,7 +1,8 @@
 class_name Hud
 extends CanvasLayer
 ## HUD band (120 px at the top): hearts, brass / keys / pitch pots, active sub-item frame and a
-## minimap of the 3x2 overworld grid. Placeholder drawing; reads GameState only.
+## minimap of the 3x2 overworld grid. Counters and the item frame draw the kind's icon
+## (SpriteVisual.icon_of) and fall back to the placeholder shapes; reads GameState only.
 ## No tutorial text here: button help lives in the pause menu.
 
 const BAND_COLOR := Color(0.05, 0.05, 0.08, 1.0)
@@ -87,17 +88,20 @@ func _draw_hearts() -> void:
 func _draw_counters() -> void:
 	var font := ThemeDB.fallback_font
 	var x := 520.0
-	canvas.draw_circle(Vector2(x, 36), 14.0, Placeholder.color_of(&"brass_coin"))
+	if not _draw_icon(&"brass_coin", Vector2(x, 36), 32.0):
+		canvas.draw_circle(Vector2(x, 36), 14.0, Placeholder.color_of(&"brass_coin"))
 	canvas.draw_string(
 		font, Vector2(x + 28, 48), "%d" % GameState.currency, HORIZONTAL_ALIGNMENT_LEFT, -1, 34
 	)
-	canvas.draw_rect(Rect2(Vector2(x - 6, 70), Vector2(12, 32)), Placeholder.color_of(&"key"))
+	if not _draw_icon(&"key", Vector2(x, 86), 40.0):
+		canvas.draw_rect(Rect2(Vector2(x - 6, 70), Vector2(12, 32)), Placeholder.color_of(&"key"))
 	canvas.draw_string(
 		font, Vector2(x + 28, 98), "%d" % GameState.keys, HORIZONTAL_ALIGNMENT_LEFT, -1, 34
 	)
 	if GameState.has_item(&"pitch_pot"):
 		var px := x + 150.0
-		canvas.draw_circle(Vector2(px, 36), 14.0, Placeholder.color_of(&"pitch_pot"))
+		if not _draw_icon(&"pitch_pot_bundle", Vector2(px, 36), 32.0):
+			canvas.draw_circle(Vector2(px, 36), 14.0, Placeholder.color_of(&"pitch_pot"))
 		canvas.draw_string(
 			font,
 			Vector2(px + 28, 48),
@@ -115,8 +119,9 @@ func _draw_item_frame() -> void:
 	var id := GameState.active_item
 	if id == &"":
 		return
-	var color := Placeholder.color_of(id)
-	canvas.draw_circle(frame.get_center() + Vector2(0, -8), 22.0, color)
+	var center := frame.get_center() + Vector2(0, -8)
+	if not _draw_icon(id, center, 44.0):
+		canvas.draw_circle(center, 22.0, Placeholder.color_of(id))
 	var label := ItemRegistry.display_name(id)
 	canvas.draw_string(
 		ThemeDB.fallback_font,
@@ -126,6 +131,17 @@ func _draw_item_frame() -> void:
 		80,
 		13
 	)
+
+
+## Draws the kind's HUD icon, `side` px square, centred on `center`. False when the kind has no
+## art (the caller then draws its placeholder shape).
+func _draw_icon(kind: StringName, center: Vector2, side: float) -> bool:
+	var icon := SpriteVisual.icon_of(kind)
+	if icon == null:
+		return false
+	var extent := Vector2(side, side)
+	canvas.draw_texture_rect(icon, Rect2(center - extent * 0.5, extent), false)
+	return true
 
 
 func _draw_minimap() -> void:

@@ -26,7 +26,19 @@ func _ready() -> void:
 	var shape := CollisionShape2D.new()
 	shape.shape = rect
 	add_child(shape)
-	Placeholder.attach(self, &"door_marker", 0.0, size)
+	# Every RoomDoor is a cave door: the cave side is cave_exit, the overworld side cave_mouth.
+	var art := &"cave_exit" if _in_dark_room() else &"cave_mouth"
+	SpriteVisual.attach(self, art if SpriteVisual.has_art(art) else &"door_marker", 0.0, size)
+
+
+## True when the nearest Room above this door is dark (the cave side).
+func _in_dark_room() -> bool:
+	var node: Node = get_parent()
+	while node != null:
+		if node is Room:
+			return (node as Room).dark
+		node = node.get_parent()
+	return false
 
 
 func _physics_process(_delta: float) -> void:

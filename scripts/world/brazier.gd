@@ -40,7 +40,7 @@ func _ready() -> void:
 	light.color = Color(1.0, 0.7, 0.35)
 	light.enabled = false
 	add_child(light)
-	Placeholder.attach(self, &"brazier", 0.0, Vector2(64, 64))
+	SpriteVisual.attach(self, &"brazier", 0.0, Vector2(64, 64))
 	if brazier_id != &"" and GameState.has_flag(flag_name()):
 		lit = true
 	_refresh()
@@ -69,6 +69,6 @@ func _on_hurt(hitbox: Hitbox) -> void:
 
 func _refresh() -> void:
 	light.enabled = lit
-	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Placeholder
-	if visual != null:
-		visual.set_kind(&"brazier_lit" if lit else &"brazier")
+	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
+	if visual != null and visual.has_method("set_kind"):
+		visual.call("set_kind", &"brazier_lit" if lit else &"brazier")

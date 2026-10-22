@@ -21,6 +21,8 @@ var _flying: bool = false
 var _timer: float = 0.0
 var _turn_rate: float = 0.0
 var _turn_timer: float = 0.0
+## Presentation only: the animation currently asked of the Visual.
+var _shown_state: StringName = &""
 
 
 func _init() -> void:
@@ -33,6 +35,18 @@ func _init() -> void:
 
 func _enemy_ready() -> void:
 	_start_rest()
+
+
+## Presentation only: fly while in the flight state, otherwise rest. The state is sent only when it
+## changes. Until the fly art exists, play_anim("fly") is a no-op and the rest loop keeps playing.
+func _process(_delta: float) -> void:
+	if visual == null or not visual.has_method("play_anim"):
+		return
+	visual.set(&"auto_motion", false)
+	var state: StringName = &"fly" if _flying else &"rest"
+	if state != _shown_state:
+		_shown_state = state
+		visual.call("play_anim", state)
 
 
 func _enemy_physics(delta: float) -> void:

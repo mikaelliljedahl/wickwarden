@@ -34,7 +34,7 @@ func _ready() -> void:
 	trigger_shape.shape = trigger_rect
 	_trigger.add_child(trigger_shape)
 	add_child(_trigger)
-	Placeholder.attach(self, &"locked_door", 0.0, size)
+	SpriteVisual.attach(self, &"locked_door", 0.0, size)
 	if door_id != &"" and GameState.has_flag(flag_name()):
 		_set_open(true)
 

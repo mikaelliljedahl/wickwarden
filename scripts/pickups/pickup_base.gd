@@ -71,8 +71,9 @@ func _ready() -> void:
 	if get_node_or_null(Placeholder.VISUAL_NAME) == null:
 		var look := kind
 		if kind == &"item":
-			look = item_id if Placeholder.KINDS.has(item_id) else &"item"
-		Placeholder.attach(self, look)
+			var has_item_look := SpriteVisual.has_art(item_id) or Placeholder.KINDS.has(item_id)
+			look = item_id if has_item_look else &"item"
+		SpriteVisual.attach(self, look)
 
 
 func flag_name() -> StringName:

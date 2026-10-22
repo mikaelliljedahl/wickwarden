@@ -26,7 +26,7 @@ func _ready() -> void:
 	_shape.name = "Shape"
 	_shape.shape = rect
 	add_child(_shape)
-	Placeholder.attach(self, &"cracked_wall", 0.0, size)
+	SpriteVisual.attach(self, &"cracked_wall", 0.0, size)
 	if wall_id != &"" and GameState.has_flag(flag_name()):
 		_open(false)
 
