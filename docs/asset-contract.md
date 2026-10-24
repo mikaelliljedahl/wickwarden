@@ -36,6 +36,7 @@ post-processing ruined them.
 - **Facings:** characters with a front and a back (Tamsin, the hollow) have three drawn
   directions: `down` (towards the viewer), `up` (away from the viewer) and `side` (drawn
   **facing right**). The code mirrors `side` for left. That gives four facings.
+- **Side-only animations.** An animation may be drawn as `side` only (new tool poses of Tamsin, decision 29). The manifest lists only the strips that exist. When a facing strip is missing, `SpriteVisual` plays the `side` strip, mirrored for left, and never fails. Left is never a drawn strip.
 - Creatures without a clear front (spitcap, skitterwick, duskmoth, tallow blob, tallow drop) have
   one drawn direction, facing the viewer or a three-quarter right. The code mirrors it for left.
 - **Light:** a warm key light from the upper left, as from a lamp. Deep cool shadows. No cast
@@ -48,7 +49,8 @@ post-processing ruined them.
   The code cuts on exact pixel boundaries. A wrong width breaks every frame after it.
 - One file per animation: `assets/sprites/<kind>_<anim>.png`, for example `player_walk_down.png`.
 - Single-frame props are one image each: `assets/sprites/<kind>.png`. Their size is in section 7.
-- Terrain textures are opaque, seamless in both axes, and repeat with texture repeat on.
+- Terrain textures are opaque, seamless in both axes, and repeat with texture repeat on. The only
+  exception is the terrain edge strip (section 7), which has true alpha.
 
 ## 5. Scale each STRIP, never each frame
 
@@ -143,6 +145,35 @@ collision circle, so the soles sit `r` px below it (`r` = body radius).
 | `water` | `water` blocks (dark pond water) |
 | `pond_bank` | the mud bank around a pond (outside the `water` blocks) |
 | `wall_ruin_face` | the front face of `wall` blocks (dry-stone wall seen from the front) |
+
+### Large figures: second cell-size table (binding)
+
+The inventory ([art-inventory.md](art-inventory.md)) proposed these sizes; the owner accepted them (decision 35). Cells are square unless two numbers are given. `foot` rows follow the pattern of the first table (about 92 % of the cell height). A kind with `centre` has **no foot line**: it floats, hangs, or is a set of body parts. Its anchor is the cell centre, the cut tool aligns the alpha mass centre of the reference pose to the cell centre, and every other rule (one factor per strip, one factor per character) is unchanged.
+
+| Cell | foot | Kinds |
+|---|---|---|
+| 96 | 88 | `wickling`, `liftable_rock_small`, world pickups on pedestals (`item_*`), `bigkey`, `fragment_c1_to_c9`, `flame_cinder`, `jar_lit` |
+| 128 | centre | `cinder_wisp`, `choirling`, `watcher_eye`, `unlit_eye` |
+| 192 | 176 | `bramble_snapper`, `fen_leech`, `husk_hound_*`, `brine_crab_*`, `mirror_shade_*`, shopkeepers and villagers (`npc_*`) |
+| 256 | 236 | minibosses `hollow_captain`, `thorn_warden`, `mirror_warden`, `choir_warden`, `pale_squire`, `wick_automaton`, `corrows_echo`; `npc_corrow_wax` |
+| 256 | 220 | `reed_raft_vehicle` (256 x 256) |
+| 320 | 292 | minibosses `lull_mauler`, `abacus_brute`; boss `gloam_knight` |
+| 384 | 340 | miniboss `sump_lurker`; boss `dirge_head_bass`, `dirge_head_alto`, `dirge_head_treble` |
+| 512 | 470 | bosses `kilnkeeper`, `unlit_p2_shell` |
+| 640 | 600 | boss `hushed_colossus_body` |
+| 256, 384, 512, 640, 768 (also 768 x 512, 384 x 256) | centre | `miniboss_death_wax`, `briar_mother_p1`, `briar_bloom_p2`, `tidewick_*`, `hushed_colossus_arms`, `archivist_*`, `coinwyrm_*`, `lock_warden_body`, `unlit_p1_mass`, `unlit_p3_heart`, `ninth_lantern`; the exact cell of each is the `cell` column of the inventory |
+
+Every kind that is in neither the first table nor this one (large props, effects, projectiles, lights, icons, HUD and minimap art, stills) takes the cell size in the `cell` column of the inventory. The inventory is binding for sizes only; its counts and status are not normative. Minibosses and bosses have no separate hurt or death pose (decision 33): hit flash is `modulate`, deaths use the shared effect strips.
+
+### Terrain edge strips (binding)
+
+An **edge strip** is an alpha overlay laid over the opaque base tiles where two terrains meet or where a surface needs a rim: a region transition (`edge_grass_to_thorn`), a path border, shore foam, a cliff shadow, a cave floor-to-wall edge or a pit rim. The base tiles stay opaque (section 4); edge strips are the only terrain images with alpha.
+
+- **Cell.** A straight strip is one cell of **384 x 96** (4 tiles long, 1 tile deep). It is seamless along its length: the left and right columns match, so the code tiles it. A corner piece (inner or outer corner, used by the pit rim) is one cell of **96 x 96**. A generated source is 1536 x 384 or larger; the cut tool scales the whole source with one factor to the cell.
+- **Naming.** `assets/sprites/edge_<name>.png` for a straight strip, `edge_<name>_inner.png` and `edge_<name>_outer.png` for corners. The `<kind>` always starts with `edge_`. Each file is one frame (no animation). The strip is drawn with its **inner edge on the bottom row**: the opaque feature is at the top, the blend fades out towards the bottom. The code rotates or flips it for other sides.
+- **Alpha.** True alpha with soft edges, as for sprites. **No alpha threshold**, no palette quantization, no hard cut (section 1). The only change to a pixel is the removal of the key colour with the soft ramp (section 6.1) and the despill of partly transparent pixels (section 6.2). A strip may be mostly transparent; that is normal.
+- **Cut tool.** A strip is a sheet with a single cell and no foot line: the tool removes the key, trims nothing, does not look for gaps (section 6.3), does not align to a foot line (section 6.5), and checks that the result has the cell size and that the left and right columns match within a small tolerance, else it stops with an error that names the sheet. The proof (section 6.6) draws the strip on a dark checkerboard twice side by side, so a visible seam can be seen. The tool needs a new manifest kind for this (`"kind": "edge_strip"`); that change to `tools/cut_sprites.py` is a separate task and until it is done the `edge_*` rows cannot be cut.
+- **Manifest.** `sprites.json` gets an entry per strip with `cell`, `anchor` (`[0, 0]`, top left) and one animation `idle` with 1 frame. The code (a `Sprite2D` or a `TextureRect` with repeat on) places it; `SpriteVisual` is not used.
 
 Room floors keep `floor_color` as a soft tint on the texture, so the six overworld rooms still
 read as different places.

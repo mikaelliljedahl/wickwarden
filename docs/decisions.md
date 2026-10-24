@@ -41,3 +41,13 @@ These decisions are binding. The project owner made them on 2026-10-24.
 26. Minibosses in C4, C5 and C8 are fought with tools the player already holds: hook deflect, corner braziers, or a pot on the rail. They are not fought with the cave's own tool.
 27. The cinder wick flame rolls up to 288 px. It can light far braziers. The plan said one tile.
 28. For the remaining open questions in that file, agents choose the simplest solution. The agent notes the choice in the file.
+
+## Art inventory (docs/art-inventory.md, docs/asset-contract.md)
+
+29. Player animations: generate one facing (side, right). Up and down are generated only for the locomotion rows that are not symmetric (the walk-like mitts rows carry, push and pull). Code mirrors left from right. The existing `done` strips keep their three facings. `SpriteVisual` shows the side strip when a facing strip is missing.
+30. Shop prices and counters: the digits are drawn in code with a font tinted brass. There is no numeral sheet (`ui_brass_digits` is removed).
+31. Cave textures: three shared sets (brick, stone, root), each with ground, wall and wall face. Code tints them per cave. The per-cave texture rows (ground, wall, wall face and special for each of the ten caves) are removed. Per-region textures, cave-specific props and the boss arena paintings stay.
+32. Watcher eye: three views are generated (down, up, side). The fourth wall uses the mirrored side view.
+33. Creature hurt and death: hit flash by `modulate` plus the shared death effects (`fx_enemy_poof`, `miniboss_death_wax`, `fx_boss_death_light`, `fx_boss_death_wax`). No separate hurt or death poses for monsters, minibosses or bosses.
+34. `docs/asset-contract.md` gets a terrain edge strip format for alpha overlays (region transitions, shore foam, pit rims, cave edges): cell 384 x 96 (corners 96 x 96), names `edge_*`, true alpha with no alpha threshold, a single-cell cut with no foot line. Opaque base tiles stay opaque. The cut tool code is not changed by this decision; it needs a separate task.
+35. Remaining unclear points of the art inventory: the simplest option. The proposed sizes of minibosses, bosses and other large figures become a binding second cell-size table in the contract (floating bodies are anchored at the cell centre, with no foot line). The rekindle memory stills (`memory_c*`) and `npc_corrow_ghost` stay provisional. Two ending stills only, the optional villagers, the light textures and the backdrops stay as listed (optional items are generated last).
