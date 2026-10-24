@@ -55,3 +55,11 @@ These decisions are binding. The project owner made them on 2026-10-24.
 ## Monster API changes (docs/monsters-bosses-tools.md section 7.2)
 
 36. The four files that section 7.2 of `docs/monsters-bosses-tools.md` changes, `scripts/core/layers.gd`, `scripts/combat/hitbox.gd`, `scripts/enemies/enemy_base.gd` and `scripts/enemies/enemy_projectile.gd`, are owned by M0 (BossBase, wave 1), which lists them in its Owns. They must be merged before any wave 1 monster WP starts.
+
+## Names aligned with the contract (code-contract section 16.12)
+
+37. Boss and mouth flags. A boss sets `boss_<arena room id>_defeated` on death (for example `boss_cave_10_14_defeated`; the arena ids are in docs/monsters-bosses-tools.md section 4.0). The mouth room of cave N sets `mouth_cN` on the first entry, not when a fragment is taken. The warp list shows the mouths whose flag is set.
+38. The sling and pot API names are the ones of work package F5: `slugs`, `slug_max()`, `add_slugs(n)`, `spend_slug()` and `pot_max()`. A pot bag is the pickup kind `pot_bag` and sets the flag `pot_bag_1` or `pot_bag_2`.
+39. Flag spellings: `burned_<id>` (P01), `moved_<id>` (P06), `revealed_<id>` (P08) and `resonated_<id>` (P07). `eye_<id>` and `mini_<room_id>` keep their names.
+40. The ending trigger is `scripts/world/ending_trigger.gd` (E1). The flags `ending_rekindle` and `ending_wickwarden` keep the names the monster file gives them (code-contract 16.4).
+41. WorldData keeps class_name (F1 row overrides the no-class_name rule).

@@ -830,15 +830,16 @@ The Owns lists of world-work-packages.md are authoritative; this table is the su
 
 ### 16.12 Open conflicts (for the lead)
 
-Found while writing this section. The contract above uses the name in the second column. The lead settles each one
-before the WP named in the last column starts.
+Found while writing this section. The contract above uses the name in the third column. The lead settled each one
+(decisions 37 to 41 in [decisions.md](decisions.md)). The last column is the resolution; the monster file is
+edited to match, and the rows below are kept as the record.
 
-| Topic | Monster file says | Work packages say (used here) | Before |
-|---|---|---|---|
-| Boss flag | `boss_cN` (sections 4 intro and 7.3) | `boss_<cave room id>_defeated` (M0, B10, F0) | M0 |
-| Mouth flag | (open question 8) set when fragment N is taken | set on first entry of the mouth room (F0, T06) | T06 |
-| Sling and pot API | `tallow_slugs`, `add_tallow_slugs`, `spend_tallow_slug`, `add_pot_bags` (7.2) | `slugs`, `add_slugs`, `spend_slug`, `pot_max()` (F5) | F5 |
-| Flag spellings | `burn_<id>`, `stone_<id>`, `seam_<id>`, `reson_<id>` | `burned_`, `moved_`, `revealed_`, `resonated_` (P01, P06, P08, P07) | P01 |
-| Ending | `ending_choice.gd`, flags `ending_rekindle` / `ending_wickwarden` (7.3) | `ending_trigger.gd`, no flag names (E1). The flag names are kept in 16.4 | E1 |
-| Intro flag | `intro_seen` is a save flag (F14 says "sets intro_seen") | a settings-file flag (F13) | F13 |
-| Make and AGENTS | `rooms-check`, `world-gen-test`, `playthrough` exist (F1) | not in AGENTS.md (F0 lists four commands) | F0 review |
+| Topic | Monster file says | Work packages say (used here) | Before | Resolution |
+|---|---|---|---|---|
+| Boss flag | `boss_cN` (sections 4 intro and 7.3) | `boss_<cave room id>_defeated` (M0, B10, F0) | M0 | Resolved (decision 37): `boss_<arena room id>_defeated`, for example `boss_cave_10_14_defeated`. Monster file sections 4.0 and 7.3 edited. |
+| Mouth flag | (open question 8) set when fragment N is taken | set on first entry of the mouth room (F0, T06) | T06 | Resolved (decision 37): `mouth_cN` on first entry. Monster file section 5.6 and open question 8 edited. |
+| Sling and pot API | `tallow_slugs`, `add_tallow_slugs`, `spend_tallow_slug`, `add_pot_bags` (7.2) | `slugs`, `add_slugs`, `spend_slug`, `pot_max()` (F5) | F5 | Resolved (decision 38): the F5 names in sections 5.2 and 7.2. |
+| Flag spellings | `burn_<id>`, `stone_<id>`, `seam_<id>`, `reson_<id>` | `burned_`, `moved_`, `revealed_`, `resonated_` (P01, P06, P08, P07) | P01 | Resolved (decision 39): the four spellings of 16.4 in sections 5.1, 5.3, 5.5 and 5.6. |
+| Ending | `ending_choice.gd`, flags `ending_rekindle` / `ending_wickwarden` (7.3) | `ending_trigger.gd`, no flag names (E1). The flag names are kept in 16.4 | E1 | Resolved (decision 40): file `ending_trigger.gd` in sections 4.10 and 7.3. The two flag names stay (16.4). |
+| Intro flag | `intro_seen` is a save flag (F14 says "sets intro_seen") | a settings-file flag (F13) | F13 | Resolved by 16.4 (settings file `user://settings.json`, written by F14, read by F13). The monster file has no intro flag, so it is not edited. |
+| Make and AGENTS | `rooms-check`, `world-gen-test`, `playthrough` exist (F1) | not in AGENTS.md (F0 lists four commands) | F0 review | Resolved by 16.10: AGENTS.md lists the four daily commands; the other three are not for daily use. No edit made. |

@@ -21,7 +21,7 @@ These came from the user after the world plan was written. They override the wor
 | Pitch pot limit | 10 now, raised by the two pot bags (P1 `ow_7_2#bag`, P2 `ow_10_1#hut`) to a final limit of **18**. | 10, then 14 after P1, then 18 after P2 (+4 each). The plan proposed 15 and 20. |
 | C9 | Corrow's workshop, not a lantern. | The Lock Warden drops "Corrow's Last Wick" (the ninth fragment) and a wick core, no lantern theme. |
 | Ninth Door | Opens only with all nine fragments (frag:c1 to frag:c9). | Nothing to add; the C10 section assumes nine. |
-| C10 order | The final fight comes before the ending choice. | The Unlit dies, then the choice prop appears (section 4.10). |
+| C10 order | The final fight comes before the ending choice. | The Unlit dies, then the ending trigger appears (section 4.10, `ending_trigger.gd`). |
 | Ward | A few puzzles need the ward. | Every monster and boss lists its ward interaction (section 1.4, tables). |
 
 ## 1. Conventions
@@ -167,7 +167,7 @@ clockwork lamp-tender with a funnel chimney; Corrow's Echo, a wax figure of an o
 |---|---|
 | Arena | One room of the cave, 20x10 tiles (1920x960 px), walkable 1728x768 px. The camera does not move. The player enters 96 px inside the boss door. The boss door does not shut (world plan 5.3). |
 | Intro | 1.5 s after the player enters: the boss is visible, hurtbox and attacks off. |
-| Leaving | Leaving the room (door, death, warp) resets the boss to full HP and phase 1. A defeated boss stays dead (flag `boss_cN`, persistent). |
+| Leaving | Leaving the room (door, death, warp) resets the boss to full HP and phase 1. A defeated boss stays dead (flag `boss_<arena room id>_defeated`, persistent; for example `boss_cave_1_8_defeated`). The arena ids are `cave_1_8`, `cave_2_9`, `cave_3_9`, `cave_4_10`, `cave_5_10`, `cave_6_11`, `cave_7_11`, `cave_8_12`, `cave_9_10` and `cave_10_14` (the Arena row of sections 4.1 to 4.10). |
 | Stun, knockback | Immune to stun and hook knockback (section 1.3), except parts named in the tables. |
 | Phase change | At the HP threshold the boss is invulnerable for 1.2 s, all of its projectiles and hazards are removed, and one ember (timed 8 s) appears at (960, 480) if Tamsin is below full health. |
 | Resupply | Bosses marked "resupply" (C2, C9, C10) spawn a pitch pot bundle when Tamsin owns the pot and has fewer than 4 pots, and a slug bundle when she owns the sling and has fewer than 8 slugs, at every phase start and every 30 s (timed pickups at (960, 480)). |
@@ -401,7 +401,7 @@ Drops: Corrow's Last Wick (ninth fragment), wick core. Art: a huge brass door-lo
 | 3 | | Chain lash | Every 6.0 s. Telegraph 0.8 s. A 96 px line from a post to the opposite wall, damage 3. Not blockable. |
 | 3 | | Heart pulse | While exposed, every 3.0 s a ring 0 to 400 px in 0.6 s, damage 3, ward blocks. 2 husk hounds per cycle. |
 
-Death: 2.0 s fade, the Ninth Lantern settles at (960, 480), no pickups. The `EndingChoice` prop appears (section 7): two sockets
+Death: 2.0 s fade, the Ninth Lantern settles at (960, 480), no pickups. The ending trigger appears (`ending_trigger.gd`, section 7.3): two sockets
 left and right of the lantern, touching one chooses "rekindle" or "become the Wickwarden" (`story.md`). Art: a vast mass of wax, rope and old
 tools around a dim lantern, five lidless eyes orbiting it, a heart glowing under the lantern when it is pulled down.
 
@@ -437,7 +437,7 @@ The pitch pot's limit rises from 10 to 14 (pot bag P1) and 18 (pot bag P2); this
 | Use | `use_item`. `activate()` refuses if a flame of this item exists (`active_count() > 1`). Tamsin is rooted for 0.2 s (hands up), then the flame leaves. |
 | Flame | Spawns 48 px ahead and rolls at 480 px/s for up to 288 px. It stops at the first `WORLD` body, `Burnable`, brazier or enemy hurtbox. If something solid or burnable is within 96 px it is placed at 96 px. It stands for 3.0 s (fade out the last 0.4 s). Radius 56 px. |
 | Damage | `Hitbox`, team PLAYER, kind `&"fire"`, `once_per_target = false`, damage 1 per tick every 0.5 s (6 per flame), knockback 0. A flame that touches an enemy attaches to it and follows it for the rest of its 3.0 s. Bramble snapper: one tick kills. Wickling: fire kills. Wisp and Kilnkeeper: see tables. |
-| Props | Hitting a `Burnable` prop (group `burnable`, `on_fire(pos)`) starts its burn: a thorn hedge is open after 1.0 s and stays open (flag `burn_<id>`). Braziers in range 56 px light as for the hook. |
+| Props | Hitting a `Burnable` prop (group `burnable`, `on_fire(pos)`) starts its burn: a thorn hedge is open after 1.0 s and stays open (flag `burned_<id>`). Braziers in range 56 px light as for the hook. |
 | Friendly fire | The flame never hurts Tamsin. |
 | Cost | No ammo. After the flame is gone there is no extra cooldown (a new cast is allowed). |
 | Layers | The flame Hitbox is on `PLAYER_HITBOX`, mask `ENEMY_HURTBOX` + `PROP_HURTBOX`. A ray against `WORLD` stops the roll. `Burnable` props are on `PROP_HURTBOX` with a filter for kind `fire`. No new layer. |
@@ -448,9 +448,9 @@ The pitch pot's limit rises from 10 to 14 (pot bag P1) and 18 (pot bag P2); this
 
 | Aspect | Spec |
 |---|---|
-| Use | `use_item` spends 1 slug (`GameState.spend_tallow_slug()`). `activate()` refuses if a slug is alive or the count is 0. Tamsin stands still 0.12 s (recoil); no cooldown otherwise. |
+| Use | `use_item` spends 1 slug (`GameState.spend_slug()`). `activate()` refuses if a slug is alive or the count is 0. Tamsin stands still 0.12 s (recoil); no cooldown otherwise. |
 | Slug | An `Area2D` hitbox, radius 14 px, 720 px/s, range 840 px. It is destroyed by a `WORLD` body, by the first hurtbox it hits, or at range. Damage 1, knockback 240 px/s for 0.08 s, kind `&"sling"`, team PLAYER, `once_per_target`. |
-| Ammo | Max 30 slugs (`GameState.tallow_slugs`, `slug_max`). The pickup of the item itself grants 12 (like the pot's 6). Slug bundle pickup: +6. Drop chance 8 % once the sling is found. Shops: not in the plan; see Open question 5. There is no ammo upgrade in this spec. |
+| Ammo | Max 30 slugs (`GameState.slugs`, `GameState.slug_max()`). The pickup of the item itself grants 12 (like the pot's 6). Slug bundle pickup: +6. Drop chance 8 % once the sling is found. Shops: not in the plan; see Open question 5. There is no ammo upgrade in this spec. |
 | Props | `EyeSwitch` (on `PROP_HURTBOX`, filter kind `sling`) toggles on a slug and stays on (flag `eye_<id>`). Placement rule: the switch is in line of sight of a tile within 840 px, with a clear row or column. |
 | Layers | `PLAYER_HITBOX` mask `ENEMY_HURTBOX` + `PROP_HURTBOX`; a ray against `WORLD`. No new layer. |
 | Gates it opens (6) | `e028` `ow_7_1`<->`ow_8_1` eye-switch portcullis (the Eyegate); `e160` `cave_2_6`<->`cave_2_7` eye-switch portcullis; `e172` `cave_4_2`<->`cave_4_3` eye switch; `e212` `cave_8_2`<->`cave_8_3` eye switch; `e231` `cave_9_2`<->`cave_9_2#cell` eye-switch cell; `e244` `cave_10_12`<->`cave_10_13` eye switch. |
@@ -463,7 +463,7 @@ The pitch pot's limit rises from 10 to 14 (pot bag P1) and 18 (pot bag P2); this
 | Use | `use_item` facing a `Liftable` or `HeavyStone` within 72 px: a grab hitbox (kind `&"grab"`, damage 0, radius 48, 0.1 s) at 72 px ahead. A hit on a prop that accepts `grab` lifts it (0.25 s). If nothing is grabbed: no-op (0.2 s lockout). |
 | Carry | Tamsin walks at 252 px/s. The hook, the flare, the ward and other items are off. `use_item` throws; the `ward` button puts the object down in front of her. A hit on Tamsin drops and breaks the object at her feet. |
 | Throw | 480 px at 720 px/s in the facing direction. A `Hitbox` (team PLAYER, kind `&"thrown"`, damage 3, knockback 560 px/s for 0.15 s, once per target) is active in flight; on landing the object breaks (a small puff). Lockout 0.4 s. |
-| Props | `Liftable`: rock, urn, a lit pitch pot (its fuse keeps running; a thrown pot explodes where it lands or when the fuse ends). `HeavyStone` has two modes: **lift** (carry as above at 216 px/s; thrown objects shatter on landing and the gap stays open: flag `stone_<id>`) for heavy stones; **push** for boulders and heavy doors (hold toward it for 0.5 s, it slides 96 px, repeatable up to 3 steps, stops at a wall; the final position is permanent). |
+| Props | `Liftable`: rock, urn, a lit pitch pot (its fuse keeps running; a thrown pot explodes where it lands or when the fuse ends). `HeavyStone` has two modes: **lift** (carry as above at 216 px/s; thrown objects shatter on landing and the gap stays open: flag `moved_<id>`) for heavy stones; **push** for boulders and heavy doors (hold toward it for 0.5 s, it slides 96 px, repeatable up to 3 steps, stops at a wall; the final position is permanent). |
 | Layers | `Liftable` and `HeavyStone` are `WORLD` bodies with an `Area2D` grab zone on `PROP_HURTBOX` (filter kind `grab`). The thrown `Hitbox` is `PLAYER_HITBOX`. No new layer. |
 | Gates it opens (6) | `e063` `ow_9_3`<->`ow_9_4` heavy stones (lift); `e175` `cave_4_5`<->`cave_4_6` heavy stone (lift); `e198` `cave_6_8`<->`cave_6_10` heavy door (push); `e228` `cave_9_5`<->`cave_9_8` heavy stone (lift); `e239` `cave_10_5`<->`cave_10_8` heavy stone (lift); `e251` `ow_6_6`<->`cave_6_1` heavy boulder (push, the mouth of C6). |
 | In combat | Throws shards, rocks and lit pots at range (3 damage, 6 against the Colossus). It leaves Tamsin helpless while carrying (no ward, no hook): lift only when the room is calm. |
@@ -486,7 +486,7 @@ The pitch pot's limit rises from 10 to 14 (pot bag P1) and 18 (pot bag P2); this
 |---|---|
 | Use | `use_item` throws a jar to 288 px ahead (arc 0.45 s, stops short at a wall). `activate()` refuses while a jar glows. |
 | Glow | A `PointLight2D` radius 520 px (fade in 0.3 s, full 4.7 s, fade out 1.0 s = 6.0 s total). The jar node is in group `glow_source`; `GlowJar.is_lit(pos)` is true within 520 px of a live jar. Tamsin's own lamp (260 px) does not count. |
-| Reveal | `HiddenSeam` props (group `revealable`) within 520 px brighten; after 1.0 s of continuous exposure they unseal for good (flag `seam_<id>`) and become a normal passage or stairs. |
+| Reveal | `HiddenSeam` props (group `revealable`) within 520 px brighten; after 1.0 s of continuous exposure they unseal for good (flag `revealed_<id>`) and become a normal passage or stairs. |
 | Layers | None. The jar is a node, light is a `PointLight2D`, `is_lit` is a distance check against the group. |
 | Gates it opens (6) | `e144` `ow_11_7`<->`ow_11_7#cache` sealed seam; `e185` `cave_5_5`<->`cave_5_6` hidden seam; `e195` `cave_6_6`<->`cave_6_7` hidden seam; `e237` `cave_10_5`<->`cave_10_6` hidden seam; `e252` `ow_10_2`<->`cave_7_1` hidden stairs; `e254` `ow_0_2`<->`cave_9_1` hidden stairs. Placement rule: each seam is a faint scuff that stays hidden until a jar lights it; the player can throw the jar from any tile within 520 px of it. |
 | In combat | A light, not a weapon (damage 0). It strips the decoy of the mirror shade, shows the real Archivist, lights dark rooms for 6 s. |
@@ -496,8 +496,8 @@ The pitch pot's limit rises from 10 to 14 (pot bag P1) and 18 (pot bag P2); this
 | Aspect | Spec |
 |---|---|
 | Tap | `use_item` rings the chime: a ring wave from Tamsin, radius 0 to 480 px over 0.5 s. A `Hitbox` (team PLAYER, kind `&"chime"`, damage 0, `once_per_target`) with no knockback. Cooldown 1.2 s. |
-| What it does | `ResonanceStone` and resonance doors/vaults (group `resonant`, `on_chime()`) wake when the wave reaches them and stay awake (flag `reson_<id>`). Enemies with `chime_stun_time > 0` are stunned: choirling 2.5 s, Dirge head (only while it sings) 4.0 s, Corrow's Echo (only while it charges) 2.0 s. Nothing else is affected. |
-| Hold | Hold `use_item` 1.2 s: the world pauses and a warp picker (new UI, list of cave mouths with flag `mouth_cN`) opens. Select a mouth to warp (World fade 0.3 s). Not allowed in a boss arena. See Open question 8. |
+| What it does | `ResonanceStone` and resonance doors/vaults (group `resonant`, `on_chime()`) wake when the wave reaches them and stay awake (flag `resonated_<id>`). Enemies with `chime_stun_time > 0` are stunned: choirling 2.5 s, Dirge head (only while it sings) 4.0 s, Corrow's Echo (only while it charges) 2.0 s. Nothing else is affected. |
+| Hold | Hold `use_item` 1.2 s: the world pauses and a warp picker (new UI, list of the cave mouths whose flag `mouth_cN` is set) opens. Select a mouth to warp (World fade 0.3 s). Not allowed in a boss arena. See Open question 8. |
 | Layers | A `Hitbox`; `ResonanceStone` is an Area2D on `PROP_HURTBOX` with filter kind `chime`. No new layer. |
 | Gates it opens (4) | `e194` `cave_6_5`<->`cave_6_6` resonance stone; `e232` `cave_9_9`<->`cave_9_9#vault` resonance vault; `e238` `cave_10_6`<->`cave_10_7` resonance stone; `e253` `ow_9_7`<->`cave_8_1` resonance door (the mouth of C8). |
 | In combat | A timing tool against singers: ring it during a song. The Dirge Choir and Echo fights rely on it. |
@@ -599,8 +599,8 @@ Everything else uses the existing layers: `PROP_HURTBOX` for props that react to
 | `scripts/enemies/enemy_base.gd` | new fields `stun_scale := 1.0`, `knockback_scale := 1.0`, `chime_stun_time := 0.0`, `reel_light := false`, `armor_front_deg := 0.0` (guard arc), `water_only := false`, `ignore_water := false`; new virtual `_resolve_damage(hitbox, amount) -> int` (return 0 to block; default returns `amount`), called by the base before applying a hit; new `signal guard_blocked(hitbox)`. Existing hooks are unchanged. |
 | `scripts/enemies/enemy_projectile.gd` | optional `homing_turn_deg`, `shape_capsule` (for the watcher beam). |
 | `scripts/player/player.gd` | state enum `NORMAL, CARRY, RAFT, LEAP, REEL` and `begin_external_motion(mode, path_or_controller)` / `end_external_motion()`; foot sensor on `FEET`; `set_hurtbox_enabled(bool)`; the existing `use_item()` stays generic (it only asks `ItemBase`). |
-| `scripts/autoload/game_state.gd` | `tallow_slugs`, `slug_max := 30`, `pot_max := 10` (14 after P1, 18 after P2; replaces the `PITCH_POT_MAX` constant), `add_tallow_slugs(n)`, `spend_tallow_slug() -> bool`, `add_pot_bags(n)`; signals `slugs_changed`, `pot_max_changed`. |
-| `scripts/pickups/pickup_base.gd`, `scenes/pickups/` | new kinds `slug_bundle` (+6) and `pot_bag` (raises `pot_max` by 4); item-found ammo constants for the sling (12). |
+| `scripts/autoload/game_state.gd` | `slugs`, `slug_max()` (30), `pot_max()` (10, plus 4 per pot bag flag `pot_bag_1`, `pot_bag_2`, so 14 and 18; `PITCH_POT_MAX` stays as the base), `add_slugs(n)`, `spend_slug() -> bool`; signals `slugs_changed`, `pot_max_changed`. Pot bags come from pickup kind `pot_bag`, which sets the next flag. |
+| `scripts/pickups/pickup_base.gd`, `scenes/pickups/` | new kinds `slug_bundle` (+6) and `pot_bag` (raises `pot_max()` by 4); item-found ammo constants for the sling (12). |
 | `scripts/pickups/drop_table.gd` | `pick(roll, pitch_pot_found, sling_found)`: slug bundle 8 % (section 1.5). |
 | `scripts/ui/hud.gd` | slug count for the sling, pot count shows the new maximum. |
 | `scripts/items/item_registry.gd` | register the eight ids and scene paths of section 5. |
@@ -616,9 +616,9 @@ Names and scene paths follow the existing pattern (`scripts/<dir>/<name>.gd` + `
 | UI | `scripts/ui/warp_picker.gd`, `scenes/ui/warp_picker.tscn` |
 | Regular monsters | `scripts/enemies/{bramble_snapper,fen_leech,cinder_wisp,watcher_eye,husk_hound,brine_crab,wickling,mirror_shade,choirling}.gd` + scenes; projectile scenes `beam_bolt.tscn`, `thorn_needle.tscn`, `note.tscn` |
 | Minibosses | `scripts/enemies/{hollow_captain,thorn_warden,sump_lurker,lull_mauler,mirror_warden,choir_warden,pale_squire,abacus_brute,wick_automaton,corrows_echo}.gd` + scenes |
-| Boss framework | `scripts/enemies/boss_base.gd` (`extends EnemyBase`: `boss_id`, `phase`, `thresholds`, `_enter_phase(n)`, intro, reset on leave, flag `boss_cN`, death drops, resupply timer), `boss_part.gd` (`extends EnemyBase`: eyes, plates, heads, tail; reports damage to the owner boss), `telegraph.gd` (a floor marker node: shape circle, rect or cone, duration, signal `finished`; the attack node spawns its `Hitbox` on `finished`) |
+| Boss framework | `scripts/enemies/boss_base.gd` (`extends EnemyBase`: `boss_id`, `phase`, `thresholds`, `_enter_phase(n)`, intro, reset on leave, flag `boss_<arena room id>_defeated`, death drops, resupply timer), `boss_part.gd` (`extends EnemyBase`: eyes, plates, heads, tail; reports damage to the owner boss), `telegraph.gd` (a floor marker node: shape circle, rect or cone, duration, signal `finished`; the attack node spawns its `Hitbox` on `finished`) |
 | Bosses | `scripts/enemies/{kilnkeeper,briar_mother,tidewick,hushed_colossus,archivist,dirge_choir,gloam_knight,coinwyrm,lock_warden,the_unlit}.gd` + scenes, with part scenes (`seed_eye`, `wax_plate`, `choir_head`, `lock_plate`, `coin_plate`, `unlit_eye`) |
-| Ending | `scripts/world/ending_choice.gd` (two sockets, flags `ending_rekindle` / `ending_wickwarden`) |
+| Ending | `scripts/world/ending_trigger.gd` + `scenes/world/ending_trigger.tscn` (two sockets, flags `ending_rekindle` / `ending_wickwarden`) |
 | Placeholders | new `Placeholder.KINDS` entries for each `visual_kind` above; art comes later through `docs/art-brief.md` |
 | Tests | `tests/test_<name>.gd` per monster, per tool and per boss (guard tests for armour, ammo, pit fall, raft clamp, ward area hits, phase thresholds, reset on leave, drops) |
 
@@ -644,8 +644,7 @@ world data table, minimap.
    world-plan 6.4, which still says 15 and 20.
 7. **Raft steering and lanes.** The plan says Tamsin rides "to the next mooring". This spec uses free steering within `WaterZone`s,
    docking only at moorings. A fixed lane (auto-ride) is simpler to build and would make Tidewick a different fight.
-8. **Chime warp.** Which mouths are listed: flag `mouth_cN` set when fragment N is taken, including C9 and C10 (not C10 after it is
-   entered)? Warp from inside a cave? This spec says yes everywhere except boss arenas.
+8. **Chime warp.** Resolved (decision 37): flag `mouth_cN` is set on the first entry of cave N's mouth room, so the list shows each mouth entered so far. C9 and C10 are listed the same way. Warp from inside a cave: yes, everywhere except boss arenas.
 9. **Rekindle scene.** Collecting a fragment should trigger the story's memory scene. Not specified here; the boss spec only drops
    the pickup.
 10. **Ending choice.** The two sockets and the interaction (hook strike on one, hold the ward toward the other) are placeholders.
