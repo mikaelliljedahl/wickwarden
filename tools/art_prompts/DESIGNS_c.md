@@ -29,6 +29,22 @@ Designs that the inventory and the world docs do not describe. The owner can cha
 - `tallow_flask`: intended as a small round glass flask of honey-gold tallow with a cork. All three variants drifted to a heart-shaped glass lantern with a flame inside (see the known problems); the pickup is failed.
 - `bigkey`: a long iron shaft with a toothed bit and a lantern-shaped bow (brass bars around a flame-shaped glass). The brass came out saturated gold, not the neutral pale brass the code tint needs.
 
+## Batch 23 (lantern fragments)
+
+One shape for all nine: an upright, faceted shard of old lantern glass about as tall as a hand, wide base, tapering top, a thin brass rim at the base, light inside. The colour per fragment:
+
+- c1 Warmth: amber and honey-orange glass, warm lamp amber light
+- c2 Growth: moss-green glass with a leaf pattern inside, green-gold light
+- c3 Rain: pale blue glass with round bubbles inside, cold teal light
+- c4 Sleep: deep violet glass, dim dusk-violet light
+- c5 Memory: pale silver-white glass with fine lines inside like folded paper (no writing), white-gold light
+- c6 Song: rose-pink glass with ripple lines, soft rose light
+- c7 Courage: deep red glass with a dark core, red-orange light
+- c8 Trade: bronze-gold glass with a coin-like disc (batch 24)
+- c9 Corrow's Last Wick: black glass with a white-hot wick flame (batch 24)
+
+The glow poses are: medium, brightest with a halo, medium with the light shifted up, dimmest. Brass bases came out with prongs (wider than the thin rim), in most variants.
+
 ## Open points for the owner
 
 - `reel_line_rope` (batch 21): the inventory gives both `96x16 tile` and `alpha strip 16x96`. The prompt uses a horizontal cord (96 long, 16 thick) that runs into both sides of the image.
