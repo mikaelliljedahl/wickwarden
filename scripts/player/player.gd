@@ -87,7 +87,7 @@ var _speed_scales: Dictionary = {}
 
 func _init() -> void:
 	collision_layer = Layers.PLAYER_BODY
-	collision_mask = Layers.WORLD
+	collision_mask = Layers.WORLD | Layers.WATER  # Deep water blocks walking.
 	motion_mode = MOTION_MODE_FLOATING
 
 

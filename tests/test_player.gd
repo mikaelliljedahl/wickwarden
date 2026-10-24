@@ -16,6 +16,10 @@ func _movement_speed() -> void:
 	reset_state()
 	var arena := make_arena()
 	var player := make_player(arena)
+	check(
+		(player.collision_mask & Layers.WATER) != 0,
+		"player body collision mask includes deep water"
+	)
 	await frames(2)
 	Input.action_press(&"move_right")
 	await frames(10)
