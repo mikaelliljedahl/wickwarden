@@ -1,0 +1,21 @@
+; Ruin of Ode (ow_2_0): ruin walls, a cracked wall (bomb) to the in-place cache ow_2_0#cache with the wick core.
+; The east exit has the thorn hedge (cinder wick).
+room ow_2_0
+terrain Ruin of Ode: ruin walls, cracked wall
+floor_color 0.26 0.25 0.2
+grid
+####################
+#...#..........#...#
+#..........#...#...#
+#....##........##.##
+........#...........
+....................
+#..##.........b....#
+#..................#
+#.#..............#.#
+#########..#########
+enemy hollow 5,2
+enemy hollow 12,7
+opener cracked_wall 17,3 id=ow_2_0_cache
+opener thorn_hedge @1872,480 id=ow_2_0_hedge
+pickup wick_core 17,1 id=wick_core_ow_2_0
