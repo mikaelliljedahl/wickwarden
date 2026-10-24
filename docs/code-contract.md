@@ -135,16 +135,22 @@ bushes in `bushes`.
 `GameState` (run state; health in half-hearts):
 
 ```gdscript
-health, max_health (6..40), currency, keys, pitch_pots (0..10): int
+health, max_health (6..40), currency, keys (count of the current scope, section 16.5), pitch_pots (0..pot_max()): int
 items: Dictionary[StringName, true]; active_item: StringName
 visited_rooms: Dictionary; current_room: StringName; flags: Dictionary
 damage(amount) -> bool (true = dead)   heal(n)   full_heal()   add_max_heart(hearts := 1)  # + full heal
-add_currency(n)  add_key(n := 1)  use_key() -> bool  add_pitch_pots(n)  spend_pitch_pot() -> bool
+add_currency(n)  add_key(n := 1, scope := &"ow")  use_key(scope := &"ow") -> bool  keys_in(scope) -> int
+add_pitch_pots(n)  spend_pitch_pot() -> bool
 has_item(id)  acquire_item(id)  set_active_item(id)  cycle_item()
 set_flag(flag, value := true)  has_flag(flag)  mark_visited(room_id)  reset()
 signals: health_changed, currency_changed, keys_changed, pitch_pots_changed, item_acquired,
          active_item_changed, room_visited, flag_changed
 ```
+
+World build amendments to `GameState` (section 16.5 gives the rules): `big_keys` and `fragments` are
+flag-backed (`has_big_key(cave)`, `add_fragment(cave)`); `pot_max()` is 10 plus 4 per pot bag flag, and
+`PITCH_POT_MAX` stays as the base; `slugs`, `slug_max()` (30), `add_slugs(n)`, `spend_slug() -> bool`;
+`WALLET_CAP` (999) with `spend_currency(n) -> bool`; signals `slugs_changed`, `pot_max_changed`.
 
 `Events` (signal bus, no state): `room_entered(room_id)`, `room_left`, `enemy_died(enemy, at)`,
 `player_hurt(amount)`, `player_died`, `player_respawned`, `pickup_collected(kind)`,
@@ -152,7 +158,7 @@ signals: health_changed, currency_changed, keys_changed, pitch_pots_changed, ite
 
 Persistent-flag naming (written by the core, read by tests and WP7): `picked_<persistent_id>` (placed
 pickups), `door_<door_id>` (locked doors), `gate_<gate_id>`, `brazier_<brazier_id>`,
-and for the cracked wall (WP6) `cracked_<wall_id>`.
+and for the cracked wall (WP6) `cracked_<wall_id>`. The world build adds the flags of section 16.4.
 
 ## 6. Combat components
 
@@ -419,14 +425,16 @@ entity only and is the one permitted edit in a core file. Step 2 replaces `Visua
 - **Walls** are plain `StaticBody2D` rectangles (layer `WORLD`), a 96 px ring with a 192 px gap centred on
   each exit side. Chosen over `TileMapLayer` on purpose: Hollowtide's trap was that tile collision
   polygons are measured from the tile **centre**. If tiles come in step 2, test the real tile collision.
-- Room positions: `ow_x_y` at `(x*1920, y*960)`; `cave_1` at grid (0, 3), i.e. world `(0, 2880)`.
+- Room positions: `ow_x_y` at `(x*1920, y*960)`. `cave_1` is at grid (0, 3), i.e. world `(0, 2880)`, until
+  F2 moves it to grid (1, 13), world `(1920, 12480)` (section 16.7). Cave rooms use grid rows 12 and later.
   Local coordinates inside a room scene are 0..1920 x 0..960. Interior (walkable) is 96..1824 x 96..864.
 - **World** (`scripts/world/world.gd`, `scenes/world/world.tscn`, main scene): rooms, player, camera,
-  HUD (120 px band), pause menu, lighting. `ROOM_PATHS` lists the room scenes; adding a room = one
-  line plus a scene. Edge crossing slides the camera 0.45 s with player and rooms frozen and puts the
+  HUD (120 px band), pause menu, lighting. Room grids, exits, scene paths and door targets come from
+  `data/world_data.json` (section 16.7); `ROOM_PATHS` is removed by F2, so the list of rooms is the graph.
+  Only the current room and the rooms it can slide into stay loaded. Edge crossing slides the camera 0.45 s with player and rooms frozen and puts the
   player 96 px inside the new room (lateral position kept in the gap). `warp_to(room_id, spawn := &"Default",
-  fade := true)` fades 0.3 s out / 0.3 s in. Dying: 0.8 s later fade, full health, start room
-  (`ow_0_0` / `Default`). Dark rooms: `CanvasModulate` plus the player's `PointLight2D` (radius 260).
+  fade := true)` fades 0.3 s out / 0.3 s in. Dying: 0.8 s later fade, full health, at the checkpoint
+  (the last cave mouth or shop entered, default `ow_0_0` / `Default`; section 16.9). Dark rooms: `CanvasModulate` plus the player's `PointLight2D` (radius 260).
   Useful for tests: `world.start_at(id, spawn)`, `world.is_transitioning()`, `world.get_current_room_id()`,
   `world.get_room(id)`, `world.player`, `world.camera`, `world.fade_rect`.
 - `Room.register_template(container, node)` adds an enemy/bush template at runtime (tests).
@@ -436,6 +444,9 @@ entity only and is the one permitted edit in a core file. Step 2 replaces `Visua
   target spawn marker outside the target door's trigger), `PickupBase` placed with `persistent_id` (and
   `item_id` for kind `item`; pedestal = a `SolidBlock` of kind `pedestal`).
 - `CrackedWall` (WP6, `scenes/world/cracked_wall.tscn`) is placed in `Props` with `wall_id` (and a `size`).
+- World build (section 16): generated rooms are `scenes/world/rooms/<id>.tscn` and pockets
+  `scenes/world/rooms/<id>__<tag>.tscn`, compiled from `tools/rooms/*.room` (section 16.8). The seven step-1
+  rooms stay hand-made. Launch argument `--start-room=<id>[:spawn]` starts play or capture in any room.
 
 ## 12. Writing an enemy: worked example
 
@@ -558,7 +569,8 @@ func run() -> void:
 **Groups added to the combat components:** every `Hitbox` is in group `hitboxes`, every `Hurtbox` in
 `hurtboxes` (the debug overlay reads them; nothing else should).
 
-**Room authoring.** The seven rooms are plain `.tscn` files built on the 96 px grid: a tile `(c, r)` of the
+**Room authoring.** The seven step-1 rooms are plain `.tscn` files built on the 96 px grid (the world build's
+rooms are `.room` files compiled by `tools/build_rooms.py`, section 16.8; the same grid rules apply to both): a tile `(c, r)` of the
 20x10 grid has its centre at `(96c + 48, 96r + 48)` in room-local pixels, the interior is tiles 1..18 x 1..8,
 exits are 2 tiles wide (tiles 9-10 on the n/s sides, rows 4-5 on the w/e sides). Keep a corridor of 3 tiles
 in front of each exit free, put hollows on tile centres (they walk the grid) and keep sealed spots (secret
@@ -574,11 +586,259 @@ Pedestal items sit 22 px in front (south) of the solid pedestal so the player's 
 (spends the key) -> pitch pot item (+6 pots) -> place a pot at the cracked wall in `ow_2_0` -> wick core
 (+1 max heart, full heal).
 
-**Dev mode.** `godot --path . -- --dev-mode` (`make dev`): all sub-items, 10 pitch pots, 5 keys
-(`World.apply_dev_loadout()`), and F1 toggles `DebugOverlay` (active hitboxes red, hurtboxes green). Without the
+**Dev mode.** `godot --path . -- --dev-mode` (`make dev`): all sub-items, 10 pitch pots, 5 keys in every
+scope (`World.apply_dev_loadout()`, F4), and F1 toggles `DebugOverlay` (active hitboxes red, hurtboxes green).
+Dev mode skips the title and does not write saves (section 16.9). Without the
 argument nothing changes: `make run` is the real start. `World.dev_mode`, `World.set_debug_draw(on)`.
 
 **Screenshots.** `tools/capture.tscn` renders into a 1920x1080 SubViewport (size independent of the window):
 `godot --path . res://tools/capture.tscn -- --room=ow_1_1 --out=docs/screens/step1/ow_1_1.png`. Options:
 `--spawn --frames --place=x,y --facing=up|down|left|right --dev --hitboxes --action=flare|charge|pot`.
+The world build adds `--fixture=<scene>` and `--start-room=<id>` (section 16.10).
 The step-1 shots are in `docs/screens/step1/` (`docs/.gdignore` keeps Godot from importing them).
+
+## 16. World build (full game)
+
+Written by F0 ([world-work-packages.md](world-work-packages.md)). Binding for every world work package (WP).
+Sections 1 to 15 still apply. Each change to them is listed in 16.11; sections 5, 11 and 15 are amended in place.
+
+### 16.1 Sources, precedence and scope
+
+- Design: [world-plan.md](world-plan.md), graph [world-graph.json](world-graph.json). Monsters, bosses and tools:
+  [monsters-bosses-tools.md](monsters-bosses-tools.md). Owner decisions: [decisions.md](decisions.md).
+- Precedence: owner decisions (decisions.md, world-work-packages.md section 1) win over both plans. For a monster
+  number the monster file wins. For an interface or a file name the work package that owns it wins
+  (world-work-packages.md section 4 and the Owns lists). Conflicts found while writing this section are in 16.12.
+- Scope: 192 rooms (88 overworld, 104 cave), 33 pockets (30 with a scene, 3 in place), 8 tools, regular monsters,
+  minibosses, bosses, saves, the title and the intro.
+- Ownership of a world file is its Owns list in world-work-packages.md, mapped to paths by `tools/wp_ownership.json`
+  (D2). Checks: `python3 tools/check_ownership.py <WP> [--base main]` and `python3 tools/check_ownership.py --global`.
+  Section 2 (the step-1 table) does not apply to world WPs.
+
+### 16.2 Rules for every world WP
+
+1. **Read first**: AGENTS.md, this file (sections 1 and 3 to 16), your WP row and the inputs it names. Never guess
+   a dimension, path or interface.
+2. **Only write the files in your Owns list.** Anything else is reported to the lead, not patched. In waves 1 to 5
+   no two WPs own the same file. In wave 0 (sequential) a later WP may amend an earlier file only where its Owns
+   list says "amends".
+3. Section 1 rules stay: behaviour in `_physics_process`; no `class_name` in WP files (`extends "res://path.gd"` is
+   fine); `load()` plus a null check for files another WP delivers; a `Visual` child; half-heart integers;
+   `Layers.*` constants. Core files in `scripts/core/` may declare `class_name` (`WorldData`). Story text (title,
+   intro, ending) is allowed in the game. Button help lives only in the pause menu.
+4. **Placeholder art only.** New entities register their look with `Placeholder.register_kind(...)` (16.6) from
+   their own script. Content WPs do not edit `Placeholder.KINDS` or `tools/make_audio.py`. New content reuses the
+   existing sounds or stays silent. Art comes in a later pass.
+5. **Persistence by flags.** Anything that survives a room change or a save is a flag of 16.4 or of section 5.
+   Rooms can be unloaded at any time, so no state lives in a room node.
+6. The interface contracts of 16.3 are the only coupling between parallel WPs. A WP's tests use the real
+   counterpart if it exists and a small stand-in that obeys the same contract otherwise. F3 and Q7 test every real pair.
+7. **Done means**: `make test T="<own suites>"` passes, `make lint` is clean, the visual check of your row was made
+   (a capture, 16.10), and the report lists every file touched. The lead runs the full `make check` after the merge.
+8. A WP that finds a spec problem stops and reports it. It does not change numbers, normative documents or
+   `docs/monsters-bosses-tools.md`.
+
+### 16.3 Interface contracts
+
+These are the only coupling between parallel world WPs (copied from world-work-packages.md section 4).
+
+| Contract | Defined as |
+|---|---|
+| Fire | `Hitbox.kind = &"fire"`. A prop that burns is in group `burnable` and has `on_fire(pos: Vector2)`. `Brazier` also lights on `fire`. |
+| Sling | `Hitbox.kind = &"sling"` (damage 2, one slug on screen, costs one slug). An `EyeSwitch` is in group `eye_switch` and reacts to `sling` hitboxes on `PROP_HURTBOX`. |
+| Chime | A resonance prop is in group `resonant` and has `on_chime()`. The warp list is `GameState` flags `mouth_c1` .. `mouth_c10` (set when a cave mouth is first entered). |
+| Glow | A hidden prop is in group `revealable` and has `reveal()` / `hide_again()`. The jar adds a `PointLight2D` (radius 520, 6 s) and calls `reveal()` on every `revealable` within its radius while it burns. |
+| Raft | `Mooring` is in group `mooring` with `mooring_id`, `target_room`, `target_mooring`. The raft rides the player between two moorings with the Player motion API (F7). |
+| Boots | `PitZone` is in group `pit_zone`. `Player.is_airborne()` is true during the leap; a pit only acts when the player is not airborne. |
+| Reel | `AnchorRing` is in group `anchor_ring` with `get_anchor_position()`. The reel hitbox has `kind = &"reel"` and carries small pickups with `PickupBase.begin_carry`. |
+| Mitts | A small thing is in group `liftable` (`lift(by)`, `throw(dir)`); a `HeavyStone` is in group `heavy` (`try_move(dir)`, `lift_by_mitts(by)`). The mitts item checks `GameState.has_item(&"heft_mitts")`. |
+| Grate | A grate is in group `grate`. It blocks the player body (layer `WORLD`); the tether moth's turn-back ray ignores bodies in that group (P09 amends `tether_moth.gd`). |
+| Ward | The ward absorbs a blockable `Hitbox`; the existing `Hitbox.blocked` signal fires. A `WardPlate` counts those blocks (P15). |
+| Shallows | Fen leeches need `Area2D` zones in group `shallows`; rooms place them (R4, C03, C09, C10). |
+| Boss | `BossBase` (M0) extends `EnemyBase`, sets flag `boss_<cave room id>_defeated` on death (for example `boss_cave_10_14_defeated`), emits `defeated`, and locks the arena doors for the fight. Placed rewards use `PickupBase.requires_flag` (F4) so they appear only after that flag. |
+| Spawn markers | Cave mouth room has marker `FromCave`; cave entrance room has marker `FromOverworld`; pocket door pairs use `FromPocket` / `Inside`. All room doors take their targets from `data/world_data.json`. |
+| Gate prop names | One prop name per row of world-plan 1.3 / 2.2; the generator emits a `prop` string per edge and `tests/test_world_graph.gd` maps each to a scene or script (F3 table). |
+
+### 16.4 Flags
+
+Flags are `GameState` flags and survive room changes and saves (section 16.9). Existing flags of section 5 stay.
+
+| Flag | Set when | Set by (WP) |
+|---|---|---|
+| `picked_<persistent_id>`, `door_<door_id>`, `gate_<gate_id>`, `brazier_<brazier_id>`, `cracked_<wall_id>` | existing | core (section 5) |
+| `mouth_c1` .. `mouth_c10` | the mouth room of cave N is entered for the first time; the warp list (T06) reads them | World |
+| `bigkey_c1` .. `bigkey_c10` | the big key of cave N is collected (kind `big_key`) | F4 |
+| `frag_c1` .. `frag_c9` | the fragment of cave N is collected (kind `fragment`). C10 gives none. | F4 |
+| `boss_<cave room id>_defeated` | the boss of that cave room dies (for example `boss_cave_10_14_defeated`) | M0 and the boss WPs |
+| `mini_<room_id>` | a miniboss dies; it does not respawn | miniboss WPs (monster file section 3) |
+| `door_boss_<cave>` | the BossDoor opens with `bigkey_cN` | P10 |
+| `door_ninth` | the Ninth Door opens with `frag_c1` .. `frag_c9` | P11 |
+| `pot_bag_1`, `pot_bag_2` | a pot bag is collected; `pot_max()` rises by 4 (14, then 18) | F5 |
+| `shop_<id>` | a one-time shop stock item is sold | F9 |
+| `burned_<id>` | a `Burnable` prop has burned open and stays open | P01 |
+| `eye_<id>` | an `EyeSwitch` is on | P02 |
+| `moved_<id>` | a `HeavyStone` opening was moved or lifted open | P06 |
+| `resonated_<id>` | a resonance stone or door is awake | P07 |
+| `revealed_<id>` | a `HiddenSeam` is revealed | P08 |
+| `ward_<id>` | a `WardPlate` was satisfied | P15 |
+| `ending_rekindle`, `ending_wickwarden` | the ending choice was made (names from the monster file, 16.12) | E1 |
+| `intro_seen` | the intro finished once. It is kept in `user://settings.json`, not in the save | F14 writes, F13 reads |
+
+### 16.5 Keys, wallet, ammo, pickups, shops, items (additions to sections 5, 8 and 9)
+
+- **Scoped keys** (decision 3). A key's scope is `ow` or a cave `cN`. `keys_in(scope)`, `add_key(n, scope)`, `use_key(scope)`.
+  A key spends only in its own scope. `LockedDoor` and `PickupBase` take `scope` (default `ow`); the scene states it,
+  and the graph test checks it against the graph.
+- **Big keys and fragments** are flag-backed: `has_big_key(cave)` reads `bigkey_cN`; `add_fragment(cave)` sets `frag_cN`.
+- **Wallet**: `WALLET_CAP = 999` (decision 7). `spend_currency(n) -> bool` spends only when there is enough.
+- **Pitch pot limit**: `pot_max()` = 10 plus 4 per pot bag flag (10, 14, 18; decision 4). `PITCH_POT_MAX` stays as the base.
+- **Sling ammo** (decision 9): `slugs`, `slug_max()` = 30; 12 on the first pickup of the sling; `slug_bundle` +6;
+  `add_slugs(n)`, `spend_slug() -> bool`. The drop table is `pick(roll, pitch_pot_found, sling_found)`; the slug
+  bundle drops at 8 % only after the sling is found.
+- **New pickup kinds** (section 8): `big_key`, `fragment`, `pot_bag` (sets the next bag flag), `slug_bundle`. Placed
+  pickups may set `requires_flag`: inactive and invisible until that flag exists. Wick cores stay kind `wick_core`
+  with the persistent ids of section 15 plus `wick_core_cN`.
+- **Shops** (F9): `ShopItem`, a walk-up purchase. Stock kinds: `ember` (+1 heart at purchase), `pot_bundle` (+4 pots,
+  only after the pot item is found), `slug_bundle`, `tallow_flask` (full heal on purchase, no inventory slot;
+  decision 13). Prices are read from `data/shop_prices.json`, never written in code.
+- **Items** (section 9, F10): `ItemRegistry` registers all ten ids up front: `tether_moth`, `pitch_pot` (step 1) and
+  `cinder_wick`, `tallow_sling`, `reed_raft`, `heft_mitts`, `glow_jar`, `lantern_chime`, `skitter_boots`, `reel_line`.
+  Scripts are `res://scripts/items/<id>.gd` and scenes `res://scenes/items/<id>.tscn`.
+- **Item subscreen** (decision 6, 20): opens with Tab (Select on a gamepad). It shows all items in a grid; move keys
+  select; confirm equips. `cycle_item` stays as the quick switch.
+
+### 16.6 Combat, props, monsters and placeholders (additions to sections 3, 6, 7, 10)
+
+- **Collision layers** (section 3 table is not edited): `WATER` = 1024 (layer 11), blocker bodies of deep water;
+  `FEET` = 2048 (layer 12), foot sensors. `PitZone` has mask `FEET`. Use `Layers.*` only.
+- **Hitbox kinds** (section 6): `&"fire"`, `&"sling"`, `&"reel"`, `&"thrown"`, `&"grab"`, `&"chime"`. New fields
+  `block_destroys_carrier := true` and `tick_interval := 0.0`.
+- **Enemy fields and hooks** (section 7): `stun_scale`, `knockback_scale`, `chime_stun_time`, `reel_light`,
+  `armor_front_deg`, `water_only`, `ignore_water`; virtual `_resolve_damage(hitbox, amount) -> int` (0 blocks);
+  signal `guard_blocked(hitbox)`. Projectiles (section 8) gain `homing_turn_deg` and `shape_capsule`.
+- **Player** (section 4 and 16.3): state enum `NORMAL, CARRY, RAFT, LEAP, REEL`; `begin_external_motion(mode,
+  path_or_controller)`, `end_external_motion()`; a foot sensor on `FEET`; `set_hurtbox_enabled(bool)`. The existing
+  `use_item()` stays generic.
+- **Tool and monster API details** are section 7 of [monsters-bosses-tools.md](monsters-bosses-tools.md). That section
+  is part of this contract. M0 owns the four core files it names (decision 36) and merges them before any wave 1
+  monster WP starts.
+- **Placeholders** (section 10): `Placeholder.register_kind(kind, definition, is_static := false)` and
+  `Placeholder.has_kind(kind)`. A world WP registers its kind from its own script. `Placeholder.KINDS` is not edited
+  by content WPs. The look-edit allowance of section 10 is for step 1 only.
+
+### 16.7 Data and world runtime (amends section 11)
+
+- **`data/world_data.json`** is generated by `tools/gen_world_data.py` from `docs/world-graph.json` (F1). It is never
+  edited by hand. `make world-check` regenerates it to a temporary file and fails when the committed copy differs.
+  It holds rooms (`id`, `scene`, `grid`, `exits`, `dark`, `scope` = `ow` or `cN`, `region`, `name`, `enemies`),
+  pockets (`id`, `scene` with `#` replaced by `__`, `in_place`, virtual `grid` on row 30), edges (`a`, `b`, `link`,
+  `gate`, `needs`, `dir`, `key`, `prop`), pickups, items, shops, caves (mouth room, entrance room, lantern name) and
+  `source_sha` of the graph.
+- **`WorldData`** (`scripts/core/world_data.gd`, static methods): `room_ids()`, `has(id)`, `scene_path(id)`,
+  `grid(id)`, `exits(id)`, `scope_of(id)`, `neighbors(id)`, `edge_between(a, b)`, `is_oneway(a, b)`, `cave_of(id)`,
+  `pickups_in(id)`, `all_pockets()`.
+- **Pockets**: a pocket `<room>#<tag>` has the scene `scenes/world/rooms/<room>__<tag>.tscn` (for example `ow_7_2#bag`
+  becomes `ow_7_2__bag.tscn`). The three sealed spots `ow_2_0#cache`, `ow_2_1#closet` and `cave_1#alcove` are
+  `in_place` (no scene; decision 15). Every other pocket has its own scene. Pockets sit on virtual row 30 and are
+  never part of the world grid.
+- **Grid**: cave rooms use rows 12 and later. `cave_1` moves from grid (0, 3) to grid (1, 13), world (1920, 12480)
+  (F2). Overworld rooms keep `(x*1920, y*960)`.
+- **World** (F2): `ROOM_PATHS` is removed; `_by_grid` is built from `WorldData`. The current room and the rooms it
+  can slide into stay loaded; `get_room(id)` loads on demand; pockets load on `warp_to`. `World.add_room_scene(room_id,
+  packed_scene)` is a test and capture hook. A room without a scene is a warning and a closed edge.
+- **Doors and spawns**: targets of generated rooms come from `data/world_data.json`. Markers: `FromCave` (cave mouth
+  room), `FromOverworld` (cave entrance room), `FromPocket` and `Inside` (pocket door pairs).
+- **Data files** are read at run time from `data/` (`world_data.json`, `shop_prices.json`, `intro.json`,
+  `ending.json`). Nothing reads `docs/` at run time (`docs/.gdignore`). The export includes `data/*.json` through the
+  JSON export filter (decision 17).
+
+### 16.8 File layout (new)
+
+The Owns lists of world-work-packages.md are authoritative; this table is the summary.
+
+| Path | Content | Owner |
+|---|---|---|
+| `docs/world-plan.md`, `docs/world-graph.json`, `docs/world-work-packages.md`, `docs/monsters-bosses-tools.md`, `docs/decisions.md` | designs and decisions | their WPs and the owner |
+| `docs/intro-script.md` | intro lines and still briefs | D3 |
+| `docs/room-kit.md` | `.room` format | F6 |
+| `data/world_data.json` | generated graph | F1 |
+| `data/shop_prices.json` | shop prices (tuning, no code) | F9 |
+| `data/intro.json` | intro lines | F14 |
+| `data/ending.json` | ending lines | E1 |
+| `tools/gen_world_data.py`, `tools/build_rooms.py`, `tools/check_world_graph.py` | generator, room compiler, graph checker | F1, F6, G1 |
+| `tools/rooms/<id>.room`, `tools/rooms/<id>__<tag>.room` | room sources (the compiler's input) | room batch WPs |
+| `tools/wp_ownership.json`, `tools/check_ownership.py`, `tools/test_check_ownership.py` | ownership map and checker | D2 |
+| `scenes/world/rooms/<id>.tscn`, `scenes/world/rooms/<id>__<tag>.tscn` | compiled rooms and pockets (never edited by hand); the seven step-1 rooms stay hand-made | F6, room batch WPs |
+| `scenes/bosses/<name>_arena.tscn` | boss arena fragment, placed in the boss room by the lead | boss WPs |
+| `scripts/core/world_data.gd` (`WorldData`) | static data reader | F1 |
+| `scripts/autoload/save_game.gd` (`SaveGame`) | the save slot | F12 |
+| `scripts/world/*` props (burnable, eye_switch, mooring, water_zone, pit_zone, anchor_ring, reelable, liftable, heavy_stone, resonance_stone, hidden_seam, ward_plate, ninth_door, boss_door, shop_item, ending_trigger, ...) | props and triggers | the P-, S- and E-WPs |
+| `scripts/items/<id>.gd`, `scenes/items/<id>.tscn` | the eight tools and their helpers | T-WPs |
+| `scripts/enemies/*` | regular monsters, minibosses, bosses, `boss_base.gd`, `boss_part.gd`, `telegraph.gd` | M-, B- WPs; M0 for the boss base |
+| `scripts/ui/*` | title, menu list, intro, ending, warp picker, item subscreen, minimap in `hud.gd` | F10, F11, F13, F14, E1, T06 |
+| `tests/test_world_data.gd`, `tests/test_world_graph.gd`, `tests/area_base.gd`, `tests/fixtures/gallery/<wp>.tscn`, `tests/fixtures/rooms/` | tests and fixtures | F1, F3, F2, F6 |
+| `assets/art/<name>.png` | stills and sprites (a later art pass) | art |
+| user data: `user://save_1.json`, `user://save_1.bad`, `user://settings.json` | save slot, a kept corrupt save, settings | F12, F13 |
+
+### 16.9 Saves, title and flow
+
+- **One save slot** (decision 16): `user://save_1.json`, versioned (`format`, `game_version`), written atomically
+  (temporary file, then rename). Contents: health, max health, wallet, keys by scope, pots, slugs, items, active item,
+  visited rooms, all flags, the checkpoint room and the playtime. A corrupt or newer file is ignored with a warning
+  and kept as `save_1.bad`.
+- **Autosave** on every room entry (debounced to once per second) and after every persistent pickup.
+- **Checkpoint**: the last cave mouth or shop entered; default `ow_0_0`. Death returns the player there with full
+  health; flags are kept.
+- **`SaveGame`** (autoload): `has_save()`, `save()`, `load_into_state()`, `erase()`, `launch_mode` (`&"new"`,
+  `&"continue"`, `&"dev"`). `SaveGame.enabled` is false in tests and in `--dev-mode`; `TestCase.reset_state()` keeps it so.
+- **Title** (decision 14): New game, Continue, Quit. Continue is greyed out without a save. New game with a save asks
+  once (Yes/No) before it erases the slot. The title is the main scene; `--dev-mode`, `--start-room` and the capture
+  tool skip it.
+- **Intro** after New game: six stills, skippable at once by any confirm key or Esc (decision 21). It shows no skip hint.
+  It sets `intro_seen` in the settings file.
+- **Ending** (decisions 12, 22): after the Unlit dies (flag `boss_cave_10_14_defeated`), two lit lanterns with Corrow
+  between them; no text during the choice. Both endings end with the credits and a return to the title; the save is
+  marked `completed`.
+- **Pause menu** has "Back to title" (decision 23).
+
+### 16.10 Build commands, captures and tests
+
+- **Make targets** added by F1: `world-data`, `world-check`, `world-gen-test`, `rooms`, `rooms-check`, `capture-all`,
+  `playthrough`. A target whose tool is built later prints "not built yet". `check` gains `world-check` and `world-gen-test`.
+  AGENTS.md lists `world-data`, `world-check`, `rooms` and `capture-all` for daily use.
+- **Long suites**: a suite may declare `## timeout=<seconds>` as its first line (F3) to exceed the 90 s default (decision 24).
+- **Captures**: `tools/capture.gd --fixture=<scene>` renders a WP's gallery scene `tests/fixtures/gallery/<wp>.tscn`
+  (F2). `--start-room=<id>[:spawn]` captures any room. Full-size captures stay out of git; commit contact sheets only
+  (decision 18).
+
+### 16.11 Amendment table
+
+| Section | Change | Where | WP |
+|---|---|---|---|
+| 3 Collision layers | `WATER` 1024, `FEET` 2048 | 16.6 (table not edited) | M0 |
+| 5 Autoloads | `GameState`: scoped keys, big keys, fragments, wallet cap, pot limit, slugs; flags | edited in place, 16.4 | F4, F5 |
+| 6 Combat components | new hitbox kinds and fields | 16.6 | M0 |
+| 7 EnemyBase | new fields and virtual `_resolve_damage`, signal `guard_blocked` | 16.6 | M0 |
+| 8 Pickups | kinds `big_key`, `fragment`, `pot_bag`, `slug_bundle`; `scope`, `requires_flag` | 16.5 | F4, F5 |
+| 9 Sub-items | ten ids; item subscreen; Tab | 16.5 | F10 |
+| 10 Placeholder art | `register_kind`, `has_kind`; `KINDS` not edited by content WPs | 16.6 | F2 |
+| 11 Room system | data-driven rooms, streaming, `cave_1` moves, pockets, `--start-room`, checkpoint respawn | edited in place, 16.7 | F1, F2, F12 |
+| 13 Tests | `## timeout=<seconds>` header | 16.10 | F3 |
+| 15 Dev world | five keys in every scope; dev mode skips title and saves; room authoring; capture options | edited in place | F4, F6, F12, F13 |
+| 1, 2, 4, 12, 14 | unchanged. Section 2 is the step-1 table | none | |
+| 16 (new) | the world build | this section | F0 |
+
+### 16.12 Open conflicts (for the lead)
+
+Found while writing this section. The contract above uses the name in the second column. The lead settles each one
+before the WP named in the last column starts.
+
+| Topic | Monster file says | Work packages say (used here) | Before |
+|---|---|---|---|
+| Boss flag | `boss_cN` (sections 4 intro and 7.3) | `boss_<cave room id>_defeated` (M0, B10, F0) | M0 |
+| Mouth flag | (open question 8) set when fragment N is taken | set on first entry of the mouth room (F0, T06) | T06 |
+| Sling and pot API | `tallow_slugs`, `add_tallow_slugs`, `spend_tallow_slug`, `add_pot_bags` (7.2) | `slugs`, `add_slugs`, `spend_slug`, `pot_max()` (F5) | F5 |
+| Flag spellings | `burn_<id>`, `stone_<id>`, `seam_<id>`, `reson_<id>` | `burned_`, `moved_`, `revealed_`, `resonated_` (P01, P06, P08, P07) | P01 |
+| Ending | `ending_choice.gd`, flags `ending_rekindle` / `ending_wickwarden` (7.3) | `ending_trigger.gd`, no flag names (E1). The flag names are kept in 16.4 | E1 |
+| Intro flag | `intro_seen` is a save flag (F14 says "sets intro_seen") | a settings-file flag (F13) | F13 |
+| Make and AGENTS | `rooms-check`, `world-gen-test`, `playthrough` exist (F1) | not in AGENTS.md (F0 lists four commands) | F0 review |

@@ -30,11 +30,17 @@ towers and tend the Nine Lanterns.
 Corrow disappeared on the night of the Lanternfall. He left behind his **lamp hook**, a long
 brass pole with a hooked end, and a lamp that will not go out. Tamsin takes them both.
 
+Corrow also kept a hidden **workshop**, **Corrow's Undercroft**, under an old lamp tower outside
+Brackwater Ford. No lantern fell there. It is the one cave in the valley that is not an
+Underlight, and it holds his letters and murals.
+
 ## The quest
 
-Tamsin goes down into each Underlight, finds the core of the fallen lantern and rekindles it
-with her lamp. Each rekindled lantern gives a part of its old power back to the valley, and it
-gives Tamsin a tool that opens new paths.
+Tamsin goes down into the Underlights, finds the core of each fallen lantern and rekindles it
+with her lamp. The eight lanterns she rekindles in the Underlights each give a part of their old
+power back to the valley, and each gives Tamsin a tool that opens new paths. In Corrow's workshop
+she finds his last wick, the ninth fragment. With all nine fragments the way to the **Ninth
+Hollow** opens, and the Hollow holds the last lantern.
 
 The valley people believe that the Hush pulled the lanterns down. Tamsin finds a different
 truth step by step, in murals, in letters from Corrow and in the memories that each lantern
@@ -60,6 +66,13 @@ In the Ninth Hollow, Tamsin finds Corrow, half wax and half man. She must choose
    The dusk changes slowly into a real dawn. The Hush settle and become quiet.
 
 There is no evil king and no captured person to save. The conflict is about the cost of comfort.
+
+## Title and intro
+
+The game opens on a title screen with New game, Continue and Quit. New game plays a short intro of six
+stills; its lines are written in [intro-script.md](intro-script.md) and follow this sketch up to Tamsin
+setting out. The intro never reveals the truth, shows no skip hint, and any confirm key or Esc skips it.
+The ending lines are in `data/ending.json`, written from this file.
 
 ## Tone
 

@@ -4,6 +4,11 @@ The goal of step 1 is a small, playable dev world that gives the feel of the gam
 movement, the lamp hook, sub-items, flip-screen rooms and five monster types. Art is
 placeholder in step 1. Step 2 replaces it with high-detail GPT Image art (see the last section).
 
+> World build note: this file is the step-1 plan and keeps its numbers. The full game is planned in
+> [world-plan.md](world-plan.md), split into work packages in [world-work-packages.md](world-work-packages.md),
+> and contracted in [code-contract.md](code-contract.md) section 16. The owner's decisions are in
+> [decisions.md](decisions.md). Where a note below points elsewhere, that document is the current rule.
+
 ## 1. Engine and format
 
 - Godot 4.7, GDScript only. Run with `godot --path .`.
@@ -28,6 +33,9 @@ Overworld grid of 3×2 rooms plus one cave interior.
 | `ow_1_1` | (1,1) | Crossroads. 2 Tallow blobs, 1 Spitcap. A **cave entrance**. |
 | `ow_2_1` | (2,1) | Dead end with a **locked door** (needs 1 key) to the pitch pot item. |
 | `cave_1` | interior | Dark cave. Two **unlit braziers**; lighting both with the lamp opens a gate to a **key**. 3 Hollows. |
+
+> World build note: the full world (192 rooms) is listed in [world-graph.json](world-graph.json). The rooms of
+> this table keep their ids (decision 10). `cave_1` moves to grid (1, 13) with F2 (code-contract 16.7).
 
 Room transitions:
 
@@ -88,6 +96,9 @@ Units: health is in **half-hearts**. Start health 6 (3 hearts). Max 20 hearts.
 | **Tether moth** | Boomerang | Flies 420 px in the facing direction at 900 px/s, then returns to the player. Stuns enemies for 2.0 s, damage 0. Picks up loot that it touches. One on screen at a time. | none |
 | **Pitch pot** | Bomb | Placed one tile in front of the player. Explodes after 1.6 s. Radius 150 px, damage 4 to enemies and 2 to the player. Opens `cracked_wall` nodes. Max 2 on screen. | starts 0, max 10 |
 
+> World build note: the pitch pot limit of 10 is the base. Two pot bags raise it to 14 and then 18
+> (decision 4; code-contract 16.5).
+
 ## 5. Pickups
 
 | Pickup | Effect | Drop chance from an enemy |
@@ -101,7 +112,14 @@ Units: health is in **half-hearts**. Start health 6 (3 hearts). Max 20 hearts.
 
 Pickups disappear after 8 s. They blink during the last 2 s. Placed pickups do not disappear.
 
+> World build note: small keys belong to one cave each (scoped keys, decision 3). Big keys, fragments, slug
+> ammo and the wallet cap are added by the full game (code-contract 16.5).
+
 ## 6. Monsters (the Hush)
+
+> World build note: the table below is the step-1 set. The full game's regular monsters, minibosses and
+> bosses are specified in [monsters-bosses-tools.md](monsters-bosses-tools.md); their code contract is
+> code-contract section 16.6. The five monster types of the first paragraph are the step-1 count.
 
 All enemies use the shared enemy base (see the code contract). All enemies give contact damage.
 
@@ -131,6 +149,10 @@ The HUD band (120 px at the top) shows, from left to right:
 4. A minimap of the 3×2 grid. Visited rooms are filled. The current room is highlighted.
 
 No tutorial text appears in the game world. Button help is allowed only in the pause menu.
+
+> World build note: the 3×2 minimap is the step-1 HUD. The full game shows the overworld on a 12×9 map and
+> a cave map, with the key, big key and fragment counters (work package F11 in
+> [world-work-packages.md](world-work-packages.md)).
 
 ## 8. Placeholder art (step 1)
 
