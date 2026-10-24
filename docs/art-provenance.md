@@ -493,6 +493,23 @@ GPT Image terrain textures below; they add no other image.
 | `wick_automaton_walk_up_v1.png` | 1536×1024 | `01a16f5b-ab6e-7252-b5af-04fdf759f75e` | `exec-2a233520-d0f3-4297-869c-ce93e301e3e5` | `86d47c582f975e5c` | `log_b61.md` |
 | `wick_automaton_walk_up_v2.png` | 1536×1024 | `01a16f5b-b179-7f32-8c8e-b9950cb87047` | `exec-ad6d6caa-2a9f-4b72-b7a0-b75cbeb0673c` | `ef3dc5157f38c59a` | `log_b61.md` |
 | `wick_automaton_walk_up_v3.png` | 1536×1024 | `01a16f5b-b863-74c0-8f22-1278fee7e1a9` | `exec-34af720b-a00c-4cac-8bea-f7eb0ca6932e` | `3fdcc9570d389327` | `log_b61.md` |
+| `mirror_shade_walk_side_v1.png` | 1536×1024 | `01a16f57-7492-75f3-b208-e4cf08d0f9ca` | `exec-b495ba1b-86b9-44ce-a4b1-43a3b31b18f2` | `e41612ebf2142c0b` | `log_b16.md` |
+| `mirror_shade_walk_side_v3.png` | 1536×1024 | `01a16f59-92c0-7b40-aa80-2791944a434b` | `exec-3b6e091f-2425-4f0b-8c20-e22ddfd18d4a` | `56137c2065a0eab3` | `log_b16.md` |
+| `mirror_shade_walk_down_v1.png` | 1536×1024 | `01a16f5c-0201-7360-a912-b2c8c6f8889e` | `exec-ca2f3f26-007c-49aa-80aa-0a9eaf0b7cc7` | `3de1de49159fb167` | `log_b16.md` |
+| `mirror_shade_walk_down_v2.png` | 1536×1024 | `01a16f5c-1097-7772-a892-10c209630549` | `exec-934a0e2a-d02f-4824-905b-d46587e1d971` | `8e7eb673b908449f` | `log_b16.md` |
+| `mirror_shade_walk_down_v3.png` | 1536×1024 | `01a16f5c-275e-7630-a80a-0f14cceffdf4` | `exec-a276e091-50f0-4466-ac70-7de1488e8e73` | `e3097b3ffa4dce64` | `log_b16.md` |
+| `mirror_shade_walk_up_v1.png` | 1536×1024 | `01a16f5c-56b1-72b0-acd9-15ae397317e3` | `exec-170ba681-bc41-4989-a661-f85be4ebc44d` | `8dfe731a142d4f23` | `log_b16.md` |
+| `mirror_shade_walk_up_v2.png` | 1536×1024 | `01a16f5c-6e4c-70a2-9444-319ac2b0f387` | `exec-806f419a-b8f6-4823-a023-4a9dd30b24ab` | `856fd2d180be2eae` | `log_b16.md` |
+| `mirror_shade_walk_up_v3.png` | 1536×1024 | `01a16f5c-991d-7b13-8f54-1143f4bde008` | `exec-ccbd8853-034a-4d3e-ad47-3c0797f03b54` | `82d6bb172e681c49` | `log_b16.md` |
+| `mirror_shade_states_fade_down_v1.png` | 1536×1024 | `01a16f5e-2709-7ff3-b89a-e784f2c81122` | `exec-395e3450-8727-44c7-90f9-b55913e86aad` | `b4bea88880028cb2` | `log_b16.md` |
+| `mirror_shade_states_fade_down_v2.png` | 1536×1024 | `01a16f5e-30be-7701-ba6d-98d7d2e710a2` | `exec-dc44bebd-cee0-4850-9cfe-1edfcefb9c81` | `8b25b195a76e9eff` | `log_b16.md` |
+| `mirror_shade_states_fade_down_v3.png` | 1536×1024 | `01a16f5e-3461-7613-bcc0-8d63aec8abf5` | `exec-bafb9c7c-be62-48cf-8dcb-05ba8384c9a4` | `539154ff62542501` | `log_b16.md` |
+| `mirror_shade_states_echo_side_v1.png` | 1536×1024 | `01a16f5e-3fa0-7b80-ac2d-289c32bcfaf5` | `exec-57756471-ea05-40c7-aa22-8bfa76e3cff6` | `e33fb771335c4b7e` | `log_b16.md` |
+| `mirror_shade_states_echo_side_v2.png` | 1536×1024 | `01a16f5e-4d33-79c2-944d-0287c6949553` | `exec-3a5c8c61-94aa-4d2d-aded-6ca1b6b80985` | `9e985eabf7bb8df8` | `log_b16.md` |
+| `mirror_shade_states_echo_side_v3.png` | 1536×1024 | `01a16f5e-7810-76a0-8c6e-af432d90f059` | `exec-66322417-49fb-4978-aaf0-9bdf6e3552bf` | `e24fb5e3fc961352` | `log_b16.md` |
+| `mirror_shade_states_crack_down_v1.png` | 1536×1024 | `01a16f5f-ff0d-7271-82d7-4bac22eaa902` | `exec-dc3eb026-e96a-4b24-b527-55acb7940041` | `511ca54486751b92` | `log_b16.md` |
+| `mirror_shade_states_crack_down_v2.png` | 1536×1024 | `01a16f60-11de-73d1-9f56-09d1938ee63b` | `exec-f62e1617-8df9-4d10-8b57-054fcf85d29b` | `27abd6d430c4a497` | `log_b16.md` |
+| `mirror_shade_states_crack_down_v3.png` | 1536×1024 | `01a16f60-336b-7441-96bb-ff83a4b5a268` | `exec-50083e44-c1a0-436d-9c5e-c560ef3113b6` | `2afd553e0adbbc5e` | `log_b16.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion

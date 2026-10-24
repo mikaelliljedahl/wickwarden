@@ -8,7 +8,7 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 | 13 | cave tex water, two cave edge strips, bramble snapper, fen leech, cinder wisp | 18 | generated, verified, logged (`log_b13.md`): 5 ok, 11 weak, 2 failed; edge strips at 2.5:1 |
 | 14 | watcher eye (3 views), husk hound walk (3 facings) | 18 | generated, verified, logged (`log_b14.md`): 6 ok, 12 weak; side references watcher v1 and husk v2 |
 | 15 | husk hound states, brine crab walk (3 facings) and states, wickling | 18 | generated, verified, logged (`log_b15.md`): 5 ok, 13 weak; brine side reference v1 |
-| 16 | mirror shade walk and states | 18 | not started |
+| 16 | mirror shade walk (3 facings) and states (fade, echo swing, decoy crack) | 18 | generated, verified, logged (`log_b16.md`): 4 ok, 13 weak, 1 failed (walk side v2, three attempts coloured); walk side reference v1 |
 | 17 | choirling, icons tether moth, pitch pot, cinder wick, tallow sling, reed raft | 18 | not started |
 | 18 | icons heft mitts, glow jar, lantern chime, skitter boots, reel line; item cinder wick | 18 | not started |
 | 19 | pedestal items tallow sling, reed raft, heft mitts, glow jar, lantern chime, skitter boots | 18 | not started |
@@ -27,6 +27,9 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 
 - Brine crab, down and up (batch 15): every front and rear view came out as a side profile or a three-quarter view, even with the stronger facing text (brine down v1 to v3 all weak; brine up v1 to v3 weak). A crab with a side-only read may need a different subject wording or a side-only unit; the owner decides.
 - Batch 15 facing text: batches 15 and 16 use the stronger down and up wording (see batch 14 note).
+
+- Mirror shade silhouettes (batch 16): the reference `tamsin_walk.png` is in colour and the model keeps colour, face and lantern in many variants (walk side v2 failed three times; side v3 first try and down v2, up v1, up v2 show shading or detail). The stronger silhouette wording (`SHADE_NEW` in the generator) was used from the retries on; the owner may want a silhouette-only reference.
+- Walk cycles in batch 16 and batch 14/15 repeat leg arrangements in pose pairs (1 and 3, 2 and 4) in most variants (README rejection rule). Kept as weak for the owner's cull.
 
 ## Process
 

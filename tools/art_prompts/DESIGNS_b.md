@@ -28,4 +28,11 @@ variant of one image uses the same design. Tamsin's design is not changed here.
 - Wickling: a thumb-high candle imp: stub of pale cream wax, two tiny legs, small bright orange flame head, two dim arms. Run 4 and pause 1 in one direction.
 - Husk states: crouch, charge (2) and dizzy (2) of the batch 14 hound, side only.
 
-## Batch 16 to 19 (filled in as each batch is done)
+## Batch 16: mirror shade walk and states
+
+- Mirror shade: one solid cut-out silhouette of Tamsin in one dark blue-black colour, with a thin pale outline and no face, no shading, no lantern and no pole; the braid, coat, scarf, satchel strap and boots show in the outer shape only. Walk: four poses in side, down and up views.
+- Echo swing (side): the silhouette arm drawn back, swept through a wide arc in front and fully extended with a dark streak along the arc.
+- Decoy crack (down): pale fracture lines across the silhouette in the first pose; the second pose breaks into dark shards that stay together.
+- Fade in (down): three steps from faint (pose 1) to half present (pose 2) to a solid figure (pose 3).
+
+## Batch 17 to 19 (filled in as each batch is done)
