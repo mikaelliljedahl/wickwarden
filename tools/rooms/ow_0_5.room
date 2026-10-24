@@ -1,0 +1,20 @@
+; Peat Hollow (ow_0_5): a peat bog at the west edge of Tallowfen. Peat pools and tussocks; the only way
+; on is the east road to Wickfarm (ow_1_5).
+room ow_0_5
+terrain Peat Hollow: peat bog, tussocks, peat pools
+floor_color 0.16 0.13 0.09
+grid
+####################
+#..ee.....ww.......#
+#.e.......wwww..b..#
+#....b....wwww.....#
+#....rr..ww.........
+#......e...wwww.....
+#..e.......wwww..b.#
+#..b..ee...........#
+#.....e.....rr.....#
+####################
+enemy tallow_blob 4,2
+enemy tallow_blob 13,7
+enemy hollow 15,2
+spawn Default 2,5

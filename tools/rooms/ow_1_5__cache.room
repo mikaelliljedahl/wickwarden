@@ -1,0 +1,19 @@
+; Wickfarm cellar (ow_1_5#cache): the barn cellar behind the cut bush in the south door. Crates and a pillar;
+; the brass lies at the back, the way out is the door at the south.
+room ow_1_5#cache
+terrain barn cellar: crates, sacks, brass at the back
+floor_color 0.12 0.1 0.08
+grid
+####################
+#r.r.......r.......#
+#...........#......#
+#..................#
+#......r.......r...#
+#...#..........r...#
+#..........r.......#
+#r...#.........r...#
+#..r..........#....#
+####################
+cache 4,3 id=cache_ow_1_5
+door ow_1_5 FromPocket 9,8
+spawn Inside 9,6

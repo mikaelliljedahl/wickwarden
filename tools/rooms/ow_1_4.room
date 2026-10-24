@@ -1,0 +1,20 @@
+; Boardwalk (ow_1_4): planks cross the marsh from the reed gate (north) to the farm road (south). Pools and reed
+; beds on both sides; the fen leeches wait in the water by the planks.
+room ow_1_4
+terrain Boardwalk: boardwalks over marsh pools, reed beds
+floor_color 0.18 0.2 0.14
+grid
+#########..#########
+#ww..ee......ee..ww#
+#wwww.e......e.wwww#
+#..ee.........ee...#
+....................
+....................
+#e............ww...#
+#t..ee.......t.....#
+#...b...e....ww..ee#
+#########..#########
+enemy fen_leech 5,2
+enemy fen_leech 11,7
+enemy duskmoth 14,2
+spawn Default 10,5

@@ -1,0 +1,20 @@
+; Drowned Orchard (ow_2_4): an orchard that the marsh has taken. Trees stand in flood water; a dry walk
+; runs east from the Boardwalk and then south to the Sump Edge.
+room ow_2_4
+terrain Drowned Orchard: flooded orchard, trees in water
+floor_color 0.14 0.22 0.18
+grid
+####################
+#t..t..ww..t..t..ww#
+#..ww...ww.....t...#
+#t..t....w.t...tw.t#
+.........t......ww.#
+....t....ww......w.#
+#t..t..w...t..ww..t#
+#..ww..t.....t.....#
+#....t.....w..t....#
+#########..#########
+enemy skitterwick 6,2
+enemy skitterwick 13,2
+enemy skitterwick 16,7
+spawn Default 2,4

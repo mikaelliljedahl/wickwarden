@@ -1,0 +1,24 @@
+; Wickfarm (ow_1_5): a farm ruin. The barn in the north-east has a cut bush in its south door; the
+; cellar behind it (ow_1_5#cache) holds the brass.
+room ow_1_5
+terrain Wickfarm: farm ruin, barn walls, fallen stones
+floor_color 0.22 0.2 0.14
+grid
+#########..#########
+#..t........######.#
+#e..r.......#....#.#
+#....t..e...###.##.#
+....ee..............
+.....b..e.....rr....
+#t..ee.......t.....#
+#...b...e...r.....t#
+#e.....b......ee...#
+#########..#########
+enemy spitcap 2,2
+enemy spitcap 5,7
+enemy duskmoth 7,6
+enemy duskmoth 14,7
+spawn Default 3,4
+opener cut_screen 15,3 look=reed_cluster
+door ow_1_5#cache Inside 15,3
+spawn FromPocket 15,4
