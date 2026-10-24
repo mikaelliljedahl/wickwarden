@@ -7,7 +7,7 @@ Facing and leg fix (from `PROGRESS.md`): applied to the statue sheets (`statue_f
 | Batch | Units | Images | Status |
 |---|---|---|---|
 | 28 | sealed_seam, hook_tap_wall, grate, boss_door, ninth_door, wax_seal | 18 | done: generated, verified, logged (`log_b28.md`), provenance rows added; wax_seal (3) weak: melt drips read as blood |
-| 29 | reed_cluster, rush_wall, moss_wall, dry_vine_screen, bush_cluster, brittle_rocks | 18 | prompts written |
+| 29 | reed_cluster, rush_wall, moss_wall, dry_vine_screen, bush_cluster, brittle_rocks | 18 | done: generated, verified, logged (`log_b29.md`), provenance added; dry_vine_screen (3) and bush_cluster (3) weak: posts or halves split the cut poses |
 | 30 | pocket_stall, pocket_cart, pocket_lighthouse_door, pocket_mason_door, pocket_hut_door, pocket_grotto | 18 | prompts written |
 | 31 | pocket_stairs_down, pocket_plain_door, shop_counter, ward_plate, street_lamp, wall_torch | 18 | prompts written |
 | 32 | pillar_1, pillar_2, pillar_3, lectern, statue_eye | 15 | prompts written |
