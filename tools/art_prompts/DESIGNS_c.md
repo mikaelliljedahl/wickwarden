@@ -15,8 +15,16 @@ Designs that the inventory and the world docs do not describe. The owner can cha
 - `flame_cinder`: three rows in one sheet. Rolling flame (4 poses, a fire ball rolling), standing flame (4 poses, a flame on a charred bed), fade (3 poses, the flame dying to embers and smoke). The standing and fade rows sit on a dark charred bed, which the generator adds on its own; it is wider than the flame in the first two variants (see the log).
 - `slug_tallow`: a pale cream tallow pellet, flight (2 poses, a streak behind it) and impact splat (3 poses).
 
+## Batch 21
+
+- `reed_raft_vehicle`: a raft of bundled reeds on water, with no person on it. The landing boards and mooring post of rows 2 and 3 are part of the sprite (the inventory says "raft under Tamsin, board 3, dock 2"); they are cut at the cell edge in all three variants.
+- `jar_thrown` and `jar_lit`: a glass jar with a cork and a brass band, with a warm light inside. The jar_lit vessel came out heart-shaped in two of three variants; the inventory does not specify the shape.
+- `reel_tip`: a curved dark iron hook with a brass collar and a spark at its point. The cord tail is extra.
+- `liftable_rock_small`: row 1 holds three objects (mossy rock, clay urn, wooden crate), row 2 the break puff. The accepted name `liftable_rock_small` covers the whole sheet; the cut tool needs to split row 1 into three kinds, or the owner splits the names.
+
 ## Open points for the owner
 
 - `reel_line_rope` (batch 21): the inventory gives both `96x16 tile` and `alpha strip 16x96`. The prompt uses a horizontal cord (96 long, 16 thick) that runs into both sides of the image.
 - `edge_pit_rim` (batch 25): the inventory gives one unit for three pieces (a straight strip and two corners). The sheet has the three pieces on one image; the cut tool needs a multi-piece rule for it. The contract says one cell per edge strip, so this is a deviation from `asset-contract.md` section 7 until the cut tool is changed.
+- `reed_raft_vehicle` (batch 21): the landing boards and posts inside the sprite are cut at the cell edge; the owner may want a raft-only redo.
 - `slag_chunk` (batch 24): the inventory gives a 96x96 cell with no foot line. The prompt puts it on the ground at the ground line of the other 96-px ground objects.
