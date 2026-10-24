@@ -4,11 +4,11 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 
 | Batch | Content | Images | Status |
 |---|---|---|---|
-| 12 | shared cave sets stone and root (textures, faces) | 18 | generated, verified, logged (`log_b12.md`); 3 ok-looking units, the rest weak (rubble, rock-dominant) |
+| 12 | shared cave sets stone and root (textures, faces) | 18 | generated, verified, logged (`log_b12.md`): 8 ok, 10 weak (rubble and rock-dominant ground) |
 | 13 | cave tex water, two cave edge strips, bramble snapper, fen leech, cinder wisp | 18 | generated, verified, logged (`log_b13.md`): 5 ok, 11 weak, 2 failed; edge strips at 2.5:1 |
 | 14 | watcher eye (3 views), husk hound walk (3 facings) | 18 | generated, verified, logged (`log_b14.md`): 6 ok, 12 weak; side references watcher v1 and husk v2 |
-| 15 | husk hound states, brine crab walk (3 facings) and states, wickling | 18 | generated, verified, logged (`log_b15.md`): 5 ok, 13 weak; brine side reference v1 |
-| 16 | mirror shade walk (3 facings) and states (fade, echo swing, decoy crack) | 18 | generated, verified, logged (`log_b16.md`): 4 ok, 13 weak, 1 failed (walk side v2, three attempts coloured); walk side reference v1 |
+| 15 | husk hound states, brine crab walk (3 facings) and states, wickling | 18 | generated, verified, logged (`log_b15.md`): 6 ok, 12 weak; brine side reference v1 |
+| 16 | mirror shade walk (3 facings) and states (fade, echo swing, decoy crack) | 18 | generated, verified, logged (`log_b16.md`): 5 ok, 12 weak, 1 failed (walk side v2, three attempts coloured); walk side reference v1 |
 | 17 | choirling (3 rows), icons tether moth, pitch pot, cinder wick, tallow sling, reed raft | 18 | generated, verified, logged (`log_b17.md`): 15 ok, 3 weak (choirling); two cinder wick images recovered from the job's own session folder |
 | 18 | icons heft mitts, glow jar, lantern chime, skitter boots, reel line; item cinder wick (pedestal) | 18 | generated, verified, logged (`log_b18.md`): 17 ok, 1 weak (glow jar v3, heart-shaped) |
 | 19 | pedestal items tallow sling, reed raft, heft mitts, glow jar, lantern chime, skitter boots | 18 | generated, verified, logged (`log_b19.md`): 16 ok, 2 weak (glow jar v3, lantern chime v3) |
