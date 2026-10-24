@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/ward_plate.tscn" id="2"]
+
+[node name="GalleryP15" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+exits = Array[StringName]([])
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="Pad" parent="Props" instance=ExtResource("2")]
+position = Vector2(960, 520)
+ward_id = &"gallery"
+blocks_required = 2
+test_spore_post = true
+
+[node name="Blocker" parent="Props" instance=ExtResource("2")]
+position = Vector2(1320, 520)
+ward_id = &"gallery"
+blocker = true
+size = Vector2(192, 96)
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(960, 700)
