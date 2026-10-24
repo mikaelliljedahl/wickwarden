@@ -1,0 +1,59 @@
+{
+  "format": 1,
+  "source": "docs/intro-script.md",
+  "stills": [
+    {
+      "id": "intro_01_lanterns",
+      "hold": 8.0,
+      "lines": [
+        "Nine great lights drift slowly above the valley of Vey.",
+        "Each one keeps a thing alive: warmth, rain, song and trade.",
+        "The village sleeps under them, and the valley is calm."
+      ]
+    },
+    {
+      "id": "intro_02_lanternfall",
+      "hold": 8.0,
+      "lines": [
+        "One night, all nine lanterns fall from the sky.",
+        "They do not break. They burn down into the ground.",
+        "Where each one lands, a crater, a ruin or a cave glows."
+      ]
+    },
+    {
+      "id": "intro_03_dusk",
+      "hold": 8.0,
+      "lines": [
+        "Since that night, the valley lives in a dusk that does not end.",
+        "Out of the dusk come the Hush: forgotten songs and lost tools.",
+        "They are not cruel. They are hungry, and they want only light."
+      ]
+    },
+    {
+      "id": "intro_04_tamsin",
+      "hold": 6.0,
+      "lines": [
+        "In Brackwater Ford, Tamsin is an apprentice lamplighter.",
+        "She lights the street lamps at night and trims the wicks by morning."
+      ]
+    },
+    {
+      "id": "intro_05_hook",
+      "hold": 7.0,
+      "lines": [
+        "Her master, Old Corrow, was the last Wickwarden.",
+        "He is gone. He left his lamp hook and a lamp that will not go out.",
+        "Tamsin takes them both and keeps them close."
+      ]
+    },
+    {
+      "id": "intro_06_setout",
+      "hold": 8.0,
+      "lines": [
+        "Tamsin walks the village path with the hook in one hand.",
+        "Ahead, a cave mouth glows. Somewhere below, a fallen lantern burns.",
+        "She sets out to find it and light it again."
+      ]
+    }
+  ]
+}
