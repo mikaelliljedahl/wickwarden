@@ -45,6 +45,13 @@ One shape for all nine: an upright, faceted shard of old lantern glass about as 
 
 The glow poses are: medium, brightest with a halo, medium with the light shifted up, dimmest. Brass bases came out with prongs (wider than the thin rim), in most variants.
 
+## Batch 24
+
+- `fragment_c8` (Trade): bronze-gold glass with a flat coin-like disc inside. Variant 2 has the disc standing high and in front of the glass (weak).
+- `fragment_c9` (Corrow's Last Wick): black glass with a white-hot wick flame. Variants came out grey-silver or bronze-tinted; the owner may want a redo with "black obsidian-like glass".
+- `slag_chunk`: a dark grey-black lump with rust-red glints. All three variants show an orange molten glow (weak); the prompt says subtle glints.
+- `thorn_hedge`, `thorn_wall`, `thorn_door`: three rows, the closed state, the five burning poses in order (small flicker, climbing flames, fire through the middle, large fire, embers), then the burnt-open state. Thorn walls and doors share the same burn sequence.
+
 ## Open points for the owner
 
 - `reel_line_rope` (batch 21): the inventory gives both `96x16 tile` and `alpha strip 16x96`. The prompt uses a horizontal cord (96 long, 16 thick) that runs into both sides of the image.
@@ -52,4 +59,4 @@ The glow poses are: medium, brightest with a halo, medium with the light shifted
 - `reed_raft_vehicle` (batch 21): the landing boards and posts inside the sprite are cut at the cell edge; the owner may want a raft-only redo.
 - `tallow_flask` (batch 22): failed in all three variants. A redo needs an explicit sphere shape and no flame; the owner decides.
 - `bigkey` (batch 22): the brass is saturated gold in all three variants, which the per-cave tint may not handle well.
-- `slag_chunk` (batch 24): the inventory gives a 96x96 cell with no foot line. The prompt puts it on the ground at the ground line of the other 96-px ground objects.
+- `slag_chunk` (batch 24): the inventory gives a 96x96 cell with no foot line. The prompt puts it on the ground at the ground line of the other 96-px ground objects. The orange glow in all three variants needs a redo before the cut.
