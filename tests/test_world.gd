@@ -452,7 +452,7 @@ func _hud(world: World) -> void:
 	check(world.hud != null, "the world has a HUD")
 	check_eq(world.hud.canvas.size, Vector2(1920, 120), "the HUD band is 120 px high")
 	check_eq(Hud.room_cell(&"ow_2_1"), Vector2i(2, 1), "minimap cell of an overworld room")
-	check_eq(Hud.room_cell(&"cave_1"), Vector2i(-1, -1), "the cave is not on the minimap")
+	check_eq(Hud.room_cell(&"cave_1"), Vector2i(1, 1), "a cave room has its local cell")
 	GameState.acquire_item(&"pitch_pot")
 	GameState.add_pitch_pots(3)
 	GameState.damage(1)
