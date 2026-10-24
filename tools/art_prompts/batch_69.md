@@ -78,7 +78,7 @@ Inventory id `lock_warden_body`, unit `lock_warden_body_broken` (no facing).
 - Output file: `tools/source_art/lock_warden_body_broken_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/lock_warden_body_broken.png`
 
@@ -98,7 +98,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/lock_warden_body_broken_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/lock_warden_body_broken.png`
 
@@ -118,7 +118,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/lock_warden_body_broken_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/lock_warden_body_broken.png`
 
@@ -142,7 +142,7 @@ Inventory id `lock_plate`, unit `lock_plate` (no facing).
 - Output file: `tools/source_art/lock_plate_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/lock_plate.png`
 
@@ -162,7 +162,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/lock_plate_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/lock_plate.png`
 
@@ -182,7 +182,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/lock_plate_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/lock_plate.png`
 
@@ -206,7 +206,7 @@ Inventory id `lock_keyhole`, unit `lock_keyhole` (no facing).
 - Output file: `tools/source_art/lock_keyhole_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/lock_keyhole.png`
 
@@ -226,7 +226,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/lock_keyhole_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/lock_keyhole.png`
 
@@ -246,7 +246,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/lock_keyhole_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `lock_warden_body_closed_open` (written after that unit is chosen)
+- Reference images: `tools/source_art/lock_warden_body_closed_open_v1.png` (producer pick, design reference: the chosen variant of `lock_warden_body_closed_open`)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/lock_keyhole.png`
 
@@ -334,7 +334,7 @@ Inventory id `unlit_eye`, unit `unlit_eye` (no facing).
 - Output file: `tools/source_art/unlit_eye_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `unlit_p1_mass` (written after that unit is chosen)
+- Reference images: `tools/source_art/unlit_p1_mass_v1.png` (producer pick, design reference: the chosen variant of `unlit_p1_mass`)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/unlit_eye.png`
 
@@ -354,7 +354,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/unlit_eye_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `unlit_p1_mass` (written after that unit is chosen)
+- Reference images: `tools/source_art/unlit_p1_mass_v1.png` (producer pick, design reference: the chosen variant of `unlit_p1_mass`)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/unlit_eye.png`
 
@@ -374,7 +374,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/unlit_eye_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `unlit_p1_mass` (written after that unit is chosen)
+- Reference images: `tools/source_art/unlit_p1_mass_v1.png` (producer pick, design reference: the chosen variant of `unlit_p1_mass`)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/unlit_eye.png`
 
