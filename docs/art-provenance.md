@@ -624,6 +624,24 @@ GPT Image terrain textures below; they add no other image.
 | `shipwreck_2_v1.png` | 1536×1024 | `01a16f69-f7ad-7370-ac3c-fd39be5386fe` | `exec-42ae685a-dfbc-416c-8601-8567cf5b9bcb` | `604e0712cfeb1fe9` | `log_b37.md` |
 | `shipwreck_2_v2.png` | 1536×1024 | `01a16f6a-26e1-7180-8a31-87af9a294c3e` | `exec-e43bfd6f-c302-4c86-9ea2-c292a64387fe` | `e1ead086f1ee876f` | `log_b37.md` |
 | `shipwreck_2_v3.png` | 1536×1024 | `01a16f6a-e44e-71c3-be89-d664862578fb` | `exec-99911566-f5b0-4c30-8448-05d067659304` | `32edeb9c5e48600d` | `log_b37.md` |
+| `briar_bloom_p2_v1.png` | 1536×1024 | `01a16f67-caaf-7112-beb6-a3a03114c2a7` | `exec-3e5147bd-6c25-4d4f-9906-03906333d36d` | `125bac23860d2998` | `log_b64.md` |
+| `briar_bloom_p2_v2.png` | 1536×1024 | `01a16f67-cc4c-7782-a0d4-7a9e80de8fb5` | `exec-cdb2623c-a984-471b-ba51-8b2231a7cb27` | `ad43da7066a2dfb0` | `log_b64.md` |
+| `briar_bloom_p2_v3.png` | 1536×1024 | `01a16f67-d01e-7e21-b93d-c1ca4ff9d748` | `exec-439d7bb4-6613-4846-b65a-76e3db20813c` | `91f74765835bce63` | `log_b64.md` |
+| `briar_seed_v1.png` | 1536×1024 | `01a16f63-6c42-7452-9c67-96d2570811f1` | `exec-067b7524-9495-43da-b045-ee2026f22f64` | `60ec8ee12f3e1200` | `log_b64.md` |
+| `briar_seed_v2.png` | 1536×1024 | `01a16f63-7a2d-7f13-a4df-5d8408636aca` | `exec-bcab6331-e6bc-4361-affa-35e13fc7209c` | `192b72f600c6bcce` | `log_b64.md` |
+| `briar_seed_v3.png` | 1536×1024 | `01a16f67-d569-7550-bc4e-66129fb36168` | `exec-c0f51d6b-6c53-4bc2-b392-ab50833752b7` | `5944ed04ee722763` | `log_b64.md` |
+| `tidewick_body_v1.png` | 1536×1024 | `01a16f6b-444a-7f20-af35-efc59a9aba25` | `exec-5012552f-6004-44ac-9eee-8bb7ffa9a6f4` | `4d80fab828760e4c` | `log_b64.md` |
+| `tidewick_body_v2.png` | 1536×1024 | `01a16f6b-4c2d-7023-a11c-69ee81eb9602` | `exec-7a95f182-608a-4cf3-b1a3-0191793d4abd` | `cf44fbb831bab218` | `log_b64.md` |
+| `tidewick_body_v3.png` | 1536×1024 | `01a16f6b-8489-7b63-9467-e8435f0ae06e` | `exec-e9ea38f1-a650-47ba-a84f-4c2df68871de` | `7f31835d0117c943` | `log_b64.md` |
+| `tidewick_head_down_v1.png` | 1536×1024 | `01a16f69-a5be-75b1-862e-e2c840af21ee` | `exec-43f0c03c-0031-4d16-88eb-f56f15ec4f81` | `5bc9b7e64d8e3ce8` | `log_b64.md` |
+| `tidewick_head_down_v2.png` | 1536×1024 | `01a16f69-a9e2-7b53-a866-950b9c940f0a` | `exec-50b1d9cb-426c-4276-9d1f-7507b8cda20a` | `ec42d584ec933218` | `log_b64.md` |
+| `tidewick_head_down_v3.png` | 1536×1024 | `01a16f69-af8d-7e13-a60f-d25524cbca38` | `exec-f08766dd-c4da-4c15-804d-a9639acfa564` | `ee62e9368f7e7bc9` | `log_b64.md` |
+| `tidewick_head_side_v1.png` | 1536×1024 | `01a16f67-de36-7d01-84be-2379cc522bc8` | `exec-eb838121-07f8-40ab-939d-9dde072cd2d4` | `4f3e49a46361ba82` | `log_b64.md` |
+| `tidewick_head_side_v2.png` | 1536×1024 | `01a16f67-e37c-75c2-baa3-b84c94a2f5df` | `exec-1efcdc79-ce07-4262-ad21-2035691f08e3` | `af2ea24e175254c2` | `log_b64.md` |
+| `tidewick_head_side_v3.png` | 1536×1024 | `01a16f69-9bd1-7ad0-8b71-59af3243041c` | `exec-50dfd224-8324-4385-8847-cd8ceeb8a2f9` | `7421c1b15dd93d20` | `log_b64.md` |
+| `tidewick_head_up_v1.png` | 1536×1024 | `01a16f69-be90-7813-a9fd-1271078b225f` | `exec-f14604f1-1708-4ca1-bec0-ee9c2763c280` | `bc279da4052a1966` | `log_b64.md` |
+| `tidewick_head_up_v2.png` | 1536×1024 | `01a16f6a-5216-72a2-b67f-f039ab2fea62` | `exec-3178773b-d7e2-44ac-b665-432f2b9a8f97` | `5b0ca054af04e024` | `log_b64.md` |
+| `tidewick_head_up_v3.png` | 1536×1024 | `01a16f6b-1bf7-7bd1-acd0-9cd5b12f675c` | `exec-be0ebbc4-f113-44b7-ac10-c94b28276bac` | `aaba11a437ba79c6` | `log_b64.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
