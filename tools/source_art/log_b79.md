@@ -22,7 +22,7 @@ Date: 2026-10-24. Codex jobs (AgentTeamForge, backend `codex`, model `cheapest`,
 - `warp_icon_c5_v1.png`: ok - mossy mouth with a silver-white glint; its job reported no image (folder holds it)
 - `warp_icon_c5_v3.png`: ok - mossy stone mouth with a silver-white glint; its job described a broad floor (another reading), the file is the mouth, kept
 - `warp_icon_c6_v1.png`: ok - mossy arch with three bronze bells lit inside; its job reported no artifact (folder holds it)
-- `warp_icon_c5_v2.png`: ok - mossy mouth with a warm glint; its job reported no image (folder holds it)
+- `warp_icon_c5_v2.png`: weak - warm tan arch with green foliage, not the polished grey stone asked for (kept)
 - `warp_icon_c6_v2.png`: ok - mossy arch with bronze bells lit inside
 
 ## Details
