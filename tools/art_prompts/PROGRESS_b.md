@@ -1,6 +1,6 @@
 # Art production progress, batches 12 to 19 (producer b)
 
-Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batches of 18). Prompts are written by `tools/art_prompts/gen_b.py`-style templates from the verbatim shared, sheet, texture and face blocks of `art-brief.md`; the batch files are the output. The icon and edge-strip blocks are written from the sheet block and `asset-contract.md` section 7 (see the header of each batch file).
+Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batches of 18). Prompts were written from templates that copy the shared, sheet, texture and face blocks of `art-brief.md` verbatim (the generator is not kept in the repo); the batch files are the output. The icon and edge-strip blocks are written from the sheet block and `asset-contract.md` section 7 (see the header of each batch file).
 
 | Batch | Content | Images | Status |
 |---|---|---|---|
