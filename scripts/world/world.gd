@@ -59,6 +59,7 @@ var _rooms_node: Node2D
 var _actors: Node2D
 var _modulate: CanvasModulate
 var _by_grid: Dictionary = {}  # Vector2i -> StringName (room id), from WorldData
+var _mouth_flags: Dictionary = {}  # cave mouth room id -> flag mouth_cN (16.4)
 var _scene_overrides: Dictionary = {}  # room id -> PackedScene, from add_room_scene
 var _warned: Dictionary = {}  # room id -> true, for warn-once messages
 var _t: float = 0.0
@@ -91,6 +92,7 @@ func _ready() -> void:
 	camera.position_smoothing_enabled = false
 	add_child(camera)
 	_build_grid_index()
+	_build_mouth_flags()
 	var player_scene := load(PLAYER_SCENE) as PackedScene
 	player = player_scene.instantiate() as Player
 	_actors.add_child(player)
@@ -412,6 +414,7 @@ func _finish_room_entry() -> void:
 	_modulate.color = DARK_COLOR if current_room.dark else Color.WHITE
 	player.set_dark_mode(current_room.dark)
 	GameState.mark_visited(current_room.room_id)
+	_mark_cave_mouth(current_room.room_id)
 	Events.room_entered.emit(current_room.room_id)
 	room_changed.emit(current_room.room_id)
 
@@ -449,6 +452,24 @@ func _build_grid_index() -> void:
 			push_error("World: grid %s holds both %s and %s" % [cell, _by_grid[cell], id])
 			continue
 		_by_grid[cell] = StringName(id)
+
+
+## Cave mouth room -> flag `mouth_cN` (code-contract 16.4), from the caves of data/world_data.json.
+func _build_mouth_flags() -> void:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(WorldData.PATH))
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_warning("World: %s is missing; cave mouths cannot set their flags" % WorldData.PATH)
+		return
+	for cave: Dictionary in parsed.get("caves", []):
+		var flag := StringName("mouth_%s" % str(cave.get("scope", "")))
+		_mouth_flags[StringName(str(cave.get("mouth", "")))] = flag
+
+
+## Sets the cave's mouth flag the first time its mouth room is entered. Flags survive every later visit.
+func _mark_cave_mouth(room_id: StringName) -> void:
+	var flag: StringName = _mouth_flags.get(room_id, &"")
+	if flag != &"" and not GameState.has_flag(flag):
+		GameState.set_flag(flag)
 
 
 ## Instantiates a room from its scene (or its add_room_scene override). The grid comes from the

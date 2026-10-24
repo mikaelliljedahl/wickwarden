@@ -18,6 +18,7 @@ func run() -> void:
 	await _slide_pauses_and_respawns(world)
 	await _slide_vertical(world)
 	await _cave(world)
+	await _cave_mouth_flags(world)
 	await _death_respawn(world)
 	await _hud(world)
 	await _soak_warps(world)
@@ -388,6 +389,48 @@ func _cave(world: World) -> void:
 	release_inputs()
 	await _wait_transition(world)
 	check_eq(world.get_current_room_id(), &"cave_1", "the cave entrance door leads in")
+
+
+## Entering a cave mouth for the first time sets its flag mouth_cN (code-contract 16.4); later visits keep
+## it and set nothing again. Each of the ten mouths of the graph is checked in a world of its own with a
+## stub room at the mouth's graph cell.
+func _cave_mouth_flags(world: World) -> void:
+	reset_state()
+	world.start_at(&"ow_0_0")
+	check(not GameState.has_flag(&"mouth_c1"), "no mouth flag before the mouth is entered")
+	world.warp_to(&"ow_0_1", &"Default", false)
+	check(not GameState.has_flag(&"mouth_c1"), "an ordinary room sets no mouth flag")
+	world.warp_to(&"ow_1_1", &"Default", false)
+	check(GameState.has_flag(&"mouth_c1"), "entering the mouth of C1 sets mouth_c1")
+	world.warp_to(&"ow_0_1", &"Default", false)
+	var changes: Array[int] = [0]
+	var count_change := func(_flag: StringName, _value: bool) -> void: changes[0] += 1
+	GameState.flag_changed.connect(count_change)
+	world.warp_to(&"ow_1_1", &"Default", false)
+	GameState.flag_changed.disconnect(count_change)
+	check(GameState.has_flag(&"mouth_c1"), "the flag stays on a later visit")
+	check_eq(changes[0], 0, "a later visit sets no flag again")
+
+	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(WorldData.PATH))
+	var mouth_world := await make_world()
+	for cave: Dictionary in data.get("caves", []):
+		var mouth := StringName(str(cave["mouth"]))
+		var flag := StringName("mouth_%s" % str(cave["scope"]))
+		reset_state()
+		var stub := Room.new()
+		stub.name = "Stub"
+		stub.grid = WorldData.grid(str(mouth))
+		var packed := PackedScene.new()
+		packed.pack(stub)
+		stub.free()
+		mouth_world.add_room_scene(mouth, packed)
+		mouth_world.start_at(&"ow_0_0")
+		mouth_world.warp_to(mouth, &"Default", false)
+		check(GameState.has_flag(flag), "entering %s sets %s" % [mouth, flag])
+		var others := GameState.flags.keys().filter(func(f: StringName) -> bool: return String(f).begins_with("mouth_"))
+		check_eq(others, [flag], "only %s is set by %s" % [flag, mouth])
+	await dispose(mouth_world)
+	reset_state()
 
 
 func _death_respawn(world: World) -> void:
