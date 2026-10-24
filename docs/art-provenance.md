@@ -277,6 +277,24 @@ GPT Image terrain textures below; they add no other image.
 | `cinder_wisp_v2.png` | 1536×1024 | `01a16f49-19e6-7893-b652-ad9d302cbcf0` | `exec-4b6ce46d-293e-49bc-ae05-259d82f21f7d` | `d7bede4ab3f455b8` | `log_b13.md` |
 | `cinder_wisp_v3.png` | 1536×1024 | `01a16f49-fe7d-7310-bfd7-88de465709f5` | `exec-65e95606-aad4-4f01-9d5c-81a96498ace2` | `b191c25f2412381a` | `log_b13.md` |
 | `bramble_snapper_v3.png` | 1536×1024 | `01a16f49-f845-7c50-8387-9ae105c2f82c` | `exec-5c96e364-0b1b-4b07-be12-8f9491360f8c` | `fac6ae08f4b2e655` | `log_b13.md` |
+| `pocket_stall_v1.png` | 1536×1024 | `01a16f4a-8e45-72b3-ac4b-6df646baf43b` | `exec-0d99c8cc-0558-4bd9-8270-2b7c7c3d1f13` | `3790305131fd5df1` | `log_b30.md` |
+| `pocket_stall_v2.png` | 1536×1024 | `01a16f4a-8f41-7ce1-97e5-eb295f8bff00` | `exec-9e0d7430-0689-4f4e-b2d4-c57e4586f486` | `1e556b1c36d16d46` | `log_b30.md` |
+| `pocket_stall_v3.png` | 1536×1024 | `01a16f4a-91de-7b00-9536-961aa049ad2d` | `exec-29603980-081c-4680-a65c-38aa2925601f` | `c6c2e7fd99d8f981` | `log_b30.md` |
+| `pocket_cart_v1.png` | 1536×1024 | `01a16f4a-9a34-7d10-b604-a44906e539ee` | `exec-4f0a3133-be02-4eea-949f-838fbe7517c2` | `781049c6c787b672` | `log_b30.md` |
+| `pocket_cart_v2.png` | 1536×1024 | `01a16f4a-a42e-7af2-995e-b7ddaf04e9a5` | `exec-99c1fa85-b5ee-4365-978e-7a3d44a1bf15` | `4cabebf9d12f857e` | `log_b30.md` |
+| `pocket_cart_v3.png` | 1536×1024 | `01a16f4a-a90a-7360-94b1-efed73f983d5` | `exec-18938ee1-eaeb-4f71-8a9e-d8eadbe97544` | `b466c83c42daaaa0` | `log_b30.md` |
+| `pocket_lighthouse_door_v1.png` | 1536×1024 | `01a16f4b-e414-77c1-ae65-487c94637e55` | `exec-3f0596fd-58bf-4f8a-ad0e-8438ec3b4114` | `849e08c295c733b6` | `log_b30.md` |
+| `pocket_lighthouse_door_v2.png` | 1536×1024 | `01a16f4b-ecec-7812-b4ec-0c866565e90c` | `exec-3853b0c5-1efd-45ec-898e-c991e5552ca3` | `be8d3c39fbb78f59` | `log_b30.md` |
+| `pocket_lighthouse_door_v3.png` | 1536×1024 | `01a16f4b-f595-7500-b98d-93ef2291b0fd` | `exec-efd64cd0-d5f5-4d1f-a6d5-0c6fb71308a6` | `b86f9cc5b6d5d5d1` | `log_b30.md` |
+| `pocket_mason_door_v1.png` | 1536×1024 | `01a16f4b-fc4f-7f01-a4ba-198d2de23fde` | `exec-7da56558-a861-42da-8cfd-9746f027e81f` | `8ea860226bbf49cd` | `log_b30.md` |
+| `pocket_mason_door_v2.png` | 1536×1024 | `01a16f4c-0af0-72c2-92ac-3b71d1768acc` | `exec-d6e25f0c-84e8-454a-ae2b-e6abaaefe9d5` | `eb38908e859598de` | `log_b30.md` |
+| `pocket_mason_door_v3.png` | 1536×1024 | `01a16f4c-0d12-75a3-ac3b-f0515577f317` | `exec-2d9f6510-6642-414f-898b-076b1fa83ea4` | `0125157077a8b715` | `log_b30.md` |
+| `pocket_hut_door_v1.png` | 1536×1024 | `01a16f4d-2c63-7951-a533-a82263f45286` | `exec-7b75ba5f-6b5b-4901-a3a3-781bba5dc276` | `8af22c71763a6f8e` | `log_b30.md` |
+| `pocket_hut_door_v2.png` | 1536×1024 | `01a16f4d-315d-7df1-99a2-fe135085506b` | `exec-3eed0228-956e-4976-8040-632fad2b6ca8` | `1014e2b1bcb79497` | `log_b30.md` |
+| `pocket_hut_door_v3.png` | 1536×1024 | `01a16f4d-3ab3-7d72-bd4e-49a424c6e7d5` | `exec-1c46a62b-8516-4079-8d24-8172125f4abc` | `98c97ce6088b6e93` | `log_b30.md` |
+| `pocket_grotto_v1.png` | 1536×1024 | `01a16f4d-4492-7201-80e9-78997e3e8b85` | `exec-14b53597-000d-4e12-a0e1-da26c0924b04` | `e1507a1bd3e8be59` | `log_b30.md` |
+| `pocket_grotto_v2.png` | 1536×1024 | `01a16f4d-4a34-7070-973f-744e13028788` | `exec-a976569b-b954-45e0-91f3-7fc2b3b34b6d` | `b3659e1dab4b010b` | `log_b30.md` |
+| `pocket_grotto_v3.png` | 1536×1024 | `01a16f4d-51ce-7ff2-a7ea-6bb24b7469f3` | `exec-4969684c-9b09-4a9e-860d-e0c9785d6e25` | `8f01c302fc557ef6` | `log_b30.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
