@@ -78,7 +78,7 @@ Inventory id `gloam_knight_p1`, unit `gloam_knight_p1_down` (facing down).
 - Output file: `tools/source_art/gloam_knight_p1_down_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p1_down.png`
 
@@ -98,7 +98,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/gloam_knight_p1_down_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p1_down.png`
 
@@ -118,7 +118,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/gloam_knight_p1_down_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p1_down.png`
 
@@ -142,7 +142,7 @@ Inventory id `gloam_knight_p1`, unit `gloam_knight_p1_up` (facing up).
 - Output file: `tools/source_art/gloam_knight_p1_up_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p1_up.png`
 
@@ -162,7 +162,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/gloam_knight_p1_up_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p1_up.png`
 
@@ -182,7 +182,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/gloam_knight_p1_up_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p1_up.png`
 
@@ -206,7 +206,7 @@ Inventory id `gloam_knight_p2`, unit `gloam_knight_p2_down` (facing down).
 - Output file: `tools/source_art/gloam_knight_p2_down_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p2_down.png`
 
@@ -226,7 +226,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/gloam_knight_p2_down_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p2_down.png`
 
@@ -246,7 +246,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/gloam_knight_p2_down_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p2_down.png`
 
@@ -270,7 +270,7 @@ Inventory id `gloam_knight_p2`, unit `gloam_knight_p2_side` (facing side).
 - Output file: `tools/source_art/gloam_knight_p2_side_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p2_side.png`
 
@@ -290,7 +290,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/gloam_knight_p2_side_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p2_side.png`
 
@@ -310,7 +310,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/gloam_knight_p2_side_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `gloam_knight_p1_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/gloam_knight_p1_side_v1.png` (design: the chosen variant of `gloam_knight_p1_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/gloam_knight_p2_side.png`
 

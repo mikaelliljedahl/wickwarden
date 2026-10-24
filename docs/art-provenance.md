@@ -984,6 +984,21 @@ GPT Image terrain textures below; they add no other image.
 | `lull_mauler_actions_side_v1.png` | 1536×1024 | `01a16f9c-b306-7362-bba3-747ab5fd8195` | `exec-53f1a4f0-0e75-42e3-9994-75731a4cd962` | `670b9ba14720ede6` | `log_b56.md` |
 | `lull_mauler_actions_side_v2.png` | 1536×1024 | `01a16fa1-4af9-7342-9ab2-89c88d1ddb2d` | `exec-ba149a63-9c23-493d-b803-f99ab54d00ca` | `28877311860cee41` | `log_b56.md` |
 | `lull_mauler_actions_side_v3.png` | 1536×1024 | `01a16fa0-d5e3-7ef0-bb49-1e2ba88b8d60` | `exec-a3b49275-2e77-456a-9893-cb3be3f11438` | `3637850a2822b057` | `log_b56.md` |
+| `gloam_knight_p1_side_v1.png` | 1536×1024 | `01a16f79-2084-7053-b319-b9b785e8d2f8` | `exec-3dbc4cd1-14b3-4fe8-aed1-1389c548b7c5` | `0b67f91cee58a74a` | `log_b67.md` |
+| `gloam_knight_p1_side_v2.png` | 1536×1024 | `01a16f79-2c60-7fd2-9eea-6100e17dffb6` | `exec-635236e0-b6c4-4e1a-ac4f-a9a18c7400f4` | `7b0fa688074e864f` | `log_b67.md` |
+| `gloam_knight_p1_side_v3.png` | 1536×1024 | `01a16f79-3335-7661-8e34-55c8cba85337` | `exec-96c750cc-7bf2-49bc-bd03-702c9bbf2971` | `ca3d8a9c6ab613dc` | `log_b67.md` |
+| `gloam_knight_p1_down_v1.png` | 1536×1024 | `01a16f9e-2c01-7742-ae0d-75bd09a113f6` | `exec-72c128d8-498c-49af-b7fc-4377e0570aa5` | `9b90529ac91b23a5` | `log_b67.md` |
+| `gloam_knight_p1_down_v2.png` | 1536×1024 | `01a16f9e-2c22-7d21-b535-9b8e941c4418` | `exec-ab2555b9-6c82-488d-9bf3-ab5414bc01d8` | `578716c89f827431` | `log_b67.md` |
+| `gloam_knight_p1_down_v3.png` | 1536×1024 | `01a16f9e-2d3f-7931-9c9c-1691f3bae7f4` | `exec-dd1125c8-1acc-4124-877e-aa5711531aeb` | `df8b1c1a7f8a99ef` | `log_b67.md` |
+| `gloam_knight_p1_up_v1.png` | 1536×1024 | `01a16f99-318f-7fd1-810b-a83ca6b2ffcd` | `exec-6c9abbc6-775e-4e75-9f22-619cf6e520e4` | `ed6bdc99c863a82b` | `log_b67.md` |
+| `gloam_knight_p1_up_v2.png` | 1536×1024 | `01a16f99-3206-7232-8401-63a2d20ff846` | `exec-91099068-dcd8-49b0-9e37-878cab569899` | `73f0cf14339ae215` | `log_b67.md` |
+| `gloam_knight_p1_up_v3.png` | 1536×1024 | `01a16f99-3172-7462-bb8e-9ae32fef41ae` | `exec-fcac13b9-8d34-490a-aedc-efde3f44b788` | `f99d8bf7a871e494` | `log_b67.md` |
+| `gloam_knight_p2_down_v1.png` | 1536×1024 | `01a16f9e-4ea4-7ef1-93c6-1a34a4484b29` | `exec-a04ee12c-71e1-48ba-ae0e-9ae7f456fa6b` | `d51fe4c096fc19f4` | `log_b67.md` |
+| `gloam_knight_p2_down_v2.png` | 1536×1024 | `01a16f9e-4d15-7ad1-b5bf-8c052683ef91` | `exec-93efebe2-4225-4747-a5c2-f08e72e7c01a` | `a27067fcbbd2abaa` | `log_b67.md` |
+| `gloam_knight_p2_down_v3.png` | 1536×1024 | `01a16f9e-4deb-7fd3-97e3-632828d87025` | `exec-1b10b8fd-9742-4140-8afc-55baa3c92982` | `99fb0ce10390a17d` | `log_b67.md` |
+| `gloam_knight_p2_side_v1.png` | 1536×1024 | `01a16fa3-5082-7a80-85c9-6558ac7af454` | `exec-45aebc63-7621-45ee-975a-3a9639b7f0cd` | `70b8c9ab261d5694` | `log_b67.md` |
+| `gloam_knight_p2_side_v2.png` | 1536×1024 | `01a16fa3-4ef2-7ac2-87db-3f60396f3e58` | `exec-e07ba6ee-25fd-49a6-8dc6-b8dd1563c725` | `0def62242a88d9cb` | `log_b67.md` |
+| `gloam_knight_p2_side_v3.png` | 1536×1024 | `01a16fa3-4e9d-75e1-aa54-3f4e241fda8e` | `exec-8a5cff61-8334-4590-a90f-d780cda7671c` | `5bf054049334e201` | `log_b67.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
