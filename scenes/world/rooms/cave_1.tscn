@@ -11,7 +11,7 @@
 [node name="Cave1" type="Node2D"]
 script = ExtResource("1")
 room_id = &"cave_1"
-grid = Vector2i(0, 3)
+grid = Vector2i(1, 13)
 exits = Array[StringName]([])
 dark = true
 floor_color = Color(0.12, 0.11, 0.14, 1)

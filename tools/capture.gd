@@ -6,6 +6,10 @@ extends Node
 ##
 ## Options:
 ##   --room=<id> --spawn=<marker>   room and entry marker (default ow_0_0 / Default)
+##   --start-room=<id>[:spawn]      the same as one argument (the game takes it too)
+##   --fixture=<scene>              capture a gallery scene instead of a room: the scene (its root is
+##                                  a Room, e.g. tests/fixtures/gallery/<wp>.tscn) is added to the
+##                                  world as the room "fixture" and the shot is taken there
 ##   --frames=N                     physics frames to simulate before the shot (default 30)
 ##   --place=x,y                    put the player at this ROOM-LOCAL position first
 ##   --facing=up|down|left|right    turn the player before the shot
@@ -16,6 +20,8 @@ extends Node
 ##   --action=swing                 swing the hook and shoot in the middle of the sweep
 ##   --action=pause                 open the pause menu and shoot
 ##   --hitboxes                     draw hitboxes and hurtboxes (same as F1 in the game)
+
+const FIXTURE_ROOM := &"fixture"
 
 var _viewport: SubViewport
 
@@ -34,6 +40,7 @@ func _run() -> void:
 	var action := ""
 	var dev := false
 	var hitboxes := false
+	var fixture := ""
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--out="):
 			out = arg.trim_prefix("--out=")
@@ -41,6 +48,10 @@ func _run() -> void:
 			room = StringName(arg.trim_prefix("--room="))
 		elif arg.begins_with("--spawn="):
 			spawn = StringName(arg.trim_prefix("--spawn="))
+		elif arg.begins_with(World.START_ROOM_ARG):
+			var start := World.parse_start_room(PackedStringArray([arg]))
+			room = start[0]
+			spawn = start[1]
 		elif arg.begins_with("--frames="):
 			wait_frames = int(arg.trim_prefix("--frames="))
 		elif arg.begins_with("--place="):
@@ -54,6 +65,8 @@ func _run() -> void:
 			dev = true
 		elif arg == "--hitboxes":
 			hitboxes = true
+		elif arg.begins_with("--fixture="):
+			fixture = arg.trim_prefix("--fixture=")
 	_viewport = SubViewport.new()
 	_viewport.size = Vector2i(1920, 1080)
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
@@ -67,6 +80,18 @@ func _run() -> void:
 		GameState.acquire_item(&"tether_moth")
 		GameState.acquire_item(&"pitch_pot")
 		GameState.add_pitch_pots(3)
+	if fixture != "":
+		if not ResourceLoader.exists(fixture):
+			printerr("capture: no scene at %s" % fixture)
+			get_tree().quit(1)
+			return
+		world.add_room_scene(FIXTURE_ROOM, load(fixture) as PackedScene)
+		room = FIXTURE_ROOM
+		spawn = &"Default"
+	if world.get_room(room) == null:
+		printerr("capture: %s is not a room the world can load" % room)
+		get_tree().quit(1)
+		return
 	GameState.damage(3)
 	world.start_at(room, spawn)
 	if place != Vector2.INF:

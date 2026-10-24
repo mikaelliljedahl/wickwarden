@@ -9,6 +9,11 @@ extends Node2D
 ## * Death: the player dies, 0.8 s later the world fades out, resets health to full and puts the
 ##   player in the start room.
 ##
+## Rooms come from data/world_data.json (WorldData): the grid index is built from it, and a room
+## is instantiated when it is first needed. The current room and the rooms its exits lead to stay
+## loaded; every other room is freed when the player changes room, so no state lives in a room node
+## (flags do). A room whose scene does not exist yet is a warning and a closed edge.
+##
 ## The screen shows the room at y 120..1080 under the 120 px HUD band: the camera centre is the
 ## room origin + WorldConst.CAMERA_OFFSET. Timing is driven from _physics_process so tests are
 ## deterministic.
@@ -19,15 +24,6 @@ signal player_respawned
 
 enum Phase { NONE, SLIDE, FADE_OUT, FADE_IN, DEATH_WAIT }
 
-const ROOM_PATHS := {
-	&"ow_0_0": "res://scenes/world/rooms/ow_0_0.tscn",
-	&"ow_1_0": "res://scenes/world/rooms/ow_1_0.tscn",
-	&"ow_2_0": "res://scenes/world/rooms/ow_2_0.tscn",
-	&"ow_0_1": "res://scenes/world/rooms/ow_0_1.tscn",
-	&"ow_1_1": "res://scenes/world/rooms/ow_1_1.tscn",
-	&"ow_2_1": "res://scenes/world/rooms/ow_2_1.tscn",
-	&"cave_1": "res://scenes/world/rooms/cave_1.tscn",
-}
 const START_ROOM := &"ow_0_0"
 const START_SPAWN := &"Default"
 const DEATH_WAIT := 0.8
@@ -40,11 +36,14 @@ const PAUSE_SCENE := "res://scenes/ui/pause_menu.tscn"
 const DEV_ARG := "--dev-mode"
 const DEV_KEYS := 5
 const DEV_PITCH_POTS := 10
+## Launch argument (`godot --path . -- --start-room=<id>[:spawn]`, also used by the capture tool):
+## start play in that room at that entry marker. An unknown room falls back to START_ROOM.
+const START_ROOM_ARG := "--start-room="
 
 var player: Player
 var camera: Camera2D
 var current_room: Room
-var rooms: Dictionary = {}  # room id -> Room
+var rooms: Dictionary = {}  # room id -> Room, only the rooms that are loaded now
 var phase: Phase = Phase.NONE
 var hud: Node
 var fade_rect: ColorRect
@@ -54,7 +53,9 @@ var debug_overlay: DebugOverlay
 var _rooms_node: Node2D
 var _actors: Node2D
 var _modulate: CanvasModulate
-var _by_grid: Dictionary = {}  # Vector2i -> Room
+var _by_grid: Dictionary = {}  # Vector2i -> StringName (room id), from WorldData
+var _scene_overrides: Dictionary = {}  # room id -> PackedScene, from add_room_scene
+var _warned: Dictionary = {}  # room id -> true, for warn-once messages
 var _t: float = 0.0
 var _next_room: Room
 var _cam_from: Vector2
@@ -84,7 +85,7 @@ func _ready() -> void:
 	camera.name = "Camera"
 	camera.position_smoothing_enabled = false
 	add_child(camera)
-	_load_rooms()
+	_build_grid_index()
 	var player_scene := load(PLAYER_SCENE) as PackedScene
 	player = player_scene.instantiate() as Player
 	_actors.add_child(player)
@@ -96,7 +97,8 @@ func _ready() -> void:
 	if DEV_ARG in OS.get_cmdline_user_args():
 		dev_mode = true
 		apply_dev_loadout()
-	start_at(START_ROOM, START_SPAWN)
+	var start := _start_position()
+	start_at(start[0], start[1])
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -109,6 +111,19 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 # ---- Public API ------------------------------------------------------------------------------
+
+
+## `--start-room=<id>[:spawn]` in `args` as [room id, spawn marker]. The id is &"" when the argument
+## is absent. A missing spawn part means START_SPAWN.
+static func parse_start_room(args: PackedStringArray) -> Array[StringName]:
+	for arg in args:
+		if arg.begins_with(START_ROOM_ARG):
+			var parts := arg.trim_prefix(START_ROOM_ARG).split(":")
+			var spawn := START_SPAWN
+			if parts.size() > 1 and not parts[1].is_empty():
+				spawn = StringName(parts[1])
+			return [StringName(parts[0]), spawn]
+	return [&"", START_SPAWN]
 
 
 ## Dev loadout: every sub-item, DEV_PITCH_POTS pitch pots, DEV_KEYS keys. Does not set any flags.
@@ -133,12 +148,28 @@ func get_current_room_id() -> StringName:
 	return current_room.room_id if current_room != null else &""
 
 
+## The room `room_id`, instantiated from its scene on first use. Null when the room has no scene
+## yet (a warning, once per room).
 func get_room(room_id: StringName) -> Room:
-	return rooms.get(room_id)
+	if rooms.has(room_id):
+		return rooms[room_id]
+	return _load_room(room_id)
+
+
+## Makes `packed_scene` the scene of `room_id` from now on (a test and capture hook; also for an
+## id the graph lacks). A loaded copy is dropped unless it is the current room.
+func add_room_scene(room_id: StringName, packed_scene: PackedScene) -> Room:
+	_scene_overrides[room_id] = packed_scene
+	if rooms.has(room_id) and rooms[room_id] != current_room:
+		_unload(room_id)
+	return get_room(room_id)
 
 
 ## Puts the player in a room instantly (start of the game, tests). No fade, no slide.
 func start_at(room_id: StringName, spawn: StringName = START_SPAWN) -> void:
+	var target := get_room(room_id)
+	if target == null:
+		return
 	phase = Phase.NONE
 	_set_paused(false)
 	_switch_room(room_id, spawn)
@@ -149,14 +180,17 @@ func start_at(room_id: StringName, spawn: StringName = START_SPAWN) -> void:
 ## Fades out, moves the player to a spawn marker in `room_id`, fades in. With `fade = false`
 ## the switch is instant. Ignored while another transition runs.
 func warp_to(room_id: StringName, spawn: StringName = START_SPAWN, fade: bool = true) -> void:
-	if is_transitioning() or not rooms.has(room_id):
+	if is_transitioning():
+		return
+	var target := get_room(room_id)
+	if target == null:
 		return
 	if not fade:
 		_switch_room(room_id, spawn)
 		_place_player_at_spawn(spawn)
 		return
 	_clear_transients()
-	_next_room = rooms[room_id]
+	_next_room = target
 	_warp_spawn = spawn
 	_warp_switched = false
 	_set_paused(true)
@@ -181,7 +215,7 @@ func _physics_process(delta: float) -> void:
 			_t += delta
 			if _t >= DEATH_WAIT:
 				_respawn_pending = true
-				_next_room = rooms[START_ROOM]
+				_next_room = get_room(START_ROOM)
 				_warp_spawn = START_SPAWN
 				_warp_switched = false
 				phase = Phase.FADE_OUT
@@ -218,7 +252,10 @@ func _neighbor(dir: Vector2i) -> Room:
 	var opposite := _side_name(-dir)
 	if not current_room.has_exit(side):
 		return null
-	var next: Room = _by_grid.get(current_room.grid + dir)
+	var id: StringName = _by_grid.get(current_room.grid + dir, &"")
+	var next: Room = null
+	if id != &"":
+		next = get_room(id)
 	if next == null or not next.has_exit(opposite):
 		return null
 	return next
@@ -332,7 +369,9 @@ func _step_fade_in(delta: float) -> void:
 
 ## Instant switch: leave the old room, enter the new one, jump the camera, apply lighting.
 func _switch_room(room_id: StringName, spawn: StringName) -> void:
-	var target: Room = rooms[room_id]
+	var target := get_room(room_id)
+	if target == null:
+		return
 	_clear_transients()
 	if current_room != null and current_room != target:
 		current_room.leave()
@@ -353,6 +392,7 @@ func _place_player_at_spawn(spawn: StringName) -> void:
 
 func _finish_room_entry() -> void:
 	current_room.process_mode = Node.PROCESS_MODE_INHERIT
+	_refresh_loaded()
 	_modulate.color = DARK_COLOR if current_room.dark else Color.WHITE
 	player.set_dark_mode(current_room.dark)
 	GameState.mark_visited(current_room.room_id)
@@ -385,19 +425,103 @@ func _on_player_died() -> void:
 # ---- Setup -----------------------------------------------------------------------------------
 
 
-func _load_rooms() -> void:
-	for room_id in ROOM_PATHS:
-		var scene := load(String(ROOM_PATHS[room_id])) as PackedScene
-		if scene == null:
-			push_warning("World: room scene missing for %s" % room_id)
+## Grid index of every overworld and cave room in the graph. Pockets are not on the grid.
+func _build_grid_index() -> void:
+	for id in WorldData.room_ids():
+		var cell := WorldData.grid(id)
+		if _by_grid.has(cell):
+			push_error("World: grid %s holds both %s and %s" % [cell, _by_grid[cell], id])
 			continue
-		var room := scene.instantiate() as Room
-		if room == null:
-			continue
-		room.room_id = room_id
-		_rooms_node.add_child(room)
-		rooms[room_id] = room
-		_by_grid[room.grid] = room
+		_by_grid[cell] = StringName(id)
+
+
+## Instantiates a room from its scene (or its add_room_scene override). The grid comes from the
+## graph; the scene must agree with it. The room starts disabled and hidden until it is entered.
+func _load_room(room_id: StringName) -> Room:
+	var scene := _scene_for(room_id)
+	if scene == null:
+		return null
+	var node := scene.instantiate()
+	var room := node as Room
+	if room == null:
+		node.free()
+		_warn_once(room_id, "World: the scene of %s is not a Room" % room_id)
+		return null
+	room.room_id = room_id
+	var id := String(room_id)
+	if WorldData.has(id):
+		var cell := WorldData.grid(id)
+		if room.grid != cell:
+			push_warning("World: %s is at grid %s in its scene, %s in the graph" % [room_id, room.grid, cell])
+		room.grid = cell
+	room.process_mode = Node.PROCESS_MODE_DISABLED
+	_rooms_node.add_child(room)
+	rooms[room_id] = room
+	return room
+
+
+func _scene_for(room_id: StringName) -> PackedScene:
+	if _scene_overrides.has(room_id):
+		return _scene_overrides[room_id]
+	var id := String(room_id)
+	if not WorldData.has(id):
+		_warn_once(room_id, "World: %s is not a room of the graph" % room_id)
+		return null
+	var path := WorldData.scene_path(id)
+	if path.is_empty() or not ResourceLoader.exists(path):
+		_warn_once(room_id, "World: %s has no room scene yet; its edges are closed" % room_id)
+		return null
+	return load(path) as PackedScene
+
+
+## Keeps the current room and the rooms its exits lead to loaded (so a slide finds them at once);
+## frees every other room. Called whenever a room becomes the current one.
+func _refresh_loaded() -> void:
+	var keep: Array[StringName] = [current_room.room_id]
+	for side in current_room.exits:
+		var id: StringName = _by_grid.get(current_room.grid + _side_vector(side), &"")
+		if id != &"":
+			keep.append(id)
+			get_room(id)
+	for id in rooms.keys():
+		if not keep.has(id):
+			_unload(id)
+
+
+## Room and spawn the game starts in: the `--start-room` argument when that room exists.
+func _start_position() -> Array[StringName]:
+	var requested := parse_start_room(OS.get_cmdline_user_args())
+	if requested[0] != &"":
+		if get_room(requested[0]) != null:
+			return requested
+		push_warning("World: --start-room=%s is not a room; starting in %s" % [requested[0], START_ROOM])
+	return [START_ROOM, START_SPAWN]
+
+
+func _unload(room_id: StringName) -> void:
+	var room: Room = rooms[room_id]
+	rooms.erase(room_id)
+	_rooms_node.remove_child(room)
+	room.queue_free()
+
+
+func _side_vector(side: StringName) -> Vector2i:
+	match side:
+		&"n":
+			return Vector2i.UP
+		&"s":
+			return Vector2i.DOWN
+		&"w":
+			return Vector2i.LEFT
+		_:
+			return Vector2i.RIGHT
+
+
+func _warn_once(room_id: StringName, message: String) -> void:
+	if _warned.has(room_id):
+		return
+	_warned[room_id] = true
+	push_warning(message)
 
 
 func _build_overlay() -> void:

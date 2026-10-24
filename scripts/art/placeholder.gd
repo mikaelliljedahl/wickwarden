@@ -7,6 +7,8 @@ extends Node2D
 ## the node with an AnimatedSprite2D, so keep to `modulate`, `visible` and optional `set_facing`.
 ##
 ## Add a kind by adding one line to KINDS. shape: circle | rect | diamond | arc | ring.
+## World scripts add their kinds at run time with register_kind() (WP F2 rules: KINDS is not edited
+## by content work packages).
 
 const VISUAL_NAME := "Visual"
 
@@ -83,8 +85,50 @@ const STATIC_KINDS: Array[StringName] = [
 ## Arc opening in degrees (shape "arc").
 @export var arc_degrees: float = 110.0
 
+## Kinds registered at run time by register_kind(): kind -> definition (same shape as KINDS).
+static var _runtime_kinds: Dictionary = {}
+## Runtime kinds that are drawn without the facing nub.
+static var _runtime_static: Dictionary = {}
+
 var facing: Vector2 = Vector2.DOWN
 var color_override: Color = Color(0, 0, 0, 0)
+
+
+## Registers a placeholder kind from a script, e.g. from a prop's own file. `definition` has the
+## keys of a KINDS entry: "shape" (String), "color" (Color) and "radius" (float) or "size" (Vector2).
+## Registering again replaces the earlier definition. A name that KINDS already has is refused
+## (error), because the step-1 table is not overwritten.
+static func register_kind(
+	entity_kind: StringName, definition: Dictionary, is_static: bool = false
+) -> void:
+	if KINDS.has(entity_kind):
+		push_error("Placeholder: %s is already in KINDS and cannot be registered" % entity_kind)
+		return
+	if not (definition.get("shape") is String) or not (definition.get("color") is Color):
+		push_error("Placeholder: %s needs a shape (String) and a color (Color)" % entity_kind)
+		return
+	_runtime_kinds[entity_kind] = definition
+	if is_static:
+		_runtime_static[entity_kind] = true
+	else:
+		_runtime_static.erase(entity_kind)
+
+
+## True for a kind of KINDS or one registered with register_kind().
+static func has_kind(entity_kind: StringName) -> bool:
+	return KINDS.has(entity_kind) or _runtime_kinds.has(entity_kind)
+
+
+## The definition of `entity_kind`, falling back to "generic" for an unknown kind.
+static func definition_of(entity_kind: StringName) -> Dictionary:
+	if KINDS.has(entity_kind):
+		return KINDS[entity_kind]
+	return _runtime_kinds.get(entity_kind, KINDS[&"generic"])
+
+
+## True for a kind drawn without the facing nub (STATIC_KINDS or a static runtime kind).
+static func is_static_kind(entity_kind: StringName) -> bool:
+	return STATIC_KINDS.has(entity_kind) or _runtime_static.has(entity_kind)
 
 
 ## Creates (or replaces) the "Visual" child of `parent` for an entity kind and returns it.
@@ -108,7 +152,7 @@ static func attach(
 
 
 static func color_of(entity_kind: StringName) -> Color:
-	return KINDS.get(entity_kind, KINDS[&"generic"])["color"]
+	return definition_of(entity_kind)["color"]
 
 
 ## Small expanding, fading circle used for enemy death. Frees itself.
@@ -147,7 +191,7 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	var entry: Dictionary = KINDS.get(kind, KINDS[&"generic"])
+	var entry: Dictionary = definition_of(kind)
 	var color: Color = entry["color"]
 	if color_override.a > 0.0:
 		color = color_override
@@ -176,7 +220,7 @@ func _draw() -> void:
 
 
 func _draw_facing_nub(extent: float, color: Color) -> void:
-	if kind == &"generic" or not KINDS.has(kind) or STATIC_KINDS.has(kind):
+	if kind == &"generic" or not has_kind(kind) or is_static_kind(kind):
 		return
 	var shade := Color(color.r * 0.45, color.g * 0.45, color.b * 0.45, color.a)
 	draw_circle(facing * extent * 0.6, extent * 0.22, shade)

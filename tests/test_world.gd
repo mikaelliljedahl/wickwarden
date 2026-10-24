@@ -1,10 +1,16 @@
 extends TestCase
-## World: room graph, camera slide (0.45 s), entry position, pausing during the slide, enemy
-## respawn on entry, warp fade (0.3 s), cave lighting, death and respawn, HUD, walls.
+## World: streaming of rooms from the graph (on demand, closed edges for missing scenes), the room
+## graph on the real scenes, the --start-room argument, add_room_scene, placeholder kinds, camera
+## slide (0.45 s), entry position, pausing during the slide, enemy respawn on entry, warp fade
+## (0.3 s), cave lighting, death and respawn, HUD, walls, and a 40-warp soak test.
 
 
 func run() -> void:
 	var world := await make_world()
+	await _streaming(world)
+	_start_argument()
+	await _placeholder_kinds()
+	await _added_scene(world)
 	await _room_graph(world)
 	await _start(world)
 	await _walls(world)
@@ -14,6 +20,7 @@ func run() -> void:
 	await _cave(world)
 	await _death_respawn(world)
 	await _hud(world)
+	await _soak_warps(world)
 	await dispose(world)
 
 
@@ -25,28 +32,129 @@ func _wait_transition(world: World, max_frames: int = 120) -> int:
 	return n
 
 
+## add_room_scene (the capture and test hook): a scene given for an id is entered, freed when the
+## player leaves, and loaded again from the same scene on the next visit.
+func _added_scene(world: World) -> void:
+	var packed := PackedScene.new()
+	var gallery := Room.new()
+	gallery.name = "Gallery"
+	packed.pack(gallery)
+	gallery.free()
+	world.add_room_scene(&"gallery_test", packed)
+	world.warp_to(&"gallery_test", &"Default", false)
+	check_eq(world.get_current_room_id(), &"gallery_test", "a room added by scene is entered")
+	check_eq(world.get_room(&"gallery_test").room_id, &"gallery_test", "it keeps its id")
+	world.warp_to(&"ow_0_0", &"Default", false)
+	check(not world.rooms.has(&"gallery_test"), "a room the player left is freed")
+	check(world.get_room(&"gallery_test") != null, "and it loads again from the same scene")
+	world.start_at(&"ow_0_0")
+
+
+## Runtime placeholder kinds: registered from a script, drawn like the table kinds, not overwriting it.
+func _placeholder_kinds() -> void:
+	check(Placeholder.has_kind(&"spitcap"), "a step-1 kind is known")
+	check(not Placeholder.has_kind(&"test_crate"), "an unregistered kind is unknown")
+	var crate := {"shape": "rect", "color": Color(0.5, 0.2, 0.1), "size": Vector2(40, 40)}
+	Placeholder.register_kind(&"test_crate", crate, true)
+	check(Placeholder.has_kind(&"test_crate"), "a registered kind is known")
+	check(Placeholder.is_static_kind(&"test_crate"), "a static kind is marked static")
+	check(not Placeholder.is_static_kind(&"spitcap"), "a turning kind is not static")
+	check_eq(Placeholder.color_of(&"test_crate"), Color(0.5, 0.2, 0.1), "its colour is used")
+	var visual := Placeholder.attach(self, &"test_crate")
+	await frames(2)
+	check_eq(visual.kind, &"test_crate", "a placeholder of a runtime kind is attached")
+	check(visual.is_inside_tree(), "and it is in the tree")
+	await dispose(visual)
+
+
+## `--start-room=<id>[:spawn]` parses to a room and a spawn marker; the spawn defaults to Default.
+func _start_argument() -> void:
+	var none: Array[StringName] = [&"", &"Default"]
+	check_eq(World.parse_start_room(PackedStringArray(["--dev-mode"])), none, "no argument: none")
+	var room_only: Array[StringName] = [&"ow_1_1", &"Default"]
+	check_eq(
+		World.parse_start_room(PackedStringArray(["--start-room=ow_1_1"])), room_only, "room only"
+	)
+	var with_spawn: Array[StringName] = [&"cave_1", &"FromOverworld"]
+	check_eq(
+		World.parse_start_room(PackedStringArray(["--dev-mode", "--start-room=cave_1:FromOverworld"])),
+		with_spawn,
+		"room and spawn"
+	)
+
+
+## Rooms load on demand: only the current room and the rooms its exits lead to stay loaded.
+func _streaming(world: World) -> void:
+	check_eq(_loaded_ids(world), ["ow_0_0", "ow_0_1", "ow_1_0"], "the start loads its exits")
+	world.warp_to(&"ow_1_0", &"Default", false)
+	check_eq(
+		_loaded_ids(world),
+		["ow_0_0", "ow_1_0", "ow_1_1", "ow_2_0"],
+		"after a move the far rooms are freed"
+	)
+	check(world.get_room(&"ow_3_0") == null, "a room without a scene is not loaded")
+	check(not world.rooms.has(&"ow_3_0"), "and it is not kept")
+	world.start_at(&"ow_0_0")
+
+
+## Sorted ids of the loaded rooms, as Strings (StringName does not sort alphabetically).
+func _loaded_ids(world: World) -> Array[String]:
+	var ids: Array[String] = []
+	for id in world.rooms.keys():
+		ids.append(String(id))
+	ids.sort()
+	return ids
+
+
+## The graph id of the room at `cell`, "" when there is none.
+func _id_at(cell: Vector2i) -> String:
+	for id in WorldData.room_ids():
+		if WorldData.grid(id) == cell:
+			return id
+	return ""
+
+
+## Every room whose scene exists loads at its graph grid, the scene agrees with the graph, and
+## every exit leads to a mirrored room. The seven dev rooms are the ones with a scene so far.
 func _room_graph(world: World) -> void:
-	check_eq(world.rooms.size(), 7, "all seven placeholder rooms load")
-	for id in [&"ow_0_0", &"ow_1_0", &"ow_2_0", &"ow_0_1", &"ow_1_1", &"ow_2_1", &"cave_1"]:
-		check(world.rooms.has(id), "room %s exists" % id)
 	var sides := {&"n": Vector2i.UP, &"s": Vector2i.DOWN, &"w": Vector2i.LEFT, &"e": Vector2i.RIGHT}
 	var opposite := {&"n": &"s", &"s": &"n", &"w": &"e", &"e": &"w"}
-	for id in world.rooms:
-		var room: Room = world.rooms[id]
+	var with_scene: Array[String] = []
+	for id in WorldData.room_ids():
+		if ResourceLoader.exists(WorldData.scene_path(id)):
+			with_scene.append(id)
+	check(with_scene.size() >= 7, "the seven placeholder rooms have scenes")
+	for id in ["ow_0_0", "ow_1_0", "ow_2_0", "ow_0_1", "ow_1_1", "ow_2_1", "cave_1"]:
+		check(with_scene.has(id), "room %s has a scene" % id)
+	for id in with_scene:
+		var probe := (load(WorldData.scene_path(id)) as PackedScene).instantiate() as Room
+		check_eq(probe.grid, WorldData.grid(id), "%s scene agrees with the graph grid" % id)
+		probe.free()
+		var room := world.get_room(StringName(id))
+		check(room != null, "room %s loads" % id)
+		if room == null:
+			continue
 		check_eq(
 			room.position,
 			Vector2(room.grid) * Vector2(1920, 960),
 			"%s sits at its grid origin" % id
 		)
 		for side in room.exits:
-			var neighbor := world.rooms.values().filter(
-				func(r: Room) -> bool: return r.grid == room.grid + sides[side]
-			)
-			check_eq(neighbor.size(), 1, "%s exit %s leads to a room" % [id, side])
-			if neighbor.size() == 1:
-				check(neighbor[0].has_exit(opposite[side]), "%s exit %s is mirrored" % [id, side])
-	check(world.rooms[&"cave_1"].dark, "the cave is dark")
-	check(not world.rooms[&"ow_0_0"].dark, "overworld rooms are lit")
+			var neighbor_id := _id_at(room.grid + sides[side])
+			check(neighbor_id != "", "%s exit %s leads to a room" % [id, side])
+			if neighbor_id == "":
+				continue
+			var neighbor := world.get_room(StringName(neighbor_id))
+			check(neighbor != null, "%s exit %s leads to a loaded room" % [id, side])
+			if neighbor != null:
+				check(neighbor.has_exit(opposite[side]), "%s exit %s is mirrored" % [id, side])
+	check(world.get_room(&"cave_1").dark, "the cave is dark")
+	check(not world.get_room(&"ow_0_0").dark, "overworld rooms are lit")
+	check_eq(
+		world.get_room(&"cave_1").position,
+		Vector2(1920, 12480),
+		"cave_1 sits at world position (1920, 12480)"
+	)
 
 
 func _start(world: World) -> void:
@@ -235,7 +343,7 @@ func _cave(world: World) -> void:
 		"camera is on the cave"
 	)
 	# Walk down into the exit door: back to ow_1_1 at its FromCave marker.
-	player.place_at(Vector2(960, 2880 + 640))
+	player.place_at(world.get_room(&"cave_1").global_position + Vector2(960, 640))
 	await frames(2)
 	Input.action_press(&"move_down")
 	var guard := 0
@@ -295,6 +403,49 @@ func _death_respawn(world: World) -> void:
 	await frames(10)
 	release_inputs()
 	check(player.global_position.x > x, "the player can move after respawning")
+
+
+## Forty warps in five rounds of eight through the dev rooms and the cave. Every warp lands where
+## it names, at most five rooms are loaded at a time, and the node count of the world does not grow
+## after the first round (freed rooms leave nothing behind).
+func _soak_warps(world: World) -> void:
+	reset_state()
+	var route: Array[StringName] = [
+		&"ow_1_1", &"cave_1", &"ow_2_1", &"ow_2_0", &"ow_0_1", &"cave_1", &"ow_0_0", &"ow_1_0"
+	]
+	world.player.hurtbox.enabled = false
+	world.start_at(&"ow_1_0")
+	var base := -1
+	var landed := 0
+	var max_loaded := 0
+	for round_index in range(5):
+		for id in route:
+			world.warp_to(id)
+			await _wait_transition(world)
+			if world.get_current_room_id() == id:
+				landed += 1
+			max_loaded = maxi(max_loaded, world.rooms.size())
+		await frames(2)
+		var count := _node_count(world)
+		if base < 0:
+			base = count
+		else:
+			check(
+				count <= base,
+				"round %d: the node count does not grow (%d, first round %d)"
+				% [round_index + 1, count, base]
+			)
+	check_eq(landed, 40, "all 40 warps land in the room they name")
+	check(max_loaded <= 5, "at most five rooms are loaded at a time (got %d)" % max_loaded)
+	world.player.hurtbox.enabled = true
+	world.start_at(&"ow_0_0")
+
+
+func _node_count(node: Node) -> int:
+	var total := 1
+	for child in node.get_children():
+		total += _node_count(child)
+	return total
 
 
 func _hud(world: World) -> void:
