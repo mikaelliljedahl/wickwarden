@@ -7,8 +7,9 @@ Facing and leg rule (`PROGRESS.md`): not needed in this range, no batch has a wa
 | Batch | Content | Images | Status |
 |---|---|---|---|
 | 36 | boardwalk (straight, end, corner), dock pier | 12 | done: generated, verified (own-session SHA-256), viewed, logged (`log_b36.md`), provenance added; 3 ok (dock pier), 9 weak (boardwalk tiles stand on stub legs or posts) |
-| 37 | wax vat 1 and 2, wax vat pipe, lily pads, shipwreck 1 and 2 | 18 | in progress (wave 1: wax vat 1 and 2) |
-| 38 to 47 | see batch files | 18, 15 (B39) | prompts written, not started |
+| 37 | wax vat 1 and 2, wax vat pipe, lily pads, shipwreck 1 and 2 | 18 | done: generated, verified (own-session SHA-256), viewed, logged (`log_b37.md`), provenance added; 15 ok, 3 weak (shipwreck 1 v3: magenta through the sail; shipwreck 2 v1 and v2: sand and rocks under the wreck); wax_vat_2_v3 first attempt failed at the reference attach, resubmitted as `-r1` |
+| 38 | rusted lantern post, salt crystals 1 and 2, driftwood net, village well, haystack | 18 | in progress |
+| 39 to 47 | see batch files | 15 (B39), 18 others | prompts written, not started |
 
 Wave rule: at most 6 Codex jobs at the same time, one image per job, model `cheapest`, idempotency key `ww-bNN-<unit>-vN`. Each job's output is copied from its own session folder only; SHA-256 checked against that folder and against `tools/source_art/` for duplicates.
 
