@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/thorn_hedge.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/world/brazier.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/items/flame.tscn" id="4"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox.gd" id="5"]
+
+[node name="GalleryT01" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+floor_color = Color(0.17, 0.2, 0.2, 1)
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(320, 480)
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="ThornHedge" parent="Props" instance=ExtResource("2")]
+position = Vector2(720, 480)
+burn_id = &"fixture_hedge"
+
+[node name="Brazier" type="StaticBody2D" parent="Props"]
+position = Vector2(1500, 480)
+script = ExtResource("3")
+brazier_id = &"fixture_brazier"
+
+[node name="Flame" parent="." instance=ExtResource("4")]
+position = Vector2(440, 480)
+place_dir = Vector2(1, 0)

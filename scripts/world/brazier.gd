@@ -1,6 +1,6 @@
 class_name Brazier
 extends StaticBody2D
-## An unlit brazier. A lamp hook swing (or flare) that hits it lights it. Solid.
+## An unlit brazier. A lamp hook swing, a flare or a cinder wick flame (kind `fire`) that hits it lights it. Solid.
 ## Lit state persists through the flag "brazier_<id>" when `brazier_id` is set.
 ## A Gate listens to `lit_changed`.
 
@@ -80,6 +80,10 @@ func ignite() -> void:
 
 
 func _on_hurt(hitbox: Hitbox) -> void:
+	if hitbox.kind == &"fire":
+		# A cinder wick flame lights it silently; a flame touching a lit brazier does nothing.
+		ignite()
+		return
 	if hitbox.kind == &"hook" or hitbox.kind == &"flare":
 		if lit:
 			Audio.play_sfx(&"hook_clank", global_position)
