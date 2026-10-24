@@ -5,11 +5,20 @@ extends RefCounted
 ## scenes later without editing the Player. A missing scene means "item not implemented yet" and
 ## using it is a silent no-op.
 
-## Cycle order and display names. Add a new item by adding one entry; `register()` does the same
-## at runtime (tests).
+## Registry order (the item subscreen grid and the quick-switch cycle), display names and scene
+## paths. All ten sub-items are listed up front (code contract 16.5); a tool WP only adds its scene.
+## `register()` does the same at runtime (tests).
 static var items: Dictionary = {
 	&"tether_moth": {"scene": "res://scenes/items/tether_moth.tscn", "name": "Tether Moth"},
 	&"pitch_pot": {"scene": "res://scenes/items/pitch_pot.tscn", "name": "Pitch Pot"},
+	&"cinder_wick": {"scene": "res://scenes/items/cinder_wick.tscn", "name": "Cinder Wick"},
+	&"tallow_sling": {"scene": "res://scenes/items/tallow_sling.tscn", "name": "Tallow Sling"},
+	&"reed_raft": {"scene": "res://scenes/items/reed_raft.tscn", "name": "Reed Raft"},
+	&"heft_mitts": {"scene": "res://scenes/items/heft_mitts.tscn", "name": "Heft Mitts"},
+	&"glow_jar": {"scene": "res://scenes/items/glow_jar.tscn", "name": "Glow Jar"},
+	&"lantern_chime": {"scene": "res://scenes/items/lantern_chime.tscn", "name": "Lantern Chime"},
+	&"skitter_boots": {"scene": "res://scenes/items/skitter_boots.tscn", "name": "Skitter Boots"},
+	&"reel_line": {"scene": "res://scenes/items/reel_line.tscn", "name": "Reel Line"},
 }
 
 

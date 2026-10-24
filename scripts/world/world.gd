@@ -33,6 +33,7 @@ const DARK_COLOR := Color(0.06, 0.06, 0.12)
 const PLAYER_SCENE := "res://scenes/player/player.tscn"
 const HUD_SCENE := "res://scenes/ui/hud.tscn"
 const PAUSE_SCENE := "res://scenes/ui/pause_menu.tscn"
+const ITEM_MENU_SCENE := "res://scenes/ui/item_menu.tscn"
 ## Launch argument (`godot --path . -- --dev-mode`, `make dev`): all sub-items, 10 pitch pots, 5 keys
 ## and F1 toggles the hitbox / hurtbox overlay. Normal runs never see it.
 const DEV_ARG := "--dev-mode"
@@ -553,3 +554,6 @@ func _build_overlay() -> void:
 	var pause_scene := load(PAUSE_SCENE) as PackedScene
 	if pause_scene != null:
 		add_child(pause_scene.instantiate())
+	var item_scene := load(ITEM_MENU_SCENE) as PackedScene
+	if item_scene != null:
+		add_child(item_scene.instantiate())

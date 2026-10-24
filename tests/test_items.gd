@@ -1,16 +1,38 @@
 extends TestCase
 ## Sub-item API: registry, Player.use_item with a fixture item, refusal, missing scenes, cycling.
 
+const ALL_IDS: Array[StringName] = [
+	&"tether_moth",
+	&"pitch_pot",
+	&"cinder_wick",
+	&"tallow_sling",
+	&"reed_raft",
+	&"heft_mitts",
+	&"glow_jar",
+	&"lantern_chime",
+	&"skitter_boots",
+	&"reel_line",
+]
+
 
 func run() -> void:
 	await _registry()
 	await _use_item()
 	await _cycle_input()
+	await _cycle_order()
 
 
 func _registry() -> void:
 	check(ItemRegistry.items.has(&"tether_moth"), "tether_moth is registered")
 	check(ItemRegistry.items.has(&"pitch_pot"), "pitch_pot is registered")
+	check_eq(ItemRegistry.ids(), ALL_IDS, "all ten sub-items are registered, in registry order")
+	for id in ALL_IDS:
+		check_eq(
+			String(ItemRegistry.items[id]["scene"]),
+			"res://scenes/items/%s.tscn" % id,
+			"%s has its scene path" % id
+		)
+		check(ItemRegistry.display_name(id) != String(id), "%s has a display name" % id)
 	check_eq(ItemRegistry.get_scene(&"unknown_item"), null, "unknown ids give null")
 	ItemRegistry.register(&"ghost", "res://scenes/items/does_not_exist.tscn")
 	check_eq(ItemRegistry.get_scene(&"ghost"), null, "a missing scene gives null, no error")
@@ -94,3 +116,29 @@ func _cycle_input() -> void:
 	player.cycle_item()
 	check_eq(GameState.active_item, &"tether_moth", "Player.cycle_item() cycles too")
 	await dispose(arena)
+
+
+func _cycle_order() -> void:
+	# Registry order, not acquisition order: pitch pot is held first, then tether moth, cinder wick.
+	reset_state()
+	GameState.acquire_item(&"pitch_pot")
+	GameState.acquire_item(&"tether_moth")
+	GameState.acquire_item(&"cinder_wick")
+	check_eq(
+		GameState.acquired_item_ids(),
+		[&"tether_moth", &"pitch_pot", &"cinder_wick"],
+		"acquired items are listed in registry order"
+	)
+	GameState.cycle_item()
+	check_eq(
+		GameState.active_item, &"cinder_wick", "the quick switch goes to the next in registry order"
+	)
+	GameState.cycle_item()
+	check_eq(
+		GameState.active_item,
+		&"tether_moth",
+		"the quick switch wraps to the first in registry order"
+	)
+	GameState.cycle_item()
+	check_eq(GameState.active_item, &"pitch_pot", "the quick switch keeps going round")
+	reset_state()

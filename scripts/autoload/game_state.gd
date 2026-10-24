@@ -231,9 +231,21 @@ func set_active_item(item_id: StringName) -> void:
 	active_item_changed.emit(active_item)
 
 
-## Switches to the next acquired item (wraps). No-op with fewer than two items.
+## Acquired items in ItemRegistry order (then any unregistered ones, in acquisition order).
+func acquired_item_ids() -> Array:
+	var ids: Array = []
+	for id in ItemRegistry.ids():
+		if items.has(id):
+			ids.append(id)
+	for id in items.keys():
+		if not ids.has(id):
+			ids.append(id)
+	return ids
+
+
+## Switches to the next acquired item in registry order (wraps). No-op with fewer than two items.
 func cycle_item() -> void:
-	var ids: Array = items.keys()
+	var ids := acquired_item_ids()
 	if ids.size() < 2:
 		return
 	var idx: int = ids.find(active_item)

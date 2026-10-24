@@ -10,6 +10,7 @@ const HELP_ROWS := [
 	["Use item", "E / K / X"],
 	["Ward", "Shift / L / RB  (hold)"],
 	["Change item", "Q / I / Y"],
+	["Item menu", "Tab / Select"],
 	["Pause", "Esc / Start"],
 ]
 const FONT_SIZE := 36
@@ -58,7 +59,11 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed(&"pause"):
+	# While the item subscreen is open, its own handler closes it on the pause key.
+	if (
+		event.is_action_pressed(&"pause")
+		and get_tree().get_node_count_in_group(&"item_menu_open") == 0
+	):
 		toggle()
 		get_viewport().set_input_as_handled()
 
