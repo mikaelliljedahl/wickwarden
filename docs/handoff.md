@@ -10,7 +10,7 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 ## Status (update at every push)
 
 - Date: 2026-10-24
-- HEAD when this section was written: `e433d40` (the handoff commit is the next one, `Add the orchestrator handoff`)
+- HEAD when this section was written: `04c90ee` (F13). The lead session hit its usage limit here; a new orchestrator should start from this point.
 - Repo state: other agents write to the repo at the same time. Uncommitted files exist that are not ours (see section 6).
 
 | Part | State |
@@ -18,8 +18,8 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 | Step 1 (dev world) | Done. Historical. |
 | Step 2 (art pass) | Done in code. Owner has not approved it in play. |
 | Planning (world plan, WPs, decisions, graph, monster spec, art inventory, intro script) | Done. |
-| Wave 0 (foundation) | F0–F8, F10, F11 done. F9, F12, F13, F14 not started. |
-| Wave 1 (parts: P01–P15, T01–T08, M0–M5) | Not started. Gate (F0–F7 merged) is met at `e433d40`. Start with the WPs whose Depends are done. |
+| Wave 0 (foundation) | F0–F13 done. F14 (intro) not started; can start now. Run `make check` first to confirm F13 is green. |
+| Wave 1 (parts: P01–P15, T01–T08, M0–M5) | Not started. Gate (F0–F7 merged) is met. Start with the WPs whose Depends are done. |
 | Wave 2 (regions R1–R6, MB1–MB5, B01–B10) | Not started. |
 | Wave 3 (caves C01–C10, E1 ending) | Not started. |
 | Wave 4 (QA Q1–Q9) | Not started. |
@@ -42,12 +42,13 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 | F6 | Room kit: `tools/build_rooms.py`, `docs/room-kit.md` | `e433d40` (committed by another agent; 28 unit tests OK) | Done |
 | F7 | Player motion and modifier API | `9e394e4` | Done |
 | F8 | One-way ledge drops | `92ef136` | Done |
-| F9 | Shops | none | Not started. Can start now (F5, F6 done). |
+| F9 | Shops | `d512e39` | Done |
 | F10 | Item subscreen | `0325e58` | Done |
 | F11 | Minimap for 192 rooms | `8b7c0b0` | Done |
-| F12 | Save system | none | Not started. Can start now (F4, F5, F11 are done). |
-| F13 | Title screen and new-game flow | none | Not started (needs F12) |
-| F14 | Intro sequence | none | Not started (needs F13; D3 done) |
+| F12 | Save system | `e89353b` | Done |
+| F13 | Title screen and new-game flow | `04c90ee` | Done (committed by a pi agent; lead has not re-verified `make check`) |
+| F14 | Intro sequence | none | Not started. Can start now (F13, D3 done). |
+| Fix-ups | Cave mouth flags `dd9fd08`, shop checkpoint test `ca33a0c`, shop and cache lines in the room kit `5430704`, Makefile and area test `95f21e2` | see log | Done. A job for `GameState.from_dict` may still be open: check `git log`. |
 
 ### Art status
 
