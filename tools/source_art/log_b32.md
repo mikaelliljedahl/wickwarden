@@ -168,7 +168,7 @@ Image size: 1536x1024.
 - Job id: `b32_pillar_2_v3` (job name `ww-b32-pillar_2-v3`)
 - Date: 2026-10-24
 - Reference image: `tools/source_art/ow_structures.png`
-- Attempts: 1
+- Attempts: 2 (the first job, job_01a16f5267fa7b9aa5f76f76036f28ba, session 01a16f52-a088-7a61-bf24-1e3827325855, failed: the image tool rejected a null entry in the reference list, no image was made; the job copied here is the second, job_01a16f5b44447900966a3177cf15c88b)
 - Image size: 1536x1024 pixels (requested 1536x1024)
 - Generation tool: Codex job, native image generation (model shown as `gpt-6-luna`, effort medium)
 - Session ID: `01a16f5b-51eb-71d1-aa5a-d4cf64859e41`
@@ -176,7 +176,7 @@ Image size: 1536x1024.
 - Source path copied from: `/home/mikael/.codex/generated_images/01a16f5b-51eb-71d1-aa5a-d4cf64859e41/exec-232725f2-6ed4-4159-a72f-6ec06c707cb5.png`
 - SHA-256: `4511b2bb2169eaabac0b264d2d28a83e60090c7fd32834fa5a9d9c6f58216212`
 - Verdict: ok. wax drips and a wick on top, no flame; uncropped. The first attempt (job_01a16f5267fa7b9aa5f76f76036f28ba, session 01a16f52-a088-7a61-bf24-1e3827325855) failed: a null entry in the reference list, no image; resubmitted as r2
-- Rejected attempts: none.
+- Rejected attempts: first job, no image (see attempts).
 
 Exact prompt used:
 
@@ -224,7 +224,7 @@ Image size: 1536x1024.
 - Job id: `b32_pillar_3_v2` (job name `ww-b32-pillar_3-v2`)
 - Date: 2026-10-24
 - Reference image: `tools/source_art/ow_structures.png`
-- Attempts: 1
+- Attempts: 2 (the first job, job_01a16f5b5f3273af81b1a4ba6fc68874, session 01a16f5b-6778-7dc2-acb3-0d8b38272f9b, failed with a null entry in the reference list and made no image; the job copied here is the second, job_01a16f645ca57e279f25a11931b0f34a)
 - Image size: 1536x1024 pixels (requested 1536x1024)
 - Generation tool: Codex job, native image generation (model shown as `gpt-6-luna`, effort medium)
 - Session ID: `01a16f64-61d0-7042-8454-4512e52f5e7d`
@@ -232,7 +232,7 @@ Image size: 1536x1024.
 - Source path copied from: `/home/mikael/.codex/generated_images/01a16f64-61d0-7042-8454-4512e52f5e7d/exec-5a7bf252-d3c9-4fb1-8e55-c8da71a3b080.png`
 - SHA-256: `660dd057cdb9d31da6129217f4b2353357609fd6e80b6993437adfc68dd6d272`
 - Verdict: ok. roots wrapped round the stone block; resubmitted after the first attempt (job_01a16f5b5f3273af81b1a4ba6fc68874, session 01a16f5b-6778-7dc2-acb3-0d8b38272f9b) failed on a null reference entry, no image
-- Rejected attempts: none.
+- Rejected attempts: first job, no image (see attempts).
 
 Exact prompt used:
 

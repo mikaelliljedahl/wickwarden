@@ -84,7 +84,7 @@ Image size: 1536x1024.
 - Job id: `b34_anvil_v3` (job name `ww-b34-anvil-v3`)
 - Date: 2026-10-24
 - Reference image: `tools/source_art/ow_props.png`
-- Attempts: 1
+- Attempts: 2 (the first job, job_01a16f6ad8c2786d858b070902070bfd, session 01a16f6a-de58-7791-8eaa-f34b73c3909a, used the prompt text test instead of the entry and made no image; the job copied here is job_01a16f73cb67781f9c84c9742ad2476e)
 - Image size: 1536x1024 pixels (requested 1536x1024)
 - Generation tool: Codex job, native image generation (model shown as `gpt-6-luna`, effort medium)
 - Session ID: `01a16f74-b248-7f70-a5a9-328782ac9b3f`
@@ -92,7 +92,7 @@ Image size: 1536x1024.
 - Source path copied from: `/home/mikael/.codex/generated_images/01a16f74-b248-7f70-a5a9-328782ac9b3f/exec-8384f860-d745-49c9-9bf1-a6e72f761c30.png`
 - SHA-256: `ba4a493dc4b50f882ab40af342559466614c4f191e7f6747d60a7e3bc6551bfd`
 - Verdict: ok. two poses (anvil on a block, slag pour set); clean. The first attempt (job_01a16f6ad8c2786d858b070902070bfd, session 01a16f6a-de58-7791-8eaa-f34b73c3909a) failed: the job used the prompt text test instead of the entry; no image; resubmitted as r2
-- Rejected attempts: none.
+- Rejected attempts: first job, no image (see attempts).
 
 Exact prompt used:
 
