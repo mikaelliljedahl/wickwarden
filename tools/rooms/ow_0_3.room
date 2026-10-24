@@ -1,0 +1,20 @@
+; Cattail Corner (ow_0_3): a damp field of cattail stands. Exits E to Reed Gate and S to Mudflat.
+; The graph gives this room no gates and no pickups.
+room ow_0_3
+terrain Cattail Corner: cattails
+floor_color 0.18 0.24 0.17
+grid
+####################
+#..e.....e...ee....#
+#.ee.......e....b..#
+#...b.....e.....e..#
+#..e................
+#.....e...ee........
+#....b.....e.......#
+#.e........b..ee...#
+#...ee......e......#
+#########..#########
+enemy duskmoth 4,2
+enemy duskmoth 16,7
+enemy tallow_blob 14,3
+spawn Default 4,5

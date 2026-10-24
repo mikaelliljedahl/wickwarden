@@ -1,0 +1,22 @@
+; Reed Gate (ow_1_3): a reed wall closes the north gap (cut with the hook, the Ford Road side).
+; Boardwalk from the west to the south. The fen leech lives in shallows (zone not in the compiler yet).
+room ow_1_3
+terrain Reed Gate: reed wall, boardwalk start
+floor_color 0.2 0.22 0.16
+grid
+#########..#########
+#...ee.........ee..#
+#..e..........e....#
+#....e...........e.#
+...................#
+.......e......e....#
+#..........wwww....#
+#...........wwwe...#
+#..e.......ww......#
+#########..#########
+enemy spitcap 6,2
+enemy spitcap 15,3
+enemy fen_leech 8,7
+spawn Default 4,4
+opener cut_screen 9,0 look=rush_wall
+opener cut_screen 10,0 look=rush_wall

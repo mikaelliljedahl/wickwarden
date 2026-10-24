@@ -1,0 +1,20 @@
+; Whispering Shallows (ow_5_3): walkable shallows around two deep pools. The four links are raft links.
+; The item gates of the links (reed_raft) have no compiler line yet.
+room ow_5_3
+terrain Whispering Shallows: shallows (lake)
+floor_color 0.14 0.22 0.22
+grid
+#########..#########
+#..e.........e.....#
+#...........e......#
+#....wwww..........#
+.....wwww...........
+...........wwww.....
+#..........wwww....#
+#..e.......e.......#
+#...........e......#
+#########..#########
+enemy fen_leech 4,7
+enemy duskmoth 15,2
+enemy duskmoth 8,8
+spawn Default 10,5

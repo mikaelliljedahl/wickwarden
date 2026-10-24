@@ -1,0 +1,19 @@
+; Reed Shore North (ow_4_3): shore and reeds. The Drop Ledge lands here (the spawn is the landing).
+; E is the raft link to Whispering Shallows; S walks to Stranded Boat.
+room ow_4_3
+terrain Reed Shore North: shore, reeds
+floor_color 0.16 0.22 0.2
+grid
+####################
+#.e.....e.......e..#
+#...e........ee....#
+#..............e...#
+#..........e........
+#....e..............
+#..........ewwww...#
+#..........wwwwwe..#
+#...........wwww...#
+#########..#########
+enemy duskmoth 4,3
+enemy duskmoth 12,4
+spawn Default 9,2
