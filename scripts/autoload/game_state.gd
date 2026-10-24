@@ -16,12 +16,21 @@ signal room_visited(room_id: StringName)
 signal flag_changed(flag: StringName, value: bool)
 signal big_key_acquired(cave: StringName)
 signal fragment_acquired(cave: StringName)
+signal slugs_changed(value: int)
 
 const START_HEALTH := 6
 const MAX_HEALTH_CAP := 40  # 20 hearts
 const PITCH_POT_MAX := 10
+## Each pot bag (flags pot_bag_1 and pot_bag_2) raises the pitch pot limit by this much: 10, 14, 18.
+const POT_BAG_STEP := 4
+const POT_BAG_FLAGS: Array[StringName] = [&"pot_bag_1", &"pot_bag_2"]
+## Wallet cap in brass. Prices are set in playtests.
+const WALLET_CAP := 999
+## Tallow sling ammo (decision 9): max 30; the first pickup of the sling gives 12 (ITEM_START_SLUGS).
+const SLUG_MAX := 30
 ## Ammo granted when an item is first acquired. Plan section 4: pitch pots start at 0.
 const ITEM_START_AMMO := {&"pitch_pot": 0}
+const ITEM_START_SLUGS := {&"tallow_sling": 12}
 ## The key scopes: the overworld, then the ten caves.
 const DEFAULT_SCOPE := &"ow"
 const KEY_SCOPES: Array[StringName] = [
@@ -40,6 +49,7 @@ var keys: int:
 	get:
 		return keys_in(current_scope())
 var pitch_pots: int = 0
+var slugs: int = 0  # tallow sling ammo, 0 to slug_max()
 var items: Dictionary = {}  # item id -> true, in acquisition order
 var active_item: StringName = &""
 var visited_rooms: Dictionary = {}  # room id -> true
@@ -53,6 +63,7 @@ func reset() -> void:
 	currency = 0
 	key_counts = {}
 	pitch_pots = 0
+	slugs = 0
 	items = {}
 	active_item = &""
 	visited_rooms = {}
@@ -62,6 +73,7 @@ func reset() -> void:
 	currency_changed.emit(currency)
 	keys_changed.emit(keys)
 	pitch_pots_changed.emit(pitch_pots)
+	slugs_changed.emit(slugs)
 	active_item_changed.emit(active_item)
 
 
@@ -91,9 +103,19 @@ func add_max_heart(hearts: int = 1) -> void:
 	health_changed.emit(health, max_health)
 
 
+## Adds brass, capped at WALLET_CAP.
 func add_currency(amount: int) -> void:
-	currency = maxi(0, currency + amount)
+	currency = clampi(currency + amount, 0, WALLET_CAP)
 	currency_changed.emit(currency)
+
+
+## Spends `amount` brass. Returns false, and changes nothing, if the wallet holds less.
+func spend_currency(amount: int) -> bool:
+	if amount < 0 or currency < amount:
+		return false
+	currency -= amount
+	currency_changed.emit(currency)
+	return true
 
 
 ## The scope of the room the player is in: "ow" or "cN". "ow" when no room is known.
@@ -132,8 +154,27 @@ func _resolve_scope(scope: StringName) -> StringName:
 	return scope if scope != &"" else current_scope()
 
 
+## The pitch pot limit: PITCH_POT_MAX plus POT_BAG_STEP per pot bag held (10, 14 or 18).
+func pot_max() -> int:
+	var bags := 0
+	for flag in POT_BAG_FLAGS:
+		if has_flag(flag):
+			bags += 1
+	return PITCH_POT_MAX + bags * POT_BAG_STEP
+
+
+## Records the next pot bag (pot_bag_1, then pot_bag_2). False when both are held.
+func add_pot_bag() -> bool:
+	for flag in POT_BAG_FLAGS:
+		if not has_flag(flag):
+			set_flag(flag)
+			pitch_pots_changed.emit(pitch_pots)
+			return true
+	return false
+
+
 func add_pitch_pots(amount: int) -> void:
-	pitch_pots = clampi(pitch_pots + amount, 0, PITCH_POT_MAX)
+	pitch_pots = clampi(pitch_pots + amount, 0, pot_max())
 	pitch_pots_changed.emit(pitch_pots)
 
 
@@ -143,6 +184,25 @@ func spend_pitch_pot() -> bool:
 		return false
 	pitch_pots -= 1
 	pitch_pots_changed.emit(pitch_pots)
+	return true
+
+
+func slug_max() -> int:
+	return SLUG_MAX
+
+
+## Adds sling slugs, capped at slug_max(). Negative amounts remove slugs, never below 0.
+func add_slugs(amount: int) -> void:
+	slugs = clampi(slugs + amount, 0, slug_max())
+	slugs_changed.emit(slugs)
+
+
+## Spends one slug. Returns false (and changes nothing) if there is none.
+func spend_slug() -> bool:
+	if slugs <= 0:
+		return false
+	slugs -= 1
+	slugs_changed.emit(slugs)
 	return true
 
 
@@ -157,6 +217,8 @@ func acquire_item(item_id: StringName) -> void:
 	items[item_id] = true
 	if ITEM_START_AMMO.has(item_id):
 		add_pitch_pots(int(ITEM_START_AMMO[item_id]))
+	if ITEM_START_SLUGS.has(item_id):
+		add_slugs(int(ITEM_START_SLUGS[item_id]))
 	item_acquired.emit(item_id)
 	if active_item == &"":
 		set_active_item(item_id)

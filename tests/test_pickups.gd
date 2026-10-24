@@ -9,6 +9,8 @@ func run() -> void:
 	await _persistence_and_items()
 	await _scoped_keys_big_keys_and_fragments()
 	await _requires_flag()
+	await _pot_bag_and_slug_bundle()
+	await _slug_drop_gating()
 
 
 func _effects() -> void:
@@ -208,3 +210,48 @@ func _requires_flag() -> void:
 	await frames(3)
 	check_eq(GameState.currency, 2, "a pickup whose flag is already set is active at once")
 	await dispose(arena)
+
+
+func _pot_bag_and_slug_bundle() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(300, 300))
+	await frames(2)
+	var bag_scene := load("res://scenes/pickups/pot_bag.tscn") as PackedScene
+	var slug_scene := load("res://scenes/pickups/slug_bundle.tscn") as PackedScene
+	check(bag_scene != null and slug_scene != null, "the pot bag and slug bundle scenes load")
+	var bag := bag_scene.instantiate() as PickupBase
+	arena.add_child(bag)
+	bag.global_position = Vector2(300, 300)
+	await frames(3)
+	check(GameState.has_flag(&"pot_bag_1"), "a pot bag sets the first bag flag")
+	check_eq(GameState.pot_max(), 14, "and raises the pitch pot limit to 14")
+	var bag_two := PickupBase.spawn(&"pot_bag", arena, Vector2(300, 300), false)
+	await frames(3)
+	check(GameState.has_flag(&"pot_bag_2"), "a second pot bag sets the second flag")
+	check_eq(GameState.pot_max(), 18, "and the limit becomes 18")
+	check(not is_instance_valid(bag_two), "the second pot bag is collected and freed")
+	var slug := slug_scene.instantiate() as PickupBase
+	arena.add_child(slug)
+	slug.global_position = Vector2(300, 300)
+	await frames(3)
+	check_eq(GameState.slugs, 6, "a slug bundle gives 6 slugs")
+	check(not is_instance_valid(slug), "and the player collects it")
+	check(player.collector != null, "the player has a collector")
+	await dispose(arena)
+
+
+func _slug_drop_gating() -> void:
+	check_eq(DropTable.pick(0.75, true, false), &"", "no slug bundle before the sling is found")
+	check_eq(DropTable.pick(0.749, true, true), &"pitch_pot_bundle", "the pot bundle slice is unchanged")
+	check_eq(DropTable.pick(0.75, true, true), &"slug_bundle", "a slug bundle drops at 75 % once the sling is found")
+	check_eq(DropTable.pick(0.829, true, true), &"slug_bundle", "the slug bundle slice is 8 %")
+	check_eq(DropTable.pick(0.83, true, true), &"", "nothing from 83 % up")
+	var counts := {&"ember": 0, &"brass_bit": 0, &"brass_coin": 0, &"pitch_pot_bundle": 0, &"slug_bundle": 0, &"": 0}
+	for i in range(1000):
+		counts[DropTable.pick(float(i) / 1000.0, true, true)] += 1
+	check_eq(counts[&"slug_bundle"], 80, "8 % slug bundle once the sling is found")
+	check_eq(counts[&""], 170, "17 % nothing")
+	GameState.reset()
+	GameState.acquire_item(&"tallow_sling")
+	check_eq(DropTable.roll(0.8), &"slug_bundle", "roll() reads the sling from GameState")

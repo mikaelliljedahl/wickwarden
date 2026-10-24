@@ -9,6 +9,9 @@ func run() -> void:
 	_flags_and_rooms()
 	_scoped_keys()
 	_big_keys_and_fragments()
+	_wallet()
+	_pot_bags()
+	_slugs()
 	_input_map()
 
 
@@ -117,6 +120,64 @@ func _big_keys_and_fragments() -> void:
 	GameState.reset()
 	check_eq(GameState.fragment_count(), 0, "reset clears the fragments")
 	check(not GameState.has_big_key(&"c2"), "and the big keys")
+
+
+func _wallet() -> void:
+	reset_state()
+	GameState.add_currency(5000)
+	check_eq(GameState.currency, GameState.WALLET_CAP, "the wallet is capped at 999 brass")
+	check_eq(GameState.WALLET_CAP, 999, "the cap is 999")
+	check(GameState.spend_currency(999), "a purchase of the whole wallet is paid")
+	check_eq(GameState.currency, 0, "and the wallet is empty")
+	check(not GameState.spend_currency(1), "a purchase above the wallet is refused")
+	GameState.add_currency(7)
+	check(not GameState.spend_currency(8), "a price above the wallet is refused")
+	check_eq(GameState.currency, 7, "and nothing is spent")
+	check(not GameState.spend_currency(-1), "a negative price is refused")
+	check(GameState.spend_currency(7), "a price within the wallet is paid")
+	check_eq(GameState.currency, 0, "the wallet is empty again")
+
+
+func _pot_bags() -> void:
+	reset_state()
+	check_eq(GameState.pot_max(), 10, "the pitch pot limit starts at 10")
+	check(GameState.add_pot_bag(), "the first pot bag is taken")
+	check(GameState.has_flag(&"pot_bag_1"), "as flag pot_bag_1")
+	check_eq(GameState.pot_max(), 14, "the first bag raises the limit to 14")
+	GameState.add_pitch_pots(25)
+	check_eq(GameState.pitch_pots, 14, "pitch pots are capped at 14")
+	check(GameState.add_pot_bag(), "the second pot bag is taken")
+	check(GameState.has_flag(&"pot_bag_2"), "as flag pot_bag_2")
+	check_eq(GameState.pot_max(), 18, "the second bag raises the limit to 18")
+	check(not GameState.add_pot_bag(), "a third pot bag is refused")
+	check_eq(GameState.pot_max(), 18, "and the limit stays at 18")
+	GameState.add_pitch_pots(25)
+	check_eq(GameState.pitch_pots, 18, "pitch pots are capped at 18")
+	GameState.reset()
+	check_eq(GameState.pot_max(), 10, "reset takes the bags back")
+
+
+func _slugs() -> void:
+	reset_state()
+	check_eq(GameState.slugs, 0, "no slugs before the sling is found")
+	check(not GameState.spend_slug(), "no slug to spend")
+	GameState.acquire_item(&"tallow_sling")
+	check_eq(GameState.slugs, 12, "the first pickup of the sling gives 12 slugs")
+	GameState.acquire_item(&"tallow_sling")
+	check_eq(GameState.slugs, 12, "a second pickup of the sling gives no more")
+	check_eq(GameState.slug_max(), 30, "the slug maximum is 30")
+	GameState.add_slugs(6)
+	check_eq(GameState.slugs, 18, "a slug bundle adds its 6")
+	GameState.add_slugs(50)
+	check_eq(GameState.slugs, 30, "slugs are capped at 30")
+	check(GameState.spend_slug(), "a slug is spent")
+	check_eq(GameState.slugs, 29, "the count drops by one")
+	GameState.add_slugs(-100)
+	check_eq(GameState.slugs, 0, "slugs never go below 0")
+	check(not GameState.spend_slug(), "and an empty sling spends nothing")
+	GameState.add_slugs(3)
+	GameState.reset()
+	check_eq(GameState.slugs, 0, "reset clears the slugs")
 
 
 func _input_map() -> void:

@@ -2,7 +2,8 @@ class_name PickupBase
 extends Area2D
 ## A pickup. One script for every kind in plan section 5; `kind` selects look and effect.
 ##
-## Kinds: ember, brass_bit, brass_coin, pitch_pot_bundle, key, wick_core, item, big_key, fragment.
+## Kinds: ember, brass_bit, brass_coin, pitch_pot_bundle, key, wick_core, item, big_key, fragment,
+## pot_bag (raises the pitch pot limit by 4, once per bag) and slug_bundle (+6 sling slugs).
 ## `scope` is the key scope of a `key` ("ow" or "cN") and the cave of a `big_key` or `fragment`.
 ## `requires_flag` (placed pickups): the pickup is invisible and inactive until that flag is set.
 ##
@@ -26,7 +27,7 @@ const PICKUP_RADIUS := 36.0
 const ITEM_FOUND_AMMO := {&"pitch_pot": 6}
 const KINDS: Array[StringName] = [
 	&"ember", &"brass_bit", &"brass_coin", &"pitch_pot_bundle", &"key", &"wick_core", &"item",
-	&"big_key", &"fragment"
+	&"big_key", &"fragment", &"pot_bag", &"slug_bundle"
 ]
 
 @export var kind: StringName = &"brass_bit"
@@ -103,6 +104,14 @@ static func _register_kinds() -> void:
 		Placeholder.register_kind(
 			&"fragment", {"shape": "diamond", "color": Color(0.7, 0.55, 1.0), "radius": 16.0}
 		)
+	if not Placeholder.has_kind(&"pot_bag"):
+		Placeholder.register_kind(
+			&"pot_bag", {"shape": "rect", "color": Color(0.55, 0.4, 0.22), "size": Vector2(34, 30)}
+		)
+	if not Placeholder.has_kind(&"slug_bundle"):
+		Placeholder.register_kind(
+			&"slug_bundle", {"shape": "diamond", "color": Color(0.85, 0.78, 0.55), "radius": 12.0}
+		)
 
 
 ## Invisible and inactive while `requires_flag` is unset; shown and collectable once it is set.
@@ -132,6 +141,8 @@ func get_amount() -> int:
 			return 5
 		&"pitch_pot_bundle":
 			return 4
+		&"slug_bundle":
+			return 6
 		_:
 			return 1
 
@@ -192,6 +203,10 @@ func _apply_effect(_collector: Node) -> void:
 				push_error("PickupBase: fragment needs a cave scope 1-9, got %s" % scope)
 		&"wick_core":
 			GameState.add_max_heart(1)
+		&"pot_bag":
+			GameState.add_pot_bag()
+		&"slug_bundle":
+			GameState.add_slugs(get_amount())
 		&"item":
 			if item_id != &"":
 				var first_time := not GameState.has_item(item_id)

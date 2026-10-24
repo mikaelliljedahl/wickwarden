@@ -6,6 +6,7 @@ extends TestCase
 func run() -> void:
 	await _ammo_and_limit()
 	await _fuse_and_blast()
+	await _pot_bags_raise_the_ammo_limit()
 
 
 func _pots() -> Array:
@@ -65,3 +66,16 @@ func _fuse_and_blast() -> void:
 	check_eq(GameState.health, GameState.START_HEALTH - 2, "the blast does 2 to the player in range")
 	check_eq(_pots().size(), 0, "the pot is gone after the blast")
 	await dispose(arena)
+
+
+func _pot_bags_raise_the_ammo_limit() -> void:
+	reset_state()
+	GameState.acquire_item(&"pitch_pot")
+	GameState.add_pitch_pots(25)
+	check_eq(GameState.pitch_pots, 10, "the pot limit is 10 without bags")
+	GameState.add_pot_bag()
+	GameState.add_pitch_pots(25)
+	check_eq(GameState.pitch_pots, 14, "one pot bag makes the limit 14")
+	GameState.add_pot_bag()
+	GameState.add_pitch_pots(25)
+	check_eq(GameState.pitch_pots, 18, "two pot bags make the limit 18")
