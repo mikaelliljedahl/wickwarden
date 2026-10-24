@@ -733,6 +733,7 @@ GPT Image terrain textures below; they add no other image.
 | `cold_furnace_v1.png` | 1536×1024 | `01a16f69-9094-7cf0-ba30-ebc0fe8d4a8e` | `exec-80e104ad-b828-4d7c-b66d-e8456e16a60b` | `c29ae3139871a9b8` | `log_b33.md` |
 | `cold_furnace_v2.png` | 1536×1024 | `01a16f69-9249-7462-bf0a-4792b8f10aa1` | `exec-8e2ee80d-5bd8-4f7d-9acb-134b21ccc224` | `dea52ca0e5c23fdc` | `log_b33.md` |
 | `cold_furnace_v3.png` | 1536×1024 | `01a16f6a-6f84-7103-a2bc-e39c421f9bdc` | `exec-ad4aab74-2a9e-463f-bffb-b5337c67230e` | `61ab49f407ae83dd` | `log_b33.md` |
+| `icon_cinder_wick_v3.png` | 1254×1254 | `01a16f6e-0e28-7f92-b637-0ecc66fdfd16` | `exec-ebbaa6e6-39e0-4b09-bb4d-b8f28bea4835` | `d69903aa1e2b18f9` | `log_b17.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion

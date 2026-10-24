@@ -35,4 +35,13 @@ variant of one image uses the same design. Tamsin's design is not changed here.
 - Decoy crack (down): pale fracture lines across the silhouette in the first pose; the second pose breaks into dark shards that stay together.
 - Fade in (down): three steps from faint (pose 1) to half present (pose 2) to a solid figure (pose 3).
 
-## Batch 17 to 19 (filled in as each batch is done)
+## Batch 17: choirling and first icons
+
+- Choirling: a floating round singer of old pale wax, a wide round mouth ringed with pale lamp-glass teeth, a faint cold glow inside, pale ribbons trailing. Rows: hover 4, telegraph 2, sing 2. (The spitcap reference gave leafy bodies: weak, see PROGRESS_b.md.)
+- Cinder wick icon: braided black wick cord, brass cap, glowing orange coal tip with sparks, held diagonally.
+- Tallow sling icon: short forked dark-wood handle, two leather bands, a small leather pouch with a pale tallow slug.
+- Reed raft icon: a small flat raft of bundled dry reeds lashed with twine, a plain wooden punting pole across it.
+- Pitch pot icon: a squat round clay pot sealed with black pitch that drips, a rope binding, a short twisted fuse with a spark.
+- Tether moth icon: pale lavender and cream moth, amber wing edges, brass thread with a glowing tip (the art brief description).
+
+## Batch 18 to 19 (filled in as each batch is done)
