@@ -90,7 +90,7 @@ Counts in this plan:
 
 | Gate type | Overworld | Caves | Total |
 |---|---|---|---|
-| item | 34 | 28 | 62 |
+| item | 36 | 30 | 66 |
 | key | 2 | 20 | 22 |
 | bomb | 8 | 3 | 11 |
 | cut | 5 | 2 | 7 |
@@ -98,7 +98,9 @@ Counts in this plan:
 | boss | 1 | 10 | 11 |
 | oneway | 2 | 0 | 2 |
 | hidden | 4 | 3 | 7 |
-| **all** | 56 | 68 | 124 |
+| **all** | 58 | 70 | 128 |
+
+The item row includes the four ward puzzles (item gates that need `ward`, decision 8 of `docs/decisions.md`). The graph checker reports 128 gated edges (`python3 tools/check_world_graph.py --stats`).
 
 ### 1.4 The capability rule and the other hard rules
 
@@ -161,11 +163,11 @@ in the graph (`bigkey:cN`, `frag:cN`), but they are not tools.
 |---|---|---|---|---|---|---|
 | `hook` | Lamp Hook | sword | Swing 110 deg, reach 120 px, damage 2; lights braziers, cuts bushes. (Existing, dev plan section 4.) | start | cut 7, hidden 1, brazier 2 | existing |
 | `flare` | Charge Flare | sword beam | Hold 0.8 s, 360 deg sweep, reach 140 px, damage 4. (Existing.) | start | item 2 | existing |
-| `ward` | Ward | shield | Hold to block projectiles in the front 120 deg. (Existing.) No gate uses it; it is defence only. | start | - | existing |
+| `ward` | Ward | shield | Hold to block projectiles in the front 120 deg. (Existing.) Also opens four optional ward puzzles (decision 8). | start | item 4 | existing |
 | `tether_moth` | Tether Moth | boomerang | Flies 420 px, stuns enemies, carries pickups it touches back to Tamsin. | ow_0_1 (pedestal) | item 1 | none |
 | `pitch_pot` | Pitch Pot | bomb | Placed pot explodes after 1.6 s; opens cracked walls and brittle rocks. | ow_2_1#closet (locked door) | bomb 11 | none |
 | `cinder_wick` | Cinder Wick | candle | Lights a small flame one tile ahead that burns for 3 s; burns thorns and webs, lights far braziers. | C1 | item 5 | props only |
-| `tallow_sling` | Tallow Sling | bow | Fires a tallow slug in a straight line; hits eye switches and fliers from range. No ammo, one slug on screen. | C2 | item 6 | props only |
+| `tallow_sling` | Tallow Sling | bow | Fires a tallow slug in a straight line; hits eye switches and fliers from range. Limited ammo: 12 at the start, 30 at most; a slug bundle adds 6 (decision 9). Pot bags do not change it. One slug on screen. | C2 | item 6 | props only, plus an ammo count in `GameState` (F5) |
 | `reed_raft` | Reed Raft | raft | Used at a mooring post: Tamsin rides a raft over open water to the next mooring. | C3 | item 26 | NEW CORE |
 | `heft_mitts` | Heft Mitts | power glove | Lifts and throws small rocks and pots; pushes or lifts heavy stones that the hook cannot move. | C4 | item 6 | NEW CORE (small) |
 | `glow_jar` | Glow Jar | lens / candle | Throws a jar that glows with radius 520 px for 6 s; reveals hidden seams, ghost walls and sealed stairs. | C5 | hidden 6 | props only |
@@ -1305,28 +1307,30 @@ Each row is a gated edge of the graph. Capabilities in the last column are found
 
 ### 6.1 Counts per region and per cave
 
-| Area | Rooms | Tools | Wick cores | Small keys | Big keys | Fragments | Pot bags | Caches | Shops | Pot bundles | Enemies |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| Brackwater Ford | 8 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 20 |
-| Thornwood | 15 | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 34 |
-| Cinderflats | 14 | 0 | 1 | 0 | 0 | 0 | 1 | 2 | 1 | 0 | 34 |
-| Tallowfen and Mirrormere | 24 | 0 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 57 |
-| Gravelight Heights | 15 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 38 |
-| Hushmarch | 12 | 0 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 30 |
-| C1 The Wick Cellar | 8 | 1 | 1 | 2 | 1 | 1 | 0 | 1 | 0 | 0 | 17 |
-| C2 The Briar Hollow | 9 | 1 | 1 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 18 |
-| C3 The Drowned Wick Works | 9 | 1 | 2 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 18 |
-| C4 The Sleeping Foundry | 10 | 1 | 1 | 2 | 1 | 1 | 0 | 1 | 0 | 0 | 22 |
-| C5 The Mirrored Archive | 10 | 1 | 1 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 19 |
-| C6 The Choir Vault | 11 | 1 | 2 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 25 |
-| C7 The Hall of Nerve | 11 | 1 | 1 | 2 | 1 | 1 | 0 | 1 | 0 | 0 | 21 |
-| C8 The Counting House | 12 | 1 | 1 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 25 |
-| C9 Corrow's Undercroft | 10 | 0 | 1 | 2 | 1 | 1 | 0 | 2 | 0 | 0 | 20 |
-| C10 The Ninth Hollow | 14 | 0 | 0 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 38 |
-| **Total** | **192** | **10** | **17** | **22** | **10** | **9** | **2** | **12** | **6** | **1** | **436** |
+| Area | Rooms | Tools | Wick cores | Small keys | Big keys | Fragments | Pot bags | Caches | Shops | Pot bundles | Slug bundles | Enemies |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Brackwater Ford | 8 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 20 |
+| Thornwood | 15 | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 34 |
+| Cinderflats | 14 | 0 | 1 | 0 | 0 | 0 | 1 | 3 | 1 | 0 | 1 | 34 |
+| Tallowfen and Mirrormere | 24 | 0 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 57 |
+| Gravelight Heights | 15 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 1 | 38 |
+| Hushmarch | 12 | 0 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 1 | 30 |
+| C1 The Wick Cellar | 8 | 1 | 1 | 2 | 1 | 1 | 0 | 1 | 0 | 0 | 0 | 17 |
+| C2 The Briar Hollow | 9 | 1 | 1 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 18 |
+| C3 The Drowned Wick Works | 9 | 1 | 2 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 18 |
+| C4 The Sleeping Foundry | 10 | 1 | 1 | 2 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 22 |
+| C5 The Mirrored Archive | 10 | 1 | 1 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 19 |
+| C6 The Choir Vault | 11 | 1 | 2 | 2 | 1 | 1 | 0 | 1 | 0 | 0 | 0 | 25 |
+| C7 The Hall of Nerve | 11 | 1 | 1 | 2 | 1 | 1 | 0 | 1 | 0 | 0 | 0 | 21 |
+| C8 The Counting House | 12 | 1 | 1 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 25 |
+| C9 Corrow's Undercroft | 10 | 0 | 1 | 2 | 1 | 1 | 0 | 2 | 0 | 0 | 1 | 20 |
+| C10 The Ninth Hollow | 14 | 0 | 0 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | 38 |
+| **Total** | **192** | **10** | **17** | **22** | **10** | **9** | **2** | **16** | **6** | **1** | **9** | **436** |
 
 C1 shows two small keys because the overworld key (scope `ow`) lies in the C1 alcove; its own
 scope has one. Tools: Brackwater holds the moth and the pot; each of C1 to C8 holds one.
+
+Caches include the four ward pockets (Cinderflats, Gravelight, C6 and C10; decision 8 of `docs/decisions.md`). Slug bundles are the nine sling-ammo sources in the graph (decision 9): four in the overworld (the Thornwood cache and shops S3 to S5) and five in caves (C2, C4, C8, C9 and C10). Every sling gate has a slug source that is reachable without the sling in the same region or cave (rule R6b, checked by the graph checker). The graph has 33 pockets: 30 pocket scenes and the 3 sealed spots that stay in their rooms (decision 15).
 
 ### 6.2 Wick cores
 
@@ -1365,9 +1369,7 @@ alcove at `ow_3_2` (needs the moth).
 ### 6.4 Pitch pot upgrades
 
 Two pot bags (P1 at the Fallen Mast `ow_7_2`, P2 in the kiln hut `ow_10_1`) raise the pot limit.
-Proposal: the limit stays 10 (dev plan) until the first bag, 15 after it and 20 after the second.
-This changes the `PITCH_POT_MAX` constant and needs the user's approval (open question 4). The
-dev-world numbers are untouched until then.
+Each bag adds 4 to the limit (decision 4 of `docs/decisions.md`): the limit is 10 until the first bag, 14 after it and 18 after the second. `PITCH_POT_MAX` changes in F5 (`GameState.pot_max()`). Pot bags do not change the sling limit (section 2.1).
 
 ### 6.5 Shops
 
@@ -1408,35 +1410,75 @@ pocket table (section 3.7) and in the cave tables. Brass in caches in total: abo
 
 ## 7. Open questions
 
-### 7.1 For the user
+### 7.1 For the user (all resolved)
+
+Status: resolved on 2026-10-24 by the project owner. Sources: `docs/decisions.md` items 1 to 13 and section 1 of `docs/world-work-packages.md`. Decision 14 there (title screen and intro) is the work plan's own addition, not one of these questions.
 
 1. **Ten caves and nine lanterns.** The story has nine lanterns, the Ninth Hollow among them. The
    plan makes C1 to C8 lanterns, C9 a non-lantern cave (Corrow's Undercroft, the letters and
    murals) and C10 the Ninth Hollow. Do you want C9 as a workshop cave, or nine caves only?
+
+   **Resolved:** C9 is Corrow's workshop, a cave without a lantern (Corrow's Undercroft). C1 to C8 hold lanterns; C10 is the Ninth Hollow. (Decision 1.)
+
 2. **The Ninth Door.** It opens with all nine fragments (C9 gives "Corrow's Last Wick"). Nine or
    eight?
+
+   **Resolved:** Nine. The Ninth Door needs all nine lantern fragments. (Decision 2.)
+
 3. **Scoped keys.** The plan changes `GameState.keys` into one count per scope (overworld and one
    per cave) so that no key can be wasted. The alternative is one global pool with a stricter
    design rule (no two key doors reachable at once). Scoped keys are recommended.
+
+   **Resolved:** Scoped. Small keys belong to one cave each, so no key can be wasted. (Decision 3; F4.)
+
 4. **Pitch pot bags.** May the pot limit grow beyond 10 (to 15 and 20)? Otherwise the two bags
    become heart-free caches with brass.
+
+   **Resolved:** Yes. Each of the two pot bags adds 4 to the pitch pot limit: 10, then 14, then 18. (Decision 4; section 6.4.)
+
 5. **Tallow flask.** Full heal on purchase, or a held item (needs an inventory and a use button)?
+
+   **Resolved:** Full heal on purchase, with no inventory slot. (Decision 13; F9.)
+
 6. **Wallet and prices.** Is there a wallet cap? Are the prices of section 6.5 right?
+
+   **Resolved:** Yes, a wallet cap of 999 brass. Prices are set in playtests; section 6.5 keeps the starting values. (Decision 7; F5, F9.)
+
 7. **Ten sub-items and one `cycle_item` button.** Ten tools make cycling slow. A radial picker in
    the pause menu is proposed.
+
+   **Resolved:** A pause-style item subscreen instead of a radial picker: a grid of all items, move keys select, confirm equips. `cycle_item` stays as the quick switch. (Decision 6; F10.)
+
 8. **Saving.** A game with 192 rooms needs saves. Where and how (a lantern post, the pause menu)?
+
+   **Resolved:** Saves are required (F12, F13). One save slot: autosave on room entry, respawn at the last cave mouth or shop. (Decision 5; `docs/decisions.md` item 16.)
+
 9. **The ward.** No gate needs the ward. Add beam puzzles that need it, or keep it as defence?
+
+   **Resolved:** Both: a few ward puzzles, all off the main path (four optional caches with a ward plate in Cinderflats, Gravelight, C6 and C10), and the ward stays a defence tool. (Decision 8; G1.)
+
 10. **Sling ammo.** Unlimited (as planned) or wax shots from the wallet?
+
+   **Resolved:** Limited ammo: start 12, max 30, a slug bundle adds 6, and the drop chance is 8 %. Shops S3 to S5 sell a slug bundle. Pot bags do not change the limit. (Decision 9; F5, G1.)
+
 11. **Start in the corner.** The six dev rooms keep their ids, so the start is the north-west
     corner and the world grows east and south. Is that acceptable?
+
+   **Resolved:** Yes. The start stays in the north-west corner and the six dev rooms keep their ids. (Decision 10.)
+
 12. **One-way drops.** Two ledge drops need a small `World` change. Keep them, or replace them with
     plain gates?
+
+   **Resolved:** Keep both one-way ledge drops (a small World change, F8). (Decision 11.)
+
 13. **The final fight.** The Unlit and the ending choice of `story.md` follow each other. Is the
     boss fight before the choice right? Corrow's Echo is the miniboss of C10.
 
+   **Resolved:** Yes. The Unlit is fought first, then the ending choice (E1). (Decision 12.)
+
 ### 7.2 Objections and required updates to existing documents
 
-These documents are not edited here. A follow-up should decide them.
+**Status: resolved by `docs/world-work-packages.md`** (its section 2 maps each objection to the work package that resolves it). The documents below are not edited here.
 
 - `code-contract.md` section 11 and 15: `cave_1` is at grid (0,3) with `exits = []`; this plan moves
   it to (1,13) and gives it west and east gaps. `World.ROOM_PATHS` lists seven rooms and
