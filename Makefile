@@ -1,7 +1,7 @@
 GODOT ?= godot
 GDTOOLKIT = uv tool run --from gdtoolkit==4.5.0
 
-.PHONY: run dev import test lint format check art art-test audio
+.PHONY: run dev import test lint format check art art-test audio world-data world-check world-gen-test rooms rooms-check capture-all playthrough
 
 run:
 	$(GODOT) --path .
@@ -25,7 +25,7 @@ lint:
 format:
 	$(GDTOOLKIT) gdformat scripts tests
 
-check: import test lint
+check: import test lint world-check world-gen-test
 
 # Cuts tools/source_art/*.png into assets/sprites/ (see docs/asset-contract.md). Subset: make art SHEETS="tamsin_walk items"
 art:
@@ -37,3 +37,32 @@ art-test:
 # Synthesises every sound into assets/audio/ (stdlib Python + ffmpeg for the .ogg music). Subset: make audio ITEMS="swing cave"
 audio:
 	python3 tools/make_audio.py $(ITEMS)
+
+# Regenerates data/world_data.json from docs/world-graph.json (never edit the JSON by hand).
+world-data:
+	python3 tools/gen_world_data.py
+
+# Fails when data/world_data.json is not what the current graph gives (regenerates in memory).
+world-check:
+	python3 tools/gen_world_data.py --check
+
+# Unit tests of the world data generator (stdlib unittest).
+world-gen-test:
+	python3 -m unittest tools/test_gen_world_data.py
+
+# The next four targets need tools that later work packages add. Until then they fail with a message.
+rooms:
+	@echo "make rooms: not built yet (tools/build_rooms.py comes with WP F6)"
+	@exit 1
+
+rooms-check:
+	@echo "make rooms-check: not built yet (tools/build_rooms.py comes with WP F6)"
+	@exit 1
+
+capture-all:
+	@echo "make capture-all: not built yet (tools/capture_all.gd comes with WP Q4)"
+	@exit 1
+
+playthrough:
+	@echo "make playthrough: not built yet (tests/test_playthrough_*.gd and tools/playthrough_route.py come with WP Q3)"
+	@exit 1
