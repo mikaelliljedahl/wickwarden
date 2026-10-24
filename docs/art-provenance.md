@@ -777,6 +777,21 @@ GPT Image terrain textures below; they add no other image.
 | `bell_3_v1.png` | 1536×1024 | `01a16f74-7940-7192-ac40-a69910408c8f` | `exec-f88f83b1-293e-4206-a936-e7adccb25596` | `30e8ef9344a75e48` | `log_b39.md` |
 | `bell_3_v2.png` | 1536×1024 | `01a16f74-8387-7e53-abe4-47bcf6d9e1af` | `exec-74207bf9-0c6d-41c2-bdfa-864dfeb9a92a` | `c0f1a23625b44c2a` | `log_b39.md` |
 | `bell_3_v3.png` | 1536×1024 | `01a16f76-d96b-7db1-b219-ccad8199b719` | `exec-3421f318-2f34-49a0-b44a-66424e57d9b7` | `6ae9755e8a112040` | `log_b39.md` |
+| `anvil_v1.png` | 1536×1024 | `01a16f6a-784b-77e3-8e53-6969e3078eef` | `exec-18ce0822-2f9f-43e3-88fd-14e92f261404` | `f80bb3ce34cdae77` | `log_b34.md` |
+| `anvil_v2.png` | 1536×1024 | `01a16f6a-7dc2-7282-90e2-c275e800a7a4` | `exec-bef00bfa-fcbf-4e09-a966-057b9f4e9cb0` | `8b4f918a4a1fc9c3` | `log_b34.md` |
+| `anvil_v3.png` | 1536×1024 | `01a16f74-b248-7f70-a5a9-328782ac9b3f` | `exec-8384f860-d745-49c9-9bf1-a6e72f761c30` | `ba4a493dc4b50f88` | `log_b34.md` |
+| `slag_heap_1_v1.png` | 1536×1024 | `01a16f6a-e6a2-7e51-ab63-963d8d76dc52` | `exec-3728fad4-c9ce-4d73-b694-b5a4bc035b92` | `ebf8f9e7a6153755` | `log_b34.md` |
+| `slag_heap_1_v2.png` | 1536×1024 | `01a16f6b-3054-7622-b1dc-434401cfcc50` | `exec-76d0731e-c9c2-4c6c-a574-9c064b2c49e1` | `3f73f084ec056fde` | `log_b34.md` |
+| `slag_heap_1_v3.png` | 1536×1024 | `01a16f74-c03a-72b0-b6ff-b714e3052c46` | `exec-c26fdb2f-f356-4a07-b7b7-2df317e2d3a1` | `3bee30a28b18ef3e` | `log_b34.md` |
+| `slag_heap_2_v1.png` | 1536×1024 | `01a16f75-1c74-76a2-b24c-1dea0e9f208a` | `exec-10f8c049-1e11-4c5b-a2d5-08af1c9d4ae1` | `22f7b417d8ce63d4` | `log_b34.md` |
+| `slag_heap_2_v2.png` | 1536×1024 | `01a16f75-2006-7f01-8603-c4b1868c463c` | `exec-045a71c5-2a09-4081-a455-d410ad71872b` | `6cba69b47bef05f8` | `log_b34.md` |
+| `slag_heap_2_v3.png` | 1536×1024 | `01a16f75-2379-72b0-bb96-7c4c0c0baa6f` | `exec-ee70dca8-f1ef-4514-b9e5-0146bfd319bf` | `bd0b032fe88477b1` | `log_b34.md` |
+| `glass_shards_1_v1.png` | 1536×1024 | `01a16f75-2ab5-72b2-a2f5-3844eedb6208` | `exec-fdf93aba-70c2-4cbc-b88f-2be1d3835b8f` | `2271418b41168eba` | `log_b34.md` |
+| `glass_shards_1_v2.png` | 1536×1024 | `01a16f77-3189-76f1-a00b-57c077c4e5d7` | `exec-e00cb058-53d7-46b3-afcd-11a057f15d37` | `f8889b016acb5374` | `log_b34.md` |
+| `glass_shards_1_v3.png` | 1536×1024 | `01a16f77-66ad-7f21-8b4a-233890fabdda` | `exec-1c35ac82-35d0-4ddb-9e69-2d88a8a96f39` | `5ee5dfa7241ee296` | `log_b34.md` |
+| `glass_shards_2_v1.png` | 1536×1024 | `01a16f77-8950-7811-a590-014021992660` | `exec-32fae299-032d-4c54-99cf-39f1756c3045` | `87f31b9e433c5be9` | `log_b34.md` |
+| `glass_shards_2_v2.png` | 1536×1024 | `01a16f77-e2c2-7240-9361-f8d491446a6f` | `exec-0a86c707-00c8-4314-a493-bf62919abb48` | `53d2ccd829c300da` | `log_b34.md` |
+| `glass_shards_2_v3.png` | 1536×1024 | `01a16f79-5257-7a10-bec3-80da275bc828` | `exec-1a21c911-4967-4c6f-bf8a-f52de6ae1686` | `a99c90e5edd5ce94` | `log_b34.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
