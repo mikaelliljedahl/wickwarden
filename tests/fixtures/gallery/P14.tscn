@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/pocket_door.tscn" id="2"]
+
+[node name="GalleryP14" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+exits = Array[StringName]([])
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="PocketStall" parent="Props" instance=ExtResource("2")]
+position = Vector2(240, 400)
+variant = "stall"
+
+[node name="PocketCart" parent="Props" instance=ExtResource("2")]
+position = Vector2(432, 400)
+variant = "cart"
+
+[node name="PocketLighthouse" parent="Props" instance=ExtResource("2")]
+position = Vector2(624, 400)
+variant = "lighthouse"
+
+[node name="PocketMason" parent="Props" instance=ExtResource("2")]
+position = Vector2(816, 400)
+variant = "mason"
+
+[node name="PocketHut" parent="Props" instance=ExtResource("2")]
+position = Vector2(1008, 400)
+variant = "hut"
+
+[node name="PocketGrotto" parent="Props" instance=ExtResource("2")]
+position = Vector2(1200, 400)
+variant = "grotto"
+
+[node name="PocketStairs" parent="Props" instance=ExtResource("2")]
+position = Vector2(1392, 400)
+variant = "stairs"
+
+[node name="PocketPlain" parent="Props" instance=ExtResource("2")]
+position = Vector2(1584, 400)
+variant = "plain"
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(960, 700)
