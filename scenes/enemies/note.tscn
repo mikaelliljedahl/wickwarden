@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/enemy_projectile.gd" id="1"]
+
+[node name="Note" type="Area2D"]
+script = ExtResource("1")
+damage = 2
+speed = 220.0
+radius = 14.0
+blockable_by_ward = true
+lifetime = 3.0
+visual_kind = &"note"
+homing_turn_deg = 120.0
