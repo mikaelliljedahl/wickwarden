@@ -2,7 +2,7 @@
 
 Prompts: `tools/art_prompts/batch_40.md` (job id `b40_<output>` for each row). Backend codex, model `cheapest` (gpt-6-luna, effort medium), one image per job, 1536x1024. Each output is checked byte-identical (SHA-256) against its own session folder under `~/.codex/generated_images/<session>/`. No hash is duplicated in `tools/source_art/`. Verdicts are from viewing the montage; weak images are kept for the owner's cull. Run by producer a, 2026-10-24.
 
-Two runs: eleven files (`pump_valve_*`, `pipe_segment_*`, `mirror_reflective_1_v1` and `_v2`) came from an earlier run whose log was never written. Their hashes match their session folders and they were viewed in this run, so they are kept and logged here. Seven files (`mirror_reflective_1_v3`, `mirror_reflective_2_v1` to `_v3`, `mirror_cracked_v1` to `_v3`, `mirror_cracked_v2`) were generated in this run.
+Two runs: eleven files (`pump_valve_*`, `pipe_segment_*`, `mirror_reflective_1_v1` and `_v2`) came from an earlier run whose log was never written. Their hashes match their session folders and they were viewed in this run, so they are kept and logged here. Seven files (`mirror_reflective_1_v3`, `mirror_reflective_2_v1` to `_v3`, `mirror_cracked_v1` to `_v3`) were generated in this run.
 
 | Output | Job | Session | Generated file (output ID) | Size | SHA-256 (16) | Verdict |
 |---|---|---|---|---|---|---|
