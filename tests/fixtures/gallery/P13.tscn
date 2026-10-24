@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/reed_cluster.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/world/rush_wall.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/moss_wall.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/dry_vine_screen.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/world/bush_cluster.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/world/brittle_rocks.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/world/cracked_wall.tscn" id="8"]
+
+[node name="GalleryP13" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+exits = Array[StringName]([&"e"])
+
+[node name="Bushes" type="Node2D" parent="."]
+
+[node name="ReedCluster" parent="Bushes" instance=ExtResource("2")]
+position = Vector2(480, 300)
+
+[node name="RushWall" parent="Bushes" instance=ExtResource("3")]
+position = Vector2(720, 300)
+
+[node name="MossWall" parent="Bushes" instance=ExtResource("4")]
+position = Vector2(960, 300)
+
+[node name="DryVineScreen" parent="Bushes" instance=ExtResource("5")]
+position = Vector2(1200, 300)
+
+[node name="BushCluster" parent="Bushes" instance=ExtResource("6")]
+position = Vector2(1440, 300)
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="BrittleRocks" parent="Props" instance=ExtResource("7")]
+position = Vector2(720, 620)
+wall_id = &"gallery_rocks"
+
+[node name="CrackedWall" parent="Props" instance=ExtResource("8")]
+position = Vector2(1200, 620)
+wall_id = &"gallery_cracked"
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(480, 720)

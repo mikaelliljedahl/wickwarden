@@ -3,11 +3,15 @@ extends StaticBody2D
 ## itself whether a blast reaches it: the distance from the explosion centre to its nearest edge
 ## must be <= radius. Opening disables its collision, hides it and sets the persistent flag
 ## "cracked_<wall_id>" so the wall starts open on every later visit.
+##
+## `variant` is the look only: cracked_wall (default) or brittle_rocks (a rock look, the same blast).
 
 ## Id for the persistent flag. Empty = not persistent.
 @export var wall_id: StringName = &""
 ## Footprint in px (centred on the origin).
 @export var size: Vector2 = Vector2(96, 96)
+## Look only: cracked_wall or brittle_rocks. Its name is also the Placeholder kind of the look.
+@export var variant: StringName = &"cracked_wall"
 
 var is_open: bool = false
 var _shape: CollisionShape2D
@@ -16,6 +20,7 @@ var _shape: CollisionShape2D
 func _init() -> void:
 	collision_layer = Layers.WORLD
 	collision_mask = 0
+	_register_looks()
 
 
 func _ready() -> void:
@@ -26,7 +31,7 @@ func _ready() -> void:
 	_shape.name = "Shape"
 	_shape.shape = rect
 	add_child(_shape)
-	SpriteVisual.attach(self, &"cracked_wall", 0.0, size)
+	SpriteVisual.attach(self, variant, 0.0, size)
 	if wall_id != &"" and GameState.has_flag(flag_name()):
 		_open(false)
 
@@ -65,3 +70,14 @@ func _open(persist: bool) -> void:
 		Audio.play_sfx(&"wall_break", global_position)
 	if persist and wall_id != &"":
 		GameState.set_flag(flag_name())
+
+
+## Placeholder look of the brittle rocks (registered once; "cracked_wall" is in Placeholder.KINDS).
+static func _register_looks() -> void:
+	if Placeholder.has_kind(&"brittle_rocks"):
+		return
+	Placeholder.register_kind(
+		&"brittle_rocks",
+		{"shape": "rect", "color": Color(0.45, 0.45, 0.5), "size": Vector2(96, 96)},
+		true
+	)
