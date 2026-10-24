@@ -121,10 +121,23 @@ func _arrive() -> void:
 	finish()
 
 
+## True when the ray meets a wall. Grates (group `grate`) do not turn the moth back: the ray skips
+## them and looks for the next body, so a pickup behind a grate can still be fetched.
 func _hits_wall(from: Vector2, to: Vector2) -> bool:
 	var query := PhysicsRayQueryParameters2D.create(from, to, Layers.WORLD)
-	var hit: Dictionary = get_world_2d().direct_space_state.intersect_ray(query)
+	var space := get_world_2d().direct_space_state
+	var excluded: Array[RID] = []
+	var hit: Dictionary = space.intersect_ray(query)
+	while not hit.is_empty() and _is_grate(hit["collider"] as Object):
+		excluded.append(hit["rid"] as RID)
+		query.exclude = excluded
+		hit = space.intersect_ray(query)
 	return not hit.is_empty()
+
+
+static func _is_grate(body: Object) -> bool:
+	var node := body as Node
+	return node != null and node.is_in_group(&"grate")
 
 
 func _on_picked(pickup: PickupBase) -> void:

@@ -3,6 +3,7 @@ extends TestCase
 ## carries loot back to the player.
 
 const DUMMY_SCENE := "res://scenes/enemies/dummy_walker.tscn"
+const GRATE_SCENE := "res://scenes/world/grate.tscn"
 
 
 func run() -> void:
@@ -11,6 +12,8 @@ func run() -> void:
 	await _stuns_enemy()
 	await _carries_pickup()
 	await _turns_back_at_wall()
+	await _flies_over_grate()
+	await _wall_behind_grate_still_turns()
 
 
 func _moths() -> Array:
@@ -125,5 +128,60 @@ func _turns_back_at_wall() -> void:
 			break
 		max_out = maxf(max_out, moth.global_position.distance_to(start))
 	check(max_out > 120.0 and max_out < 150.0, "the moth turns back at the wall (150 px out)")
+	check(not is_instance_valid(moth) or moth.is_queued_for_deletion(), "it still returns")
+	await dispose(arena)
+
+
+func _make_grate(parent: Node, at: Vector2, size: Vector2) -> void:
+	var scene := load(GRATE_SCENE) as PackedScene
+	check(scene != null, "the grate scene loads")
+	var grate := scene.instantiate() as Node2D
+	grate.set(&"size", size)
+	parent.add_child(grate)
+	grate.global_position = at
+
+
+func _flies_over_grate() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(600, 500))
+	_make_grate(arena, Vector2(750, 500), Vector2(48, 192))
+	await frames(2)
+	GameState.acquire_item(&"tether_moth")
+	check(_throw(player, Vector2.RIGHT), "the moth is thrown at a grate")
+	var moth := _moths()[0] as Node2D
+	var start := player.global_position
+	var max_out := 0.0
+	for i in range(300):
+		await frames(1)
+		if not is_instance_valid(moth) or moth.is_queued_for_deletion():
+			break
+		max_out = maxf(max_out, moth.global_position.distance_to(start))
+	check_near(max_out, 420.0, 16.0, "the moth flies over a grate and does not turn back there")
+	check(not is_instance_valid(moth) or moth.is_queued_for_deletion(), "it still returns")
+	await dispose(arena)
+
+
+func _wall_behind_grate_still_turns() -> void:
+	reset_state()
+	var walls: Array[Rect2] = [Rect2(850, 380, 40, 240)]
+	var arena := make_arena(walls)
+	var player := make_player(arena, Vector2(600, 500))
+	_make_grate(arena, Vector2(750, 500), Vector2(48, 192))
+	await frames(2)
+	GameState.acquire_item(&"tether_moth")
+	check(_throw(player, Vector2.RIGHT), "the moth is thrown past a grate at a wall")
+	var moth := _moths()[0] as Node2D
+	var start := player.global_position
+	var max_out := 0.0
+	for i in range(300):
+		await frames(1)
+		if not is_instance_valid(moth) or moth.is_queued_for_deletion():
+			break
+		max_out = maxf(max_out, moth.global_position.distance_to(start))
+	check(
+		max_out > 230.0 and max_out < 255.0,
+		"a wall behind the grate still turns the moth (250 px out)"
+	)
 	check(not is_instance_valid(moth) or moth.is_queued_for_deletion(), "it still returns")
 	await dispose(arena)
