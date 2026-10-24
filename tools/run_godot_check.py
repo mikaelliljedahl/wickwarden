@@ -13,6 +13,9 @@ engine ERROR line, or leaked objects at shutdown.
 
 If the class cache (.godot/global_script_class_cache.cfg) is missing, one `--import` runs first.
 Add `--import` to force it. Never run two imports at once in the same checkout.
+
+A suite may declare `## timeout=<seconds>` as its first line to run longer than the default
+TIMEOUT (the world playthrough shards need it).
 """
 
 from __future__ import annotations
@@ -37,6 +40,7 @@ FAILURE = re.compile(
     re.I | re.M,
 )
 TIMEOUT = 90.0
+TIMEOUT_HEADER = re.compile(r"\A## timeout=(\d+)\s*$", re.M)
 
 
 def discover(filters: list[str]) -> list[Path]:
@@ -73,8 +77,16 @@ def ensure_import(godot: list[str], force: bool) -> bool:
     return done.returncode == 0
 
 
+def timeout_of(file: Path) -> float:
+    """The suite's own timeout from a `## timeout=<seconds>` first line, else TIMEOUT."""
+    first_line = file.read_text(encoding="utf-8").split("\n", 1)[0]
+    match = TIMEOUT_HEADER.match(first_line)
+    return float(match.group(1)) if match else TIMEOUT
+
+
 def run_one(file: Path, godot: list[str], scratch: Path) -> tuple[str, bool, float, str]:
     home = scratch / file.stem
+    limit = timeout_of(file)
     env = isolated_env(home, dict(os.environ, PYTHONUNBUFFERED="1"))
     command = [
         *godot,
@@ -90,7 +102,7 @@ def run_one(file: Path, godot: list[str], scratch: Path) -> tuple[str, bool, flo
     started = time.monotonic()
     try:
         done = subprocess.run(
-            command, cwd=ROOT, env=env, capture_output=True, text=True, timeout=TIMEOUT, check=False
+            command, cwd=ROOT, env=env, capture_output=True, text=True, timeout=limit, check=False
         )
         output = done.stdout + done.stderr
         ok = done.returncode == 0 and not FAILURE.search(output)
@@ -98,7 +110,7 @@ def run_one(file: Path, godot: list[str], scratch: Path) -> tuple[str, bool, flo
             output += f"\nexit={done.returncode}"
     except subprocess.TimeoutExpired as error:
         out = (error.stdout or b"") + (error.stderr or b"")
-        output = out.decode(errors="replace") + f"\nTIMEOUT after {TIMEOUT:.0f}s"
+        output = out.decode(errors="replace") + f"\nTIMEOUT after {limit:.0f}s"
         ok = False
     return file.stem, ok, time.monotonic() - started, f"$ {shlex.join(command)}\n{output}"
 
