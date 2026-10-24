@@ -13,7 +13,8 @@ python3 -m unittest tools/test_build_rooms.py     # the compiler's own tests
 `ROOM` is a room id (`ow_0_1`), a pocket id (`ow_7_2#bag`) or a file stem (`ow_7_2__bag`). Without it every
 `tools/rooms/*.room` is built. Errors print as `file:line: message` and fail the run; a room with an error is
 not written. The compiler reads `data/world_data.json` (run `make world-data` first). Room id, grid cell, exits,
-`dark`, scope and the monster counts come from the graph, never from the file.
+`dark`, scope and the monster counts come from the graph, never from the file. Shop prices come from
+`data/shop_prices.json`; the contents of a cache come from the graph text (see `cache` below).
 
 ## Files
 
@@ -89,6 +90,8 @@ such). A hollow must stand on a tile centre; the compiler checks it whatever the
 | `opener locked_door <pos> id=<id> [scope=<s>] [size=<w>,<h>]` | a `LockedDoor` (192 x 96 by default), `door_id` = id, scope = the room's scope unless given |
 | `door <target room> <spawn> <pos>` | a `RoomDoor` trigger (96 x 96) that warps to `target room` at marker `spawn` |
 | `spawn <name> <pos>` | a `Marker2D` in `Spawns`. `Default` is the spawn of the room. |
+| `shop <S1..S6> <stock> <pos> [id=<stock id>]` | a `ShopItem` (`scenes/world/shop_item.tscn`) with `shop`, `stock` and, when given, `stock_id`. The stock is `ember`, `pot_bundle`, `slug_bundle` or `tallow_flask`. A one-time stock (`pot_bundle`, `slug_bundle`) needs `id=` (its flag is `shop_<id>`). The price is not written: `ShopItem` reads it from `data/shop_prices.json`, and the compiler checks that the stock is priced for that shop. Use `@x,y` with y = 96r + 70 for a stock item on a pedestal. |
+| `cache <pos> id=<graph cache id>` | the contents of the graph's cache `<id>`, placed on its spot as pickups: brass as one `brass_coin` with `amount` = the brass, each ember as `ember.tscn`, a pot bundle as `pitch_pot_bundle.tscn`. Their ids are `<id>_brass`, `<id>_ember<n>` and `<id>_pots`. A slug bundle of a cache is not a piece: the graph gives it its own pickup, placed by a `pickup slug_bundle` line. |
 
 Pickup kinds and scenes:
 
@@ -99,7 +102,7 @@ Pickup kinds and scenes:
 | `small_key` | `scenes/pickups/key.tscn` | `slug_bundle` | `scenes/pickups/slug_bundle.tscn` |
 | `big_key` | `scenes/pickups/big_key.tscn` (F4) | `fragment` | `scenes/pickups/fragment.tscn` (F4) |
 
-The graph's `cache` and `shop` pickups have no kind here yet (no scene). A room with one does not compile.
+The graph's `cache` pickup is placed by the `cache` line and its shop stock by the `shop` lines, not by `pickup`.
 
 ## What the compiler checks
 
@@ -116,17 +119,30 @@ Every error fails the build of that room.
    enemy scene exists.
 7. Placed pickups equal the graph's pickups of the room and of its in-place pockets: same ids, same kinds, none
    missing, none extra. A pickup id is the graph id (`wick_core_ow_2_0`, `bigkey_c1`, `frag_c1`, a tool name).
-   A `bigkey:cN` or `frag:cN` item of the graph is the pickup `bigkey_cN` or `frag_cN`.
+   A `bigkey:cN` or `frag:cN` item of the graph is the pickup `bigkey_cN` or `frag_cN`. A `cache` line is the
+   graph's `cache` pickup of its id. Shop records are checked in item 12.
 8. A pickup of the room is reachable from the spawn and from every open exit. A pickup of an in-place pocket is
    sealed: unreachable with every opener closed, and reachable when exactly one opener is opened.
 9. Each plain door of the graph to a room that is not in-place has a `door` line to that partner; every `door`
    line targets a graph partner of this room; door spawn names are one of `Default`, `FromCave`, `FromOverworld`, `FromPocket`, `Inside`.
 10. Ids of openers and pickups are unique in the room. Opener footprints are not on an obstacle.
 11. Every scene and script the room refers to exists. The message names the missing file.
+12. Shops. A room with a `shop` line is the graph's shop of that id (`ow_1_2#shop` is `S1`), and a shop room has
+    at least one stock line. Each stock line is priced for its shop in `data/shop_prices.json`, has an `id=` when it
+    is one-time stock, and is reachable from the spawn. Each graph slug bundle of the shop (its `shop` field) is
+    placed by a `shop slug_bundle` line with the same id. A cache's text must be one the compiler knows: `N brass`,
+    `ember`, `N embers`, `pot bundle` or `slug bundle` (the last one is its own pickup line).
 
 Obstacles are the solid tiles of the grid and the footprints of `prop` entities, with the 4 px margin of
 `tests/area_base.gd`. Enemies and spawns may not stand on an obstacle; a pickup may (a pedestal item sits 22 px
 in front of its pedestal, so `@x,y` with y = 96r + 70).
+
+## Shop and cache templates
+
+`tests/fixtures/rooms/shop.room` is the shop template: pedestals, two stock items of shop S1 and the door. The
+tests compile it as `ow_1_2__shop.room`. The cache contents are read from `docs/world-graph.json` at build time:
+`data/world_data.json` does not carry the `contents` text yet (`tools/gen_world_data.py` drops it). A later
+change to the generator can move that read to `data/world_data.json`.
 
 ## Persistent ids
 

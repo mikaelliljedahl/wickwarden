@@ -3,12 +3,12 @@
 
 Usage:
     python3 tools/build_rooms.py [ROOM ...] [--check]
-        [--rooms-dir DIR] [--out-dir DIR] [--world FILE]
+        [--rooms-dir DIR] [--out-dir DIR] [--world FILE] [--prices FILE]
 
 ROOM is a room id (ow_0_1), a pocket id (ow_7_2#bag) or a file stem (ow_7_2__bag). Without ROOM every
 *.room file of the rooms directory is built. Each file is validated against data/world_data.json (the
-run-time copy of docs/world-graph.json). Every error is printed as file:line: message; a room with an
-error is not written. --check validates and compares the generated text with the committed scene
+run-time copy of docs/world-graph.json), docs/world-graph.json (cache contents) and data/shop_prices.json.
+Every error is printed as file:line: message; a room with an error is not written. --check validates and compares the generated text with the committed scene
 without writing (`make rooms-check`). Exit codes: 0 = ok, 1 = errors or a stale scene, 2 = unreadable
 world data. The format is documented in docs/room-kit.md. Stdlib only.
 """
@@ -25,6 +25,9 @@ ROOT = Path(__file__).resolve().parent.parent
 ROOMS_DIR = ROOT / "tools" / "rooms"
 OUT_DIR = ROOT / "scenes" / "world" / "rooms"
 WORLD_FILE = ROOT / "data" / "world_data.json"
+SHOP_PRICES_FILE = ROOT / "data" / "shop_prices.json"
+# The cache contents are free text in the graph; data/world_data.json (gen_world_data.py) does not carry them yet.
+GRAPH_FILE = ROOT / "docs" / "world-graph.json"
 
 TILE = 96
 COLS, ROWS = 20, 10
@@ -62,6 +65,19 @@ PICKUP_SCENES = {
     "fragment": "res://scenes/pickups/fragment.tscn",
 }
 PICKUP_NODE_NAME = {"item": "ItemPickup", "small_key": "Key", "pot_bundle": "PitchPotBundle"}
+SHOP_SCENE = "res://scenes/world/shop_item.tscn"  # ShopItem (F9): stock kind, one-time id and shop id
+SHOP_STOCK = ("ember", "pot_bundle", "slug_bundle", "tallow_flask")  # ShopItem.STOCK_KINDS
+SHOP_ONE_TIME = ("pot_bundle", "slug_bundle")  # ShopItem.ONE_TIME: these need id=, the flag shop_<id>
+SHOP_ID_RE = re.compile(r"^S\d+$")
+# The pieces a cache is made of, from the graph's `contents` text. Slug bundles are not pieces: the graph gives
+# each one its own pickup line (for example slug_bundle_ow_4_1), which the room places as `pickup slug_bundle`.
+CACHE_PART_RE = re.compile(r"^(?:(\d+) brass|(\d+) embers|ember|pot bundle|slug bundle)$")
+CACHE_PIECE_SCENES = {
+    "brass": "res://scenes/pickups/brass_coin.tscn",
+    "ember": "res://scenes/pickups/ember.tscn",
+    "pot_bundle": "res://scenes/pickups/pitch_pot_bundle.tscn",
+}
+CACHE_PIECE_NAME = {"brass": "BrassCoin", "ember": "Ember", "pot_bundle": "PitchPotBundle"}
 OPENER_SIZE = {"cracked_wall": (96, 96), "locked_door": (192, 96)}
 OPENER_OPTS = ("id", "size", "scope")
 PROP_SIZE = (96, 96)
@@ -78,6 +94,8 @@ ENTITY_OPTS = {
     "opener": OPENER_OPTS,
     "door": (),
     "spawn": (),
+    "shop": ("id",),
+    "cache": ("id",),
 }
 
 
@@ -177,9 +195,11 @@ def snake(name: str) -> str:
 
 
 class World:
-    """The records of data/world_data.json the compiler reads, normalised."""
+    """The records of data/world_data.json the compiler reads, normalised, and the shop prices."""
 
-    def __init__(self, data: dict) -> None:
+    def __init__(self, data: dict, shop_prices: dict | None = None, graph: dict | None = None) -> None:
+        self.prices: dict[str, dict[str, int]] = (shop_prices or {}).get("shops", {})
+        graph_contents = {p["id"]: p["contents"] for p in (graph or {}).get("pickups", []) if "contents" in p}
         self.rooms: dict[str, dict] = {}
         for room in data["rooms"]:
             self.rooms[room["id"]] = {
@@ -207,7 +227,15 @@ class World:
             }
         self.edges: list[dict] = data["edges"]
         self.pickups: list[dict] = [
-            {"id": p["id"], "kind": p["kind"], "node": p["node"], "after_boss": False} for p in data["pickups"]
+            {
+                "id": p["id"],
+                "kind": p["kind"],
+                "node": p["node"],
+                "after_boss": False,
+                "shop": p.get("shop"),
+                "contents": graph_contents.get(p["id"], p.get("contents", "")),
+            }
+            for p in data["pickups"]
         ]
         for key, record in data["items"].items():
             self.pickups.append(item_as_pickup(key, record))
@@ -221,6 +249,12 @@ class World:
         nodes.update(r["id"] for r in self.rooms.values() if r["pocket"] and r["in_place"] and r["host"] == room_id)
         return nodes
 
+    def price(self, shop: str, stock: str) -> int | None:
+        return self.prices.get(shop, {}).get(stock)
+
+    def pickup_record(self, ident: str) -> dict | None:
+        return next((p for p in self.pickups if p["id"] == ident), None)
+
     def door_edges(self, room_id: str) -> list[dict]:
         return [e for e in self.edges if e["link"] == "door" and room_id in (e["a"], e["b"])]
 
@@ -233,7 +267,14 @@ def item_as_pickup(key: str, record: dict) -> dict:
         ident, kind = "frag_" + key.split(":", 1)[1], "fragment"
     else:
         ident, kind = key, "item"
-    return {"id": ident, "kind": kind, "node": record["node"], "after_boss": bool(record.get("after_boss"))}
+    return {
+        "id": ident,
+        "kind": kind,
+        "node": record["node"],
+        "after_boss": bool(record.get("after_boss")),
+        "shop": None,
+        "contents": "",
+    }
 
 
 # ---- the .room source ------------------------------------------------------------------------
@@ -409,11 +450,12 @@ class Plan:
         self.enemies: list[tuple[tuple, Node, Entity]] = []
         self.spawns: list[tuple[str, tuple[int, int], Node]] = []
         self.openers: list[tuple[Entity, set[tuple[int, int]]]] = []
-        self.pickups: list[tuple[Entity, str, str]] = []  # (entity, persistent id, kind)
+        self.pickups: list[tuple[Entity, str, str]] = []  # (entity, persistent id, kind); a cache is kind cache
+        self.shops: list[tuple[Entity, str, str, str]] = []  # (entity, shop id, stock kind, stock id or "")
         self.doors: list[Entity] = []
 
 
-def build_plan(src: Source, errors: list[str]) -> Plan | None:
+def build_plan(src: Source, world: World, errors: list[str]) -> Plan | None:
     """Turns the grid and the entities into nodes. Syntax and per-entity errors are reported here."""
     plan = Plan()
     grid = src.grid
@@ -452,14 +494,14 @@ def build_plan(src: Source, errors: list[str]) -> Plan | None:
                 plan.singles.append(((row, col, -1), node))
     ok = True
     for seq, ent in enumerate(src.entities):
-        ok = dispatch(ent, seq, src, plan, errors) and ok
+        ok = dispatch(ent, seq, src, plan, world, errors) and ok
     if not ok:
         return None
     plan.singles.sort(key=lambda pair: pair[0])
     return plan
 
 
-def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, errors: list[str]) -> bool:
+def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, errors: list[str]) -> bool:
     where_ = where(src.path, ent.line)
     key = (ent.tile[1], ent.tile[0], seq)
     if ent.verb == "enemy":
@@ -520,7 +562,77 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, errors: list[str]) 
         plan.doors.append(ent)
         plan.singles.append((key, node))
         return True
+    if ent.verb == "shop":
+        return dispatch_shop(ent, key, src, plan, errors)
+    if ent.verb == "cache":
+        return dispatch_cache(ent, key, src, plan, world, errors)
     return dispatch_pickup(ent, key, src, plan, errors)
+
+
+def dispatch_shop(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
+    """`shop <S1..Sn> <stock kind> <pos> [id=<stock id>]`: a ShopItem. Its price is checked in check_shops."""
+    where_ = where(src.path, ent.line)
+    if len(ent.args) != 2 or not SHOP_ID_RE.match(ent.args[0]) or ent.args[1] not in SHOP_STOCK:
+        errors.append(f"{where_}: shop takes a shop id (S1..), a stock kind ({', '.join(SHOP_STOCK)}) and a position")
+        return False
+    shop_id, kind = ent.args
+    ident = ent.opts.get("id", "")
+    if ident and not IDENT_RE.match(ident):
+        errors.append(f"{where_}: shop id={ident} must be snake_case")
+        return False
+    node = Node("", "Props", None, Res("PackedScene", SHOP_SCENE))
+    node.props = [("position", vec2(*ent.pos)), ("shop", sname(shop_id)), ("stock", sname(kind))]
+    if ident:
+        node.props.append(("stock_id", sname(ident)))
+    node.base = "ShopItem"
+    plan.shops.append((ent, shop_id, kind, ident))
+    plan.singles.append((key, node))
+    return True
+
+
+def dispatch_cache(ent: Entity, key: tuple, src: Source, plan: Plan, world: World, errors: list[str]) -> bool:
+    """`cache <pos> id=<graph cache id>`: the contents come from the graph (brass, embers, a pot bundle)."""
+    where_ = where(src.path, ent.line)
+    ident = ent.opts.get("id", "")
+    if ent.args or not IDENT_RE.match(ident):
+        errors.append(f"{where_}: cache takes a position and id=<graph cache id>")
+        return False
+    plan.pickups.append((ent, ident, "cache"))
+    record = world.pickup_record(ident)
+    if record is None or record["kind"] != "cache":
+        return True  # check_pickups reports an id the graph does not have
+    pieces = cache_pieces(ident, record["contents"])
+    if pieces is None:
+        errors.append(f"{where_}: cache {ident} has contents {record['contents']!r}, which the compiler does not know")
+        return False
+    for kind, persistent, amount in pieces:
+        node = Node("", "Props", None, Res("PackedScene", CACHE_PIECE_SCENES[kind]))
+        node.props = [("position", vec2(*ent.pos)), ("persistent_id", sname(persistent))]
+        if kind == "brass":
+            node.props.append(("amount", str(amount)))
+        node.base = CACHE_PIECE_NAME[kind]
+        plan.singles.append((key, node))
+    return True
+
+
+def cache_pieces(ident: str, contents: str) -> list[tuple[str, str, int]] | None:
+    """(kind, persistent id, amount) of each piece of a cache, from its graph text; None if a part is unknown.
+    Pieces lie on the cache's spot and are collected together. A brass piece holds the whole amount."""
+    pieces: list[tuple[str, str, int]] = []
+    embers = 0
+    for part in (text.strip() for text in contents.split(",")):
+        match = CACHE_PART_RE.match(part)
+        if match is None:
+            return None
+        if match.group(1):
+            pieces.append(("brass", f"{ident}_brass", int(match.group(1))))
+        elif match.group(2) or part == "ember":
+            for _ in range(int(match.group(2) or 1)):
+                embers += 1
+                pieces.append(("ember", f"{ident}_ember{embers}", 0))
+        elif part == "pot bundle":
+            pieces.append(("pot_bundle", f"{ident}_pots", 0))
+    return pieces
 
 
 def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
@@ -644,6 +756,7 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
 
     check_enemies(src, rec, plan, errors)
     check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors)
+    check_shops(src, rec, world, plan, reach, errors)
     check_doors(src, rec, world, plan, errors)
     check_openers_and_ids(src, plan, errors)
 
@@ -664,7 +777,12 @@ def check_enemies(src: Source, rec: dict, plan: Plan, errors: list[str]) -> None
 
 def check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors) -> None:
     path = src.path
-    graph = {p["id"]: p for p in world.pickups if p["node"] in world.placed_nodes(rec["id"])}
+    # Shop records are checked by check_shops: their stock is placed by `shop` lines, not `pickup` lines.
+    graph = {
+        p["id"]: p
+        for p in world.pickups
+        if p["node"] in world.placed_nodes(rec["id"]) and not p["shop"]
+    }
     placed: dict[str, Entity] = {}
     for ent, ident, kind in plan.pickups:
         where_ = where(path, ent.line)
@@ -700,6 +818,36 @@ def check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors) 
             starts = [t for t in GAP_TILES[side] if t not in plan.static]
             if not reaches(flood(starts, plan.static | set().union(*(t for _, t in plan.openers))), tile):
                 errors.append(f"{where(path, ent.line)}: pickup {ident} is not reachable from exit {side}")
+
+
+def check_shops(
+    src: Source, rec: dict, world: World, plan: Plan, reach: set[tuple[int, int]], errors: list[str]
+) -> None:
+    """A shop room has the graph's shop record and one `shop` line per stock item; each line is priced in
+    data/shop_prices.json, reachable and off the obstacles. The graph's slug bundles of the shop are its stock."""
+    path = src.path
+    graph_shops = [p for p in world.pickups if p["kind"] == "shop" and p["node"] == rec["id"]]
+    stock = {p["id"]: p for p in world.pickups if p["node"] == rec["id"] and p["shop"] and p["kind"] != "shop"}
+    if plan.shops and not graph_shops:
+        errors.append(f"{where(path, plan.shops[0][0].line)}: {rec['id']} is not a shop of the graph")
+    for ent, shop_id, kind, ident in plan.shops:
+        where_ = where(path, ent.line)
+        if graph_shops and shop_id != graph_shops[0]["shop"]:
+            errors.append(f"{where_}: {rec['id']} is shop {graph_shops[0]['shop']} in the graph, not {shop_id}")
+        if world.price(shop_id, kind) is None:
+            errors.append(f"{where_}: no price for {kind} in shop {shop_id} (data/shop_prices.json)")
+        if kind in SHOP_ONE_TIME and not ident:
+            errors.append(f"{where_}: {kind} is one-time stock and needs id=<stock id>")
+        if not reaches(reach, ent.tile):
+            errors.append(f"{where_}: shop stock {kind} is not reachable from the spawn")
+    if graph_shops and not plan.shops:
+        errors.append(f"{where(path, 1)}: shop {graph_shops[0]['shop']} has no stock line")
+    placed = {ident: kind for _, _, kind, ident in plan.shops if ident}
+    for ident, record in stock.items():
+        if ident not in placed:
+            errors.append(f"{where(path, 1)}: graph stock {ident} ({record['kind']}) is not placed")
+        elif placed[ident] != record["kind"]:
+            errors.append(f"{where(path, 1)}: stock {ident} is {placed[ident]}, the graph says {record['kind']}")
 
 
 def closed_flood(plan: Plan, spawn_tile: tuple[int, int], opened: int | None) -> set[tuple[int, int]]:
@@ -742,6 +890,12 @@ def check_openers_and_ids(src: Source, plan: Plan, errors: list[str]) -> None:
     for ent, ident, _ in plan.pickups:
         if ident in seen:
             errors.append(f"{where(src.path, ent.line)}: id {ident} is used by a pickup and an opener")
+        seen.add(ident)
+    for ent, _, _, ident in plan.shops:
+        if not ident:
+            continue
+        if ident in seen:
+            errors.append(f"{where(src.path, ent.line)}: id {ident} is used twice in this room")
         seen.add(ident)
 
 
@@ -887,7 +1041,7 @@ def compile_room(path: Path, world: World) -> tuple[str | None, list[str]]:
         return None, errors
     src.scope = rec["scope"]
     ring_problems(src, rec, errors)
-    plan = build_plan(src, errors)
+    plan = build_plan(src, world, errors)
     if plan is None or errors:
         return None, errors
     check_room(src, rec, world, plan, errors)
@@ -929,11 +1083,16 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--rooms-dir", type=Path, default=ROOMS_DIR)
     parser.add_argument("--out-dir", type=Path, default=OUT_DIR)
     parser.add_argument("--world", type=Path, default=WORLD_FILE)
+    parser.add_argument("--prices", type=Path, default=SHOP_PRICES_FILE)
     args = parser.parse_args(argv)
     try:
-        world = World(json.loads(args.world.read_text(encoding="utf-8")))
+        world = World(
+            json.loads(args.world.read_text(encoding="utf-8")),
+            json.loads(args.prices.read_text(encoding="utf-8")),
+            json.loads(GRAPH_FILE.read_text(encoding="utf-8")),
+        )
     except (OSError, ValueError, KeyError) as exc:
-        print(f"build_rooms: cannot read {args.world}: {exc} (run make world-data)", file=sys.stderr)
+        print(f"build_rooms: cannot read the world data: {exc} (run make world-data)", file=sys.stderr)
         return 2
     files, errors = selected_files(args.rooms, args.rooms_dir)
     failed = bool(errors)

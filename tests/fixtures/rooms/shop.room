@@ -1,0 +1,22 @@
+; Fixture of tools/build_rooms.py: the shop template. The test compiles it as the pocket ow_1_2#shop (under the
+; file name ow_1_2__shop.room). Stock is shop S1 of the graph: an ember (8 brass) and a pot bundle (12 brass).
+; The stock sits 22 px south of its pedestal (y = 96r + 70), the convention of pickups on a pedestal.
+room ow_1_2#shop
+terrain Tilly's lamp stall: stone counter, lanterns
+grid
+####################
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+prop pedestal 5,3
+prop pedestal 14,3
+shop S1 ember @528,358
+shop S1 pot_bundle @1392,358 id=pot_s1
+door ow_1_2 FromPocket 9,8
+spawn Inside 9,6

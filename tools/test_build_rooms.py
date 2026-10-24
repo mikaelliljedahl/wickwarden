@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import contextlib
 import io
+import json
 import re
 import sys
 import tempfile
@@ -23,6 +24,7 @@ import build_rooms as br  # noqa: E402
 FIXTURES = br.ROOT / "tests" / "fixtures" / "rooms"
 FIXTURE_ROOM = FIXTURES / "ow_0_1.room"
 EXPECTED_SCENE = FIXTURES / "expected_ow_0_1.tscn"
+SHOP_FIXTURE = FIXTURES / "shop.room"
 
 
 def node_list(text: str) -> list[str]:
@@ -36,7 +38,9 @@ def node_list(text: str) -> list[str]:
 
 
 def real_world() -> br.World:
-    return br.World(__import__("json").loads(br.WORLD_FILE.read_text(encoding="utf-8")))
+    world = json.loads(br.WORLD_FILE.read_text(encoding="utf-8"))
+    prices = json.loads(br.SHOP_PRICES_FILE.read_text(encoding="utf-8"))
+    return br.World(world, prices, json.loads(br.GRAPH_FILE.read_text(encoding="utf-8")))
 
 
 def fixture_lines() -> list[str]:
@@ -61,14 +65,14 @@ def compile_text(text: str, world: br.World, name: str = "ow_0_1.room") -> tuple
 
 
 def world_of(rooms: list[dict], pockets: list[dict] | None = None, pickups: list[dict] | None = None,
-             edges: list[dict] | None = None, items: dict | None = None) -> br.World:
+             edges: list[dict] | None = None, items: dict | None = None, prices: dict | None = None) -> br.World:
     return br.World({
         "rooms": rooms,
         "pockets": pockets or [],
         "pickups": pickups or [],
         "edges": edges or [],
         "items": items or {},
-    })
+    }, prices)
 
 
 def room_record(room_id: str, exits: list[str], enemies: dict | None = None, grid=(5, 5)) -> dict:
@@ -271,6 +275,134 @@ class Command(unittest.TestCase):
     def test_unknown_room_name_is_reported(self) -> None:
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(br.main(["ow_9_9", "--rooms-dir", str(FIXTURES), "--out-dir", str(FIXTURES)]), 1)
+
+
+
+def pocket_text(entities: list[str], room: str = "ow_5_5#cache") -> str:
+    """A pocket source: a walled 20x10 box with the given entity lines."""
+    box = ["#" * 20] + ["#" + "." * 18 + "#"] * 8 + ["#" * 20]
+    return "\n".join([f"room {room}", "grid", *box, *entities]) + "\n"
+
+
+class Shops(unittest.TestCase):
+    """`shop` lines place ShopItem nodes. Each stock is priced in data/shop_prices.json for its shop, and the
+    room must be the graph's shop of that id (the graph's slug bundles of the shop are its stock)."""
+
+    def fixture(self) -> str:
+        return SHOP_FIXTURE.read_text(encoding="utf-8")
+
+    def test_fixture_compiles_with_the_graph_and_the_prices(self) -> None:
+        text, errors = compile_text(self.fixture(), real_world(), "ow_1_2__shop.room")
+        self.assertEqual(errors, [])
+        self.assertEqual((text or "").count('[node name="ShopItem'), 2)
+        self.assertIn('shop = &"S1"', text or "")
+        self.assertIn('stock = &"ember"', text or "")
+        self.assertIn('stock_id = &"pot_s1"', text or "")
+        self.assertNotIn("price", text or "")  # ShopItem reads the price from data/shop_prices.json
+
+    def test_stock_without_a_price_is_refused(self) -> None:
+        text = self.fixture().replace("shop S1 ember @528,358", "shop S1 tallow_flask @528,358")
+        _, errors = compile_text(text, real_world(), "ow_1_2__shop.room")
+        self.assertTrue(any("no price for tallow_flask in shop S1" in e for e in errors), errors)
+
+    def test_one_time_stock_needs_an_id(self) -> None:
+        text = self.fixture().replace("pot_bundle @1392,358 id=pot_s1", "pot_bundle @1392,358")
+        _, errors = compile_text(text, real_world(), "ow_1_2__shop.room")
+        self.assertTrue(any("one-time stock and needs id=" in e for e in errors), errors)
+
+    def test_shop_line_must_name_the_graphs_shop(self) -> None:
+        text = self.fixture().replace("shop S1", "shop S3")
+        _, errors = compile_text(text, real_world(), "ow_1_2__shop.room")
+        self.assertTrue(any("ow_1_2#shop is shop S1 in the graph, not S3" in e for e in errors), errors)
+
+    def test_a_room_that_is_no_shop_refuses_shop_lines(self) -> None:
+        text = self.fixture().replace("room ow_1_2#shop", "room ow_4_1#cache")
+        _, errors = compile_text(text, real_world(), "ow_4_1__cache.room")
+        self.assertTrue(any("ow_4_1#cache is not a shop of the graph" in e for e in errors), errors)
+
+    def test_graph_stock_of_the_shop_must_be_placed(self) -> None:
+        # S3 of the graph sells a slug bundle (slug_bundle_s3); the fixture with S3's other stock lacks it.
+        text = (
+            self.fixture()
+            .replace("ow_1_2#shop", "ow_10_3#shop")
+            .replace("door ow_1_2", "door ow_10_3")
+            .replace("shop S1 ember @528,358", "shop S3 tallow_flask @528,358")
+            .replace("shop S1 pot_bundle @1392,358 id=pot_s1", "shop S3 pot_bundle @1392,358 id=pot_s3")
+        )
+        _, errors = compile_text(text, real_world(), "ow_10_3__shop.room")
+        self.assertTrue(any("graph stock slug_bundle_s3 (slug_bundle) is not placed" in e for e in errors), errors)
+        self.assertEqual(len(errors), 1, errors)
+        placed = text + "shop S3 slug_bundle @1392,742 id=slug_bundle_s3\n"
+        result, errors = compile_text(placed, real_world(), "ow_10_3__shop.room")
+        self.assertEqual(errors, [])
+        self.assertIsNotNone(result)
+
+
+class Caches(unittest.TestCase):
+    """A `cache` line puts the contents of the graph's cache on its spot: brass as one coin with the amount,
+    each ember, a pot bundle. Slug bundles are their own pickup lines."""
+
+    def world(self, contents: str) -> br.World:
+        return world_of(
+            [room_record("ow_5_5", ["w"])],
+            pockets=[{"id": "ow_5_5#cache", "host": "ow_5_5", "grid": [0, 30], "in_place": False, "scope": "ow"}],
+            pickups=[
+                {"id": "cache_ow_5_5", "kind": "cache", "node": "ow_5_5#cache", "contents": contents},
+                {"id": "slug_bundle_ow_5_5", "kind": "slug_bundle", "node": "ow_5_5#cache"},
+            ],
+            edges=[{"id": "e1", "a": "ow_5_5", "b": "ow_5_5#cache", "link": "door", "gate": None,
+                    "needs": [], "dir": "both", "key": None, "prop": None}],
+        )
+
+    def entities(self, cache_id: str = "cache_ow_5_5") -> list[str]:
+        return [f"cache 5,4 id={cache_id}", "pickup slug_bundle 6,4 id=slug_bundle_ow_5_5",
+                "door ow_5_5 FromPocket 9,8", "spawn Inside 9,6"]
+
+    def test_pieces_come_from_the_graph_text(self) -> None:
+        world = self.world("30 brass, ember, pot bundle, slug bundle")
+        text, errors = compile_text(pocket_text(self.entities()), world, "ow_5_5__cache.room")
+        self.assertEqual(errors, [])
+        out = text or ""
+        self.assertIn('persistent_id = &"cache_ow_5_5_brass"', out)
+        self.assertIn("amount = 30", out)
+        self.assertIn('persistent_id = &"cache_ow_5_5_ember1"', out)
+        self.assertIn('persistent_id = &"cache_ow_5_5_pots"', out)
+        self.assertNotIn("slugs", out)  # the slug bundle is the pickup line, not a piece of the cache
+
+    def test_cache_parts(self) -> None:
+        self.assertEqual(
+            br.cache_pieces("c", "40 brass"), [("brass", "c_brass", 40)]
+        )
+        self.assertEqual(
+            br.cache_pieces("c", "2 embers, pot bundle"),
+            [("ember", "c_ember1", 0), ("ember", "c_ember2", 0), ("pot_bundle", "c_pots", 0)],
+        )
+        self.assertIsNone(br.cache_pieces("c", "a chest"))
+
+    def test_unknown_contents_are_refused(self) -> None:
+        _, errors = compile_text(pocket_text(self.entities()), self.world("a chest of gold"), "ow_5_5__cache.room")
+        self.assertTrue(any("does not know" in e for e in errors), errors)
+
+    def test_missing_cache_line_is_refused(self) -> None:
+        entities = [e for e in self.entities() if not e.startswith("cache")]
+        _, errors = compile_text(pocket_text(entities), self.world("40 brass"), "ow_5_5__cache.room")
+        self.assertTrue(any("graph pickup cache_ow_5_5 (cache) is not placed" in e for e in errors), errors)
+
+    def test_cache_id_must_be_in_the_graph(self) -> None:
+        _, errors = compile_text(pocket_text(self.entities("cache_ow_9_9")), self.world("40 brass"),
+                                 "ow_5_5__cache.room")
+        self.assertTrue(any("pickup cache_ow_9_9 is not in the graph for this room" in e for e in errors), errors)
+
+    def test_cache_needs_an_id(self) -> None:
+        entities = ["cache 5,4", *self.entities()[1:]]
+        _, errors = compile_text(pocket_text(entities), self.world("40 brass"), "ow_5_5__cache.room")
+        self.assertTrue(any("cache takes a position and id=" in e for e in errors), errors)
+
+    def test_every_cache_text_of_the_graph_is_understood(self) -> None:
+        caches = [p for p in real_world().pickups if p["kind"] == "cache"]
+        self.assertGreater(len(caches), 10)
+        for cache in caches:
+            self.assertIsNotNone(br.cache_pieces(cache["id"], cache["contents"]), cache["contents"])
 
 
 if __name__ == "__main__":
