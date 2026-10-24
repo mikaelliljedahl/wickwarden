@@ -8,8 +8,9 @@ Limit: at most 6 Codex jobs running at once. Only this file and `DESIGNS_a.md` a
 | Batch | Prompts | Images | Status |
 |---|---|---|---|
 | 4 | `batch_04.md` (6 rows, side only) | 18 | generated, checked, logged (`log_b04.md`); 15 ok, 3 weak (reel pull: line cut at the right edge) |
-| 5 | `batch_05.md` (pot place, moth throw side; item get, flask drink, pit fall, death down) | 18 | prompts written; not yet submitted |
-| 6 to 11 | not yet written | | |
+| 5 | `batch_05.md` (pot place, moth throw side; item get, flask drink, pit fall, death down) | 18 | generated, checked, logged (`log_b05.md`); 15 ok, 3 weak (item get: the held object reads as a second lantern) |
+| 6 | `batch_06.md` (six texture rows, 1024x1024, no key) | 18 | prompts written (`batch_06.md`); not yet submitted |
+| 7 to 11 | not yet written | | |
 
 ## Run notes
 
@@ -20,6 +21,9 @@ Limit: at most 6 Codex jobs running at once. Only this file and `DESIGNS_a.md` a
 - Images returned at 1536x1024 by the tool.
 
 ## Problems
+
+- Batch 5: several jobs reported a file name that is not in their folder, or the generic name `image.png`, or no name. Rule kept: take the own-folder file. Where a folder holds two outputs, the job's reported (later) file is taken; the change of copy happened for pot v3, flask v3, pit v3 and death v1 after the first copy.
+- The tool time: a job takes about 3 to 5 minutes; sleep-based waits are blocked, so waits run as background sleeps.
 
 - Batch 4: `b04_jar_throw_side_v1` stopped by mistake (cancelled), resubmitted as `-r1`. Some jobs report an output name that is not in their own session folder, and one session folder holds two images (chime_hold v1 and v3, leap v3). Rule: take the own-folder file that matches the reported name, else the later one; each case is named in `log_b04.md`.
 - Batch 4 reel pull (v1 to v3): the line runs off the right edge in pose 2. Kept as weak for the cull; regenerate those three if the owner rejects them.
