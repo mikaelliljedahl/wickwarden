@@ -445,6 +445,21 @@ GPT Image terrain textures below; they add no other image.
 | `hud_counter_slug_v1.png` | 1536×1024 | `01a16f51-26f2-7102-96e1-f61211a7bb63` | `exec-e6dd0bef-25d6-4e38-9cb7-51ba43bd0ef3` | `5d993f1274575184` | `log_b72.md` |
 | `hud_counter_slug_v2.png` | 1536×1024 | `01a16f55-9e20-76d2-9648-127907c06942` | `exec-f35211da-1e15-427d-a1a6-3659432221e0` | `7627a81b36de3fcf` | `log_b72.md` |
 | `hud_counter_slug_v3.png` | 1536×1024 | `01a16f55-a02a-7012-aef4-d6645a99b646` | `exec-b3eabf81-45b0-4b75-b241-8c5de7ddae2c` | `a76ea76c478b39ed` | `log_b72.md` |
+| `abacus_brute_actions_down_v1.png` | 1536×1024 | `01a16f59-9230-7a53-803e-913cb13d738f` | `exec-c46e1f5b-d749-4e9e-aba2-3e5fcf61f349` | `7b72aac43609560d` | `log_b60.md` |
+| `abacus_brute_actions_down_v2.png` | 1536×1024 | `01a16f59-9ad8-7e40-bf2c-f4b098c8f298` | `exec-d7665825-5cba-474b-9f19-1836e3b8df2e` | `3142fedf55d3a008` | `log_b60.md` |
+| `abacus_brute_actions_down_v3.png` | 1536×1024 | `01a16f59-9fd8-79b2-8e0e-c6794fe53bcd` | `exec-cf3d731d-5265-48a7-ac69-68c90fbab2e2` | `afcdf589d0d33b69` | `log_b60.md` |
+| `abacus_brute_actions_side_v1.png` | 1536×1024 | `01a16f58-5357-7b40-84a7-26cb949e2776` | `exec-1bbaabaf-120f-47fc-a6d4-cc8fee1e336c` | `154f15ec17b51d94` | `log_b60.md` |
+| `abacus_brute_actions_side_v2.png` | 1536×1024 | `01a16f59-8748-7ce2-b37f-786cc1dbfb28` | `exec-53b73641-dde9-4970-9be7-970d98f59ea4` | `e19f017e0ad529eb` | `log_b60.md` |
+| `abacus_brute_actions_side_v3.png` | 1536×1024 | `01a16f59-8aac-7c80-9280-1c6cd3278874` | `exec-59dd35c5-52fd-4d14-bd6a-4a1d2a282d0d` | `818d21857cb6893b` | `log_b60.md` |
+| `abacus_brute_walk_down_v1.png` | 1536×1024 | `01a16f57-2f50-72f1-b64d-8d5463d60e43` | `exec-f5550f84-79ec-4651-94d4-6ec3385a2ed6` | `f71392da7fc7e307` | `log_b60.md` |
+| `abacus_brute_walk_down_v2.png` | 1536×1024 | `01a16f57-3559-7a83-9d4f-ca02bd059ad4` | `exec-1a2125c8-c5be-4d25-afb3-e1f03f3f5a07` | `f83620c1d4e3c7df` | `log_b60.md` |
+| `abacus_brute_walk_down_v3.png` | 1536×1024 | `01a16f58-3b6d-7e11-807f-c2c9781687c5` | `exec-606d6434-0d4d-45a6-8a9e-9d01fe447700` | `a58fbec154963ff0` | `log_b60.md` |
+| `abacus_brute_walk_side_v1.png` | 1536×1024 | `01a16f55-6533-76c3-b373-878943613dc6` | `exec-b9fa2a71-d447-4229-8c13-6d02fff43d1f` | `ad4465a9f473d1b5` | `log_b60.md` |
+| `abacus_brute_walk_side_v2.png` | 1536×1024 | `01a16f55-6ead-7d60-bf01-073c449a6009` | `exec-3e31afa9-4f9e-48c3-ab17-ebaa6ca8bdf2` | `32eb8cbbdc16a9ca` | `log_b60.md` |
+| `abacus_brute_walk_side_v3.png` | 1536×1024 | `01a16f55-7351-7d00-9f68-c22097441e40` | `exec-85cfc188-3b51-468e-a505-52d0b06e8a92` | `18302ea9a80f78cd` | `log_b60.md` |
+| `abacus_brute_walk_up_v1.png` | 1536×1024 | `01a16f58-3df8-7542-8813-14598c1ea7ec` | `exec-bf129851-f78c-456a-b739-32f8d0ad42a0` | `00fbdd84b33ef082` | `log_b60.md` |
+| `abacus_brute_walk_up_v2.png` | 1536×1024 | `01a16f58-4566-7510-a7eb-283c7372acd6` | `exec-f6600d8a-adc2-45c8-880f-c5e7ebe272d7` | `3dbf75663331dad1` | `log_b60.md` |
+| `abacus_brute_walk_up_v3.png` | 1536×1024 | `01a16f58-4bc0-7671-a190-45b2fe47c459` | `exec-6af00a97-1a5e-4e0c-9860-ac32baeeafe9` | `38b28412b06809e0` | `log_b60.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
