@@ -2,10 +2,12 @@
 """Checks docs/world-graph.json: structure, gate vocabulary, reachability and soft-locks.
 
 Usage:
-    python3 tools/check_world_graph.py [path/to/world-graph.json] [--stats] [--rounds] [--orders]
+    python3 tools/check_world_graph.py [path/to/world-graph.json] [--stats] [--rounds] [--orders] [--no-selftest]
 
-Exit code 0 = every check passed, 1 = at least one failed. Stdlib only. The file format and the
-rules are described in docs/world-plan.md section 5.
+Exit code 0 = every check passed and every self-test mutation was rejected, 1 = otherwise.
+Stdlib only. The file format and the rules are described in docs/world-plan.md section 5.
+The self-test (world-plan 5.7) applies a list of mutations to copies of the graph in memory and
+requires each one to fail a check; --no-selftest skips it.
 
 Model:
   * Nodes are rooms and pockets (secret closets, shops, key alcoves). Edges are room links.
@@ -15,7 +17,10 @@ Model:
     `needs` are held. After a boss (`after_boss`) the boss weakness tools are needed as well.
   * Capabilities only grow. Small keys are the one consumable, so they are checked per scope by
     exploring every order in which that scope's doors can be opened.
+  * Sling ammo (R6b, capability-free): every gate or boss that needs `tallow_sling` has a
+    `slug_bundle` pickup in its region or cave that the player can reach without crossing it.
 """
+import copy
 import json
 import sys
 from collections import Counter, defaultdict
@@ -23,6 +28,7 @@ from collections import Counter, defaultdict
 GATE_TYPES = {"item", "key", "bomb", "cut", "brazier", "boss", "oneway", "hidden"}
 FIXED_NEEDS = {"bomb": {"pitch_pot"}, "cut": {"hook"}, "brazier": {"hook"}}
 DIRS = {(0, -1): "n", (1, 0): "e", (0, 1): "s", (-1, 0): "w"}
+SLING = "tallow_sling"
 
 
 class Graph:
@@ -328,6 +334,53 @@ def check_keys(g, errors, notes):
             errors.append("key scope %s can soft-lock; dead states: %s" % (s, dead[:3]))
 
 
+def reach_without(g, caps, opened, skip_edges, skip_nodes):
+    """Nodes reachable from the start while holding `caps`, never crossing a skipped edge or entering a skipped node."""
+    seen = {g.start}
+    stack = [g.start]
+    while stack:
+        n = stack.pop()
+        for e, other in g.adj[n]:
+            if e["id"] in skip_edges or other in skip_nodes or other in seen:
+                continue
+            if g.can_pass(e, caps, opened):
+                seen.add(other)
+                stack.append(other)
+    return seen
+
+
+def sling_gates(g):
+    """Every gate that needs the tallow sling: (label, regions the gate lies in, edges to skip, nodes to skip)."""
+    out = []
+    for e in g.edges:
+        if SLING in e.get("needs", []):
+            homes = {g.nodes[e["a"]].get("region"), g.nodes[e["b"]].get("region")}
+            out.append((e["id"], homes, {e["id"]}, set()))
+    for n in g.d["nodes"]:
+        if SLING in n.get("boss", {}).get("needs", []):
+            out.append((n["id"] + " (boss)", {n.get("region")}, set(), {n["id"]}))
+    return out
+
+
+def check_slugs(g, errors, notes):
+    """R6b (capability-free): every sling gate has a slug source it can reach without that gate.
+
+    A slug source is a pickup of kind `slug_bundle` in a region or cave the gate lies in, reachable
+    from the start without crossing the gate (or without entering the boss room). Ammo is not
+    modelled, so this only proves that the player can refill before the gate.
+    """
+    _, caps, opened = g.solve()
+    sources = [c for c in g.coll if c.get("kind") == "slug_bundle"]
+    gates = sling_gates(g)
+    for label, homes, skip_edges, skip_nodes in gates:
+        free = reach_without(g, caps, opened, skip_edges, skip_nodes)
+        found = [c["id"] for c in sources
+                 if g.nodes[c["node"]].get("region") in homes and c["node"] in free and c["needs"] <= caps]
+        if not found:
+            errors.append("R6b: sling gate %s has no slug source in %s reachable without it" % (label, sorted(homes)))
+    notes.append("slug sources %d for %d sling gates" % (len(sources), len(gates)))
+
+
 def unlock_rounds(g):
     """Round r = the capabilities that can be found while holding only those of earlier rounds."""
     held, rounds = set(g.base), []
@@ -382,11 +435,9 @@ def print_stats(g):
     print("collectibles:", dict(Counter(c.get("kind", "capability") for c in g.coll)))
 
 
-def main(argv):
-    flags = [a for a in argv[1:] if a.startswith("--")]
-    args = [a for a in argv[1:] if not a.startswith("--")]
-    with open(args[0] if args else "docs/world-graph.json", encoding="utf-8") as fh:
-        g = Graph(json.load(fh))
+def run_checks(data):
+    """Runs every check on a parsed graph. Returns (graph, errors, notes)."""
+    g = Graph(data)
     errors, notes = [], []
     check_structure(g, errors)
     if not errors:
@@ -394,6 +445,90 @@ def main(argv):
         check_oneway(g, errors)
         check_return(g, errors, reached)
         check_keys(g, errors, notes)
+        check_slugs(g, errors, notes)
+    return g, errors, notes
+
+
+# Self-test mutations (world-plan 5.7). Each takes a copy of the parsed graph, changes it in place,
+# and must make run_checks report at least one error.
+
+
+def _m_ward_plate_no_capability(d):
+    for e in d["edges"]:
+        if e.get("prop") == "ward plate":
+            e["needs"] = []
+
+
+def _m_ward_not_base(d):
+    # The ward plates rely on the ward being a base capability (no round changes).
+    d["base_capabilities"] = [c for c in d["base_capabilities"] if c != "ward"]
+
+
+def _m_cave2_slug_source_removed(d):
+    d["pickups"] = [p for p in d["pickups"] if p["id"] != "slug_bundle_cave_2_6"]
+
+
+def _m_overworld_slug_sources_removed(d):
+    # Thornwood and Cinderflats: the cache and the shop stock are the only sources for the Eyegate.
+    d["pickups"] = [p for p in d["pickups"] if p["id"] not in ("slug_bundle_ow_4_1", "slug_bundle_s3")]
+
+
+def _m_c10_slug_source_behind_eye_switch(d):
+    for p in d["pickups"]:
+        if p["id"] == "slug_bundle_cave_10_12":
+            p["node"] = "cave_10_13"
+
+
+def _m_c9_slug_source_in_boss_room(d):
+    for p in d["pickups"]:
+        if p["id"] == "slug_bundle_cave_9_9":
+            p["node"] = "cave_9_10"
+
+
+def _m_c4_slug_source_in_wrong_cave(d):
+    for p in d["pickups"]:
+        if p["id"] == "slug_bundle_cave_4_7":
+            p["node"] = "cave_8_2"
+
+
+MUTATIONS = [
+    ("ward plate gates with no capability (R1)", _m_ward_plate_no_capability),
+    ("the ward taken out of the base kit (no item grants it)", _m_ward_not_base),
+    ("every slug source of C2 removed (eye switch and boss, R6b)", _m_cave2_slug_source_removed),
+    ("the slug sources of Thornwood and Cinderflats removed (Eyegate, R6b)", _m_overworld_slug_sources_removed),
+    ("the C10 slug source moved behind the eye switch (R6b)", _m_c10_slug_source_behind_eye_switch),
+    ("the C9 slug source moved into the boss room (R6b)", _m_c9_slug_source_in_boss_room),
+    ("the C4 slug source moved into C8 (R6b, wrong cave)", _m_c4_slug_source_in_wrong_cave),
+]
+
+
+def run_selftest(data):
+    """Applies every mutation to a copy of `data`. Returns how many were accepted or not applied."""
+    base = json.dumps(data, sort_keys=True)
+    bad = 0
+    print("self-test: %d mutations" % len(MUTATIONS))
+    for label, mutate in MUTATIONS:
+        mutated = copy.deepcopy(data)
+        mutate(mutated)
+        if json.dumps(mutated, sort_keys=True) == base:
+            print("  NOT APPLIED: %s" % label)
+            bad += 1
+            continue
+        _, errors, _ = run_checks(mutated)
+        if errors:
+            print("  rejected: %s -> %s" % (label, errors[0]))
+        else:
+            print("  ACCEPTED: %s" % label)
+            bad += 1
+    return bad
+
+
+def main(argv):
+    flags = [a for a in argv[1:] if a.startswith("--")]
+    args = [a for a in argv[1:] if not a.startswith("--")]
+    with open(args[0] if args else "docs/world-graph.json", encoding="utf-8") as fh:
+        data = json.load(fh)
+    g, errors, notes = run_checks(data)
     for line in notes:
         print(line)
     if "--stats" in flags:
@@ -411,6 +546,11 @@ def main(argv):
             print("  -", e)
         return 1
     print("OK: %d nodes, %d edges; goal reachable; no soft-lock found" % (len(g.nodes), len(g.edges)))
+    if "--no-selftest" not in flags:
+        if run_selftest(data):
+            print("FAILED: a self-test mutation was not rejected")
+            return 1
+        print("self-test OK: every mutation rejected")
     return 0
 
 
