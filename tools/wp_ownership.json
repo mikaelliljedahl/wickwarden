@@ -470,9 +470,13 @@
         "scenes/enemies/boss_part.tscn",
         "scripts/enemies/telegraph.gd",
         "scenes/enemies/telegraph.tscn",
-        "tests/fixtures/gallery/M0.tscn"
+        "tests/fixtures/gallery/M0.tscn",
+        "scripts/combat/hitbox.gd",
+        "scripts/enemies/enemy_base.gd",
+        "scripts/enemies/enemy_projectile.gd",
+        "scripts/core/layers.gd"
       ],
-      "note": "boss_part.gd and telegraph.gd are the boss framework in monsters-bosses-tools 7.3 and no other WP owns them; assigned to M0."
+      "note": "boss_part.gd and telegraph.gd are the boss framework in monsters-bosses-tools 7.3 and no other WP owns them; assigned to M0. hitbox.gd, enemy_base.gd, enemy_projectile.gd and layers.gd are the API changes of monsters-bosses-tools 7.2 and no other WP owns them; assigned to M0 and merged before wave 1 monster WPs start (decision 36)."
     },
     "M1": {
       "wave": 1,
@@ -728,7 +732,8 @@
       ],
       "pockets": [
         "ow_8_0#cache",
-        "ow_9_0#cache"
+        "ow_9_0#cache",
+        "ow_9_1#ward"
       ],
       "in_place": [],
       "owns": [
@@ -743,7 +748,9 @@
         "tools/rooms/ow_8_0__cache.room",
         "scenes/world/rooms/ow_8_0__cache.tscn",
         "tools/rooms/ow_9_0__cache.room",
-        "scenes/world/rooms/ow_9_0__cache.tscn"
+        "scenes/world/rooms/ow_9_0__cache.tscn",
+        "tools/rooms/ow_9_1__ward.room",
+        "scenes/world/rooms/ow_9_1__ward.tscn"
       ]
     },
     "R3.b": {
@@ -988,7 +995,9 @@
         "ow_9_4",
         "ow_9_5"
       ],
-      "pockets": [],
+      "pockets": [
+        "ow_8_5#ward"
+      ],
       "in_place": [],
       "owns": [
         "tools/rooms/ow_8_4.room",
@@ -998,7 +1007,9 @@
         "tools/rooms/ow_9_4.room",
         "scenes/world/rooms/ow_9_4.tscn",
         "tools/rooms/ow_9_5.room",
-        "scenes/world/rooms/ow_9_5.tscn"
+        "scenes/world/rooms/ow_9_5.tscn",
+        "tools/rooms/ow_8_5__ward.room",
+        "scenes/world/rooms/ow_8_5__ward.tscn"
       ]
     },
     "R5.b": {
@@ -1719,7 +1730,9 @@
         "cave_6_7",
         "cave_6_8"
       ],
-      "pockets": [],
+      "pockets": [
+        "cave_6_8#ward"
+      ],
       "in_place": [],
       "owns": [
         "tools/rooms/cave_6_5.room",
@@ -1729,7 +1742,9 @@
         "tools/rooms/cave_6_7.room",
         "scenes/world/rooms/cave_6_7.tscn",
         "tools/rooms/cave_6_8.room",
-        "scenes/world/rooms/cave_6_8.tscn"
+        "scenes/world/rooms/cave_6_8.tscn",
+        "tools/rooms/cave_6_8__ward.room",
+        "scenes/world/rooms/cave_6_8__ward.tscn"
       ]
     },
     "C06.c": {
@@ -2045,7 +2060,9 @@
         "cave_10_11",
         "cave_10_12"
       ],
-      "pockets": [],
+      "pockets": [
+        "cave_10_10#ward"
+      ],
       "in_place": [],
       "owns": [
         "tools/rooms/cave_10_9.room",
@@ -2055,7 +2072,9 @@
         "tools/rooms/cave_10_11.room",
         "scenes/world/rooms/cave_10_11.tscn",
         "tools/rooms/cave_10_12.room",
-        "scenes/world/rooms/cave_10_12.tscn"
+        "scenes/world/rooms/cave_10_12.tscn",
+        "tools/rooms/cave_10_10__ward.room",
+        "scenes/world/rooms/cave_10_10__ward.tscn"
       ]
     },
     "C10.d": {

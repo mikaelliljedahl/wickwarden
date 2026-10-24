@@ -303,7 +303,7 @@ Script dir `scripts/enemies/`, scene dir `scenes/enemies/`. Spec source: the mon
 
 | ID, model | Depends | Owns (besides standard files, per monster) | Deliverable | Test |
 |---|---|---|---|---|
-| M0 BossBase, Sonnet | F4 | `scripts/enemies/boss_base.gd`, `tests/test_boss_base.gd` | `BossBase` (extends `EnemyBase`): phases, arena lock (closes the arena doors on first hit), flag `boss_<room>_defeated`, signal `defeated`, no drops except the placed rewards, optional health bar ring in the HUD canvas; miniboss mode (no arena lock) | phases advance, flag set on death, doors reopen on death or on player death/reset |
+| M0 BossBase, Sonnet | F4 | `scripts/enemies/boss_base.gd`, `tests/test_boss_base.gd`, `scripts/combat/hitbox.gd`, `scripts/enemies/enemy_base.gd`, `scripts/enemies/enemy_projectile.gd`, `scripts/core/layers.gd` | `BossBase` (extends `EnemyBase`): phases, arena lock (closes the arena doors on first hit), flag `boss_<room>_defeated`, signal `defeated`, no drops except the placed rewards, optional health bar ring in the HUD canvas; miniboss mode (no arena lock) | phases advance, flag set on death, doors reopen on death or on player death/reset |
 | M1 bramble_snapper, wickling, Haiku | F4 | monster files for both, projectile none | Snapper: rooted, snaps within about 1.5 tiles, `burnable` (group, `on_fire`), moth does not stun it. Wickling: pack of 2-3, dies in one hit | snaps in range, burns, pack count |
 | M2 cinder_wisp, husk_hound, Haiku | F4 | both monsters, `scripts/enemies/flame_ring.gd` + scene if the monster file needs it | Wisp: drifts, bursts into a flame ring, ward blocks the burst. Hound: fast straight charges then circling | burst damage and ward block, charge and circle |
 | M3 fen_leech, brine_crab, Haiku | F4 | both monsters, `scripts/world/shallow_zone.gd` + scene | Leech: lives in `shallows` zones, surfaces to lunge, hurt only when surfaced. Crab: sideways walker, front immune, back, flare or pot hurts | surfaced-only damage, front immunity |
@@ -327,9 +327,9 @@ A region WP has two kinds of session:
 |---|---|---|---|
 | R1 Brackwater Ford, Sonnet lead, Haiku batches | F6, F9, P01, P08, P13, P14 | 8 rooms: 6 existing (only `ow_2_0` gets the east exit with a thorn hedge and `ow_1_1` gets the south exit; `ow_0_0`, `ow_1_0`, `ow_0_1`, `ow_2_1` are not changed, their `.room` batch only verifies them against the graph); new rooms `ow_0_2` (hidden stairs to C9) and `ow_1_2` (Ford Road, reed wall, shop S1). Existing `ow_2_0.tscn` and `ow_1_1.tscn` are hand-edited by the batch that owns them. | `tests/test_area_brackwater.gd` |
 | R2 Thornwood, Sonnet lead, Haiku batches | F6, F8, F9, P01, P02, P03, P09, P13, P14, M1 | 15 rooms, 5 pockets (shop S2 by bomb wall, cache, grate alcove with the overworld key, thorn-sealed hut with a wick core, pot bag P1); thorn hedges at both ends of the Brackwater border; the Eyegate (eye-switch portcullis); the Drop Ledge | `tests/test_area_thornwood.gd` |
-| R3 Cinderflats, Sonnet lead, Haiku batches | F6, F9, P02, P05, P06, P08, P12, P14, P15, M2 | 14 rooms, 5 pockets (+1 ward cache from G1); wax seal, hook-tap wall, hidden stairs to C7, heavy stones, anchor ledge, kiln hut with the key door | `tests/test_area_cinderflats.gd` |
+| R3 Cinderflats, Sonnet lead, Haiku batches | F6, F9, P02, P05, P06, P08, P12, P14, P15, M2 | 14 rooms, 6 pockets (1 of them the ward cache from G1); wax seal, hook-tap wall, hidden stairs to C7, heavy stones, anchor ledge, kiln hut with the key door | `tests/test_area_cinderflats.gd` |
 | R4 Tallowfen and Mirrormere, Sonnet lead, Haiku batches | F6, F8, F9, P03, P13, M3 | 24 rooms (12 lake rooms with 18+ moorings), 4 pockets; the lake rooms use the water tile layout of the dev pond (collision rectangles unchanged) and the mooring pairs of the graph; `shallows` zones for the leeches | `tests/test_area_tallowfen.gd` |
-| R5 Gravelight Heights, Sonnet lead, Haiku batches | F6, F8, F9, P03, P04, P06, P14, P15, M4 | 15 rooms, 2 pockets (+1 ward cache from G1); ravine leaps (arrival side props), heavy boulder before C6, the Dockside drop landing | `tests/test_area_gravelight.gd` |
+| R5 Gravelight Heights, Sonnet lead, Haiku batches | F6, F8, F9, P03, P04, P06, P14, P15, M4 | 15 rooms, 3 pockets (1 of them the ward cache from G1); ravine leaps (arrival side props), heavy boulder before C6, the Dockside drop landing | `tests/test_area_gravelight.gd` |
 | R6 Hushmarch, Sonnet lead, Haiku batches | F6, F9, P04, P05, P07, P08, P11, P14, M2, M3 | 12 rooms, 4 pockets; anchor beach, resonance door to C8, sealed seam, the Ninth Door | `tests/test_area_hushmarch.gd` |
 
 #### 7.1.1 Room batches (Haiku, at most 4 rooms; generated from the graph; pockets travel with their room)
@@ -344,7 +344,7 @@ Rooms are listed by id. Pockets after `+` are separate scenes; "in-place" pocket
 | R2.b | 4 rooms | 1 | `ow_5_0`, `ow_5_1`, `ow_6_0 +#shop`, `ow_6_1` |
 | R2.c | 4 rooms | 2 | `ow_7_0`, `ow_7_1`, `ow_3_2 +#grate`, `ow_3_3 +#hut` |
 | R2.d | 3 rooms | 1 | `ow_4_2`, `ow_5_2`, `ow_7_2 +#bag` |
-| R3.a | 4 rooms | 2 | `ow_8_0 +#cache`, `ow_8_1`, `ow_9_0 +#cache`, `ow_9_1` |
+| R3.a | 4 rooms | 3 | `ow_8_0 +#cache`, `ow_8_1`, `ow_9_0 +#cache`, `ow_9_1 +#ward` |
 | R3.b | 4 rooms | 1 | `ow_10_0`, `ow_10_1 +#hut`, `ow_11_1`, `ow_8_2` |
 | R3.c | 4 rooms | 1 | `ow_9_2`, `ow_9_3`, `ow_10_2`, `ow_10_3 +#shop` |
 | R3.d | 2 rooms | 1 | `ow_11_2 +#cache`, `ow_10_4` |
@@ -354,7 +354,7 @@ Rooms are listed by id. Pockets after `+` are separate scenes; "in-place" pocket
 | R4.d | 4 rooms | 0 | `ow_2_5`, `ow_3_5`, `ow_4_4`, `ow_4_5` |
 | R4.e | 4 rooms | 2 | `ow_5_4`, `ow_5_5 +#cache`, `ow_6_4`, `ow_6_5 +#shop` |
 | R4.f | 4 rooms | 0 | `ow_7_4`, `ow_1_6`, `ow_2_6`, `ow_2_7` |
-| R5.a | 4 rooms | 0 | `ow_8_4`, `ow_8_5`, `ow_9_4`, `ow_9_5` |
+| R5.a | 4 rooms | 1 | `ow_8_4`, `ow_8_5 +#ward`, `ow_9_4`, `ow_9_5` |
 | R5.b | 4 rooms | 0 | `ow_3_7`, `ow_4_6`, `ow_4_7`, `ow_5_6` |
 | R5.c | 4 rooms | 1 | `ow_5_7 +#shop`, `ow_6_6`, `ow_7_6`, `ow_7_7` |
 | R5.d | 3 rooms | 1 | `ow_8_6`, `ow_4_8 +#cache`, `ow_5_8` |
@@ -437,7 +437,7 @@ Room details come from world-plan section 4 (cave table of rooms) and the graph;
 | C05.b | 4 rooms | 0 | `cave_5_5`, `cave_5_6`, `cave_5_7`, `cave_5_8` |
 | C05.c | 2 rooms | 0 | `cave_5_9`, `cave_5_10` |
 | C06.a | 4 rooms | 0 | `cave_6_1`, `cave_6_2`, `cave_6_3`, `cave_6_4` |
-| C06.b | 4 rooms | 0 | `cave_6_5`, `cave_6_6`, `cave_6_7`, `cave_6_8` |
+| C06.b | 4 rooms | 1 | `cave_6_5`, `cave_6_6`, `cave_6_7`, `cave_6_8 +#ward` |
 | C06.c | 3 rooms | 1 | `cave_6_9 +#crypt`, `cave_6_10`, `cave_6_11` |
 | C07.a | 4 rooms | 0 | `cave_7_1`, `cave_7_2`, `cave_7_3`, `cave_7_4` |
 | C07.b | 4 rooms | 0 | `cave_7_5`, `cave_7_6`, `cave_7_7`, `cave_7_8` |
@@ -450,7 +450,7 @@ Room details come from world-plan section 4 (cave table of rooms) and the graph;
 | C09.c | 2 rooms | 1 | `cave_9_9 +#vault`, `cave_9_10` |
 | C10.a | 4 rooms | 0 | `cave_10_1`, `cave_10_2`, `cave_10_3`, `cave_10_4` |
 | C10.b | 4 rooms | 0 | `cave_10_5`, `cave_10_6`, `cave_10_7`, `cave_10_8` |
-| C10.c | 4 rooms | 0 | `cave_10_9`, `cave_10_10`, `cave_10_11`, `cave_10_12` |
+| C10.c | 4 rooms | 1 | `cave_10_9`, `cave_10_10 +#ward`, `cave_10_11`, `cave_10_12` |
 | C10.d | 2 rooms | 0 | `cave_10_13`, `cave_10_14` |
 
 ### 8.2 E1. The ending (Sonnet)

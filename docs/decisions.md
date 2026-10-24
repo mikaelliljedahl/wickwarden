@@ -51,3 +51,7 @@ These decisions are binding. The project owner made them on 2026-10-24.
 33. Creature hurt and death: hit flash by `modulate` plus the shared death effects (`fx_enemy_poof`, `miniboss_death_wax`, `fx_boss_death_light`, `fx_boss_death_wax`). No separate hurt or death poses for monsters, minibosses or bosses.
 34. `docs/asset-contract.md` gets a terrain edge strip format for alpha overlays (region transitions, shore foam, pit rims, cave edges): cell 384 x 96 (corners 96 x 96), names `edge_*`, true alpha with no alpha threshold, a single-cell cut with no foot line. Opaque base tiles stay opaque. The cut tool code is not changed by this decision; it needs a separate task.
 35. Remaining unclear points of the art inventory: the simplest option. The proposed sizes of minibosses, bosses and other large figures become a binding second cell-size table in the contract (floating bodies are anchored at the cell centre, with no foot line). The rekindle memory stills (`memory_c*`) and `npc_corrow_ghost` stay provisional. Two ending stills only, the optional villagers, the light textures and the backdrops stay as listed (optional items are generated last).
+
+## Monster API changes (docs/monsters-bosses-tools.md section 7.2)
+
+36. The four files that section 7.2 of `docs/monsters-bosses-tools.md` changes, `scripts/core/layers.gd`, `scripts/combat/hitbox.gd`, `scripts/enemies/enemy_base.gd` and `scripts/enemies/enemy_projectile.gd`, are owned by M0 (BossBase, wave 1), which lists them in its Owns. They must be merged before any wave 1 monster WP starts.
