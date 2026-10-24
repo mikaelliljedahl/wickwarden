@@ -11,6 +11,9 @@ signal hurt_taken(amount: int)
 signal swing_started(facing: Vector2)
 signal flare_fired
 signal item_used(item_id: StringName)
+## Emitted once when an external motion ends, whatever ended it (arrival, end_external_motion,
+## death, place_at).
+signal motion_finished
 
 enum State { NORMAL, SWING, FLARE, DEAD }
 
@@ -37,6 +40,8 @@ const AXIS_PRESS := 0.5
 const LAMP_RADIUS := 260.0
 const HOOK_KNOCKBACK := 480.0
 const HOOK_KNOCKBACK_TIME := 0.12
+## Key of the motion's own entry in _hurt_blockers.
+const _MOTION_SOURCE := &"_motion"
 
 var state: State = State.NORMAL
 ## Cardinal facing: Vector2.UP / DOWN / LEFT / RIGHT.
@@ -66,6 +71,18 @@ var _iframes: float = 0.0
 var _knock_velocity: Vector2 = Vector2.ZERO
 var _knock_time: float = 0.0
 var _locked: bool = false  # World freezes the player with process_mode; this is for tests/cutscenes
+var _body_shape: CollisionShape2D
+var _motion_active: bool = false
+var _motion_airborne: bool = false
+var _motion_path: Array[Vector2] = []
+var _motion_index: int = 0
+var _motion_speed: float = 0.0
+## Sources (keys) that switch the hurtbox off; the motion uses _MOTION_SOURCE.
+var _hurt_blockers: Dictionary = {}
+## Sources that block the hook and the items (lock_actions), and sources that scale walking
+## speed (set_speed_scale). Keyed by the source object.
+var _action_locks: Dictionary = {}
+var _speed_scales: Dictionary = {}
 
 
 func _init() -> void:
@@ -82,6 +99,7 @@ func _ready() -> void:
 	circle.radius = BODY_RADIUS
 	body.shape = circle
 	add_child(body)
+	_body_shape = body
 
 	visual = _make_player_visual()
 	_swing_visual = _make_swing_trail()
@@ -172,6 +190,7 @@ func get_facing() -> Vector2:
 
 ## Teleports the player and clears motion and pending actions (room entry, respawn).
 func place_at(pos: Vector2) -> void:
+	end_external_motion()
 	global_position = pos
 	velocity = Vector2.ZERO
 	_knock_time = 0.0
@@ -197,7 +216,7 @@ func reset_actions() -> void:
 func respawn(pos: Vector2) -> void:
 	state = State.NORMAL
 	_iframes = 0.0
-	hurtbox.enabled = true
+	_refresh_hurtbox()
 	hurtbox.invulnerable = false
 	visual.visible = true
 	visual.modulate = Color.WHITE
@@ -209,7 +228,7 @@ func respawn(pos: Vector2) -> void:
 ## if an item instance was created and accepted the use.
 func use_item() -> bool:
 	var id := GameState.active_item
-	if id == &"" or state != State.NORMAL:
+	if id == &"" or state != State.NORMAL or _motion_active or actions_locked():
 		return false
 	var item := ItemRegistry.create(id)
 	if item == null:
@@ -250,10 +269,106 @@ func ward_blocks(hitbox: Hitbox) -> bool:
 func take_damage(
 	amount: int, from_pos: Vector2, knock_speed: float = 640.0, knock_time: float = 0.14
 ) -> bool:
-	if state == State.DEAD or _iframes > 0.0:
+	if state == State.DEAD or _iframes > 0.0 or is_airborne():
 		return false
 	_apply_hit(amount, from_pos, knock_speed, knock_time)
 	return true
+
+
+# ---- External motion (raft, boots, reel line, mitts) ----------------------------------------
+
+
+## Moves the player along `path` (world coordinates) at `speed` px/s. Walls do not stop it: the
+## body shape is off, the controls, the hook, the items and the ward are not used, and knockback
+## is ignored. World room slides do not cancel it; it ends at the last point, on
+## end_external_motion(), on death and on place_at(). `options`: "airborne" (bool, default
+## false) makes is_airborne() true and ignores all damage; "hurtbox" (bool, default true) false
+## switches the hurtbox off for the motion. Returns false, and does nothing, when the player is
+## dead, a motion already runs, the path is empty or the speed is not above zero.
+func begin_external_motion(path: Array[Vector2], speed: float, options: Dictionary = {}) -> bool:
+	if (
+		not is_node_ready()
+		or state == State.DEAD
+		or _motion_active
+		or path.is_empty()
+		or speed <= 0.0
+	):
+		return false
+	reset_actions()
+	_ward_visual.visible = false  # reset_actions() does not hide the ward arc
+	_knock_time = 0.0
+	_motion_path.assign(path)
+	_motion_index = 0
+	_motion_speed = speed
+	_motion_airborne = bool(options.get("airborne", false))
+	_motion_active = true
+	if not bool(options.get("hurtbox", true)):
+		_hurt_blockers[_MOTION_SOURCE] = true
+	_body_shape.set_deferred("disabled", true)
+	velocity = Vector2.ZERO
+	_refresh_hurtbox()
+	return true
+
+
+## Ends the external motion now and restores the body shape and the hurtbox. A no-op when no
+## motion runs. Emits motion_finished, whatever ended the motion.
+func end_external_motion() -> void:
+	if not _motion_active:
+		return
+	_motion_active = false
+	_motion_airborne = false
+	_motion_path.clear()
+	_motion_index = 0
+	_hurt_blockers.erase(_MOTION_SOURCE)
+	velocity = Vector2.ZERO
+	_body_shape.set_deferred("disabled", false)
+	_refresh_hurtbox()
+	motion_finished.emit()
+
+
+## True while an external motion runs.
+func is_external_motion() -> bool:
+	return _motion_active
+
+
+## True during an airborne leap (begin_external_motion with "airborne"). Damage is ignored.
+func is_airborne() -> bool:
+	return _motion_active and _motion_airborne
+
+
+## Blocks the hook (charge, swing, flare) and the sub-item use while `source` holds a lock. Each
+## source holds its own lock; the actions stay blocked while any lock is held. A lock that turns
+## on cancels a swing or a charge that runs. Cycling the items is not blocked.
+func lock_actions(source: Variant, on: bool) -> void:
+	if on:
+		_action_locks[source] = true
+		_cancel_attack()
+	else:
+		_action_locks.erase(source)
+
+
+## True while any source holds an action lock.
+func actions_locked() -> bool:
+	return not _action_locks.is_empty()
+
+
+## Scales walking speed by `factor` for as long as `source` keeps an entry. The factors of all
+## sources multiply; 1.0 removes the entry. Speeds given to begin_external_motion are not scaled.
+func set_speed_scale(source: Variant, factor: float) -> void:
+	if is_equal_approx(factor, 1.0):
+		_speed_scales.erase(source)
+	else:
+		_speed_scales[source] = maxf(factor, 0.0)
+
+
+## Switches the hurtbox off (false) or on (true) for `source`. The hurtbox is on only when no
+## source has it off, the player is alive and the player is not airborne.
+func set_hurtbox_enabled(source: Variant, on: bool) -> void:
+	if on:
+		_hurt_blockers.erase(source)
+	else:
+		_hurt_blockers[source] = true
+	_refresh_hurtbox()
 
 
 # ---- Internals -------------------------------------------------------------------------------
@@ -267,6 +382,12 @@ func _physics_process(delta: float) -> void:
 	var attack_pressed := attack_held and not _attack_prev
 	var attack_released := _attack_prev and not attack_held
 	_attack_prev = attack_held
+
+	if _motion_active:
+		_update_motion(delta)
+		_update_items()
+		_update_lamp_glow()
+		return
 
 	if _knock_time > 0.0:
 		_knock_time -= delta
@@ -284,8 +405,57 @@ func _physics_process(delta: float) -> void:
 	_update_lamp_glow()
 
 
+func _update_motion(delta: float) -> void:
+	var step := _motion_speed * delta
+	while _motion_index < _motion_path.size():
+		var target := _motion_path[_motion_index]
+		var to_target := target - global_position
+		var dist := to_target.length()
+		if dist <= step:
+			global_position = target
+			step -= dist
+			_motion_index += 1
+		else:
+			global_position += to_target * (step / dist)
+			break
+	if _motion_index >= _motion_path.size():
+		end_external_motion()
+	else:
+		velocity = (_motion_path[_motion_index] - global_position).normalized() * _motion_speed
+
+
+## Cancels a swing, a flare or a charge that runs (used when an action lock turns on).
+func _cancel_attack() -> void:
+	if state == State.SWING or state == State.FLARE:
+		state = State.NORMAL
+		_swing_visual.visible = false
+		_flare_visual.visible = false
+	_state_time = 0.0
+	_hold_time = 0.0
+	charging = false
+	charge_ready = false
+	if swing_hitbox != null:
+		swing_hitbox.deactivate()
+	if flare_hitbox != null:
+		flare_hitbox.deactivate()
+
+
+## Product of the factors of all sources (1.0 when none).
+func _speed_scale() -> float:
+	var factor := 1.0
+	for value in _speed_scales.values():
+		factor *= float(value)
+	return factor
+
+
+func _refresh_hurtbox() -> void:
+	if hurtbox == null:
+		return
+	hurtbox.enabled = state != State.DEAD and _hurt_blockers.is_empty() and not is_airborne()
+
+
 func _update_attack(delta: float, held: bool, pressed: bool, released: bool) -> void:
-	if _locked:
+	if _locked or actions_locked():
 		return
 	match state:
 		State.NORMAL:
@@ -393,6 +563,7 @@ func _update_movement(delta: float) -> void:
 		mult = WARD_SPEED_MULT
 	elif charging:
 		mult = CHARGE_SPEED_MULT
+	mult *= _speed_scale()
 	if input_dir != Vector2.ZERO:
 		velocity = input_dir * WALK_SPEED * mult
 		if not ward_up:
@@ -485,7 +656,7 @@ func _apply_hit(
 	hurtbox.invulnerable = true
 	# A hit cancels swing, charge and ward.
 	reset_actions()
-	if knock_speed > 0.0:
+	if knock_speed > 0.0 and not _motion_active:
 		var dir := global_position - from_pos
 		if hitbox != null and hitbox.knockback_direction != Vector2.ZERO:
 			dir = hitbox.knockback_direction
@@ -501,6 +672,7 @@ func _die() -> void:
 	state = State.DEAD
 	velocity = Vector2.ZERO
 	_knock_time = 0.0
+	end_external_motion()
 	hurtbox.enabled = false
 	swing_hitbox.deactivate()
 	flare_hitbox.deactivate()
