@@ -2,8 +2,8 @@ extends Control
 ## Title screen (F13, decision 14): the splash with the logo and a menu of New game, Continue and Quit.
 ## Continue is greyed out and skipped without a save, and it is the default selection when a save exists.
 ## New game over an existing save asks once (Yes/No) before it erases the slot (`pause` answers No).
-## New game sets SaveGame.launch_mode `new` and goes to the intro (F14) unless the settings file says
-## `intro_seen`; then it goes to world.tscn. Continue sets `continue` and goes to world.tscn. Quit quits.
+## New game sets SaveGame.launch_mode `new` and always goes to the intro (F14, decision 44); the intro
+## then goes to world.tscn. Continue sets `continue` and goes to world.tscn. Quit quits.
 ## `--dev-mode` and `--start-room` skip the title (World starts in launch mode `dev`).
 ##
 ## Story text only: no button help here (the pause menu has it). The music is the overworld loop.
@@ -99,7 +99,8 @@ static func skips_title(args: PackedStringArray) -> bool:
 	return false
 
 
-## True when the settings file says the intro was seen. F14 writes the flag; the title only reads it.
+## True when the settings file says the intro was seen. F14 writes the flag. It never skips the intro
+## (decision 44): New game always plays it.
 static func intro_seen() -> bool:
 	if not FileAccess.file_exists(SETTINGS_PATH):
 		return false
@@ -266,7 +267,7 @@ func _new_game() -> void:
 func _begin_new_game() -> void:
 	SaveGame.launch_mode = SaveGame.MODE_NEW
 	var scene := WORLD_SCENE
-	if not intro_seen() and ResourceLoader.exists(INTRO_SCENE):
+	if ResourceLoader.exists(INTRO_SCENE):
 		scene = INTRO_SCENE
 	_leave(&"new", scene)
 

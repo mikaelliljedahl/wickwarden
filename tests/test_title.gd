@@ -11,6 +11,7 @@ const BAD := "user://save_1.bad"
 const TEMP := "user://save_1.json.tmp"
 const SETTINGS := "user://settings.json"
 const TITLE_SCRIPT := "res://scripts/ui/title.gd"
+const INTRO_SCENE := "res://scenes/ui/intro.tscn"
 const WORLD_SCENE := "res://scenes/world/world.tscn"
 
 
@@ -23,6 +24,7 @@ func run() -> void:
 	await _menu_with_save()
 	await _overwrite_prompt()
 	await _new_game_without_save()
+	await _new_game_plays_the_intro_every_time()
 	await _continue_with_save()
 	await _continue_loads_the_save()
 	await _new_game_resets_the_state()
@@ -168,7 +170,7 @@ func _overwrite_prompt() -> void:
 	SaveGame.enabled = false
 	check(not SaveGame.has_save(), "Yes erases the saved game")
 	check_eq(title.last_action, &"new", "Yes starts a new game")
-	check_eq(title.last_scene, WORLD_SCENE, "without an intro, New game goes to the world")
+	check_eq(title.last_scene, INTRO_SCENE, "New game over a save goes to the intro first")
 	check_eq(SaveGame.launch_mode, SaveGame.MODE_NEW, "New game sets launch mode new")
 	await dispose(title)
 
@@ -180,9 +182,22 @@ func _new_game_without_save() -> void:
 	await _tap(&"confirm")
 	check(not title.is_prompt_open(), "New game without a save asks nothing")
 	check_eq(title.last_action, &"new", "New game is recorded")
-	check_eq(title.last_scene, WORLD_SCENE, "New game goes to the world")
+	check_eq(title.last_scene, INTRO_SCENE, "New game goes to the intro first")
 	check_eq(SaveGame.launch_mode, SaveGame.MODE_NEW, "New game sets launch mode new")
 	await dispose(title)
+
+
+## Decision 44: the intro plays on every New game, even when the settings file says it was seen.
+func _new_game_plays_the_intro_every_time() -> void:
+	_clean()
+	reset_state()
+	_write_settings('{"intro_seen": true}')
+	var title = await _make_title()
+	await _tap(&"confirm")
+	check_eq(title.last_scene, INTRO_SCENE, "intro_seen does not skip the intro on New game")
+	check_eq(title.last_action, &"new", "New game is recorded with intro_seen set")
+	await dispose(title)
+	_clean()
 
 
 func _continue_with_save() -> void:

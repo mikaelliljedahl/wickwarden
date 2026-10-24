@@ -13,7 +13,9 @@ const COLS := 20
 const ROWS := 10
 const EXIT_DEPTH := 3
 const SCRIPT_DIR := "res://scripts/world/"
-const WALL_SCRIPTS := ["locked_door.gd", "gate.gd", "cracked_wall.gd", "burnable.gd"]
+const WALL_SCRIPTS := [
+	"locked_door.gd", "gate.gd", "cracked_wall.gd", "burnable.gd", "resonance_stone.gd"
+]
 const SIDE_STEP := {"n": Vector2i(0, -1), "e": Vector2i(1, 0), "s": Vector2i(0, 1), "w": Vector2i(-1, 0)}
 ## Every gate prop name of world-plan 1.3 and 2.2 (the graph's `prop`) -> its script in scripts/world/.
 ## tests/test_world_graph.gd fails when a prop of the graph has no entry here.
