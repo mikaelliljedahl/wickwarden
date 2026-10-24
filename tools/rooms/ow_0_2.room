@@ -1,0 +1,20 @@
+; Lamplighter's Stump (ow_0_2): broken lamp tower, ivy. The only exit is E to Ford Road. The hidden stairs
+; to C9 (glow jar reveal) stand at the foot of the tower.
+room ow_0_2
+terrain Lamplighter's Stump: broken lamp tower, ivy
+floor_color 0.2 0.22 0.2
+grid
+####################
+#...r###...........#
+#....###......tt...#
+#.....#.r..........#
+#...................
+#...................
+#..bb........bb....#
+#..b........b..ee..#
+#.......bb.........#
+####################
+enemy skitterwick 11,2
+enemy skitterwick 2,8
+enemy tallow_blob 7,8
+hidden_stairs cave_9_1 FromOverworld @576,432 id=ow_0_2_stairs

@@ -1,0 +1,25 @@
+; Ford Road (ow_1_2): ford over a stone bridge at the centre, stall (Tilly's lamp stall) north-east with
+; the shop door to the pocket ow_1_2#shop. Exits: N to the Crossroads, W to Lamplighter's Stump, S over the
+; rush wall (hook) to Reed Gate.
+room ow_1_2
+terrain Ford Road: ford, stepping stones, lamp stall
+floor_color 0.2 0.24 0.22
+grid
+#########..#########
+#...........r......#
+#.tt.............r.#
+#.t..............r.#
+...................#
+.....eee.....eeeeee#
+#...wwwww..wwwwwwww#
+#...wwwww..wwwwwwww#
+#..bb..........bb..#
+#########..#########
+enemy spitcap 6,2
+enemy tallow_blob 2,7
+enemy tallow_blob 13,8
+prop hut @1536,144 size=192,96
+door ow_1_2#shop Inside 15,2
+spawn FromPocket 15,3
+opener cut_screen 9,9 look=rush_wall
+opener cut_screen 10,9 look=rush_wall
