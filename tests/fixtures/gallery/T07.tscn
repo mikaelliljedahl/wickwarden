@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/pit.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="3"]
+
+[node name="Fixture" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+floor_color = Color(0.17, 0.21, 0.17, 1)
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(240, 480)
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="Pit" parent="Props" instance=ExtResource("2")]
+position = Vector2(640, 480)
+size = Vector2(120, 192)
+
+[node name="Rail" type="StaticBody2D" parent="Props" groups=["leapable"]]
+position = Vector2(960, 480)
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("3")
+size = Vector2(32, 192)
+kind = &"rock"
+
+[node name="Wall" type="StaticBody2D" parent="Props"]
+position = Vector2(1440, 480)
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("3")
+size = Vector2(96, 288)
+kind = &"rock"
