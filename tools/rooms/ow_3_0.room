@@ -1,0 +1,20 @@
+; ow_3_0 Thorn Gate (Thornwood arrival from Brackwater). The briar archway runs from the west gap, where the
+; thorn hedge (gate e005, cinder wick) stands, to the room. Exits: E to Hedgerow, S to Thornpath, W to Brackwater.
+room ow_3_0
+terrain Thorn Gate: briar archway
+floor_color 0.18 0.24 0.16
+grid
+####################
+#......tt.....tt...#
+#.......bb.........#
+#ttt.........b.....#
+....................
+...........b........
+#ttt...............#
+#....bb......bb....#
+#.t................#
+#########..#########
+enemy spitcap 7,2
+enemy spitcap 15,6
+opener thorn_hedge @48,480 id=e005
+spawn Default 10,5

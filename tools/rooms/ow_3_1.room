@@ -1,0 +1,19 @@
+; ow_3_1 Thornpath (Thornwood): a winding path through brambles, with a ring of bushes (the mushroom ring) east
+; of the centre. Exits: N to Thorn Gate, E to Fernhollow, S to Sunken Lane. No gates.
+room ow_3_1
+terrain Thornpath: brambles, mushroom ring
+floor_color 0.18 0.24 0.16
+grid
+#########..#########
+#..bb...........b..#
+#.b.....t....bbb...#
+#.....tt........tt.#
+#....b..............
+#..tt........bbb....
+#............b.b...#
+#....tt......bbb...#
+#.b.........tt.....#
+#########..#########
+enemy tallow_blob 4,2
+enemy tallow_blob 17,7
+spawn Default 10,5

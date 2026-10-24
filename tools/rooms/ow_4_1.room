@@ -1,0 +1,24 @@
+; ow_4_1 Fernhollow (Thornwood): ferns and a ruined well (rocks at the centre-north). A cracked wall stands in a
+; rock nook in the north-east; it leads to the cache pocket ow_4_1#cache (pitch pot). Exits: E to Briar Mouth,
+; S to Drop Ledge, W to Thornpath.
+room ow_4_1
+terrain Fernhollow: ferns, ruined well
+floor_color 0.18 0.24 0.16
+grid
+####################
+#...ee...........rr#
+#.....rr........r.r#
+#.....rr...........#
+....................
+....e...............
+#..ee......bb......#
+#....r.....e.......#
+#...........ee.....#
+#########..#########
+enemy skitterwick 3,2
+enemy skitterwick 13,3
+enemy skitterwick 3,8
+opener cracked_wall 17,2 id=ow_4_1_cache
+door ow_4_1#cache Inside 17,2
+spawn Default 10,5
+spawn FromPocket 17,3

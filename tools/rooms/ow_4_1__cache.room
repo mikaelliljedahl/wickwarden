@@ -1,0 +1,20 @@
+; Cache pocket ow_4_1#cache: a root cellar behind the cracked wall of Fernhollow. The cache (pot bundle, brass) lies
+; at the back; the slug bundle lies by the roots. The door back to Fernhollow is at the south.
+room ow_4_1#cache
+terrain root cellar under the well
+floor_color 0.12 0.1 0.08
+grid
+####################
+#..................#
+#.t....t...........#
+#.....r.........r..#
+#..............t...#
+#..................#
+#..................#
+#.r.............r..#
+#...r..............#
+####################
+cache 4,3 id=cache_ow_4_1
+pickup slug_bundle 13,3 id=slug_bundle_ow_4_1
+door ow_4_1 FromPocket 9,8
+spawn Inside 9,6
