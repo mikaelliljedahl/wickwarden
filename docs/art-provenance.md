@@ -510,6 +510,26 @@ GPT Image terrain textures below; they add no other image.
 | `mirror_shade_states_crack_down_v1.png` | 1536×1024 | `01a16f5f-ff0d-7271-82d7-4bac22eaa902` | `exec-dc3eb026-e96a-4b24-b527-55acb7940041` | `511ca54486751b92` | `log_b16.md` |
 | `mirror_shade_states_crack_down_v2.png` | 1536×1024 | `01a16f60-11de-73d1-9f56-09d1938ee63b` | `exec-f62e1617-8df9-4d10-8b57-054fcf85d29b` | `27abd6d430c4a497` | `log_b16.md` |
 | `mirror_shade_states_crack_down_v3.png` | 1536×1024 | `01a16f60-336b-7441-96bb-ff83a4b5a268` | `exec-50083e44-c1a0-436d-9c5e-c560ef3113b6` | `2afd553e0adbbc5e` | `log_b16.md` |
+| `hud_socket_warmth_v1.png` | 1536×1024 | `01a16f58-c4d8-7eb2-9dd1-53660fd32788` | `exec-3d7c43a1-ee79-4ac8-b919-e5b6fbdc0752` | `127c5435b1a05972` | `log_b73.md` |
+| `hud_socket_warmth_v2.png` | 1536×1024 | `01a16f58-c700-79a0-adb1-3f749c336b4d` | `exec-f6a4feb6-69ad-4c04-bf7d-e35a086556d0` | `0716112d4a850b56` | `log_b73.md` |
+| `hud_socket_warmth_v3.png` | 1536×1024 | `01a16f58-ccb5-7341-af26-1f67996d5616` | `exec-753f25f0-4bfa-4fd2-94f9-30bdd7c4fc94` | `5b6e2bf3da2fd630` | `log_b73.md` |
+| `hud_socket_growth_v1.png` | 1536×1024 | `01a16f58-d136-7ab1-8307-19ff1962129d` | `exec-55b3faf2-35a8-43f5-9fdb-ebc87b31e925` | `03961481895710d9` | `log_b73.md` |
+| `hud_socket_growth_v2.png` | 1536×1024 | `01a16f58-d6c0-7cf3-a6b6-d948b94882d4` | `exec-7c9fec36-298a-4faf-9ad3-27cae0925258` | `cd6115afd0ee7ad7` | `log_b73.md` |
+| `hud_socket_growth_v3.png` | 1536×1024 | `01a16f58-dfda-7221-a284-58cb19a98a1a` | `exec-06f907b7-4eb9-4dd1-9c43-e549fd435684` | `f331a895093b1436` | `log_b73.md` |
+| `hud_socket_rain_v1.png` | 1536×1024 | `01a16f5b-26ca-73e0-b19e-fa4f3262ebf8` | `exec-df187476-add1-4476-9aff-6ba062a6b52a` | `f3fe07db042c704f` | `log_b73.md` |
+| `hud_socket_rain_v2.png` | 1536×1024 | `01a16f5b-2818-7143-bf38-be54d57151da` | `exec-fa84435e-2413-4e3b-a8eb-683842246c42` | `9ba3995f20eb16ca` | `log_b73.md` |
+| `hud_socket_rain_v3.png` | 1536×1024 | `01a16f5b-2c1f-7cc0-b76c-f72d7c71faa4` | `exec-e3acf9bb-ca44-4091-bced-eff820ceb9a8` | `0015a8a9a8c785a8` | `log_b73.md` |
+| `hud_socket_sleep_v1.png` | 1536×1024 | `01a16f5b-33c6-7a10-93eb-22c27a19d9c1` | `exec-9c817296-4846-4c95-a498-e33b0bdd1946` | `238a91104bfd2647` | `log_b73.md` |
+| `hud_socket_sleep_v2.png` | 1536×1024 | `01a16f5b-36b1-7601-beba-905480c7786e` | `exec-2d71e509-6357-4475-84d2-d9f0970ac7c8` | `47b61015214abeef` | `log_b73.md` |
+| `hud_socket_sleep_v3.png` | 1536×1024 | `01a16f5b-4e4d-7a61-973c-a18d7b1fecc5` | `exec-54f4de35-f524-4f8b-bbe4-216e5c70c24b` | `0faa43ff3e1e5275` | `log_b73.md` |
+| `hud_socket_memory_v1.png` | 1536×1024 | `01a16f5d-b71e-7f81-88e9-13759889cb48` | `exec-2f32e204-1d99-4c4f-811d-52336f7477b0` | `be5d57c2578eebf3` | `log_b73.md` |
+| `hud_socket_memory_v2.png` | 1536×1024 | `01a16f5d-c4b6-7b12-b0d4-2a23b5ae39b4` | `exec-85dc8c5a-0a39-43a7-a1c9-e1d15cd031f9` | `f5067c99ad56afac` | `log_b73.md` |
+| `hud_socket_memory_v3.png` | 1536×1024 | `01a16f5d-c80f-7381-b510-14068559c78f` | `exec-b22d9a1d-0539-4d1a-a5ee-19c866068bbd` | `ddbd0f8dadd11200` | `log_b73.md` |
+| `hud_socket_song_v1.png` | 1536×1024 | `01a16f5d-d358-75c1-8f57-28fa59e704c5` | `exec-d328fa90-03cf-4b01-80e1-0e28954e3a88` | `c0eca169b51dd6c5` | `log_b73.md` |
+| `hud_socket_song_v2.png` | 1536×1024 | `01a16f5d-eb88-7452-bcc4-fb6bed7cbcc0` | `exec-fb4089cc-f094-4c0a-96e3-cb522e071e0d` | `dcacd4ef5248281d` | `log_b73.md` |
+| `hud_socket_song_v3.png` | 1536×1024 | `01a16f5e-23a1-7190-8474-1de8427d5c61` | `exec-61793816-9ce0-48dc-8383-2cbe97c34f83` | `fe3d8991b71c7061` | `log_b73.md` |
+| `hud_socket_courage_v1.png` | 1536×1024 | `01a16f5f-ecd2-7822-b7ab-3328cca99a8d` | `exec-f5a9cb18-999d-46b3-be8f-48e75381b275` | `ee7af8a40058eba1` | `log_b73.md` |
+| `hud_socket_courage_v2.png` | 1536×1024 | `01a16f60-1504-70d3-ac17-c7722c9ca199` | `exec-eb3470c8-880e-47b5-a8e7-91f92c4ed4f1` | `f1f6ab3208848edb` | `log_b73.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
