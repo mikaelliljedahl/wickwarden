@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/world/water_zone.tscn" id="2"]
@@ -18,7 +18,7 @@ position = Vector2(240, 480)
 
 [node name="Props" type="Node2D" parent="."]
 
-[node name="Mooring" type="StaticBody2D" parent="Props"]
+[node name="WestMooring" type="StaticBody2D" parent="Props"]
 position = Vector2(400, 420)
 collision_layer = 1
 collision_mask = 0
@@ -26,11 +26,21 @@ script = ExtResource("3")
 mooring_id = &"west"
 target_room = &"fixture"
 target_mooring = &"east"
+draw_ride_path = true
+
+[node name="EastMooring" type="StaticBody2D" parent="Props"]
+position = Vector2(1500, 420)
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("3")
+mooring_id = &"east"
+target_room = &"fixture"
+target_mooring = &"west"
 
 [node name="DeepWater" parent="Props" instance=ExtResource("2")]
-position = Vector2(1000, 480)
+position = Vector2(960, 480)
 size = Vector2(768, 480)
 
 [node name="Shallows" parent="Props" instance=ExtResource("4")]
-position = Vector2(1600, 480)
+position = Vector2(1620, 800)
 size = Vector2(192, 192)
