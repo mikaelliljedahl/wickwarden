@@ -1,5 +1,10 @@
 # Wickwarden — step 1: dev world plan
 
+> Status: done, historical. Step 1 (the dev world) and step 2 (the art pass) are built. The current plan is
+> [world-plan.md](world-plan.md) and [world-work-packages.md](world-work-packages.md); the current status is
+> [state.md](state.md). This file is kept as the step-1 record. Its numbers still stand where the dev rooms and
+> the [code contract](code-contract.md) cite them.
+
 The goal of step 1 is a small, playable dev world that gives the feel of the game: top-down
 movement, the lamp hook, sub-items, flip-screen rooms and five monster types. Art is
 placeholder in step 1. Step 2 replaces it with high-detail GPT Image art (see the last section).

@@ -1,6 +1,7 @@
 # Wickwarden: world work packages (build plan)
 
-Status: plan only. No code, scene or art changes come with this document.
+Status: build plan, in progress. Wave 0 (foundation): G1, D1, D2, D3, F0 and F1 are done; F2 is running. The current
+status is [state.md](state.md).
 Inputs: [world-plan.md](world-plan.md) (master plan), [world-graph.json](world-graph.json) (the graph),
 [../tools/check_world_graph.py](../tools/check_world_graph.py) (the checker),
 [code-contract.md](code-contract.md) (file ownership style), [dev-world-plan.md](dev-world-plan.md)
