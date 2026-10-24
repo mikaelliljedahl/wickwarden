@@ -78,7 +78,7 @@ Inventory id `coinwyrm_head`, unit `coinwyrm_head_down` (facing down).
 - Output file: `tools/source_art/coinwyrm_head_down_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_head_down.png`
 
@@ -98,7 +98,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coinwyrm_head_down_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_head_down.png`
 
@@ -118,7 +118,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coinwyrm_head_down_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_head_down.png`
 
@@ -142,7 +142,7 @@ Inventory id `coinwyrm_plates`, unit `coinwyrm_plates_a` (no facing).
 - Output file: `tools/source_art/coinwyrm_plates_a_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_plates_a.png`
 
@@ -162,7 +162,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coinwyrm_plates_a_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_plates_a.png`
 
@@ -182,7 +182,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coinwyrm_plates_a_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_plates_a.png`
 
@@ -206,7 +206,7 @@ Inventory id `coinwyrm_plates`, unit `coinwyrm_plates_b` (no facing).
 - Output file: `tools/source_art/coinwyrm_plates_b_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_plates_b.png`
 
@@ -226,7 +226,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coinwyrm_plates_b_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_plates_b.png`
 
@@ -246,7 +246,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coinwyrm_plates_b_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_plates_b.png`
 
@@ -270,7 +270,7 @@ Inventory id `coinwyrm_tail`, unit `coinwyrm_tail` (no facing).
 - Output file: `tools/source_art/coinwyrm_tail_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_tail.png`
 
@@ -290,7 +290,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coinwyrm_tail_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_tail.png`
 
@@ -310,7 +310,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coinwyrm_tail_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/coinwyrm_tail.png`
 
@@ -334,7 +334,7 @@ Inventory id `coin_heap`, unit `coin_heap` (no facing).
 - Output file: `tools/source_art/coin_heap_v1.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/coin_heap.png`
 
@@ -354,7 +354,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coin_heap_v2.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/coin_heap.png`
 
@@ -374,7 +374,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/coin_heap_v3.png`
 - Key colour: pure magenta `#FF00FF`
 - Size: 1536x1024 (landscape), one sheet, rows as in the prompt
-- Reference images: PENDING: the design reference is the chosen variant of `coinwyrm_head_side` (written after that unit is chosen)
+- Reference images: `tools/source_art/coinwyrm_head_side_v1.png` (design: the chosen variant of `coinwyrm_head_side`; attach it), `tools/source_art/tamsin_walk_side.png` (style and light)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/coin_heap.png`
 
