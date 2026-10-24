@@ -1089,7 +1089,7 @@ One JSON object. Nodes, edges and pickups are one object per line so that diffs 
 | `start_hearts`, `max_hearts` | int | 3 and 20 |
 | `base_capabilities` | list | `hook`, `flare`, `ward` |
 | `capabilities` | object id -> `{name, kind}` | `base`, `tool`, `big_key` (`bigkey:cN`), `fragment` (`frag:cN`) |
-| `nodes` | list | `{id, kind: "room" or "pocket", world: "overworld" or "cave_N", region, grid: [x,y] (rooms), name, terrain, enemies: {name: count}, contents, exits: ["n","e","s","w"], gates: [edge ids], miniboss?, boss?: {name, design, needs}, role?, k?, local?}` |
+| `nodes` | list | `{id, kind: "room" or "pocket", world: "overworld" or "cave_N", region, grid: [x,y] (rooms), name, terrain, enemies: {name: count}, contents, exits: ["n","e","s","w"], gates: [edge ids], dark? (rooms only: bool, default false; every cave room is dark except cave 9, decision 42), miniboss?, boss?: {name, design, needs}, role?, k?, local?}` |
 | `edges` | list | `{id, a, b, link: "step" or "door", gate: null or one of item, key, bomb, cut, brazier, boss, oneway, hidden, needs: [capability ids], dir: "both" or "a>b", prop, key?: scope}` |
 | `items` | object capability -> `{node, needs?, after_boss?}` | where every non-base capability lives |
 | `pickups` | list | `{id, kind: small_key, wick_core, pot_bag, pot_bundle, cache or shop, node, scope?, needs?, after_boss?, early?, contents?, shop?}` |

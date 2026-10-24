@@ -112,13 +112,19 @@ class BuildTest(unittest.TestCase):
                 self.assertLessEqual(room["grid"][1], 8, room["id"])
 
     def test_dark_follows_the_graph(self) -> None:
-        dark = sorted(room["id"] for room in self.data["rooms"] if room["dark"])
-        self.assertEqual(dark, ["cave_1", "cave_1_8", "cave_5_10"])
+        # Decision 42: every cave room is dark (boss arenas included) except the ten rooms of cave 9.
+        dark = [room["id"] for room in self.data["rooms"] if room["dark"]]
+        cave_9 = [room["id"] for room in self.data["rooms"] if room["scope"] == "c9"]
+        self.assertEqual(len(cave_9), 10)
+        self.assertEqual(len(dark), 94)
+        self.assertFalse(set(dark) & set(cave_9))
+        self.assertIn("cave_1_8", dark)
         graph = fresh_graph()
         node_by_id(graph, "cave_1_8")["dark"] = False
         data = build_from(graph)
         dark = [room["id"] for room in data["rooms"] if room["dark"]]
-        self.assertEqual(dark, ["cave_1", "cave_5_10"])
+        self.assertEqual(len(dark), 93)
+        self.assertNotIn("cave_1_8", dark)
 
     def test_caves_match_the_cave_table_of_the_plan(self) -> None:
         rows = plan_cave_rows()

@@ -485,7 +485,7 @@ The pitch pot's limit rises from 10 to 14 (pot bag P1) and 18 (pot bag P2); this
 | Aspect | Spec |
 |---|---|
 | Use | `use_item` throws a jar to 288 px ahead (arc 0.45 s, stops short at a wall). `activate()` refuses while a jar glows. |
-| Glow | A `PointLight2D` radius 520 px (fade in 0.3 s, full 4.7 s, fade out 1.0 s = 6.0 s total). The jar node is in group `glow_source`; `GlowJar.is_lit(pos)` is true within 520 px of a live jar. Tamsin's own lamp (260 px) does not count. |
+| Glow | A `PointLight2D` radius 520 px (fade in 0.3 s, full 4.7 s, fade out 1.0 s = 6.0 s total). The jar node is in group `glow_light`; `GlowJar.is_lit(pos)` is true within 520 px of a live jar. Tamsin's own lamp (260 px) does not count. |
 | Reveal | `HiddenSeam` props (group `revealable`) within 520 px brighten; after 1.0 s of continuous exposure they unseal for good (flag `revealed_<id>`) and become a normal passage or stairs. |
 | Layers | None. The jar is a node, light is a `PointLight2D`, `is_lit` is a distance check against the group. |
 | Gates it opens (6) | `e144` `ow_11_7`<->`ow_11_7#cache` sealed seam; `e185` `cave_5_5`<->`cave_5_6` hidden seam; `e195` `cave_6_6`<->`cave_6_7` hidden seam; `e237` `cave_10_5`<->`cave_10_6` hidden seam; `e252` `ow_10_2`<->`cave_7_1` hidden stairs; `e254` `ow_0_2`<->`cave_9_1` hidden stairs. Placement rule: each seam is a faint scuff that stays hidden until a jar lights it; the player can throw the jar from any tile within 520 px of it. |
@@ -638,8 +638,9 @@ world data table, minimap.
 3. **Reset on leaving.** A boss resets to full HP when Tamsin leaves the room. Persist damage instead?
 4. **Cinder wick range.** The plan says a flame "one tile ahead". This spec rolls it up to 288 px (it stops 96 px ahead when something
    is there) so that it can light "far braziers" as the plan's tool table says. Sticking to enemies is also new. Accept?
-5. **Sling ammo supply.** Numbers (max 30, 12 on pickup, bundle +6, 8 % drop) are mine. The shops in the plan sell no slugs;
-   proposal: add "slug bundle 10 brass" to shops S3, S4 and S5. Bosses with a sling dependency (C2, C9, C10) get resupply bundles.
+5. **Sling ammo supply.** Resolved by decision 9: shops S3, S4 and S5 sell a slug bundle. Numbers (max 30, 12 on pickup, bundle +6,
+   8 % drop) are mine. The price, 10 brass, is a proposal (decision 7: prices are set in playtests). Bosses with a sling dependency
+   (C2, C9, C10) get resupply bundles.
 6. **Pot bags.** The final limit is 18 (user). The step split (10, 14, 18: +4 per bag) is mine. Confirm, and update
    world-plan 6.4, which still says 15 and 20.
 7. **Raft steering and lanes.** The plan says Tamsin rides "to the next mooring". This spec uses free steering within `WaterZone`s,

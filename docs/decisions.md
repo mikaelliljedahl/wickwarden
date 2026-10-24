@@ -63,3 +63,4 @@ These decisions are binding. The project owner made them on 2026-10-24.
 39. Flag spellings: `burned_<id>` (P01), `moved_<id>` (P06), `revealed_<id>` (P08) and `resonated_<id>` (P07). `eye_<id>` and `mini_<room_id>` keep their names.
 40. The ending trigger is `scripts/world/ending_trigger.gd` (E1). The flags `ending_rekindle` and `ending_wickwarden` keep the names the monster file gives them (code-contract 16.4).
 41. WorldData keeps class_name (F1 row overrides the no-class_name rule).
+42. Lantern caves are dark. Every cave room in `docs/world-graph.json` has `dark: true`, the boss arenas included, except the ten rooms of cave 9 (Corrow's workshop, no lantern, decision 1). Rooms that were already dark stay dark. The node key `dark` (rooms only, optional, default false) is listed in world-plan section 5.6. The glow group of the jar is `glow_light` (work package M5), not `glow_source`, in monsters-bosses-tools section 5.
