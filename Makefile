@@ -46,18 +46,19 @@ world-data:
 world-check:
 	python3 tools/gen_world_data.py --check
 
-# Unit tests of the world data generator (stdlib unittest).
+# Unit tests of the world data generator and the room kit compiler (stdlib unittest).
 world-gen-test:
-	python3 -m unittest tools/test_gen_world_data.py
+	python3 -m unittest tools/test_gen_world_data.py tools/test_build_rooms.py
 
-# The next four targets need tools that later work packages add. Until then they fail with a message.
+# Compiles tools/rooms/*.room into scenes/world/rooms/ (docs/room-kit.md). Subset: make rooms ROOMS="ow_0_1"
 rooms:
-	@echo "make rooms: not built yet (tools/build_rooms.py comes with WP F6)"
-	@exit 1
+	python3 tools/build_rooms.py $(ROOMS)
 
+# Validates every .room and fails when a committed scene differs from its compiled text (writes nothing).
 rooms-check:
-	@echo "make rooms-check: not built yet (tools/build_rooms.py comes with WP F6)"
-	@exit 1
+	python3 tools/build_rooms.py --check
+
+# The next two targets need tools that later work packages add. Until then they fail with a message.
 
 capture-all:
 	@echo "make capture-all: not built yet (tools/capture_all.gd comes with WP Q4)"

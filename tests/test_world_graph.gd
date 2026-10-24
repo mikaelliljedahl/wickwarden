@@ -15,6 +15,7 @@ func run() -> void:
 	_doors_have_their_scenes()
 	_persistent_ids_unique()
 	_broken_rooms_are_rejected()
+	_gates_may_stand_in_gated_exits()
 	_print_pending()
 	free_scenes()
 
@@ -131,6 +132,38 @@ func _broken_rooms_are_rejected() -> void:
 	check(_mentions(room_problems("ow_0_1", no_moth), "pickups placed"),
 		"a room whose pickup is gone is rejected")
 	no_moth.free()
+
+
+## A gated exit may hold its gate in the gap or the corridor (world-plan 1.1): ow_2_0 east is gated
+## (edge e005), its scene has no east exit yet, so the instance gets one. A gate there passes, a plain
+## solid block there still fails. A gate in the gap of an open exit (ow_0_0 east, edge e001) still fails.
+func _gates_may_stand_in_gated_exits() -> void:
+	var gated := _instance("ow_2_0")
+	var gated_exits: Array[StringName] = [&"w", &"s", &"e"]
+	gated.exits = gated_exits
+	var gate := Gate.new()
+	gate.size = Vector2(96, 192)
+	gate.position = Vector2(1776, 480)
+	(gated.get_node("Props") as Node).add_child(gate)
+	check(room_problems("ow_2_0", gated).is_empty(), "a gate in the gap of a gated exit (ow_2_0 east) passes")
+	gated.free()
+	var walled := _instance("ow_2_0")
+	walled.exits = gated_exits
+	var block := SolidBlock.new()
+	block.size = Vector2(96, 192)
+	block.position = Vector2(1776, 480)
+	(walled.get_node("Props") as Node).add_child(block)
+	check(_mentions(room_problems("ow_2_0", walled), "exit e corridor blocked"),
+		"a solid block in the gap of a gated exit is rejected")
+	walled.free()
+	var open := _instance("ow_0_0")
+	var open_gate := Gate.new()
+	open_gate.size = Vector2(96, 192)
+	open_gate.position = Vector2(1776, 480)
+	(open.get_node("Props") as Node).add_child(open_gate)
+	check(_mentions(room_problems("ow_0_0", open), "exit e corridor blocked"),
+		"a gate in the gap of an open exit is rejected")
+	open.free()
 
 
 func _instance(id: String) -> Node:

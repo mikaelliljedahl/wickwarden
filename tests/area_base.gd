@@ -180,6 +180,28 @@ func gated_edges_of(room_id: String) -> Array[Dictionary]:
 	return edges
 
 
+## Exit sides of `id` that a gated step edge leads through (the other end is a room, not a pocket).
+func gated_sides_of(id: String) -> Array[String]:
+	var sides: Array[String] = []
+	for edge: Dictionary in gated_edges_of(id):
+		var a := String(edge["a"])
+		var b := String(edge["b"])
+		if is_pocket(a) or is_pocket(b):
+			continue
+		var other := b if a == id else a
+		var side := _side_towards(WorldData.grid(other) - WorldData.grid(id))
+		if side != "" and not sides.has(side):
+			sides.append(side)
+	return sides
+
+
+func _side_towards(step: Vector2i) -> String:
+	for side: String in SIDE_STEP:
+		if SIDE_STEP[side] == step:
+			return side
+	return ""
+
+
 ## Plain door edges (link door, no gate) that have `id` at one end.
 func plain_doors_of(id: String) -> Array[Dictionary]:
 	index_world()
@@ -298,7 +320,7 @@ func room_problems(id: String, room: Node) -> Array[String]:
 		problems.append("%s: Props, Bushes or Enemies container is missing" % id)
 		return problems
 	_check_enemies(id, enemies, problems)
-	var geometry := _geometry(room, props, bushes)
+	var geometry := _geometry(room, props, bushes, _gated_corridor_tiles(id))
 	_check_layout(id, enemies, scene_exits, geometry, problems)
 	_check_pickups(id, room, geometry, problems)
 	_check_gates(id, problems)
@@ -355,8 +377,9 @@ func _off_tile_centre(p: Vector2) -> bool:
 
 
 ## Obstacles, the tiles they cover and the tiles reached from the default spawn while every
-## openable obstacle is closed.
-func _geometry(room: Node, props: Node, bushes: Node) -> Dictionary:
+## openable obstacle is closed. `walk` leaves out the openers that stand in a gated exit's gap or
+## corridor (`gated_tiles`): such an opener is the gate of that exit, so it is not a wall of the walk.
+func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -> Dictionary:
 	var fixed: Array[Rect2] = []
 	var openable: Array[Rect2] = []
 	fixed.append_array(room.wall_rects())
@@ -378,13 +401,35 @@ func _geometry(room: Node, props: Node, bushes: Node) -> Dictionary:
 		fixed.append(Rect2((bush as Node2D).position - Vector2(34, 34), Vector2(68, 68)))
 	var closed: Array[Rect2] = fixed.duplicate()
 	closed.append_array(openable)
+	var walls: Array[Rect2] = fixed.duplicate()
+	for rect in openable:
+		if not _overlaps(rect_tiles(rect), gated_tiles):
+			walls.append(rect)
 	var blocked := blocked_tiles(closed)
+	var walk := blocked_tiles(walls)
 	var spawn_tile := tile_of(_spawn_position(room))
 	return {
 		"blocked": blocked,
-		"reach": flood([spawn_tile], blocked),
+		"walk": walk,
+		"reach": flood([spawn_tile], walk),
 		"spawn_tile": spawn_tile,
 	}
+
+
+## Tiles of the exit corridors (exit_tiles) of the sides that a gated step edge leads through.
+func _gated_corridor_tiles(id: String) -> Dictionary:
+	var tiles := {}
+	for side in gated_sides_of(id):
+		for tile in exit_tiles(side):
+			tiles[tile] = true
+	return tiles
+
+
+func _overlaps(tiles: Dictionary, other: Dictionary) -> bool:
+	for tile in tiles:
+		if other.has(tile):
+			return true
+	return false
 
 
 func _is_wall_like(node: Node) -> bool:
@@ -403,13 +448,14 @@ func _check_layout(
 	id: String, enemies: Node, scene_exits: Array[String], geometry: Dictionary, problems: Array[String]
 ) -> void:
 	var blocked: Dictionary = geometry["blocked"]
+	var walk: Dictionary = geometry["walk"]
 	var reach: Dictionary = geometry["reach"]
 	if blocked.has(geometry["spawn_tile"]):
 		problems.append("%s: the default spawn is inside an obstacle" % id)
 	for side in scene_exits:
 		var tiles := exit_tiles(side)
 		for tile in tiles:
-			if blocked.has(tile):
+			if walk.has(tile):
 				problems.append("%s: exit %s corridor blocked at tile %s" % [id, side, tile])
 		for tile in tiles:
 			if not reach.has(tile):
@@ -507,11 +553,17 @@ func tile_of(p: Vector2) -> Vector2i:
 func blocked_tiles(rects: Array[Rect2]) -> Dictionary:
 	var blocked := {}
 	for r in rects:
-		for c in range(COLS):
-			for row in range(ROWS):
-				if Rect2(c * TILE, row * TILE, TILE, TILE).grow(-4.0).intersects(r):
-					blocked[Vector2i(c, row)] = true
+		blocked.merge(rect_tiles(r))
 	return blocked
+
+
+func rect_tiles(r: Rect2) -> Dictionary:
+	var tiles := {}
+	for c in range(COLS):
+		for row in range(ROWS):
+			if Rect2(c * TILE, row * TILE, TILE, TILE).grow(-4.0).intersects(r):
+				tiles[Vector2i(c, row)] = true
+	return tiles
 
 
 func flood(start: Array[Vector2i], blocked: Dictionary) -> Dictionary:

@@ -36,9 +36,10 @@ The documents marked **Binding** in the table are normative. Other documents gui
   `tools/source_art/` into `assets/sprites/`; `make art-test` tests the cut tool.
 - World build: `make world-data` regenerates `data/world_data.json` from `docs/world-graph.json`;
   `make world-check` fails when the committed file differs; `make world-gen-test` tests the generator.
-- Not built yet: `make rooms`, `make rooms-check`, `make capture-all` and `make playthrough` print a message and
-  fail until their work packages (F6, Q3, Q4) land. `make rooms` will compile `tools/rooms/*.room` into
-  `scenes/world/rooms/`; `make capture-all` will capture every room.
+- `make rooms` compiles `tools/rooms/*.room` into `scenes/world/rooms/`; `make rooms-check` validates them and
+  fails on a stale scene (`tools/build_rooms.py`, format in `docs/room-kit.md`).
+- Not built yet: `make capture-all` and `make playthrough` print a message and fail until their work packages
+  (Q3, Q4) land. `make capture-all` will capture every room.
 
 ## Absolute work rules
 - Read the plan and `docs/code-contract.md` before code; never guess dimensions, paths or interfaces.
