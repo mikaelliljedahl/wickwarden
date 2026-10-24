@@ -13,7 +13,7 @@ Range: `docs/art-inventory.md` section 4, batches B48 to B59 only (192 images). 
 | 54 | hollow_captain_walk, hollow_captain_actions | 15 | not started |
 | 55 | thorn_warden_walk, thorn_warden_actions, sump_lurker | 18 | not started |
 | 56 | lull_mauler_walk, lull_mauler_actions | 15 | done: 15 of 15 generated, verified (hashes match own session folders, no duplicates), logged (`log_b56.md`), provenance added; walk side v1 anchor (producer pick); 1 failed job (`b56_lull_mauler_actions_side_v2`, relative reference path) regenerated as `-r1`; 5 ok, 10 weak |
-| 57 | mirror_warden_walk, mirror_warden_actions | 15 | not started |
+| 57 | mirror_warden_walk, mirror_warden_actions | 15 | done: 15 of 15 generated, verified (hashes match own session folders, no duplicates), logged (`log_b57.md`), provenance added; walk side v1 anchor (producer pick); 1 ok (actions down v3), 14 weak; all units show gold/bronze armour instead of pale silver-grey and unrequested capes; down and up units drift to side or three-quarter |
 | 58 | choir_warden_walk, choir_warden_actions | 15 | not started |
 | 59 | pale_squire_walk, pale_squire_actions | 15 | not started |
 
@@ -27,6 +27,7 @@ Range: `docs/art-inventory.md` section 4, batches B48 to B59 only (192 images). 
 ## Problems
 
 - Batch 56: `b56_lull_mauler_actions_side_v2` failed with "AbsolutePathBuf deserialized without a base path" because the reference was a relative path. Use absolute reference paths in job text.
+- Batch 57: the job text used relative reference paths for the first wave; later jobs used absolute paths. Armour colour drift (gold/bronze, dark capes) in every unit of the Mirror Warden; logged for the owner.
 - Batch 56 walk units repeat leg arrangements (poses 1 and 3, 2 and 3) and down/up units drift sideways; logged weak.
 
 - Batch 48, `proj_spore_bolt_v1` (job `b48_proj_spore_bolt_v1`): failed; the job attached its own session folder as a reference image. Resubmitted as `-r1`, accepted.
