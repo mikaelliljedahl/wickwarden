@@ -22,4 +22,10 @@ variant of one image uses the same design. Tamsin's design is not changed here.
 - Watcher eye: a carved stone eye socket in a square mount of dark ruined stone with moss, a heavy stone lid, a cold blue iris. Rows: lid closed 1, opening 3, open 1, fire 2 (a thin pale-blue bolt). Side view looks right; down view faces the viewer; up view shows the back.
 - Husk hound: a thin grey hound from sacks, rope and rusted lantern parts; a rusted lantern cage on its back with no flame; rope tail; cold teal glow in the long head.
 
-## Batch 15 to 19 (filled in as each batch is done)
+## Batch 15: husk hound states, brine crab, wickling
+
+- Brine crab: a barnacled crab with a plate shell like a rusted breastplate (teal-grey and rust), pale barnacles on the edges, six thin legs, eye stalks with small dark tips, and one huge claw (the claw is on the right side in the side view). Sidestep 4 poses; claws up; two lunges; guard spark (a short bright spark on the plate).
+- Wickling: a thumb-high candle imp: stub of pale cream wax, two tiny legs, small bright orange flame head, two dim arms. Run 4 and pause 1 in one direction.
+- Husk states: crouch, charge (2) and dizzy (2) of the batch 14 hound, side only.
+
+## Batch 16 to 19 (filled in as each batch is done)
