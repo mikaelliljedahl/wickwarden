@@ -38,7 +38,7 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 
 ## Totals (batches 12 to 19)
 
-- 144 images: 103 ok and 39 weak, 2 failed (the walk side v2 slot of batch 16 after three attempts; no file in the repo) and 0 unresolved. The weak and ok counts per batch are in each `log_bNN.md`. The owner culls.
+- 144 images, one verdict each: 78 ok, 63 weak, 3 failed. The failed ones: `edge_cave_floor_to_wall_v2` and `edge_cave_water_v2` (kept in the repo with their failed verdict, 2.7:1 aspect and band position); `mirror_shade_walk_side_v2` (three attempts, coloured Tamsin; no file in the repo). The owner culls.
 - Structural findings for the owner: edge strips come back at 2.5:1 (cut tool needs 4:1); the choirling reference; the crab front and rear views; mirror-shade silhouettes; every 1024x1024 request returns 1254x1254.
 
 ## Process
