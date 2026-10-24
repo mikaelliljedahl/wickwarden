@@ -10,7 +10,8 @@ Limit: at most 6 Codex jobs running at once. Only this file and `DESIGNS_a.md` a
 | 4 | `batch_04.md` (6 rows, side only) | 18 | generated, checked, logged (`log_b04.md`); 15 ok, 3 weak (reel pull: line cut at the right edge) |
 | 5 | `batch_05.md` (pot place, moth throw side; item get, flask drink, pit fall, death down) | 18 | generated, checked, logged (`log_b05.md`); 15 ok, 3 weak (item get: the held object reads as a second lantern) |
 | 6 | `batch_06.md` (six texture rows, 1024x1024, no key) | 18 | generated, checked, logged (`log_b06.md`); 15 ok, 3 weak (ground ash: reads as stone rubble, too little grey ash). Images are 1254x1254 from the tool |
-| 7 to 11 | not yet written | | |
+| 7 | `batch_07.md` (slag, cinder wall, cinder face (face block), fen, boardwalk, lake water) | 18 | generated, checked, logged (`log_b07.md`); 15 ok, 3 weak (cinder wall: reads as a pale dry-stone wall) |
+| 8 to 11 | not yet written | | |
 
 ## Run notes
 
