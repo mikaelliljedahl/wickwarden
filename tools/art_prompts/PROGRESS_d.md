@@ -9,7 +9,7 @@ Facing and leg fix (from `PROGRESS.md`): applied to the statue sheets (`statue_f
 | 28 | sealed_seam, hook_tap_wall, grate, boss_door, ninth_door, wax_seal | 18 | done: generated, verified, logged (`log_b28.md`), provenance rows added; wax_seal (3) weak: melt drips read as blood |
 | 29 | reed_cluster, rush_wall, moss_wall, dry_vine_screen, bush_cluster, brittle_rocks | 18 | done: generated, verified, logged (`log_b29.md`), provenance added; dry_vine_screen (3) and bush_cluster (3) weak: posts or halves split the cut poses |
 | 30 | pocket_stall, pocket_cart, pocket_lighthouse_door, pocket_mason_door, pocket_hut_door, pocket_grotto | 18 | done: generated, verified, logged (`log_b30.md`), provenance added; lighthouse door (3) weak: square base, not round; mason door v3 weak: carving reads like a numeral |
-| 31 | pocket_stairs_down, pocket_plain_door, shop_counter, ward_plate, street_lamp, wall_torch | 18 | prompts written |
+| 31 | pocket_stairs_down, pocket_plain_door, shop_counter, ward_plate, street_lamp, wall_torch | 18 | done: generated, verified, logged (`log_b31.md`), provenance added; pocket_plain_door (3) weak: too ornate for a plain door |
 | 32 | pillar_1, pillar_2, pillar_3, lectern, statue_eye | 15 | prompts written |
 | 33 | statue_figure_1, statue_figure_2, crate_stack_1, crate_stack_2, crate_stack_3, cold_furnace | 18 | prompts written |
 | 34 | anvil, slag_heap_1, slag_heap_2, glass_shards_1, glass_shards_2 | 15 | prompts written |
