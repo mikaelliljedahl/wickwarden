@@ -9,27 +9,48 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-- Date: 2026-10-24 (orchestrator takeover session, Claude-free build by Haiku workers via AgentTeamForge pi jobs)
-- HEAD at this update: `3dc6397`. `make check` was green at `3dc6397`'s parent state (EXIT 0 at 21:58).
-- Repo state: other agents (art producers) commit at the same time. Use explicit paths only.
+- Date: 2026-10-24, takeover session (orchestrator Claude out of usage; continued by Haiku workers via AgentTeamForge).
+- Checkpoint for handover: HEAD `e36f4d3`. `make check` EXIT 0 at `e36f4d3` (64 test files, gdlint clean, world data up to date).
+- Repo rule for the next session: commit with explicit paths only. `tests/area_base.gd` has an uncommitted hunk from another agent. Leave it or ask the owner first. Do not run `make format` (it rewrites other agents' files).
+- Briefs for the next orchestrator and its workers: `docs/handover/worker-brief.md` (WP workers) and `docs/handover/art-producer-brief.md` (art producers). They are copies of the briefs the workers read.
 
 | Part | State |
 |---|---|
 | Step 1, Step 2, planning | Done. |
-| Wave 0 (F0–F14) | Done. F14 intro landed `309ab00`. FX1 fix (title test, area_base wall list) `5e87f4e`. |
-| Wave 1 | In progress. Landed: M0 `c0adbd7`, P01 `fe259ab`, P02 `b3ee104`, P03 `ef22589`/`c56fda5`, P04 `203f04a`, P05 `c027332`, P07 `ac6347b`, P08 `82f3cee`, P10 `d0491de`, P11 `01b3b80`, P14 `3dc6397`, T01 `376daae`, T02 `882020d`, T05 `970d28e`. Running: M1–M5, P09, P12, P13. Queued: P06, P15, T03, T04, T06, T07, T08. |
-| Wave 2–5 | Not started. |
+| Wave 0 (F0–F14) | Done. F14 `309ab00`; FX1 `5e87f4e` (title test for the intro, area wall list). |
+| Wave 1 (P01–P15, T01–T08, M0–M5) | Landed: M0 `c0adbd7`, M1 `b19ada3`, M2 `3406d6c`, M3 `aa56121`, M4 `dd18a26`, M5 `a41a7cf`, P01 `fe259ab`, P02 `b3ee104`, P03 `c56fda5`, P04 `203f04a`, P05 `c027332`, P06 `e36f4d3`, P07 `ac6347b`, P08 `82f3cee`, P09 `1bb21b2`, P10 `d0491de`, P11 `01b3b80`, P12 `218df59`, P13 `efa583e`, P14 `3dc6397`, P15 **not started**, T01 `376daae`, T02 `882020d`, T03 **not started**, T04 **not started**, T05 `970d28e`, T06 **not started**, T07 `cd3afaa`, T08 `89fa8fc`. |
+| Wave 2 (R1–R6, MB1–MB5, B01–B10) | Not started. |
+| Wave 3 (C01–C10, E1) | Not started. |
+| Wave 4 (Q1–Q9) | Not started. |
+| Wave 5 (Z1–Z3) | Not started. |
 
-Decisions added by the orchestrator: 43 (sling damage 1, monster file wins), 44 (intro on every New game).
+Open WPs in wave 1: P15 (WardPlate), T03 (reed_raft, needs `water_zone.gd` from T03 itself), T04 (heft_mitts, needs P06's grab API), T06 (lantern_chime, needs F10 done: ok). Run them with the worker brief (`docs/handover/worker-brief.md`). Each owns its files in `tools/wp_ownership.json`.
 
-Open points found by workers (lead to decide or to fix in a later WP):
-- `tests/area_base.gd` WALL_SCRIPTS lacks `boss_door.gd` and `ninth_door.gd` (P10, P11 reports). Fix in a later FX.
-- `tests/area_base.gd` has uncommitted formatter changes from another agent (M0 ran `make format` by mistake and restored 28 files; the area_base hunk stays in the tree). Its owner must check it.
-- Contract 16.3 and WP section 4 still say sling damage 2 (decision 43 overrides; the docs need a correction pass).
-- M0: arena lock is implemented (WP row wins over monster file 4.0 wording). Boss door shut on first hit.
-- P10 BossDoor needs `cave` set per room; rooms must set it.
-- P08 seam is invisible until revealed (WP row); world-plan asks for a faint cue. Design call for the owner.
-- `.uid` files of several WPs were written by hand (no `make import`). Regenerate with `make import` in a later check.
+Decisions taken by the orchestrator: 43 (sling damage 1; monster file wins), 44 (intro plays on every New game).
+
+Spec points that need a decision or a docs fix (workers reported them, nothing changed in normative docs):
+- Sling damage: code-contract 16.3 and WP section 4 still say 2 (decision 43 says 1). Fix the docs in a later pass.
+- Flags missing from code-contract 16.4: `melted_<seal>` (P12), `moved_<id>` and `moved_<id>@<path>` (P06). Liftables do not persist.
+- `tests/area_base.gd` WALL_SCRIPTS lacks `boss_door.gd` and `ninth_door.gd` (P10, P11). Fix in an FX.
+- Watcher eye stun: row says 1.5 s, moth stun is 2.0 s. Code uses 2.0 s (M4). Owner decides.
+- Mirror shade decoy: monster file and WP row differ (position copy vs facing). Code follows the monster file (M5). Owner decides.
+- Leech surfaced-only hits and deep water (M3, T03): T03 must add deep water to group `shallows` or leeches stay in shallows only.
+- Throw hit timing (P06): monster file says active in flight, world plan says on landing. Code: in flight until 0.15 s after landing.
+- Reel line pull stop 72 px and landing rules (T08): code follows the monster file; light-enemy pull not done (no WP row).
+- P08 hidden seam is invisible until revealed (WP row). The world plan asks for a faint cue. Design call for the owner.
+- P10 boss door: rooms must set `cave`. Without it `push_error` at `_ready`.
+- M0: arena lock implemented (WP row), monster file 4.0 says doors do not shut. Owner decides.
+- `.uid` files of several WPs were written by hand (no `make import`). Run `make import` once in a check.
+
+Art (producers a–d started at the end of the takeover session; their state is in `tools/art_prompts/PROGRESS_<x>.md`):
+- Batches with no log and no images yet: 26, 27, 40–59 (progress files a, c, e, f), 67–71 (g; 69 partly done), 80 (partly, 4 of 19 done), 81–86 (81 has prompts only; 82–86 have no prompts; 10 and 11 have no prompts).
+- About 183 untracked files in `tools/source_art/` from earlier producers (not reconciled with logs). A reconciler should check their SHA-256 and logs before committing.
+- Art producers use `docs/handover/art-producer-brief.md`. They take the PNG only from `~/.codex/generated_images/<session_id>/`.
+
+### Questions for the owner
+- Continue with API credits: which WP order first? Suggested: finish wave 1 (P15, T03, T04, T06), then wave 2 region batches.
+- Art: is the cost of about 500 Codex image jobs acceptable (no weekly quota, but API cost if the image jobs bill per call)?
+- The decisions in the list above (watcher stun length, decoy behaviour, arena lock) need an answer before wave 2 bosses.
 
 ### Wave 0 detail
 
