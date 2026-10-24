@@ -10,7 +10,7 @@ Facing and leg fix (from `PROGRESS.md`): applied to the statue sheets (`statue_f
 | 29 | reed_cluster, rush_wall, moss_wall, dry_vine_screen, bush_cluster, brittle_rocks | 18 | done: generated, verified, logged (`log_b29.md`), provenance added; dry_vine_screen (3) and bush_cluster (3) weak: posts or halves split the cut poses |
 | 30 | pocket_stall, pocket_cart, pocket_lighthouse_door, pocket_mason_door, pocket_hut_door, pocket_grotto | 18 | done: generated, verified, logged (`log_b30.md`), provenance added; lighthouse door (3) weak: square base, not round; mason door v3 weak: carving reads like a numeral |
 | 31 | pocket_stairs_down, pocket_plain_door, shop_counter, ward_plate, street_lamp, wall_torch | 18 | done: generated, verified, logged (`log_b31.md`), provenance added; pocket_plain_door (3) weak: too ornate for a plain door |
-| 32 | pillar_1, pillar_2, pillar_3, lectern, statue_eye | 15 | prompts written |
+| 32 | pillar_1, pillar_2, pillar_3, lectern, statue_eye | 15 | done: generated, verified, logged (`log_b32.md`), provenance added; pillar_1 (3) weak: ivy on a plain pillar; pillar_2 v2 weak: flame on the wick; pillar_2 v3 and pillar_3 v2 each needed a second job after a null reference failure |
 | 33 | statue_figure_1, statue_figure_2, crate_stack_1, crate_stack_2, crate_stack_3, cold_furnace | 18 | prompts written |
 | 34 | anvil, slag_heap_1, slag_heap_2, glass_shards_1, glass_shards_2 | 15 | prompts written |
 | 35 | dead_tree_1, dead_tree_2, thorn_bramble_1, thorn_bramble_2, fallen_log, root_bridge | 18 | prompts written |

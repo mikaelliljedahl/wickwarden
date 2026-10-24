@@ -573,6 +573,21 @@ GPT Image terrain textures below; they add no other image.
 | `seed_eye_v1.png` | 1536×1024 | `01a16f65-e18a-7810-b4fb-51b2c937ece9` | `exec-6ce8d9cd-728c-4536-b1d6-eb17b9c2bf97` | `9bc5931703e3186d` | `log_b63.md` |
 | `seed_eye_v2.png` | 1536×1024 | `01a16f65-e43b-74c3-b7a5-d48dbff3df3a` | `exec-006bc8db-31c7-4231-b449-4ecfefdf0dc3` | `223fcbdb3a78cb37` | `log_b63.md` |
 | `seed_eye_v3.png` | 1536×1024 | `01a16f66-4286-7d92-9655-8c9773185176` | `exec-33dada4c-9552-4c78-ac7e-09f129792489` | `cd39769cc79425e4` | `log_b63.md` |
+| `pillar_1_v1.png` | 1536×1024 | `01a16f52-77e1-7a02-8de7-daacbec2c1b6` | `exec-46cf48a4-bb0e-4f9b-8897-15fba53edf54` | `5f09e1e70ed041dc` | `log_b32.md` |
+| `pillar_1_v2.png` | 1536×1024 | `01a16f52-8c47-72c3-84c4-e640da487b56` | `exec-eece57ed-0b49-4ce8-8416-7b0a44ef31fb` | `f0024c910b8d97e0` | `log_b32.md` |
+| `pillar_1_v3.png` | 1536×1024 | `01a16f52-8d4b-7d51-9b86-5958ee037524` | `exec-aa469e96-5f86-4d48-a149-0a4cb2ac606b` | `e8ce740e91531af3` | `log_b32.md` |
+| `pillar_2_v1.png` | 1536×1024 | `01a16f52-8e73-72b1-a5e0-40755032c9dc` | `exec-6ec141ee-f62e-40f9-b3ad-64cf275c6bb7` | `7d7d5585503ea35c` | `log_b32.md` |
+| `pillar_2_v2.png` | 1536×1024 | `01a16f52-9dfa-7853-9aec-092456370997` | `exec-c9a82da6-7f02-4dfe-b99f-880d81785be5` | `83c2797d7d9baa9f` | `log_b32.md` |
+| `pillar_2_v3.png` | 1536×1024 | `01a16f5b-51eb-71d1-aa5a-d4cf64859e41` | `exec-232725f2-6ed4-4159-a72f-6ec06c707cb5` | `4511b2bb2169eaab` | `log_b32.md` |
+| `pillar_3_v1.png` | 1536×1024 | `01a16f5b-5f10-72d3-8886-85a55b7f1a8a` | `exec-ff6c383c-b325-44c6-9ef1-aa861913edbf` | `b895f9d9f256df88` | `log_b32.md` |
+| `pillar_3_v2.png` | 1536×1024 | `01a16f64-61d0-7042-8454-4512e52f5e7d` | `exec-5a7bf252-d3c9-4fb1-8e55-c8da71a3b080` | `660dd057cdb9d31d` | `log_b32.md` |
+| `pillar_3_v3.png` | 1536×1024 | `01a16f5b-6e61-7001-805a-8af39f191bdc` | `exec-bc284569-90b0-4ca6-a007-eaf5a67a5155` | `5bb1b1ee12ea9680` | `log_b32.md` |
+| `lectern_v1.png` | 1536×1024 | `01a16f5b-764e-76e2-97e1-359e74405393` | `exec-09463004-f5d4-4cc2-a989-cfcd3abda9fc` | `7ac1d24143b8ecf5` | `log_b32.md` |
+| `lectern_v2.png` | 1536×1024 | `01a16f5b-7a58-7160-a937-c0561cf79c33` | `exec-f1e3179d-99fd-44ad-9754-12ae3564ef76` | `6b3081e7eac808b9` | `log_b32.md` |
+| `lectern_v3.png` | 1536×1024 | `01a16f64-717b-7db3-b5cb-9152ec31bd04` | `exec-c2b4d643-98d9-41c2-9a96-59a5b4f32435` | `c1152e0b61473312` | `log_b32.md` |
+| `statue_eye_v1.png` | 1536×1024 | `01a16f64-93ce-7842-9119-ccda86e05245` | `exec-cdf1714b-8d6c-4d10-a222-46f5df84770c` | `c3ccf6ba52e1e088` | `log_b32.md` |
+| `statue_eye_v2.png` | 1536×1024 | `01a16f64-e028-7151-bb99-583005594d62` | `exec-853f6cc4-7950-458f-a593-344831289463` | `4a0695e22b98a68d` | `log_b32.md` |
+| `statue_eye_v3.png` | 1536×1024 | `01a16f64-f5bb-7bc3-a2cb-8260fa3b19d6` | `exec-89e871ff-1697-45a9-84a5-80385733586f` | `8a942860f5f305e1` | `log_b32.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
