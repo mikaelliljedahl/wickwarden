@@ -1,0 +1,22 @@
+; Lantern Isle (ow_6_3): a wooded island in the lake, with the cave mouth C5 (door to cave_5_1).
+; The island is reached by causeways north and south. Mooring posts (reed_raft, edges e045 e057 e059 e060),
+; the standing lamp prop and the fen leech shallows zone are not in the compiler yet.
+room ow_6_3
+terrain Lantern Isle: island, standing lamp, lake
+floor_color 0.16 0.22 0.2
+grid
+#########..#########
+#....e........e....#
+#...wwwww..wwwww...#
+#...www......www...#
+....www......www....
+....www.....bwww....
+#...wwwb.....www...#
+#...wwwww..wwwww...#
+#e................e#
+#########..#########
+enemy fen_leech 2,3
+enemy fen_leech 17,6
+door cave_5_1 Default 8,3
+spawn FromCave 8,4
+spawn Default 2,1

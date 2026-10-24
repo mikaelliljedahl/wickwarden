@@ -1,0 +1,19 @@
+; Mudflat (ow_0_4): soft ground with puddles, rocks and reed tufts. North to Cattail Corner, east to Boardwalk.
+room ow_0_4
+terrain Mudflat: mudflat
+floor_color 0.22 0.2 0.14
+grid
+#########..#########
+#..r.......e....e..#
+#....b........r....#
+#....r............e#
+#...r......e........
+#.....ww............
+#...........b.ww.r.#
+#..b...........b...#
+#.r.........ee..ee.#
+####################
+enemy tallow_blob 4,2
+enemy tallow_blob 13,4
+enemy tallow_blob 17,7
+spawn Default 9,5

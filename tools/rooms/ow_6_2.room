@@ -1,0 +1,19 @@
+; North Reach (ow_6_2): open water and reeds. Two pond basins (the dev pond rectangles) with a causeway
+; between them. Mooring posts (reed_raft, edges e027 e042 e044 e045) are not in the compiler yet.
+room ow_6_2
+terrain North Reach: open water, reeds
+floor_color 0.14 0.22 0.22
+grid
+#########..#########
+#...ee.......e...e.#
+#..e...............#
+#....e........e....#
+....wwwww..wwwww....
+....wwwww..wwwww....
+#..wwwwww..wwwwww..#
+#..wwww......wwwwe.#
+#.e..........b.....#
+#########..#########
+enemy duskmoth 6,2
+enemy duskmoth 17,3
+spawn Default 1,8

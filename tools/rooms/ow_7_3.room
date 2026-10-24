@@ -1,0 +1,22 @@
+; Stone Islet (ow_7_3): reeds on a small islet in the lake. The reed cluster at the east rim hides the
+; reed grotto pocket ow_7_3#grotto (hook cut). Mooring posts (reed_raft, edges e046 e059 e061) are not
+; in the compiler yet.
+room ow_7_3
+terrain Stone Islet: islet, reeds, pond
+floor_color 0.18 0.22 0.17
+grid
+#########..#########
+#..e...e.......wwww#
+#.....e.....e..wwww#
+#..................#
+....e.........e....#
+..............wwwww#
+#............wwwwww#
+#.wwwww......wwwwww#
+#.wwwwwee.....www..#
+#########..#########
+enemy fen_leech 8,6
+opener cut_screen 12,4 look=reed_cluster
+door ow_7_3#grotto Inside 12,4
+spawn FromPocket 11,4
+spawn Default 3,2

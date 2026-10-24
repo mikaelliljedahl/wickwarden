@@ -1,0 +1,19 @@
+; Reed grotto pocket ow_7_3#grotto: a dark hollow in the islet reeds, behind the reed cluster. The wick core
+; lies at the back. The door back to Stone Islet is at the south.
+room ow_7_3#grotto
+terrain reed grotto, pool
+floor_color 0.1 0.14 0.1
+grid
+####################
+#.e...e.....e......#
+#..www.e....e......#
+#..www.............#
+#.e...e............#
+#...............rr.#
+#......e...........#
+#.r..........e..r..#
+#..................#
+####################
+pickup wick_core 15,3 id=wick_core_ow_7_3
+door ow_7_3 FromPocket 9,8
+spawn Inside 9,6
