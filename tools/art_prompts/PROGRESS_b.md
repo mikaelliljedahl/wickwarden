@@ -11,7 +11,7 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 | 16 | mirror shade walk (3 facings) and states (fade, echo swing, decoy crack) | 18 | generated, verified, logged (`log_b16.md`): 4 ok, 13 weak, 1 failed (walk side v2, three attempts coloured); walk side reference v1 |
 | 17 | choirling (3 rows), icons tether moth, pitch pot, cinder wick, tallow sling, reed raft | 18 | generated, verified, logged (`log_b17.md`): 15 ok, 3 weak (choirling); two cinder wick images recovered from the job's own session folder |
 | 18 | icons heft mitts, glow jar, lantern chime, skitter boots, reel line; item cinder wick (pedestal) | 18 | generated, verified, logged (`log_b18.md`): 17 ok, 1 weak (glow jar v3, heart-shaped) |
-| 19 | pedestal items tallow sling, reed raft, heft mitts, glow jar, lantern chime, skitter boots | 18 | not started |
+| 19 | pedestal items tallow sling, reed raft, heft mitts, glow jar, lantern chime, skitter boots | 18 | generated, verified, logged (`log_b19.md`): 16 ok, 2 weak (glow jar v3, lantern chime v3) |
 
 ## Known problems
 
@@ -35,6 +35,11 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 - Failed-looking jobs (batch 17): cinder wick v2 and v3 jobs reported FAILED because `CODEX_THREAD_ID` was unset, but each job's own session folder held exactly one PNG written at run time. The lead copied from that folder only and checked by SHA-256.
 
 - Icons (batches 17 to 19): every 1024x1024 request came back 1254x1254 (the same tool behaviour as the textures); not resized. The landscape pedestal sheets come back at 1536x1024 as requested.
+
+## Totals (batches 12 to 19)
+
+- 144 images: 103 ok and 39 weak, 2 failed (the walk side v2 slot of batch 16 after three attempts; no file in the repo) and 0 unresolved. The weak and ok counts per batch are in each `log_bNN.md`. The owner culls.
+- Structural findings for the owner: edge strips come back at 2.5:1 (cut tool needs 4:1); the choirling reference; the crab front and rear views; mirror-shade silhouettes; every 1024x1024 request returns 1254x1254.
 
 ## Process
 

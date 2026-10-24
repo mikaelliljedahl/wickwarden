@@ -53,4 +53,12 @@ variant of one image uses the same design. Tamsin's design is not changed here.
 - Reel line: a brass reel with a dark cord wound on it, a wooden or brass handle, and a short length of line to a curled hook.
 - Item cinder wick: the cinder wick lying on a short carved stone pedestal with a lantern motif; one idle pose and three glint poses.
 
-## Batch 19 (filled in as each batch is done)
+## Batch 19: pedestal pickups (tallow sling, reed raft, heft mitts, glow jar, lantern chime, skitter boots)
+
+- Each world pickup: the item on a short carved stone pedestal with a worn lantern motif (no text); one idle pose and three glint poses where a small bright sparkle moves over the item. The pedestal is the same in every pose.
+- Tallow sling: as the icon (forked dark-wood handle, two leather bands, pouch with a pale slug), lying diagonally.
+- Reed raft: a bundle of dry reeds lashed with twine, a punting pole across it, lying on the pedestal.
+- Heft mitts: a pair of tan-leather mitts with brass rivets and buckled cuffs.
+- Glow jar: round glass jar with brass lid and a warm amber glow (variant 3: sparkles spill outside the jar; weak).
+- Lantern chime: glass lantern cage with three brass chime rods and a clapper (variant 3: oversized centre glint; weak).
+- Skitter boots: worn brown leather boots, laces, brass coil springs at the heels.
