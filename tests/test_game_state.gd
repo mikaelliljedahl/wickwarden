@@ -7,6 +7,8 @@ func run() -> void:
 	_economy()
 	_items()
 	_flags_and_rooms()
+	_scoped_keys()
+	_big_keys_and_fragments()
 	_input_map()
 
 
@@ -71,6 +73,50 @@ func _flags_and_rooms() -> void:
 	check_eq(GameState.current_room, &"ow_0_0", "current room tracked")
 	GameState.reset()
 	check(not GameState.has_flag(&"door_a"), "reset clears flags")
+
+
+func _scoped_keys() -> void:
+	reset_state()
+	GameState.add_key(2, &"c3")
+	check_eq(GameState.keys_in(&"c3"), 2, "a cave key is counted in its own scope")
+	check_eq(GameState.keys_in(&"ow"), 0, "and not in the overworld")
+	check_eq(GameState.use_key(&"ow"), false, "a cave key does not open an overworld door")
+	check_eq(GameState.use_key(&"c4"), false, "nor a door of another cave")
+	check_eq(GameState.use_key(&"c3"), true, "a key of its own scope is spent")
+	check_eq(GameState.keys_in(&"c3"), 1, "the count of that scope drops by one")
+	GameState.mark_visited(&"cave_1_4")
+	check_eq(GameState.keys, 0, "keys is the count of the current scope (c1 here)")
+	GameState.add_key(1, &"c1")
+	check_eq(GameState.keys, 1, "a key of the current scope is counted")
+	GameState.mark_visited(&"ow_0_0")
+	check_eq(GameState.keys, 0, "in an overworld room keys is the overworld count")
+	check_eq(GameState.keys_in(&"c1"), 1, "the cave key is kept for its cave")
+	GameState.add_key()
+	check_eq(GameState.keys_in(&"ow"), 1, "add_key without a scope adds to the current scope")
+	check_eq(GameState.use_key(), true, "use_key without a scope spends from the current scope")
+	check_eq(GameState.use_key(), false, "and there is no second one")
+
+
+func _big_keys_and_fragments() -> void:
+	reset_state()
+	check(not GameState.has_big_key(&"c2"), "no big key at the start")
+	check(GameState.add_big_key(&"c2"), "the big key of cave 2 is added")
+	check(GameState.has_big_key(&"c2"), "and it is held")
+	check(GameState.has_flag(&"bigkey_c2"), "as the flag bigkey_c2")
+	check(not GameState.add_big_key(&"c2"), "a second big key of the same cave is refused")
+	check(not GameState.add_big_key(&"ow"), "a big key needs a cave scope")
+	check(GameState.add_fragment(&"c1"), "the fragment of cave 1 is added")
+	check(GameState.has_flag(&"frag_c1"), "as the flag frag_c1")
+	check(not GameState.add_fragment(&"c10"), "the Ninth Hollow gives no fragment")
+	check(not GameState.has_fragment(&"c10"), "so none is held for it")
+	check(GameState.add_fragment(&"c9"), "the fragment of cave 9 is added")
+	check_eq(GameState.fragment_count(), 2, "two fragments are held")
+	for number in range(2, 10):
+		GameState.add_fragment(StringName("c%d" % number))
+	check_eq(GameState.fragment_count(), 9, "all nine fragments are held")
+	GameState.reset()
+	check_eq(GameState.fragment_count(), 0, "reset clears the fragments")
+	check(not GameState.has_big_key(&"c2"), "and the big keys")
 
 
 func _input_map() -> void:

@@ -7,6 +7,7 @@ func run() -> void:
 	await _bush()
 	await _brazier_and_gate()
 	await _locked_door()
+	await _locked_door_scope()
 	await _visual_hints()
 
 
@@ -139,6 +140,29 @@ func _locked_door() -> void:
 	arena.add_child(again)
 	await frames(2)
 	check(again.is_open, "an opened door is open on the next visit")
+	await dispose(arena)
+
+
+func _locked_door_scope() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(500, 600))
+	var door := LockedDoor.new()
+	door.door_id = &"c2_test"
+	door.scope = &"c2"
+	arena.add_child(door)
+	door.global_position = Vector2(500, 400)
+	await frames(2)
+	GameState.add_key(1, &"ow")
+	player.place_at(door.global_position + Vector2(0, -70))
+	await frames(4)
+	check(not door.is_open, "a key of another scope does not open a cave door")
+	check_eq(GameState.keys_in(&"ow"), 1, "and that key is not spent")
+	GameState.add_key(1, &"c2")
+	await frames(4)
+	check(door.is_open, "a key of the door's own scope opens it")
+	check_eq(GameState.keys_in(&"c2"), 0, "and that key is spent")
+	check_eq(GameState.keys_in(&"ow"), 1, "the overworld key is still held")
 	await dispose(arena)
 
 

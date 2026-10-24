@@ -7,6 +7,8 @@ func run() -> void:
 	await _timeout_and_blink()
 	await _carrier()
 	await _persistence_and_items()
+	await _scoped_keys_big_keys_and_fragments()
+	await _requires_flag()
 
 
 func _effects() -> void:
@@ -144,4 +146,65 @@ func _persistence_and_items() -> void:
 	await frames(3)
 	check(GameState.has_item(&"tether_moth"), "an item pickup grants the sub-item")
 	check_eq(GameState.active_item, &"tether_moth", "and selects it")
+	await dispose(arena)
+
+
+func _scoped_keys_big_keys_and_fragments() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(300, 300))
+	await frames(2)
+	var cave_key := PickupBase.new()
+	cave_key.kind = &"key"
+	cave_key.scope = &"c2"
+	arena.add_child(cave_key)
+	cave_key.global_position = Vector2(300, 300)
+	await frames(3)
+	check_eq(GameState.keys_in(&"c2"), 1, "a key pickup adds to its own scope")
+	check_eq(GameState.keys_in(&"ow"), 0, "and not to the overworld")
+	var big := PickupBase.new()
+	big.kind = &"big_key"
+	big.scope = &"c2"
+	arena.add_child(big)
+	big.global_position = Vector2(300, 300)
+	await frames(3)
+	check(GameState.has_big_key(&"c2"), "a big key pickup sets the big key of its cave")
+	check(GameState.has_flag(&"bigkey_c2"), "as flag bigkey_c2")
+	var frag := PickupBase.new()
+	frag.kind = &"fragment"
+	frag.scope = &"c2"
+	arena.add_child(frag)
+	frag.global_position = Vector2(300, 300)
+	await frames(3)
+	check(GameState.has_flag(&"frag_c2"), "a fragment pickup sets frag_c2")
+	check_eq(GameState.fragment_count(), 1, "one fragment is held")
+	check(player.collector != null, "the player collects them")
+	await dispose(arena)
+
+
+func _requires_flag() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(300, 300))
+	await frames(2)
+	var gated := PickupBase.new()
+	gated.kind = &"brass_bit"
+	gated.requires_flag = &"boss_cave_10_14_defeated"
+	arena.add_child(gated)
+	gated.global_position = Vector2(300, 300)
+	await frames(3)
+	check_eq(GameState.currency, 0, "a pickup that needs a flag is not collected while it is unset")
+	check(not gated.visible, "and it is invisible while the flag is unset")
+	check(not gated.is_collected, "and it is not collected by a collector")
+	GameState.set_flag(&"boss_cave_10_14_defeated")
+	check(gated.visible, "it shows at once when the flag is set")
+	await frames(3)
+	check_eq(GameState.currency, 1, "and the player collects it")
+	var later := PickupBase.new()
+	later.kind = &"brass_bit"
+	later.requires_flag = &"boss_cave_10_14_defeated"
+	later.global_position = Vector2(300, 300)
+	arena.add_child(later)
+	await frames(3)
+	check_eq(GameState.currency, 2, "a pickup whose flag is already set is active at once")
 	await dispose(arena)

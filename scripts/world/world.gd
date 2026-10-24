@@ -126,12 +126,14 @@ static func parse_start_room(args: PackedStringArray) -> Array[StringName]:
 	return [&"", START_SPAWN]
 
 
-## Dev loadout: every sub-item, DEV_PITCH_POTS pitch pots, DEV_KEYS keys. Does not set any flags.
+## Dev loadout: every sub-item, DEV_PITCH_POTS pitch pots, DEV_KEYS small keys in every key scope
+## (the overworld and each cave). Does not set any flags.
 func apply_dev_loadout() -> void:
 	for id in ItemRegistry.ids():
 		GameState.acquire_item(id)
 	GameState.add_pitch_pots(DEV_PITCH_POTS)
-	GameState.add_key(DEV_KEYS - GameState.keys)
+	for scope in GameState.KEY_SCOPES:
+		GameState.add_key(DEV_KEYS - GameState.keys_in(scope), scope)
 
 
 ## Shows or hides the hitbox / hurtbox overlay (F1 in dev mode).

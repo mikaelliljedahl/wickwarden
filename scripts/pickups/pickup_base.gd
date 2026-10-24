@@ -2,7 +2,9 @@ class_name PickupBase
 extends Area2D
 ## A pickup. One script for every kind in plan section 5; `kind` selects look and effect.
 ##
-## Kinds: ember, brass_bit, brass_coin, pitch_pot_bundle, key, wick_core, item.
+## Kinds: ember, brass_bit, brass_coin, pitch_pot_bundle, key, wick_core, item, big_key, fragment.
+## `scope` is the key scope of a `key` ("ow" or "cN") and the cave of a `big_key` or `fragment`.
+## `requires_flag` (placed pickups): the pickup is invisible and inactive until that flag is set.
 ##
 ## Collecting: PickupBase.collect(collector) applies the effect, frees the pickup and returns
 ## true. The Player's PickupCollector calls it automatically on overlap. A carrier collector
@@ -23,7 +25,8 @@ const PICKUP_RADIUS := 36.0
 ## the first cracked wall can be opened without farming drops (WP7 decision).
 const ITEM_FOUND_AMMO := {&"pitch_pot": 6}
 const KINDS: Array[StringName] = [
-	&"ember", &"brass_bit", &"brass_coin", &"pitch_pot_bundle", &"key", &"wick_core", &"item"
+	&"ember", &"brass_bit", &"brass_coin", &"pitch_pot_bundle", &"key", &"wick_core", &"item",
+	&"big_key", &"fragment"
 ]
 
 @export var kind: StringName = &"brass_bit"
@@ -34,10 +37,15 @@ const KINDS: Array[StringName] = [
 @export var persistent_id: StringName = &""
 ## Kind "item" only: the sub-item id granted (tether_moth, pitch_pot).
 @export var item_id: StringName = &""
+## Key scope: "ow" or a cave "cN". Kind `key` spends in that scope; `big_key` and `fragment` name the cave.
+@export var scope: StringName = &"ow"
+## Non-empty: the pickup stays invisible and inactive until this flag is set (for example a boss flag).
+@export var requires_flag: StringName = &""
 
 var is_collected: bool = false
 var carrier: Node2D
 var _age: float = 0.0
+var _gated: bool = false  # true while requires_flag is not set
 
 
 ## Creates a pickup of `pickup_kind` at `at` (global) under `parent`. Dropped pickups time out.
@@ -68,12 +76,44 @@ func _ready() -> void:
 	var node := CollisionShape2D.new()
 	node.shape = shape
 	add_child(node)
+	_register_kinds()
 	if get_node_or_null(Placeholder.VISUAL_NAME) == null:
 		var look := kind
 		if kind == &"item":
-			var has_item_look := SpriteVisual.has_art(item_id) or Placeholder.KINDS.has(item_id)
+			var has_item_look := SpriteVisual.has_art(item_id) or Placeholder.has_kind(item_id)
 			look = item_id if has_item_look else &"item"
 		SpriteVisual.attach(self, look)
+	if requires_flag != &"":
+		GameState.flag_changed.connect(_on_flag_changed)
+		_refresh_gate()
+
+
+func _exit_tree() -> void:
+	if GameState.flag_changed.is_connected(_on_flag_changed):
+		GameState.flag_changed.disconnect(_on_flag_changed)
+
+
+## Placeholder looks of the kinds that this script adds (placeholder visuals only).
+static func _register_kinds() -> void:
+	if not Placeholder.has_kind(&"big_key"):
+		Placeholder.register_kind(
+			&"big_key", {"shape": "diamond", "color": Color(1.0, 0.75, 0.25), "radius": 22.0}
+		)
+	if not Placeholder.has_kind(&"fragment"):
+		Placeholder.register_kind(
+			&"fragment", {"shape": "diamond", "color": Color(0.7, 0.55, 1.0), "radius": 16.0}
+		)
+
+
+## Invisible and inactive while `requires_flag` is unset; shown and collectable once it is set.
+func _refresh_gate() -> void:
+	_gated = requires_flag != &"" and not GameState.has_flag(requires_flag)
+	visible = not _gated
+
+
+func _on_flag_changed(flag: StringName, _value: bool) -> void:
+	if flag == requires_flag:
+		_refresh_gate()
 
 
 func flag_name() -> StringName:
@@ -99,7 +139,7 @@ func get_amount() -> int:
 ## Applies the effect to GameState and frees the pickup. Returns false if already collected.
 ## `collector` is the node that receives it (the Player); it is passed to the effect hook.
 func collect(collector: Node = null) -> bool:
-	if is_collected:
+	if is_collected or _gated:
 		return false
 	is_collected = true
 	_apply_effect(collector)
@@ -114,7 +154,7 @@ func collect(collector: Node = null) -> bool:
 ## Marks the pickup as carried by `by`: it follows `by`, stops timing out and is ignored by
 ## other carriers. Collect it with collect(player) when the carrier arrives.
 func begin_carry(by: Node2D) -> bool:
-	if is_collected or carrier != null:
+	if is_collected or _gated or carrier != null:
 		return false
 	carrier = by
 	_age = 0.0
@@ -143,7 +183,13 @@ func _apply_effect(_collector: Node) -> void:
 		&"pitch_pot_bundle":
 			GameState.add_pitch_pots(get_amount())
 		&"key":
-			GameState.add_key(get_amount())
+			GameState.add_key(get_amount(), scope)
+		&"big_key":
+			if not GameState.add_big_key(scope):
+				push_error("PickupBase: big_key needs a cave scope, got %s" % scope)
+		&"fragment":
+			if not GameState.add_fragment(scope):
+				push_error("PickupBase: fragment needs a cave scope 1-9, got %s" % scope)
 		&"wick_core":
 			GameState.add_max_heart(1)
 		&"item":
@@ -155,7 +201,7 @@ func _apply_effect(_collector: Node) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if is_collected:
+	if is_collected or _gated:
 		return
 	if is_carried():
 		global_position = carrier.global_position

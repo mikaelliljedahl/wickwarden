@@ -276,7 +276,8 @@ func _dev_loadout(world: World) -> void:
 	world.apply_dev_loadout()
 	check(GameState.has_item(&"tether_moth") and GameState.has_item(&"pitch_pot"), "dev: all sub-items")
 	check_eq(GameState.pitch_pots, 10, "dev: 10 pitch pots")
-	check_eq(GameState.keys, 5, "dev: 5 keys")
+	for scope in GameState.KEY_SCOPES:
+		check_eq(GameState.keys_in(scope), 5, "dev: 5 keys in scope %s" % scope)
 	check(not world.debug_overlay.visible, "the hitbox overlay starts hidden")
 	world.set_debug_draw(true)
 	check(world.debug_overlay.visible, "set_debug_draw shows the hitbox overlay")

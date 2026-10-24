@@ -84,7 +84,8 @@
       ],
       "amends": [
         "scripts/world/world.gd",
-        "tests/test_dev_world.gd"
+        "tests/test_dev_world.gd",
+        "tests/test_dev_world_route.gd"
       ]
     },
     "F5": {

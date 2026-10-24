@@ -1,12 +1,14 @@
 class_name LockedDoor
 extends StaticBody2D
-## A door that needs one small key. Touching it with at least one key spends the key and opens it
-## for good (flag "door_<id>" when `door_id` is set). Solid until open.
+## A door that needs one small key of its own `scope` ("ow" or a cave "cN"). Touching it with a key
+## of that scope spends the key and opens it for good (flag "door_<id>" when `door_id` is set).
+## A key of another scope does not open it. Solid until open.
 
 signal opened
 
 @export var door_id: StringName = &""
 @export var size: Vector2 = Vector2(192, 96)
+@export var scope: StringName = &"ow"
 
 var is_open: bool = false
 var _shape: CollisionShape2D
@@ -43,9 +45,9 @@ func flag_name() -> StringName:
 	return StringName("door_%s" % door_id)
 
 
-## Spends a key and opens. Returns false if already open or no key is held.
+## Spends a key of this door's scope and opens. Returns false if already open or no such key is held.
 func try_unlock() -> bool:
-	if is_open or not GameState.use_key():
+	if is_open or not GameState.use_key(scope):
 		return false
 	if door_id != &"":
 		GameState.set_flag(flag_name())
@@ -56,7 +58,7 @@ func try_unlock() -> bool:
 
 
 func _physics_process(_delta: float) -> void:
-	if is_open or GameState.keys <= 0:
+	if is_open or GameState.keys_in(scope) <= 0:
 		return
 	if _trigger.has_overlapping_bodies():
 		try_unlock()

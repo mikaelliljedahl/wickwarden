@@ -110,7 +110,7 @@ func _cave_gate_and_key() -> void:
 	check((gate.get_child(0) as CollisionShape2D).disabled, "an open gate has no collision")
 	check_eq(GameState.keys, 0, "no key yet")
 	await _walk_onto(key)
-	check_eq(GameState.keys, 1, "the key behind the gate is collected")
+	check_eq(GameState.keys_in(&"ow"), 1, "the key behind the gate is collected (overworld scope)")
 	check(GameState.has_flag(&"picked_cave_key"), "the key pickup is remembered")
 
 
