@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/anchor_ring.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/world/anchor_pocket.tscn" id="3"]
+
+[node name="Gallery" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+build_walls = false
+floor_color = Color(0.2, 0.27, 0.18, 1)
+
+[node name="Chasm" type="Polygon2D" parent="."]
+color = Color(0.06, 0.07, 0.1, 1)
+polygon = PackedVector2Array(700, 0, 1220, 0, 1220, 1080, 700, 1080)
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="ShoreRing" parent="Props" instance=ExtResource("2")]
+position = Vector2(640, 480)
+
+[node name="LedgeRing" parent="Props" instance=ExtResource("2")]
+position = Vector2(1280, 480)
+max_range = 576.0
+
+[node name="PocketRing" parent="Props" instance=ExtResource("3")]
+position = Vector2(1600, 800)
