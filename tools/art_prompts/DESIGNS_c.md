@@ -22,9 +22,18 @@ Designs that the inventory and the world docs do not describe. The owner can cha
 - `reel_tip`: a curved dark iron hook with a brass collar and a spark at its point. The cord tail is extra.
 - `liftable_rock_small`: row 1 holds three objects (mossy rock, clay urn, wooden crate), row 2 the break puff. The accepted name `liftable_rock_small` covers the whole sheet; the cut tool needs to split row 1 into three kinds, or the owner splits the names.
 
+## Batch 22
+
+- `slug_bundle`: four pale tallow pellets tied with brown string, on the ground.
+- `pot_bag`: a brown leather drawstring pouch with a brass ring at the mouth.
+- `tallow_flask`: intended as a small round glass flask of honey-gold tallow with a cork. All three variants drifted to a heart-shaped glass lantern with a flame inside (see the known problems); the pickup is failed.
+- `bigkey`: a long iron shaft with a toothed bit and a lantern-shaped bow (brass bars around a flame-shaped glass). The brass came out saturated gold, not the neutral pale brass the code tint needs.
+
 ## Open points for the owner
 
 - `reel_line_rope` (batch 21): the inventory gives both `96x16 tile` and `alpha strip 16x96`. The prompt uses a horizontal cord (96 long, 16 thick) that runs into both sides of the image.
 - `edge_pit_rim` (batch 25): the inventory gives one unit for three pieces (a straight strip and two corners). The sheet has the three pieces on one image; the cut tool needs a multi-piece rule for it. The contract says one cell per edge strip, so this is a deviation from `asset-contract.md` section 7 until the cut tool is changed.
 - `reed_raft_vehicle` (batch 21): the landing boards and posts inside the sprite are cut at the cell edge; the owner may want a raft-only redo.
+- `tallow_flask` (batch 22): failed in all three variants. A redo needs an explicit sphere shape and no flame; the owner decides.
+- `bigkey` (batch 22): the brass is saturated gold in all three variants, which the per-cave tint may not handle well.
 - `slag_chunk` (batch 24): the inventory gives a 96x96 cell with no foot line. The prompt puts it on the ground at the ground line of the other 96-px ground objects.
