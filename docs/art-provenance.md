@@ -36,6 +36,7 @@ GPT Image terrain textures below; they add no other image.
   reference, and `hush_hollow.png` still supplies `hollow_walk_down`. The v2 sheets are one row of four
   poses each; the logs say the tool showed no session or call ID, so the IDs below are the output file
   names the logs record, each checked byte-identical (SHA-256) against `~/.codex/generated_images/<session>/`.
+- Batches 1 to 3 (2026-10-24, Tamsin tool and mitts sheets, 42 images `tamsin_{wick_cast,sling_shot,raft_ride,mitts_*}[_facing]_v1..v3`) came from one Codex job per image at tier `cheapest`, prompts from `tools/art_prompts/batch_01.md` to `batch_03.md`. Each file was checked byte-identical against the png in its own job's session folder, and no two files share a hash. All variants are kept until the owner culls; the log lists defects (the pull and push `down` sheets face sideways).
 - No source image was resized or edited by hand. The textures and some sheets are 1254×1254 or
   2172×724 because the tool returned those sizes.
 
@@ -72,6 +73,48 @@ GPT Image terrain textures below; they add no other image.
 | `hush_hollow_walk_side.png` | 2172×724 | `01a163e2-105c-7f63-a1f6-19f0996eb728` | `exec-0657a715-9683-4c6d-a9dd-f51a862f855b` | `3d937390de9276ad` | `log_hollow_walk_v2.md` |
 | `tex_pond_bank.png` | 1254×1254 | `01a163da-a933-7313-9e9a-43e7e436266e` | `exec-5ce69000-6ba2-4781-b41d-ae1d36510bf7` | `07448dcf0d67fd32` | `log_terrain.md` |
 | `tex_wall_ruin_face.png` | 1254×1254 | `01a163da-a933-7313-9e9a-43e7e436266e` | `exec-38baea37-8d44-45c4-82d6-1d08749b7e79` | `dae6d22650c92bb1` | `log_terrain.md` |
+| `tamsin_wick_cast_v1.png` | 1536×1024 | `01a16f29-722a-7593-af8d-4a8c2e7f801f` | `exec-b4fec007-f485-4e1d-a82f-3c9545296540` | `6494a3e8b13860f5` | `log_b01.md` |
+| `tamsin_wick_cast_v2.png` | 1536×1024 | `01a16f2c-6e9f-7fe1-bb6f-2f797b5c27fd` | `exec-e11541d3-01b0-4822-b044-c5c540724195` | `02cb0742304a38c6` | `log_b01.md` |
+| `tamsin_wick_cast_v3.png` | 1536×1024 | `01a16f2c-75af-7402-a9f7-949a18c2583d` | `exec-d151e71f-3417-42ec-bb60-edc21bacac43` | `fab2e4ac05c31eb2` | `log_b01.md` |
+| `tamsin_sling_shot_v1.png` | 1536×1024 | `01a16f2c-800f-7463-bb4a-a64abc004728` | `exec-df3ea513-4eea-47db-a5f6-a2206586b3b9` | `a5db6d9883198187` | `log_b01.md` |
+| `tamsin_sling_shot_v2.png` | 1536×1024 | `01a16f2c-8999-7980-ac8c-d6616c128f40` | `exec-d40d3eeb-f005-49cc-8098-38248c264c1d` | `5698cd082195a2d5` | `log_b01.md` |
+| `tamsin_sling_shot_v3.png` | 1536×1024 | `01a16f2c-933b-7c40-90d6-a2fdc9f8c45b` | `exec-42c16a87-cde6-4564-9942-1473083a6a97` | `4745e7e47cb52ea7` | `log_b01.md` |
+| `tamsin_raft_ride_v1.png` | 1536×1024 | `01a16f2c-9d4f-71c0-afef-1fc3eca2ccb8` | `exec-31819aaa-cebe-49a5-b232-f83961ba7b06` | `3a7ad2c6537ec929` | `log_b01.md` |
+| `tamsin_raft_ride_v2.png` | 1536×1024 | `01a16f2c-a767-77e1-a31b-9aff1de41c38` | `exec-2b342914-0b74-47db-b79c-b39226ae4cdd` | `6789e27aaa1fe7d0` | `log_b01.md` |
+| `tamsin_raft_ride_v3.png` | 1536×1024 | `01a16f2c-b4a1-7ab2-bc80-27e67495f4a9` | `exec-f6327517-7679-4c62-8b4d-6abca9ff156a` | `2d37d06a45c5791f` | `log_b01.md` |
+| `tamsin_mitts_lift_v1.png` | 1536×1024 | `01a16f2c-bb5a-7741-a6d1-35f2f07f9a41` | `exec-edbd36d4-04f6-431e-9856-33ae76fb51bb` | `8bce57a7968faf74` | `log_b01.md` |
+| `tamsin_mitts_lift_v2.png` | 1536×1024 | `01a16f2c-c5a8-7821-89aa-6bf83d848098` | `exec-09eb02ec-77ef-435d-bb66-b82d06ad9152` | `45cc841faed2b28c` | `log_b01.md` |
+| `tamsin_mitts_lift_v3.png` | 1536×1024 | `01a16f2c-cf3c-7230-a9cd-b3b3a7e3cf59` | `exec-99ba7957-1dfa-4338-84c0-9324b17e95c0` | `c28b91dfefff5017` | `log_b01.md` |
+| `tamsin_mitts_carry_side_v1.png` | 1536×1024 | `01a16f32-23f8-70b3-bded-65be432b7563` | `exec-bc237e0c-82ce-4a6c-88c4-b861c8d2baf6` | `86918ed018673125` | `log_b02_b03.md` |
+| `tamsin_mitts_carry_side_v2.png` | 1536×1024 | `01a16f32-2c74-7f02-a32d-024120bddcc3` | `exec-7cf6b1df-2619-4c31-a245-936b50b58717` | `89e5f4eafc03923f` | `log_b02_b03.md` |
+| `tamsin_mitts_carry_side_v3.png` | 1536×1024 | `01a16f32-35ee-7801-9bcd-42603c96ccfe` | `exec-e4cf1d29-6a2c-43ec-b91d-5efb0b2c8c71` | `0c15d908a99ceebe` | `log_b02_b03.md` |
+| `tamsin_mitts_throw_v1.png` | 1536×1024 | `01a16f32-3f6d-7110-baef-550a25b9a57f` | `exec-a03be854-6f8a-498d-83be-9b38caa64cf8` | `5712ffaaeeeeda78` | `log_b02_b03.md` |
+| `tamsin_mitts_throw_v2.png` | 1536×1024 | `01a16f32-486d-7341-bbc0-7f36780fe8c8` | `exec-dd5bfc83-f904-4ca5-b124-cc0fc5a37145` | `a2b80593089fb8e2` | `log_b02_b03.md` |
+| `tamsin_mitts_throw_v3.png` | 1536×1024 | `01a16f32-524a-7f33-bb89-15bbac0a4bb8` | `exec-1ff71a7c-1f68-4685-890d-d7b5be51bf32` | `9a551325e48e4179` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_side_v1.png` | 1536×1024 | `01a16f32-5d33-71b1-9fe0-f361c9b53249` | `exec-fd815d2f-50fa-4369-9c59-1564baafe814` | `e8dbec5c07a7fa3f` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_side_v2.png` | 1536×1024 | `01a16f32-682d-7171-92c9-4823c5968045` | `exec-e1bbcf20-921e-424a-bf67-52de9f71e7e8` | `a0e9f06b838340b0` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_side_v3.png` | 1536×1024 | `01a16f32-7015-7f50-800c-d7ce14ea1ffa` | `exec-41b68609-4e71-43ef-ade0-96e23acab9e8` | `3a3ee6a87a4f3520` | `log_b02_b03.md` |
+| `tamsin_mitts_push_side_v1.png` | 1536×1024 | `01a16f32-7a84-7350-842b-1602a4085780` | `exec-fa39cc6b-17ec-43ac-8109-7edb8b5ea79b` | `bdd4892af88d5055` | `log_b02_b03.md` |
+| `tamsin_mitts_push_side_v2.png` | 1536×1024 | `01a16f32-84ab-79e0-a888-9f577a152c8a` | `exec-7db553b9-7355-4205-b224-d326756e067f` | `9c05af8f95c612e4` | `log_b02_b03.md` |
+| `tamsin_mitts_push_side_v3.png` | 1536×1024 | `01a16f32-8d4b-7600-85c1-ab694cb46dda` | `exec-daa0eb6b-c416-4e3e-9263-e198fb283ea4` | `58ef08baf49b53e0` | `log_b02_b03.md` |
+| `tamsin_mitts_carry_down_v1.png` | 1536×1024 | `01a16f37-cc25-7251-b931-4ffbd3b3b7d5` | `exec-c24b46db-14db-4814-a95e-4268d23c2b91` | `848dd78360394bae` | `log_b02_b03.md` |
+| `tamsin_mitts_carry_down_v2.png` | 1536×1024 | `01a16f37-cff9-7213-bbb7-54076dce27b3` | `exec-ad510061-57b0-4859-813f-3c775c7252df` | `8d529b8116304693` | `log_b02_b03.md` |
+| `tamsin_mitts_carry_down_v3.png` | 1536×1024 | `01a16f37-d8f7-75f1-939a-d67360e21662` | `exec-f6483113-6a69-4e65-9495-5228da7fd3bb` | `358d69f8d1e38afa` | `log_b02_b03.md` |
+| `tamsin_mitts_carry_up_v2.png` | 1536×1024 | `01a16f37-eb70-7dd1-a195-72a576f525e5` | `exec-687c229b-6b96-4655-83cd-f16b8701a872` | `bdefec8f6114891d` | `log_b02_b03.md` |
+| `tamsin_mitts_carry_up_v3.png` | 1536×1024 | `01a16f37-f583-7c10-bc79-1978ac010d8a` | `exec-2fc254b2-7083-49c0-990f-336bafd104de` | `09de29115c22a440` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_down_v1.png` | 1536×1024 | `01a16f38-012b-7372-86f8-8649605f79a7` | `exec-a9e553bd-b49d-44b1-aaa2-1ae45d91c35e` | `fe20b92d0b0581fc` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_down_v2.png` | 1536×1024 | `01a16f38-0b26-7273-9c3a-636d2e08e874` | `exec-6a6f8d97-0c94-4062-8170-0e48fb277858` | `e962f125b7ead2c0` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_down_v3.png` | 1536×1024 | `01a16f38-13b6-7b00-8391-ff590cb2e191` | `exec-a9865c1d-17e7-4cd6-a23b-cf3866ce1e97` | `029bb02afc2cba97` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_up_v1.png` | 1536×1024 | `01a16f38-1d56-74b2-bccf-8b2fd85f71b6` | `exec-2a2cdc52-149b-44e2-80fb-b2d5c73261d6` | `6fd60b5ff5b30bff` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_up_v2.png` | 1536×1024 | `01a16f38-24b3-7f41-b934-bf9542174d82` | `exec-1e27d6aa-42c3-4393-8513-2df9be496424` | `10943d77f1b673dc` | `log_b02_b03.md` |
+| `tamsin_mitts_pull_up_v3.png` | 1536×1024 | `01a16f38-2f07-7703-aa6f-a656bea468a9` | `exec-a153ffbf-0ac6-4315-9f60-c43e0b35b155` | `d52ecbad8b7362ce` | `log_b02_b03.md` |
+| `tamsin_mitts_push_down_v1.png` | 1536×1024 | `01a16f38-377f-7a52-9dfa-8e372bc804f9` | `exec-1ea133f8-aab4-44ba-a2ce-dc364003f2bd` | `7b25f001560e6e0a` | `log_b02_b03.md` |
+| `tamsin_mitts_push_down_v2.png` | 1536×1024 | `01a16f38-4079-7391-8281-5d788742bf78` | `exec-f6e0b517-0062-4d42-ad81-e5381ba7684f` | `47d12c88d753f02c` | `log_b02_b03.md` |
+| `tamsin_mitts_push_down_v3.png` | 1536×1024 | `01a16f38-4b64-7951-aee5-59bee5643704` | `exec-3cc6f23f-65e9-4968-b133-7500f0a2244f` | `b3a1eab7a9697eb1` | `log_b02_b03.md` |
+| `tamsin_mitts_carry_up_v1.png` | 1536×1024 | `01a16f39-4e74-7062-8052-cd947bcf73c5` | `exec-eeb08c6c-f7f1-496c-9832-448e3b392ee1` | `bc8971709d844657` | `log_b02_b03.md` |
+| `tamsin_mitts_push_up_v1.png` | 1536×1024 | `01a16f39-56f0-7541-8132-e6324873d36b` | `exec-c3d568b4-71c6-48f9-aca2-0d65179f81b2` | `4244b84345a2f10e` | `log_b02_b03.md` |
+| `tamsin_mitts_push_up_v2.png` | 1536×1024 | `01a16f39-60a5-7b53-b041-9482a304ade4` | `exec-466b362d-f999-4b61-bf71-ec4267320538` | `11c5edf714f14564` | `log_b02_b03.md` |
+| `tamsin_mitts_push_up_v3.png` | 1536×1024 | `01a16f39-68ff-7010-84fb-f3395e44ebfe` | `exec-c8664233-f552-407d-88b6-1a808229830b` | `7534d81930d15acb` | `log_b02_b03.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
