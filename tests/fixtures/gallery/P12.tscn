@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/wax_seal.tscn" id="2"]
+
+[node name="GalleryP12" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+exits = Array[StringName]([&"e"])
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="WaxSeal" parent="Props" instance=ExtResource("2")]
+position = Vector2(1872, 480)
+rotation = 1.5707964
+seal_id = &"gallery_seal"
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(400, 480)
