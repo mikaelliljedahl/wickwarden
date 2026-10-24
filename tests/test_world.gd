@@ -146,8 +146,20 @@ func _room_graph(world: World) -> void:
 				continue
 			var neighbor := world.get_room(StringName(neighbor_id))
 			check(neighbor != null, "%s exit %s leads to a loaded room" % [id, side])
-			if neighbor != null:
+			if neighbor != null and WorldData.is_oneway(id, neighbor_id):
+				# A one-way ledge drop (test_oneway.gd): a declared drop side, and no gap back.
+				check(
+					room.is_drop_side(side), "%s drops %s through a declared drop side" % [id, side]
+				)
+				check(
+					not neighbor.has_exit(opposite[side]), "%s drop %s has no way back" % [id, side]
+				)
+			elif neighbor != null:
 				check(neighbor.has_exit(opposite[side]), "%s exit %s is mirrored" % [id, side])
+				check(
+					not room.is_drop_side(side),
+					"%s side %s is a drop only on a one-way edge" % [id, side]
+				)
 	check(world.get_room(&"cave_1").dark, "the cave is dark")
 	check(not world.get_room(&"ow_0_0").dark, "overworld rooms are lit")
 	check_eq(

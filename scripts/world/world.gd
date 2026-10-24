@@ -6,6 +6,8 @@ extends Node2D
 ##   rooms are frozen (process_mode DISABLED) during the slide; the player is moved to 1 tile
 ##   inside the new room.
 ## * warp_to(): fade to black 0.3 s, switch rooms, fade back 0.3 s (cave doors, respawn).
+## * Ledge drops: a one-way edge (WorldData.is_oneway) leaves the upper room through a declared drop side
+##   and the lower room has no gap back. The landing and the slide are those of an ordinary edge.
 ## * Death: the player dies, 0.8 s later the world fades out, resets health to full and puts the
 ##   player in the start room.
 ##
@@ -258,9 +260,16 @@ func _neighbor(dir: Vector2i) -> Room:
 	var next: Room = null
 	if id != &"":
 		next = get_room(id)
-	if next == null or not next.has_exit(opposite):
+	if next == null:
 		return null
-	return next
+	if next.has_exit(opposite):
+		return next
+	# One-way ledge drop: the lower room has no gap on this side. Only a declared drop side whose
+	# graph edge is one-way from this room is crossed; the way back stays shut.
+	var from_id := String(current_room.room_id)
+	if current_room.is_drop_side(side) and WorldData.is_oneway(from_id, String(next.room_id)):
+		return next
+	return null
 
 
 func _side_name(dir: Vector2i) -> StringName:

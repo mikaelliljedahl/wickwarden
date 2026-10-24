@@ -18,6 +18,10 @@ extends Node2D
 @export var room_id: StringName = &""
 @export var grid: Vector2i = Vector2i.ZERO
 @export var exits: Array[StringName] = []
+## Sides (a subset of `exits`) on which a one-way ledge drop leaves this room. The room on the far
+## side has no gap there (its `exits` omit that side), so the way back is closed. World crosses such a
+## side only when WorldData.is_oneway() confirms the edge (code-contract 16.3, world WP F8).
+@export var drop_exits: Array[StringName] = []
 ## Dark rooms are lit only by the lamp (World turns the CanvasModulate on).
 @export var dark: bool = false
 @export var floor_color: Color = Color(0.17, 0.21, 0.17)
@@ -35,6 +39,9 @@ var _vignette: ArrayMesh
 
 func _ready() -> void:
 	position = Vector2(grid) * WorldConst.ROOM_SIZE
+	for side in drop_exits:
+		if not exits.has(side):
+			push_error("Room %s: drop side %s is not one of its exits" % [room_id, side])
 	y_sort_enabled = true
 	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	for container_name in [&"Enemies", &"Bushes", &"Props", &"Spawns"]:
@@ -168,6 +175,11 @@ func get_spawn_position(spawn_name: StringName = &"Default") -> Vector2:
 
 func has_exit(side: StringName) -> bool:
 	return exits.has(side)
+
+
+## True when `side` is a one-way ledge drop of this room (see drop_exits).
+func is_drop_side(side: StringName) -> bool:
+	return drop_exits.has(side)
 
 
 # ---- Lifecycle -------------------------------------------------------------------------------
