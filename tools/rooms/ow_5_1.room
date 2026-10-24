@@ -1,0 +1,23 @@
+; Briar Mouth (ow_5_1): giant roots arch over the cave mouth C2 at (15,2), the door to the Rootmouth
+; (cave_2_1). Exits: N to Owl Clearing, E to Rootbridge, W to Fernhollow. Two bramble snappers, one hollow.
+room ow_5_1
+terrain Briar Mouth: giant roots, cave mouth
+floor_color 0.16 0.2 0.14
+grid
+#########..#########
+#..tt........ttttt.#
+#..t.........tr.r..#
+#....b.....b.......#
+....................
+....................
+#.....r.t..........#
+#................r.#
+#..b..........t....#
+####################
+enemy bramble_snapper 6,3
+enemy bramble_snapper 12,6
+enemy hollow 16,8
+door cave_2_1 FromOverworld 15,2
+spawn Default 9,5
+spawn FromCave 15,3
+

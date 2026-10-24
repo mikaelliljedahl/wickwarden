@@ -1,0 +1,21 @@
+; Owl Clearing (ow_5_0): open clearing with stumps and bushes; the trees stand at the edges. Three duskmoths.
+; Exits: E to Standing Stones, S to Briar Mouth, W to Fernhollow.
+room ow_5_0
+terrain Owl Clearing: clearing, stumps
+floor_color 0.18 0.24 0.16
+grid
+####################
+#..tt..........tt..#
+#.......r....b.....#
+#.....b..........r.#
+....................
+....................
+#....r.......r.b...#
+#.tt.........tt....#
+#..................#
+#########..#########
+enemy duskmoth 7,1
+enemy duskmoth 15,4
+enemy duskmoth 16,7
+spawn Default 9,5
+

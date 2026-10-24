@@ -1,0 +1,23 @@
+; Shop S2, Peddler's Burrow (ow_6_0#shop): a root burrow behind the bomb wall of Standing Stones.
+; Stock: an ember (8 brass) and a tallow flask (40 brass). The door back to Standing Stones is at the south.
+room ow_6_0#shop
+terrain Peddler's burrow: stone counter, roots
+floor_color 0.12 0.1 0.08
+grid
+####################
+#tt..............tt#
+#..................#
+#..................#
+#r................r#
+#..................#
+#..................#
+#t................t#
+#..................#
+####################
+prop pedestal 5,3
+prop pedestal 14,3
+shop S2 ember @528,358
+shop S2 tallow_flask @1392,358
+door ow_6_0 FromPocket 9,8
+spawn Inside 9,6
+

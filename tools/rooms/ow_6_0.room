@@ -1,0 +1,23 @@
+; Standing Stones (ow_6_0): a ring of eight stones round an open centre. The cracked wall (bomb) in the
+; north-east nook opens to the shop pocket ow_6_0#shop (Peddler's Burrow, S2). Exits: E to North Cliff, W to Clearing.
+room ow_6_0
+terrain Standing Stones: stone ring
+floor_color 0.2 0.22 0.2
+grid
+####################
+#...............r..#
+#......r....r..r.r.#
+#.....r......r.....#
+....................
+....................
+#.....r......r.....#
+#......r....r......#
+#..................#
+####################
+enemy spitcap 3,2
+enemy spitcap 15,7
+opener cracked_wall 16,2 id=ow_6_0_shop
+door ow_6_0#shop Inside 16,2
+spawn Default 9,5
+spawn FromPocket 16,3
+

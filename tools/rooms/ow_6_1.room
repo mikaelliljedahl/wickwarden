@@ -1,0 +1,21 @@
+; Rootbridge (ow_6_1): a stream runs across the room; a root bridge crosses it at the centre, to the south
+; exit (the lake, reed raft, not yet a line). Exits: E to Eyegate, S to the lake, W to Briar Mouth.
+room ow_6_1
+terrain Rootbridge: stream, root bridge
+floor_color 0.16 0.22 0.18
+grid
+####################
+#.tt...........tt..#
+#.....b............#
+#...........b......#
+....................
+....................
+#wwwwwwww..wwwwwwww#
+#wwwwwwww..wwwwwwww#
+#...b..........b.tt#
+#########..#########
+enemy spitcap 6,1
+enemy spitcap 14,2
+enemy bramble_snapper 8,5
+spawn Default 3,4
+
