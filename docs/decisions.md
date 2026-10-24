@@ -64,3 +64,8 @@ These decisions are binding. The project owner made them on 2026-10-24.
 40. The ending trigger is `scripts/world/ending_trigger.gd` (E1). The flags `ending_rekindle` and `ending_wickwarden` keep the names the monster file gives them (code-contract 16.4).
 41. WorldData keeps class_name (F1 row overrides the no-class_name rule).
 42. Lantern caves are dark. Every cave room in `docs/world-graph.json` has `dark: true`, the boss arenas included, except the ten rooms of cave 9 (Corrow's workshop, no lantern, decision 1). Rooms that were already dark stay dark. The node key `dark` (rooms only, optional, default false) is listed in world-plan section 5.6. The glow group of the jar is `glow_light` (work package M5), not `glow_source`, in monsters-bosses-tools section 5.
+
+## Build decisions taken by the orchestrator (2026-10-24)
+
+43. Tallow sling damage is 1 per slug hit, as `docs/monsters-bosses-tools.md` section 5.2 and its keyhole and boss numbers say (sling 1). The WP header rule that the monster file wins on numbers applies. Code-contract 16.3 and `world-work-packages.md` section 4 say 2; those lines are wrong and are corrected in a later docs pass, not by a worker.
+44. The intro plays on every New game. It is skippable at any press (F14). A finished or skipped intro may write `intro_seen`, but `intro_seen` never suppresses the intro. This reads the F13 text "so a second new game still lets the player skip with one press" as the rule.
