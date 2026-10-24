@@ -85,9 +85,12 @@ such). A hollow must stand on a tile centre; the compiler checks it whatever the
 | `enemy <name> <pos>` | an instance of `scenes/enemies/<name>.tscn` in `Enemies`. Names are the graph names in lower case with spaces as `_` (`tallow_blob`); a `NEW:` prefix is dropped. |
 | `pickup item <tool id> <pos>` | `item_pickup.tscn` with `persistent_id` and `item_id` = the tool id |
 | `pickup <kind> <pos> id=<id> [requires=<flag>] [scope=<s>]` | the scene of the kind (table below); a `small_key` takes the room's scope unless `scope=` says otherwise (`scope=` is an error for other kinds) |
-| `prop <kind> <pos> [size=<w>,<h>]` | a plain `SolidBlock` of a kind in `PROP_KINDS` (`hut`, `pedestal`, `sign_post`, `wall`, `water`, `rock`, `tree`, `reed`); size defaults to 96 x 96. A prop with its own script (a hedge, a gate, a switch) is not a plain block and has no line yet |
+| `prop <kind> <pos> [size=<w>,<h>]` | a plain `SolidBlock` of a kind in `PROP_KINDS` (`hut`, `pedestal`, `sign_post`, `wall`, `water`, `rock`, `tree`, `reed`); size defaults to 96 x 96. Scripted props use their own entity lines below. |
 | `opener cracked_wall <pos> id=<id>` | `cracked_wall.tscn` (96 x 96), `wall_id` = id |
 | `opener locked_door <pos> id=<id> [scope=<s>] [size=<w>,<h>]` | a `LockedDoor` (192 x 96 by default), `door_id` = id, scope = the room's scope unless given |
+| `opener thorn_hedge <pos> id=<id> [size=<w>,<h>]` | `thorn_hedge.tscn` (192 x 96 by default), `burn_id` = id; the flag is `burned_<id>`. It must stand in a graph exit corridor and rotates to fit an east or west gap. |
+| `opener cut_screen <pos> look=<name>` | a cuttable Bush scene; `name` is `reed_cluster` or `rush_wall`. Each line is one screen tile; place one per tile to cover a two-tile exit gap. Bush screens regrow on room entry and take no id. |
+| `hidden_stairs <target room> <spawn> <pos> id=<id>` | `hidden_stairs.tscn` (192 x 96); the reveal flag is `revealed_<id>`, and the revealed door targets the given room and spawn |
 | `door <target room> <spawn> <pos>` | a `RoomDoor` trigger (96 x 96) that warps to `target room` at marker `spawn` |
 | `spawn <name> <pos>` | a `Marker2D` in `Spawns`. `Default` is the spawn of the room. |
 | `shop <S1..S6> <stock> <pos> [id=<stock id>]` | a `ShopItem` (`scenes/world/shop_item.tscn`) with `shop`, `stock` and, when given, `stock_id`. The stock is `ember`, `pot_bundle`, `slug_bundle` or `tallow_flask`. A one-time stock (`pot_bundle`, `slug_bundle`) needs `id=` (its flag is `shop_<id>`). The price is not written: `ShopItem` reads it from `data/shop_prices.json`, and the compiler checks that the stock is priced for that shop. Use `@x,y` with y = 96r + 70 for a stock item on a pedestal. |
@@ -151,8 +154,8 @@ Pickup ids are the graph ids. The dev-world rooms keep the ids of code-contract 
 
 ## Out of scope for this compiler
 
-- Props with their own script (`burnable.gd` hedges and doors, `gate.gd`, `brazier.gd`, `eye_switch.gd`, ...) need
-  an entity line each. The compiler refuses them as `prop` lines; a room that needs one waits for its entity kind.
+- Other props with their own script (`burnable.gd` thorn walls and doors, `gate.gd`, `brazier.gd`, `eye_switch.gd`, ...)
+  still need an entity line each. The compiler refuses them as `prop` lines until their entity kind exists.
 - Gates (`gate` edges) are not checked against an opener here; `tests/test_world_graph.gd` and the area tests do
   that on the built scenes.
 - Pickups with `after_boss` in the graph must carry `requires=boss_<room>_defeated`; the compiler checks the form only.

@@ -80,6 +80,18 @@ def room_record(room_id: str, exits: list[str], enemies: dict | None = None, gri
             "enemies": enemies or {}, "scene": "", "region": "x", "name": "x"}
 
 
+def open_grid(exits: list[str]) -> list[str]:
+    grid = [["#" if c in (0, 19) or r in (0, 9) else "." for c in range(20)] for r in range(10)]
+    for side in exits:
+        for col, row in br.GAP_TILES[side]:
+            grid[row][col] = "."
+    return ["".join(row) for row in grid]
+
+
+def room_text(room_id: str, exits: list[str], entity: str) -> str:
+    return "\n".join([f"room {room_id}", "grid", *open_grid(exits), entity]) + "\n"
+
+
 class RoundTrip(unittest.TestCase):
     def test_ow_0_1_matches_the_hand_made_scene(self) -> None:
         text, errors = compile_text(FIXTURE_ROOM.read_text(encoding="utf-8"), real_world())
@@ -227,6 +239,78 @@ class PropKinds(unittest.TestCase):
         result, errors = compile_text(text, world, "ow_5_5.room")
         self.assertIsNone(result)
         self.assertTrue(any("prop kind must be one of" in e for e in errors), errors)
+
+
+class ScriptedOpeners(unittest.TestCase):
+    def test_thorn_hedge_uses_scene_size_and_rotates_for_east_gap(self) -> None:
+        world = world_of([room_record("ow_2_0", ["e"])])
+        text, errors = compile_text(
+            room_text("ow_2_0", ["e"], "opener thorn_hedge @1872,480 id=ow_2_0_hedge"),
+            world,
+            "ow_2_0.room",
+        )
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/thorn_hedge.tscn"', text or "")
+        self.assertIn('burn_id = &"ow_2_0_hedge"', text or "")
+        self.assertIn("rotation = 1.570796", text or "")
+        self.assertNotIn("size = Vector2", text or "")  # the scene's 192 x 96 size is the default
+
+    def test_thorn_hedge_outside_an_exit_corridor_is_rejected(self) -> None:
+        world = world_of([room_record("ow_2_0", ["e"])])
+        _, errors = compile_text(
+            room_text("ow_2_0", ["e"], "opener thorn_hedge 5,5 id=ow_2_0_hedge"),
+            world,
+            "ow_2_0.room",
+        )
+        self.assertTrue(any(":13: opener thorn_hedge must stand in a graph exit corridor" in e for e in errors), errors)
+
+    def test_cut_screen_uses_the_selected_bush_scene(self) -> None:
+        world = world_of([room_record("ow_1_2", ["s"])])
+        for look in ("reed_cluster", "rush_wall"):
+            with self.subTest(look=look):
+                text, errors = compile_text(
+                    room_text("ow_1_2", ["s"], f"opener cut_screen 9,9 look={look}"),
+                    world,
+                    "ow_1_2.room",
+                )
+                self.assertEqual(errors, [])
+                self.assertIn(f'path="res://scenes/world/{look}.tscn"', text or "")
+
+    def test_cut_screen_rejects_unknown_looks(self) -> None:
+        world = world_of([room_record("ow_1_2", ["s"])])
+        _, errors = compile_text(
+            room_text("ow_1_2", ["s"], "opener cut_screen 9,9 look=reed_wall"),
+            world,
+            "ow_1_2.room",
+        )
+        self.assertTrue(any("opener cut_screen needs look=reed_cluster or look=rush_wall" in e for e in errors), errors)
+
+    def hidden_stairs_world(self) -> br.World:
+        return world_of(
+            [room_record("ow_0_2", ["e"]), room_record("cave_9_1", [])],
+            edges=[{"id": "e254", "a": "ow_0_2", "b": "cave_9_1", "link": "door", "gate": "hidden",
+                    "needs": ["glow_jar"], "dir": "both", "prop": "hidden stairs"}],
+        )
+
+    def test_hidden_stairs_builds_a_persistent_target_door(self) -> None:
+        text, errors = compile_text(
+            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_1 FromOverworld 5,5 id=lamp_stairs"),
+            self.hidden_stairs_world(),
+            "ow_0_2.room",
+        )
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/hidden_stairs.tscn"', text or "")
+        self.assertIn('seam_id = &"lamp_stairs"', text or "")
+        self.assertIn('door_target = &"cave_9_1"', text or "")
+        self.assertIn('door_spawn = &"FromOverworld"', text or "")
+
+    def test_hidden_stairs_must_target_a_graph_door_partner(self) -> None:
+        _, errors = compile_text(
+            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_2 FromOverworld 5,5 id=lamp_stairs"),
+            self.hidden_stairs_world(),
+            "ow_0_2.room",
+        )
+        self.assertTrue(any("door to cave_9_2 is not a door of the graph for ow_0_2" in e for e in errors), errors)
 
 
 class Geometry(unittest.TestCase):

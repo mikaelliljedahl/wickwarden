@@ -54,6 +54,12 @@ ROOM_SCRIPT = "res://scripts/world/room.gd"
 DOOR_SCRIPT = "res://scripts/world/room_door.gd"
 LOCKED_SCRIPT = "res://scripts/world/locked_door.gd"
 CRACKED_SCENE = "res://scenes/world/cracked_wall.tscn"
+THORN_HEDGE_SCENE = "res://scenes/world/thorn_hedge.tscn"
+CUT_SCREEN_SCENES = {
+    "reed_cluster": "res://scenes/world/reed_cluster.tscn",
+    "rush_wall": "res://scenes/world/rush_wall.tscn",
+}
+HIDDEN_STAIRS_SCENE = "res://scenes/world/hidden_stairs.tscn"
 ITEM_PICKUP_SCENE = "res://scenes/pickups/item_pickup.tscn"
 PICKUP_SCENES = {
     "wick_core": "res://scenes/pickups/wick_core.tscn",
@@ -78,8 +84,14 @@ CACHE_PIECE_SCENES = {
     "pot_bundle": "res://scenes/pickups/pitch_pot_bundle.tscn",
 }
 CACHE_PIECE_NAME = {"brass": "BrassCoin", "ember": "Ember", "pot_bundle": "PitchPotBundle"}
-OPENER_SIZE = {"cracked_wall": (96, 96), "locked_door": (192, 96)}
-OPENER_OPTS = ("id", "size", "scope")
+OPENER_SIZE = {
+    "cracked_wall": (96, 96),
+    "locked_door": (192, 96),
+    "thorn_hedge": (192, 96),
+    # Bush's collision circle is contained by one 96 px tile; a wide screen uses one per gap tile.
+    "cut_screen": (96, 96),
+}
+OPENER_OPTS = ("id", "size", "scope", "look")
 PROP_SIZE = (96, 96)
 # Solid kinds a `prop` line may place: plain SolidBlocks in the hand-made scenes. A prop with its own script
 # (burnable, gate, eye switch, ...) needs its own entity kind here first, so it cannot compile as a plain block.
@@ -93,6 +105,7 @@ ENTITY_OPTS = {
     "prop": ("size",),
     "opener": OPENER_OPTS,
     "door": (),
+    "hidden_stairs": ("id",),
     "spawn": (),
     "shop": ("id",),
     "cache": ("id",),
@@ -135,6 +148,11 @@ def exit_corridor(side: str) -> list[tuple[int, int]]:
         else:
             tiles += [(COLS - 1 - k, 4), (COLS - 1 - k, 5)]
     return tiles
+
+
+def corridor_side(tile: tuple[int, int], exits: list[str]) -> str | None:
+    """The graph exit corridor containing `tile`, if any."""
+    return next((side for side in SIDES if side in exits and tile in exit_corridor(side)), None)
 
 
 def neighbours(tile: tuple[int, int]) -> list[tuple[int, int]]:
@@ -546,7 +564,7 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
         plan.singles.append((key, node))
         return True
     if ent.verb == "opener":
-        return dispatch_opener(ent, key, src, plan, errors)
+        return dispatch_opener(ent, key, src, plan, world, errors)
     if ent.verb == "door":
         if len(ent.args) != 2 or ent.args[1] not in SPAWN_NAMES:
             errors.append(f"{where_}: door takes a target room and a spawn name ({', '.join(SPAWN_NAMES)})")
@@ -562,6 +580,8 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
         plan.doors.append(ent)
         plan.singles.append((key, node))
         return True
+    if ent.verb == "hidden_stairs":
+        return dispatch_hidden_stairs(ent, key, src, plan, errors)
     if ent.verb == "shop":
         return dispatch_shop(ent, key, src, plan, errors)
     if ent.verb == "cache":
@@ -635,15 +655,38 @@ def cache_pieces(ident: str, contents: str) -> list[tuple[str, str, int]] | None
     return pieces
 
 
-def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
+def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: World, errors: list[str]) -> bool:
     where_ = where(src.path, ent.line)
     if len(ent.args) != 1 or ent.args[0] not in OPENER_SIZE:
-        errors.append(f"{where_}: opener takes cracked_wall or locked_door")
+        errors.append(f"{where_}: opener takes one of {', '.join(OPENER_SIZE)}")
         return False
     kind = ent.args[0]
+    if kind == "cut_screen":
+        if set(ent.opts) - {"look"}:
+            errors.append(f"{where_}: opener cut_screen only takes look=reed_cluster or look=rush_wall")
+            return False
+        look = ent.opts.get("look", "")
+        if look not in CUT_SCREEN_SCENES:
+            errors.append(f"{where_}: opener cut_screen needs look=reed_cluster or look=rush_wall")
+            return False
+        size = OPENER_SIZE[kind]
+        tiles = tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
+        plan.openers.append((ent, tiles))
+        node = Node("", "Props", None, Res("PackedScene", CUT_SCREEN_SCENES[look]))
+        node.props = [("position", vec2(*ent.pos))]
+        node.base = camel(look)
+        plan.singles.append((key, node))
+        return True
+
+    if kind == "thorn_hedge" and "scope" in ent.opts:
+        errors.append(f"{where_}: opener thorn_hedge does not take scope=")
+        return False
     ident = ent.opts.get("id", "")
     if not IDENT_RE.match(ident):
         errors.append(f"{where_}: opener {kind} needs id=<snake_case id>")
+        return False
+    if "look" in ent.opts:
+        errors.append(f"{where_}: opener {kind} does not take look=")
         return False
     size = OPENER_SIZE[kind]
     if "size" in ent.opts:
@@ -652,12 +695,29 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, errors: li
             errors.append(f"{where_}: size takes two positive numbers, size=<w>,<h>")
             return False
         size = parsed
-    tiles = tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
+    side = None
+    if kind == "thorn_hedge":
+        rec = world.room(src.room_id or "")
+        side = corridor_side(ent.tile, rec["exits"] if rec is not None else [])
+        if side is None:
+            errors.append(f"{where_}: opener thorn_hedge must stand in a graph exit corridor")
+            return False
+    footprint = (size[1], size[0]) if side in ("e", "w") else size
+    tiles = tiles_of_rect(ent.pos[0] - footprint[0] / 2, ent.pos[1] - footprint[1] / 2,
+                          footprint[0], footprint[1])
     plan.openers.append((ent, tiles))
     if kind == "cracked_wall":
         node = Node("", "Props", None, Res("PackedScene", CRACKED_SCENE))
         node.props = [("position", vec2(*ent.pos)), ("wall_id", sname(ident))]
         node.base = "CrackedWall"
+    elif kind == "thorn_hedge":
+        node = Node("", "Props", None, Res("PackedScene", THORN_HEDGE_SCENE))
+        node.props = [("position", vec2(*ent.pos)), ("burn_id", sname(ident))]
+        if side in ("e", "w"):
+            node.props.append(("rotation", "1.570796"))
+        if size != OPENER_SIZE["thorn_hedge"]:
+            node.props.append(("size", vec2(*size)))
+        node.base = "ThornHedge"
     else:
         node = Node("", "Props", "StaticBody2D")
         node.props = [("position", vec2(*ent.pos)), ("script", Res("Script", LOCKED_SCRIPT)), ("door_id", sname(ident))]
@@ -667,6 +727,32 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, errors: li
         if size != OPENER_SIZE["locked_door"]:
             node.props.append(("size", vec2(*size)))
         node.base = "LockedDoor"
+    plan.singles.append((key, node))
+    return True
+
+
+def dispatch_hidden_stairs(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
+    """`hidden_stairs <target> <spawn> <pos> id=<id>` reveals a persistent RoomDoor after a glow-jar reveal."""
+    where_ = where(src.path, ent.line)
+    if len(ent.args) != 2 or ent.args[1] not in SPAWN_NAMES:
+        errors.append(f"{where_}: hidden_stairs takes a target room and a spawn name ({', '.join(SPAWN_NAMES)})")
+        return False
+    ident = ent.opts.get("id", "")
+    if not IDENT_RE.match(ident):
+        errors.append(f"{where_}: hidden_stairs needs id=<snake_case id>")
+        return False
+    size = (192, 96)  # hidden_stairs.tscn's default size, which fills a 192 px wall gap
+    tiles = tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
+    plan.openers.append((ent, tiles))
+    plan.doors.append(ent)
+    node = Node("", "Props", None, Res("PackedScene", HIDDEN_STAIRS_SCENE))
+    node.props = [
+        ("position", vec2(*ent.pos)),
+        ("seam_id", sname(ident)),
+        ("door_target", sname(ent.args[0])),
+        ("door_spawn", sname(ent.args[1])),
+    ]
+    node.base = "HiddenStairs"
     plan.singles.append((key, node))
     return True
 
@@ -881,12 +967,14 @@ def check_doors(src: Source, rec: dict, world: World, plan: Plan, errors: list[s
 def check_openers_and_ids(src: Source, plan: Plan, errors: list[str]) -> None:
     seen: set[str] = set()
     for ent, tiles in plan.openers:
-        ident = ent.opts["id"]
-        if ident in seen:
-            errors.append(f"{where(src.path, ent.line)}: id {ident} is used twice in this room")
-        seen.add(ident)
+        ident = ent.opts.get("id", "")
+        if ident:
+            if ident in seen:
+                errors.append(f"{where(src.path, ent.line)}: id {ident} is used twice in this room")
+            seen.add(ident)
         if any(t in plan.static for t in tiles):
-            errors.append(f"{where(src.path, ent.line)}: opener {ident} stands on an obstacle")
+            label = ident or ent.args[0]
+            errors.append(f"{where(src.path, ent.line)}: opener {label} stands on an obstacle")
     for ent, ident, _ in plan.pickups:
         if ident in seen:
             errors.append(f"{where(src.path, ent.line)}: id {ident} is used by a pickup and an opener")
