@@ -677,6 +677,24 @@ GPT Image terrain textures below; they add no other image.
 | `haystack_v1.png` | 1536×1024 | `01a16f6e-fa03-7a81-8bee-397e253d25f6` | `exec-00ee85af-84d8-4b7f-9f25-63df33292f5d` | `9ee95e1331a84845` | `log_b38.md` |
 | `haystack_v2.png` | 1536×1024 | `01a16f6f-00a2-7ef0-9b02-d13078df88e9` | `exec-c3a9df3b-ab8c-4ffa-9e58-872f779f1181` | `210be2ec38c61813` | `log_b38.md` |
 | `haystack_v3.png` | 1536×1024 | `01a16f6f-0698-7b11-92aa-89f2fd173e6b` | `exec-519765e8-c29e-4f42-b38a-345c97a9d9a1` | `86f017175c57c5cb` | `log_b38.md` |
+| `archivist_p1_v1.png` | 1536×1024 | `01a16f6d-195d-73c2-bf21-556236cb9a57` | `exec-dd03301b-5ce1-41c6-b53f-dbdb43638e7c` | `fc9b3b91bdec8500` | `log_b65.md` |
+| `archivist_p1_v2.png` | 1536×1024 | `01a16f6f-cc59-7db3-a019-590ff0082568` | `exec-ee261848-0b94-4cde-b28b-070fa32d6425` | `96b881f92c8d8219` | `log_b65.md` |
+| `archivist_p1_v3.png` | 1536×1024 | `01a16f6f-d2de-7aa0-96dd-01d2882e2958` | `exec-3b214c32-eb09-49e4-abaa-72ab2ecfc177` | `f2c1b567f634e598` | `log_b65.md` |
+| `colossus_shard_v1.png` | 1536×1024 | `01a16f6f-b905-72b1-9765-3ac463a97c44` | `exec-a8f33a76-32e4-41fc-bd9e-fd4ccff56128` | `f13b9f8f1f3a150b` | `log_b65.md` |
+| `colossus_shard_v2.png` | 1536×1024 | `01a16f6f-c132-76b2-ba55-88667b6e0a5c` | `exec-aa426cdb-79a2-49eb-9ff1-60aac31b8767` | `210c022122160359` | `log_b65.md` |
+| `colossus_shard_v3.png` | 1536×1024 | `01a16f6f-c607-7313-a760-4027d2f10fd6` | `exec-33dd180f-7ed7-4980-aa0a-e928693f0aa2` | `351b8f53d54e0a04` | `log_b65.md` |
+| `hushed_colossus_arms_slam_v1.png` | 1536×1024 | `01a16f6e-7696-78c1-a635-1cfbdfe4173a` | `exec-f3004ae7-f9b2-4162-9985-295182bd5038` | `32e6bdaa1b7c9abc` | `log_b65.md` |
+| `hushed_colossus_arms_slam_v2.png` | 1536×1024 | `01a16f6e-77e6-70b3-829c-924aff72450d` | `exec-76c976c9-c88a-4e28-9a46-9ca96743308b` | `7eb629cd1fe84d4f` | `log_b65.md` |
+| `hushed_colossus_arms_slam_v3.png` | 1536×1024 | `01a16f6e-78dd-7cf1-bd00-0ff6dc93201e` | `exec-a4b9eb13-3b85-4a18-9cf0-b7775b5c4e27` | `8b3f534652eff239` | `log_b65.md` |
+| `hushed_colossus_arms_sweep_v1.png` | 1536×1024 | `01a16f6e-9237-7593-84ff-195fa83ce350` | `exec-4612908c-19bb-4db9-ba30-fe8a28f41208` | `5b70cf89c6ea07a4` | `log_b65.md` |
+| `hushed_colossus_arms_sweep_v2.png` | 1536×1024 | `01a16f6e-9cdb-7013-a974-7433c8f8c3b8` | `exec-af59d763-4388-407b-b485-ee469588e6fb` | `d7b24d0b1e1f4e30` | `log_b65.md` |
+| `hushed_colossus_arms_sweep_v3.png` | 1536×1024 | `01a16f6e-9d12-7dd3-8819-aa6c53d03a88` | `exec-4f753631-0581-4f80-83d5-5687c9554cdb` | `e3374067bbeed61d` | `log_b65.md` |
+| `hushed_colossus_body_v1.png` | 1536×1024 | `01a16f6c-f29c-7a40-bad1-3b16fec183f3` | `exec-3efb272e-efd6-447f-9a68-944072d76f63` | `d39d96761f99966f` | `log_b65.md` |
+| `hushed_colossus_body_v2.png` | 1536×1024 | `01a16f6d-04bd-76b1-86f5-75c7a30cd4ea` | `exec-e7ded8ca-612a-44b6-a1b2-6a4528afd89c` | `43a480684d5fd282` | `log_b65.md` |
+| `hushed_colossus_body_v3.png` | 1536×1024 | `01a16f6d-0637-7580-a2bb-3639bca76a2b` | `exec-fa9a18d5-8aaa-4ba0-9ee6-492faf7add1c` | `157445a8e062425e` | `log_b65.md` |
+| `tidewick_tail_v1.png` | 1536×1024 | `01a16f6b-8b19-7400-ae2b-85afd9389d20` | `exec-b97d8178-034d-4af2-824c-7dc0ce984c22` | `4a0d2b95bff6fb72` | `log_b65.md` |
+| `tidewick_tail_v2.png` | 1536×1024 | `01a16f6c-d9c5-7271-8e56-e5d1632d6d29` | `exec-3e4532d0-bcf2-43fc-ab6d-b592dea30330` | `e875ea31920c35c6` | `log_b65.md` |
+| `tidewick_tail_v3.png` | 1536×1024 | `01a16f6c-dfe9-7333-945b-704594e91b79` | `exec-088de42b-92b3-440d-8bf1-0bb8ca9a0dde` | `77a6d5b241c92b95` | `log_b65.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
