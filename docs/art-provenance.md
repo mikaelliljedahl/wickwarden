@@ -1215,6 +1215,24 @@ GPT Image terrain textures below; they add no other image.
 | `choir_warden_actions_side_v1.png` | 1536×1024 | `01a16fba-799a-71b0-a954-1482feedd65a` | `exec-7ec1a6be-711b-43af-b143-3571e297d64f` | `b3c9cbdfef33e74b` | `log_b58.md` |
 | `choir_warden_actions_side_v2.png` | 1536×1024 | `01a16fbe-3de8-7921-afd1-c3ad78d4ecbf` | `exec-a5358146-5963-458e-957d-d83ced6f6714` | `b18ce228c4202b72` | `log_b58.md` |
 | `choir_warden_actions_side_v3.png` | 1536×1024 | `01a16fbe-3e18-7001-bc34-d1ab1db8e44c` | `exec-6848c4a6-56cd-45c6-867d-94a3047b9ee9` | `86d5235259bc4585` | `log_b58.md` |
+| `fx_hit_spark_v1.png` | 1536×1024 | `01a16fb7-3a06-7f72-91c9-a3942e1426cf` | `exec-fa20cfec-674f-4810-96fa-5843ac048647` | `09799645f3923118` | `log_b44.md` |
+| `fx_hit_spark_v2.png` | 1536×1024 | `01a16fb6-e318-76e3-ab68-fd13e3d77ed6` | `exec-c69b53de-a989-4967-b79d-2ad74207a145` | `9d4e7ee7d18d1e7d` | `log_b44.md` |
+| `fx_hit_spark_v3.png` | 1536×1024 | `01a16fb7-4002-7040-9cfe-2d8059a95d56` | `exec-11169d0b-7579-41b9-a2ba-21fccd22a226` | `264e9c23775e6966` | `log_b44.md` |
+| `fx_enemy_poof_v1.png` | 1536×1024 | `01a16fb6-e2f2-7920-af01-78509751f7e6` | `exec-dac7aaef-9430-4c14-be95-0f149075244c` | `78e7844dd0032201` | `log_b44.md` |
+| `fx_enemy_poof_v2.png` | 1536×1024 | `01a16fb7-4be8-7fe3-845a-2dcf24a3ddd1` | `exec-17a04d52-8cc3-4c56-814b-cf34a3fe99d1` | `f9fa2ae6bc0afcfb` | `log_b44.md` |
+| `fx_enemy_poof_v3.png` | 1536×1024 | `01a16fb6-e3cd-73c3-a405-3227539e149a` | `exec-187b754a-f33a-4ff9-9935-492a0e628906` | `534eb7efe8e14f59` | `log_b44.md` |
+| `fx_water_splash_v1.png` | 1536×1024 | `01a16fbb-21d3-7a42-92d4-59be73bb5d9d` | `exec-6ecc5306-f769-4fa7-badc-3e42130f4a35` | `63fb56ce38fc1afa` | `log_b44.md` |
+| `fx_water_splash_v2.png` | 1536×1024 | `01a16fbb-22c9-7282-83e9-70d5eb2f330a` | `exec-2aafa0b8-bd74-42aa-a925-479493a395fe` | `65b5526a92316737` | `log_b44.md` |
+| `fx_water_splash_v3.png` | 1536×1024 | `01a16fbb-23e0-7ab1-bdfa-852afcc98341` | `exec-bde4b69e-4149-44aa-a506-1cf061198503` | `b1ae9dfc86f22875` | `log_b44.md` |
+| `fx_water_ripple_v1.png` | 1536×1024 | `01a16fbb-2208-7a93-af29-0ab231d4fd29` | `exec-2a8ac076-ebe4-4959-ae58-bf7a32db5f17` | `fc5a1c3cfc56b378` | `log_b44.md` |
+| `fx_water_ripple_v2.png` | 1536×1024 | `01a16fbb-226b-7851-ac44-5baa7173cdc9` | `exec-602d89bb-cf6e-4fe2-8f5b-716f5ff63ee4` | `2946f832e46073bd` | `log_b44.md` |
+| `fx_water_ripple_v3.png` | 1536×1024 | `01a16fbb-2272-7fa3-8e5c-1d6de09f3206` | `exec-2927f24f-90e9-480d-b622-24cc23da8401` | `c338faca5ea1b86f` | `log_b44.md` |
+| `fx_raft_wake_v1.png` | 1536×1024 | `01a16fbf-5f54-74a1-ab94-4129624bcd93` | `exec-831d88ed-acb6-481f-9838-db4fc25d6658` | `bc449ecede4cc501` | `log_b44.md` |
+| `fx_raft_wake_v2.png` | 1536×1024 | `01a16fbf-5e66-71b2-a274-56fa844db9d8` | `exec-40deb2c4-271c-42d4-b50a-471ac5421a08` | `f9c832fbfbcde3cc` | `log_b44.md` |
+| `fx_raft_wake_v3.png` | 1536×1024 | `01a16fbf-5f84-75a3-b563-b45bf58a9864` | `exec-e43d12b3-5478-4e46-b5f6-150ecb221f5f` | `57372a0fb8888de4` | `log_b44.md` |
+| `fx_wisp_burst_v1.png` | 1536×1024 | `01a16fbf-5f31-7040-8021-2cfd0207362f` | `exec-d512c656-e52b-4e46-9c6f-1920b173b033` | `e186704da89ee20a` | `log_b44.md` |
+| `fx_wisp_burst_v2.png` | 1536×1024 | `01a16fbf-5ec7-7f33-a6ad-780175377bf6` | `exec-57ae31c2-bf16-4a28-bf4c-7986dff4c0f0` | `6be8e11f790b13a0` | `log_b44.md` |
+| `fx_wisp_burst_v3.png` | 1536×1024 | `01a16fbf-5f9a-72b1-bd7e-ea048258f6f2` | `exec-e10b00da-120e-4a71-9837-caa055e042ae` | `5961c341c7d05e41` | `log_b44.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
