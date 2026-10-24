@@ -9,7 +9,9 @@ extends Node2D
 ## * Ledge drops: a one-way edge (WorldData.is_oneway) leaves the upper room through a declared drop side
 ##   and the lower room has no gap back. The landing and the slide are those of an ordinary edge.
 ## * Death: the player dies, 0.8 s later the world fades out, resets health to full and puts the
-##   player in the start room.
+##   player in the checkpoint room (the last cave mouth or shop entered, else the start room). Flags stay.
+## * Launch modes (SaveGame.launch_mode): `new` resets GameState, `continue` loads the save slot and
+##   resumes in its current room, `dev` keeps the state the caller set up.
 ##
 ## Rooms come from data/world_data.json (WorldData): the grid index is built from it, and a room
 ## is instantiated when it is first needed. The current room and the rooms its exits lead to stay
@@ -97,6 +99,7 @@ func _ready() -> void:
 	debug_overlay = DebugOverlay.new()
 	debug_overlay.name = "DebugOverlay"
 	add_child(debug_overlay)
+	_apply_launch_mode()
 	if DEV_ARG in OS.get_cmdline_user_args():
 		dev_mode = true
 		apply_dev_loadout()
@@ -207,6 +210,7 @@ func warp_to(room_id: StringName, spawn: StringName = START_SPAWN, fade: bool = 
 
 
 func _physics_process(delta: float) -> void:
+	SaveGame.add_playtime(delta)
 	match phase:
 		Phase.NONE:
 			_check_edge()
@@ -220,7 +224,7 @@ func _physics_process(delta: float) -> void:
 			_t += delta
 			if _t >= DEATH_WAIT:
 				_respawn_pending = true
-				_next_room = get_room(START_ROOM)
+				_next_room = _respawn_room()
 				_warp_spawn = START_SPAWN
 				_warp_switched = false
 				phase = Phase.FADE_OUT
@@ -500,14 +504,34 @@ func _refresh_loaded() -> void:
 			_unload(id)
 
 
-## Room and spawn the game starts in: the `--start-room` argument when that room exists.
+## Room and spawn the game starts in: the `--start-room` argument when that room exists, else the
+## saved room of a Continue, else the start room.
 func _start_position() -> Array[StringName]:
 	var requested := parse_start_room(OS.get_cmdline_user_args())
 	if requested[0] != &"":
 		if get_room(requested[0]) != null:
 			return requested
 		push_warning("World: --start-room=%s is not a room; starting in %s" % [requested[0], START_ROOM])
+	if SaveGame.launch_mode == SaveGame.MODE_CONTINUE and get_room(SaveGame.resume_room()) != null:
+		return [SaveGame.resume_room(), START_SPAWN]
 	return [START_ROOM, START_SPAWN]
+
+
+## The launch mode of SaveGame: `new` starts a clean run, `continue` loads the slot (a new run when
+## there is none), `dev` keeps the state of the caller.
+func _apply_launch_mode() -> void:
+	if SaveGame.launch_mode == SaveGame.MODE_DEV:
+		return
+	if SaveGame.launch_mode == SaveGame.MODE_CONTINUE and SaveGame.load_into_state():
+		return
+	GameState.reset()
+	SaveGame.begin_new_game()
+
+
+## The room a death returns to: the checkpoint (SaveGame), else the start room.
+func _respawn_room() -> Room:
+	var room := get_room(SaveGame.checkpoint_room())
+	return room if room != null else get_room(START_ROOM)
 
 
 func _unload(room_id: StringName) -> void:

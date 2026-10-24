@@ -13,6 +13,7 @@ config/features=PackedStringArray("4.7")
 
 GameState="*res://scripts/autoload/game_state.gd"
 Events="*res://scripts/autoload/events.gd"
+SaveGame="*res://scripts/autoload/save_game.gd"
 Audio="*res://scripts/audio/audio.gd"
 
 [display]
