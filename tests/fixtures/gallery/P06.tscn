@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/liftable_rock.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/world/heavy_stone.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/heavy_boulder.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/heavy_door.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/world/heavy_stones.tscn" id="6"]
+
+[node name="GalleryP06" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+exits = Array[StringName]([&"s"])
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="LiftableRock" parent="Props" instance=ExtResource("2")]
+position = Vector2(480, 300)
+
+[node name="HeavyStone" parent="Props" instance=ExtResource("3")]
+position = Vector2(960, 300)
+stone_id = &"gallery_stone"
+
+[node name="HeavyStones" parent="Props" instance=ExtResource("6")]
+position = Vector2(1440, 300)
+stone_id = &"gallery_stones"
+
+[node name="HeavyBoulder" parent="Props" instance=ExtResource("4")]
+position = Vector2(480, 600)
+stone_id = &"gallery_boulder"
+
+[node name="HeavyDoor" parent="Props" instance=ExtResource("5")]
+position = Vector2(960, 600)
+stone_id = &"gallery_door"
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(960, 900)
