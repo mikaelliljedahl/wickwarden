@@ -1,0 +1,19 @@
+; Quarry (ow_4_7): cut stone and rock piles, open ground in the middle. Four ways: N to Cliff Foot, E to
+; Statuary, S to South Cliff, W to Fen Pass.
+room ow_4_7
+terrain Quarry: quarry, rock piles
+floor_color 0.22 0.2 0.17
+grid
+#########..#########
+#rr....r.....rr....#
+#.r..........rr.r..#
+#..rr.......r......#
+......rr............
+.....rr.......r.....
+#.r....r.....rr....#
+#.......r....rr....#
+#.....r...........r#
+#########..#########
+enemy hollow 4,2
+enemy hollow 15,7
+spawn Default 10,5

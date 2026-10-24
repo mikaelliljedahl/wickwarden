@@ -1,0 +1,22 @@
+; Fen Pass (ow_3_7): a marsh pass between the Quarry (E) and the rush wall to Last Pier (W, cut with the hook).
+; Reeds line both sides, two pools stand in the middle. The rush wall is two cut screens on the west gap.
+room ow_3_7
+terrain Fen Pass: pass, reeds, pools
+floor_color 0.17 0.22 0.16
+grid
+####################
+#..e.....ww.....e..#
+#.e......ww........#
+#....ee.........e..#
+....................
+....................
+#..e........ee.....#
+#.......ww.....e...#
+#e....ww.....e.....#
+####################
+enemy skitterwick 5,2
+enemy skitterwick 13,7
+enemy tallow_blob 9,4
+opener cut_screen 0,4 look=rush_wall
+opener cut_screen 0,5 look=rush_wall
+spawn Default 15,5

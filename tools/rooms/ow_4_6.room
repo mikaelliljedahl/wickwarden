@@ -1,0 +1,19 @@
+; Cliff Foot (ow_4_6): the landing of the Dockside drop (one-way, from ow_4_5 to the north). The north wall
+; is cliff face and rubble; E walks to Watchers' Steps, S to the Quarry.
+room ow_4_6
+terrain Cliff Foot: cliff foot, scree
+floor_color 0.2 0.2 0.18
+grid
+####################
+#....rr.......r....#
+#.r......r.........#
+#...r...........r..#
+#..........r........
+#...................
+#...rr.........r...#
+#..........r.......#
+#.....rr.......r...#
+#########..#########
+enemy skitterwick 5,3
+enemy skitterwick 14,6
+spawn Default 10,2
