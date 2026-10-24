@@ -11,6 +11,7 @@ The documents marked **Binding** in the table are normative. Other documents gui
 | File | Contents | Status |
 |---|---|---|
 | [docs/state.md](docs/state.md) | Current status: what is done, what is running, open points and next steps. Read it first. | Living status; update it when a step or work package lands |
+| [docs/handoff.md](docs/handoff.md) | Orchestrator handoff: workflow, how to start agents, art pipeline, owner preferences, status and a start checklist. | Living status; update it at every push |
 | [docs/decisions.md](docs/decisions.md) | The owner's decisions of 2026-10-24. They win over the plans where they differ. | **Binding** |
 | [docs/code-contract.md](docs/code-contract.md) | File ownership, APIs, collision layers, tests; section 16 is the world build contract. | **Binding** |
 | [docs/asset-contract.md](docs/asset-contract.md) | Art interface: cells, foot line, strips, manifest, `SpriteVisual`. | **Binding** |
