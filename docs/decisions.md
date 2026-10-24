@@ -27,7 +27,7 @@ These decisions are binding. The project owner made them on 2026-10-24.
 15. The 3 existing sealed spots stay in their rooms. The other 30 pockets get their own scenes.
 16. There is one save slot. Autosave runs on room entry. Respawn happens at the last cave mouth or shop.
 17. Add a JSON export filter when the first export preset is created.
-18. Commit only 16 contact sheets of room captures. Do not commit the 218 full-size screenshots.
+18. Commit only 16 contact sheets of room captures. Do not commit the 218 full-size screenshots. Current state: no contact sheet is committed yet; the 14 full-size step-2 screenshots in `docs/screens/step2/` (about 25 MB) were tracked before this rule and are not deleted.
 19. A short load hitch at a cave warp is acceptable.
 20. The item subscreen opens with Tab. On gamepad it opens with Select.
 21. The intro has no skip hint. Any confirm key or Esc skips it.

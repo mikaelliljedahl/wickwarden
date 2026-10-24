@@ -1,6 +1,6 @@
 # Wickwarden: master world plan
 
-Status: plan only. No code, scene or art changes come with this document.
+Status: plan accepted. The world build is running; see [state.md](state.md) and [world-work-packages.md](world-work-packages.md).
 Companion files: [world-graph.json](world-graph.json) (the machine-readable graph) and
 [../tools/check_world_graph.py](../tools/check_world_graph.py) (the checker).
 

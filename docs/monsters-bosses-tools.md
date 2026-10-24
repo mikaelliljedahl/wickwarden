@@ -1,6 +1,6 @@
 # Wickwarden: monsters, bosses and tools (spec)
 
-Status: plan only. No code, scene or art changes come with this document.
+Status: plan accepted. The world build is running; see [state.md](state.md) and [world-work-packages.md](world-work-packages.md).
 Companions: [world-plan.md](world-plan.md) (master plan, Appendix A lists the monsters, section 2 the
 tools), [world-graph.json](world-graph.json), [dev-world-plan.md](dev-world-plan.md) (sections 4-6 are
 the number format used here), [code-contract.md](code-contract.md) (APIs and layers),

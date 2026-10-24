@@ -6,7 +6,7 @@ missing something, report it, do not patch the core. Numbers come from
 [dev-world-plan.md](dev-world-plan.md); this file defines the interfaces.
 
 Godot 4.7 (`config_version=5`), GDScript, static typing where reasonable. Run commands from the repo
-root. `make test` runs every test, `make check` = import + test + gdlint.
+root. `make test` runs every test, `make check` = import + test + gdlint + world-check + world-gen-test.
 
 ## 1. Rules for every work package (WP1-WP7)
 

@@ -1,6 +1,6 @@
 # Wickwarden: art inventory (GPT Image)
 
-Status: list only. No prompts and no images come with this document. It is the complete list of
+Status: the list is complete. Prompts and images are produced per batch in `tools/art_prompts/` and `tools/source_art/` (see [art-provenance.md](art-provenance.md)). It is the complete list of
 graphic elements the full game needs from GPT Image, with status, size, animation frames and the
 number of variants to generate. Prompts are written later from [art-brief.md](art-brief.md) (style,
 shared block, sheet block, key colours), one batch at a time.
