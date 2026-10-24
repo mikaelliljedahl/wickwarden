@@ -1,7 +1,7 @@
 extends StaticBody2D
-## A mooring post on a shore: a solid post (layer WORLD) with a dock zone of 80 px. Two posts with the
-## same pair of ids (`mooring_id` here, `target_mooring` and `target_room` on the other end) are the
-## two ends of a raft crossing (world-plan 2.3, monsters file 5.4). The post is in group `mooring`.
+## A mooring post on a shore: a solid post (layer WORLD) with a dock zone of 80 px. A raft crossing links two
+## posts: `target_room` and `target_mooring` name the post at the other end, which names this one back
+## (world-plan 2.3, monsters file 5.4). The post is in group `mooring`.
 ##
 ## `get_ride_path()` returns the path of a raft ride from this post to the target post: a quadratic arc
 ## over the water, sampled every SAMPLE_PX, ending exactly on the target's landing point. The landing point
@@ -17,7 +17,6 @@ const ARC_HEIGHT := 0.2
 const SAMPLE_PX := 24.0
 const POST_SIZE := Vector2(32, 32)
 const KIND := &"mooring"
-const LANDING_MARKER := "Landing"
 
 @export var mooring_id: StringName = &""
 ## Room id and mooring id of the post at the other end of the crossing.
