@@ -15,7 +15,7 @@ Date: 2026-10-24. Codex jobs (AgentTeamForge, backend `codex`, model `cheapest`,
 - `crate_stack_1_v3.png`: ok - one crate, grey planks and iron corners; slightly larger than v1
 - `crate_stack_2_v1.png`: ok - one crate of dark slatted boards with a rope handle on each side; clean
 - `crate_stack_2_v2.png`: ok - one crate with rope handles; clean
-- `crate_stack_2_v3.png`: MISSING
+- `crate_stack_2_v3.png`: ok - one crate with rope handles; clean
 - `crate_stack_3_v1.png`: ok - three crates stacked, iron straps; small ivy on the top crate
 - `crate_stack_3_v2.png`: ok - three crates stacked, larger than v1; ivy on the lower crates
 - `crate_stack_3_v3.png`: ok - three crates stacked, clean
@@ -329,6 +329,34 @@ Original game art for "Wickwarden", a painterly top-down adventure. Hand-painted
 A sprite sheet on a perfectly flat, uniform pure magenta #FF00FF background that fills the whole image, with no gradient, no texture, no vignette, no floor and no cast shadow on the background. Each pose is a separate, complete figure with a wide empty gap of background on all sides; poses never touch or overlap and nothing is cut off at the image edge. Poses in one row stand on one shared invisible ground line and have the same scale. The figure is identical in every pose: same design, same colours, same proportions.
 
 Exactly 1 separate pose in one horizontal row on a 1536x1024 landscape canvas, all at the same scale, all bases on one common ground line, wide equal gaps. Pose 1, one crate: a single wooden crate of dark slatted boards with a rope handle on each side. Variation for this image: Slightly stronger warm light on the lit parts; more weathered surface detail and a few more chips and stains. No extra poses, no cropping, no touching, no text. Painterly high detail, no pixel art.
+
+Image size: 1536x1024.
+```
+
+## `crate_stack_2_v3.png`
+
+- File: `tools/source_art/crate_stack_2_v3.png` (accepted name after the cull: `tools/source_art/crate_stack_2.png`)
+- Job id: `b33_crate_stack_2_v3` (job name `ww-b33-crate_stack_2-v3`)
+- Date: 2026-10-24
+- Reference image: `tools/source_art/ow_props.png`
+- Attempts: 1
+- Image size: 1536x1024 pixels (requested 1536x1024)
+- Generation tool: Codex job, native image generation (model shown as `gpt-6-luna`, effort medium)
+- Session ID: `01a16f68-0d2d-7ac0-ae27-d86678ba1bc3`
+- Generated file name: `exec-381eb725-a50e-47f8-94a2-6a5e42750722.png`
+- Source path copied from: `/home/mikael/.codex/generated_images/01a16f68-0d2d-7ac0-ae27-d86678ba1bc3/exec-381eb725-a50e-47f8-94a2-6a5e42750722.png`
+- SHA-256: `0cc5b6700e8928a0ca64ef4fd5dbb446ba588cc5296efa0d8f126570c8c3dde5`
+- Verdict: ok. one crate with rope handles; clean
+- Rejected attempts: none.
+
+Exact prompt used:
+
+```text
+Original game art for "Wickwarden", a painterly top-down adventure. Hand-painted storybook illustration style with visible brush strokes and soft edges, high detail, warm lamp light against deep dusk colours, low saturation except for light sources. NOT pixel art, no pixel grid, no dithering, no thick black outlines. Three-quarter top-down view, camera about 50 degrees above the ground, key light from the upper left. No text, no letters, no numbers, no labels, no frame borders, no grid lines, no watermark.
+
+A sprite sheet on a perfectly flat, uniform pure magenta #FF00FF background that fills the whole image, with no gradient, no texture, no vignette, no floor and no cast shadow on the background. Each pose is a separate, complete figure with a wide empty gap of background on all sides; poses never touch or overlap and nothing is cut off at the image edge. Poses in one row stand on one shared invisible ground line and have the same scale. The figure is identical in every pose: same design, same colours, same proportions.
+
+Exactly 1 separate pose in one horizontal row on a 1536x1024 landscape canvas, all at the same scale, all bases on one common ground line, wide equal gaps. Pose 1, one crate: a single wooden crate of dark slatted boards with a rope handle on each side. Variation for this image: Softer edges and more worn material texture; the shape kept simple and the same as the other variants. No extra poses, no cropping, no touching, no text. Painterly high detail, no pixel art.
 
 Image size: 1536x1024.
 ```
