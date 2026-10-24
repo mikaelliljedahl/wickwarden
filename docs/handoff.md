@@ -9,21 +9,27 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-- Date: 2026-10-24
-- HEAD when this section was written: `04c90ee` (F13). The lead session hit its usage limit here; a new orchestrator should start from this point.
-- Repo state: other agents write to the repo at the same time. Uncommitted files exist that are not ours (see section 6).
+- Date: 2026-10-24 (orchestrator takeover session, Claude-free build by Haiku workers via AgentTeamForge pi jobs)
+- HEAD at this update: `3dc6397`. `make check` was green at `3dc6397`'s parent state (EXIT 0 at 21:58).
+- Repo state: other agents (art producers) commit at the same time. Use explicit paths only.
 
 | Part | State |
 |---|---|
-| Step 1 (dev world) | Done. Historical. |
-| Step 2 (art pass) | Done in code. Owner has not approved it in play. |
-| Planning (world plan, WPs, decisions, graph, monster spec, art inventory, intro script) | Done. |
-| Wave 0 (foundation) | F0–F13 done. F14 (intro) not started; can start now. Run `make check` first to confirm F13 is green. |
-| Wave 1 (parts: P01–P15, T01–T08, M0–M5) | Not started. Gate (F0–F7 merged) is met. Start with the WPs whose Depends are done. |
-| Wave 2 (regions R1–R6, MB1–MB5, B01–B10) | Not started. |
-| Wave 3 (caves C01–C10, E1 ending) | Not started. |
-| Wave 4 (QA Q1–Q9) | Not started. |
-| Wave 5 (Z1–Z3) | Not started. |
+| Step 1, Step 2, planning | Done. |
+| Wave 0 (F0–F14) | Done. F14 intro landed `309ab00`. FX1 fix (title test, area_base wall list) `5e87f4e`. |
+| Wave 1 | In progress. Landed: M0 `c0adbd7`, P01 `fe259ab`, P02 `b3ee104`, P03 `ef22589`/`c56fda5`, P04 `203f04a`, P05 `c027332`, P07 `ac6347b`, P08 `82f3cee`, P10 `d0491de`, P11 `01b3b80`, P14 `3dc6397`, T01 `376daae`, T02 `882020d`, T05 `970d28e`. Running: M1–M5, P09, P12, P13. Queued: P06, P15, T03, T04, T06, T07, T08. |
+| Wave 2–5 | Not started. |
+
+Decisions added by the orchestrator: 43 (sling damage 1, monster file wins), 44 (intro on every New game).
+
+Open points found by workers (lead to decide or to fix in a later WP):
+- `tests/area_base.gd` WALL_SCRIPTS lacks `boss_door.gd` and `ninth_door.gd` (P10, P11 reports). Fix in a later FX.
+- `tests/area_base.gd` has uncommitted formatter changes from another agent (M0 ran `make format` by mistake and restored 28 files; the area_base hunk stays in the tree). Its owner must check it.
+- Contract 16.3 and WP section 4 still say sling damage 2 (decision 43 overrides; the docs need a correction pass).
+- M0: arena lock is implemented (WP row wins over monster file 4.0 wording). Boss door shut on first hit.
+- P10 BossDoor needs `cave` set per room; rooms must set it.
+- P08 seam is invisible until revealed (WP row); world-plan asks for a faint cue. Design call for the owner.
+- `.uid` files of several WPs were written by hand (no `make import`). Regenerate with `make import` in a later check.
 
 ### Wave 0 detail
 
