@@ -951,6 +951,21 @@ GPT Image terrain textures below; they add no other image.
 | `cave_mouth_stone_v1.png` | 1536×1024 | `01a16fa0-83a3-71b0-ad1b-d66c9138dee1` | `exec-546a0d3f-6483-4fba-8556-db5d57d22961` | `81fae4e7ecddcd0e` | `log_b42.md` |
 | `cave_mouth_stone_v2.png` | 1536×1024 | `01a16fa0-8229-7eb1-a1f4-c88dbbcc1be9` | `exec-67cdc037-2b03-48ea-8018-4395e64b4aae` | `69b67b439fde9c52` | `log_b42.md` |
 | `cave_mouth_stone_v3.png` | 1536×1024 | `01a16fa0-821f-7ab2-8bf5-fda210f021d9` | `exec-263606ac-c61a-4456-b114-a396a9b6dcb3` | `29a68f34194972b9` | `log_b42.md` |
+| `lull_mauler_walk_side_v1.png` | 1536×1024 | `01a16f94-a843-7bb1-a92a-62b748d4bdbe` | `exec-43b5448a-efc8-4026-95bd-66eb3ca94d38` | `2b5ad810620059e7` | `log_b56.md` |
+| `lull_mauler_walk_side_v2.png` | 1536×1024 | `01a16f98-5982-7cc3-9ad7-aad3ca9edb85` | `exec-dc410b1f-aa23-40c6-9fec-81740ad3dd15` | `3a158d7f89deb832` | `log_b56.md` |
+| `lull_mauler_walk_side_v3.png` | 1536×1024 | `01a16f98-579a-7771-9ac6-a6d24d6ac4dc` | `exec-069f0242-e0c2-4014-8ba2-5a2ac63aa1b0` | `24c19099f45ba385` | `log_b56.md` |
+| `lull_mauler_walk_down_v1.png` | 1536×1024 | `01a16f98-5aab-7c21-83d5-7fb3031187d0` | `exec-55b1209c-c2d3-4088-bbc8-c6e46213f8c5` | `9c8ada014ad34adb` | `log_b56.md` |
+| `lull_mauler_walk_down_v2.png` | 1536×1024 | `01a16f98-d4b7-75a1-bee7-c8247cf46092` | `exec-aa26a967-2840-494f-967f-cb20a531e880` | `179aee5eaacedc9f` | `log_b56.md` |
+| `lull_mauler_walk_down_v3.png` | 1536×1024 | `01a16f98-59d5-7853-b230-67c33e680d6a` | `exec-e16d3885-ee7f-4828-872a-006b0a0bf322` | `eabfe035829d40ff` | `log_b56.md` |
+| `lull_mauler_walk_up_v1.png` | 1536×1024 | `01a16f98-5af0-7ea3-9a9a-f4a60adaacd8` | `exec-57480b51-399a-4574-bda7-0269d7c60152` | `cf2ea74e29795ebd` | `log_b56.md` |
+| `lull_mauler_walk_up_v2.png` | 1536×1024 | `01a16f9c-b34e-7d43-a2b5-60da6432d4fd` | `exec-c57d0153-3069-40c6-88eb-19b89c4dd65a` | `258e555019ea1c4a` | `log_b56.md` |
+| `lull_mauler_walk_up_v3.png` | 1536×1024 | `01a16f9c-b2dc-70c0-8734-377aa719de49` | `exec-f78fc027-bb12-4d1a-860f-d7dd5ee9b585` | `42f2bd9783c340dd` | `log_b56.md` |
+| `lull_mauler_actions_down_v1.png` | 1536×1024 | `01a16f9c-b379-7452-81fc-a8c198144a40` | `exec-4363a158-f45d-42bd-8dba-f5c7014b332c` | `a3f6a55bd981c574` | `log_b56.md` |
+| `lull_mauler_actions_down_v2.png` | 1536×1024 | `01a16f9d-2bc1-7711-947b-ced4f838481a` | `exec-92741b6b-ba92-4134-a31c-42241a2aeab7` | `d324ed432ae3cc43` | `log_b56.md` |
+| `lull_mauler_actions_down_v3.png` | 1536×1024 | `01a16f9c-b368-74b1-8aaf-71c053981610` | `exec-1c6e7ce2-512f-4f85-bd01-8c5795817038` | `41728a223e6cf006` | `log_b56.md` |
+| `lull_mauler_actions_side_v1.png` | 1536×1024 | `01a16f9c-b306-7362-bba3-747ab5fd8195` | `exec-53f1a4f0-0e75-42e3-9994-75731a4cd962` | `670b9ba14720ede6` | `log_b56.md` |
+| `lull_mauler_actions_side_v2.png` | 1536×1024 | `01a16fa1-4af9-7342-9ab2-89c88d1ddb2d` | `exec-ba149a63-9c23-493d-b803-f99ab54d00ca` | `28877311860cee41` | `log_b56.md` |
+| `lull_mauler_actions_side_v3.png` | 1536×1024 | `01a16fa0-d5e3-7ef0-bb49-1e2ba88b8d60` | `exec-a3b49275-2e77-456a-9893-cb3be3f11438` | `3637850a2822b057` | `log_b56.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
