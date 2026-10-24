@@ -1,0 +1,2194 @@
+{
+  "format": 1,
+  "description": "Which files each work package of docs/world-work-packages.md may change. Checked by tools/check_ownership.py. Room-batch entries (kind room_batch) are rebuilt by --regen from the batch tables; room ids are checked against docs/world-graph.json because data/world_data.json is not generated yet.",
+  "source": "docs/world-work-packages.md",
+  "wps": {
+    "G1": {
+      "wave": 0,
+      "owns": [
+        "docs/world-graph.json",
+        "tools/check_world_graph.py"
+      ]
+    },
+    "D1": {
+      "wave": 0,
+      "owns": [
+        "docs/world-plan.md"
+      ]
+    },
+    "D2": {
+      "wave": 0,
+      "owns": [
+        "tools/wp_ownership.json",
+        "tools/check_ownership.py",
+        "tools/test_check_ownership.py"
+      ]
+    },
+    "D3": {
+      "wave": 0,
+      "owns": [
+        "docs/intro-script.md"
+      ]
+    },
+    "F0": {
+      "wave": 0,
+      "owns": [
+        "docs/code-contract.md",
+        "AGENTS.md",
+        "docs/dev-world-plan.md",
+        "docs/story.md"
+      ]
+    },
+    "F1": {
+      "wave": 0,
+      "owns": [
+        "tools/gen_world_data.py",
+        "tools/test_gen_world_data.py",
+        "data/world_data.json",
+        "scripts/core/world_data.gd",
+        "tests/test_world_data.gd",
+        "Makefile"
+      ]
+    },
+    "F2": {
+      "wave": 0,
+      "owns": [
+        "scripts/world/world.gd",
+        "scenes/world/rooms/cave_1.tscn",
+        "tests/test_world.gd",
+        "tests/test_dev_world.gd",
+        "tests/test_dev_world_route.gd",
+        "scripts/art/placeholder.gd",
+        "tools/capture.gd"
+      ]
+    },
+    "F3": {
+      "wave": 0,
+      "owns": [
+        "tests/test_world_graph.gd",
+        "tests/area_base.gd",
+        "tools/run_godot_check.py"
+      ]
+    },
+    "F4": {
+      "wave": 0,
+      "owns": [
+        "scripts/autoload/game_state.gd",
+        "scripts/pickups/pickup_base.gd",
+        "scripts/world/locked_door.gd",
+        "scenes/pickups/big_key.tscn",
+        "scenes/pickups/fragment.tscn",
+        "tests/test_game_state.gd",
+        "tests/test_pickups.gd",
+        "tests/test_interactables.gd"
+      ],
+      "amends": [
+        "scripts/world/world.gd",
+        "tests/test_dev_world.gd"
+      ]
+    },
+    "F5": {
+      "wave": 0,
+      "owns": [
+        "scripts/pickups/drop_table.gd",
+        "scripts/items/pitch_pot.gd",
+        "scenes/pickups/pot_bag.tscn",
+        "scenes/pickups/slug_bundle.tscn"
+      ],
+      "amends": [
+        "scripts/autoload/game_state.gd",
+        "scripts/pickups/pickup_base.gd",
+        "tests/test_game_state.gd",
+        "tests/test_pickups.gd",
+        "tests/test_pitch_pot.gd"
+      ],
+      "note": "The test files are F4's; the row lists them without 'amends', read here as amends."
+    },
+    "F6": {
+      "wave": 0,
+      "owns": [
+        "tools/build_rooms.py",
+        "tools/test_build_rooms.py",
+        "docs/room-kit.md",
+        "tests/fixtures/rooms/*"
+      ]
+    },
+    "F7": {
+      "wave": 0,
+      "owns": [
+        "scripts/player/player.gd",
+        "tests/test_player_motion.gd"
+      ]
+    },
+    "F8": {
+      "wave": 0,
+      "owns": [
+        "scripts/world/room.gd",
+        "scripts/world/ledge.gd",
+        "scenes/world/ledge.tscn",
+        "tests/test_oneway.gd"
+      ],
+      "amends": [
+        "scripts/world/world.gd",
+        "tests/test_world.gd"
+      ]
+    },
+    "F9": {
+      "wave": 0,
+      "owns": [
+        "scripts/world/shop_item.gd",
+        "scenes/world/shop_item.tscn",
+        "data/shop_prices.json",
+        "tests/test_shop.gd"
+      ]
+    },
+    "F10": {
+      "wave": 0,
+      "owns": [
+        "scripts/ui/item_menu.gd",
+        "scenes/ui/item_menu.tscn",
+        "scripts/items/item_registry.gd",
+        "scripts/ui/pause_menu.gd",
+        "project.godot",
+        "tests/test_items.gd",
+        "tests/test_item_menu.gd"
+      ],
+      "amends": [
+        "scripts/world/world.gd",
+        "scripts/autoload/game_state.gd"
+      ]
+    },
+    "F11": {
+      "wave": 0,
+      "owns": [
+        "scripts/ui/hud.gd",
+        "tests/test_hud_map.gd",
+        "scenes/ui/hud.tscn"
+      ],
+      "amends": [
+        "tests/test_world.gd"
+      ]
+    },
+    "F12": {
+      "wave": 0,
+      "owns": [
+        "scripts/autoload/save_game.gd",
+        "tests/test_save_game.gd"
+      ],
+      "amends": [
+        "project.godot",
+        "scripts/world/world.gd"
+      ]
+    },
+    "F13": {
+      "wave": 0,
+      "owns": [
+        "scripts/ui/title.gd",
+        "scenes/ui/title.tscn",
+        "scripts/ui/menu_list.gd",
+        "tests/test_title.gd"
+      ],
+      "amends": [
+        "project.godot"
+      ]
+    },
+    "F14": {
+      "wave": 0,
+      "owns": [
+        "scripts/ui/intro.gd",
+        "scenes/ui/intro.tscn",
+        "data/intro.json",
+        "tests/test_intro.gd"
+      ]
+    },
+    "P01": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/burnable.gd",
+        "scenes/world/thorn_hedge.tscn",
+        "scenes/world/thorn_wall.tscn",
+        "scenes/world/thorn_door.tscn",
+        "tests/test_burnable.gd",
+        "tests/fixtures/gallery/P01.tscn"
+      ]
+    },
+    "P02": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/eye_switch.gd",
+        "scenes/world/eye_switch.tscn",
+        "scenes/world/eye_portcullis.tscn",
+        "scenes/world/eye_cell.tscn",
+        "tests/test_eye_switch.gd",
+        "tests/fixtures/gallery/P02.tscn"
+      ]
+    },
+    "P03": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/mooring.gd",
+        "scenes/world/mooring.tscn",
+        "tests/test_mooring.gd",
+        "tests/fixtures/gallery/P03.tscn"
+      ]
+    },
+    "P04": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/pit_zone.gd",
+        "scenes/world/pit.tscn",
+        "scenes/world/ravine_leap.tscn",
+        "tests/test_pit_zone.gd",
+        "tests/fixtures/gallery/P04.tscn"
+      ]
+    },
+    "P05": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/anchor_ring.gd",
+        "scenes/world/anchor_ring.tscn",
+        "scenes/world/anchor_pocket.tscn",
+        "tests/test_anchor_ring.gd",
+        "tests/fixtures/gallery/P05.tscn"
+      ]
+    },
+    "P06": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/liftable.gd",
+        "scripts/world/heavy_stone.gd",
+        "scenes/world/liftable_rock.tscn",
+        "scenes/world/heavy_stone.tscn",
+        "scenes/world/heavy_boulder.tscn",
+        "scenes/world/heavy_door.tscn",
+        "scenes/world/heavy_stones.tscn",
+        "tests/test_liftable.gd",
+        "tests/test_heavy_stone.gd",
+        "tests/fixtures/gallery/P06.tscn"
+      ]
+    },
+    "P07": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/resonance_stone.gd",
+        "scenes/world/resonance_stone.tscn",
+        "scenes/world/resonance_door.tscn",
+        "scenes/world/resonance_vault.tscn",
+        "tests/test_resonance_stone.gd",
+        "tests/fixtures/gallery/P07.tscn"
+      ]
+    },
+    "P08": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/hidden_seam.gd",
+        "scenes/world/hidden_seam.tscn",
+        "scenes/world/hidden_stairs.tscn",
+        "scenes/world/sealed_seam.tscn",
+        "scenes/world/hook_tap_wall.tscn",
+        "tests/test_hidden_seam.gd",
+        "tests/fixtures/gallery/P08.tscn"
+      ]
+    },
+    "P09": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/grate.gd",
+        "scenes/world/grate.tscn",
+        "tests/test_grate.gd",
+        "tests/fixtures/gallery/P09.tscn"
+      ],
+      "amends": [
+        "scripts/items/tether_moth.gd",
+        "tests/test_tether_moth.gd"
+      ]
+    },
+    "P10": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/boss_door.gd",
+        "scenes/world/boss_door.tscn",
+        "tests/test_boss_door.gd",
+        "tests/fixtures/gallery/P10.tscn"
+      ]
+    },
+    "P11": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/ninth_door.gd",
+        "scenes/world/ninth_door.tscn",
+        "tests/test_ninth_door.gd",
+        "tests/fixtures/gallery/P11.tscn"
+      ]
+    },
+    "P12": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/wax_seal.gd",
+        "scenes/world/wax_seal.tscn",
+        "tests/test_wax_seal.gd",
+        "tests/fixtures/gallery/P12.tscn"
+      ]
+    },
+    "P13": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/bush.gd",
+        "scripts/world/cracked_wall.gd",
+        "scenes/world/reed_cluster.tscn",
+        "scenes/world/rush_wall.tscn",
+        "scenes/world/moss_wall.tscn",
+        "scenes/world/dry_vine_screen.tscn",
+        "scenes/world/bush_cluster.tscn",
+        "scenes/world/brittle_rocks.tscn",
+        "tests/test_variants.gd",
+        "tests/fixtures/gallery/P13.tscn"
+      ]
+    },
+    "P14": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/pocket_door.gd",
+        "scenes/world/pocket_door.tscn",
+        "tests/test_pocket_door.gd",
+        "tests/fixtures/gallery/P14.tscn"
+      ]
+    },
+    "P15": {
+      "wave": 1,
+      "owns": [
+        "scripts/world/ward_plate.gd",
+        "scenes/world/ward_plate.tscn",
+        "tests/test_ward_plate.gd",
+        "tests/fixtures/gallery/P15.tscn"
+      ]
+    },
+    "T01": {
+      "wave": 1,
+      "owns": [
+        "scripts/items/cinder_wick.gd",
+        "scenes/items/cinder_wick.tscn",
+        "scripts/items/flame.gd",
+        "scenes/items/flame.tscn",
+        "tests/test_cinder_wick.gd",
+        "tests/fixtures/gallery/T01.tscn"
+      ],
+      "amends": [
+        "scripts/world/brazier.gd"
+      ],
+      "note": "flame.gd is a helper named in monsters-bosses-tools 7.3; assigned to T01 by name."
+    },
+    "T02": {
+      "wave": 1,
+      "owns": [
+        "scripts/items/tallow_sling.gd",
+        "scenes/items/tallow_sling.tscn",
+        "scripts/items/slug.gd",
+        "scenes/items/slug.tscn",
+        "tests/test_tallow_sling.gd",
+        "tests/fixtures/gallery/T02.tscn"
+      ],
+      "note": "slug.gd is a helper named in monsters-bosses-tools 7.3; assigned to T02 by name."
+    },
+    "T03": {
+      "wave": 1,
+      "owns": [
+        "scripts/items/reed_raft.gd",
+        "scenes/items/reed_raft.tscn",
+        "scripts/world/water_zone.gd",
+        "scenes/world/water_zone.tscn",
+        "tests/test_reed_raft.gd",
+        "tests/fixtures/gallery/T03.tscn"
+      ],
+      "note": "water_zone.gd (WaterZone, deep water for the raft) is in monsters-bosses-tools 7.3 and is not in any WP row; assigned to T03. M3 owns shallow_zone.gd, a different file."
+    },
+    "T04": {
+      "wave": 1,
+      "owns": [
+        "scripts/items/heft_mitts.gd",
+        "scenes/items/heft_mitts.tscn",
+        "tests/test_heft_mitts.gd",
+        "tests/fixtures/gallery/T04.tscn"
+      ]
+    },
+    "T05": {
+      "wave": 1,
+      "owns": [
+        "scripts/items/glow_jar.gd",
+        "scenes/items/glow_jar.tscn",
+        "scripts/items/jar.gd",
+        "scenes/items/jar.tscn",
+        "tests/test_glow_jar.gd",
+        "tests/fixtures/gallery/T05.tscn"
+      ],
+      "note": "jar.gd is a helper named in monsters-bosses-tools 7.3; assigned to T05 by name."
+    },
+    "T06": {
+      "wave": 1,
+      "owns": [
+        "scripts/items/lantern_chime.gd",
+        "scenes/items/lantern_chime.tscn",
+        "scripts/items/chime_wave.gd",
+        "scenes/items/chime_wave.tscn",
+        "scripts/ui/warp_picker.gd",
+        "scenes/ui/warp_picker.tscn",
+        "tests/test_warp_picker.gd",
+        "tests/test_lantern_chime.gd",
+        "tests/fixtures/gallery/T06.tscn"
+      ],
+      "note": "chime_wave.gd is a helper named in monsters-bosses-tools 7.3; assigned to T06 by name."
+    },
+    "T07": {
+      "wave": 1,
+      "owns": [
+        "scripts/items/skitter_boots.gd",
+        "scenes/items/skitter_boots.tscn",
+        "tests/test_skitter_boots.gd",
+        "tests/fixtures/gallery/T07.tscn"
+      ]
+    },
+    "T08": {
+      "wave": 1,
+      "owns": [
+        "scripts/items/reel_line.gd",
+        "scenes/items/reel_line.tscn",
+        "scripts/items/reel_tip.gd",
+        "scenes/items/reel_tip.tscn",
+        "scripts/world/reelable.gd",
+        "scenes/world/reelable.tscn",
+        "tests/test_reel_line.gd",
+        "tests/fixtures/gallery/T08.tscn"
+      ],
+      "note": "reel_tip.gd is a helper and reelable.gd a prop, both named in monsters-bosses-tools 7.3 and in no WP row; assigned to T08."
+    },
+    "M0": {
+      "wave": 1,
+      "owns": [
+        "scripts/enemies/boss_base.gd",
+        "tests/test_boss_base.gd",
+        "scripts/enemies/boss_part.gd",
+        "scenes/enemies/boss_part.tscn",
+        "scripts/enemies/telegraph.gd",
+        "scenes/enemies/telegraph.tscn",
+        "tests/fixtures/gallery/M0.tscn"
+      ],
+      "note": "boss_part.gd and telegraph.gd are the boss framework in monsters-bosses-tools 7.3 and no other WP owns them; assigned to M0."
+    },
+    "M1": {
+      "wave": 1,
+      "owns": [
+        "scripts/enemies/bramble_snapper.gd",
+        "scenes/enemies/bramble_snapper.tscn",
+        "scripts/enemies/wickling.gd",
+        "scenes/enemies/wickling.tscn",
+        "tests/test_bramble_snapper.gd",
+        "tests/test_wickling.gd",
+        "tests/fixtures/gallery/M1.tscn"
+      ]
+    },
+    "M2": {
+      "wave": 1,
+      "owns": [
+        "scripts/enemies/cinder_wisp.gd",
+        "scenes/enemies/cinder_wisp.tscn",
+        "scripts/enemies/husk_hound.gd",
+        "scenes/enemies/husk_hound.tscn",
+        "scripts/enemies/flame_ring.gd",
+        "scenes/enemies/flame_ring.tscn",
+        "tests/test_cinder_wisp.gd",
+        "tests/test_husk_hound.gd",
+        "tests/fixtures/gallery/M2.tscn"
+      ],
+      "note": "flame_ring is optional in the row ('if the monster file needs it'); the monster file does not name it, so it is listed as allowed, not required."
+    },
+    "M3": {
+      "wave": 1,
+      "owns": [
+        "scripts/enemies/fen_leech.gd",
+        "scenes/enemies/fen_leech.tscn",
+        "scripts/enemies/brine_crab.gd",
+        "scenes/enemies/brine_crab.tscn",
+        "scripts/world/shallow_zone.gd",
+        "scenes/world/shallow_zone.tscn",
+        "tests/test_fen_leech.gd",
+        "tests/test_brine_crab.gd",
+        "tests/fixtures/gallery/M3.tscn"
+      ],
+      "note": "The row names shallow_zone.gd; monsters-bosses-tools 7.3 names water_zone.gd (owned by T03) and says fen leeches live in WaterZones of either kind."
+    },
+    "M4": {
+      "wave": 1,
+      "owns": [
+        "scripts/enemies/watcher_eye.gd",
+        "scenes/enemies/watcher_eye.tscn",
+        "scripts/enemies/choirling.gd",
+        "scenes/enemies/choirling.tscn",
+        "scenes/enemies/beam_bolt.tscn",
+        "scenes/enemies/note.tscn",
+        "tests/test_watcher_eye.gd",
+        "tests/test_choirling.gd",
+        "tests/fixtures/gallery/M4.tscn"
+      ],
+      "note": "Projectile scenes beam_bolt.tscn and note.tscn (monsters-bosses-tools 7.3, no directory given) are placed in scenes/enemies/."
+    },
+    "M5": {
+      "wave": 1,
+      "owns": [
+        "scripts/enemies/mirror_shade.gd",
+        "scenes/enemies/mirror_shade.tscn",
+        "tests/test_mirror_shade.gd",
+        "tests/fixtures/gallery/M5.tscn"
+      ]
+    },
+    "R1": {
+      "wave": 2,
+      "owns": [
+        "tests/test_area_brackwater.gd",
+        "tests/test_route_brackwater.gd"
+      ],
+      "note": "The route test name is not given in the row; derived from the cave pattern tests/test_route_cave_<n>.gd."
+    },
+    "R1.a": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_0_0",
+        "ow_0_1",
+        "ow_1_0",
+        "ow_1_1"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_0_0.room",
+        "scenes/world/rooms/ow_0_0.tscn",
+        "tools/rooms/ow_0_1.room",
+        "scenes/world/rooms/ow_0_1.tscn",
+        "tools/rooms/ow_1_0.room",
+        "scenes/world/rooms/ow_1_0.tscn",
+        "tools/rooms/ow_1_1.room",
+        "scenes/world/rooms/ow_1_1.tscn"
+      ]
+    },
+    "R1.b": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_2_0",
+        "ow_2_1",
+        "ow_0_2",
+        "ow_1_2"
+      ],
+      "pockets": [
+        "ow_1_2#shop"
+      ],
+      "in_place": [
+        "ow_2_0#cache",
+        "ow_2_1#closet"
+      ],
+      "owns": [
+        "tools/rooms/ow_2_0.room",
+        "scenes/world/rooms/ow_2_0.tscn",
+        "tools/rooms/ow_2_1.room",
+        "scenes/world/rooms/ow_2_1.tscn",
+        "tools/rooms/ow_0_2.room",
+        "scenes/world/rooms/ow_0_2.tscn",
+        "tools/rooms/ow_1_2.room",
+        "scenes/world/rooms/ow_1_2.tscn",
+        "tools/rooms/ow_1_2__shop.room",
+        "scenes/world/rooms/ow_1_2__shop.tscn"
+      ]
+    },
+    "R2": {
+      "wave": 2,
+      "owns": [
+        "tests/test_area_thornwood.gd",
+        "tests/test_route_thornwood.gd"
+      ]
+    },
+    "R2.a": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_3_0",
+        "ow_3_1",
+        "ow_4_0",
+        "ow_4_1"
+      ],
+      "pockets": [
+        "ow_4_1#cache"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_3_0.room",
+        "scenes/world/rooms/ow_3_0.tscn",
+        "tools/rooms/ow_3_1.room",
+        "scenes/world/rooms/ow_3_1.tscn",
+        "tools/rooms/ow_4_0.room",
+        "scenes/world/rooms/ow_4_0.tscn",
+        "tools/rooms/ow_4_1.room",
+        "scenes/world/rooms/ow_4_1.tscn",
+        "tools/rooms/ow_4_1__cache.room",
+        "scenes/world/rooms/ow_4_1__cache.tscn"
+      ]
+    },
+    "R2.b": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_5_0",
+        "ow_5_1",
+        "ow_6_0",
+        "ow_6_1"
+      ],
+      "pockets": [
+        "ow_6_0#shop"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_5_0.room",
+        "scenes/world/rooms/ow_5_0.tscn",
+        "tools/rooms/ow_5_1.room",
+        "scenes/world/rooms/ow_5_1.tscn",
+        "tools/rooms/ow_6_0.room",
+        "scenes/world/rooms/ow_6_0.tscn",
+        "tools/rooms/ow_6_1.room",
+        "scenes/world/rooms/ow_6_1.tscn",
+        "tools/rooms/ow_6_0__shop.room",
+        "scenes/world/rooms/ow_6_0__shop.tscn"
+      ]
+    },
+    "R2.c": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_7_0",
+        "ow_7_1",
+        "ow_3_2",
+        "ow_3_3"
+      ],
+      "pockets": [
+        "ow_3_2#grate",
+        "ow_3_3#hut"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_7_0.room",
+        "scenes/world/rooms/ow_7_0.tscn",
+        "tools/rooms/ow_7_1.room",
+        "scenes/world/rooms/ow_7_1.tscn",
+        "tools/rooms/ow_3_2.room",
+        "scenes/world/rooms/ow_3_2.tscn",
+        "tools/rooms/ow_3_3.room",
+        "scenes/world/rooms/ow_3_3.tscn",
+        "tools/rooms/ow_3_2__grate.room",
+        "scenes/world/rooms/ow_3_2__grate.tscn",
+        "tools/rooms/ow_3_3__hut.room",
+        "scenes/world/rooms/ow_3_3__hut.tscn"
+      ]
+    },
+    "R2.d": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_4_2",
+        "ow_5_2",
+        "ow_7_2"
+      ],
+      "pockets": [
+        "ow_7_2#bag"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_4_2.room",
+        "scenes/world/rooms/ow_4_2.tscn",
+        "tools/rooms/ow_5_2.room",
+        "scenes/world/rooms/ow_5_2.tscn",
+        "tools/rooms/ow_7_2.room",
+        "scenes/world/rooms/ow_7_2.tscn",
+        "tools/rooms/ow_7_2__bag.room",
+        "scenes/world/rooms/ow_7_2__bag.tscn"
+      ]
+    },
+    "R3": {
+      "wave": 2,
+      "owns": [
+        "tests/test_area_cinderflats.gd",
+        "tests/test_route_cinderflats.gd"
+      ]
+    },
+    "R3.a": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_8_0",
+        "ow_8_1",
+        "ow_9_0",
+        "ow_9_1"
+      ],
+      "pockets": [
+        "ow_8_0#cache",
+        "ow_9_0#cache"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_8_0.room",
+        "scenes/world/rooms/ow_8_0.tscn",
+        "tools/rooms/ow_8_1.room",
+        "scenes/world/rooms/ow_8_1.tscn",
+        "tools/rooms/ow_9_0.room",
+        "scenes/world/rooms/ow_9_0.tscn",
+        "tools/rooms/ow_9_1.room",
+        "scenes/world/rooms/ow_9_1.tscn",
+        "tools/rooms/ow_8_0__cache.room",
+        "scenes/world/rooms/ow_8_0__cache.tscn",
+        "tools/rooms/ow_9_0__cache.room",
+        "scenes/world/rooms/ow_9_0__cache.tscn"
+      ]
+    },
+    "R3.b": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_10_0",
+        "ow_10_1",
+        "ow_11_1",
+        "ow_8_2"
+      ],
+      "pockets": [
+        "ow_10_1#hut"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_10_0.room",
+        "scenes/world/rooms/ow_10_0.tscn",
+        "tools/rooms/ow_10_1.room",
+        "scenes/world/rooms/ow_10_1.tscn",
+        "tools/rooms/ow_11_1.room",
+        "scenes/world/rooms/ow_11_1.tscn",
+        "tools/rooms/ow_8_2.room",
+        "scenes/world/rooms/ow_8_2.tscn",
+        "tools/rooms/ow_10_1__hut.room",
+        "scenes/world/rooms/ow_10_1__hut.tscn"
+      ]
+    },
+    "R3.c": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_9_2",
+        "ow_9_3",
+        "ow_10_2",
+        "ow_10_3"
+      ],
+      "pockets": [
+        "ow_10_3#shop"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_9_2.room",
+        "scenes/world/rooms/ow_9_2.tscn",
+        "tools/rooms/ow_9_3.room",
+        "scenes/world/rooms/ow_9_3.tscn",
+        "tools/rooms/ow_10_2.room",
+        "scenes/world/rooms/ow_10_2.tscn",
+        "tools/rooms/ow_10_3.room",
+        "scenes/world/rooms/ow_10_3.tscn",
+        "tools/rooms/ow_10_3__shop.room",
+        "scenes/world/rooms/ow_10_3__shop.tscn"
+      ]
+    },
+    "R3.d": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_11_2",
+        "ow_10_4"
+      ],
+      "pockets": [
+        "ow_11_2#cache"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_11_2.room",
+        "scenes/world/rooms/ow_11_2.tscn",
+        "tools/rooms/ow_10_4.room",
+        "scenes/world/rooms/ow_10_4.tscn",
+        "tools/rooms/ow_11_2__cache.room",
+        "scenes/world/rooms/ow_11_2__cache.tscn"
+      ]
+    },
+    "R4": {
+      "wave": 2,
+      "owns": [
+        "tests/test_area_tallowfen.gd",
+        "tests/test_route_tallowfen.gd"
+      ]
+    },
+    "R4.a": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_0_3",
+        "ow_1_3",
+        "ow_4_3",
+        "ow_5_3"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_0_3.room",
+        "scenes/world/rooms/ow_0_3.tscn",
+        "tools/rooms/ow_1_3.room",
+        "scenes/world/rooms/ow_1_3.tscn",
+        "tools/rooms/ow_4_3.room",
+        "scenes/world/rooms/ow_4_3.tscn",
+        "tools/rooms/ow_5_3.room",
+        "scenes/world/rooms/ow_5_3.tscn"
+      ]
+    },
+    "R4.b": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_6_2",
+        "ow_6_3",
+        "ow_7_3",
+        "ow_0_4"
+      ],
+      "pockets": [
+        "ow_7_3#grotto"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_6_2.room",
+        "scenes/world/rooms/ow_6_2.tscn",
+        "tools/rooms/ow_6_3.room",
+        "scenes/world/rooms/ow_6_3.tscn",
+        "tools/rooms/ow_7_3.room",
+        "scenes/world/rooms/ow_7_3.tscn",
+        "tools/rooms/ow_0_4.room",
+        "scenes/world/rooms/ow_0_4.tscn",
+        "tools/rooms/ow_7_3__grotto.room",
+        "scenes/world/rooms/ow_7_3__grotto.tscn"
+      ]
+    },
+    "R4.c": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_0_5",
+        "ow_1_4",
+        "ow_1_5",
+        "ow_2_4"
+      ],
+      "pockets": [
+        "ow_1_5#cache"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_0_5.room",
+        "scenes/world/rooms/ow_0_5.tscn",
+        "tools/rooms/ow_1_4.room",
+        "scenes/world/rooms/ow_1_4.tscn",
+        "tools/rooms/ow_1_5.room",
+        "scenes/world/rooms/ow_1_5.tscn",
+        "tools/rooms/ow_2_4.room",
+        "scenes/world/rooms/ow_2_4.tscn",
+        "tools/rooms/ow_1_5__cache.room",
+        "scenes/world/rooms/ow_1_5__cache.tscn"
+      ]
+    },
+    "R4.d": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_2_5",
+        "ow_3_5",
+        "ow_4_4",
+        "ow_4_5"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_2_5.room",
+        "scenes/world/rooms/ow_2_5.tscn",
+        "tools/rooms/ow_3_5.room",
+        "scenes/world/rooms/ow_3_5.tscn",
+        "tools/rooms/ow_4_4.room",
+        "scenes/world/rooms/ow_4_4.tscn",
+        "tools/rooms/ow_4_5.room",
+        "scenes/world/rooms/ow_4_5.tscn"
+      ]
+    },
+    "R4.e": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_5_4",
+        "ow_5_5",
+        "ow_6_4",
+        "ow_6_5"
+      ],
+      "pockets": [
+        "ow_5_5#cache",
+        "ow_6_5#shop"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_5_4.room",
+        "scenes/world/rooms/ow_5_4.tscn",
+        "tools/rooms/ow_5_5.room",
+        "scenes/world/rooms/ow_5_5.tscn",
+        "tools/rooms/ow_6_4.room",
+        "scenes/world/rooms/ow_6_4.tscn",
+        "tools/rooms/ow_6_5.room",
+        "scenes/world/rooms/ow_6_5.tscn",
+        "tools/rooms/ow_5_5__cache.room",
+        "scenes/world/rooms/ow_5_5__cache.tscn",
+        "tools/rooms/ow_6_5__shop.room",
+        "scenes/world/rooms/ow_6_5__shop.tscn"
+      ]
+    },
+    "R4.f": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_7_4",
+        "ow_1_6",
+        "ow_2_6",
+        "ow_2_7"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_7_4.room",
+        "scenes/world/rooms/ow_7_4.tscn",
+        "tools/rooms/ow_1_6.room",
+        "scenes/world/rooms/ow_1_6.tscn",
+        "tools/rooms/ow_2_6.room",
+        "scenes/world/rooms/ow_2_6.tscn",
+        "tools/rooms/ow_2_7.room",
+        "scenes/world/rooms/ow_2_7.tscn"
+      ]
+    },
+    "R5": {
+      "wave": 2,
+      "owns": [
+        "tests/test_area_gravelight.gd",
+        "tests/test_route_gravelight.gd"
+      ]
+    },
+    "R5.a": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_8_4",
+        "ow_8_5",
+        "ow_9_4",
+        "ow_9_5"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_8_4.room",
+        "scenes/world/rooms/ow_8_4.tscn",
+        "tools/rooms/ow_8_5.room",
+        "scenes/world/rooms/ow_8_5.tscn",
+        "tools/rooms/ow_9_4.room",
+        "scenes/world/rooms/ow_9_4.tscn",
+        "tools/rooms/ow_9_5.room",
+        "scenes/world/rooms/ow_9_5.tscn"
+      ]
+    },
+    "R5.b": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_3_7",
+        "ow_4_6",
+        "ow_4_7",
+        "ow_5_6"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_3_7.room",
+        "scenes/world/rooms/ow_3_7.tscn",
+        "tools/rooms/ow_4_6.room",
+        "scenes/world/rooms/ow_4_6.tscn",
+        "tools/rooms/ow_4_7.room",
+        "scenes/world/rooms/ow_4_7.tscn",
+        "tools/rooms/ow_5_6.room",
+        "scenes/world/rooms/ow_5_6.tscn"
+      ]
+    },
+    "R5.c": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_5_7",
+        "ow_6_6",
+        "ow_7_6",
+        "ow_7_7"
+      ],
+      "pockets": [
+        "ow_5_7#shop"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_5_7.room",
+        "scenes/world/rooms/ow_5_7.tscn",
+        "tools/rooms/ow_6_6.room",
+        "scenes/world/rooms/ow_6_6.tscn",
+        "tools/rooms/ow_7_6.room",
+        "scenes/world/rooms/ow_7_6.tscn",
+        "tools/rooms/ow_7_7.room",
+        "scenes/world/rooms/ow_7_7.tscn",
+        "tools/rooms/ow_5_7__shop.room",
+        "scenes/world/rooms/ow_5_7__shop.tscn"
+      ]
+    },
+    "R5.d": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_8_6",
+        "ow_4_8",
+        "ow_5_8"
+      ],
+      "pockets": [
+        "ow_4_8#cache"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_8_6.room",
+        "scenes/world/rooms/ow_8_6.tscn",
+        "tools/rooms/ow_4_8.room",
+        "scenes/world/rooms/ow_4_8.tscn",
+        "tools/rooms/ow_5_8.room",
+        "scenes/world/rooms/ow_5_8.tscn",
+        "tools/rooms/ow_4_8__cache.room",
+        "scenes/world/rooms/ow_4_8__cache.tscn"
+      ]
+    },
+    "R6": {
+      "wave": 2,
+      "owns": [
+        "tests/test_area_hushmarch.gd",
+        "tests/test_route_hushmarch.gd"
+      ]
+    },
+    "R6.a": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_10_5",
+        "ow_11_5",
+        "ow_8_7",
+        "ow_9_6"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_10_5.room",
+        "scenes/world/rooms/ow_10_5.tscn",
+        "tools/rooms/ow_11_5.room",
+        "scenes/world/rooms/ow_11_5.tscn",
+        "tools/rooms/ow_8_7.room",
+        "scenes/world/rooms/ow_8_7.tscn",
+        "tools/rooms/ow_9_6.room",
+        "scenes/world/rooms/ow_9_6.tscn"
+      ]
+    },
+    "R6.b": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_9_7",
+        "ow_10_6",
+        "ow_10_7",
+        "ow_11_6"
+      ],
+      "pockets": [
+        "ow_10_7#shop",
+        "ow_11_6#cache"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_9_7.room",
+        "scenes/world/rooms/ow_9_7.tscn",
+        "tools/rooms/ow_10_6.room",
+        "scenes/world/rooms/ow_10_6.tscn",
+        "tools/rooms/ow_10_7.room",
+        "scenes/world/rooms/ow_10_7.tscn",
+        "tools/rooms/ow_11_6.room",
+        "scenes/world/rooms/ow_11_6.tscn",
+        "tools/rooms/ow_10_7__shop.room",
+        "scenes/world/rooms/ow_10_7__shop.tscn",
+        "tools/rooms/ow_11_6__cache.room",
+        "scenes/world/rooms/ow_11_6__cache.tscn"
+      ]
+    },
+    "R6.c": {
+      "wave": 2,
+      "kind": "room_batch",
+      "rooms": [
+        "ow_11_7",
+        "ow_8_8",
+        "ow_9_8",
+        "ow_10_8"
+      ],
+      "pockets": [
+        "ow_11_7#cache",
+        "ow_8_8#cache"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/ow_11_7.room",
+        "scenes/world/rooms/ow_11_7.tscn",
+        "tools/rooms/ow_8_8.room",
+        "scenes/world/rooms/ow_8_8.tscn",
+        "tools/rooms/ow_9_8.room",
+        "scenes/world/rooms/ow_9_8.tscn",
+        "tools/rooms/ow_10_8.room",
+        "scenes/world/rooms/ow_10_8.tscn",
+        "tools/rooms/ow_11_7__cache.room",
+        "scenes/world/rooms/ow_11_7__cache.tscn",
+        "tools/rooms/ow_8_8__cache.room",
+        "scenes/world/rooms/ow_8_8__cache.tscn"
+      ]
+    },
+    "MB1": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/minibosses/hollow_captain.gd",
+        "scenes/enemies/minibosses/hollow_captain.tscn",
+        "tests/test_hollow_captain.gd",
+        "tests/fixtures/gallery/hollow_captain.tscn",
+        "scripts/enemies/minibosses/thorn_warden.gd",
+        "scenes/enemies/minibosses/thorn_warden.tscn",
+        "tests/test_thorn_warden.gd",
+        "tests/fixtures/gallery/thorn_warden.tscn",
+        "scenes/enemies/thorn_needle.tscn"
+      ],
+      "note": "thorn_needle.tscn (Thorn Warden's projectile, monsters-bosses-tools 7.3) is not in the row; assigned to MB1. Script dir follows this WP row, not 7.3 (scripts/enemies/<name>.gd)."
+    },
+    "MB2": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/minibosses/sump_lurker.gd",
+        "scenes/enemies/minibosses/sump_lurker.tscn",
+        "tests/test_sump_lurker.gd",
+        "tests/fixtures/gallery/sump_lurker.tscn",
+        "scripts/enemies/minibosses/lull_mauler.gd",
+        "scenes/enemies/minibosses/lull_mauler.tscn",
+        "tests/test_lull_mauler.gd",
+        "tests/fixtures/gallery/lull_mauler.tscn"
+      ],
+      "note": "Script dir follows this WP row (scripts/enemies/minibosses/), not monsters-bosses-tools 7.3 (scripts/enemies/<name>.gd)."
+    },
+    "MB3": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/minibosses/mirror_warden.gd",
+        "scenes/enemies/minibosses/mirror_warden.tscn",
+        "tests/test_mirror_warden.gd",
+        "tests/fixtures/gallery/mirror_warden.tscn",
+        "scripts/enemies/minibosses/choir_warden.gd",
+        "scenes/enemies/minibosses/choir_warden.tscn",
+        "tests/test_choir_warden.gd",
+        "tests/fixtures/gallery/choir_warden.tscn"
+      ]
+    },
+    "MB4": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/minibosses/pale_squire.gd",
+        "scenes/enemies/minibosses/pale_squire.tscn",
+        "tests/test_pale_squire.gd",
+        "tests/fixtures/gallery/pale_squire.tscn",
+        "scripts/enemies/minibosses/abacus_brute.gd",
+        "scenes/enemies/minibosses/abacus_brute.tscn",
+        "tests/test_abacus_brute.gd",
+        "tests/fixtures/gallery/abacus_brute.tscn"
+      ]
+    },
+    "MB5": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/minibosses/wick_automaton.gd",
+        "scenes/enemies/minibosses/wick_automaton.tscn",
+        "tests/test_wick_automaton.gd",
+        "tests/fixtures/gallery/wick_automaton.tscn",
+        "scripts/enemies/minibosses/corrows_echo.gd",
+        "scenes/enemies/minibosses/corrows_echo.tscn",
+        "tests/test_corrows_echo.gd",
+        "tests/fixtures/gallery/corrows_echo.tscn"
+      ]
+    },
+    "B01": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/kilnkeeper.gd",
+        "scenes/enemies/bosses/kilnkeeper.tscn",
+        "scenes/bosses/kilnkeeper_arena.tscn",
+        "tests/test_boss_kilnkeeper.gd",
+        "tests/fixtures/gallery/B01.tscn",
+        "scenes/enemies/bosses/wax_plate.tscn"
+      ],
+      "note": "Part scene wax_plate is named in monsters-bosses-tools 7.3 without a directory; placed in scenes/enemies/bosses/."
+    },
+    "B02": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/briar_mother.gd",
+        "scenes/enemies/bosses/briar_mother.tscn",
+        "scenes/bosses/briar_mother_arena.tscn",
+        "tests/test_boss_briar_mother.gd",
+        "tests/fixtures/gallery/B02.tscn",
+        "scenes/enemies/bosses/seed_eye.tscn"
+      ],
+      "note": "Part scene seed_eye is named in monsters-bosses-tools 7.3 without a directory; placed in scenes/enemies/bosses/."
+    },
+    "B03": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/tidewick.gd",
+        "scenes/enemies/bosses/tidewick.tscn",
+        "scenes/bosses/tidewick_arena.tscn",
+        "tests/test_boss_tidewick.gd",
+        "tests/fixtures/gallery/B03.tscn"
+      ]
+    },
+    "B04": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/hushed_colossus.gd",
+        "scenes/enemies/bosses/hushed_colossus.tscn",
+        "scenes/bosses/hushed_colossus_arena.tscn",
+        "tests/test_boss_hushed_colossus.gd",
+        "tests/fixtures/gallery/B04.tscn"
+      ]
+    },
+    "B05": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/archivist.gd",
+        "scenes/enemies/bosses/archivist.tscn",
+        "scenes/bosses/archivist_arena.tscn",
+        "tests/test_boss_archivist.gd",
+        "tests/fixtures/gallery/B05.tscn"
+      ]
+    },
+    "B06": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/dirge_choir.gd",
+        "scenes/enemies/bosses/dirge_choir.tscn",
+        "scenes/bosses/dirge_choir_arena.tscn",
+        "tests/test_boss_dirge_choir.gd",
+        "tests/fixtures/gallery/B06.tscn",
+        "scenes/enemies/bosses/choir_head.tscn"
+      ],
+      "note": "Part scene choir_head is named in monsters-bosses-tools 7.3 without a directory; placed in scenes/enemies/bosses/."
+    },
+    "B07": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/gloam_knight.gd",
+        "scenes/enemies/bosses/gloam_knight.tscn",
+        "scenes/bosses/gloam_knight_arena.tscn",
+        "tests/test_boss_gloam_knight.gd",
+        "tests/fixtures/gallery/B07.tscn"
+      ]
+    },
+    "B08": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/coinwyrm.gd",
+        "scenes/enemies/bosses/coinwyrm.tscn",
+        "scenes/bosses/coinwyrm_arena.tscn",
+        "tests/test_boss_coinwyrm.gd",
+        "tests/fixtures/gallery/B08.tscn",
+        "scenes/enemies/bosses/coin_plate.tscn"
+      ],
+      "note": "Part scene coin_plate is named in monsters-bosses-tools 7.3 without a directory; placed in scenes/enemies/bosses/."
+    },
+    "B09": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/lock_warden.gd",
+        "scenes/enemies/bosses/lock_warden.tscn",
+        "scenes/bosses/lock_warden_arena.tscn",
+        "tests/test_boss_lock_warden.gd",
+        "tests/fixtures/gallery/B09.tscn",
+        "scenes/enemies/bosses/lock_plate.tscn"
+      ],
+      "note": "Part scene lock_plate is named in monsters-bosses-tools 7.3 without a directory; placed in scenes/enemies/bosses/."
+    },
+    "B10": {
+      "wave": 2,
+      "owns": [
+        "scripts/enemies/bosses/the_unlit.gd",
+        "scenes/enemies/bosses/the_unlit.tscn",
+        "scenes/bosses/the_unlit_arena.tscn",
+        "tests/test_boss_the_unlit.gd",
+        "tests/fixtures/gallery/B10.tscn",
+        "scenes/enemies/bosses/unlit_eye.tscn"
+      ],
+      "note": "Part scene unlit_eye is named in monsters-bosses-tools 7.3 without a directory; placed in scenes/enemies/bosses/."
+    },
+    "C01": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_1.gd",
+        "tests/test_route_cave_1.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_1_8.tscn"
+      ],
+      "note": "The arena and reward pickups are placed in the boss room cave_1_8, owned by its batch (amends)."
+    },
+    "C01.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_1",
+        "cave_1_2",
+        "cave_1_3",
+        "cave_1_4"
+      ],
+      "pockets": [],
+      "in_place": [
+        "cave_1#alcove"
+      ],
+      "owns": [
+        "tools/rooms/cave_1.room",
+        "scenes/world/rooms/cave_1.tscn",
+        "tools/rooms/cave_1_2.room",
+        "scenes/world/rooms/cave_1_2.tscn",
+        "tools/rooms/cave_1_3.room",
+        "scenes/world/rooms/cave_1_3.tscn",
+        "tools/rooms/cave_1_4.room",
+        "scenes/world/rooms/cave_1_4.tscn"
+      ]
+    },
+    "C01.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_1_5",
+        "cave_1_6",
+        "cave_1_7",
+        "cave_1_8"
+      ],
+      "pockets": [
+        "cave_1_6#crack"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_1_5.room",
+        "scenes/world/rooms/cave_1_5.tscn",
+        "tools/rooms/cave_1_6.room",
+        "scenes/world/rooms/cave_1_6.tscn",
+        "tools/rooms/cave_1_7.room",
+        "scenes/world/rooms/cave_1_7.tscn",
+        "tools/rooms/cave_1_8.room",
+        "scenes/world/rooms/cave_1_8.tscn",
+        "tools/rooms/cave_1_6__crack.room",
+        "scenes/world/rooms/cave_1_6__crack.tscn"
+      ]
+    },
+    "C02": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_2.gd",
+        "tests/test_route_cave_2.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_2_9.tscn"
+      ]
+    },
+    "C02.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_2_1",
+        "cave_2_2",
+        "cave_2_3",
+        "cave_2_4"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_2_1.room",
+        "scenes/world/rooms/cave_2_1.tscn",
+        "tools/rooms/cave_2_2.room",
+        "scenes/world/rooms/cave_2_2.tscn",
+        "tools/rooms/cave_2_3.room",
+        "scenes/world/rooms/cave_2_3.tscn",
+        "tools/rooms/cave_2_4.room",
+        "scenes/world/rooms/cave_2_4.tscn"
+      ]
+    },
+    "C02.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_2_5",
+        "cave_2_6",
+        "cave_2_7",
+        "cave_2_8"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_2_5.room",
+        "scenes/world/rooms/cave_2_5.tscn",
+        "tools/rooms/cave_2_6.room",
+        "scenes/world/rooms/cave_2_6.tscn",
+        "tools/rooms/cave_2_7.room",
+        "scenes/world/rooms/cave_2_7.tscn",
+        "tools/rooms/cave_2_8.room",
+        "scenes/world/rooms/cave_2_8.tscn"
+      ]
+    },
+    "C02.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_2_9"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_2_9.room",
+        "scenes/world/rooms/cave_2_9.tscn"
+      ]
+    },
+    "C03": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_3.gd",
+        "tests/test_route_cave_3.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_3_9.tscn"
+      ]
+    },
+    "C03.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_3_1",
+        "cave_3_2",
+        "cave_3_3",
+        "cave_3_4"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_3_1.room",
+        "scenes/world/rooms/cave_3_1.tscn",
+        "tools/rooms/cave_3_2.room",
+        "scenes/world/rooms/cave_3_2.tscn",
+        "tools/rooms/cave_3_3.room",
+        "scenes/world/rooms/cave_3_3.tscn",
+        "tools/rooms/cave_3_4.room",
+        "scenes/world/rooms/cave_3_4.tscn"
+      ]
+    },
+    "C03.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_3_5",
+        "cave_3_6",
+        "cave_3_7",
+        "cave_3_8"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_3_5.room",
+        "scenes/world/rooms/cave_3_5.tscn",
+        "tools/rooms/cave_3_6.room",
+        "scenes/world/rooms/cave_3_6.tscn",
+        "tools/rooms/cave_3_7.room",
+        "scenes/world/rooms/cave_3_7.tscn",
+        "tools/rooms/cave_3_8.room",
+        "scenes/world/rooms/cave_3_8.tscn"
+      ]
+    },
+    "C03.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_3_9"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_3_9.room",
+        "scenes/world/rooms/cave_3_9.tscn"
+      ]
+    },
+    "C04": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_4.gd",
+        "tests/test_route_cave_4.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_4_10.tscn"
+      ]
+    },
+    "C04.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_4_1",
+        "cave_4_2",
+        "cave_4_3",
+        "cave_4_4"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_4_1.room",
+        "scenes/world/rooms/cave_4_1.tscn",
+        "tools/rooms/cave_4_2.room",
+        "scenes/world/rooms/cave_4_2.tscn",
+        "tools/rooms/cave_4_3.room",
+        "scenes/world/rooms/cave_4_3.tscn",
+        "tools/rooms/cave_4_4.room",
+        "scenes/world/rooms/cave_4_4.tscn"
+      ]
+    },
+    "C04.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_4_5",
+        "cave_4_6",
+        "cave_4_7",
+        "cave_4_8"
+      ],
+      "pockets": [
+        "cave_4_7#seal"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_4_5.room",
+        "scenes/world/rooms/cave_4_5.tscn",
+        "tools/rooms/cave_4_6.room",
+        "scenes/world/rooms/cave_4_6.tscn",
+        "tools/rooms/cave_4_7.room",
+        "scenes/world/rooms/cave_4_7.tscn",
+        "tools/rooms/cave_4_8.room",
+        "scenes/world/rooms/cave_4_8.tscn",
+        "tools/rooms/cave_4_7__seal.room",
+        "scenes/world/rooms/cave_4_7__seal.tscn"
+      ]
+    },
+    "C04.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_4_9",
+        "cave_4_10"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_4_9.room",
+        "scenes/world/rooms/cave_4_9.tscn",
+        "tools/rooms/cave_4_10.room",
+        "scenes/world/rooms/cave_4_10.tscn"
+      ]
+    },
+    "C05": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_5.gd",
+        "tests/test_route_cave_5.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_5_10.tscn"
+      ]
+    },
+    "C05.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_5_1",
+        "cave_5_2",
+        "cave_5_3",
+        "cave_5_4"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_5_1.room",
+        "scenes/world/rooms/cave_5_1.tscn",
+        "tools/rooms/cave_5_2.room",
+        "scenes/world/rooms/cave_5_2.tscn",
+        "tools/rooms/cave_5_3.room",
+        "scenes/world/rooms/cave_5_3.tscn",
+        "tools/rooms/cave_5_4.room",
+        "scenes/world/rooms/cave_5_4.tscn"
+      ]
+    },
+    "C05.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_5_5",
+        "cave_5_6",
+        "cave_5_7",
+        "cave_5_8"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_5_5.room",
+        "scenes/world/rooms/cave_5_5.tscn",
+        "tools/rooms/cave_5_6.room",
+        "scenes/world/rooms/cave_5_6.tscn",
+        "tools/rooms/cave_5_7.room",
+        "scenes/world/rooms/cave_5_7.tscn",
+        "tools/rooms/cave_5_8.room",
+        "scenes/world/rooms/cave_5_8.tscn"
+      ]
+    },
+    "C05.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_5_9",
+        "cave_5_10"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_5_9.room",
+        "scenes/world/rooms/cave_5_9.tscn",
+        "tools/rooms/cave_5_10.room",
+        "scenes/world/rooms/cave_5_10.tscn"
+      ]
+    },
+    "C06": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_6.gd",
+        "tests/test_route_cave_6.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_6_11.tscn"
+      ]
+    },
+    "C06.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_6_1",
+        "cave_6_2",
+        "cave_6_3",
+        "cave_6_4"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_6_1.room",
+        "scenes/world/rooms/cave_6_1.tscn",
+        "tools/rooms/cave_6_2.room",
+        "scenes/world/rooms/cave_6_2.tscn",
+        "tools/rooms/cave_6_3.room",
+        "scenes/world/rooms/cave_6_3.tscn",
+        "tools/rooms/cave_6_4.room",
+        "scenes/world/rooms/cave_6_4.tscn"
+      ]
+    },
+    "C06.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_6_5",
+        "cave_6_6",
+        "cave_6_7",
+        "cave_6_8"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_6_5.room",
+        "scenes/world/rooms/cave_6_5.tscn",
+        "tools/rooms/cave_6_6.room",
+        "scenes/world/rooms/cave_6_6.tscn",
+        "tools/rooms/cave_6_7.room",
+        "scenes/world/rooms/cave_6_7.tscn",
+        "tools/rooms/cave_6_8.room",
+        "scenes/world/rooms/cave_6_8.tscn"
+      ]
+    },
+    "C06.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_6_9",
+        "cave_6_10",
+        "cave_6_11"
+      ],
+      "pockets": [
+        "cave_6_9#crypt"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_6_9.room",
+        "scenes/world/rooms/cave_6_9.tscn",
+        "tools/rooms/cave_6_10.room",
+        "scenes/world/rooms/cave_6_10.tscn",
+        "tools/rooms/cave_6_11.room",
+        "scenes/world/rooms/cave_6_11.tscn",
+        "tools/rooms/cave_6_9__crypt.room",
+        "scenes/world/rooms/cave_6_9__crypt.tscn"
+      ]
+    },
+    "C07": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_7.gd",
+        "tests/test_route_cave_7.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_7_11.tscn"
+      ]
+    },
+    "C07.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_7_1",
+        "cave_7_2",
+        "cave_7_3",
+        "cave_7_4"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_7_1.room",
+        "scenes/world/rooms/cave_7_1.tscn",
+        "tools/rooms/cave_7_2.room",
+        "scenes/world/rooms/cave_7_2.tscn",
+        "tools/rooms/cave_7_3.room",
+        "scenes/world/rooms/cave_7_3.tscn",
+        "tools/rooms/cave_7_4.room",
+        "scenes/world/rooms/cave_7_4.tscn"
+      ]
+    },
+    "C07.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_7_5",
+        "cave_7_6",
+        "cave_7_7",
+        "cave_7_8"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_7_5.room",
+        "scenes/world/rooms/cave_7_5.tscn",
+        "tools/rooms/cave_7_6.room",
+        "scenes/world/rooms/cave_7_6.tscn",
+        "tools/rooms/cave_7_7.room",
+        "scenes/world/rooms/cave_7_7.tscn",
+        "tools/rooms/cave_7_8.room",
+        "scenes/world/rooms/cave_7_8.tscn"
+      ]
+    },
+    "C07.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_7_9",
+        "cave_7_10",
+        "cave_7_11"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_7_9.room",
+        "scenes/world/rooms/cave_7_9.tscn",
+        "tools/rooms/cave_7_10.room",
+        "scenes/world/rooms/cave_7_10.tscn",
+        "tools/rooms/cave_7_11.room",
+        "scenes/world/rooms/cave_7_11.tscn"
+      ]
+    },
+    "C08": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_8.gd",
+        "tests/test_route_cave_8.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_8_12.tscn"
+      ]
+    },
+    "C08.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_8_1",
+        "cave_8_2",
+        "cave_8_3",
+        "cave_8_4"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_8_1.room",
+        "scenes/world/rooms/cave_8_1.tscn",
+        "tools/rooms/cave_8_2.room",
+        "scenes/world/rooms/cave_8_2.tscn",
+        "tools/rooms/cave_8_3.room",
+        "scenes/world/rooms/cave_8_3.tscn",
+        "tools/rooms/cave_8_4.room",
+        "scenes/world/rooms/cave_8_4.tscn"
+      ]
+    },
+    "C08.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_8_5",
+        "cave_8_6",
+        "cave_8_7",
+        "cave_8_8"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_8_5.room",
+        "scenes/world/rooms/cave_8_5.tscn",
+        "tools/rooms/cave_8_6.room",
+        "scenes/world/rooms/cave_8_6.tscn",
+        "tools/rooms/cave_8_7.room",
+        "scenes/world/rooms/cave_8_7.tscn",
+        "tools/rooms/cave_8_8.room",
+        "scenes/world/rooms/cave_8_8.tscn"
+      ]
+    },
+    "C08.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_8_9",
+        "cave_8_10",
+        "cave_8_11",
+        "cave_8_12"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_8_9.room",
+        "scenes/world/rooms/cave_8_9.tscn",
+        "tools/rooms/cave_8_10.room",
+        "scenes/world/rooms/cave_8_10.tscn",
+        "tools/rooms/cave_8_11.room",
+        "scenes/world/rooms/cave_8_11.tscn",
+        "tools/rooms/cave_8_12.room",
+        "scenes/world/rooms/cave_8_12.tscn"
+      ]
+    },
+    "C09": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_9.gd",
+        "tests/test_route_cave_9.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_9_10.tscn"
+      ]
+    },
+    "C09.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_9_1",
+        "cave_9_2",
+        "cave_9_3",
+        "cave_9_4"
+      ],
+      "pockets": [
+        "cave_9_2#cell"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_9_1.room",
+        "scenes/world/rooms/cave_9_1.tscn",
+        "tools/rooms/cave_9_2.room",
+        "scenes/world/rooms/cave_9_2.tscn",
+        "tools/rooms/cave_9_3.room",
+        "scenes/world/rooms/cave_9_3.tscn",
+        "tools/rooms/cave_9_4.room",
+        "scenes/world/rooms/cave_9_4.tscn",
+        "tools/rooms/cave_9_2__cell.room",
+        "scenes/world/rooms/cave_9_2__cell.tscn"
+      ]
+    },
+    "C09.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_9_5",
+        "cave_9_6",
+        "cave_9_7",
+        "cave_9_8"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_9_5.room",
+        "scenes/world/rooms/cave_9_5.tscn",
+        "tools/rooms/cave_9_6.room",
+        "scenes/world/rooms/cave_9_6.tscn",
+        "tools/rooms/cave_9_7.room",
+        "scenes/world/rooms/cave_9_7.tscn",
+        "tools/rooms/cave_9_8.room",
+        "scenes/world/rooms/cave_9_8.tscn"
+      ]
+    },
+    "C09.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_9_9",
+        "cave_9_10"
+      ],
+      "pockets": [
+        "cave_9_9#vault"
+      ],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_9_9.room",
+        "scenes/world/rooms/cave_9_9.tscn",
+        "tools/rooms/cave_9_10.room",
+        "scenes/world/rooms/cave_9_10.tscn",
+        "tools/rooms/cave_9_9__vault.room",
+        "scenes/world/rooms/cave_9_9__vault.tscn"
+      ]
+    },
+    "C10": {
+      "wave": 3,
+      "owns": [
+        "tests/test_area_cave_10.gd",
+        "tests/test_route_cave_10.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_10_14.tscn"
+      ]
+    },
+    "C10.a": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_10_1",
+        "cave_10_2",
+        "cave_10_3",
+        "cave_10_4"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_10_1.room",
+        "scenes/world/rooms/cave_10_1.tscn",
+        "tools/rooms/cave_10_2.room",
+        "scenes/world/rooms/cave_10_2.tscn",
+        "tools/rooms/cave_10_3.room",
+        "scenes/world/rooms/cave_10_3.tscn",
+        "tools/rooms/cave_10_4.room",
+        "scenes/world/rooms/cave_10_4.tscn"
+      ]
+    },
+    "C10.b": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_10_5",
+        "cave_10_6",
+        "cave_10_7",
+        "cave_10_8"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_10_5.room",
+        "scenes/world/rooms/cave_10_5.tscn",
+        "tools/rooms/cave_10_6.room",
+        "scenes/world/rooms/cave_10_6.tscn",
+        "tools/rooms/cave_10_7.room",
+        "scenes/world/rooms/cave_10_7.tscn",
+        "tools/rooms/cave_10_8.room",
+        "scenes/world/rooms/cave_10_8.tscn"
+      ]
+    },
+    "C10.c": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_10_9",
+        "cave_10_10",
+        "cave_10_11",
+        "cave_10_12"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_10_9.room",
+        "scenes/world/rooms/cave_10_9.tscn",
+        "tools/rooms/cave_10_10.room",
+        "scenes/world/rooms/cave_10_10.tscn",
+        "tools/rooms/cave_10_11.room",
+        "scenes/world/rooms/cave_10_11.tscn",
+        "tools/rooms/cave_10_12.room",
+        "scenes/world/rooms/cave_10_12.tscn"
+      ]
+    },
+    "C10.d": {
+      "wave": 3,
+      "kind": "room_batch",
+      "rooms": [
+        "cave_10_13",
+        "cave_10_14"
+      ],
+      "pockets": [],
+      "in_place": [],
+      "owns": [
+        "tools/rooms/cave_10_13.room",
+        "scenes/world/rooms/cave_10_13.tscn",
+        "tools/rooms/cave_10_14.room",
+        "scenes/world/rooms/cave_10_14.tscn"
+      ]
+    },
+    "E1": {
+      "wave": 3,
+      "owns": [
+        "scripts/ui/ending.gd",
+        "scenes/ui/ending.tscn",
+        "scripts/world/ending_trigger.gd",
+        "scenes/world/ending_trigger.tscn",
+        "scripts/world/ending_choice.gd",
+        "scenes/world/ending_choice.tscn",
+        "data/ending.json",
+        "tests/test_ending.gd"
+      ],
+      "amends": [
+        "scenes/world/rooms/cave_10_14.tscn"
+      ],
+      "note": "ending_choice.gd (monsters-bosses-tools 7.3) is not in the E1 row; assigned to E1. Its scene name is not given; assumed."
+    },
+    "Q1": {
+      "wave": 4,
+      "owns": [
+        "tools/extract_scene_graph.gd",
+        "tests/test_scene_solver.gd"
+      ]
+    },
+    "Q2": {
+      "wave": 4,
+      "owns": [
+        "tests/test_world_complete.gd",
+        "tests/test_layout_all.gd"
+      ]
+    },
+    "Q3": {
+      "wave": 4,
+      "owns": [
+        "tests/test_playthrough_1.gd",
+        "tests/test_playthrough_2.gd",
+        "tests/test_playthrough_3.gd",
+        "tests/test_playthrough_4.gd",
+        "tools/playthrough_route.py",
+        "data/playthrough_route.json"
+      ],
+      "note": "data/playthrough_route.json is written by the tool named in the row; listed as allowed output."
+    },
+    "Q4": {
+      "wave": 4,
+      "owns": [
+        "tools/capture_all.gd",
+        "tools/capture_all.tscn",
+        "docs/screens/step3/contact-*.png"
+      ],
+      "note": "The 16 area names are not fixed in the row; contact-*.png matches the 16 sheets without naming them."
+    },
+    "Q5": {
+      "wave": 4,
+      "owns": [
+        "docs/screens/step3/review-*.txt"
+      ],
+      "note": "Same as Q4: 16 files, names not fixed."
+    },
+    "Q6": {
+      "wave": 4,
+      "owns": [
+        "tests/test_soak_*.gd",
+        "tests/test_economy_budget.gd"
+      ],
+      "note": "Same as Q4: 16 files, names not fixed."
+    },
+    "Q7": {
+      "wave": 4,
+      "owns": [
+        "tests/test_tool_matrix.gd"
+      ]
+    },
+    "Q8": {
+      "wave": 4,
+      "owns": [
+        "tests/test_streaming.gd",
+        "tools/perf_walk.gd"
+      ]
+    },
+    "Q9": {
+      "wave": 4,
+      "owns": [
+        "docs/state.md",
+        "README.md",
+        "docs/screens/step3/README.txt"
+      ]
+    },
+    "Z1": {
+      "wave": 5,
+      "owns": [],
+      "note": "Owns are set per ticket; the ticket writes its own entry before the stray check.",
+      "per_ticket": true
+    },
+    "Z2": {
+      "wave": 5,
+      "owns": [
+        "data/shop_prices.json"
+      ],
+      "note": "'Constants named in the code contract' do not name a file; no file is listed for them."
+    },
+    "Z3": {
+      "wave": 5,
+      "owns": [
+        "export_presets.cfg"
+      ],
+      "amends": [
+        "docs/state.md"
+      ],
+      "note": "Amends Q9's file, so it is not a second owner."
+    }
+  },
+  "open_gaps": [
+    "monsters-bosses-tools.md 7.2 API changes to scripts/combat/hitbox.gd, scripts/enemies/enemy_base.gd, scripts/enemies/enemy_projectile.gd and scripts/core/layers.gd have no WP owner; the document needs an owner before wave 1 starts.",
+    "monsters-bosses-tools.md 7.3 puts minibosses and bosses in scripts/enemies/<name>.gd and tests/test_<name>.gd; the WP rows use scripts/enemies/minibosses/, scripts/enemies/bosses/ and tests/test_boss_<name>.gd. The manifest follows the WP rows.",
+    "G1 ward pockets are in the committed docs/world-graph.json (cave_10_10#ward, cave_6_8#ward, ow_8_5#ward, ow_9_1#ward) but no batch row lists them, so --global fails. Proposed rows: ow_9_1 +#ward in R3.a, ow_8_5 +#ward in R5.a, cave_6_8 +#ward in C06.b, cave_10_10 +#ward in C10.c; the lead adds them to docs/world-work-packages.md and runs --regen."
+  ]
+}
