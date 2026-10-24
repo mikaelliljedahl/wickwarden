@@ -24,12 +24,12 @@ tutorial text in the game world.
 | Overworld rooms | 88 (inside a 12x9 grid of 108 cells; the rest is sea, cliff and void) |
 | Cave rooms | 104 in 10 caves (8, 9, 9, 10, 10, 11, 11, 12, 10, 14) |
 | Rooms in total | 192 |
-| Pockets (secret closets, shops, key alcoves; not counted as rooms) | 29 |
-| Graph size | 221 nodes, 255 edges, 124 gated edges |
+| Pockets (secret closets, shops, key alcoves; not counted as rooms) | 33 |
+| Graph size | 225 nodes, 259 edges, 128 gated edges |
 | Tools | 10 (2 existing, 8 new) on top of the base kit hook, flare, ward |
 | Wick cores | 17 (start 3 hearts, maximum 20 = the 20-heart cap) |
 | Small keys / big keys / lantern fragments | 22 / 10 / 9 |
-| Shops / caches / pot bags | 6 / 12 / 2 |
+| Shops / caches / pot bags | 6 / 16 / 2 |
 | Enemies placed | 213 in the overworld, 223 in the caves, plus 10 minibosses and 10 bosses |
 | Rooms reachable with the base kit at the start | 38 overworld rooms and 6 rooms of C1 |
 | Valid orders of C1 to C9 | 26 (see section 5.5) |
@@ -179,7 +179,7 @@ Notes:
 
 - The Wickwarden voice: wick, lamp, wax, moth, tallow, hush. Names avoid any classic item name.
 - The charge flare opens two "wax seal" pockets (`flare` is a base capability, so they are early
-  optional secrets). The ward is defence only; no gate needs it (open question 9).
+  optional secrets). The ward is also a defence tool; four optional ward-plate caches need it (decision 8; open question 9).
 - Gate counts count edges that name the tool in `needs`. Boss doors and key doors are separate.
 - Item and gate counts are produced from `world-graph.json`; they do not need updating by hand.
 
@@ -210,7 +210,7 @@ active item is chosen with `cycle_item` (open question 7: ten items need a bette
 | `tether_moth` | none | Existing `ItemBase`. Grated alcoves need a new `Grate` prop; the moth's carrier `PickupCollector` already fetches the pickup. |
 | `pitch_pot` | none | Existing `ItemBase` and `CrackedWall` (the brittle rocks reuse it with a rock look). |
 | `cinder_wick` | props only | `ItemBase` that spawns a short-lived fire `Hitbox` (`kind = &"fire"`, a new kind string). New prop `Burnable` (group `burnable`, method `on_fire(pos)`) for thorn hedges, walls and webs. One flame at a time. |
-| `tallow_sling` | props only | `ItemBase` with a moving `Area2D` slug (like the tether moth). New prop `EyeSwitch` that reacts to `kind = &"sling"`. No ammo, one slug at a time. |
+| `tallow_sling` | props only | `ItemBase` with a moving `Area2D` slug (like the tether moth). New prop `EyeSwitch` that reacts to `kind = &"sling"`. Limited ammo: start 12, max 30, a slug bundle adds 6 (decision 9); one slug at a time. |
 | `reed_raft` | NEW CORE | Needs the player external-motion mode (below) and two props: `Mooring` (a post on the shore with a target mooring) and a water lane. The water blocks walking as before; only the raft crosses. |
 | `heft_mitts` | NEW CORE (small) | Needs a carry state on `Player` (speed, no hook while carrying) and a `Liftable` / `HeavyStone` prop. Throw = launch with a `Hitbox` on landing. |
 | `glow_jar` | props only | `ItemBase` that throws a jar and adds a `PointLight2D` (radius 520 px, 6 s). New prop `HiddenSeam` (group `revealable`, `reveal()`); one jar at a time. |
@@ -1379,9 +1379,9 @@ Six shops, all pockets, no text: items sit on pedestals with a price shown in br
 |---|---|---|---|---|
 | S1 | `ow_1_2` | Tilly's lamp stall | Ember 8, Pitch pot bundle 12 | open door; needs base kit |
 | S2 | `ow_6_0` | Peddler's burrow | Ember 8, Tallow flask 40 | bomb (pitch_pot); needs pitch_pot |
-| S3 | `ow_10_3` | Ashwife's cart | Pitch pot bundle 12, Tallow flask 40 | open door; needs cinder_wick, tallow_sling |
-| S4 | `ow_5_7` | Stone mason | Ember 8, Pitch pot bundle 12, Tallow flask 40 | open door; needs base kit |
-| S5 | `ow_10_7` | Pilgrim's stall | Ember 6, Pitch pot bundle 10, Tallow flask 35 | open door; needs cinder_wick, glow_jar, pitch_pot, reed_raft, skitter_boots, tallow_sling, tether_moth |
+| S3 | `ow_10_3` | Ashwife's cart | Pitch pot bundle 12, Tallow flask 40, Slug bundle 10 | open door; needs cinder_wick, tallow_sling |
+| S4 | `ow_5_7` | Stone mason | Ember 8, Pitch pot bundle 12, Tallow flask 40, Slug bundle 10 | open door; needs base kit |
+| S5 | `ow_10_7` | Pilgrim's stall | Ember 6, Pitch pot bundle 10, Tallow flask 35, Slug bundle 10 | open door; needs cinder_wick, glow_jar, pitch_pot, reed_raft, skitter_boots, tallow_sling, tether_moth |
 | S6 | `ow_6_5` | Keeper's trade | Tallow flask 50 | open door; needs pitch_pot, reed_raft |
 
 - **Ember**: +1 heart (2 half-hearts), applied on purchase.
@@ -1391,7 +1391,7 @@ Six shops, all pockets, no text: items sit on pedestals with a price shown in br
 
 ### 6.6 Secret caches
 
-12 caches (brass, pots, embers). 7 are in the overworld, 5 in caves; they are in the
+16 caches (brass, pots, embers). 9 are in the overworld, 7 in caves; they are in the
 pocket table (section 3.7) and in the cave tables. Brass in caches in total: about 460.
 
 ### 6.7 Economy sketch
@@ -1402,9 +1402,9 @@ pocket table (section 3.7) and in the cave tables. Brass in caches in total: abo
   about 340 brass. Caches add about 460. The game offers roughly 800 brass in total.
 - Sinks: ember 6-8, bundle 10-12, flask 35-50. A player who buys all six shops once (one flask and
   one bundle each) spends about 250. The rest is a buffer for refills in the long caves.
-- No wallet cap exists in `GameState`; the sketch needs none (open question 6).
+- The wallet cap is 999 brass (decision 7; open question 6).
 - Pot supply: 6 pots from the pot item, a 10 % bundle drop per kill, 1 bundle on a ledge
-  (`ow_7_0`), bundles in 4 caches and in 4 shops. The 124 gated edges include 11 bomb walls; each needs one pot.
+  (`ow_7_0`), bundles in 4 caches and in 4 shops. The 128 gated edges include 11 bomb walls; each needs one pot.
 
 ---
 
