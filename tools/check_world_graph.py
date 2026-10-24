@@ -201,6 +201,8 @@ def check_structure(g, errors):
         if cap not in known:
             errors.append("item %s is not a declared capability" % cap)
     for n in d["nodes"]:
+        if "dark" in n and (n["kind"] != "room" or not isinstance(n["dark"], bool)):
+            errors.append("node %s: dark must be true or false, and only rooms have it" % n["id"])
         for cap in n.get("boss", {}).get("needs", []):
             if cap not in known:
                 errors.append("boss at %s needs unknown capability %s" % (n["id"], cap))
@@ -433,6 +435,7 @@ def print_stats(g):
     print("edges: %d, gated: %d" % (len(g.edges), sum(1 for e in g.edges if e.get("gate"))))
     print("gate types:", dict(Counter(e["gate"] for e in g.edges if e.get("gate"))))
     print("collectibles:", dict(Counter(c.get("kind", "capability") for c in g.coll)))
+    print("dark rooms: %d" % sum(1 for n in rooms if n.get("dark")))
 
 
 def run_checks(data):
@@ -491,6 +494,19 @@ def _m_c4_slug_source_in_wrong_cave(d):
             p["node"] = "cave_8_2"
 
 
+def _m_dark_not_boolean(d):
+    for n in d["nodes"]:
+        if n["id"] == "cave_1":
+            n["dark"] = "yes"
+
+
+def _m_dark_on_pocket(d):
+    for n in d["nodes"]:
+        if n["kind"] == "pocket":
+            n["dark"] = True
+            return
+
+
 MUTATIONS = [
     ("ward plate gates with no capability (R1)", _m_ward_plate_no_capability),
     ("the ward taken out of the base kit (no item grants it)", _m_ward_not_base),
@@ -499,6 +515,8 @@ MUTATIONS = [
     ("the C10 slug source moved behind the eye switch (R6b)", _m_c10_slug_source_behind_eye_switch),
     ("the C9 slug source moved into the boss room (R6b)", _m_c9_slug_source_in_boss_room),
     ("the C4 slug source moved into C8 (R6b, wrong cave)", _m_c4_slug_source_in_wrong_cave),
+    ("dark is a string on a room (schema)", _m_dark_not_boolean),
+    ("dark on a pocket (schema: only rooms have it)", _m_dark_on_pocket),
 ]
 
 
