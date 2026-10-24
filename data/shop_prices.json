@@ -1,0 +1,11 @@
+{
+  "note": "Shop prices in brass (world-plan 6.5 starting values). Tuned in playtests; edit here, never in code. Stock kinds: ember, pot_bundle, slug_bundle, tallow_flask.",
+  "shops": {
+    "S1": {"ember": 8, "pot_bundle": 12},
+    "S2": {"ember": 8, "tallow_flask": 40},
+    "S3": {"pot_bundle": 12, "tallow_flask": 40, "slug_bundle": 10},
+    "S4": {"ember": 8, "pot_bundle": 12, "tallow_flask": 40, "slug_bundle": 10},
+    "S5": {"ember": 6, "pot_bundle": 10, "tallow_flask": 35, "slug_bundle": 10},
+    "S6": {"tallow_flask": 50}
+  }
+}
