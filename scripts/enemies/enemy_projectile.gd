@@ -9,6 +9,9 @@ extends Area2D
 ##
 ## Hooks: _projectile_physics(delta) (extra motion, called before the straight move),
 ##        _on_destroyed(reason) with reason in &"wall", &"ward", &"hit", &"range", &"bounds".
+## Options: `homing_turn_deg` > 0 turns the flight toward the player at that many degrees per second
+## (Hush torrent, treble notes); `shape_capsule` uses a 24 x 96 px capsule along the flight direction
+## (watcher beam) instead of the circle.
 
 signal destroyed(reason: StringName)
 
@@ -24,6 +27,13 @@ signal destroyed(reason: StringName)
 ## Destroy on touching the player hurtbox (even if the hit was ignored by i-frames: no, only
 ## accepted hits). Set false for piercing projectiles.
 @export var destroy_on_hit: bool = true
+## Degrees per second the flight turns toward the player. 0 = straight flight.
+@export var homing_turn_deg: float = 0.0
+## True: the wall and hit shapes are a capsule of CAPSULE_SIZE along the flight direction.
+@export var shape_capsule: bool = false
+
+## Size of the capsule shape (width, length in px) when shape_capsule is set.
+const CAPSULE_SIZE := Vector2(24.0, 96.0)
 
 var direction: Vector2 = Vector2.RIGHT
 ## Global rect the projectile may exist in. Rect2() = unbounded.
@@ -31,6 +41,7 @@ var room_rect: Rect2 = Rect2()
 var hitbox: Hitbox
 var is_destroyed: bool = false
 var _age: float = 0.0
+var _shape_nodes: Array[CollisionShape2D] = []
 
 
 ## Spawns a plain projectile. Returns it.
@@ -45,27 +56,25 @@ static func fire(
 	return projectile
 
 
-func _init() -> void:
+## Layer and mask are set in _ready(): a subclass _init() does not run this one (Godot 4.7).
+func _ready() -> void:
 	collision_layer = 0
 	collision_mask = Layers.WORLD
 	monitoring = true
-
-
-func _ready() -> void:
 	add_to_group(&"projectiles")
 	if get_node_or_null("WallShape") == null:
-		var shape := CircleShape2D.new()
-		shape.radius = radius
-		var node := CollisionShape2D.new()
-		node.name = "WallShape"
-		node.shape = shape
-		add_child(node)
+		var wall_node := _make_shape_node()
+		wall_node.name = "WallShape"
+		add_child(wall_node)
+		_shape_nodes.append(wall_node)
 	hitbox = get_node_or_null("Hitbox") as Hitbox
 	if hitbox == null:
 		hitbox = Hitbox.new()
 		hitbox.name = "Hitbox"
 		hitbox.team = Layers.Team.ENEMY
-		hitbox.add_circle(radius)
+		var hit_node := _make_shape_node()
+		hitbox.add_child(hit_node)
+		_shape_nodes.append(hit_node)
 		add_child(hitbox)
 	hitbox.kind = &"projectile"
 	hitbox.damage = damage
@@ -86,6 +95,31 @@ func launch(at: Vector2, dir: Vector2) -> void:
 	direction = dir.normalized() if dir != Vector2.ZERO else Vector2.RIGHT
 	if hitbox != null:
 		hitbox.knockback_direction = direction
+	_orient_shapes()
+
+
+## A circle of `radius`, or a capsule of CAPSULE_SIZE when shape_capsule is set.
+func _make_shape_node() -> CollisionShape2D:
+	var node := CollisionShape2D.new()
+	if shape_capsule:
+		var capsule := CapsuleShape2D.new()
+		capsule.radius = CAPSULE_SIZE.x * 0.5
+		capsule.height = CAPSULE_SIZE.y
+		node.shape = capsule
+	else:
+		var circle := CircleShape2D.new()
+		circle.radius = radius
+		node.shape = circle
+	return node
+
+
+## A capsule stands upright by default; turn it so its long axis follows the flight direction.
+func _orient_shapes() -> void:
+	if not shape_capsule:
+		return
+	for node in _shape_nodes:
+		if is_instance_valid(node):
+			node.rotation = direction.angle() + PI * 0.5
 
 
 func _projectile_physics(_delta: float) -> void:
@@ -116,8 +150,11 @@ func _physics_process(delta: float) -> void:
 	_projectile_physics(delta)
 	if is_destroyed:
 		return
+	if homing_turn_deg > 0.0:
+		_home(delta)
 	global_position += direction * speed * delta
 	hitbox.knockback_direction = direction
+	_orient_shapes()
 	if room_rect.size != Vector2.ZERO and not room_rect.has_point(global_position):
 		destroy(&"bounds")
 		return
@@ -126,7 +163,20 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_blocked() -> void:
-	destroy(&"ward")
+	if hitbox.block_destroys_carrier:
+		destroy(&"ward")
+
+
+## Turns `direction` toward the player by at most homing_turn_deg per second.
+func _home(delta: float) -> void:
+	var target := get_tree().get_first_node_in_group(&"player") as Node2D
+	if target == null:
+		return
+	var to_target := target.global_position - global_position
+	if to_target.length_squared() < 0.0001:
+		return
+	var max_turn := deg_to_rad(homing_turn_deg) * delta
+	direction = direction.rotated(clampf(direction.angle_to(to_target), -max_turn, max_turn))
 
 
 func _on_hit_landed(_hurtbox: Hurtbox) -> void:

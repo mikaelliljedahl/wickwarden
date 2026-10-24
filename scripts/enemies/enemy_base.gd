@@ -17,6 +17,8 @@ extends CharacterBody2D
 signal damaged(amount: int)
 signal died(enemy: EnemyBase)
 signal stunned(seconds: float)
+## A hit from the front guard (armor_front_deg) was stopped: hitbox is the blocked hit.
+signal guard_blocked(hitbox: Hitbox)
 
 const FLASH_TIME := 0.1
 const HIT_KNOCKBACK_FALLBACK := 480.0
@@ -24,6 +26,9 @@ const IFRAME_TIME := 0.25
 const BODY_NAME := "BodyShape"
 const HURTBOX_NAME := "Hurtbox"
 const CONTACT_NAME := "ContactHitbox"
+## Seconds of the guard spark and the push on the attacker (monsters-bosses-tools section 1.3).
+const GUARD_PUSH_SPEED := 200.0
+const GUARD_PUSH_TIME := 0.1
 
 @export var max_hp: int = 2
 ## Contact damage in half-hearts, dealt by the ContactHitbox while it overlaps the player.
@@ -47,6 +52,24 @@ var invulnerable: bool = false
 var hit_wall: bool = false
 var facing_dir: Vector2 = Vector2.DOWN
 
+## Stat knobs set in _init() (plain vars: a scene never overrides them).
+## Multiplies the stun time of a hit with stun_time (moth stun). 0 = immune. Direct stun() is not scaled.
+var stun_scale: float = 1.0
+## Multiplies the knockback speed of every hit. 0 = immune to knockback.
+var knockback_scale: float = 1.0
+## Seconds of stun for a `chime` hit (lantern chime). 0 = the chime does nothing. Set it to 0 while a
+## monster cannot be stunned by the chime (for example a head that is not singing).
+var chime_stun_time: float = 0.0
+## True: a light enemy the reel line pulls to Tamsin and stuns for 0.8 s (read by the reel tool).
+var reel_light: bool = false
+## Front guard arc in degrees (a shield). A hit from inside the arc is blocked (spark, 0 damage). 0 = no guard.
+## The guard is down while stunned, and flare and explosion hits pierce it.
+var armor_front_deg: float = 0.0
+## True: the enemy lives in water zones only (fen leech). Movement inside water is the monster's job.
+var water_only: bool = false
+## True: the enemy ignores deep water (WATER blockers): flyers, leeches and rafts. False: ground enemies stop at it.
+var ignore_water: bool = false
+
 var hurtbox: Hurtbox
 var contact_hitbox: Hitbox
 var visual: Node2D
@@ -59,13 +82,12 @@ var _flash_time: float = 0.0
 var _player: Node2D
 
 
-func _init() -> void:
-	collision_layer = Layers.ENEMY_BODY
-	collision_mask = Layers.WORLD
-	motion_mode = MOTION_MODE_FLOATING
-
-
+## Body layer, mask and motion are set here, not in _init(): a subclass _init() does not run the base
+## _init() in Godot 4.7, so the body would stay on the WORLD layer.
 func _ready() -> void:
+	collision_layer = Layers.ENEMY_BODY
+	collision_mask = Layers.WORLD if ignore_water else Layers.WORLD | Layers.WATER
+	motion_mode = MOTION_MODE_FLOATING
 	add_to_group(&"enemies")
 	hp = max_hp
 	if get_node_or_null(BODY_NAME) == null:
@@ -135,6 +157,12 @@ func _on_stunned(_seconds: float) -> void:
 
 func _on_stun_end() -> void:
 	pass
+
+
+## Called with an accepted damaging hit before it is applied. Return the damage to apply; 0 blocks it.
+## The default returns `amount` unchanged (the front guard is checked by the base before this hook).
+func _resolve_damage(_hitbox: Hitbox, amount: int) -> int:
+	return amount
 
 
 # ---- Public API ------------------------------------------------------------------------------
@@ -332,7 +360,13 @@ func _on_hurtbox_hurt(hitbox: Hitbox) -> void:
 		return
 	var amount := hitbox.damage_for(hurtbox)
 	if hitbox.stun_time > 0.0:
-		stun(hitbox.stun_time)
+		stun(hitbox.stun_time * stun_scale)
+	if hitbox.kind == &"chime" and chime_stun_time > 0.0:
+		stun(chime_stun_time)
+	if _guard_blocks(hitbox):
+		_spark_guard(hitbox)
+		return
+	amount = _resolve_damage(hitbox, amount)
 	if amount <= 0:
 		return
 	hp -= amount
@@ -350,16 +384,49 @@ func _after_hit(
 	hurtbox.invulnerable = true
 	_flash_time = FLASH_TIME
 	_set_flash(true)
-	if knock_speed > 0.0 and hp > 0:
+	var speed := knock_speed * knockback_scale
+	if speed > 0.0 and hp > 0:
 		var dir := global_position - from_pos
 		if hitbox != null and hitbox.knockback_direction != Vector2.ZERO:
 			dir = hitbox.knockback_direction
 		if dir.length_squared() < 0.0001:
 			dir = Vector2.DOWN
-		apply_knockback(dir.normalized() * knock_speed, knock_time)
+		apply_knockback(dir.normalized() * speed, knock_time)
 	_on_hurt(hitbox)
 	if hp <= 0:
 		_die()
+
+
+## True when the front guard stops `hitbox`: the guard is up, the enemy is not stunned, the hit is not
+## a flare or explosion, and its origin is inside the front arc (armor_front_deg, centred on facing_dir).
+func _guard_blocks(hitbox: Hitbox) -> bool:
+	if armor_front_deg <= 0.0 or is_stunned():
+		return false
+	if hitbox.kind == &"flare" or hitbox.kind == &"explosion":
+		return false
+	var to_attacker := hitbox.origin() - global_position
+	if to_attacker.length_squared() < 0.0001:
+		return false
+	return absf(facing_dir.angle_to(to_attacker)) <= deg_to_rad(armor_front_deg) * 0.5
+
+
+## A guarded hit: spark, signal, and the attacker is pushed back (enemies only; the player has no
+## knockback API).
+func _spark_guard(hitbox: Hitbox) -> void:
+	guard_blocked.emit(hitbox)
+	Audio.play_sfx(&"ward_block", global_position)
+	var parent := get_parent()
+	if parent != null:
+		var spark_at := (
+			global_position + (hitbox.origin() - global_position).normalized() * body_radius
+		)
+		Placeholder.puff(parent, spark_at, Color(1.0, 0.95, 0.7, 0.9), 12.0)
+	var attacker := hitbox.source
+	if is_instance_valid(attacker) and attacker.has_method(&"apply_knockback"):
+		var away := attacker.global_position - global_position
+		if away.length_squared() < 0.0001:
+			away = Vector2.DOWN
+		attacker.call(&"apply_knockback", away.normalized() * GUARD_PUSH_SPEED, GUARD_PUSH_TIME)
 
 
 func _die() -> void:

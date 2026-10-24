@@ -18,6 +18,8 @@ extends RefCounted
 ## | 8     | 128       | PICKUP           | pickups (Area2D)                  | PICKUP_COLLECTOR              |
 ## | 9     | 256       | PICKUP_COLLECTOR | player collector, moth carrier    | -                             |
 ## | 10    | 512       | PROP_HURTBOX     | bush, brazier (hit by the hook)   | -                             |
+## | 11    | 1024      | WATER            | blocker bodies of deep water      | player, ground enemies        |
+## | 12    | 2048      | FEET             | foot sensors (Player, Pale Squire)| PitZone                       |
 ##
 ## Passive areas (hurtboxes, collectors) have mask 0. Active areas (hitboxes, pickups) poll their
 ## overlaps in `_physics_process`. Triggers (RoomDoor, LockedDoor) use layer 0 and mask PLAYER_BODY.
@@ -34,6 +36,8 @@ const ENEMY_HITBOX := 64
 const PICKUP := 128
 const PICKUP_COLLECTOR := 256
 const PROP_HURTBOX := 512
+const WATER := 1024
+const FEET := 2048
 
 
 ## Mask a Hitbox of this team needs to detect the hurtboxes it may damage.
