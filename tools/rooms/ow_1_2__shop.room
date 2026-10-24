@@ -1,0 +1,21 @@
+; Shop S1 (Tilly's lamp stall) of Ford Road: the pocket ow_1_2#shop, entered through the stall door of ow_1_2.
+; Stock: an ember (8 brass) and a pot bundle (12 brass). The stock sits 22 px south of its pedestal.
+room ow_1_2#shop
+terrain Tilly's lamp stall: stone counter, lanterns
+grid
+####################
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+prop pedestal 5,3
+prop pedestal 14,3
+shop S1 ember @528,358
+shop S1 pot_bundle @1392,358 id=pot_s1
+door ow_1_2 FromPocket 9,8
+spawn Inside 9,6

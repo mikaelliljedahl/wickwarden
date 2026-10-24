@@ -1,0 +1,20 @@
+; Dead End (ow_2_1): walled grove, no enemies. The locked door (overworld key, opens with the key of the
+; ow scope) seals the pitch pot closet, the in-place pocket ow_2_1#closet. Placed from the graph row; the
+; layout is the dev-world room ow_2_1 (step 1), unchanged.
+room ow_2_1
+terrain Dead End: walled grove
+floor_color 0.22 0.2 0.24
+grid
+#########..#########
+#.tt.......rr...tt.#
+#.t..............t.#
+#..................#
+...................#
+.............##..###
+#...rr.......#.....#
+#............#.....#
+#.r..........#.....#
+####################
+prop pedestal 16,7 size=72,72
+pickup item pitch_pot @1584,742
+opener locked_door @1536,528 id=ow_2_1_pitch
