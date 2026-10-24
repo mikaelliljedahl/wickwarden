@@ -411,6 +411,21 @@ GPT Image terrain textures below; they add no other image.
 | `brine_crab_states_v1.png` | 1536×1024 | `01a16f55-ee52-75b2-a4a7-cdafe930cb80` | `exec-c1fb47b6-e03a-420c-ab9f-ed1fa73235bd` | `de791ecbd9338f2e` | `log_b15.md` |
 | `brine_crab_states_v3.png` | 1536×1024 | `01a16f56-051b-7bc3-bb73-855342c0b8ac` | `exec-9557284c-faf6-43b8-b26d-8cd0bf82b9ae` | `608ca2435a361b57` | `log_b15.md` |
 | `brine_crab_states_v2.png` | 1536×1024 | `01a16f55-fa2a-78f1-90d4-123e4319081b` | `exec-9f4c0c3c-ce8f-4d51-9e2f-fcddce83e0e1` | `b200812005220c86` | `log_b15.md` |
+| `hud_counter_brass_v1.png` | 1536×1024 | `01a16f51-19e3-7213-a7a4-9a513e611572` | `exec-36c93161-d5f1-400d-ad6d-c0f512ee6342` | `24e417089eb24b7d` | `log_b72.md` |
+| `hud_counter_brass_v2.png` | 1536×1024 | `01a16f51-2bb6-7522-9391-370fe8ded9c0` | `exec-836aa5e1-4259-43db-b2a5-4d845df89bdc` | `b42b86dd45e6fed7` | `log_b72.md` |
+| `hud_counter_brass_v3.png` | 1536×1024 | `01a16f55-a6f8-7f01-8f40-dadd32e86e9c` | `exec-0ebd9634-c954-41b1-93fa-f1d3909808bb` | `4af1415825a90f20` | `log_b72.md` |
+| `hud_counter_small_key_v1.png` | 1536×1024 | `01a16f51-1ae7-7152-9e90-624b90a4dfcc` | `exec-0223fed3-8603-4b77-a0ec-4f0000315a47` | `88cdf71dcc00e684` | `log_b72.md` |
+| `hud_counter_small_key_v2.png` | 1536×1024 | `01a16f53-b671-75e2-a023-377d2cbb0845` | `exec-ff5e84c2-047b-43b3-80cc-1ea616cd2186` | `2707298f0dd4aeb8` | `log_b72.md` |
+| `hud_counter_small_key_v3.png` | 1536×1024 | `01a16f53-c310-7e73-b757-cf498da8f918` | `exec-16c9b42e-0275-41e2-924c-06dfd8e77e5f` | `c14e8cbc1d039f0d` | `log_b72.md` |
+| `hud_counter_big_key_v1.png` | 1536×1024 | `01a16f51-1e0b-7970-9662-80a6e9c79601` | `exec-50417bac-b8b0-4999-a093-49b8808335b8` | `959bd5d5c4e065f3` | `log_b72.md` |
+| `hud_counter_big_key_v2.png` | 1536×1024 | `01a16f53-cfdb-7842-b4eb-e480d5cc574e` | `exec-b2267280-1ca4-4ab1-bfc5-5a949344f33b` | `98d17b922cffea75` | `log_b72.md` |
+| `hud_counter_big_key_v3.png` | 1536×1024 | `01a16f53-d5d8-7cd0-ba08-5fdf3eabdad7` | `exec-91c9b82f-c9d9-4028-b52a-71f09d78d393` | `1f9f98d45a86506f` | `log_b72.md` |
+| `hud_counter_pot_v1.png` | 1536×1024 | `01a16f51-2343-7670-96f2-99b3b2f5767e` | `exec-89e6234e-f6eb-4759-adb1-950e48045bcb` | `d6a3737a97497850` | `log_b72.md` |
+| `hud_counter_pot_v2.png` | 1536×1024 | `01a16f53-f87a-7e21-a524-bce428b3dc01` | `exec-6662e66f-7f59-4825-8b49-78d74bd07bec` | `7ca7a874ace0ab47` | `log_b72.md` |
+| `hud_counter_pot_v3.png` | 1536×1024 | `01a16f54-0d79-7102-b4ae-3b22af41a8a1` | `exec-5f6ffad1-bedc-44e1-ba2c-444db644832f` | `fa3b29bd9f203650` | `log_b72.md` |
+| `hud_counter_slug_v1.png` | 1536×1024 | `01a16f51-26f2-7102-96e1-f61211a7bb63` | `exec-e6dd0bef-25d6-4e38-9cb7-51ba43bd0ef3` | `5d993f1274575184` | `log_b72.md` |
+| `hud_counter_slug_v2.png` | 1536×1024 | `01a16f55-9e20-76d2-9648-127907c06942` | `exec-f35211da-1e15-427d-a1a6-3659432221e0` | `7627a81b36de3fcf` | `log_b72.md` |
+| `hud_counter_slug_v3.png` | 1536×1024 | `01a16f55-a02a-7012-aef4-d6645a99b646` | `exec-b3eabf81-45b0-4b75-b241-8c5de7ddae2c` | `a76ea76c478b39ed` | `log_b72.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
