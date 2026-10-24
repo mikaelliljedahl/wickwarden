@@ -44,4 +44,13 @@ variant of one image uses the same design. Tamsin's design is not changed here.
 - Pitch pot icon: a squat round clay pot sealed with black pitch that drips, a rope binding, a short twisted fuse with a spark.
 - Tether moth icon: pale lavender and cream moth, amber wing edges, brass thread with a glowing tip (the art brief description).
 
-## Batch 18 to 19 (filled in as each batch is done)
+## Batch 18: icons heft mitts, glow jar, lantern chime, skitter boots, reel line; item cinder wick
+
+- Heft mitts: oversized tan-leather work mitts, brass rivets, wide buckled cuffs.
+- Glow jar: a squat round glass jar, brass lid with two handles, a warm amber glow inside (the heart-shaped variant 3 is weak).
+- Lantern chime: a small glass lantern cage on a brass ring with a lit candle, three brass chime rods and a clapper ball.
+- Skitter boots: worn brown leather boots, laces, a thin brass coil spring at each heel.
+- Reel line: a brass reel with a dark cord wound on it, a wooden or brass handle, and a short length of line to a curled hook.
+- Item cinder wick: the cinder wick lying on a short carved stone pedestal with a lantern motif; one idle pose and three glint poses.
+
+## Batch 19 (filled in as each batch is done)

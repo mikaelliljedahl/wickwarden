@@ -10,7 +10,7 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 | 15 | husk hound states, brine crab walk (3 facings) and states, wickling | 18 | generated, verified, logged (`log_b15.md`): 5 ok, 13 weak; brine side reference v1 |
 | 16 | mirror shade walk (3 facings) and states (fade, echo swing, decoy crack) | 18 | generated, verified, logged (`log_b16.md`): 4 ok, 13 weak, 1 failed (walk side v2, three attempts coloured); walk side reference v1 |
 | 17 | choirling (3 rows), icons tether moth, pitch pot, cinder wick, tallow sling, reed raft | 18 | generated, verified, logged (`log_b17.md`): 15 ok, 3 weak (choirling); two cinder wick images recovered from the job's own session folder |
-| 18 | icons heft mitts, glow jar, lantern chime, skitter boots, reel line; item cinder wick | 18 | not started |
+| 18 | icons heft mitts, glow jar, lantern chime, skitter boots, reel line; item cinder wick (pedestal) | 18 | generated, verified, logged (`log_b18.md`): 17 ok, 1 weak (glow jar v3, heart-shaped) |
 | 19 | pedestal items tallow sling, reed raft, heft mitts, glow jar, lantern chime, skitter boots | 18 | not started |
 
 ## Known problems
@@ -33,6 +33,8 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 
 - Choirling (batch 17): all three variants show a leafy, mossy body instead of the pale wax singer. The reference `hush_spitcap.png` is the cause (its cap is olive and moss). Not retried: weak for the owner's cull; `hush_skitterwick.png` would be the next reference to try.
 - Failed-looking jobs (batch 17): cinder wick v2 and v3 jobs reported FAILED because `CODEX_THREAD_ID` was unset, but each job's own session folder held exactly one PNG written at run time. The lead copied from that folder only and checked by SHA-256.
+
+- Icons (batches 17 to 19): every 1024x1024 request came back 1254x1254 (the same tool behaviour as the textures); not resized. The landscape pedestal sheets come back at 1536x1024 as requested.
 
 ## Process
 
