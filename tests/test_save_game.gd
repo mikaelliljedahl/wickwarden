@@ -6,6 +6,7 @@ extends TestCase
 const SLOT := "user://save_1.json"
 const BAD := "user://save_1.bad"
 const TEMP := "user://save_1.json.tmp"
+const SHOP_SCRIPT := "res://scripts/world/shop_item.gd"
 
 
 func run() -> void:
@@ -18,6 +19,7 @@ func run() -> void:
 	_erase_keeps_bad_slot()
 	_newer_and_corrupt_slots()
 	await _checkpoint_respawn()
+	await _shop_checkpoint_by_door()
 	await _autosave_and_continue()
 	_clean()
 	SaveGame.enabled = false
@@ -193,6 +195,71 @@ func _autosave_and_continue() -> void:
 	SaveGame.launch_mode = SaveGame.MODE_DEV
 	SaveGame.enabled = true
 	reset_state()
+
+
+## Walking through the door of a shop (a RoomDoor, as in the game, not warp_to) makes the shop the checkpoint
+## and autosaves it. The host room and the shop pocket are stubs: a shop pocket with a ShopItem and a door.
+func _shop_checkpoint_by_door() -> void:
+	_clean()
+	SaveGame.enabled = true
+	SaveGame.launch_mode = SaveGame.MODE_NEW
+	reset_state()
+	SaveGame.begin_new_game()
+	var world := await make_world()
+	var host := Room.new()
+	host.name = "Host"
+	host.grid = WorldData.grid("ow_1_2")
+	var door := RoomDoor.new()
+	door.name = "ShopDoor"
+	door.target_room = &"ow_1_2#shop"
+	door.position = Vector2(300, 300)
+	host.add_child(door)
+	door.owner = host
+	world.add_room_scene(&"ow_1_2", _packed(host))
+	var shop := Room.new()
+	shop.name = "Shop"
+	shop.grid = WorldData.grid("ow_1_2#shop")
+	var stock := Area2D.new()
+	stock.set_script(load(SHOP_SCRIPT))
+	stock.name = "Stock"
+	stock.set("shop", &"S1")
+	stock.set("stock", &"ember")
+	stock.position = Vector2(600, 600)
+	shop.add_child(stock)
+	stock.owner = shop
+	world.add_room_scene(&"ow_1_2#shop", _packed(shop))
+	world.start_at(&"ow_1_2")
+	check_eq(SaveGame.checkpoint_room(), &"ow_0_0", "before the shop the checkpoint is the start room")
+	world.player.place_at(world.get_room(&"ow_1_2").position + Vector2(300, 300))
+	var waited := 0
+	while world.get_current_room_id() != &"ow_1_2#shop" and waited < 300:
+		await frames(1)
+		waited += 1
+	await _wait_transition_for(world)
+	check_eq(world.get_current_room_id(), &"ow_1_2#shop", "the shop door leads into the shop")
+	check_eq(SaveGame.checkpoint_room(), &"ow_1_2#shop", "entering the shop makes it the checkpoint")
+	await seconds(1.1)
+	check_eq(_slot_dict().get("checkpoint"), "ow_1_2#shop", "the shop checkpoint is autosaved")
+	await dispose(world)
+	SaveGame.enabled = false
+	SaveGame.launch_mode = SaveGame.MODE_DEV
+	_clean()
+	reset_state()
+
+
+func _wait_transition_for(world: World) -> void:
+	var waited := 0
+	while world.is_transitioning() and waited < 120:
+		await frames(1)
+		waited += 1
+
+
+## A packed scene of `root` (its children must have `owner` set to it).
+func _packed(root: Node) -> PackedScene:
+	var packed := PackedScene.new()
+	packed.pack(root)
+	root.free()
+	return packed
 
 
 func _die_and_wait(world: World, expected: StringName, message: String) -> void:
