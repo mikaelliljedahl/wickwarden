@@ -548,6 +548,13 @@ GPT Image terrain textures below; they add no other image.
 | `miniboss_death_wax_v1.png` | 1536×1024 | `01a16f56-cc32-7d22-b9f2-7e45e4602189` | `exec-c7fdf694-6154-4006-b7bd-d14329c4992e` | `c1be012ed9d1c762` | `log_b62.md` |
 | `miniboss_death_wax_v2.png` | 1536×1024 | `01a16f61-8729-7fe3-85ce-b56158b54c26` | `exec-176eb7a6-ce70-45c3-906c-1528d52b894c` | `c691e43ca7599318` | `log_b62.md` |
 | `miniboss_death_wax_v3.png` | 1536×1024 | `01a16f61-9bdc-7b20-8bdd-cdaab9bb09bc` | `exec-781b7ede-8ed6-40de-b3da-46dd7892fb7e` | `e2143c670e669b89` | `log_b62.md` |
+| `hud_socket_trade_v1.png` | 1536×1024 | `01a16f60-2d08-7930-9509-bbf058476bda` | `exec-87aa0f29-7f1c-4ff2-825c-627d8da79cbc` | `071f60f125314a85` | `log_b74.md` |
+| `hud_socket_trade_v3.png` | 1536×1024 | `01a16f60-88de-7e70-a83a-1a9ece459fda` | `exec-d6c9c394-5fd5-4401-a553-e23e1fd65fb0` | `f47216d8d9c5fbd3` | `log_b74.md` |
+| `hud_socket_ninth_v1.png` | 1536×1024 | `01a16f60-8ca0-7ee3-9c04-33f3991bd43c` | `exec-f68a5722-dd0d-4b5a-a206-0adabba13394` | `21f5ced663407e16` | `log_b74.md` |
+| `hud_socket_trade_v2.png` | 1536×1024 | `01a16f60-4aa2-7232-93ec-34ca6b1ffb5d` | `exec-f489f24d-1878-4852-adfa-5af7ff20f60a` | `0ec51b92297ac94c` | `log_b74.md` |
+| `hud_socket_courage_v3.png` | 1536×1024 | `01a16f61-f102-7091-b622-acb2feeca77a` | `exec-de1c2fce-06e7-417e-99ad-edff10a14298` | `19874aa736df8fd9` | `log_b74.md` |
+| `hud_socket_ninth_v2.png` | 1536×1024 | `01a16f62-25f6-75a1-975f-cf60521efbe9` | `exec-94ca2441-b684-418d-9d66-9e9b9ff2dc79` | `af7eec5f5acd4157` | `log_b74.md` |
+| `hud_socket_ninth_v3.png` | 1536×1024 | `01a16f62-2c2b-7200-a9eb-164fb23bedcc` | `exec-b4a13ceb-410f-4172-9d45-7898f1395f6f` | `464e875b1fbbbf15` | `log_b74.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
