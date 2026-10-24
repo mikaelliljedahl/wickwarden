@@ -6,7 +6,7 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 |---|---|---|---|
 | 12 | shared cave sets stone and root (textures, faces) | 18 | generated, verified, logged (`log_b12.md`); 3 ok-looking units, the rest weak (rubble, rock-dominant) |
 | 13 | cave tex water, two cave edge strips, bramble snapper, fen leech, cinder wisp | 18 | generated, verified, logged (`log_b13.md`): 5 ok, 11 weak, 2 failed; edge strips at 2.5:1 |
-| 14 | watcher eye (3 views), husk hound walk (3 facings) | 18 | not started |
+| 14 | watcher eye (3 views), husk hound walk (3 facings) | 18 | generated, verified, logged (`log_b14.md`): 6 ok, 12 weak; side references watcher v1 and husk v2 |
 | 15 | husk hound states, brine crab walk and states, wickling | 18 | not started |
 | 16 | mirror shade walk and states | 18 | not started |
 | 17 | choirling, icons tether moth, pitch pot, cinder wick, tallow sling, reed raft | 18 | not started |
@@ -22,6 +22,8 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 
 - Edge strips (`edge_*`, batch 13 so far): the tool returns about 2.5:1 (1983x793, 2048x768) for the requested 1536x384 (4:1). Each edge file is kept as it came out. The cut tool needs a 4:1 source (384x96 cell); this must be solved before the edges are cut (crop, or a different request). Owner decision.
 - Batch 13 fen leech: the prompt says no water, but the generator drew ripples and puddles around the body in most variants.
+
+- Facing (batch 14 up views): the up units came out in side profile or with the eye facing the viewer (watcher up v1 to v3, husk up v1 to v3 weak). The batch 14 prompts were run with the older facing wording; batches 15 and 16 use the stronger wording (chest and face at the viewer for down, back at the viewer and body square to the camera for up). Batch 14 up units are kept as weak for the owner's cull; no retries yet.
 
 ## Process
 

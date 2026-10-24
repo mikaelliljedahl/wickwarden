@@ -17,4 +17,9 @@ variant of one image uses the same design. Tamsin's design is not changed here.
 - Fen leech: a long wax-black leech with ribbed segments, a blunt round head with dim eyes and a pale lamp-wick tail that glows when it surfaces. Rows: surface 3, idle surfaced 2, telegraph 2, lunge 2, dive 3.
 - Cinder wisp: a round ember core with a smoky tail, two dim eyes in the glow and sparks around it; float 4 and swell 2 (swell is larger and whiter).
 
-## Batch 14 to 19 (filled in as each batch is done)
+## Batch 14: watcher eye, husk hound walk
+
+- Watcher eye: a carved stone eye socket in a square mount of dark ruined stone with moss, a heavy stone lid, a cold blue iris. Rows: lid closed 1, opening 3, open 1, fire 2 (a thin pale-blue bolt). Side view looks right; down view faces the viewer; up view shows the back.
+- Husk hound: a thin grey hound from sacks, rope and rusted lantern parts; a rusted lantern cage on its back with no flame; rope tail; cold teal glow in the long head.
+
+## Batch 15 to 19 (filled in as each batch is done)
