@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/mooring.tscn" id="2"]
+
+[node name="Gallery" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+build_walls = false
+floor_color = Color(0.2, 0.3, 0.28, 1)
+
+[node name="Lake" type="Polygon2D" parent="."]
+color = Color(0.16, 0.3, 0.42, 1)
+polygon = PackedVector2Array(560, 140, 1360, 140, 1360, 820, 560, 820)
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="WestPost" parent="Props" instance=ExtResource("2")]
+position = Vector2(480, 480)
+mooring_id = &"west_shore"
+target_room = &"fixture"
+target_mooring = &"east_shore"
+draw_ride_path = true
+
+[node name="EastPost" parent="Props" instance=ExtResource("2")]
+position = Vector2(1440, 480)
+mooring_id = &"east_shore"
+target_room = &"fixture"
+target_mooring = &"west_shore"
