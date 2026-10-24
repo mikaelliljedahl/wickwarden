@@ -1,0 +1,24 @@
+# Batch 26 log (18 images)
+
+Prompts: `tools/art_prompts/batch_26.md` (job id in each heading). Backend codex, model `cheapest` (gpt-6-luna, effort medium), one image per job. Each output is checked byte-identical (SHA-256) against its own session folder under `~/.codex/generated_images/<session>/`. Verdicts: ok, weak (why), failed.
+
+| Output | Job | Session | Generated file (output ID) | Size | SHA-256 (16) | Verdict |
+|---|---|---|---|---|---|---|
+| `low_rail_v1.png` | `b26_low_rail_v1` | `01a16f60-ff80-71a1-b410-f23cf3d57460` | `exec-c34811b1-07f8-4a80-b8dc-28b27ab32c9f.png` | 1536x1024 | `f5add776afbd3992` | weak (stone posts with ball finials, stone bases and vegetation, where the prompt asks for plain short iron posts) |
+| `low_rail_v2.png` | `b26_low_rail_v2` | `01a16f61-064a-7fe0-8c4c-83660b1cb215` | `exec-eed6828a-2ac6-4be8-b1ba-3779b3f848eb.png` | 1536x1024 | `4dac783316529814` | weak (the same finials, stones and foliage; a rust patch on the bar is the only difference) |
+| `low_rail_v3.png` | `b26_low_rail_v3` | `01a16f61-0f24-74e0-ab7c-43c066de4b82` | `exec-db2cc426-9faf-4414-b163-af4a3516cc52.png` | 1536x1024 | `1bc36477029ace53` | weak (the same finials, stones and foliage) |
+| `heavy_door_v1.png` | `b26_heavy_door_v1` | `01a16f61-47d3-7a71-b5c9-d349f66c1cb4` | `exec-5a3b37f1-db89-4dfa-b2ef-b3a12372297d.png` | 1536x1024 | `771bc4b6d80da133` | ok (closed slab in a stone frame; pushed aside with a dark passage) |
+| `heavy_door_v2.png` | `b26_heavy_door_v2` | `01a16f61-4d17-7f51-ac56-bdc2ee4d3eca` | `exec-2667c25e-8126-455d-85c4-8efee75fa997.png` | 1536x1024 | `fa895083528afad2` | ok (closed; pushed with a dark gap and dust) |
+| `heavy_door_v3.png` | `b26_heavy_door_v3` | `01a16f61-53b9-76a1-bdbf-92bd21cdab2a` | `exec-b8219e0c-79c2-466c-a218-253b7ae1c298.png` | 1536x1024 | `209d37e8a1419ff6` | ok (closed; pushed; the job could not inspect its image, so the verdict is from the montage) |
+| `anchor_ring_v1.png` | `b26_anchor_ring_v1` | `01a16f62-af70-7860-9d8f-94262be77af9` | `exec-30015cfa-c46e-4a9f-b849-fb0871aed3c0.png` | 1536x1024 | `e1a1f074e3def5c7` | weak (light lines spill into the gaps between poses; the third pose's line is cut at the right edge) |
+| `anchor_ring_v2.png` | `b26_anchor_ring_v2` | `01a16f62-b059-77a2-9db3-15e27fcae279` | `exec-75137c5d-4cd4-4657-afde-a2672e8821f1.png` | 1536x1024 | `2bad3debb5c212a4` | ok (idle, targeted, targeted bright; the posts are overgrown and the chasm edge is not shown) |
+| `anchor_ring_v3.png` | `b26_anchor_ring_v3` | `01a16f62-cb3b-7521-876f-ac02701a4cef` | `exec-27730fbc-5c1d-4a5a-b54a-df540c532d42.png` | 1536x1024 | `a91b7e626d544dc5` | ok (idle, targeted, targeted bright; the bright line stays inside the frame) |
+| `anchor_pocket_v1.png` | `b26_anchor_pocket_v1` | `01a16f62-cca1-70d0-97af-9b8773469d28` | `exec-3ef5d1c8-ac9e-4591-aa8c-b9156602283b.png` | 1536x1024 | `2fc19382561deba5` | ok (idle dark, amber, brighter ring) |
+| `anchor_pocket_v2.png` | `b26_anchor_pocket_v2` | `01a16f62-d1b7-7172-80fd-8f1992157d80` | `exec-f6eafa6f-5f3e-4587-aff3-bf93cd9f4829.png` | 1536x1024 | `5392368df516c803` | ok (the same three states) |
+| `anchor_pocket_v3.png` | `b26_anchor_pocket_v3` | `01a16f62-da90-7203-9256-7d30bb64b865` | `exec-e92bd2e6-81ee-4924-8afe-652b42c7a296.png` | 1536x1024 | `bee6a8acf929095d` | ok (the same three states) |
+| `heavy_stone_v1.png` | `b26_heavy_stone_v1` | `01a16f64-10dd-7263-9540-81b6d28b9090` | `exec-073c0a46-0a29-4084-bde7-ec2ef0b5fc58.png` | 1536x1024 | `ab1d3007360faee5` | ok (sitting and lifted with a dark shadow in row 1; three shatter states in row 2; some moss and rubble) |
+| `heavy_stone_v2.png` | `b26_heavy_stone_v2` | `01a16f64-179b-72d1-915b-f0b779d6427a` | `exec-7fd229dc-7709-4f01-b0e2-c8acf7f49fd4.png` | 1536x1024 | `06e4f49c4111ba84` | weak (the dust under the lifted block has a pink tint, a key-closeness risk for the cut; heavy debris) |
+| `heavy_stone_v3.png` | `b26_heavy_stone_v3` | `01a16f64-1f0e-7743-ad59-3214890d0bae` | `exec-ff4de6d5-36d4-4f64-8d34-0624af0c56bf.png` | 1536x1024 | `6ec752d218aa0864` | weak (a large dust cloud under the lifted block, pink-tinted; vegetation not asked for) |
+| `heavy_boulder_v1.png` | `b26_heavy_boulder_v1` | `01a16f64-2736-7143-b659-64b3926d4d67` | `exec-6a5b462d-bf2e-4efd-9584-fa1f4ec020ee.png` | 1536x1024 | `16a12fe35daf36f5` | ok (mossy round rest pose; three dust steps; the rock reads a little like an outcrop) |
+| `heavy_boulder_v3.png` | `b26_heavy_boulder_v3` | `01a16f64-36d4-7b52-bd8f-2e709827f415` | `exec-6ae275a3-0a7c-4eb7-8f95-3538158e12f0.png` | 1536x1024 | `bff8ba63fecd6f35` | ok (heavily moss-covered rest pose; three dust steps; the first puff is larger than asked) |
+| `heavy_boulder_v2.png` | `b26_heavy_boulder_v2` | attempt 1 `01a16f64-2e4f-7431-9d40-25151c1cc0d7` failed (input validation, no image); retry 1 is recorded below | | | | see the retry row |

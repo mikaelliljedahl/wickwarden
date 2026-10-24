@@ -891,6 +891,30 @@ GPT Image terrain textures below; they add no other image.
 | `item_skitter_boots_v1.png` | 1536×1024 | `01a16f81-4305-75d3-89a9-ec863928a654` | `exec-29b51804-8e28-442c-b0c3-697dcc9c4619` | `452f2e9d1c72c982` | `log_b19.md` |
 | `item_skitter_boots_v2.png` | 1536×1024 | `01a16f81-5d81-7e23-8127-23bd0f048e16` | `exec-b0d67df7-d301-4167-9c6e-68d44d70fd75` | `b8b79c282b4a5dc9` | `log_b19.md` |
 | `item_skitter_boots_v3.png` | 1536×1024 | `01a16f81-83a8-7191-9c9d-1f90da2a1fba` | `exec-508b7d64-002f-4827-b1f8-6935a8b52aa8` | `e4d8f230d7b4b63d` | `log_b19.md` |
+| `warp_picker_panel_v1.png` | 1536×1024 | `01a16f82-775d-7e43-91b2-1bdfb7ca52f6` | `exec-834a8bed-74af-4df3-936c-3504043680f6` | `4c1d5aabc77588a4` | `log_b79.md` |
+| `warp_picker_panel_v3.png` | 1536×1024 | `01a16f82-84e8-7ae1-aac8-482ddf44ce39` | `exec-589641c6-ebcb-40fb-882d-27dcd592bcd7` | `d3644679166cd199` | `log_b79.md` |
+| `warp_icon_c1_v1.png` | 1536×1024 | `01a16f82-85ff-7463-a1d8-7f263e61e660` | `exec-ecefeb20-83ac-4dd9-b2d6-0daafdfd5140` | `224a048f45b63c86` | `log_b79.md` |
+| `warp_icon_c1_v2.png` | 1536×1024 | `01a16f82-8b5c-7792-be40-bcfd627a0921` | `exec-aba7660a-2b3b-46f4-9157-087731c40c8c` | `23341fd057b060af` | `log_b79.md` |
+| `warp_icon_c1_v3.png` | 1536×1024 | `01a16f82-8dec-7780-8cb5-b79f757285a8` | `exec-7eeedf23-a3db-449e-a65d-8bb128a33008` | `d02d7cfa261e921a` | `log_b79.md` |
+| `warp_icon_c2_v1.png` | 1536×1024 | `01a16f83-8f3f-7e50-817b-11f985ea3adb` | `exec-4e13962a-c96d-4a0a-a434-ffd67a86a3ab` | `e9e2d4e5339e5947` | `log_b79.md` |
+| `warp_icon_c2_v2.png` | 1536×1024 | `01a16f83-90c2-7a83-a2ad-f6da5ff80770` | `exec-abd99a3e-86d6-43ca-afdb-ec17fcf9cc82` | `d943c5774ca487b4` | `log_b79.md` |
+| `warp_icon_c2_v3.png` | 1536×1024 | `01a16f83-9087-7b22-892c-b1bb898ff700` | `exec-2f3f9110-06c0-40cf-93e1-ef96f60d7aeb` | `230d28d11e291c2e` | `log_b79.md` |
+| `warp_icon_c3_v1.png` | 1536×1024 | `01a16f83-9295-74e1-8823-34e282b60616` | `exec-4a62ae13-9f09-4c8f-8319-410f7aef7a7b` | `3ae573b04d1c26eb` | `log_b79.md` |
+| `warp_picker_panel_v2.png` | 1536×1024 | `01a16f82-77c9-7d13-9c6f-6e405b81d270` | `exec-ac3c4268-de79-4427-b13e-a8cb21907f9e` | `314b681274e621bd` | `log_b79.md` |
+| `warp_icon_c3_v2.png` | 1536×1024 | `01a16f83-ab52-7de3-ae03-6c2fa4224c43` | `exec-ec80e809-df35-4d9a-86c7-24b4e6c4e389` | `f4bb5912074abec3` | `log_b79.md` |
+| `warp_icon_c3_v3.png` | 1536×1024 | `01a16f86-32e5-7ac3-a32d-6e02c1712991` | `exec-f168adff-b10b-4dd1-bbe5-faceceb8e9bd` | `5d2d9fc373631346` | `log_b79.md` |
+| `warp_icon_c4_v1.png` | 1536×1024 | `01a16f86-33a8-7283-b77f-6b9d3a06a2f7` | `exec-bc24d42d-9a24-4301-8b35-8a4802c2d780` | `4eef4378af15d393` | `log_b79.md` |
+| `warp_icon_c4_v2.png` | 1536×1024 | `01a16f86-84e5-7a22-a3eb-1a31fd29d5a1` | `exec-c5dbe068-9ecc-40da-aa54-ecb45c2087cd` | `48b8eede4f09cbcf` | `log_b79.md` |
+| `warp_icon_c4_v3.png` | 1536×1024 | `01a16f86-891d-7cf3-9dd5-95293c7dc39b` | `exec-7c49ffea-b468-40ee-b5ff-e87279d31275` | `97d905b9d89b4053` | `log_b79.md` |
+| `warp_icon_c5_v1.png` | 1536×1024 | `01a16f86-8b2a-7aa0-bdce-4203bf16778f` | `exec-6654d11b-da77-4c1a-9f5b-9a8c922cdaaa` | `a28680c245526872` | `log_b79.md` |
+| `warp_icon_c5_v3.png` | 1536×1024 | `01a16f86-f291-74f3-8c29-739114fd3f67` | `exec-b3a3623d-bba6-404a-8c00-d5975f185802` | `d384b50920d5ee5d` | `log_b79.md` |
+| `warp_icon_c6_v1.png` | 1536×1024 | `01a16f86-b388-7630-8eae-c6a97ee940b9` | `exec-91a9e610-2381-427f-b52b-5848c3222002` | `3c725ed8fdf79e44` | `log_b79.md` |
+| `warp_icon_c5_v2.png` | 1536×1024 | `01a16f86-f1e2-7213-9e03-9eafa67b240c` | `exec-a4794255-296e-4a9b-b0d7-c386773dc3ab` | `302981732511153a` | `log_b79.md` |
+| `warp_icon_c6_v2.png` | 1536×1024 | `01a16f87-69a2-7b40-b407-1ea0c5d2e802` | `exec-050c8294-7ba1-4365-91aa-bbc21d0e9a3a` | `8fd36f6d3c836527` | `log_b79.md` |
+| `warp_icon_c6_v3.png` | 1536×1024 | `01a16f87-6a30-7e40-b56e-3b6bf0efb085` | `exec-79b04a81-bce6-48fb-9cf7-6fa80cf5a392` | `cb240e53b66b63b6` | `log_b80.md` |
+| `warp_icon_c7_v1.png` | 1536×1024 | `01a16f87-6cf3-7f00-b66e-8082bc1f2be2` | `exec-8a55421e-47af-4f67-abf1-129c198a0e4a` | `6516422f264c578a` | `log_b80.md` |
+| `warp_icon_c7_v2.png` | 1536×1024 | `01a16f87-b30d-75a2-ab0e-4f0764fc7065` | `exec-52d503fb-adbe-456e-98ae-9c6454ea6bb9` | `15baf15a635a30c8` | `log_b80.md` |
+| `warp_icon_c7_v3.png` | 1536×1024 | `01a16f87-b496-7041-b5be-9d69e2753ee7` | `exec-4a01f6a9-1615-4ffb-bbcc-50549bbc6211` | `1cb962da312c9a32` | `log_b80.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
