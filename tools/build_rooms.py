@@ -75,6 +75,16 @@ SHOP_SCENE = "res://scenes/world/shop_item.tscn"  # ShopItem (F9): stock kind, o
 SHOP_STOCK = ("ember", "pot_bundle", "slug_bundle", "tallow_flask")  # ShopItem.STOCK_KINDS
 SHOP_ONE_TIME = ("pot_bundle", "slug_bundle")  # ShopItem.ONE_TIME: these need id=, the flag shop_<id>
 SHOP_ID_RE = re.compile(r"^S\d+$")
+# The dev rooms keep their section 15 persistent ids; see docs/room-kit.md. Other rooms use graph ids.
+DEV_PICKUP_ID_ALIASES = {
+    "ow_0_0": {},
+    "ow_0_1": {"tether_moth": "tether_moth"},
+    "ow_1_0": {},
+    "ow_1_1": {},
+    "ow_2_0": {"wick_core_ow_2_0": "wick_core_cache"},
+    "ow_2_1": {"pitch_pot": "pitch_pot"},
+    "cave_1": {"key_ow_1": "cave_key"},
+}
 # The pieces a cache is made of, from the graph's `contents` text. Slug bundles are not pieces: the graph gives
 # each one its own pickup line (for example slug_bundle_ow_4_1), which the room places as `pickup slug_bundle`.
 CACHE_PART_RE = re.compile(r"^(?:(\d+) brass|(\d+) embers|ember|pot bundle|slug bundle)$")
@@ -210,6 +220,11 @@ def snake(name: str) -> str:
     """Graph monster name to scene name: 'Tallow blob' -> tallow_blob, 'NEW:wickling' -> wickling."""
     text = name.lower().replace(" ", "_")
     return text[4:] if text.startswith("new:") else text
+
+
+def persistent_pickup_id(room_id: str, graph_id: str) -> str:
+    """Return the legacy persistent id for a dev pickup, or the graph id everywhere else."""
+    return DEV_PICKUP_ID_ALIASES.get(room_id, {}).get(graph_id, graph_id)
 
 
 class World:
@@ -778,7 +793,8 @@ def dispatch_pickup(ent: Entity, key: tuple, src: Source, plan: Plan, errors: li
             return False
     scene = ITEM_PICKUP_SCENE if kind == "item" else PICKUP_SCENES[kind]
     node = Node("", "Props", None, Res("PackedScene", scene))
-    node.props = [("position", vec2(*ent.pos)), ("persistent_id", sname(ident))]
+    persistent_id = persistent_pickup_id(src.room_id or "", ident)
+    node.props = [("position", vec2(*ent.pos)), ("persistent_id", sname(persistent_id))]
     if kind == "item":
         node.props.append(("item_id", sname(ident)))
     if "scope" in ent.opts and kind != "small_key":

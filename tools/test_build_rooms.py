@@ -106,6 +106,32 @@ class RoundTrip(unittest.TestCase):
         self.assertEqual(first, second)
 
 
+class PersistentIdAliases(unittest.TestCase):
+    def test_dev_room_writes_its_legacy_pickup_id(self) -> None:
+        pickup_id = "wick_core_ow_2_0"
+        world = world_of(
+            [room_record("ow_2_0", [])],
+            pickups=[{"id": pickup_id, "kind": "wick_core", "node": "ow_2_0"}],
+        )
+        text, errors = compile_text(
+            room_text("ow_2_0", [], f"pickup wick_core 5,5 id={pickup_id}"), world, "ow_2_0.room"
+        )
+        self.assertEqual(errors, [])
+        self.assertIn('persistent_id = &"wick_core_cache"', text or "")
+
+    def test_non_dev_room_keeps_its_graph_pickup_id(self) -> None:
+        pickup_id = "wick_core_ow_5_5"
+        world = world_of(
+            [room_record("ow_5_5", [])],
+            pickups=[{"id": pickup_id, "kind": "wick_core", "node": "ow_5_5"}],
+        )
+        text, errors = compile_text(
+            room_text("ow_5_5", [], f"pickup wick_core 5,5 id={pickup_id}"), world, "ow_5_5.room"
+        )
+        self.assertEqual(errors, [])
+        self.assertIn(f'persistent_id = &"{pickup_id}"', text or "")
+
+
 class FixtureRejections(unittest.TestCase):
     """Each change to the ow_0_1 fixture must fail with its own message."""
 

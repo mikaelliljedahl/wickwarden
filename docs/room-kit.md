@@ -149,8 +149,9 @@ change to the generator can move that read to `data/world_data.json`.
 
 ## Persistent ids
 
-Pickup ids are the graph ids. The dev-world rooms keep the ids of code-contract section 15 (`wick_core_cache`,
-`pitch_pot`); a new room follows the graph (`wick_core_ow_2_0`). See the report of F6 for the open question.
+Room files identify pickups by graph id for validation. In the seven dev rooms, the compiler writes the persistent
+ids used by code-contract section 15 and the dev tests: `wick_core_ow_2_0` becomes `wick_core_cache`, and `key_ow_1`
+becomes `cave_key`; `tether_moth` and `pitch_pot` keep their names. Pickups in other rooms keep their graph ids.
 
 ## Out of scope for this compiler
 
