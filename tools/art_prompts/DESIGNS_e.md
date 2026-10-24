@@ -13,7 +13,7 @@ Details that the art brief and the inventory do not describe. Each line is what 
 - **Salt crystals (B38).** Two units: `salt_crystals_1` (angular spikes), `salt_crystals_2` (rounded cloudy crust).
 - **Driftwood net (B38).** One unit: driftwood pile with a net heaped over it.
 - **Well and haystack (B38).** The inventory row says "village well + haystack, 2 variants" with count 6. It is split into two single-pose units: `village_well` and `haystack`, three variants each. The cut manifest needs two kinds.
-- **Cottage (B39).** One unit. The second design is a longer, lower house with a wooden porch and a dark slate roof, next to the lamplighter hut.
+- **Cottage (B39).** One unit, one building: a pitched dark slate roof, stone and timber, a lit window with a shutter, a plank door, a lower and longer cottage than the lamplighter hut with a small wooden porch. The first prompt wording described a second house next to it, and the sheets came back with two houses; the wording was fixed ("single building only") and the sheets regenerated as the -r1 jobs.
 - **Ledge drop (B39).** The inventory says "straight 1, corner 1" with count 1 x 3. One generation with two poses in one row (straight rim, outer corner). Same open point as `edge_pit_rim` (producer c): the cut tool needs a multi-piece rule, or the owner splits the names.
 - **Bell (B39).** Three designs: `bell_1` (bronze bell in a timber frame), `bell_2` (wall of five organ pipes with a small bell), `bell_3` (wall of three brass and tin pipes with a bell at the side).
 - **Pump pipe (B40).** Three units: `pump_valve_1` (wheel sluice valve), `pump_valve_2` (tall lever pump), `pipe_segment` (straight pipe with flanges).
