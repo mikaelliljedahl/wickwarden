@@ -5,7 +5,7 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 | Batch | Content | Images | Status |
 |---|---|---|---|
 | 12 | shared cave sets stone and root (textures, faces) | 18 | generated, verified, logged (`log_b12.md`); 3 ok-looking units, the rest weak (rubble, rock-dominant) |
-| 13 | cave tex water, two cave edge strips, bramble snapper, fen leech, cinder wisp | 18 | not started |
+| 13 | cave tex water, two cave edge strips, bramble snapper, fen leech, cinder wisp | 18 | generated, verified, logged (`log_b13.md`): 5 ok, 11 weak, 2 failed; edge strips at 2.5:1 |
 | 14 | watcher eye (3 views), husk hound walk (3 facings) | 18 | not started |
 | 15 | husk hound states, brine crab walk and states, wickling | 18 | not started |
 | 16 | mirror shade walk and states | 18 | not started |
@@ -19,6 +19,9 @@ Range: `docs/art-inventory.md` section 4, batches B12 to B19 (144 images, 8 batc
 - Batch 12 stone and root textures: most variants show rubble or rock-dominant ground instead of cut slabs or roots. Kept for the owner's cull, logged as weak.
 - Parallel jobs: each job copied from its own session folder; every output was checked by SHA-256 against its session folder, and no duplicate hashes exist in `tools/source_art/`.
 - Another producer writes into the shared scratchpad; producer b keeps its records in its own folder only.
+
+- Edge strips (`edge_*`, batch 13 so far): the tool returns about 2.5:1 (1983x793, 2048x768) for the requested 1536x384 (4:1). Each edge file is kept as it came out. The cut tool needs a 4:1 source (384x96 cell); this must be solved before the edges are cut (crop, or a different request). Owner decision.
+- Batch 13 fen leech: the prompt says no water, but the generator drew ripples and puddles around the body in most variants.
 
 ## Process
 
