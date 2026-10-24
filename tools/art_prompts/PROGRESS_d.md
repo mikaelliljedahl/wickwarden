@@ -13,6 +13,6 @@ Facing and leg fix (from `PROGRESS.md`): applied to the statue sheets (`statue_f
 | 32 | pillar_1, pillar_2, pillar_3, lectern, statue_eye | 15 | done: generated, verified, logged (`log_b32.md`), provenance added; pillar_1 (3) weak: ivy on a plain pillar; pillar_2 v2 weak: flame on the wick; pillar_2 v3 and pillar_3 v2 each needed a second job after a null reference failure |
 | 33 | statue_figure_1, statue_figure_2, crate_stack_1, crate_stack_2, crate_stack_3, cold_furnace | 18 | done: generated, verified, logged (`log_b33.md`), provenance added; statue_figure_1 v3 weak: cane and heavy overgrowth; cold_furnace v1 and v2 weak: door glows amber |
 | 34 | anvil, slag_heap_1, slag_heap_2, glass_shards_1, glass_shards_2 | 15 | done: generated, verified, logged (`log_b34.md`), provenance added; slag_heap_2 v1 ok; glass shards read as crystal more than fused glass (kept); anvil v3 needed a second job after a wrong-prompt failure |
-| 35 | dead_tree_1, dead_tree_2, thorn_bramble_1, thorn_bramble_2, fallen_log, root_bridge | 18 | prompts written |
+| 35 | dead_tree_1, dead_tree_2, thorn_bramble_1, thorn_bramble_2, fallen_log, root_bridge | 18 | done: generated, verified, logged (`log_b35.md`), provenance added; dead_tree_2 v1 weak: tall many-branched tree, not the short stump; the two dead trees and the thorn brambles keep brown bark or berries (kept); root_bridge v2 folder holds two identical PNGs |
 
 Wave rule: at most 6 Codex jobs at the same time, one image per job, model `cheapest`, idempotency key `ww-bNN-<sheet>-vN-rK`.
