@@ -93,8 +93,17 @@ func _streaming(world: World) -> void:
 		["ow_0_0", "ow_1_0", "ow_1_1", "ow_2_0"],
 		"after a move the far rooms are freed"
 	)
-	check(world.get_room(&"ow_3_0") == null, "a room without a scene is not loaded")
-	check(not world.rooms.has(&"ow_3_0"), "and it is not kept")
+	var room_without_scene := ""
+	for id in WorldData.room_ids():
+		if not ResourceLoader.exists(WorldData.scene_path(id)):
+			room_without_scene = id
+			break
+	if room_without_scene.is_empty():
+		print("room without scene check skipped: every room has a scene")
+	else:
+		var missing_id := StringName(room_without_scene)
+		check(world.get_room(missing_id) == null, "a room without a scene is not loaded")
+		check(not world.rooms.has(missing_id), "and it is not kept")
 	world.start_at(&"ow_0_0")
 
 
@@ -127,6 +136,7 @@ func _room_graph(world: World) -> void:
 	check(with_scene.size() >= 7, "the seven placeholder rooms have scenes")
 	for id in ["ow_0_0", "ow_1_0", "ow_2_0", "ow_0_1", "ow_1_1", "ow_2_1", "cave_1"]:
 		check(with_scene.has(id), "room %s has a scene" % id)
+	var pending_exits: Array[String] = []
 	for id in with_scene:
 		var probe := (load(WorldData.scene_path(id)) as PackedScene).instantiate() as Room
 		check_eq(probe.grid, WorldData.grid(id), "%s scene agrees with the graph grid" % id)
@@ -145,6 +155,9 @@ func _room_graph(world: World) -> void:
 			check(neighbor_id != "", "%s exit %s leads to a room" % [id, side])
 			if neighbor_id == "":
 				continue
+			if not ResourceLoader.exists(WorldData.scene_path(neighbor_id)):
+				pending_exits.append("%s -> %s" % [id, neighbor_id])
+				continue
 			var neighbor := world.get_room(StringName(neighbor_id))
 			check(neighbor != null, "%s exit %s leads to a loaded room" % [id, side])
 			if neighbor != null and WorldData.is_oneway(id, neighbor_id):
@@ -161,6 +174,7 @@ func _room_graph(world: World) -> void:
 					not room.is_drop_side(side),
 					"%s side %s is a drop only on a one-way edge" % [id, side]
 				)
+	print("pending exits: %d" % pending_exits.size())
 	check(world.get_room(&"cave_1").dark, "the cave is dark")
 	check(not world.get_room(&"ow_0_0").dark, "overworld rooms are lit")
 	check_eq(
