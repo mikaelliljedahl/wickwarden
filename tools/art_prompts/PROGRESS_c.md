@@ -9,17 +9,19 @@ Owner ranges: art batches 20 to 27 of `docs/art-inventory.md` section 4. Other p
 | 22 | slug_bundle, pot_bag, tallow_flask, bigkey | `batch_22.md` | 12 | generated, verified, 6 ok, 3 weak (bigkey), 3 failed (tallow_flask, heart-shaped lantern); logged in `log_b22.md`; provenance added; committed |
 | 23 | fragment_c1_to_c9 (units c1 to c6, c7 variants 1 and 2) | `batch_23.md` | 20 | generated, verified, 16 ok, 4 weak (`fragment_c3_v1`, `c3_v2`, `c5_v3`, `c6_v2`); logged in `log_b23.md`; provenance added; committed |
 | 24 | fragment_c1_to_c9 (c7 variant 3, c8, c9), slag_chunk, thorn_hedge, thorn_wall, thorn_door | `batch_24.md` | 19 | generated, verified, 12 ok, 7 weak (`fragment_c8_v2`, `c9_v1`, `c9_v3`, `slag_chunk` v1 to v3, `thorn_hedge_v3`); logged in `log_b24.md`; provenance added; committed next |
-| 25 | eye_switch, eye_portcullis, eye_cell, mooring, edge_pit_rim, pit_fill | `batch_25.md` | 18 | not started |
+| 25 | eye_switch, eye_portcullis, eye_cell, mooring, edge_pit_rim, pit_fill | `batch_25.md` | 18 | generated, verified, 12 ok, 5 weak (`mooring` v1 to v3, `edge_pit_rim_v3`, `pit_fill_v2`), 1 failed (`eye_cell_v2`); logged in `log_b25.md`; provenance added; committed next |
 | 26 | low_rail, anchor_ring, anchor_pocket, heavy_stone, heavy_boulder, heavy_door | `batch_26.md` | 18 | not started |
 | 27 | heavy_stones, resonance_stone, resonance_door, resonance_vault, hidden_seam, hidden_stairs | `batch_27.md` | 18 | not started |
 
-Total: 141 images in 8 batches. Batches 20 to 24 are done (87 images).
+Total: 141 images in 8 batches. Batches 20 to 25 are done (105 images).
 
 ## Recipe used
 
 One Codex job per image (`cheapest`, gpt-6-luna, effort medium), at most six running at once. Each job reads its entry in the batch file and copies the png from its own session folder only. Each output is checked against its session folder by SHA-256 and against all other `tools/source_art/` files for duplicates. Montages (three variants per unit) are viewed. Every job is stopped after its result is in.
 
 ## Known problems
+
+- Batch 25: both `pit_fill` textures and `pit_fill_v3` came back at 1254x1254 instead of 1024x1024; the cut tool must scale them. The mooring rope runs off the image edge in every variant.
 
 - Batch 24: all three `slag_chunk` variants have an orange molten glow; the three `thorn_hedge_v3` edges carry a magenta spill; `fragment_c9` drifts to grey-silver or bronze instead of black.
 

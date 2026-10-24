@@ -52,11 +52,21 @@ The glow poses are: medium, brightest with a halo, medium with the light shifted
 - `slag_chunk`: a dark grey-black lump with rust-red glints. All three variants show an orange molten glow (weak); the prompt says subtle glints.
 - `thorn_hedge`, `thorn_wall`, `thorn_door`: three rows, the closed state, the five burning poses in order (small flicker, climbing flames, fire through the middle, large fire, embers), then the burnt-open state. Thorn walls and doors share the same burn sequence.
 
+## Batch 25
+
+- `eye_switch`: a carved stone slab with a heavy lid over a blue iris (off, hit, hit with a spark or flash, on). Ivy and rubble were added by the generator in most variants.
+- `eye_portcullis`: an arched stone frame with an iron grille, lifted in four steps. `eye_cell`: a heavy iron door with a carved stone eye, opening in three steps.
+- `mooring`: a weathered wooden post with an iron ring, rope loose, sway, and the occupied rope pulled taut. The rope runs off the right edge in the occupied pose in all three variants (weak).
+- `edge_pit_rim`: three pieces on one sheet: a straight rim (top) and two corners (below), with a soft shadow. The cut tool needs a multi-piece rule for it.
+- `pit_fill`: a dark blue-violet void with faint mist. Returned at 1254x1254 instead of 1024x1024.
+
 ## Open points for the owner
 
 - `reel_line_rope` (batch 21): the inventory gives both `96x16 tile` and `alpha strip 16x96`. The prompt uses a horizontal cord (96 long, 16 thick) that runs into both sides of the image.
 - `edge_pit_rim` (batch 25): the inventory gives one unit for three pieces (a straight strip and two corners). The sheet has the three pieces on one image; the cut tool needs a multi-piece rule for it. The contract says one cell per edge strip, so this is a deviation from `asset-contract.md` section 7 until the cut tool is changed.
 - `reed_raft_vehicle` (batch 21): the landing boards and posts inside the sprite are cut at the cell edge; the owner may want a raft-only redo.
+- `eye_cell_v2` (batch 25): failed (wrong pose count). The owner may want a redo of the eye_cell sheet.
+- `mooring` (batch 25): the occupied rope runs off the right edge in all three variants; a redo with "the rope stays inside the frame" is the first thing to try.
 - `tallow_flask` (batch 22): failed in all three variants. A redo needs an explicit sphere shape and no flame; the owner decides.
 - `bigkey` (batch 22): the brass is saturated gold in all three variants, which the per-cave tint may not handle well.
 - `slag_chunk` (batch 24): the inventory gives a 96x96 cell with no foot line. The prompt puts it on the ground at the ground line of the other 96-px ground objects. The orange glow in all three variants needs a redo before the cut.
