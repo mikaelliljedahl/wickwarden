@@ -1,0 +1,965 @@
+#!/usr/bin/env python3
+"""Compiles the room sources tools/rooms/*.room into scenes/world/rooms/*.tscn (code-contract 16.8).
+
+Usage:
+    python3 tools/build_rooms.py [ROOM ...] [--check]
+        [--rooms-dir DIR] [--out-dir DIR] [--world FILE]
+
+ROOM is a room id (ow_0_1), a pocket id (ow_7_2#bag) or a file stem (ow_7_2__bag). Without ROOM every
+*.room file of the rooms directory is built. Each file is validated against data/world_data.json (the
+run-time copy of docs/world-graph.json). Every error is printed as file:line: message; a room with an
+error is not written. --check validates and compares the generated text with the committed scene
+without writing (`make rooms-check`). Exit codes: 0 = ok, 1 = errors or a stale scene, 2 = unreadable
+world data. The format is documented in docs/room-kit.md. Stdlib only.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+ROOMS_DIR = ROOT / "tools" / "rooms"
+OUT_DIR = ROOT / "scenes" / "world" / "rooms"
+WORLD_FILE = ROOT / "data" / "world_data.json"
+
+TILE = 96
+COLS, ROWS = 20, 10
+EXIT_DEPTH = 3
+SIDES = ("n", "e", "s", "w")
+# The two ring tiles of each wall gap (code-contract section 15: two tiles wide, centred on the side).
+GAP_TILES = {
+    "n": [(9, 0), (10, 0)],
+    "s": [(9, ROWS - 1), (10, ROWS - 1)],
+    "w": [(0, 4), (0, 5)],
+    "e": [(COLS - 1, 4), (COLS - 1, 5)],
+}
+ROOM_CENTRE_PX = (COLS * TILE / 2, ROWS * TILE / 2)  # Room._spawn_position without a Default marker
+SPAWN_NAMES = ("Default", "FromCave", "FromOverworld", "FromPocket", "Inside")
+# Grid characters. The ring is drawn by Room from the exits, so ring '#' are not emitted as blocks.
+TERRAIN_KIND = {"#": "wall", "w": "water", "r": "rock", "t": "tree", "e": "reed"}
+MERGED_CHARS = ("#", "w")  # merged into maximal rectangles, row-major; the others are one block per tile
+BUSH_CHAR = "b"
+FLOOR_CHAR = "."
+GRID_CHARS = set(TERRAIN_KIND) | {BUSH_CHAR, FLOOR_CHAR}
+SOLID_SCRIPT = "res://scripts/world/solid_block.gd"
+BUSH_SCRIPT = "res://scripts/world/bush.gd"
+ROOM_SCRIPT = "res://scripts/world/room.gd"
+DOOR_SCRIPT = "res://scripts/world/room_door.gd"
+LOCKED_SCRIPT = "res://scripts/world/locked_door.gd"
+CRACKED_SCENE = "res://scenes/world/cracked_wall.tscn"
+ITEM_PICKUP_SCENE = "res://scenes/pickups/item_pickup.tscn"
+PICKUP_SCENES = {
+    "wick_core": "res://scenes/pickups/wick_core.tscn",
+    "small_key": "res://scenes/pickups/key.tscn",
+    "pot_bag": "res://scenes/pickups/pot_bag.tscn",
+    "pot_bundle": "res://scenes/pickups/pitch_pot_bundle.tscn",
+    "slug_bundle": "res://scenes/pickups/slug_bundle.tscn",
+    "big_key": "res://scenes/pickups/big_key.tscn",
+    "fragment": "res://scenes/pickups/fragment.tscn",
+}
+PICKUP_NODE_NAME = {"item": "ItemPickup", "small_key": "Key", "pot_bundle": "PitchPotBundle"}
+OPENER_SIZE = {"cracked_wall": (96, 96), "locked_door": (192, 96)}
+OPENER_OPTS = ("id", "size", "scope")
+PROP_SIZE = (96, 96)
+# Solid kinds a `prop` line may place: plain SolidBlocks in the hand-made scenes. A prop with its own script
+# (burnable, gate, eye switch, ...) needs its own entity kind here first, so it cannot compile as a plain block.
+PROP_KINDS = ("hut", "pedestal", "sign_post", "wall", "water", "rock", "tree", "reed")
+POS_RE = re.compile(r"^(@)?(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$")
+IDENT_RE = re.compile(r"^[a-z][a-z0-9_]*$")
+BOSS_FLAG_RE = re.compile(r"^boss_.+_defeated$")
+ENTITY_OPTS = {
+    "enemy": (),
+    "pickup": ("id", "requires", "scope"),
+    "prop": ("size",),
+    "opener": OPENER_OPTS,
+    "door": (),
+    "spawn": (),
+}
+
+
+# ---- geometry --------------------------------------------------------------------------------
+
+
+def centre_of(col: int, row: int) -> tuple[float, float]:
+    return (col * TILE + TILE / 2, row * TILE + TILE / 2)
+
+
+def tile_of(px: float, py: float) -> tuple[int, int]:
+    """Tile of a room-local point, clamped to the grid (tests/area_base.gd tile_of)."""
+    return (min(max(int(px // TILE), 0), COLS - 1), min(max(int(py // TILE), 0), ROWS - 1))
+
+
+def tiles_of_rect(left: float, top: float, width: float, height: float) -> set[tuple[int, int]]:
+    """Tiles a rectangle overlaps, with the 4 px margin of tests/area_base.gd."""
+    tiles: set[tuple[int, int]] = set()
+    for col in range(COLS):
+        for row in range(ROWS):
+            x, y = col * TILE + 4.0, row * TILE + 4.0
+            if x < left + width and left < x + TILE - 8 and y < top + height and top < y + TILE - 8:
+                tiles.add((col, row))
+    return tiles
+
+
+def exit_corridor(side: str) -> list[tuple[int, int]]:
+    """The corridor in front of a gap: two tiles wide, EXIT_DEPTH deep, the ring tiles included."""
+    tiles: list[tuple[int, int]] = []
+    for k in range(EXIT_DEPTH + 1):
+        if side == "n":
+            tiles += [(9, k), (10, k)]
+        elif side == "s":
+            tiles += [(9, ROWS - 1 - k), (10, ROWS - 1 - k)]
+        elif side == "w":
+            tiles += [(k, 4), (k, 5)]
+        else:
+            tiles += [(COLS - 1 - k, 4), (COLS - 1 - k, 5)]
+    return tiles
+
+
+def neighbours(tile: tuple[int, int]) -> list[tuple[int, int]]:
+    col, row = tile
+    return [(col + 1, row), (col - 1, row), (col, row + 1), (col, row - 1)]
+
+
+def flood(starts: list[tuple[int, int]], blocked: set[tuple[int, int]]) -> set[tuple[int, int]]:
+    seen = {s for s in starts if s not in blocked and 0 <= s[0] < COLS and 0 <= s[1] < ROWS}
+    stack = list(seen)
+    while stack:
+        for nxt in neighbours(stack.pop()):
+            if 0 <= nxt[0] < COLS and 0 <= nxt[1] < ROWS and nxt not in seen and nxt not in blocked:
+                seen.add(nxt)
+                stack.append(nxt)
+    return seen
+
+
+def reaches(seen: set[tuple[int, int]], tile: tuple[int, int]) -> bool:
+    """A pickup reaches its own tile and the tiles next to it (its circle is wider than the tile)."""
+    return tile in seen or any(n in seen for n in neighbours(tile))
+
+
+def merge_rects(grid: list[str], char: str) -> list[tuple[int, int, int, int]]:
+    """Greedy row-major merge into (col, row, width, height). A ring '#' is never merged."""
+
+    def emitted(col: int, row: int) -> bool:
+        if grid[row][col] != char:
+            return False
+        return char != "#" or (0 < col < COLS - 1 and 0 < row < ROWS - 1)
+
+    used: set[tuple[int, int]] = set()
+    rects: list[tuple[int, int, int, int]] = []
+    for row in range(ROWS):
+        for col in range(COLS):
+            if (col, row) in used or not emitted(col, row):
+                continue
+            width = 1
+            while col + width < COLS and emitted(col + width, row) and (col + width, row) not in used:
+                width += 1
+            height = 1
+            while row + height < ROWS and all(
+                emitted(c, row + height) and (c, row + height) not in used for c in range(col, col + width)
+            ):
+                height += 1
+            used.update((c, r) for r in range(row, row + height) for c in range(col, col + width))
+            rects.append((col, row, width, height))
+    return rects
+
+
+# ---- world data ------------------------------------------------------------------------------
+
+
+def snake(name: str) -> str:
+    """Graph monster name to scene name: 'Tallow blob' -> tallow_blob, 'NEW:wickling' -> wickling."""
+    text = name.lower().replace(" ", "_")
+    return text[4:] if text.startswith("new:") else text
+
+
+class World:
+    """The records of data/world_data.json the compiler reads, normalised."""
+
+    def __init__(self, data: dict) -> None:
+        self.rooms: dict[str, dict] = {}
+        for room in data["rooms"]:
+            self.rooms[room["id"]] = {
+                "id": room["id"],
+                "grid": tuple(room["grid"]),
+                "exits": list(room["exits"]),
+                "dark": bool(room["dark"]),
+                "scope": room["scope"],
+                "enemies": {snake(n): int(c) for n, c in room["enemies"].items()},
+                "pocket": False,
+                "host": None,
+                "in_place": False,
+            }
+        for pocket in data["pockets"]:
+            self.rooms[pocket["id"]] = {
+                "id": pocket["id"],
+                "grid": tuple(pocket["grid"]),
+                "exits": [],
+                "dark": False,
+                "scope": pocket["scope"],
+                "enemies": {},
+                "pocket": True,
+                "host": pocket["host"],
+                "in_place": bool(pocket["in_place"]),
+            }
+        self.edges: list[dict] = data["edges"]
+        self.pickups: list[dict] = [
+            {"id": p["id"], "kind": p["kind"], "node": p["node"], "after_boss": False} for p in data["pickups"]
+        ]
+        for key, record in data["items"].items():
+            self.pickups.append(item_as_pickup(key, record))
+
+    def room(self, room_id: str) -> dict | None:
+        return self.rooms.get(room_id)
+
+    def placed_nodes(self, room_id: str) -> set[str]:
+        """The room and the pockets that open in place: their content is in this room's scene."""
+        nodes = {room_id}
+        nodes.update(r["id"] for r in self.rooms.values() if r["pocket"] and r["in_place"] and r["host"] == room_id)
+        return nodes
+
+    def door_edges(self, room_id: str) -> list[dict]:
+        return [e for e in self.edges if e["link"] == "door" and room_id in (e["a"], e["b"])]
+
+
+def item_as_pickup(key: str, record: dict) -> dict:
+    """Graph items that are not tools: bigkey:cN is big_key bigkey_cN, frag:cN is fragment frag_cN."""
+    if key.startswith("bigkey:"):
+        ident, kind = "bigkey_" + key.split(":", 1)[1], "big_key"
+    elif key.startswith("frag:"):
+        ident, kind = "frag_" + key.split(":", 1)[1], "fragment"
+    else:
+        ident, kind = key, "item"
+    return {"id": ident, "kind": kind, "node": record["node"], "after_boss": bool(record.get("after_boss"))}
+
+
+# ---- the .room source ------------------------------------------------------------------------
+
+
+class Entity:
+    def __init__(self, verb: str, line: int, pos: tuple[float, float], args: list[str], opts: dict[str, str]) -> None:
+        self.verb = verb
+        self.line = line
+        self.pos = pos
+        self.args = args
+        self.opts = opts
+
+    @property
+    def tile(self) -> tuple[int, int]:
+        return tile_of(*self.pos)
+
+
+class Source:
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self.scope = "ow"  # the room's key scope, set from the graph before the entities are read
+        self.room_id: str | None = None
+        self.room_line = 1
+        self.floor: tuple[float, float, float] | None = None
+        self.terrain: str | None = None
+        self.grid: list[str] = []
+        self.grid_lines: list[int] = []
+        self.entities: list[Entity] = []
+
+
+def where(path: Path, line: int) -> str:
+    try:
+        shown = path.relative_to(ROOT)
+    except ValueError:
+        shown = path
+    return f"{shown}:{line}"
+
+
+def parse_source(path: Path, errors: list[str]) -> Source | None:
+    src = Source(path)
+    lines = path.read_text(encoding="utf-8").replace("\r\n", "\n").split("\n")
+    n_errors = len(errors)
+    i = 0
+    while i < len(lines):
+        lineno = i + 1
+        body = lines[i].split(";", 1)[0].strip()
+        i += 1
+        if not body:
+            continue
+        tokens = body.split()
+        verb = tokens[0]
+        if verb == "grid":
+            if src.grid:
+                errors.append(f"{where(path, lineno)}: a second grid block")
+                continue
+            rows = lines[i : i + ROWS]
+            src.grid_lines = list(range(i + 1, i + 1 + len(rows)))
+            i += len(rows)
+            if len(rows) != ROWS:
+                errors.append(f"{where(path, lineno)}: the grid needs {ROWS} rows")
+                return None
+            for row_no, row in zip(src.grid_lines, rows):
+                if len(row) != COLS:
+                    errors.append(f"{where(path, row_no)}: grid row has {len(row)} characters, needs {COLS}")
+                elif any(ch not in GRID_CHARS for ch in row):
+                    bad = "".join(sorted({ch for ch in row if ch not in GRID_CHARS}))
+                    errors.append(f"{where(path, row_no)}: unknown grid character(s) {bad!r}")
+            src.grid = rows
+        elif verb == "room":
+            if len(tokens) != 2:
+                errors.append(f"{where(path, lineno)}: 'room' takes one id")
+            else:
+                src.room_id, src.room_line = tokens[1], lineno
+        elif verb == "floor_color":
+            try:
+                rgb = tuple(float(t) for t in tokens[1:])
+            except ValueError:
+                rgb = ()
+            if len(rgb) == 3 and all(0.0 <= c <= 1.0 for c in rgb):
+                src.floor = (rgb[0], rgb[1], rgb[2])
+            else:
+                errors.append(f"{where(path, lineno)}: floor_color takes three values from 0 to 1")
+        elif verb == "terrain":
+            src.terrain = body[len("terrain") :].strip()
+        elif not src.grid:
+            errors.append(f"{where(path, lineno)}: '{verb}' comes before the grid block")
+        else:
+            entity = parse_entity(tokens, lineno, path, errors)
+            if entity is not None:
+                src.entities.append(entity)
+    if src.room_id is None:
+        errors.append(f"{where(path, 1)}: missing 'room <id>' line")
+    if not src.grid and len(errors) == n_errors:
+        errors.append(f"{where(path, 1)}: missing grid block")
+    return src if len(errors) == n_errors else None
+
+
+def parse_entity(tokens: list[str], line: int, path: Path, errors: list[str]) -> Entity | None:
+    verb = tokens[0]
+    if verb not in ENTITY_OPTS:
+        errors.append(f"{where(path, line)}: unknown entity '{verb}'")
+        return None
+    pos: tuple[float, float] | None = None
+    args: list[str] = []
+    opts: dict[str, str] = {}
+    for token in tokens[1:]:
+        if "=" in token:
+            key, _, value = token.partition("=")
+            if key not in ENTITY_OPTS[verb]:
+                errors.append(f"{where(path, line)}: '{verb}' takes no option '{key}'")
+                return None
+            opts[key] = value
+            continue
+        match = POS_RE.match(token) if pos is None else None
+        if match is None:
+            args.append(token)
+            continue
+        x, y = float(match.group(2)), float(match.group(3))
+        if match.group(1):
+            pos = (x, y)
+        elif x.is_integer() and y.is_integer():
+            pos = centre_of(int(x), int(y))
+        else:
+            errors.append(f"{where(path, line)}: tile position {token} must be whole tiles (use @x,y for pixels)")
+            return None
+    if pos is None:
+        errors.append(f"{where(path, line)}: '{verb}' needs a position x,y (tile) or @x,y (pixels)")
+        return None
+    return Entity(verb, line, pos, args, opts)
+
+
+def parse_size(text: str) -> tuple[float, float] | None:
+    parts = text.split(",")
+    if len(parts) != 2:
+        return None
+    try:
+        width, height = float(parts[0]), float(parts[1])
+    except ValueError:
+        return None
+    return (width, height) if width > 0 and height > 0 else None
+
+
+# ---- the output tree -------------------------------------------------------------------------
+
+
+class Res:
+    """A script or scene a node uses; its ext_resource id is given when the text is written."""
+
+    def __init__(self, kind: str, path: str) -> None:
+        self.kind = kind
+        self.path = path
+
+
+class Node:
+    def __init__(self, name: str, parent: str, typ: str | None = None, scene: Res | None = None) -> None:
+        self.name = name
+        self.parent = parent
+        self.typ = typ
+        self.scene = scene
+        self.base = name  # numbered output name stem, see name_all()
+        self.enemy = ""  # monster scene name, enemies only
+        self.props: list[tuple[str, object]] = []
+
+
+class Plan:
+    """The nodes of one room and the tiles they block. Lists are in output order."""
+
+    def __init__(self) -> None:
+        self.static: set[tuple[int, int]] = set()
+        self.merged: list[Node] = []
+        self.singles: list[tuple[tuple, Node]] = []  # (sort key, node) for Props and Bushes
+        self.enemies: list[tuple[tuple, Node, Entity]] = []
+        self.spawns: list[tuple[str, tuple[int, int], Node]] = []
+        self.openers: list[tuple[Entity, set[tuple[int, int]]]] = []
+        self.pickups: list[tuple[Entity, str, str]] = []  # (entity, persistent id, kind)
+        self.doors: list[Entity] = []
+
+
+def build_plan(src: Source, errors: list[str]) -> Plan | None:
+    """Turns the grid and the entities into nodes. Syntax and per-entity errors are reported here."""
+    plan = Plan()
+    grid = src.grid
+    for row in range(ROWS):
+        for col in range(COLS):
+            if grid[row][col] in TERRAIN_KIND or grid[row][col] == BUSH_CHAR:
+                plan.static.add((col, row))
+    for char in MERGED_CHARS:
+        for col, row, width, height in merge_rects(grid, char):
+            node = Node("", "Props", "StaticBody2D")
+            node.props = [
+                ("position", vec2(col * TILE + width * TILE / 2, row * TILE + height * TILE / 2)),
+                ("script", Res("Script", SOLID_SCRIPT)),
+                ("size", vec2(width * TILE, height * TILE)),
+                ("kind", sname(TERRAIN_KIND[char])),
+            ]
+            node.base = camel(TERRAIN_KIND[char])
+            plan.merged.append(node)
+    for row in range(ROWS):
+        for col in range(COLS):
+            char = grid[row][col]
+            if char in TERRAIN_KIND and char not in MERGED_CHARS:
+                node = Node("", "Props", "StaticBody2D")
+                node.props = [
+                    ("position", vec2(*centre_of(col, row))),
+                    ("script", Res("Script", SOLID_SCRIPT)),
+                    ("size", vec2(TILE, TILE)),
+                    ("kind", sname(TERRAIN_KIND[char])),
+                ]
+                node.base = camel(TERRAIN_KIND[char])
+                plan.singles.append(((row, col, -1), node))
+            elif char == BUSH_CHAR:
+                node = Node("", "Bushes", "StaticBody2D")
+                node.props = [("position", vec2(*centre_of(col, row))), ("script", Res("Script", BUSH_SCRIPT))]
+                node.base = "Bush"
+                plan.singles.append(((row, col, -1), node))
+    ok = True
+    for seq, ent in enumerate(src.entities):
+        ok = dispatch(ent, seq, src, plan, errors) and ok
+    if not ok:
+        return None
+    plan.singles.sort(key=lambda pair: pair[0])
+    return plan
+
+
+def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, errors: list[str]) -> bool:
+    where_ = where(src.path, ent.line)
+    key = (ent.tile[1], ent.tile[0], seq)
+    if ent.verb == "enemy":
+        if len(ent.args) != 1 or not IDENT_RE.match(snake(ent.args[0])):
+            errors.append(f"{where_}: enemy takes one monster name")
+            return False
+        name = snake(ent.args[0])
+        node = Node("", "Enemies", None, Res("PackedScene", f"res://scenes/enemies/{name}.tscn"))
+        node.props = [("position", vec2(*ent.pos))]
+        node.base = camel(name)
+        node.enemy = name
+        plan.enemies.append((key, node, ent))
+        return True
+    if ent.verb == "spawn":
+        if len(ent.args) != 1 or ent.args[0] not in SPAWN_NAMES:
+            errors.append(f"{where_}: spawn name must be one of {', '.join(SPAWN_NAMES)}")
+            return False
+        node = Node(ent.args[0], "Spawns", "Marker2D")
+        node.props = [("position", vec2(*ent.pos))]
+        plan.spawns.append((ent.args[0], ent.tile, node))
+        return True
+    if ent.verb == "prop":
+        if len(ent.args) != 1 or ent.args[0] not in PROP_KINDS:
+            errors.append(f"{where_}: prop kind must be one of {', '.join(PROP_KINDS)} (docs/room-kit.md)")
+            return False
+        size = PROP_SIZE
+        if "size" in ent.opts:
+            parsed = parse_size(ent.opts["size"])
+            if parsed is None:
+                errors.append(f"{where_}: size takes two positive numbers, size=<w>,<h>")
+                return False
+            size = parsed
+        node = Node("", "Props", "StaticBody2D")
+        node.props = [
+            ("position", vec2(*ent.pos)),
+            ("script", Res("Script", SOLID_SCRIPT)),
+            ("size", vec2(*size)),
+            ("kind", sname(ent.args[0])),
+        ]
+        node.base = camel(ent.args[0])
+        plan.static |= tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
+        plan.singles.append((key, node))
+        return True
+    if ent.verb == "opener":
+        return dispatch_opener(ent, key, src, plan, errors)
+    if ent.verb == "door":
+        if len(ent.args) != 2 or ent.args[1] not in SPAWN_NAMES:
+            errors.append(f"{where_}: door takes a target room and a spawn name ({', '.join(SPAWN_NAMES)})")
+            return False
+        node = Node("", "Props", "Area2D")
+        node.props = [
+            ("position", vec2(*ent.pos)),
+            ("script", Res("Script", DOOR_SCRIPT)),
+            ("target_room", sname(ent.args[0])),
+            ("target_spawn", sname(ent.args[1])),
+        ]
+        node.base = "Door"
+        plan.doors.append(ent)
+        plan.singles.append((key, node))
+        return True
+    return dispatch_pickup(ent, key, src, plan, errors)
+
+
+def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
+    where_ = where(src.path, ent.line)
+    if len(ent.args) != 1 or ent.args[0] not in OPENER_SIZE:
+        errors.append(f"{where_}: opener takes cracked_wall or locked_door")
+        return False
+    kind = ent.args[0]
+    ident = ent.opts.get("id", "")
+    if not IDENT_RE.match(ident):
+        errors.append(f"{where_}: opener {kind} needs id=<snake_case id>")
+        return False
+    size = OPENER_SIZE[kind]
+    if "size" in ent.opts:
+        parsed = parse_size(ent.opts["size"])
+        if parsed is None:
+            errors.append(f"{where_}: size takes two positive numbers, size=<w>,<h>")
+            return False
+        size = parsed
+    tiles = tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
+    plan.openers.append((ent, tiles))
+    if kind == "cracked_wall":
+        node = Node("", "Props", None, Res("PackedScene", CRACKED_SCENE))
+        node.props = [("position", vec2(*ent.pos)), ("wall_id", sname(ident))]
+        node.base = "CrackedWall"
+    else:
+        node = Node("", "Props", "StaticBody2D")
+        node.props = [("position", vec2(*ent.pos)), ("script", Res("Script", LOCKED_SCRIPT)), ("door_id", sname(ident))]
+        scope = ent.opts.get("scope", src.scope)
+        if scope != "ow":
+            node.props.append(("scope", sname(scope)))
+        if size != OPENER_SIZE["locked_door"]:
+            node.props.append(("size", vec2(*size)))
+        node.base = "LockedDoor"
+    plan.singles.append((key, node))
+    return True
+
+
+def dispatch_pickup(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
+    where_ = where(src.path, ent.line)
+    if ent.verb != "pickup" or not ent.args:
+        errors.append(f"{where_}: unknown entity '{ent.verb}'")
+        return False
+    if ent.args[0] == "item":
+        if len(ent.args) != 2:
+            errors.append(f"{where_}: 'pickup item' takes one tool id")
+            return False
+        kind, ident = "item", ent.args[1]
+    else:
+        if len(ent.args) != 1 or ent.args[0] not in PICKUP_SCENES:
+            errors.append(f"{where_}: pickup kind must be item or one of {', '.join(sorted(PICKUP_SCENES))}")
+            return False
+        kind = ent.args[0]
+        ident = ent.opts.get("id", "")
+        if not IDENT_RE.match(ident):
+            errors.append(f"{where_}: pickup {kind} needs id=<snake_case id>")
+            return False
+    scene = ITEM_PICKUP_SCENE if kind == "item" else PICKUP_SCENES[kind]
+    node = Node("", "Props", None, Res("PackedScene", scene))
+    node.props = [("position", vec2(*ent.pos)), ("persistent_id", sname(ident))]
+    if kind == "item":
+        node.props.append(("item_id", sname(ident)))
+    if "scope" in ent.opts and kind != "small_key":
+        errors.append(f"{where_}: only a small_key takes scope=")
+        return False
+    if kind == "small_key":
+        scope = ent.opts.get("scope", src.scope)  # a key spends only in the scope of its room
+        if scope != "ow":
+            node.props.append(("scope", sname(scope)))
+    if "requires" in ent.opts:
+        node.props.append(("requires_flag", sname(ent.opts["requires"])))
+    node.base = PICKUP_NODE_NAME.get(kind, camel(kind))
+    plan.pickups.append((ent, ident, kind))
+    plan.singles.append((key, node))
+    return True
+
+
+# ---- validation of one room ------------------------------------------------------------------
+
+
+def ring_problems(src: Source, rec: dict, errors: list[str]) -> None:
+    """The ring is the wall: '#' everywhere except the gap of every graph exit, which is '.'."""
+    gap_owner = {tile: side for side in SIDES for tile in GAP_TILES[side]}
+    for side in SIDES:
+        for col, row in GAP_TILES[side]:
+            ch = src.grid[row][col]
+            line = src.grid_lines[row]
+            if side in rec["exits"] and ch != FLOOR_CHAR:
+                errors.append(f"{where(src.path, line)}: graph exit {side} needs a gap ('.') here, found '{ch}'")
+            if side not in rec["exits"] and ch != "#":
+                errors.append(f"{where(src.path, line)}: the graph has no exit {side}, this tile must be '#'")
+    for row in range(ROWS):
+        for col in range(COLS):
+            ring = col in (0, COLS - 1) or row in (0, ROWS - 1)
+            if ring and (col, row) not in gap_owner and src.grid[row][col] != "#":
+                errors.append(f"{where(src.path, src.grid_lines[row])}: ring tile ({col},{row}) must be '#'")
+
+
+def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[str]) -> None:
+    grid_line = src.grid_lines[0]
+    path = src.path
+    spawn_tile = next((t for n, t, _ in plan.spawns if n == "Default"), tile_of(*ROOM_CENTRE_PX))
+    if spawn_tile in plan.static:
+        errors.append(f"{where(path, grid_line)}: the default spawn is inside an obstacle")
+    for name, tile, _ in plan.spawns:
+        if tile in plan.static:
+            errors.append(f"{where(path, grid_line)}: spawn {name} is on an obstacle at {tile}")
+
+    closed = set().union(*(t for _, t in plan.openers)) if plan.openers else set()
+    reach = flood([spawn_tile], plan.static | closed)
+    open_sides = []
+    for side in rec["exits"]:
+        corridor = exit_corridor(side)
+        if any(tile in plan.static for tile in corridor):
+            blocked = next(tile for tile in corridor if tile in plan.static)
+            errors.append(f"{where(path, grid_line)}: exit {side} corridor blocked at tile {blocked}")
+        if not any(tile in closed for tile in GAP_TILES[side]):
+            open_sides.append(side)
+            if any(tile not in reach for tile in corridor):
+                errors.append(f"{where(path, grid_line)}: exit {side} is not reachable from the spawn")
+
+    check_enemies(src, rec, plan, errors)
+    check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors)
+    check_doors(src, rec, world, plan, errors)
+    check_openers_and_ids(src, plan, errors)
+
+
+def check_enemies(src: Source, rec: dict, plan: Plan, errors: list[str]) -> None:
+    counts: dict[str, int] = {}
+    for _, node, ent in plan.enemies:
+        name = node.enemy
+        counts[name] = counts.get(name, 0) + 1
+        if ent.tile in plan.static:
+            errors.append(f"{where(src.path, ent.line)}: enemy {name} starts on an obstacle")
+        centred = ent.pos[0] % TILE == TILE / 2 and ent.pos[1] % TILE == TILE / 2
+        if name == "hollow" and not centred:
+            errors.append(f"{where(src.path, ent.line)}: hollow is not on a tile centre")
+    if counts != rec["enemies"]:
+        errors.append(f"{where(src.path, 1)}: enemies {counts}, the graph says {rec['enemies']}")
+
+
+def check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors) -> None:
+    path = src.path
+    graph = {p["id"]: p for p in world.pickups if p["node"] in world.placed_nodes(rec["id"])}
+    placed: dict[str, Entity] = {}
+    for ent, ident, kind in plan.pickups:
+        where_ = where(path, ent.line)
+        if ident in placed:
+            errors.append(f"{where_}: pickup id {ident} is placed twice")
+        placed[ident] = ent
+        if ident not in graph:
+            errors.append(f"{where_}: pickup {ident} is not in the graph for this room")
+            continue
+        if graph[ident]["kind"] != kind:
+            errors.append(f"{where_}: pickup {ident} is kind {kind}, the graph says {graph[ident]['kind']}")
+        if graph[ident]["after_boss"] and not BOSS_FLAG_RE.match(ent.opts.get("requires", "")):
+            errors.append(f"{where_}: {ident} comes after a boss, give requires=boss_<room>_defeated")
+    for ident, rec_pickup in graph.items():
+        if ident not in placed:
+            errors.append(f"{where(path, 1)}: graph pickup {ident} ({rec_pickup['kind']}) is not placed")
+
+    for ent, ident, _ in plan.pickups:
+        if ident not in graph:
+            continue
+        tile = ent.tile
+        if graph[ident]["node"] != rec["id"]:
+            # Sealed: in an in-place pocket. Closed, unreachable; exactly one opener opens it.
+            if reaches(closed_flood(plan, spawn_tile, None), tile):
+                errors.append(f"{where(path, ent.line)}: sealed pickup {ident} is reachable while closed")
+            openers = [i for i in range(len(plan.openers)) if reaches(closed_flood(plan, spawn_tile, i), tile)]
+            if len(openers) != 1:
+                errors.append(f"{where(path, ent.line)}: sealed pickup {ident} needs exactly one opener, found {len(openers)}")
+            continue
+        if not reaches(reach, tile):
+            errors.append(f"{where(path, ent.line)}: pickup {ident} is not reachable from the spawn")
+        for side in open_sides:
+            starts = [t for t in GAP_TILES[side] if t not in plan.static]
+            if not reaches(flood(starts, plan.static | set().union(*(t for _, t in plan.openers))), tile):
+                errors.append(f"{where(path, ent.line)}: pickup {ident} is not reachable from exit {side}")
+
+
+def closed_flood(plan: Plan, spawn_tile: tuple[int, int], opened: int | None) -> set[tuple[int, int]]:
+    """Flood from the spawn with every opener closed, except the opener with index `opened`."""
+    blocked = set(plan.static)
+    for index, (_, tiles) in enumerate(plan.openers):
+        if index != opened:
+            blocked |= tiles
+    return flood([spawn_tile], blocked)
+
+
+def check_doors(src: Source, rec: dict, world: World, plan: Plan, errors: list[str]) -> None:
+    path = src.path
+    partners: dict[str, str] = {}
+    for edge in world.door_edges(rec["id"]):
+        other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+        partners[other] = edge["gate"] or "plain"
+    placed = {ent.args[0]: ent for ent in plan.doors if len(ent.args) == 2}
+    for ent in plan.doors:
+        where_ = where(path, ent.line)
+        if ent.tile in plan.static:
+            errors.append(f"{where_}: door to {ent.args[0]} stands on an obstacle")
+        if ent.args[0] not in partners:
+            errors.append(f"{where_}: door to {ent.args[0]} is not a door of the graph for {rec['id']}")
+    for other, gate in partners.items():
+        in_place = world.rooms.get(other, {}).get("in_place", False)
+        if gate == "plain" and not in_place and other not in placed:
+            errors.append(f"{where(path, 1)}: plain door to {other} is not placed")
+
+
+def check_openers_and_ids(src: Source, plan: Plan, errors: list[str]) -> None:
+    seen: set[str] = set()
+    for ent, tiles in plan.openers:
+        ident = ent.opts["id"]
+        if ident in seen:
+            errors.append(f"{where(src.path, ent.line)}: id {ident} is used twice in this room")
+        seen.add(ident)
+        if any(t in plan.static for t in tiles):
+            errors.append(f"{where(src.path, ent.line)}: opener {ident} stands on an obstacle")
+    for ent, ident, _ in plan.pickups:
+        if ident in seen:
+            errors.append(f"{where(src.path, ent.line)}: id {ident} is used by a pickup and an opener")
+        seen.add(ident)
+
+
+# ---- output ----------------------------------------------------------------------------------
+
+
+def num(value: float) -> str:
+    if float(value).is_integer():
+        return str(int(value))
+    return ("%.6f" % value).rstrip("0").rstrip(".")
+
+
+def vec2(x: float, y: float) -> str:
+    return f"Vector2({num(x)}, {num(y)})"
+
+
+def sname(text: str) -> str:
+    return f'&"{text}"'
+
+
+def camel(text: str) -> str:
+    return "".join(part.capitalize() for part in text.split("_"))
+
+
+class Ext:
+    """ext_resource ids in order of first use, as Godot writes them."""
+
+    def __init__(self) -> None:
+        self.items: list[tuple[str, str]] = []
+        self.index: dict[tuple[str, str], str] = {}
+
+    def ref(self, res: Res) -> str:
+        key = (res.kind, res.path)
+        if key not in self.index:
+            self.items.append(key)
+            self.index[key] = str(len(self.items))
+        return f'ExtResource("{self.index[key]}")'
+
+
+def name_all(plan: Plan, enemies_sorted: list[Node]) -> dict[str, list[Node]]:
+    """Gives every node its name and returns the children of each container in output order."""
+    counters: dict[str, int] = {}
+
+    def numbered(base: str) -> str:
+        counters[base] = counters.get(base, 0) + 1
+        return f"{base}{counters[base]}"
+
+    children: dict[str, list[Node]] = {"Enemies": [], "Bushes": [], "Props": [], "Spawns": []}
+    for node in plan.merged:
+        node.name = numbered(node.base)
+    children["Props"].extend(plan.merged)
+    for _, node in plan.singles:
+        node.name = numbered(node.base)
+        children[node.parent].append(node)
+    counters.clear()
+    for node in enemies_sorted:
+        node.name = numbered(node.base)
+        children["Enemies"].append(node)
+    for name, _, node in plan.spawns:
+        node.name = name
+        children["Spawns"].append(node)
+    return children
+
+
+def emit(src: Source, rec: dict, plan: Plan) -> str:
+    ext = Ext()
+    exits = ", ".join(sname(s) for s in rec["exits"])
+    root = Node(root_name(rec["id"]), "", "Node2D")
+    root.props = [
+        ("script", Res("Script", ROOM_SCRIPT)),
+        ("room_id", sname(rec["id"])),
+        ("grid", f"Vector2i({rec['grid'][0]}, {rec['grid'][1]})"),
+        ("exits", f"Array[StringName]([{exits}])"),
+    ]
+    if rec["dark"]:
+        root.props.append(("dark", "true"))
+    if src.floor is not None:
+        r, g, b = src.floor
+        root.props.append(("floor_color", f"Color({num(r)}, {num(g)}, {num(b)}, 1)"))
+    enemies = [node for _, node, _ in sorted(plan.enemies, key=lambda pair: pair[0])]
+    children = name_all(plan, enemies)
+    containers = [Node(name, ".", "Node2D") for name in ("Enemies", "Bushes", "Props", "Spawns")]
+    for container in containers:
+        container.props = [("y_sort_enabled", "true")]
+
+    groups = [[node_header(root, ext, root=True)] + prop_lines(root, ext)]
+    for container in containers:
+        groups.append([node_header(container, ext)] + prop_lines(container, ext))
+        for child in children[container.name]:
+            groups.append([node_header(child, ext)] + prop_lines(child, ext))
+    source = f"tools/rooms/{rec['id'].replace('#', '__')}.room"
+    head = [f"[gd_scene load_steps={len(ext.items) + 1} format=3]", f"; Generated by tools/build_rooms.py from {source}."]
+    head.append("; Do not edit by hand: change the .room file and run make rooms.")
+    if src.terrain:
+        head.append(f"; terrain: {src.terrain}")
+    ext_lines = [f'[ext_resource type="{kind}" path="{path}" id="{ext.index[(kind, path)]}"]' for kind, path in ext.items]
+    parts = ["\n".join(head)]
+    if ext_lines:
+        parts.append("\n".join(ext_lines))
+    parts += ["\n".join(group) for group in groups]
+    return "\n\n".join(parts) + "\n"
+
+
+def root_name(room_id: str) -> str:
+    return "".join(part.capitalize() for part in re.split(r"[_#]", room_id))
+
+
+def node_header(node: Node, ext: Ext, root: bool = False) -> str:
+    if root:
+        return f'[node name="{node.name}" type="{node.typ}"]'
+    if node.scene is not None:
+        return f'[node name="{node.name}" parent="{node.parent}" instance={ext.ref(node.scene)}]'
+    return f'[node name="{node.name}" type="{node.typ}" parent="{node.parent}"]'
+
+
+def prop_lines(node: Node, ext: Ext) -> list[str]:
+    return [f"{key} = {ext.ref(value) if isinstance(value, Res) else value}" for key, value in node.props]
+
+
+# ---- driver ----------------------------------------------------------------------------------
+
+
+def room_id_of_file(path: Path) -> str:
+    return path.stem.replace("__", "#", 1)
+
+
+def compile_room(path: Path, world: World) -> tuple[str | None, list[str]]:
+    """Validates one .room file and returns its scene text, or None with the errors."""
+    errors: list[str] = []
+    src = parse_source(path, errors)
+    if src is None:
+        return None, errors
+    expected = room_id_of_file(path)
+    if src.room_id != expected:
+        errors.append(f"{where(path, src.room_line)}: room is {src.room_id}, the file is {expected}")
+        return None, errors
+    rec = world.room(expected)
+    if rec is None:
+        errors.append(f"{where(path, src.room_line)}: {expected} is not in the world graph")
+        return None, errors
+    if rec["in_place"]:
+        errors.append(f"{where(path, src.room_line)}: {expected} opens in place; put it in its host room's file")
+        return None, errors
+    src.scope = rec["scope"]
+    ring_problems(src, rec, errors)
+    plan = build_plan(src, errors)
+    if plan is None or errors:
+        return None, errors
+    check_room(src, rec, world, plan, errors)
+    for res_path in missing_resources(plan):
+        errors.append(f"{where(path, src.room_line)}: {res_path} does not exist (the part is not built yet)")
+    if errors:
+        return None, errors
+    return emit(src, rec, plan), []
+
+
+def missing_resources(plan: Plan) -> list[str]:
+    """Scenes and scripts the room refers to that are not in the repository yet."""
+    nodes = plan.merged + [n for _, n in plan.singles] + [n for _, n, _ in plan.enemies] + [n for _, _, n in plan.spawns]
+    paths: set[str] = set()
+    for node in nodes:
+        if node.scene is not None:
+            paths.add(node.scene.path)
+        paths.update(v.path for _, v in node.props if isinstance(v, Res))
+    return sorted(p for p in paths if not (ROOT / p[len("res://") :]).is_file())
+
+
+def selected_files(names: list[str], rooms_dir: Path) -> tuple[list[Path], list[str]]:
+    if not names:
+        return sorted(rooms_dir.glob("*.room")), []
+    files, errors = [], []
+    for name in names:
+        candidate = rooms_dir / (name.replace("#", "__") + ".room")
+        if candidate.exists():
+            files.append(candidate)
+        else:
+            errors.append(f"no source for {name}: {candidate} does not exist")
+    return files, errors
+
+
+def main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(description="Compile tools/rooms/*.room into scenes/world/rooms.")
+    parser.add_argument("rooms", nargs="*", help="room ids, pocket ids or file stems (default: all)")
+    parser.add_argument("--check", action="store_true", help="validate and compare with the committed scenes")
+    parser.add_argument("--rooms-dir", type=Path, default=ROOMS_DIR)
+    parser.add_argument("--out-dir", type=Path, default=OUT_DIR)
+    parser.add_argument("--world", type=Path, default=WORLD_FILE)
+    args = parser.parse_args(argv)
+    try:
+        world = World(json.loads(args.world.read_text(encoding="utf-8")))
+    except (OSError, ValueError, KeyError) as exc:
+        print(f"build_rooms: cannot read {args.world}: {exc} (run make world-data)", file=sys.stderr)
+        return 2
+    files, errors = selected_files(args.rooms, args.rooms_dir)
+    failed = bool(errors)
+    for message in errors:
+        print(message, file=sys.stderr)
+    done = 0
+    for path in files:
+        text, problems = compile_room(path, world)
+        if text is None:
+            failed = True
+            for message in problems:
+                print(message, file=sys.stderr)
+            continue
+        out = args.out_dir / (room_id_of_file(path).replace("#", "__") + ".tscn")
+        if args.check:
+            if not out.exists() or out.read_text(encoding="utf-8") != text:
+                failed = True
+                print(f"{where(out, 1)}: scene is missing or stale for {path.name}; run make rooms", file=sys.stderr)
+                continue
+        else:
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(text, encoding="utf-8")
+        done += 1
+    print(f"build_rooms: {'checked' if args.check else 'built'} {done} of {len(files)} room file(s)")
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

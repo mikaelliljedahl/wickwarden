@@ -1,0 +1,22 @@
+; Fixture of tools/build_rooms.py: the room ow_0_1 (Reedpond) written as a .room source.
+; expected_ow_0_1.tscn is the hand-made scene of the same room; the round trip must give the same node list.
+room ow_0_1
+terrain Reedpond: pond, reeds
+floor_color 0.16 0.25 0.25
+grid
+#########..#########
+#...ee.............#
+#....e.............#
+#..ewwwww..........#
+#.ewwwwww...........
+#.ewwwwww...........
+#..ewwwe...........#
+#...eee............#
+#...........ee.....#
+####################
+enemy duskmoth 2,2
+enemy duskmoth 13,2
+enemy duskmoth 16,7
+enemy duskmoth 8,8
+prop pedestal 14,7 size=72,72
+pickup item tether_moth @1392,742
