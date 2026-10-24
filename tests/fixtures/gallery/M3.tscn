@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/shallow_zone.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/fen_leech.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/brine_crab.tscn" id="4"]
+
+[node name="GalleryM3" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+exits = Array[StringName]([&"e"])
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Shallows" parent="Props" instance=ExtResource("2")]
+position = Vector2(560, 480)
+size = Vector2(960, 640)
+
+[node name="Enemies" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="LeechA" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(420, 400)
+
+[node name="LeechB" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(700, 600)
+
+[node name="CrabA" parent="Enemies" instance=ExtResource("4")]
+position = Vector2(1300, 300)
+
+[node name="CrabB" parent="Enemies" instance=ExtResource("4")]
+position = Vector2(1420, 700)
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(1600, 480)
