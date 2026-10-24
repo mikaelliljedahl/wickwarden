@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/boss_door.tscn" id="2"]
+
+[node name="GalleryP10" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+exits = Array[StringName]([&"s"])
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="BossDoor" parent="Props" instance=ExtResource("2")]
+position = Vector2(960, 300)
+cave = &"c1"
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(960, 640)
