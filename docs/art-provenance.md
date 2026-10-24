@@ -1200,6 +1200,21 @@ GPT Image terrain textures below; they add no other image.
 | `sump_lurker_v1.png` | 1536x1024 | `01a16fb8-7195-7092-9247-47f14dc25dd5` | `exec-d8cfd662-bbda-4c66-acc8-13c249584e0d` | `192e4f92a6bf55a1` | `log_b55.md` |
 | `sump_lurker_v2.png` | 1536x1024 | `01a16fb8-7195-74d0-a159-1aae53eaa185` | `exec-085c0296-c2d0-4f10-8a5b-c1276ad5618d` | `fef7470ecbab3f66` | `log_b55.md` |
 | `sump_lurker_v3.png` | 1536x1024 | `01a16fb8-722b-7681-9fcc-189e712bcdf2` | `exec-099d280e-5c04-4286-adec-87edb1b3cd6a` | `f0fe614096b3e593` | `log_b55.md` |
+| `choir_warden_walk_side_v1.png` | 1536×1024 | `01a16fb2-99c1-7c51-be69-f1d7a0159f93` | `exec-a0935c2c-0457-44d0-b97a-af85d3cabf1d` | `a76ce8af99f026c4` | `log_b58.md` |
+| `choir_warden_walk_side_v2.png` | 1536×1024 | `01a16fb2-98a8-7d32-b87d-4ab4ecaa7d21` | `exec-24deec7e-4874-44e6-9650-634888b80a86` | `65dea5ceb8884daf` | `log_b58.md` |
+| `choir_warden_walk_side_v3.png` | 1536×1024 | `01a16fb2-989f-7d61-b36c-de7a298b76bf` | `exec-0010e76e-6b7c-47c2-9dfb-b7bc7bdd29e7` | `f523cd5782f5a2fc` | `log_b58.md` |
+| `choir_warden_walk_down_v1.png` | 1536×1024 | `01a16fb6-8175-7cf2-bcd2-172e13646a2c` | `exec-953981d0-051f-4d8d-9888-7d1345474f23` | `a7e8d2fe41e44c9c` | `log_b58.md` |
+| `choir_warden_walk_down_v2.png` | 1536×1024 | `01a16fb6-82b0-7491-900c-29e454849656` | `exec-2a4d00c9-1eda-46d1-a58d-19f4fb651a24` | `3c7c7d6e73a75124` | `log_b58.md` |
+| `choir_warden_walk_down_v3.png` | 1536×1024 | `01a16fb6-8044-7e31-a717-b7ff48466464` | `exec-5be8e831-7b80-4f1f-a182-0777f75ae592` | `0d8e9cf61cb0ca7e` | `log_b58.md` |
+| `choir_warden_walk_up_v1.png` | 1536×1024 | `01a16fb6-82c9-7221-8b83-2617f98b41d8` | `exec-54fddb89-7754-45fa-b56b-5ae37e0468b0` | `95b2b53b59c66065` | `log_b58.md` |
+| `choir_warden_walk_up_v2.png` | 1536×1024 | `01a16fb6-817b-7a10-be01-f67087852fed` | `exec-388629b5-0d33-44e9-9bbd-cfce0bf72073` | `94f5f8a6bf430c8d` | `log_b58.md` |
+| `choir_warden_walk_up_v3.png` | 1536×1024 | `01a16fba-5b12-7450-92cf-07495017d3bc` | `exec-3a7c3a9a-6622-4541-9455-56ae30ec6322` | `9f99b706b47401e2` | `log_b58.md` |
+| `choir_warden_actions_down_v1.png` | 1536×1024 | `01a16fba-5ad2-7242-b6af-a653c49cc1a9` | `exec-18c6f25c-4ff2-49e2-83a2-30d497734306` | `5add2e4e3058ec32` | `log_b58.md` |
+| `choir_warden_actions_down_v2.png` | 1536×1024 | `01a16fba-77d6-7a80-b1a0-ca099cf56fc9` | `exec-a92b2f03-c095-44e5-8393-49e68aa275d0` | `df36f44cde48d5cf` | `log_b58.md` |
+| `choir_warden_actions_down_v3.png` | 1536×1024 | `01a16fba-78f7-79e1-b091-a42df9923327` | `exec-4aef9d71-b303-40b4-9b57-d1fa5d44cbe5` | `8a55f1ff98d95b07` | `log_b58.md` |
+| `choir_warden_actions_side_v1.png` | 1536×1024 | `01a16fba-799a-71b0-a954-1482feedd65a` | `exec-7ec1a6be-711b-43af-b143-3571e297d64f` | `b3c9cbdfef33e74b` | `log_b58.md` |
+| `choir_warden_actions_side_v2.png` | 1536×1024 | `01a16fbe-3de8-7921-afd1-c3ad78d4ecbf` | `exec-a5358146-5963-458e-957d-d83ced6f6714` | `b18ce228c4202b72` | `log_b58.md` |
+| `choir_warden_actions_side_v3.png` | 1536×1024 | `01a16fbe-3e18-7001-bc34-d1ab1db8e44c` | `exec-6848c4a6-56cd-45c6-867d-94a3047b9ee9` | `86d5235259bc4585` | `log_b58.md` |
 
 Rejected outputs stay only in the local Codex folders and are not in the repository: the first
 duskmoth flight row (inconsistent headings), two other duskmoth redo attempts, two other explosion
