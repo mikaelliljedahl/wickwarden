@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/cinder_wisp.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/husk_hound.tscn" id="3"]
+
+[node name="Fixture" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+grid = Vector2i(0, 0)
+exits = Array[StringName]([&"s"])
+
+[node name="Enemies" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="WispIdle" parent="Enemies" instance=ExtResource("2")]
+position = Vector2(480, 300)
+
+[node name="WispNear" parent="Enemies" instance=ExtResource("2")]
+position = Vector2(1200, 420)
+
+[node name="HoundProwl" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(480, 700)
+
+[node name="HoundRow" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(1440, 260)
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(960, 760)
