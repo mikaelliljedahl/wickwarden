@@ -15,7 +15,7 @@ Range: `docs/art-inventory.md` section 4, batches B48 to B59 only (192 images). 
 | 56 | lull_mauler_walk, lull_mauler_actions | 15 | done: 15 of 15 generated, verified (hashes match own session folders, no duplicates), logged (`log_b56.md`), provenance added; walk side v1 anchor (producer pick); 1 failed job (`b56_lull_mauler_actions_side_v2`, relative reference path) regenerated as `-r1`; 5 ok, 10 weak |
 | 57 | mirror_warden_walk, mirror_warden_actions | 15 | done: 15 of 15 generated, verified (hashes match own session folders, no duplicates), logged (`log_b57.md`), provenance added; walk side v1 anchor (producer pick); 1 ok (actions down v3), 14 weak; all units show gold/bronze armour instead of pale silver-grey and unrequested capes; down and up units drift to side or three-quarter |
 | 58 | choir_warden_walk, choir_warden_actions | 15 | done: 15 of 15 generated, verified (hashes match own session folders, no duplicates), logged (`log_b58.md`), provenance added; walk side v1 anchor (producer pick); 3 ok, 12 weak; walk units near-static (poses 1 and 3 alike), inhale poses alike in actions |
-| 59 | pale_squire_walk, pale_squire_actions | 15 | not started |
+| 59 | pale_squire_walk, pale_squire_actions | 15 | done: 15 of 15 generated, verified (hashes match own session folders, no duplicates), logged (`log_b59.md`), provenance added; walk side v1 anchor (producer pick); 0 ok, 15 weak; every unit draws gold/cream armour and red cape or tabard instead of chalk-white; walk poses near-identical |
 
 ## Run notes
 
