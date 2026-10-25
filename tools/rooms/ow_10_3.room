@@ -1,0 +1,21 @@
+room ow_10_3
+terrain Cooling Pools: twin cooling basins beside the ash road and cart shelter
+floor_color 0.27 0.23 0.20
+grid
+#########..#########
+#..................#
+#..www........www..#
+#..www........www..#
+...................#
+...................#
+#..bb.........rr...#
+#...b..........r...#
+#..................#
+#########..#########
+enemy tallow_blob 6,6
+enemy tallow_blob 13,4
+enemy cinder_wisp 4,4
+prop hut @1200,192 size=192,96
+door ow_10_3#shop Inside @1200,288
+spawn FromPocket @1200,432
+spawn Default 10,5

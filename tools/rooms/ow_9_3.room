@@ -1,0 +1,18 @@
+room ow_9_3
+terrain Heavy Pass: broad ash pass between two weathered boulder shoulders
+floor_color 0.27 0.23 0.20
+grid
+#########..#########
+#..rr...........bb.#
+#..rr...........b..#
+#...r..............#
+#...................
+#...................
+#..rr..........rr..#
+#..rr..........rr..#
+#..................#
+#########..#########
+enemy skitterwick 6,3
+enemy skitterwick 14,5
+opener heavy_stone @960,912 id=e063 size=192,96
+spawn Default 10,4

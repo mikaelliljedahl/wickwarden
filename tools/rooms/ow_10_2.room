@@ -1,0 +1,19 @@
+room ow_10_2
+terrain Glassed Court: fused stone arcs around a sealed sunken stair
+floor_color 0.27 0.23 0.20
+grid
+#########..#########
+#..rr..........rr..#
+#..r............r..#
+#.....##...##......#
+......#.............
+......#.............
+#.....##...##......#
+#..bb..........bb..#
+#..................#
+#########..#########
+enemy hollow 4,5
+enemy hollow 15,3
+hidden_stairs cave_7_1 FromOverworld @912,432 id=e252
+spawn FromCave 9,6
+spawn Default 10,7

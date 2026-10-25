@@ -1,0 +1,23 @@
+room ow_10_3#shop
+terrain Ashwife cart shelter: stone counters under the kiln awning
+floor_color 0.27 0.23 0.20
+grid
+####################
+#..rr..........rr..#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..bb..........bb..#
+#..................#
+####################
+prop pedestal 5,3
+prop pedestal 9,3
+prop pedestal 14,3
+shop S3 tallow_flask @528,358
+shop S3 pot_bundle @912,358 id=pot_bundle_s3
+shop S3 slug_bundle @1392,358 id=slug_bundle_s3
+door ow_10_3 FromPocket 9,8
+spawn Inside 9,6
+spawn Default 9,6

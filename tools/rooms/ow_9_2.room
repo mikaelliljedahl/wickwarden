@@ -1,0 +1,20 @@
+room ow_9_2
+terrain Sleeping Furnace: broken kiln shoulders and ash groves frame the cold mouth
+floor_color 0.27 0.23 0.20
+grid
+#########..#########
+#..rr.........bb...#
+#..r..###......b...#
+#.....#.#..........#
+......#.#...........
+....................
+#..bb.........rr...#
+#...b..........r...#
+#..................#
+#########..#########
+enemy hollow 13,3
+enemy cinder_wisp 5,6
+enemy cinder_wisp 13,6
+door cave_4_1 FromOverworld 7,3
+spawn FromCave 7,5
+spawn Default 10,5
