@@ -305,6 +305,14 @@ func _has_prop(root: Node, script: String, edge: Dictionary) -> bool:
 
 
 func _key_scope_ok(node: Node, edge: Dictionary) -> bool:
+	if edge["gate"] == "boss":
+		var cave := String(node.get("cave"))
+		return (
+			GameState.cave_number(StringName(cave)) > 0
+			and edge.get("needs", []) == ["bigkey:" + cave]
+			and WorldData.scope_of(host_of(String(edge["a"]))) == StringName(cave)
+			and WorldData.scope_of(host_of(String(edge["b"]))) == StringName(cave)
+		)
 	if edge["gate"] != "key":
 		return true
 	var scope: Variant = node.get("scope")
@@ -465,7 +473,10 @@ func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -
 		elif _is_wall_like(node):
 			var size: Vector2 = node.get("size")
 			var footprint := Rect2(-size * 0.5, size)
-			openable.append((node as Node2D).transform * footprint)
+			if _is_boss_door(node) and not _boss_door_matches_room(room, node):
+				fixed.append((node as Node2D).transform * footprint)
+			else:
+				openable.append((node as Node2D).transform * footprint)
 		elif node is StaticBody2D and node.get("size") is Vector2:
 			var block_size: Vector2 = node.get("size")
 			fixed.append(Rect2((node as Node2D).position - block_size * 0.5, block_size))
@@ -505,7 +516,22 @@ func _overlaps(tiles: Dictionary, other: Dictionary) -> bool:
 	return false
 
 
+## Match the exact delivered script: an arbitrary static body is never a future-open door.
+func _is_boss_door(node: Node) -> bool:
+	var script: Script = node.get_script()
+	return script != null and script.resource_path == SCRIPT_DIR + "boss_door.gd"
+
+
+func _boss_door_matches_room(room: Node, node: Node) -> bool:
+	for edge: Dictionary in gated_edges_of(String(room.get("room_id"))):
+		if edge["gate"] == "boss" and _key_scope_ok(node, edge):
+			return true
+	return false
+
+
 func _is_wall_like(node: Node) -> bool:
+	if _is_boss_door(node):
+		return node.get("size") is Vector2
 	if _script_file(node) in ["eye_switch.gd", "ward_plate.gd"]:
 		return node.get("blocker") == true
 	if _script_file(node) == "heavy_stone.gd":

@@ -16,6 +16,7 @@ func run() -> void:
 	_persistent_ids_unique()
 	_broken_rooms_are_rejected()
 	_gates_may_stand_in_gated_exits()
+	_boss_door_geometry_regressions()
 	_cave_validation_regressions()
 	_print_pending()
 	free_scenes()
@@ -317,3 +318,76 @@ func _cave_validation_regressions() -> void:
 			"walkable key is rejected instead of accepted as a moth fetch"
 		)
 	fetch_room.free()
+
+
+## The real e152 footprints stay closed for placement checks, but their complete three-tile
+## approaches are reachable in the graph's legitimate future-open model.
+func _boss_door_geometry_regressions() -> void:
+	var edge: Dictionary = {}
+	for candidate: Dictionary in world_json["edges"]:
+		if candidate["id"] == "e152":
+			edge = candidate
+	check(not edge.is_empty(), "canonical boss edge e152 exists")
+	if edge.is_empty():
+		return
+	var packed := load("res://scenes/world/boss_door.tscn") as PackedScene
+	check(packed != null, "real BossDoor scene loads")
+	if packed == null:
+		return
+	var door := packed.instantiate() as Node2D
+	door.set("cave", &"c1")
+	check(_has_prop(door, SCRIPT_DIR + "boss_door.gd", edge), "exact C1 boss gate matches")
+	door.set("cave", &"c2")
+	check(not _key_scope_ok(door, edge), "another cave's big key cannot satisfy e152")
+	door.set("cave", &"c1")
+	var wrong_needs := edge.duplicate(true)
+	wrong_needs["needs"] = ["bigkey:c2"]
+	check(not _key_scope_ok(door, wrong_needs), "wrong graph big-key scope is rejected")
+	wrong_needs["needs"] = ["unrelated_flag"]
+	check(not _key_scope_ok(door, wrong_needs), "unrelated flag cannot open a boss gate")
+	door.free()
+	for id: String in ["cave_1_6", "cave_1_8"]:
+		if not scene_exists(WorldData.scene_path(id)):
+			continue
+		var room := _instance(id)
+		var props := room.get_node("Props")
+		var side := "e" if id == "cave_1_6" else "w"
+		for node in props.get_children():
+			if not _is_boss_door(node):
+				continue
+			var geometry := _geometry(
+				room, props, room.get_node("Bushes"), _gated_corridor_tiles(id)
+			)
+			check(not node.get("is_open"), "%s BossDoor initially closed" % id)
+			for tile in rect_tiles(Rect2(node.position - node.size * 0.5, node.size)):
+				check(geometry["blocked"].has(tile), "%s closed footprint blocks %s" % [id, tile])
+			for tile in exit_tiles(side):
+				check(
+					geometry["reach"].has(tile), "%s future-open approach reaches %s" % [id, tile]
+				)
+			node.set("cave", &"c2")
+			node.set("is_open", true)
+			geometry = _geometry(room, props, room.get_node("Bushes"), _gated_corridor_tiles(id))
+			check(
+				not geometry["reach"].has(tile_of(node.position)),
+				"%s wrong scope cannot bypass geometry even with is_open" % id
+			)
+			var block := SolidBlock.new()
+			block.position = node.position
+			block.size = node.size
+			props.remove_child(node)
+			node.free()
+			props.add_child(block)
+			check(
+				_mentions(room_problems(id, room), "exit %s corridor blocked" % side),
+				"%s identical plain solid footprint is rejected" % id
+			)
+		if id == "cave_1_6":
+			var pocket_door := room.get_node("Props/Door1")
+			pocket_door.set("target_room", &"cave_2_9")
+			var problems: Array[String] = []
+			_check_doors(id, room, problems)
+			check(
+				_mentions(problems, "which the graph does not link"), "wrong door target rejected"
+			)
+		room.free()
