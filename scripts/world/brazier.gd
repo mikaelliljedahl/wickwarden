@@ -57,9 +57,19 @@ func _ready() -> void:
 	ember.position = Vector2(0, -24)
 	add_child(ember)
 	SpriteVisual.attach(self, &"brazier", 0.0, Vector2(64, 64))
+	GameState.flag_changed.connect(_on_flag_changed)
 	if brazier_id != &"" and GameState.has_flag(flag_name()):
 		lit = true
 	_refresh()
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	# A paired endpoint may already be loaded with processing disabled.
+	# Apply saved state only; never spend, replay effects or broadcast the flag again.
+	if value and not lit and brazier_id != &"" and flag == flag_name():
+		lit = true
+		_refresh()
+		lit_changed.emit(true)
 
 
 func flag_name() -> StringName:

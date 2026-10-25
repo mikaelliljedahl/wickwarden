@@ -44,6 +44,7 @@ func _ready() -> void:
 	rune.energy = 0.0
 	rune.visible = false
 	add_child(rune)
+	GameState.flag_changed.connect(_on_flag_changed)
 	if gate_id != &"" and GameState.has_flag(flag_name()):
 		_set_open(true)
 		return
@@ -54,6 +55,13 @@ func _ready() -> void:
 			node.lit_changed.connect(_on_lit_changed)
 	_check()
 	_update_rune(false)
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	# A paired endpoint may already be loaded with processing disabled.
+	# Apply saved state only; never spend, replay effects or broadcast the flag again.
+	if value and not is_open and gate_id != &"" and flag == flag_name():
+		_set_open(true)
 
 
 func flag_name() -> StringName:

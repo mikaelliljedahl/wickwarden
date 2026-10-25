@@ -37,7 +37,15 @@ func _ready() -> void:
 	_trigger.add_child(trigger_shape)
 	add_child(_trigger)
 	SpriteVisual.attach(self, &"locked_door", 0.0, size)
+	GameState.flag_changed.connect(_on_flag_changed)
 	if door_id != &"" and GameState.has_flag(flag_name()):
+		_set_open(true)
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	# A paired endpoint may already be loaded with processing disabled.
+	# Apply saved state only; never spend, replay effects or broadcast the flag again.
+	if value and not is_open and door_id != &"" and flag == flag_name():
 		_set_open(true)
 
 
