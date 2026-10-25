@@ -9,6 +9,7 @@ const START := Vector2(960, 300)
 
 
 func run() -> void:
+	await _test_decoy_art_and_fallback()
 	await _test_stats_and_pair()
 	await _test_fade_in_then_stalks()
 	await _test_decoy_mirrors_position_and_facing()
@@ -17,6 +18,46 @@ func run() -> void:
 	await _test_echo_swing_after_hook()
 	await _test_stun_cancels_echo()
 	await _test_death_hides_decoy()
+
+
+func _test_decoy_art_and_fallback() -> void:
+	var fixture := "res://tests/fixtures/sprites_fixture/sprites.json"
+	var source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(fixture))
+	var path := "user://mirror_shade_decoy_test.json"
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(JSON.stringify({"mirror_shade_decoy": source["walker"]}))
+	file.close()
+	for painted in [false, true]:
+		SpriteVisual.use_manifest(path if painted else fixture)
+		reset_state()
+		var arena := _make_room()
+		var enemy := _spawn(arena, START)
+		make_player(arena, Vector2(300, 700))
+		await seconds(0.8)
+		var decoy := _decoy_of(enemy)
+		var look := decoy.get_node("Visual") as Node2D
+		check_eq(look is SpriteVisual, painted, "decoy uses art when mapped, fallback otherwise")
+		check_eq(look is Placeholder, not painted, "missing decoy art retains Placeholder")
+		check_eq(enemy.hp, 3, "visual choice preserves hp")
+		check_eq(enemy.contact_damage, 2, "visual choice preserves contact damage")
+		check(
+			decoy.find_children("*", "Area2D", true, false).is_empty(),
+			"painted and fallback decoys have no combat areas"
+		)
+		if painted:
+			check((look as SpriteVisual).flip_h, "painted decoy follows left facing")
+		else:
+			check((look as Placeholder).facing.x < 0.0, "fallback follows left facing")
+		var light := Node2D.new()
+		light.add_to_group(&"glow_light")
+		arena.add_child(light)
+		light.global_position = enemy.global_position
+		await frames(2)
+		check(not decoy.visible, "glow hides either decoy visual")
+		check(enemy.visual.modulate.r < 0.5, "glow darkens the real shade with either visual")
+		await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
 
 func _make_room() -> Node2D:
@@ -93,10 +134,14 @@ func _test_decoy_mirrors_position_and_facing() -> void:
 			decoy.global_position.distance_to(mirrored) < 1.0,
 			"the decoy sits at the point mirrored across the room's centre line (y' = 960 - y)"
 		)
-		var look := decoy.get_node_or_null("Visual") as Placeholder
-		check(
-			look != null and look.facing.dot(enemy.facing_dir) > 0.99, "the decoy copies the facing"
-		)
+		var look := decoy.get_node_or_null("Visual") as Node2D
+		if look is SpriteVisual:
+			check((look as SpriteVisual).flip_h, "the painted decoy faces left with the shade")
+		else:
+			check(
+				look is Placeholder and (look as Placeholder).facing.dot(enemy.facing_dir) > 0.99,
+				"the fallback decoy copies the facing"
+			)
 	check(enemy.facing_dir.x < 0.0, "the shade faces Tamsin on her left")
 	await dispose(arena)
 

@@ -39,7 +39,7 @@ var _echo_wait: float = 0.0
 var _echo_active: float = 0.0
 var _watched: Player
 var _decoy: Node2D
-var _decoy_look: Placeholder
+var _decoy_look: Node2D
 var _echo: Hitbox
 
 
@@ -71,7 +71,7 @@ func _enemy_ready() -> void:
 	_decoy.name = DECOY_NAME
 	_decoy.top_level = true
 	add_child(_decoy)
-	_decoy_look = Placeholder.attach(_decoy, DECOY_KIND)
+	_decoy_look = SpriteVisual.attach(_decoy, DECOY_KIND)
 	_echo = _make_echo_hitbox()
 	add_child(_echo)
 
@@ -187,7 +187,7 @@ func _refresh_looks() -> void:
 	var decoy_tint := Color.WHITE
 	decoy_tint.a = fade
 	_decoy_look.modulate = decoy_tint
-	_decoy_look.set_facing(facing_dir)
+	_decoy_look.call("set_facing", facing_dir)
 
 
 func _mirror(pos: Vector2) -> Vector2:
