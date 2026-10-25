@@ -6,6 +6,7 @@ const GALLERY := "res://tests/fixtures/gallery/B03.tscn"
 
 
 func run() -> void:
+	await _room_template_lifecycle()
 	await _motion_and_exposure()
 	await _phases_reset_and_rewards()
 	await _real_raft_combat()
@@ -13,6 +14,64 @@ func run() -> void:
 	# Actual C3 basin coordinates exposed origin-relative hit-direction rounding.
 	await _real_undertow(Vector2i(20, 14))
 	await _real_ember_ward()
+
+
+func _assembly_check(boss: Node2D, room: Room) -> void:
+	check_eq(boss.get_node("Serpent").get_child_count(), 9, "one assembly has seven bodies, tail, ripple")
+	check_eq(boss.get_node("SerpentPaint").get_child_count(), 8, "seven body visuals and one tail visual")
+	var tails := 0
+	var contacts := 0
+	var body_visuals := 0
+	for node in boss.find_children("*", "Node2D", true, false):
+		if node.has_meta(&"tidewick_body_visual"):
+			body_visuals += 1
+	check_eq(body_visuals, 7, "no hidden or origin-space duplicate body visuals survive")
+	for node in boss.find_children("*", "Area2D", true, false):
+		if node is Hurtbox or node is Hitbox:
+			check(room.get_rect().has_point(node.global_position),
+				"every generated target/contact stays inside its own translated room")
+		if node is Hurtbox and node.name == &"Tail":
+			tails += 1
+			check_eq(node, boss.get("tail"), "public tail is the sole generated tail target")
+			check(room.get_rect().has_point(node.global_position), "tail target stays in translated room")
+		if node is Hitbox and node.kind == &"contact":
+			contacts += 1
+	check_eq(tails, 1, "template cloning leaves exactly one tail hurtbox")
+	check_eq(contacts, 1, "template cloning leaves exactly one head contact")
+	var looks: Array = boss.get("_body_visuals")
+	var bodies: Array = boss.get("followers")
+	check_eq(looks.size(), 7, "exactly seven generated body renderers")
+	for i in range(looks.size()):
+		check_near(looks[i].global_position.distance_to(bodies[i].global_position), 0, 0.01,
+			"render sorting preserves every body world anchor")
+	check_near(boss.get("tail_visual").global_position.distance_to(boss.get("tail").global_position),
+		0, 0.01, "render sorting preserves tail world anchor")
+
+
+func _room_template_lifecycle() -> void:
+	for grid in [Vector2i.ZERO, Vector2i(20, 14)]:
+		reset_state()
+		var packed := load("res://scenes/world/rooms/cave_3_9.tscn") as PackedScene
+		check(packed != null, "actual built C3 boss room loads")
+		var room := packed.instantiate() as Room
+		room.grid = grid
+		add_child(room)
+		for visit in range(3):
+			room.enter()
+			var boss := room.get_node("Enemies/Tidewick1") as Node2D
+			_assembly_check(boss, room)
+			await seconds(1.6)
+			_assembly_check(boss, room)
+			check(boss.get("tail").enabled, "canonical target opens after unchanged intro")
+			var old_tail: WeakRef = weakref(boss.get("tail"))
+			var old_contact: WeakRef = weakref(boss.get("contact_hitbox"))
+			room.leave()
+			await frames(2)
+			check(old_tail.get_ref() == null, "leaving frees the generated tail target")
+			check(old_contact.get_ref() == null, "leaving frees the head contact")
+			for target in get_tree().get_nodes_in_group(&"hurtboxes"):
+				check(not room.is_ancestor_of(target), "left room exposes no public hurtbox targets")
+		await dispose(room)
 
 
 func _fixture(grid: Vector2i = Vector2i.ZERO) -> Room:
@@ -35,8 +94,8 @@ func _motion_and_exposure() -> void:
 	await seconds(1.6)
 	check(boss.tail_exposed(), "tail surfaces at first fight cycle")
 	if SpriteVisual.has_art(&"tidewick_body"):
-		for segment in boss.followers:
-			check(segment.get_node("Visual") is SpriteVisual, "every serpent segment uses body art")
+		for look in boss._body_visuals:
+			check(look is SpriteVisual, "every serpent segment uses body art")
 		var painted_segments := 0
 		for look in boss.find_children("*", "AnimatedSprite2D", true, false):
 			if look is SpriteVisual and look.kind == &"tidewick_body" and look.is_visible_in_tree():

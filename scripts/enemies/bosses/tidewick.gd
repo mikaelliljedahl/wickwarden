@@ -33,6 +33,8 @@ var _lengths := PackedFloat32Array()
 var _distance := 0.0
 var _trail: Array[Vector2] = []
 var _assembly: Node2D
+var _paint: Node2D
+var _body_visuals: Array[Node2D] = []
 var _bolt_warning: Node2D
 var _leech_pending := false
 
@@ -61,11 +63,14 @@ func _init() -> void:
 
 
 func _boss_ready() -> void:
-	# Room templates duplicate runtime children. Only the new assembly paints the live fight;
-	# leave copied collision nodes untouched, but do not draw their stale origin-space bodies.
-	var copied_assembly := get_node_or_null("Serpent") as Node2D
-	if copied_assembly != null:
-		copied_assembly.visible = false
+	# Room snapshots duplicate generated children as well as the authored boss.
+	# Retire the entire obsolete assembly, including its copied tail hurtbox.
+	for child in get_children():
+		if child.has_meta(&"tidewick_generated") or child.name == &"Serpent":
+			remove_child(child)
+			child.free()
+	followers.clear()
+	_body_visuals.clear()
 	y_sort_enabled = true
 	collision_mask = 0
 	hurtbox.filter = func(_hit: Hitbox) -> bool: return false
@@ -77,13 +82,23 @@ func _boss_ready() -> void:
 	_assembly = Node2D.new()
 	_assembly.name = "Serpent"
 	_assembly.top_level = true
-	_assembly.y_sort_enabled = true
+	_assembly.set_meta(&"tidewick_generated", true)
 	add_child(_assembly)
+	# Paint in the boss's ordinary y-sort chain. The top-level physics assembly
+	# stays at its canonical world anchors, without adding its global Y twice to sorting.
+	_paint = Node2D.new()
+	_paint.name = "SerpentPaint"
+	_paint.y_sort_enabled = true
+	_paint.set_meta(&"tidewick_generated", true)
+	add_child(_paint)
 	for i in range(SEGMENTS):
 		var segment := Node2D.new()
 		segment.name = "Segment%d" % (i + 1)
 		_assembly.add_child(segment)
-		SpriteVisual.attach(segment, &"tidewick_body")
+		var look := SpriteVisual.attach(segment, &"tidewick_body")
+		look.set_meta(&"tidewick_body_visual", true)
+		look.reparent(_paint)
+		_body_visuals.append(look)
 		followers.append(segment)
 	tail = Hurtbox.new()
 	tail.name = "Tail"
@@ -92,6 +107,7 @@ func _boss_ready() -> void:
 	tail.hurt.connect(_tail_hit)
 	_assembly.add_child(tail)
 	tail_visual = SpriteVisual.attach(tail, &"tidewick_tail")
+	tail_visual.reparent(_paint)
 	tail_light = _light(tail, Color(1.0, 0.6, 0.2), 160.0)
 	ripple = Node2D.new()
 	ripple.z_index = 1
@@ -108,12 +124,14 @@ func _process(_delta: float) -> void:
 		var down := not spitting and velocity.y > absf(velocity.x)
 		head.set_facing(Vector2.DOWN if down else Vector2(signf(velocity.x), 0))
 		head.play_anim(&"spit_side" if spitting else (&"walk_down" if down else &"walk_side"))
-	for segment in followers:
-		if not is_instance_valid(segment):
-			continue
-		var body := segment.get_node_or_null("Visual") as SpriteVisual
+	for i in range(followers.size()):
+		var look := _body_visuals[i]
+		look.global_position = followers[i].global_position
+		var body := look as SpriteVisual
 		if body != null:
 			body.play_anim(&"reverse" if travel_direction < 0.0 else &"idle")
+	if is_instance_valid(tail_visual) and is_instance_valid(tail):
+		tail_visual.global_position = tail.global_position
 	var painted_tail := tail_visual as SpriteVisual
 	if painted_tail != null:
 		painted_tail.play_anim(&"exposed" if tail_exposed() else &"idle")
@@ -210,6 +228,9 @@ func _update_followers() -> void:
 	for i in range(followers.size()):
 		followers[i].global_position = arena_point(_trail_point((i + 1) * SPACING))
 	tail.global_position = followers[-1].global_position
+	for i in range(followers.size()):
+		_body_visuals[i].global_position = followers[i].global_position
+	tail_visual.global_position = tail.global_position
 
 
 func _tick_tail(delta: float) -> void:
