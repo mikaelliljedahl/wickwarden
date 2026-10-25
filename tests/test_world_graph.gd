@@ -16,6 +16,7 @@ func run() -> void:
 	_persistent_ids_unique()
 	_broken_rooms_are_rejected()
 	_gates_may_stand_in_gated_exits()
+	_cave_validation_regressions()
 	_print_pending()
 	free_scenes()
 
@@ -27,7 +28,10 @@ func _gates_have_props() -> void:
 		if edge["gate"] == null:
 			continue
 		var prop := String(edge["prop"])
-		check(PROP_SCRIPTS.has(prop), "edge %s: prop '%s' has a script in the F3 table" % [edge["id"], prop])
+		check(
+			PROP_SCRIPTS.has(prop),
+			"edge %s: prop '%s' has a script in the F3 table" % [edge["id"], prop]
+		)
 		if PROP_SCRIPTS.has(prop) and edge_status(edge) == "pending":
 			pending["gate %s (%s): prop or scene not built yet" % [edge["id"], prop]] = true
 
@@ -61,7 +65,10 @@ func _step_links_mirrored() -> void:
 		check(WorldData.exits(a).has(side_a), "step %s: %s has exit %s" % [edge["id"], a, side_a])
 		if String(edge["dir"]) == "both":
 			var side_b := _side_of(WorldData.grid(a) - WorldData.grid(b))
-			check(WorldData.exits(b).has(side_b), "step %s: %s has exit %s back" % [edge["id"], b, side_b])
+			check(
+				WorldData.exits(b).has(side_b),
+				"step %s: %s has exit %s back" % [edge["id"], b, side_b]
+			)
 
 
 func _side_of(step: Vector2i) -> String:
@@ -106,31 +113,43 @@ func _broken_rooms_are_rejected() -> void:
 	block.position = Vector2(1680, 480)
 	(blocked.get_node("Props") as Node).add_child(block)
 	var problems := room_problems("ow_0_0", blocked)
-	check(_mentions(problems, "exit e corridor blocked"), "a room whose east exit is walled off is rejected")
+	check(
+		_mentions(problems, "exit e corridor blocked"),
+		"a room whose east exit is walled off is rejected"
+	)
 	blocked.free()
 	var short := _instance("ow_0_0")
 	var exits: Array[StringName] = [&"e"]
 	short.exits = exits
-	check(_mentions(room_problems("ow_0_0", short), "graph exit s is missing"),
-		"a room without its south exit is rejected")
+	check(
+		_mentions(room_problems("ow_0_0", short), "graph exit s is missing"),
+		"a room without its south exit is rejected"
+	)
 	short.free()
 	var wrong := _instance("ow_0_0")
 	wrong.room_id = &"ow_9_9"
-	check(_mentions(room_problems("ow_0_0", wrong), "room_id is ow_9_9"), "a room with another id is rejected")
+	check(
+		_mentions(room_problems("ow_0_0", wrong), "room_id is ow_9_9"),
+		"a room with another id is rejected"
+	)
 	wrong.free()
 	var no_door := _instance("ow_2_1")
 	for door in descendants_of_class(no_door, LockedDoor):
 		door.get_parent().remove_child(door)
 		door.free()
-	check(_mentions(room_problems("ow_2_1", no_door), "gate e124"),
-		"a room whose locked door is gone is rejected")
+	check(
+		_mentions(room_problems("ow_2_1", no_door), "gate e124"),
+		"a room whose locked door is gone is rejected"
+	)
 	no_door.free()
 	var no_moth := _instance("ow_0_1")
 	for pickup in descendants_of_class(no_moth, PickupBase):
 		pickup.get_parent().remove_child(pickup)
 		pickup.free()
-	check(_mentions(room_problems("ow_0_1", no_moth), "pickups placed"),
-		"a room whose pickup is gone is rejected")
+	check(
+		_mentions(room_problems("ow_0_1", no_moth), "pickups placed"),
+		"a room whose pickup is gone is rejected"
+	)
 	no_moth.free()
 
 
@@ -145,7 +164,10 @@ func _gates_may_stand_in_gated_exits() -> void:
 	gate.size = Vector2(96, 192)
 	gate.position = Vector2(1776, 480)
 	(gated.get_node("Props") as Node).add_child(gate)
-	check(room_problems("ow_2_0", gated).is_empty(), "a gate in the gap of a gated exit (ow_2_0 east) passes")
+	check(
+		room_problems("ow_2_0", gated).is_empty(),
+		"a gate in the gap of a gated exit (ow_2_0 east) passes"
+	)
 	gated.free()
 	var walled := _instance("ow_2_0")
 	walled.exits = gated_exits
@@ -153,22 +175,26 @@ func _gates_may_stand_in_gated_exits() -> void:
 	block.size = Vector2(96, 192)
 	block.position = Vector2(1776, 480)
 	(walled.get_node("Props") as Node).add_child(block)
-	check(_mentions(room_problems("ow_2_0", walled), "exit e corridor blocked"),
-		"a solid block in the gap of a gated exit is rejected")
+	check(
+		_mentions(room_problems("ow_2_0", walled), "exit e corridor blocked"),
+		"a solid block in the gap of a gated exit is rejected"
+	)
 	walled.free()
 	var open := _instance("ow_0_0")
 	var open_gate := Gate.new()
 	open_gate.size = Vector2(96, 192)
 	open_gate.position = Vector2(1776, 480)
 	(open.get_node("Props") as Node).add_child(open_gate)
-	check(_mentions(room_problems("ow_0_0", open), "exit e corridor blocked"),
-		"a gate in the gap of an open exit is rejected")
+	check(
+		_mentions(room_problems("ow_0_0", open), "exit e corridor blocked"),
+		"a gate in the gap of an open exit is rejected"
+	)
 	open.free()
 
 
 func _instance(id: String) -> Node:
 	var packed := load(WorldData.scene_path(id)) as PackedScene
-	return packed.instantiate()
+	return packed.instantiate() if packed != null else null
 
 
 func _mentions(problems: Array[String], text: String) -> bool:
@@ -184,3 +210,110 @@ func _print_pending() -> void:
 	print("PENDING (not failures) %d, the scene and prop of later work packages:" % keys.size())
 	for key in keys:
 		print("  - ", key)
+
+
+## In-memory fixtures exercise future cave checks without claiming those rooms are built.
+func _cave_validation_regressions() -> void:
+	var room := Node2D.new()
+	var enemies := Node2D.new()
+	room.add_child(enemies)
+	var arena := Node2D.new()
+	room.add_child(arena)
+	var missing: Array[String] = []
+	_check_enemies("cave_1_8", enemies, missing)
+	check(not missing.is_empty(), "built boss room without its actor is rejected")
+	var actor := EnemyBase.new()
+	actor.scene_file_path = "res://scenes/enemies/bosses/kilnkeeper.tscn"
+	arena.add_child(actor)
+	var problems: Array[String] = []
+	_check_enemies("cave_1_8", enemies, problems)
+	check(problems.is_empty(), "nested exact boss scene satisfies cave role")
+	actor.scene_file_path = "res://scenes/enemies/kilnkeeper.tscn"
+	_check_enemies("cave_1_8", enemies, problems)
+	check(not problems.is_empty(), "flat special-role path is rejected")
+	actor.scene_file_path = "res://scenes/enemies/minibosses/hollow_captain.tscn"
+	problems.clear()
+	_check_enemies("cave_1_5", enemies, problems)
+	check(problems.is_empty(), "miniboss resolves separately from regular enemies")
+	var duplicate := EnemyBase.new()
+	duplicate.scene_file_path = actor.scene_file_path
+	arena.add_child(duplicate)
+	_check_enemies("cave_1_5", enemies, problems)
+	check(not problems.is_empty(), "duplicate miniboss is rejected")
+	room.free()
+	var fragment := PickupBase.new()
+	fragment.kind = &"fragment"
+	fragment.scope = &"c1"
+	fragment.persistent_id = &"frag_c1"
+	fragment.requires_flag = &"boss_cave_1_8_defeated"
+	var core := PickupBase.new()
+	core.kind = &"wick_core"
+	core.persistent_id = &"wick_core_c1"
+	core.requires_flag = fragment.requires_flag
+	var rewards: Array[Node] = [fragment, core]
+	problems.clear()
+	_check_pickup_specs("cave_1_8", rewards, problems)
+	check(problems.is_empty(), "exact boss rewards pass")
+	fragment.requires_flag = &"boss_cave_2_9_defeated"
+	_check_pickup_specs("cave_1_8", rewards, problems)
+	check(_mentions(problems, "requires exact flag"), "another boss reward flag is rejected")
+	fragment.requires_flag = core.requires_flag
+	fragment.scope = &"c2"
+	problems.clear()
+	_check_pickup_specs("cave_1_8", rewards, problems)
+	check(_mentions(problems, "wrong kind or scope"), "fragment in wrong cave scope is rejected")
+	fragment.free()
+	core.free()
+	var key := PickupBase.new()
+	key.kind = &"big_key"
+	key.scope = &"c2"
+	key.persistent_id = &"bigkey_c1"
+	var keys: Array[Node] = [key]
+	problems.clear()
+	_check_pickup_specs("cave_1_7", keys, problems)
+	check(_mentions(problems, "wrong kind or scope"), "Lockpick in wrong cave scope is rejected")
+	key.scope = &"c1"
+	problems.clear()
+	_check_pickup_specs("cave_1_7", keys, problems)
+	check(problems.is_empty(), "correct Lockpick passes")
+	key.kind = &"key"
+	key.persistent_id = &"key_c1_1"
+	check(_needs_moth("cave_1_3", key), "C1 main-room small key requires grate fetch proof")
+	check(not _needs_moth("cave_1", key), "historical key is not converted to C1 fetch")
+	key.free()
+
+	var fetch_room := _instance("cave_1")
+	var props := fetch_room.get_node("Props")
+	for prop in props.get_children():
+		props.remove_child(prop)
+		prop.free()
+	var packed := load("res://scenes/world/grate.tscn") as PackedScene
+	check(packed != null, "committed grate scene loads")
+	if packed != null:
+		var grate := packed.instantiate() as Node2D
+		grate.position = Vector2(960, 336)
+		grate.set("size", Vector2(192, 96))
+		props.add_child(grate)
+		for x in [432.0, 1488.0]:
+			var wall := SolidBlock.new()
+			wall.position = Vector2(x, 336)
+			wall.size = Vector2(864, 96)
+			props.add_child(wall)
+		var pickup := PickupBase.new()
+		pickup.position = Vector2(1008, 240)
+		props.add_child(pickup)
+		fetch_room.get_node("Spawns/Default").position = Vector2(1008, 528)
+		var geometry := _geometry(fetch_room, props, fetch_room.get_node("Bushes"), {})
+		problems.clear()
+		check(
+			_moth_pickup_valid(fetch_room, pickup, geometry, problems),
+			"sealed main-room key has a clear moth launch across a grate"
+		)
+		grate.position.y = 720
+		geometry = _geometry(fetch_room, props, fetch_room.get_node("Bushes"), {})
+		problems.clear()
+		check(
+			not _moth_pickup_valid(fetch_room, pickup, geometry, problems),
+			"walkable key is rejected instead of accepted as a moth fetch"
+		)
+	fetch_room.free()

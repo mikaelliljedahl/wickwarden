@@ -8,6 +8,30 @@ extends TestCase
 ## geometry in room-local pixels on the 96 px tile grid (20 x 10). Missing scenes and props whose
 ## script does not exist yet are PENDING (collected in `pending`), never failures.
 
+## Explicit monster-spec room roles: runtime data intentionally omits these fields.
+const CAVE_ACTORS := {
+	"cave_1_5": "minibosses/hollow_captain",
+	"cave_1_8": "bosses/kilnkeeper",
+	"cave_2_4": "minibosses/thorn_warden",
+	"cave_2_9": "bosses/briar_mother",
+	"cave_3_4": "minibosses/sump_lurker",
+	"cave_3_9": "bosses/tidewick",
+	"cave_4_4": "minibosses/lull_mauler",
+	"cave_4_10": "bosses/hushed_colossus",
+	"cave_5_4": "minibosses/mirror_warden",
+	"cave_5_10": "bosses/archivist",
+	"cave_6_4": "minibosses/choir_warden",
+	"cave_6_11": "bosses/dirge_choir",
+	"cave_7_4": "minibosses/pale_squire",
+	"cave_7_11": "bosses/gloam_knight",
+	"cave_8_4": "minibosses/abacus_brute",
+	"cave_8_12": "bosses/coinwyrm",
+	"cave_9_4": "minibosses/wick_automaton",
+	"cave_9_10": "bosses/lock_warden",
+	"cave_10_4": "minibosses/corrows_echo",
+	"cave_10_14": "bosses/the_unlit",
+}
+
 const TILE := 96.0
 const COLS := 20
 const ROWS := 10
@@ -158,13 +182,20 @@ func placed_at(room_id: String) -> Array[Dictionary]:
 		var node := String(pickup["node"])
 		if _on_room(node, room_id):
 			records.append(
-				{"id": String(pickup["id"]), "node": node, "kind": String(pickup["kind"])}
+				{
+					"id": String(pickup["id"]),
+					"node": node,
+					"kind": String(pickup["kind"]),
+					"spec": pickup
+				}
 			)
 	var items: Dictionary = world_json["items"]
 	for capability: String in items:
 		var node := String(items[capability]["node"])
 		if _on_room(node, room_id):
-			records.append({"id": capability, "node": node, "kind": "tool"})
+			records.append(
+				{"id": capability, "node": node, "kind": "tool", "spec": items[capability]}
+			)
 	return records
 
 
@@ -372,15 +403,26 @@ func _check_enemies(id: String, enemies: Node, problems: Array[String]) -> void:
 	for name: String in planned:
 		var key := name.to_lower().replace(" ", "_").trim_prefix("new:")
 		plan[key] = int(planned[name])
+	if CAVE_ACTORS.has(id):
+		plan["res://scenes/enemies/%s.tscn" % CAVE_ACTORS[id]] = 1
+	var paths := {}
+	for key: String in plan:
+		var path := key if key.begins_with("res://") else "res://scenes/enemies/%s.tscn" % key
+		paths[path] = plan[key]
 	var counts := {}
-	for enemy in enemies.get_children():
-		var position := (enemy as Node2D).position
-		var key := String(enemy.scene_file_path.get_file().get_basename())
-		counts[key] = int(counts.get(key, 0)) + 1
-		if key == "hollow" and _off_tile_centre(position):
-			problems.append("%s: hollow at %s is not on a tile centre" % [id, position])
-	if counts != plan:
-		problems.append("%s: enemies %s, the plan says %s" % [id, counts, plan])
+	var stack: Array[Node] = [enemies.get_parent()]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		if not node is EnemyBase:
+			stack.append_array(node.get_children())
+			continue
+		# Boss parts belong to their actor, rather than the room's regular enemy count.
+		var path := String(node.scene_file_path)
+		counts[path] = int(counts.get(path, 0)) + 1
+		if path == "res://scenes/enemies/hollow.tscn" and _off_tile_centre(node.position):
+			problems.append("%s: hollow at %s is not on a tile centre" % [id, node.position])
+	if counts != paths:
+		problems.append("%s: enemies %s, the plan says %s" % [id, counts, paths])
 
 
 func _off_tile_centre(p: Vector2) -> bool:
@@ -566,7 +608,7 @@ func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Arra
 	for node in nodes:
 		if node is PickupBase and String((node as PickupBase).persistent_id) == "":
 			problems.append("%s: pickup %s has no persistent_id" % [id, node.name])
-		if _is_moth_pocket(id):
+		if _is_moth_pocket(id) or _needs_moth(id, node):
 			if _moth_pickup_valid(room, node as Node2D, geometry, problems):
 				reachable += 1
 			continue
@@ -575,7 +617,10 @@ func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Arra
 		else:
 			unreachable += 1
 			if shop_items.has(node):
-				problems.append("%s: shop stock %s is not reachable from the spawn" % [id, node.name])
+				problems.append(
+					"%s: shop stock %s is not reachable from the spawn" % [id, node.name]
+				)
+	_check_pickup_specs(id, nodes, problems)
 	var sealed := 0
 	var open := 0
 	for record in placed_at(id):
@@ -598,6 +643,49 @@ func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Arra
 				% [id, open - reachable]
 			)
 		)
+
+
+func _needs_moth(id: String, node: Node) -> bool:
+	if not node is PickupBase:
+		return false
+	for record in placed_at(id):
+		if String(node.get("persistent_id")) == record["id"]:
+			return "tether_moth" in record["spec"].get("needs", [])
+	return false
+
+
+func _check_pickup_specs(id: String, nodes: Array[Node], problems: Array[String]) -> void:
+	for record in placed_at(id):
+		var pid := String(record["id"])
+		var kind := String(record["kind"])
+		var scope := String(record["spec"].get("scope", ""))
+		if pid.begins_with("bigkey:") or pid.begins_with("frag:"):
+			scope = pid.get_slice(":", 1)
+			kind = "big_key" if pid.begins_with("bigkey:") else "fragment"
+			pid = ("bigkey_" if kind == "big_key" else "frag_") + scope
+		elif kind == "small_key":
+			kind = "key"
+		# Historical in-place dev key keeps its original identity and overworld scope.
+		if pid == "key_ow_1":
+			pid = "cave_key"
+		if pid == "wick_core_ow_2_0":
+			pid = "wick_core_cache"
+		if kind not in ["key", "big_key", "fragment", "wick_core"]:
+			continue
+		var matches: Array[Node] = []
+		for node in nodes:
+			if node is PickupBase and String(node.persistent_id) == pid:
+				matches.append(node)
+		if matches.size() != 1:
+			problems.append("%s: pickup %s requires exactly one matching persistent_id" % [id, pid])
+			continue
+		var pickup := matches[0] as PickupBase
+		if String(pickup.kind) != kind or (scope != "" and String(pickup.scope) != scope):
+			problems.append("%s: pickup %s has wrong kind or scope" % [id, pid])
+		if record["spec"].get("after_boss", false):
+			var flag := "boss_%s_defeated" % host_of(String(record["node"]))
+			if String(pickup.requires_flag) != flag:
+				problems.append("%s: pickup %s requires exact flag %s" % [id, pid, flag])
 
 
 func _is_moth_pocket(id: String) -> bool:
@@ -646,7 +734,9 @@ func _moth_pickup_valid(
 				found = true
 				break
 		if not found:
-			problems.append("moth pickup %s has no clear launch within 420 px across grate" % pickup.name)
+			problems.append(
+				"moth pickup %s has no clear launch within 420 px across grate" % pickup.name
+			)
 			return false
 	return true
 
@@ -684,9 +774,7 @@ func _check_doors(id: String, room: Node, problems: Array[String]) -> void:
 		elif scene_exists(WorldData.scene_path(other)):
 			var target := scene_root(WorldData.scene_path(other))
 			if target.get_node_or_null("Spawns/%s" % door["spawn"]) == null:
-				problems.append(
-					"%s: door to %s needs marker %s there" % [id, other, door["spawn"]]
-				)
+				problems.append("%s: door to %s needs marker %s there" % [id, other, door["spawn"]])
 		else:
 			pending["door %s -> %s: target scene not built yet" % [id, other]] = true
 	for door: Dictionary in _door_entries(room):
