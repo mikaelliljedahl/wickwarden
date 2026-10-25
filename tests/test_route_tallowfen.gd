@@ -55,11 +55,8 @@ func _cut_pocket(host: StringName, target: StringName, reward: StringName) -> vo
 	check(door != null, "%s has its real pocket door" % host)
 	if door == null:
 		return
-	var blocker: Bush
-	for node in _props(room):
-		if node is Bush and node.position == door.position:
-			blocker = node
-	check(blocker != null, "%s door has its cut screen" % host)
+	var blocker := door.get_node_or_null(door.blocker_path) as Bush
+	check(blocker != null, "%s door resolves its linked cut screen" % host)
 	if blocker == null:
 		return
 	blocker.drops_enabled = false

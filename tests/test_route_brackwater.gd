@@ -19,7 +19,7 @@ func run() -> void:
 func _reed_gate() -> void:
 	var road := await _enter(&"ow_1_2")
 	var reeds: Array[Vector2] = []
-	for bush in _props(road):
+	for bush in _room_bushes(road):
 		if bush is Bush and bush.variant == &"rush_wall":
 			bush.drops_enabled = false
 			reeds.append(bush.global_position)
@@ -33,13 +33,24 @@ func _reed_gate() -> void:
 	check(player.position.y < road.position.y + 912, "the actual reed bodies stop the player")
 	for pos in reeds:
 		await _swing_at(pos, Vector2.DOWN)
-	for bush in _props(road):
-		check(not (bush is Bush and bush.variant == &"rush_wall"), "hook clears the reed gate")
+	var remaining_reeds := 0
+	for bush in _room_bushes(road):
+		if bush.variant == &"rush_wall":
+			remaining_reeds += 1
+	check_eq(remaining_reeds, 0, "hook clears both real reed blockers")
 	player.place_at(road.global_position + Vector2(960, 830))
 	Input.action_press(&"move_down")
 	await seconds(1.2)
 	Input.action_release(&"move_down")
 	check_eq(world.get_current_room_id(), &"ow_1_3", "the cleared reed gap leads to Reed Gate")
+
+
+func _room_bushes(room: Room) -> Array[Bush]:
+	var bushes: Array[Bush] = []
+	for node in room.get_node("Bushes").get_children():
+		if node is Bush:
+			bushes.append(node)
+	return bushes
 
 
 func _shop_route() -> void:

@@ -2,7 +2,7 @@
 extends "res://tests/test_dev_world_route.gd"
 ## Controlled room-entry acceptance, not an earned or continuous full-game playthrough.
 ## Pot is earned on the historical route. Mitts/raft/boots are a controlled late kit:
-## their cave acquisition routes are unbuilt. No gate or reveal flags are injected.
+## their acquisition routes are not exercised here. No gate or reveal flags are injected.
 ## Enemies are removed without drops except the real watcher used for the ward puzzle.
 
 
@@ -24,7 +24,7 @@ func run() -> void:
 	await _rafts()
 	await _ravines()
 	await _saved_reload()
-	print("PENDING R5: C6 destination absent; late kit does not prove earning cave tools")
+	print("PENDING R5: the controlled late kit does not prove the mitts acquisition route")
 	release_inputs()
 	await dispose(world)
 
@@ -153,17 +153,34 @@ func _ward_cache() -> void:
 
 func _rush_wall() -> void:
 	var room := await _enter(&"ow_3_7")
+	var rush_walls: Array[Vector2] = []
+	for bush in _room_bushes(room):
+		if bush.variant == &"rush_wall":
+			bush.drops_enabled = false
+			rush_walls.append(bush.global_position)
+	check_eq(rush_walls.size(), 2, "Fen Pass has both real rush blockers")
 	player.place_at(room.global_position + Vector2(180, 480))
 	await _walk(&"move_left", 1.0)
 	check_eq(world.get_current_room_id(), &"ow_3_7", "uncut rush border refuses walking")
-	for node in _props(room):
-		if is_instance_valid(node) and node is Bush:
-			node.drops_enabled = false
-			await _swing_at(node.global_position, Vector2.LEFT)
+	for pos in rush_walls:
+		await _swing_at(pos, Vector2.LEFT)
+	var remaining_rush_walls := 0
+	for bush in _room_bushes(room):
+		if bush.variant == &"rush_wall":
+			remaining_rush_walls += 1
+	check_eq(remaining_rush_walls, 0, "hook clears both blockers on the current bank")
 	player.place_at(room.global_position + Vector2(180, 480))
 	await _walk(&"move_left", 1.0)
 	# The opposite endpoint has its own physical cut screen, handled by its real hook.
 	check_eq(world.get_current_room_id(), &"ow_2_7", "hook-cut rush border enters actual Last Pier")
+
+
+func _room_bushes(room: Room) -> Array[Bush]:
+	var bushes: Array[Bush] = []
+	for node in room.get_node("Bushes").get_children():
+		if node is Bush:
+			bushes.append(node)
+	return bushes
 
 
 func _plain_boundaries() -> void:
@@ -208,24 +225,43 @@ func _drop() -> void:
 	check_eq(world.get_current_room_id(), &"ow_4_6", "drop cannot be climbed backwards")
 
 
-func _push(room: Room, at: Vector2, direction: Vector2, action: StringName) -> void:
+func _push(
+	room: Room, at: Vector2, direction: Vector2, action: StringName, stop_at_open: RoomDoor = null
+) -> bool:
 	player.place_at(room.global_position + at)
 	player.facing = direction
 	await frames(3)
 	Input.action_press(action)
 	check(player.use_item(), "real mitts grab starts push")
-	await seconds(1.9)
+	var opened := false
+	if stop_at_open == null:
+		await seconds(1.9)
+	else:
+		for tick in range(180):
+			if GameState.has_flag(&"moved_cave6door"):
+				opened = stop_at_open._gate_is_open()
+				break
+			await frames(1)
 	Input.action_release(action)
-	await seconds(0.4)
+	if stop_at_open == null:
+		await seconds(0.4)
+	return opened
 
 
 func _boulder() -> void:
 	var room := await _enter(&"ow_6_6")
-	var stone := _find(room, "heavy_stone.gd")
+	var stone := _find(room, "heavy_stone.gd") as Node2D
 	var door := _door(room, &"cave_6_1")
+	var stone_start := stone.global_position
 	player.place_at(room.global_position + Vector2(1410, 432))
 	await _walk(&"move_right", 0.8)
-	check_eq(stone.get("path"), "", "walking without mitts cannot push")
+	check_near(
+		stone.global_position.distance_to(stone_start),
+		0.0,
+		0.1,
+		"walking without mitts cannot push"
+	)
+	check(not GameState.has_flag(&"moved_cave6door"), "walking without mitts leaves the mouth sealed")
 	check(not door._gate_is_open(), "C6 mouth requires actual clearance")
 	GameState.add_key(1, &"c6")
 	await _swing_at(stone.global_position, Vector2.RIGHT)
@@ -233,17 +269,34 @@ func _boulder() -> void:
 	GameState.acquire_item(&"heft_mitts")
 	GameState.set_active_item(&"heft_mitts")
 	await _push(room, Vector2(1488, 510), Vector2.UP, &"move_up")
-	check_eq(stone.get("path"), "", "real wall blocks attempted upward push")
+	check_near(
+		stone.global_position.distance_to(stone_start),
+		0.0,
+		0.1,
+		"real wall blocks attempted upward push"
+	)
+	check(not GameState.has_flag(&"moved_cave6door"), "blocked push leaves the mouth sealed")
 	check(not door._gate_is_open(), "blocked push does not unlock C6")
-	await _push(room, Vector2(1410, 432), Vector2.RIGHT, &"move_right")
-	check(not String(stone.get("path")).is_empty(), "actual mitts move boulder along clear lane")
-	check(door._gate_is_open(), "cleared footprint opens linked C6 mouth")
+	var opened := await _push(room, Vector2(1410, 432), Vector2.RIGHT, &"move_right", door)
+	check(opened, "actual mitts move the boulder clear of the linked C6 mouth")
+	check(
+		GameState.has_flag(&"moved_cave6door"),
+		"actual boulder movement persists its progression flag"
+	)
 	await _proof("pushed-mouth")
 	check(GameState.has_flag(&"moved_cave6door"), "actual push persists moved state")
-	check(
-		not ResourceLoader.exists(WorldData.scene_path("cave_6_1")),
-		"C6 remains explicit future target"
-	)
+	var cave_scene := WorldData.scene_path("cave_6_1")
+	check(ResourceLoader.exists(cave_scene), "opened C6 mouth resolves to its actual cave scene")
+	if ResourceLoader.exists(cave_scene):
+		await seconds(1.0)
+		if world.get_current_room_id() != &"cave_6_1":
+			room = world.get_room(&"ow_6_6")
+			door = _door(room, &"cave_6_1")
+			check(door != null, "opened C6 mouth retains its real entrance")
+			if door != null:
+				player.place_at(door.global_position)
+				await seconds(1.0)
+		check_eq(world.get_current_room_id(), &"cave_6_1", "cleared C6 mouth enters the actual cave")
 
 
 func _paired_stones() -> void:
