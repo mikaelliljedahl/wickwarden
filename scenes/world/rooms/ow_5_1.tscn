@@ -48,54 +48,66 @@ script = ExtResource("4")
 y_sort_enabled = true
 
 [node name="Tree1" type="StaticBody2D" parent="Props"]
-position = Vector2(336, 144)
+position = Vector2(240, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree2" type="StaticBody2D" parent="Props"]
-position = Vector2(432, 144)
+position = Vector2(336, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree3" type="StaticBody2D" parent="Props"]
-position = Vector2(1296, 144)
+position = Vector2(432, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree4" type="StaticBody2D" parent="Props"]
-position = Vector2(1392, 144)
+position = Vector2(1296, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree5" type="StaticBody2D" parent="Props"]
-position = Vector2(1488, 144)
+position = Vector2(1392, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree6" type="StaticBody2D" parent="Props"]
-position = Vector2(1584, 144)
+position = Vector2(1488, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree7" type="StaticBody2D" parent="Props"]
-position = Vector2(1680, 144)
+position = Vector2(1584, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree8" type="StaticBody2D" parent="Props"]
-position = Vector2(336, 240)
+position = Vector2(1680, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree9" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 240)
+script = ExtResource("5")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree10" type="StaticBody2D" parent="Props"]
+position = Vector2(336, 240)
+script = ExtResource("5")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree11" type="StaticBody2D" parent="Props"]
 position = Vector2(1296, 240)
 script = ExtResource("5")
 size = Vector2(96, 96)
@@ -120,28 +132,16 @@ size = Vector2(96, 96)
 kind = &"rock"
 
 [node name="Rock3" type="StaticBody2D" parent="Props"]
-position = Vector2(624, 624)
+position = Vector2(432, 720)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"rock"
-
-[node name="Tree10" type="StaticBody2D" parent="Props"]
-position = Vector2(816, 624)
-script = ExtResource("5")
-size = Vector2(96, 96)
-kind = &"tree"
 
 [node name="Rock4" type="StaticBody2D" parent="Props"]
 position = Vector2(1680, 720)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"rock"
-
-[node name="Tree11" type="StaticBody2D" parent="Props"]
-position = Vector2(1392, 816)
-script = ExtResource("5")
-size = Vector2(96, 96)
-kind = &"tree"
 
 [node name="Spawns" type="Node2D" parent="."]
 y_sort_enabled = true
