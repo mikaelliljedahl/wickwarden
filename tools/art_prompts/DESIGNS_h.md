@@ -14,3 +14,5 @@ Details the art brief and the inventory do not fix. Each line is what the prompt
 ## Resumed arena reference correction, 2026-10-25
 
 Ungenerated B82/B83 arena entries now reference `arena_c1_v3.png` for top-down floor style, replacing `tex_wall_ruin.png`: the wall reference dominated C5v2/v3,C6v2/v3,C7v1. Fenced prompts unchanged; existing images retained with weak verdicts. This producer choice does not accept any variant or alter target geometry.
+
+C10 follow-up reference correction: no reference for ungenerated arena C10 entries; C8v3/C9v1 copied C1 layout too closely despite regional subjects. Fenced subjects unchanged; no completed outputs regenerated.
