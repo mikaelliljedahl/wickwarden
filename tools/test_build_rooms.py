@@ -939,6 +939,89 @@ class AnchorRingCrossings(unittest.TestCase):
                 self.assertTrue(self.compile(**options)[1])
 
 
+class RemainingRegionMouths(unittest.TestCase):
+    CASES = [("e253", "resonance_door", "resonance_id"),
+             ("e144", "sealed_seam", "seam_id"),
+             ("e255", "ninth_door", None)]
+
+    def compile(self, edge_id, kind, extra="", edge_change=None, ident=None):
+        return MissingMouthOpeners().compile(edge_id, kind, ident, extra, edge_change)
+
+    def test_actual_mouth_scenes_exports_and_offset_physical_links(self):
+        for edge, kind, field in self.CASES:
+            with self.subTest(edge=edge):
+                text, errors = self.compile(edge, kind)
+                self.assertEqual(errors, [])
+                self.assertIn(f'res://scenes/world/{kind}.tscn', text)
+                self.assertIn('size = Vector2(192, 96)', text)
+                self.assertIn(f'blocker_path = NodePath("../{br.camel(kind)}1")', text)
+                if field:
+                    self.assertIn(f'{field} = &"{edge}"', text)
+                else:
+                    self.assertNotIn(f'= &"{edge}"', text)  # NinthDoor has no exported id.
+                self.assertNotIn('requires_flag', text)
+                self.assertNotIn('hook_tap = true', text)
+
+    def test_exact_requirements_even_with_custom_persistent_ids(self):
+        for edge, kind, _ in self.CASES:
+            for ident in (None, "custom_mouth"):
+                for change in (dict(needs=["hook"]), dict(gate="bomb")):
+                    self.assertTrue(self.compile(edge, kind, ident=ident, edge_change=change)[1])
+            for option in ("look=rock", "hook_tap=true", "scope=c1", "size=0,96"):
+                self.assertTrue(self.compile(edge, kind, extra=option)[1])
+            self.assertTrue(self.compile(edge, "wax_seal")[1])
+        fragments = [f"frag:c{i}" for i in range(1, 9)]
+        self.assertTrue(self.compile("e255", "ninth_door", edge_change=dict(needs=fragments))[1])
+
+    def test_real_openers_close_and_reopen_a_two_tile_passage(self):
+        for edge_id, kind, _ in self.CASES:
+            edge = dict(next(e for e in real_world().edges if e["id"] == edge_id))
+            edge.update(a="ow_5_5", b="ow_5_6", link="step")
+            text, errors = ScriptedGateExtensions().compile(
+                f"opener {kind} @960,912 id={edge_id}", ["s"], edges=[edge])
+            self.assertEqual(errors, [])
+            self.assertIn('size = Vector2(192, 96)', text)
+            _, errors = ScriptedGateExtensions().compile(
+                f"opener {kind} 9,9 id={edge_id} size=96,96", ["s"], edges=[edge])
+            self.assertTrue(any("walkable while closed" in e for e in errors), errors)
+
+    def anchor_pocket(self, pit="pit @960,432 size=1728,288", anchors=None,
+                      door="9,8", spawn="10,8", options="", change=None):
+        edge = dict(next(e for e in real_world().edges if e["id"] == "e145"))
+        edge.update(change or {})
+        host, target = edge["a"], edge["b"]
+        world = world_of([room_record(host, [])],
+                         pockets=[dict(id=target, grid=[8, 30], host=host, scope="ow", in_place=False)],
+                         edges=[edge])
+        anchors = anchors if anchors is not None else "anchor_ring 9,8 look=anchor_pocket\nanchor_ring 9,1"
+        text = room_text(host, [], f"spawn Default 9,2\nspawn FromPocket {spawn}\n{pit}\n{anchors}\n"
+                         f"door {target} Inside {door} {options}")
+        return compile_text(text, world, host + ".room")
+
+    def test_world_body_overlapping_pit_still_stops_reel_tip(self):
+        for pit in ("pit @960,432 size=1728,288\nprop wall 9,4",
+                    "prop wall 9,4\npit @960,432 size=1728,288"):
+            _, errors = self.anchor_pocket(pit=pit)
+            self.assertTrue(any("clear 576 px reel pull" in e for e in errors), errors)
+
+    def test_actual_e145_is_a_reel_chasm_mouth_not_a_fake_openable_ring(self):
+        text, errors = self.anchor_pocket()
+        self.assertEqual(errors, [])
+        self.assertIn('look = &"anchor_pocket"', text)
+        self.assertIn('target_room = &"ow_8_8#cache"', text)
+        self.assertNotIn('blocker_path', text)
+        self.assertNotIn('requires_flag', text)
+        self.assertNotIn('gate_id', text)
+
+    def test_anchor_mouth_rejects_all_bypasses_and_bad_return_spawn(self):
+        for options in (dict(pit=""), dict(pit="pit @960,432 size=1728,96"),
+                        dict(anchors=""), dict(anchors="anchor_ring 9,8"),
+                        dict(door="9,2"), dict(spawn="9,2"),
+                        dict(options="blocker=e145"), dict(change={"needs": ["hook"]})):
+            with self.subTest(options=options):
+                self.assertTrue(self.anchor_pocket(**options)[1])
+
+
 class CavePilot(unittest.TestCase):
     def encounter_world(self, role="boss", name="Kilnkeeper"):
         record = room_record("cave_1_8", [])

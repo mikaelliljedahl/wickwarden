@@ -105,6 +105,8 @@ OPENER_SIZE = {
 OPENER_SIZE.update({"thorn_door": (192, 96), "eye_portcullis": (192, 96),
                     "heavy_stone": (96, 96), "heavy_boulder": (96, 96),
                     "hook_tap_wall": (192, 96), "wax_seal": (192, 96),
+                    "sealed_seam": (192, 96), "resonance_door": (192, 96),
+                    "ninth_door": (192, 96),
                     "ward_blocker": (192, 96)})
 LINKED = {"eye_switch": "eye_portcullis", "ward_plate": "ward_blocker"}
 SCRIPTED_OPENERS = {"thorn_door": ("thorn_door", "burn_id"),
@@ -113,7 +115,17 @@ SCRIPTED_OPENERS = {"thorn_door": ("thorn_door", "burn_id"),
                     "heavy_boulder": ("heavy_boulder", "stone_id"),
                     "hook_tap_wall": ("hook_tap_wall", "seam_id"),
                     "wax_seal": ("wax_seal", "seal_id"),
+                    "sealed_seam": ("sealed_seam", "seam_id"),
+                    "resonance_door": ("resonance_door", "resonance_id"),
+                    "ninth_door": ("ninth_door", None),
                     "ward_blocker": ("ward_plate", "ward_id")}
+# The Ninth Door has a fixed runtime flag and no exported id; id= names its compiler link.
+MOUTH_REQUIREMENTS = {
+    "sealed seam": ("hidden", ["glow_jar"]),
+    "resonance door": ("item", ["lantern_chime"]),
+    "anchor ring pocket": ("item", ["reel_line"]),
+    "sealed door (nine fragments)": ("boss", [f"frag:c{i}" for i in range(1, 10)]),
+}
 OPENER_SIZE.update({"gate": (192, 96), "boss_door": (192, 96)})
 OPENER_OPTS = ("id", "size", "scope", "look", "braziers")
 PROP_SIZE = (96, 96)
@@ -517,6 +529,7 @@ class Plan:
 
     def __init__(self) -> None:
         self.static: set[tuple[int, int]] = set()
+        self.world_solids: set[tuple[int, int]] = set()  # Retain WORLD even where a pit overlaps it.
         self.merged: list[Node] = []
         self.singles: list[tuple[tuple, Node]] = []  # (sort key, node) for Props and Bushes
         self.enemies: list[tuple[tuple, Node, Entity]] = []
@@ -548,6 +561,7 @@ def build_plan(src: Source, world: World, errors: list[str]) -> Plan | None:
         for col in range(COLS):
             if grid[row][col] in TERRAIN_KIND or grid[row][col] == BUSH_CHAR:
                 plan.static.add((col, row))
+                plan.world_solids.add((col, row))
     for char in MERGED_CHARS:
         for col, row, width, height in merge_rects(grid, char):
             node = Node("", "Props", "StaticBody2D")
@@ -612,6 +626,7 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
                       ("brazier_id", sname(ident))]
         plan.braziers.setdefault(ident, []).append((ent, node))
         plan.static.add(ent.tile)
+        plan.world_solids.add(ent.tile)
         plan.singles.append((key, node))
         return True
     if ent.verb == "arena":
@@ -677,6 +692,7 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
                 node.props.append(("visual_offset", vec2(*offset)))
         node.base = camel(ent.args[0])
         plan.static |= tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
+        plan.world_solids |= tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
         plan.singles.append((key, node))
         return True
     if ent.verb == "opener":
@@ -758,6 +774,7 @@ def dispatch_crossing(ent, key, src, plan, world, errors) -> bool:
             node.props.append(("landing_offset", vec2(*offset)))
         plan.moorings.append(ent)
         plan.static |= tiles_of_rect(ent.pos[0] - 16, ent.pos[1] - 16, 32, 32)
+        plan.world_solids |= tiles_of_rect(ent.pos[0] - 16, ent.pos[1] - 16, 32, 32)
     else:
         size = parse_size(ent.opts.get("size", "288,48" if verb == "ledge" else "192,192"))
         if size is None:
@@ -895,6 +912,8 @@ def dispatch_scripted(ent, key, src, plan, errors) -> bool:
         return False
     if kind in ("grate", "eye_switch", "pit"):
         plan.static |= tiles
+        if kind != "pit":
+            plan.world_solids |= tiles
     if kind == "grate":
         plan.grates |= tiles
     if kind == "pit":
@@ -967,20 +986,28 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
         scene, field = SCRIPTED_OPENERS[kind]
         node = Node("", "Props", None, Res("PackedScene", f"res://scenes/world/{scene}.tscn"))
         node.base = camel(kind)
-        node.props = [("position", vec2(*ent.pos)), (field, sname(ident)), ("size", vec2(*size))]
+        node.props = [("position", vec2(*ent.pos))]
+        if field is not None:
+            node.props.append((field, sname(ident)))
+        node.props.append(("size", vec2(*size)))
         if kind == "ward_blocker":
             node.props.append(("blocker", "true"))
         edge = next((e for e in world.edges if e["id"] == ident), None)
         expected = {"thorn_door": "thorn-sealed door", "eye_portcullis": "eye-switch portcullis",
                     "heavy_stone": "heavy stones", "heavy_boulder": "heavy boulder",
                     "hook_tap_wall": "hook-tap wall", "wax_seal": "wax seal",
+                    "sealed_seam": "sealed seam", "resonance_door": "resonance door",
+                    "ninth_door": "sealed door (nine fragments)",
                     "ward_blocker": "ward plate"}[kind]
         if edge is not None and (edge["prop"] != expected or src.room_id not in (edge["a"], edge["b"])):
             errors.append(f"{where_}: {kind} id does not match this graph gate")
             return False
         requirements = {"hook_tap_wall": ("hidden", ["hook"]),
                         "wax_seal": ("item", ["flare"]),
-                        "heavy_boulder": ("item", ["heft_mitts"])}
+                        "heavy_boulder": ("item", ["heft_mitts"]),
+                        "sealed_seam": MOUTH_REQUIREMENTS["sealed seam"],
+                        "resonance_door": MOUTH_REQUIREMENTS["resonance door"],
+                        "ninth_door": MOUTH_REQUIREMENTS["sealed door (nine fragments)"]}
         if edge is not None and kind in requirements:
             gate, needs = requirements[kind]
             if edge.get("gate") != gate or edge.get("needs") != needs:
@@ -1192,7 +1219,7 @@ def reel_reach(plan: Plan, starts: set[tuple[int, int]], closed: set[tuple[int, 
     WORLD bodies stop the tip, and the 72 px stop point must be dry, safe floor.
     """
     blocked = plan.static | closed
-    solid = (plan.static - plan.pits - plan.water) | closed
+    solid = plan.world_solids | closed
     reached = set(starts)
     while True:
         landings = set()
@@ -1527,8 +1554,31 @@ def check_doors(src: Source, rec: dict, world: World, plan: Plan, errors: list[s
             link_door_blocker(src, rec, world, plan, ent, errors)
     for other, gate in partners.items():
         in_place = world.rooms.get(other, {}).get("in_place", False)
-        if gate == "plain" and not in_place and other not in placed:
-            errors.append(f"{where(path, 1)}: plain door to {other} is not placed")
+        edge = next(e for e in world.door_edges(rec["id"]) if other in (e["a"], e["b"]))
+        required_mouth = edge.get("prop") in MOUTH_REQUIREMENTS and not rec["pocket"]
+        if (gate == "plain" or required_mouth) and not in_place and other not in placed:
+            errors.append(f"{where(path, 1)}: graph door to {other} is not placed")
+
+
+def check_anchor_mouth(src: Source, plan: Plan, door: Entity, errors: list[str]) -> None:
+    """A reel pocket is reached by crossing its chasm, never by opening the ring."""
+    closed = set().union(*(tiles for _, tiles in plan.openers))
+    default = next((t for name, t, _ in plan.spawns if name == "Default"), tile_of(*ROOM_CENTRE_PX))
+    walk = flood([default], plan.static | closed)
+    prefix = where(src.path, door.line)
+    if door.tile in walk:
+        errors.append(f"{prefix}: anchor pocket mouth is walkable on foot")
+    if door.tile in boots_reach(plan, walk, closed):
+        errors.append(f"{prefix}: anchor pocket mouth is crossable with 192 px boots")
+    pulled = reel_reach(plan, walk, closed)
+    if door.tile not in pulled:
+        errors.append(f"{prefix}: anchor pocket mouth needs a clear 576 px reel pull over a 288–480 px chasm")
+    bank = flood([door.tile], plan.static | closed)
+    returns = [t for name, t, _ in plan.spawns if name == "FromPocket"]
+    if len(returns) != 1 or returns[0] not in bank:
+        errors.append(f"{prefix}: anchor pocket needs FromPocket on the mouth's landing bank")
+    if default not in reel_reach(plan, bank, closed):
+        errors.append(f"{prefix}: anchor pocket needs a return anchor pull")
 
 
 def link_door_blocker(src, rec, world, plan, door, errors) -> None:
@@ -1542,6 +1592,16 @@ def link_door_blocker(src, rec, world, plan, door, errors) -> None:
     requested = door.opts.get("blocker")
     if edge is None:
         return  # check_doors already reports the invalid graph destination.
+    if not rec["pocket"] and edge.get("prop") in MOUTH_REQUIREMENTS:
+        gate, needs = MOUTH_REQUIREMENTS[edge["prop"]]
+        if edge.get("gate") != gate or edge.get("needs") != needs:
+            errors.append(f"{where(src.path, door.line)}: mouth requirements do not match graph prop {edge['prop']}")
+            return
+        if edge["prop"] == "anchor ring pocket":
+            if requested:
+                errors.append(f"{where(src.path, door.line)}: anchor pocket uses a physical chasm, not blocker=")
+            check_anchor_mouth(src, plan, door, errors)
+            return
     kinds = {"thorn-sealed door": "thorn_door", "thorn wall": "thorn_door",
              "cracked wall": "cracked_wall", "bomb wall": "cracked_wall",
              "brittle rocks": "cracked_wall", "locked door": "locked_door",
@@ -1550,6 +1610,8 @@ def link_door_blocker(src, rec, world, plan, door, errors) -> None:
              "eye-switch cell": "eye_portcullis", "eye-switch portcullis": "eye_portcullis",
              "heavy stones": "heavy_stone", "heavy boulder": "heavy_boulder",
              "hook-tap wall": "hook_tap_wall", "wax seal": "wax_seal",
+             "sealed seam": "sealed_seam", "resonance door": "resonance_door",
+             "sealed door (nine fragments)": "ninth_door",
              "key alcove gate": "gate",
              "two braziers, gate": "gate", "boss door": "boss_door"}
     kind = kinds.get(edge.get("prop"))
