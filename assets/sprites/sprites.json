@@ -1,4 +1,26 @@
 {
+  "grate_fence_bay": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/grate_fence_bay.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "mirror_shade": {
     "cell": [
       192,

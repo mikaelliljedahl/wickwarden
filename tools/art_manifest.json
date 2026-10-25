@@ -1395,6 +1395,7 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"grate_fence_bay": {"cell": [128, 128], "align": "foot", "foot": 122, "prop": true, "rect_h": 96},
 "mirror_shade": {"cell": [192, 192], "foot": 176, "radius": 28, "mirror_side": true},
 "mirror_shade_decoy": {"cell": [192, 192], "foot": 176, "radius": 28, "mirror_side": true},
 "lock_plate": {"cell": [160, 160], "align": "center", "anchor": [80.0, 80.0], "radius": 34, "mirror_side": false},
@@ -2095,6 +2096,7 @@
  }
  },
  "sheets": {
+"grate_fence_bay_candidate_20261025b": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"kind": "grate_fence_bay", "anim": "idle", "file": "grate_fence_bay", "poses": 0, "fps": 1, "loop": true, "scale": {"measure": "width", "value": 104}}]}]},
 "mirror_shade_walk_down_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"file": "mirror_shade_walk_down", "kind": "mirror_shade", "anim": "walk_down", "scale": "mirror_shade", "fps": 8, "loop": true}, {"file": "mirror_shade_idle_down", "kind": "mirror_shade", "anim": "idle_down", "scale": "mirror_shade", "fps": 8, "loop": true, "poses": 0}, {"file": "mirror_shade_walk_down", "kind": "mirror_shade_decoy", "anim": "walk_down", "scale": "mirror_shade", "fps": 8, "loop": true}, {"file": "mirror_shade_idle_down", "kind": "mirror_shade_decoy", "anim": "idle_down", "scale": "mirror_shade", "fps": 8, "loop": true, "poses": 0}]}]},
 "mirror_shade_walk_up_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"file": "mirror_shade_walk_up", "kind": "mirror_shade", "anim": "walk_up", "scale": "mirror_shade", "fps": 8, "loop": true}, {"file": "mirror_shade_idle_up", "kind": "mirror_shade", "anim": "idle_up", "scale": "mirror_shade", "fps": 8, "loop": true, "poses": 0}, {"file": "mirror_shade_walk_up", "kind": "mirror_shade_decoy", "anim": "walk_up", "scale": "mirror_shade", "fps": 8, "loop": true}, {"file": "mirror_shade_idle_up", "kind": "mirror_shade_decoy", "anim": "idle_up", "scale": "mirror_shade", "fps": 8, "loop": true, "poses": 0}]}]},
 "mirror_shade_walk_side_v3": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"file": "mirror_shade_walk_side", "kind": "mirror_shade", "anim": "walk_side", "scale": "mirror_shade", "fps": 8, "loop": true}, {"file": "mirror_shade_idle_side", "kind": "mirror_shade", "anim": "idle_side", "scale": "mirror_shade", "fps": 8, "loop": true, "poses": 0}, {"file": "mirror_shade_walk_side", "kind": "mirror_shade_decoy", "anim": "walk_side", "scale": "mirror_shade", "fps": 8, "loop": true}, {"file": "mirror_shade_idle_side", "kind": "mirror_shade_decoy", "anim": "idle_side", "scale": "mirror_shade", "fps": 8, "loop": true, "poses": 0}]}]},
