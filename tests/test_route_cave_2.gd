@@ -1,7 +1,7 @@
 ## timeout=240
 extends TestCase
 ## Controlled integration probe: positioned starts, regular enemies removed, real tool/contact gates.
-## C01 miniboss finish is scripted to acquire its real pedestal. This is not a human playthrough.
+## Captain and C02 bosses use real acquired tools and hook hitboxes. Not a human playthrough.
 var world: World
 var player: Player
 
@@ -29,10 +29,7 @@ func run() -> void:
 	check(not GameState.has_item(&"cinder_wick"), "negative gate probe precedes Cinder acquisition")
 	await blocked(Vector2(960, 240), &"move_up", thorn, "thorn gate")
 	room = await enter(&"cave_1_5")
-	for enemy in room.get_enemies():
-		enemy.drops_enabled = false
-		enemy.apply_damage(99, player.global_position, 0)
-	await seconds(1.7)
+	await captain_fight(room)
 	await collect(room, &"cinder_wick")
 	check(GameState.has_item(&"cinder_wick"), "actual C01 pedestal supplies prerequisite Cinder")
 	room = await enter(&"ow_5_1")
@@ -487,10 +484,11 @@ func reverse_pairs() -> void:
 	world = await make_world()
 	player = world.player
 	player.set_hurtbox_enabled(self, false)
-	var room := await enter(&"cave_1_5")
-	for enemy in room.get_enemies():
-		enemy.apply_damage(99, player.global_position, 0)
-	await seconds(1.7)
+	var room := await enter(&"ow_0_1")
+	await collect(room, &"tether_moth")
+	check(GameState.has_item(&"tether_moth"), "reverse fixture acquires real moth")
+	room = await enter(&"cave_1_5")
+	await captain_fight(room)
 	await collect(room, &"cinder_wick")
 	room = await enter(&"cave_2_3")
 	var peer := world.get_room(&"cave_2_2")
@@ -534,3 +532,45 @@ func projectiles(root: Node) -> int:
 	for child in root.get_children():
 		count += projectiles(child)
 	return count
+
+
+## Reuse the C01 lead sequence: front guard, actual moth stun, then actual hook hits.
+func captain_fight(room: Room) -> void:
+	var captain = room.get_enemies()[0]
+	var hp: int = captain.hp
+	player.place_at(captain.global_position + Vector2(90, 0))
+	player.facing = Vector2.LEFT
+	captain.set_facing_dir(Vector2.RIGHT)
+	await frames(2)
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(captain.hp, hp, "assembled captain blocks real front hook")
+	await frames(25)
+	player.place_at(captain.global_position - Vector2(180, 0))
+	player.facing = Vector2.RIGHT
+	GameState.set_active_item(&"tether_moth")
+	check(player.use_item(), "actual moth launched at assembled captain")
+	await frames(16)
+	check(captain.is_stunned(), "actual moth drops captain guard")
+	hp = captain.hp
+	player.place_at(captain.global_position - Vector2(90, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check(captain.hp < hp, "real hook damages captain after moth drops guard")
+	# Finish through actual player hook hitboxes from the unguarded side.
+	for strike in range(12):
+		if not is_instance_valid(captain) or captain.is_dead:
+			break
+		await frames(25)
+		if not is_instance_valid(captain) or captain.is_dead:
+			break
+		player.place_at(captain.global_position + captain.facing_dir.orthogonal() * 80)
+		player.facing = (captain.global_position - player.global_position).normalized()
+		Input.action_press(&"attack")
+		await frames(8)
+		Input.action_release(&"attack")
+	await seconds(1.6)
+	check(GameState.has_flag(&"mini_cave_1_5"), "real captain death sets room flag")
