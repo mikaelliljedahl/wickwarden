@@ -1,5 +1,5 @@
 ; Whispering Shallows (ow_5_3): walkable shallows around two deep pools. The four links are raft links.
-; The item gates of the links (reed_raft) have no compiler line yet.
+; Each link has a water barrier and a paired shore post for the reed raft.
 room ow_5_3
 terrain Whispering Shallows: shallows (lake)
 floor_color 0.14 0.22 0.22
@@ -18,3 +18,14 @@ enemy fen_leech 4,7
 enemy duskmoth 15,2
 enemy duskmoth 8,8
 spawn Default 10,5
+; Deep water seals each raft exit; the edge id pairs the shore posts.
+water @960,48 size=192,96
+mooring @960,144 id=e043 target_room=ow_5_2 target_mooring=e043 landing_offset=0,56
+water @48,480 size=96,192
+mooring @144,480 id=e055 target_room=ow_4_3 target_mooring=e055 landing_offset=56,0
+water @1872,480 size=96,192
+mooring @1776,480 id=e057 target_room=ow_6_3 target_mooring=e057 landing_offset=-56,0
+water @960,912 size=192,96
+mooring @960,816 id=e058 target_room=ow_5_4 target_mooring=e058 landing_offset=0,-56
+; Walkable marsh water contains each fen leech.
+shallows @480,720 size=192,192

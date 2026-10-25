@@ -1,6 +1,6 @@
 ; Lantern Isle (ow_6_3): a wooded island in the lake, with the cave mouth C5 (door to cave_5_1).
 ; The island is reached by causeways north and south. Mooring posts (reed_raft, edges e045 e057 e059 e060),
-; the standing lamp prop and the fen leech shallows zone are not in the compiler yet.
+; with shallows beside the island for the fen leeches. The standing lamp prop is not placed.
 room ow_6_3
 terrain Lantern Isle: island, standing lamp, lake
 floor_color 0.16 0.22 0.2
@@ -20,3 +20,15 @@ enemy fen_leech 17,6
 door cave_5_1 Default 8,3
 spawn FromCave 8,4
 spawn Default 2,1
+; Deep water seals each raft exit; the edge id pairs the shore posts.
+water @960,48 size=192,96
+mooring @960,144 id=e045 target_room=ow_6_2 target_mooring=e045 landing_offset=0,56
+water @48,480 size=96,192
+mooring @144,480 id=e057 target_room=ow_5_3 target_mooring=e057 landing_offset=56,0
+water @1872,480 size=96,192
+mooring @1776,480 id=e059 target_room=ow_7_3 target_mooring=e059 landing_offset=-56,0
+water @960,912 size=192,96
+mooring @960,816 id=e060 target_room=ow_6_4 target_mooring=e060 landing_offset=0,-56
+; Walkable marsh water contains each fen leech.
+shallows 2,3 size=192,192
+shallows 17,6 size=192,192

@@ -1,5 +1,5 @@
 ; Rootbridge (ow_6_1): a stream runs across the room; a root bridge crosses it at the centre, to the south
-; exit (the lake, reed raft, not yet a line). Exits: E to Eyegate, S to the lake, W to Briar Mouth.
+; exit (the lake, crossed by reed raft). Exits: E to Eyegate, S to the lake, W to Briar Mouth.
 room ow_6_1
 terrain Rootbridge: stream, root bridge
 floor_color 0.16 0.22 0.18
@@ -18,4 +18,6 @@ enemy spitcap 6,1
 enemy spitcap 14,2
 enemy bramble_snapper 8,5
 spawn Default 3,4
-
+; Deep water seals each raft exit; the edge id pairs the shore posts.
+water @960,912 size=192,96
+mooring @960,816 id=e027 target_room=ow_6_2 target_mooring=e027 landing_offset=0,-56

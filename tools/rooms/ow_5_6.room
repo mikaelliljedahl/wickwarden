@@ -1,5 +1,5 @@
 ; Watchers' Steps (ow_5_6): stone steps that climb to the carved eyes. The north gap is the lake shore
-; (mooring, reed raft; no compiler line yet). E walks to Choir Steps, W to Cliff Foot.
+; (mooring, reed raft). E walks to Choir Steps, W to Cliff Foot.
 room ow_5_6
 terrain Watchers' Steps: stone steps, carved eyes
 floor_color 0.19 0.19 0.2
@@ -18,3 +18,6 @@ enemy watcher_eye 5,3
 enemy watcher_eye 12,4
 enemy watcher_eye 8,7
 spawn Default 15,5
+; Deep water seals each raft exit; the edge id pairs the shore posts.
+water @960,48 size=192,96
+mooring @960,144 id=e089 target_room=ow_5_5 target_mooring=e089 landing_offset=0,56

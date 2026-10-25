@@ -17,3 +17,6 @@ grid
 enemy duskmoth 4,3
 enemy duskmoth 12,4
 spawn Default 9,2
+; Deep water seals each raft exit; the edge id pairs the shore posts.
+water @1872,480 size=96,192
+mooring @1776,480 id=e055 target_room=ow_5_3 target_mooring=e055 landing_offset=-56,0
