@@ -1,0 +1,18 @@
+room ow_7_0
+terrain North Cliff: pine sentinels, broken cliff shelf and broad southern approach
+floor_color 0.16 0.22 0.18
+grid
+####################
+#..t........r......#
+#.....t.........#..#
+#...........#####..#
+...................#
+.................r.#
+#..................#
+#....b..........t..#
+#..t...............#
+#########..#########
+enemy hollow 8,3
+enemy hollow 13,6
+pickup pot_bundle 14,2 id=pot_bundle_ow_7_0
+spawn Default 4,4

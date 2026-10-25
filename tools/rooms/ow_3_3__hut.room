@@ -1,0 +1,18 @@
+room ow_3_3#hut
+terrain Hermit hut: quiet stone hearth and central wick reliquary
+floor_color 0.24 0.19 0.13
+grid
+####################
+#..................#
+#...##........##...#
+#..................#
+#..................#
+#..................#
+#...r..........r...#
+#..................#
+#..................#
+####################
+prop pedestal 9,3
+pickup wick_core @912,358 id=wick_core_ow_3_3
+door ow_3_3 FromPocket 9,8
+spawn Inside 9,6
