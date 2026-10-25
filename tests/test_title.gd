@@ -23,6 +23,7 @@ func run() -> void:
 	await _menu_without_save()
 	await _menu_with_save()
 	await _overwrite_prompt()
+	await _detached_title_consumes_confirm()
 	await _new_game_without_save()
 	await _new_game_plays_the_intro_every_time()
 	await _continue_with_save()
@@ -173,6 +174,28 @@ func _overwrite_prompt() -> void:
 	check_eq(title.last_scene, INTRO_SCENE, "New game over a save goes to the intro first")
 	check_eq(SaveGame.launch_mode, SaveGame.MODE_NEW, "New game sets launch mode new")
 	await dispose(title)
+
+
+## Scene changes detach the title synchronously inside the menu's activated signal. Keep the
+## runner alive while reproducing that lifecycle for both New game and Continue.
+func _detached_title_consumes_confirm() -> void:
+	for has_save in [false, true]:
+		_clean()
+		if has_save:
+			_write_save()
+		var title = await _make_title()
+		var viewport := title.get_viewport() as Viewport
+		title.menu().activated.connect(func(_id: StringName) -> void: remove_child(title))
+		title._unhandled_input(_key(&"confirm"))
+		check(not title.is_inside_tree(), "confirm detaches the title during activation")
+		check(viewport.is_input_handled(), "the original viewport consumes the transition input")
+		check_eq(
+			title.last_action,
+			&"continue" if has_save else &"new",
+			"the detached title records the requested transition"
+		)
+		title.free()
+	_clean()
 
 
 func _new_game_without_save() -> void:

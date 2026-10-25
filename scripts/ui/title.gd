@@ -62,6 +62,8 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _leaving or _menu == null:
 		return
+	# Activation can change scenes and detach this title before handle_input returns.
+	var viewport := get_viewport()
 	var handled := false
 	if _prompt.visible:
 		handled = _prompt_menu.handle_input(event)
@@ -71,7 +73,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	else:
 		handled = _menu.handle_input(event)
 	if handled:
-		get_viewport().set_input_as_handled()
+		viewport.set_input_as_handled()
 
 
 func _draw() -> void:
