@@ -82,7 +82,7 @@ blocker = true
 y_sort_enabled = true
 
 [node name="FromPocket" type="Marker2D" parent="Spawns"]
-position = Vector2(432, 432)
+position = Vector2(432, 624)
 
 [node name="Default" type="Marker2D" parent="Spawns"]
 position = Vector2(1008, 528)

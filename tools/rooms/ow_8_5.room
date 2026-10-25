@@ -16,7 +16,7 @@ enemy skitterwick 7,3
 enemy skitterwick 13,6
 enemy watcher_eye 18,2
 door ow_8_5#ward Inside 4,4
-spawn FromPocket 4,4
+spawn FromPocket 4,6
 spawn Default 10,5
 ward_plate 14,2 id=e257
 opener ward_blocker 4,5 id=e257 size=96,96
