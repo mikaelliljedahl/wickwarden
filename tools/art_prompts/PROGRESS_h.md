@@ -47,3 +47,5 @@ B82 C8v3/C9v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wa
 B82 C7v2/v3,C8v1/v2 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave20-review.jpg`; log `log_art_resume_20.md`. Four weak C1 circular layout copied (C8v1 adds brass motifs). Submitted C10v1–3 without refs and intro01v1 with specified style ref; C9v2/v3pending, six jobs total.
 
 B82 complete: C9v2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave21-review.jpg`; log `log_art_resume_21.md`. Both weak C1layout drift. Freed slots filled intro01v2/v3 without sprite reference; prompt reference lines updated, fenced prompts unchanged. Six jobs total.
+
+B83 C10v1–3/intro01v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave22-review.jpg`; log `log_art_resume_22.md`. C10 weak standing candles though distinct floor layouts; intro01v1 weak ten sky lanterns/added Tamsin. B84scene02/03 refs removed (fenced subjects unchanged); submitted intro02v1–3/intro03v1. Six total with intro01v2/v3pending.

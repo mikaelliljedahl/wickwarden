@@ -18,3 +18,5 @@ Ungenerated B82/B83 arena entries now reference `arena_c1_v3.png` for top-down f
 C10 follow-up reference correction: no reference for ungenerated arena C10 entries; C8v3/C9v1 copied C1 layout too closely despite regional subjects. Fenced subjects unchanged; no completed outputs regenerated.
 
 Intro01v2/v3 scene painting reference omitted to avoid unrelated sprite-sheet content dominating scenery. Fenced subjects unchanged; intro01v1 already in flight with original style reference.
+
+B84 non-character landscape scenes intro02/03 now omit unrelated sprite style reference to avoid content copying; exact fenced subjects unchanged. Character/tool-detail scenes retain needed design refs.
