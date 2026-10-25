@@ -5,10 +5,42 @@ const FLAG := &"boss_cave_1_8_defeated"
 
 
 func run() -> void:
+	await _death_contact()
 	await _armour_and_fight()
 	await _molten_expiry_and_splash()
 	await _attacks_and_reset()
 	await _arena_scene()
+
+
+func _death_contact() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = _boss(arena, Vector2(800, 480))
+	await seconds(1.6)
+	check(boss.contact_hitbox.active, "living boss enables contact after intro")
+	boss.apply_damage(99, boss.global_position, 0.0)
+	check(boss.is_dying(), "lethal damage starts real boss death throes")
+	check_eq(boss.contact_hitbox.damage, 0, "death disables contact damage immediately")
+	# A later enable request must not restore damage during death throes.
+	boss.set_contact_enabled(true)
+	var player := make_player(arena, boss.global_position)
+	var health := GameState.health
+	await frames(5)
+	check(not boss.contact_hitbox.active, "death disables contact monitoring safely")
+	check_eq(GameState.health, health, "overlapping real player takes no death contact damage")
+	await seconds(1.0)
+	check_eq(GameState.health, health, "contact stays harmless throughout death throes")
+	player.place_at(Vector2(192, 192))
+	boss.reset_fight()
+	check(not boss.contact_hitbox.active, "reset keeps contact off during intro")
+	check_eq(boss.contact_hitbox.damage, 0, "reset intro keeps immediate damage off")
+	await seconds(1.6)
+	check(boss.contact_hitbox.active, "reset restores contact after the new intro")
+	check_eq(boss.contact_hitbox.damage, 2, "reset restores normal contact damage")
+	player.place_at(boss.global_position)
+	await frames(5)
+	check_eq(GameState.health, health - 2, "living reset boss damages an overlapping player")
+	await dispose(arena)
 
 
 func _boss(parent: Node2D, at: Vector2) -> Variant:

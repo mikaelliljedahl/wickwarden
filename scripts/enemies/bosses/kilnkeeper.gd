@@ -108,7 +108,18 @@ func _resolve_damage(hitbox: Hitbox, amount: int) -> int:
 
 func _on_hurt(hitbox: Hitbox) -> void:
 	super(hitbox)
+	if is_dying():
+		set_contact_enabled(false)
 	_show_wax()
+
+
+func set_contact_enabled(enabled: bool) -> void:
+	if contact_hitbox == null:
+		return
+	var allowed := enabled and not is_dying() and contact_damage > 0
+	# Stop damage in this physics frame; defer the monitoring change out of collision callbacks.
+	contact_hitbox.damage = contact_damage if allowed else 0
+	contact_hitbox.set_deferred(&"active", allowed)
 
 
 func _show_wax() -> void:
