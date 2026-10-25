@@ -51,3 +51,5 @@ B82 complete: C9v2/v3 verified own-session hashes/unique; opened `/tmp/wickwarde
 B83 C10v1–3/intro01v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave22-review.jpg`; log `log_art_resume_22.md`. C10 weak standing candles though distinct floor layouts; intro01v1 weak ten sky lanterns/added Tamsin. B84scene02/03 refs removed (fenced subjects unchanged); submitted intro02v1–3/intro03v1. Six total with intro01v2/v3pending.
 
 B83 intro01v2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave23-review.jpg`; log `log_art_resume_23.md`. Both nine sky lanterns; v2 weak realistic/ornate markings, v3 ok. Intro01 all3 present. Freed slots filled intro03v2/v3, six total.
+
+B84 intro02v1–3/intro03v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave24-review.jpg`; log `log_art_resume_24.md`. Intro02v1 weak ambiguous event count from extra falling glows; other3ok. Submitted intro04v1–3/05v1 with specified design refs, six total with03v2/v3pending.
