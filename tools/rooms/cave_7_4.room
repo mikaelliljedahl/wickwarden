@@ -1,0 +1,19 @@
+; The Hall of Nerve
+room cave_7_4
+terrain Warden Landing: a narrow central chasm separates the lunge banks with safe walks around either end.
+floor_color 0.145 0.145 0.17
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..##..........##..#
+#..................#
+####################
+pit @960,480 size=96,576
+opener locked_door @1872,480 id=e203 scope=c7 size=96,192
+miniboss pale_squire @720,480
+spawn Default @720,240

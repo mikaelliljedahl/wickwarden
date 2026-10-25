@@ -1,0 +1,23 @@
+; The Hall of Nerve
+room cave_7_2
+terrain Pit Gallery: twin black trenches flank a broad crossing below the northern key ledge.
+floor_color 0.145 0.145 0.17
+grid
+#########..#########
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..##..........##..#
+#..................#
+####################
+pit @576,288 size=192,192
+pit @1344,672 size=192,192
+opener locked_door @48,480 id=e203 scope=c7 size=96,192
+enemy skitterwick 7,6
+enemy skitterwick 12,3
+enemy duskmoth 5,6
+enemy duskmoth 14,3
+spawn Default 16,4

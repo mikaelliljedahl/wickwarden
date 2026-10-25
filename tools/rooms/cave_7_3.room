@@ -1,0 +1,21 @@
+; The Hall of Nerve
+room cave_7_3
+terrain Narrow Ledge: an iron lip guards a key suspended over the northern pit.
+floor_color 0.145 0.145 0.17
+grid
+####################
+#......#....#......#
+#......#....#......#
+#......##..##......#
+#..................#
+#..................#
+#..##..........##..#
+#..................#
+#..................#
+#########..#########
+grate @960,336 size=192,96
+pit @960,240 size=192,96
+pickup small_key 10,2 id=key_c7_1 scope=c7
+enemy spitcap 5,4
+enemy spitcap 14,4
+spawn Default 10,7
