@@ -1,6 +1,14 @@
 # Wickwarden — state
 
-Status as of 2026-10-25: integrated gates verified at `a1cf76d` (code checkpoint `90c7c0a`); checkpoint `4c86b2d` pushed successfully, art-only follow-up through `7639f04`. See [handoff.md](handoff.md) for push status, pending work and verification logs. The document index is [README.md](README.md).
+Status as of 2026-10-25: all ten item-menu icons integrated (pipeline `b2e516c`, menu `43552ec`) and verified with the full checks at code checkpoint `43552ec`; later source-art-only checkpoint `bae0a42` is included in the pending personal-origin push. See [handoff.md](handoff.md) for push outcome, current art pipeline and verification logs. The document index is [README.md](README.md).
+
+## Item-menu art checkpoint
+
+All ten found tools now show dedicated painted icons: Tether Moth, Pitch Pot, Cinder Wick, Tallow Sling, Reed Raft, Heft Mitts, Glow Jar, Lantern Chime, Skitter Boots and Reel Line. `item_menu.gd` asks `SpriteVisual.icon_of` for `icon_<id>` first, then accepted object art, then the existing geometric fallback. Unfound tools retain silhouettes and question marks; navigation, equip and layout are unchanged. No found-item placeholder remains with the committed icon set. HUD rendering is unchanged.
+
+Pipeline `b2e516c` publishes ten 128x128 runtime kinds and preserves every existing object animation. Selected B17/B18 sources, reasons, hashes and proof checks are recorded in [tool-icon-selection.md](../tools/source_art/tool-icon-selection.md); source generation was already complete. Other art generation and integration continue independently; source progress does not imply runtime readiness.
+
+Opened actual World captures: `/tmp/wickwarden-menu-dev-art.png` shows all ten painted tools and the equipped selection; `/tmp/wickwarden-menu-new-art.png` shows all ten unfound silhouettes. Tests cover all ten icons, all ten unfound states, accepted-object fallback and absent-art fallback. `make check` passed (70 Godot test files, lint, current world data, 96 Python tests), `make rooms-check` passed (66/66), and global ownership passed (92 WPs, 53 room batches). Logs: `/tmp/wickwarden-menu-final-{check,rooms,ownership}.log`. Later commits through `bae0a42` contain source art/log/progress only; no checked code changed. Protected source deletions/replacements, shared provenance edits and untracked import/UID files remain outside this checkpoint's owned commits.
 
 ## Where the project stands
 
