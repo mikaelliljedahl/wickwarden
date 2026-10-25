@@ -2,7 +2,8 @@ extends CanvasLayer
 ## Item subscreen (decision 6, decision 20). A pause-style grid of every sub-item in registry order.
 ## `item_menu` (Tab, gamepad Select) opens it and pauses the tree like the pause menu. Move keys
 ## select, `confirm` equips a found item and closes, `item_menu` or `pause` closes without change.
-## Placeholder look only: a found item is a coloured shape, an unfound one a dark silhouette.
+## Found items use accepted object art, with coloured shapes when art is absent.
+## Unfound items keep dark silhouettes.
 ## No help text here: button help lives only in the pause menu.
 
 const TITLE := "ITEMS"
@@ -61,6 +62,7 @@ func _ready() -> void:
 	_canvas.name = "Canvas"
 	_canvas.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_canvas.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	_canvas.visible = false
 	_canvas.draw.connect(_draw_menu)
 	add_child(_canvas)
@@ -86,7 +88,7 @@ func selected_id() -> StringName:
 	return ids[selected]
 
 
-## True if the item has been found (drawn as a shape, not a silhouette).
+## True if the item has been found (eligible for art, rather than a silhouette).
 func is_found(id: StringName) -> bool:
 	return GameState.has_item(id)
 
@@ -151,7 +153,7 @@ func _move(dx: int, dy: int) -> void:
 	_canvas.queue_redraw()
 
 
-# ---- Drawing (placeholder shapes and text, no art) -------------------------------------------------
+# ---- Drawing -------------------------------------------------------------------------------------
 
 
 func _draw_menu() -> void:
@@ -192,7 +194,13 @@ func _draw_cell(font: Font, origin: Vector2, index: int, id: StringName) -> void
 		_canvas.draw_rect(rect, FRAME_COLOR, false, 2.0)
 	var centre := rect.position + Vector2(CELL.x / 2.0, 96.0)
 	if is_found(id):
-		_draw_shape(look["shape"], centre, ICON_RADIUS, look["color"])
+		var icon := _icon_for(id)
+		if icon != null:
+			var extent := icon.get_size()
+			extent *= ICON_RADIUS * 2.0 / maxf(extent.x, extent.y)
+			_canvas.draw_texture_rect(icon, Rect2(centre - extent * 0.5, extent), false)
+		else:
+			_draw_shape(look["shape"], centre, ICON_RADIUS, look["color"])
 	else:
 		_draw_shape(look["shape"], centre, ICON_RADIUS, SILHOUETTE)
 		_canvas.draw_string(
@@ -349,3 +357,11 @@ func _draw_shape(shape: StringName, centre: Vector2, radius: float, colour: Colo
 
 func _look(id: StringName) -> Dictionary:
 	return LOOK.get(id, DEFAULT_LOOK)
+
+
+## Same object-kind lookup as the HUD. Never substitute a player tool-use animation.
+## Missing art stays a shape; unfound items never reveal their painted icon.
+func _icon_for(id: StringName) -> Texture2D:
+	if not is_found(id):
+		return null
+	return SpriteVisual.icon_of(id)

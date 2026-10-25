@@ -14,6 +14,7 @@ func run() -> void:
 	await _gamepad()
 	await _pause_interplay()
 	await _status_draws()
+	await _item_art()
 	get_tree().paused = false
 
 
@@ -221,3 +222,29 @@ func _key_event(action: StringName, pressed: bool) -> InputEventKey:
 			key.pressed = pressed
 			return key
 	return null
+
+
+## Use real accepted object frames, hide unowned art, and survive missing manifest entries.
+func _item_art() -> void:
+	reset_state()
+	var menu = await _make_menu()
+	check(menu._icon_for(&"tether_moth") == null, "unfound items do not reveal accepted art")
+	for id in [&"tether_moth", &"pitch_pot"]:
+		GameState.acquire_item(id)
+		var icon: Texture2D = menu._icon_for(id)
+		check(icon is AtlasTexture, "%s uses a single accepted object frame" % id)
+		if icon is AtlasTexture:
+			check_eq(icon.region, Rect2(0, 0, 96, 96), "the icon excludes adjacent frames")
+			check(
+				String(icon.atlas.resource_path).contains(String(id)),
+				"the icon belongs to the item, not a player tool-use sheet"
+			)
+	GameState.acquire_item(&"glow_jar")
+	var original_manifest := SpriteVisual.manifest_path
+	SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
+	check(menu._icon_for(&"glow_jar") == null, "missing art retains the geometric fallback")
+	menu.set_open(true)
+	await frames(2)
+	menu.set_open(false)
+	SpriteVisual.use_manifest(original_manifest)
+	await dispose(menu)
