@@ -7,6 +7,8 @@ func run() -> void:
 		await _check_entrance(id)
 	await _explicit_requirements()
 	await _revealed_stairs_look()
+	await _offset_seam()
+	await _pushed_boulder()
 
 
 func _check_entrance(id: StringName) -> void:
@@ -123,3 +125,122 @@ func _revealed_stairs_look() -> void:
 	)
 	check_eq(door.position, Vector2.ZERO, "stairs presentation keeps the trigger in place")
 	await dispose(room)
+
+
+func _linked_door(
+	parent: Node, blocker: Node2D, at: Vector2, footprint := Vector2(96, 96)
+) -> RoomDoor:
+	var door := RoomDoor.new()
+	door.position = at
+	door.size = footprint
+	door.blocker_path = NodePath("../" + String(blocker.name))
+	parent.add_child(door)
+	return door
+
+
+func _offset_seam() -> void:
+	reset_state()
+	var arena := make_arena()
+	var packed := load("res://scenes/world/hook_tap_wall.tscn") as PackedScene
+	check(packed != null, "real hook seam scene loads")
+	if packed == null:
+		await dispose(arena)
+		return
+	var seam = packed.instantiate()
+	seam.name = "LinkedSeam"
+	seam.position = Vector2(500, 400)
+	arena.add_child(seam)
+	var door := _linked_door(arena, seam, Vector2(500, 520))
+	var player := make_player(arena, door.position)
+	player.set_physics_process(false)
+	await frames(4)
+	check(door.has_overlapping_bodies(), "closed offset seam trigger actually contacted")
+	check(not seam.get_node("Body/Shape").disabled, "closed seam child body is solid")
+	check(not door._gate_is_open(), "closed seam denies offset trigger")
+	check(not door.get_node("Visual").visible, "closed seam conceals offset entrance")
+	await _probe_image("seam-closed")
+	player.set_physics_process(true)
+	player.place_at(seam.global_position + Vector2(0, 80))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	await frames(4)
+	check(seam.is_shown, "real player hook reveals linked seam")
+	check(seam.get_node("Body/Shape").disabled, "hook clears actual seam body")
+	check(door._gate_is_open(), "real reveal enables linked offset entrance")
+	# Temporary jar reveals must close again when their light expires.
+	var temporary = (load("res://scenes/world/hidden_seam.tscn") as PackedScene).instantiate()
+	temporary.name = "TemporarySeam"
+	temporary.position = Vector2(900, 400)
+	arena.add_child(temporary)
+	var temporary_door := _linked_door(arena, temporary, Vector2(900, 520))
+	temporary.reveal()
+	await frames(2)
+	check(temporary_door._gate_is_open(), "live reveal enables temporary entrance")
+	await frames(20)
+	check(not temporary_door._gate_is_open(), "expired reveal closes entrance again")
+	await _probe_image("seam-revealed")
+	await dispose(arena)
+
+
+func _pushed_boulder() -> void:
+	reset_state()
+	var arena := make_arena()
+	var packed := load("res://scenes/world/heavy_boulder.tscn") as PackedScene
+	check(packed != null, "real PUSH boulder scene loads")
+	if packed == null:
+		await dispose(arena)
+		return
+	var stone = packed.instantiate()
+	stone.name = "LinkedBoulder"
+	stone.stone_id = &"door_push_probe"
+	stone.position = Vector2(500, 400)
+	arena.add_child(stone)
+	var door := _linked_door(arena, stone, stone.position, Vector2(192, 96))
+	await frames(2)
+	check(not door._gate_is_open(), "unmoved boulder blocks entrance")
+	GameState.set_flag(&"moved_unrelated")
+	check(not door._gate_is_open(), "unrelated move flag cannot unlock boulder entrance")
+	var narrow := _linked_door(arena, stone, stone.position)
+	# A wide trigger still intersects after one completed step: moved is not cleared.
+	await _push_door_stone(stone)
+	check_eq(stone.path, "R", "real PUSH API completes one step")
+	check(narrow._gate_is_open(), "one full step clears a standard entrance")
+	check(not door._gate_is_open(), "moved boulder still overlapping wide entrance blocks it")
+	await _probe_image("boulder-overlapping")
+	await _push_door_stone(stone)
+	check_eq(stone.path, "RR", "second real push completes")
+	check((stone.collision_layer & Layers.WORLD) != 0, "cleared boulder remains WORLD solid")
+	check(not stone.get_node("Shape").disabled, "cleared boulder shape remains enabled")
+	check(door._gate_is_open(), "physically cleared PUSH boulder enables entrance")
+	var wrapper := Node2D.new()
+	wrapper.name = "UnrelatedSolid"
+	wrapper.position = Vector2(1000, 400)
+	arena.add_child(wrapper)
+	var body := StaticBody2D.new()
+	body.collision_layer = Layers.WORLD
+	var shape := CollisionShape2D.new()
+	shape.shape = RectangleShape2D.new()
+	body.add_child(shape)
+	wrapper.add_child(body)
+	var unrelated := _linked_door(arena, wrapper, Vector2(1200, 400))
+	check(not unrelated._gate_is_open(), "unrelated offset child WORLD body remains blocked")
+	await _probe_image("boulder-cleared")
+	await dispose(arena)
+
+
+func _push_door_stone(stone: Node) -> void:
+	for tick in range(36):
+		stone.call("try_move", Vector2.RIGHT)
+		await frames(1)
+	await frames(30)
+
+
+func _probe_image(label: String) -> void:
+	if OS.get_environment("WICK_DOOR_CAPTURE") != "1":
+		return
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var path := "/tmp/wick-door-" + label + ".png"
+	check_eq(get_viewport().get_texture().get_image().save_png(path), OK, "probe capture " + label)

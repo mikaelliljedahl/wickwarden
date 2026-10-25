@@ -123,9 +123,37 @@ func _gate_is_open() -> bool:
 		elif blocker.get("is_open") != null:
 			if not bool(blocker.get("is_open")):
 				return false
-		elif blocker is CollisionObject2D:
-			if (blocker.collision_layer & Layers.WORLD) != 0:
-				for child in blocker.get_children():
-					if child is CollisionShape2D and not child.disabled:
-						return false
+		elif blocker.get("is_shown") != null:
+			# HiddenSeam owns a WORLD body below its Area2D root.
+			if not bool(blocker.get("is_shown")) or _has_solid_shape(blocker):
+				return false
+		elif (
+			blocker.is_in_group(&"heavy")
+			and blocker.get("mode") == 1  # HeavyStone.Mode.PUSH; LIFT keeps removal semantics.
+		):
+			# PUSH stones stay solid. A completed public path alone is insufficient:
+			# the actual body must also have cleared this entrance's footprint.
+			if String(blocker.get("path")).is_empty() or _has_solid_shape(blocker, true):
+				return false
+		elif _has_solid_shape(blocker):
+			return false
 	return true
+
+
+## Inspect actual WORLD shapes, including wrapper props such as a seam's child Body.
+## Only a moved heavy body may use geometry clearance; unrelated linked solids fail closed.
+func _has_solid_shape(node: Node, overlapping_only: bool = false) -> bool:
+	if node is CollisionObject2D and (node.collision_layer & Layers.WORLD) != 0:
+		for child in node.get_children():
+			if child is CollisionShape2D and not child.disabled and child.shape != null:
+				if not overlapping_only:
+					return true
+				var footprint := RectangleShape2D.new()
+				# Edge contact after a full tile push does not cover the trigger interior.
+				footprint.size = (size - Vector2(0.02, 0.02)).max(Vector2(0.01, 0.01))
+				if child.shape.collide(child.global_transform, footprint, global_transform):
+					return true
+	for child in node.get_children():
+		if _has_solid_shape(child, overlapping_only):
+			return true
+	return false
