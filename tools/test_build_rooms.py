@@ -92,6 +92,52 @@ def room_text(room_id: str, exits: list[str], entity: str) -> str:
     return "\n".join([f"room {room_id}", "grid", *open_grid(exits), entity]) + "\n"
 
 
+class PocketDarkness(unittest.TestCase):
+    def world(self, scope: str, host_dark: bool, override: bool | None = None,
+              graph_override: bool | None = None, host_scope: str | None = None) -> br.World:
+        host = dict(room_record("host", []), scope=host_scope or scope, dark=host_dark)
+        pocket = dict(id="host#cache", host="host", grid=[26, 30], in_place=False, scope=scope)
+        if override is not None:
+            pocket["dark"] = override
+        data = dict(rooms=[host], pockets=[pocket], edges=[], pickups=[], items={})
+        node = dict(id=pocket["id"])
+        if graph_override is not None:
+            node["dark"] = graph_override
+        return br.World(data, graph={"nodes": [node]})
+
+    def test_matching_cave_pocket_inherits_host_darkness(self) -> None:
+        for dark in (False, True):
+            world = self.world("c1", dark)
+            record = world.room("host#cache")
+            self.assertIs(record["dark"], dark)
+            self.assertEqual(record["scope"], "c1")
+            self.assertEqual(record["grid"], (26, 30))
+            self.assertEqual(record["host"], "host")
+
+    def test_explicit_pocket_darkness_wins(self) -> None:
+        for dark in (False, True):
+            self.assertIs(self.world("c1", not dark, override=dark).room("host#cache")["dark"], dark)
+            self.assertIs(self.world("c1", not dark, graph_override=dark).room("host#cache")["dark"], dark)
+        self.assertIs(self.world("c1", True, override=False, graph_override=True)
+                      .room("host#cache")["dark"], False)
+
+    def test_overworld_and_mismatched_scope_keep_bright_default(self) -> None:
+        for scope, host_scope in (("ow", "ow"), ("c1", "c2")):
+            self.assertIs(self.world(scope, True, host_scope=host_scope).room("host#cache")["dark"], False)
+
+    def test_actual_crack_compiles_dark_and_overworld_shop_is_unchanged(self) -> None:
+        world = real_world()
+        pocket = world.room("cave_1_6#crack")
+        self.assertIs(pocket["dark"], True)
+        source = room_text(pocket["id"], [], "cache 10,3 id=cache_cave_1_6")
+        text, errors = compile_text(source, world, "cave_1_6__crack.room")
+        self.assertEqual(errors, [])
+        self.assertIn("dark = true", text)
+        shop = world.room("ow_1_2#shop")
+        self.assertIs(shop["dark"], False)
+        self.assertEqual(shop["scope"], "ow")
+
+
 class RoundTrip(unittest.TestCase):
     def test_ow_0_1_matches_the_hand_made_scene(self) -> None:
         text, errors = compile_text(FIXTURE_ROOM.read_text(encoding="utf-8"), real_world())

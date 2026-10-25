@@ -271,11 +271,16 @@ class World:
                 "in_place": False,
             }
         for pocket in data["pockets"]:
+            host = self.rooms.get(pocket["host"], {})
+            cave_host = (re.fullmatch(r"c[1-9][0-9]*", pocket["scope"]) is not None
+                         and pocket["scope"] == host.get("scope"))
+            default_dark = host.get("dark", False) if cave_host else False
+            pocket_dark = pocket.get("dark", graph_nodes.get(pocket["id"], {}).get("dark", default_dark))
             self.rooms[pocket["id"]] = {
                 "id": pocket["id"],
                 "grid": tuple(pocket["grid"]),
                 "exits": [],
-                "dark": False,
+                "dark": bool(pocket_dark),
                 "scope": pocket["scope"],
                 "enemies": {},
                 "pocket": True,
