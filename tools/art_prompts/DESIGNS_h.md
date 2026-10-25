@@ -10,3 +10,7 @@ Details the art brief and the inventory do not fix. Each line is what the prompt
 - `hud_counter_pot`: a squat round clay pot sealed with black pitch and a short twisted fuse, unlit (the pitch pot of the brief).
 - `hud_counter_slug`: a pale cream tallow slug, a short oval wax pellet (the design of batch 20 `slug_tallow`).
 - Key colour for all HUD icons: magenta (no magenta in brass, clay or wax).
+
+## Resumed arena reference correction, 2026-10-25
+
+Ungenerated B82/B83 arena entries now reference `arena_c1_v3.png` for top-down floor style, replacing `tex_wall_ruin.png`: the wall reference dominated C5v2/v3,C6v2/v3,C7v1. Fenced prompts unchanged; existing images retained with weak verdicts. This producer choice does not accept any variant or alter target geometry.

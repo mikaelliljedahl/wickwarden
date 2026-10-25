@@ -244,7 +244,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/arena_c7_v2.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/arena_c1_v3.png` (style and material reference; attach to image call)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/arena_c7.png`
 
@@ -266,7 +266,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/arena_c7_v3.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/arena_c1_v3.png` (style and material reference; attach to image call)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/arena_c7.png`
 
@@ -292,7 +292,7 @@ Target: 1920x960. Scale the whole source uniformly; preserve the contracted targ
 - Output file: `tools/source_art/arena_c8_v1.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/arena_c1_v3.png` (style and material reference; attach to image call)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/arena_c8.png`
 
@@ -314,7 +314,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/arena_c8_v2.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/arena_c1_v3.png` (style and material reference; attach to image call)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/arena_c8.png`
 
@@ -336,7 +336,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/arena_c8_v3.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/arena_c1_v3.png` (style and material reference; attach to image call)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/arena_c8.png`
 
@@ -362,7 +362,7 @@ Target: 1920x960. Scale the whole source uniformly; preserve the contracted targ
 - Output file: `tools/source_art/arena_c9_v1.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/arena_c1_v3.png` (style and material reference; attach to image call)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/arena_c9.png`
 
@@ -384,7 +384,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/arena_c9_v2.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/arena_c1_v3.png` (style and material reference; attach to image call)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/arena_c9.png`
 
@@ -406,7 +406,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/arena_c9_v3.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/arena_c1_v3.png` (style and material reference; attach to image call)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/arena_c9.png`
 
