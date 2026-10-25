@@ -1,6 +1,6 @@
 # Wickwarden — state
 
-Status as of 2026-10-25: integrated checkpoint verified at `a1cf76d` (code checkpoint `90c7c0a`). See [handoff.md](handoff.md) for push status, pending work and verification logs. The document index is [README.md](README.md).
+Status as of 2026-10-25: integrated gates verified at `a1cf76d` (code checkpoint `90c7c0a`); checkpoint `4c86b2d` pushed successfully, art-only follow-up through `7639f04`. See [handoff.md](handoff.md) for push status, pending work and verification logs. The document index is [README.md](README.md).
 
 ## Where the project stands
 
@@ -11,7 +11,7 @@ Status as of 2026-10-25: integrated checkpoint verified at `a1cf76d` (code check
 | Full game planning | Done; binding plans and owner decisions govern implementation. | [world-plan.md](world-plan.md), [world-work-packages.md](world-work-packages.md), [code-contract.md](code-contract.md), [decisions.md](decisions.md) |
 | World build | Waves 0 and 1 delivered, with fixed-lane raft deviation. Wave 2 remains partial: **55/88 overworld rooms, 11 separate pocket scenes**, plus historical `cave_1`. R1, R2.a–d, R4.a–f and R5.a–b room batches landed. R3, R6, R5.c–d, region acceptance tests, minibosses and bosses remain. | [handoff.md](handoff.md), [world-work-packages.md](world-work-packages.md) |
 | Caves, ending, QA and release | Waves 3–5 not delivered. Missing cave 2/5/9 targets are expected future cave content. | [world-work-packages.md](world-work-packages.md) |
-| Full game art | At verified `a1cf76d`: **1,306 committed source PNGs**, all named in 95 committed source logs; 18 effect PNGs still lack committed provenance rows (handoff lists them). Generation continues with six image jobs; source production does not mean runtime manifest integration or visual approval. | `tools/art_prompts/PROGRESS_*.md`, `tools/source_art/log_*.md`, [art-provenance.md](art-provenance.md) |
+| Full game art | At art checkpoint `7639f04`: **1,322 committed source PNGs**, all named in 98 committed source logs; 34 PNGs still lack committed provenance rows (handoff lists them). Generation continues with six image jobs; source production does not mean runtime manifest integration or visual approval. | `tools/art_prompts/PROGRESS_*.md`, `tools/source_art/log_*.md`, [art-provenance.md](art-provenance.md) |
 
 The owner replaced the prior Haiku workflow with ATF Codex **GPT-6.1 Sol low** for coding and authorized parallel agents. The lead orchestrates; this integration worker owns only state/handoff and the delegated verified push. Preexisting staged art deletions, untracked replacements and unrelated UID files remain untouched.
 
