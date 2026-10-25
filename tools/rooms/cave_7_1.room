@@ -1,0 +1,20 @@
+; The Hall of Nerve
+room cave_7_1
+terrain Sunless Stair: broken stair shoulders frame the return landing and the westward hall.
+floor_color 0.145 0.145 0.17
+grid
+####################
+#..................#
+#..###........###..#
+#..#............#..#
+...................#
+...................#
+#..#............#..#
+#..###........###..#
+#..................#
+####################
+enemy hollow 7,3
+enemy hollow 7,6
+door ow_10_2 FromCave 15,4
+spawn FromOverworld 13,4
+spawn Default 13,4
