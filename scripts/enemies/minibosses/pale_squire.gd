@@ -35,6 +35,13 @@ func _init() -> void:
 	)
 
 
+func _boss_ready() -> void:
+	# Only this body's drawn floor cues use this material; Visual keeps its own lighting.
+	var cue_material := CanvasItemMaterial.new()
+	cue_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	material = cue_material
+
+
 func _enter_phase(_number: int) -> void:
 	state = State.WALK
 	_timer = APPROACH
@@ -177,4 +184,34 @@ func _draw() -> void:
 	if is_dead or is_dying() or state == State.FALLEN:
 		return
 	if state == State.TELEGRAPH:
-		draw_line(Vector2.ZERO, _aim * LUNGE_SPEED * LUNGE_TIME, Color(1, 0.85, 0.5), 8.0)
+		_draw_spear_wake()
+
+
+func _draw_spear_wake() -> void:
+	# A chalk-pale draught on the floor; its point keeps the committed lunge endpoint.
+	var tip := _aim * LUNGE_SPEED * LUNGE_TIME
+	var side := _aim.orthogonal()
+	for layer in range(3):
+		var width := 12.0 - float(layer) * 3.5
+		var wash := PackedVector2Array(
+			[
+				_aim * 24.0 - side * width * 0.35,
+				tip * 0.75 - side * width,
+				tip,
+				tip * 0.75 + side * width,
+				_aim * 24.0 + side * width * 0.35,
+			]
+		)
+		draw_colored_polygon(wash, Color(0.67, 0.76, 0.77, 0.08))
+	# Broken dry strokes soften the ruler without losing the full aim axis.
+	for i in range(13):
+		var start := 30.0 + float(i) * 20.0 + 3.0 * sin(float(i) * 2.4)
+		var offset := side * sin(float(i) * 2.1) * 3.0
+		var from := _aim * start + offset
+		var to := _aim * (start + 14.0 + 7.0 * sin(float(i) * 1.8)) + offset * 0.4
+		draw_line(from, to, Color(0.78, 0.84, 0.81, 0.18), 8.0, true)
+		draw_line(from, to, Color(0.86, 0.88, 0.77, 0.42), 1.5, true)
+	draw_colored_polygon(
+		PackedVector2Array([tip - _aim * 32.0 - side * 2.5, tip, tip - _aim * 32.0 + side * 2.5]),
+		Color(0.87, 0.88, 0.79, 0.6)
+	)
