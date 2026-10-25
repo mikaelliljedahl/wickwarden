@@ -36,7 +36,7 @@ class Copy:
 	var popped := false
 
 	func _ready() -> void:
-		Placeholder.attach(self, &"archivist", 48.0)
+		SpriteVisual.attach(self, &"archivist_decoy", 48.0)
 		box = Hurtbox.new()
 		box.team = Layers.Team.ENEMY
 		box.add_circle(48)
@@ -95,6 +95,11 @@ func _init() -> void:
 			visual_kind,
 			{"shape": "rect", "color": Color(0.76, 0.73, 0.66), "size": Vector2(80, 96)}
 		)
+	if not Placeholder.has_kind(&"archivist_decoy"):
+		Placeholder.register_kind(
+			&"archivist_decoy",
+			{"shape": "rect", "color": Color(0.76, 0.73, 0.66), "size": Vector2(80, 96)}
+		)
 	if not Placeholder.has_kind(&"archivist_spatter"):
 		Placeholder.register_kind(
 			&"archivist_spatter",
@@ -104,6 +109,8 @@ func _init() -> void:
 
 
 func _boss_ready() -> void:
+	if visual is SpriteVisual:
+		visual.auto_motion = false
 	_home = global_position
 	rng.randomize()
 	shadow = Node2D.new()
@@ -117,6 +124,33 @@ func _boss_ready() -> void:
 	polygon.polygon = points
 	shadow.add_child(polygon)
 	shadow.visible = false
+
+
+func _process(_delta: float) -> void:
+	var painted := visual as SpriteVisual
+	if painted == null:
+		return
+	var pose := &"float" if velocity.length() > 5.0 else &"idle"
+	if _vanish > 0.0:
+		pose = &"copy"
+	elif _recover > 0.0:
+		pose = &"stunned"
+		var frames := painted.sprite_frames
+		if frames != null and frames.has_animation(&"page_break"):
+			var duration := frames.get_frame_count(&"page_break") / frames.get_animation_speed(&"page_break")
+			if _recover > 2.0 - duration:
+				pose = &"page_break"
+	elif copying:
+		# The jar's existing shadow is the clue. Do not give the real figure an
+		# exclusive cast/copy pose while the decoys stand at the compass points.
+		pose = &"idle"
+	elif _blink_warning > 0.0:
+		pose = &"blink"
+	elif phase == 3 and _ring_left > 6.0 - 3.0 / 8.0:
+		pose = &"last_page"
+	elif _bolt_left <= 0.5:
+		pose = &"cast"
+	painted.play_anim(pose)
 
 
 func _enter_phase(number: int) -> void:

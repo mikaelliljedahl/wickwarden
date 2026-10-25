@@ -44,6 +44,22 @@ func _copy_challenge() -> void:
 	await seconds(2.2)
 	check_eq(boss.copies.size(), 3, "phase2 three decoys")
 	check(boss.copying, "copy encounter active")
+	check(not boss.shadow.visible, "real-only shadow stays hidden without a jar")
+	if SpriteVisual.has_art(&"archivist"):
+		check(boss.visual is SpriteVisual, "real body keeps the inherited painted factory")
+		check(boss.visual.get_node_or_null("ContactShadow") == null,
+			"body art adds no permanent shadow that bypasses jar reveal")
+		boss._process(0.0)
+		check_eq(boss.visual.animation, &"idle", "copy challenge gives real figure no exclusive action cue")
+	for copy in boss.copies:
+		if SpriteVisual.has_art(&"archivist_decoy"):
+			var look := copy.get_node("Visual") as SpriteVisual
+			check(look != null, "every decoy uses the dedicated painted factory")
+			if look != null:
+				check_eq(look.kind, &"archivist_decoy", "copy uses the committed decoy key")
+				check(look.get_node_or_null("ContactShadow") == null,
+					"painted decoy never acquires a contact shadow")
+		check(copy.get_node_or_null("Shadow") == null, "decoy has no jar-reveal shadow")
 	await _hit(room, boss)
 	check_eq(boss.hp, 20, "unlit real rejects blind damage")
 	var decoy = boss.copies[0]
@@ -60,6 +76,8 @@ func _copy_challenge() -> void:
 	await seconds(0.6)
 	check(boss.jar_lit(), "actual landed jar lights real boss")
 	check(boss.shadow.visible, "jar shows real-only shadow")
+	for copy in boss.copies:
+		check(copy.get_node_or_null("Shadow") == null, "jar does not add a shadow to a decoy")
 	player.place_at(boss.global_position + Vector2(0, 108))
 	player.facing = Vector2.UP
 	Input.action_press(&"attack")
@@ -67,9 +85,15 @@ func _copy_challenge() -> void:
 	Input.action_release(&"attack")
 	check_eq(boss.hp, 16, "actual hook page break counts double")
 	check(not boss.copying and boss.copies.is_empty(), "page break clears copies")
+	if boss.visual is SpriteVisual:
+		boss._process(0.0)
+		check_eq(boss.visual.animation, &"page_break", "actual doubled hook starts painted page break")
 	var position_before: Vector2 = boss.global_position
 	await seconds(1.5)
 	check_eq(boss.global_position, position_before, "page break stuns for2seconds")
+	if boss.visual is SpriteVisual:
+		boss._process(0.0)
+		check_eq(boss.visual.animation, &"stunned", "remaining real recovery shows stunned art")
 	await seconds(0.7)
 	boss.apply_damage(6, boss.global_position, 0)
 	check_eq(boss.phase, 3, "10HP phase3")
