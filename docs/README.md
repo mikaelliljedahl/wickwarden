@@ -16,6 +16,7 @@ Normative. Code and art follow these; a change goes through the owner, not throu
 
 ## Plans
 
+- [walkthrough.md](walkthrough.md): a player-facing guide to the start, controls, overworld route, all ten caves and endings.
 - [world-plan.md](world-plan.md): the master plan for the full game (rooms, gates, caves, tools); binding.
 - [world-work-packages.md](world-work-packages.md): the build plan split into work packages, owners, waves and interface contracts; binding.
 - [state.md](state.md): the current status, open points and next steps; updated when a step or work package lands.
