@@ -2,6 +2,9 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+"pale_squire": {"measure": "fit", "value": [240, 220], "ref": [{"sheet": "pale_squire_walk_down_v2", "row": 0}, {"sheet": "pale_squire_walk_side_v1", "row": 0}, {"sheet": "pale_squire_walk_up_v1", "row": 0}, {"sheet": "pale_squire_actions_down_v2", "row": 0}, {"sheet": "pale_squire_actions_down_v2", "row": 1}, {"sheet": "pale_squire_actions_side_v2", "row": 1}]},
+"abacus_brute": {"measure": "fit", "value": [304, 276], "ref": [{"sheet": "abacus_brute_walk_down_v2", "row": 0}, {"sheet": "abacus_brute_walk_side_v1", "row": 0}, {"sheet": "abacus_brute_walk_up_v1", "row": 0}, {"sheet": "abacus_brute_actions_down_v1", "row": 0}, {"sheet": "abacus_brute_actions_down_v1", "row": 2}, {"sheet": "abacus_brute_actions_side_v1", "row": 0}, {"sheet": "abacus_brute_actions_side_v1", "row": 2}]},
+"gloam_lance": {"measure": "fit", "value": [80, 80], "ref": [{"sheet": "proj_lance_v1", "row": 0}]},
 "heavy_door": {"measure": "fit", "value": [180, 164], "ref": [{"sheet": "heavy_door_v3", "row": 0}]},
 "resonance_door": {"measure": "fit", "value": [180, 164], "ref": [{"sheet": "resonance_door_v2", "row": 0}, {"sheet": "resonance_door_v2", "row": 1}, {"sheet": "resonance_door_v2", "row": 2}]},
 "resonance_vault": {"measure": "fit", "value": [180, 164], "ref": [{"sheet": "resonance_vault_v2", "row": 0}, {"sheet": "resonance_vault_v2", "row": 1}, {"sheet": "resonance_vault_v2", "row": 2}]},
@@ -1384,6 +1387,9 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"pale_squire": {"cell": [256, 256], "radius": 30, "mirror_side": true, "foot": 236},
+"abacus_brute": {"cell": [320, 320], "radius": 40, "mirror_side": true, "foot": 292},
+"gloam_lance": {"cell": [96, 96], "radius": 0, "mirror_side": true, "align": "center"},
 "heavy_door": {"cell": [192, 192], "radius": 0, "align": "foot", "foot": 176, "prop": true, "rect_h": 96},
 "resonance_door": {"cell": [192, 192], "radius": 0, "align": "foot", "foot": 176, "prop": true, "rect_h": 96},
 "resonance_vault": {"cell": [192, 192], "radius": 0, "align": "foot", "foot": 176, "prop": true, "rect_h": 96},
@@ -2069,6 +2075,17 @@
  }
  },
  "sheets": {
+"pale_squire_walk_down_v2": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "pale_squire", "anim": "walk_down", "file": "pale_squire_walk_down", "scale": "pale_squire", "fps": 6, "loop": true}, {"kind": "pale_squire", "anim": "idle_down", "file": "pale_squire_idle_down", "scale": "pale_squire", "fps": 6, "loop": true, "poses": 0}]}]},
+"pale_squire_walk_side_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "pale_squire", "anim": "walk_side", "file": "pale_squire_walk_side", "scale": "pale_squire", "fps": 6, "loop": true}, {"kind": "pale_squire", "anim": "idle_side", "file": "pale_squire_idle_side", "scale": "pale_squire", "fps": 6, "loop": true, "poses": 0}]}]},
+"pale_squire_walk_up_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "pale_squire", "anim": "walk_up", "file": "pale_squire_walk_up", "scale": "pale_squire", "fps": 6, "loop": true}, {"kind": "pale_squire", "anim": "idle_up", "file": "pale_squire_idle_up", "scale": "pale_squire", "fps": 6, "loop": true, "poses": 0}]}]},
+"abacus_brute_walk_down_v2": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "abacus_brute", "anim": "walk_down", "file": "abacus_brute_walk_down", "scale": "abacus_brute", "fps": 6, "loop": true}, {"kind": "abacus_brute", "anim": "idle_down", "file": "abacus_brute_idle_down", "scale": "abacus_brute", "fps": 6, "loop": true, "poses": 0}]}]},
+"abacus_brute_walk_side_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "abacus_brute", "anim": "walk_side", "file": "abacus_brute_walk_side", "scale": "abacus_brute", "fps": 6, "loop": true}, {"kind": "abacus_brute", "anim": "idle_side", "file": "abacus_brute_idle_side", "scale": "abacus_brute", "fps": 6, "loop": true, "poses": 0}]}]},
+"abacus_brute_walk_up_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "abacus_brute", "anim": "walk_up", "file": "abacus_brute_walk_up", "scale": "abacus_brute", "fps": 6, "loop": true}, {"kind": "abacus_brute", "anim": "idle_up", "file": "abacus_brute_idle_up", "scale": "abacus_brute", "fps": 6, "loop": true, "poses": 0}]}]},
+"proj_lance_v1": {"key": "magenta", "rows": [{"poses": 5, "outputs": [{"kind": "gloam_lance", "anim": "fly", "file": "gloam_lance_fly", "scale": "gloam_lance", "fps": 6, "loop": true, "poses": [0, 2]}, {"kind": "gloam_lance", "anim": "idle", "file": "gloam_lance_fly", "scale": "gloam_lance", "fps": 6, "loop": true, "poses": [0, 2]}]}]},
+"pale_squire_actions_down_v2": {"key": "magenta", "rows": [{"poses": 4, "outputs": []}, {"poses": 2, "outputs": []}]},
+"pale_squire_actions_side_v2": {"key": "magenta", "rows": [{"poses": 4, "outputs": [], "skip": true}, {"poses": 2, "outputs": []}]},
+"abacus_brute_actions_down_v1": {"key": "magenta", "rows": [{"poses": 2, "outputs": []}, {"poses": 6, "outputs": [], "skip": true}, {"poses": 2, "outputs": []}]},
+"abacus_brute_actions_side_v1": {"key": "magenta", "rows": [{"poses": 2, "outputs": []}, {"poses": 6, "outputs": [], "skip": true}, {"poses": 2, "outputs": []}]},
 "heavy_door_v3": {"key": "magenta", "rows": [{"poses": 2, "outputs": [{"kind": "heavy_door", "anim": "closed", "file": "heavy_door_closed", "poses": 0, "scale": "heavy_door", "fps": 6, "loop": true}, {"kind": "heavy_door", "anim": "pushed", "file": "heavy_door_pushed", "poses": 1, "scale": "heavy_door", "fps": 6, "loop": false}, {"kind": "heavy_door", "anim": "idle", "file": "heavy_door_closed", "poses": 0, "scale": "heavy_door", "fps": 6, "loop": true}]}]},
 "resonance_door_v2": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"kind": "resonance_door", "anim": "dormant", "file": "resonance_door_dormant", "scale": "resonance_door", "fps": 6, "loop": true}, {"kind": "resonance_door", "anim": "idle", "file": "resonance_door_dormant", "scale": "resonance_door", "fps": 6, "loop": true}]}, {"poses": 4, "outputs": [{"kind": "resonance_door", "anim": "awake", "file": "resonance_door_awake", "scale": "resonance_door", "fps": 6, "loop": true}]}, {"poses": 1, "outputs": [{"kind": "resonance_door", "anim": "open", "file": "resonance_door_open", "scale": "resonance_door", "fps": 6, "loop": true}]}]},
 "resonance_vault_v2": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"kind": "resonance_vault", "anim": "dormant", "file": "resonance_vault_dormant", "scale": "resonance_vault", "fps": 6, "loop": true}, {"kind": "resonance_vault", "anim": "idle", "file": "resonance_vault_dormant", "scale": "resonance_vault", "fps": 6, "loop": true}]}, {"poses": 4, "outputs": [{"kind": "resonance_vault", "anim": "awake", "file": "resonance_vault_awake", "scale": "resonance_vault", "fps": 6, "loop": true}]}, {"poses": 1, "outputs": [{"kind": "resonance_vault", "anim": "open", "file": "resonance_vault_open", "scale": "resonance_vault", "fps": 6, "loop": true}]}]},
