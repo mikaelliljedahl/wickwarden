@@ -316,17 +316,13 @@ func _scenes() -> void:
 		var arena := scene.instantiate()
 		add_child(arena)
 		await frames(2)
-		var fragment := arena.get_node("Fragment") as PickupBase
-		check(not fragment.visible, "placed fragment is gated by defeat flag")
+		check_eq(_rewards(arena).size(), 0, "arena leaves persistent rewards to the cave room")
 		GameState.set_flag(&"boss_cave_2_9_defeated")
-		check(fragment.visible, "defeat reveals placed fragment")
-		check_eq(fragment.scope, &"c2", "fragment has cave two scope")
-		check_near(fragment.timeout, 0, 0.001, "placed fragment never times out")
-		check_eq(
-			(arena.get_node("WickCore") as PickupBase).persistent_id,
-			&"wick_core_c2",
-			"core has cave-two persistence"
-		)
+		await frames(2)
+		check_eq(_rewards(arena).size(), 0, "defeat cannot create duplicate arena rewards")
+		check_eq(arena.get_node("Mother").position, Vector2(960, 192), "Mother marker stays")
+		for index in range(1, 4):
+			check(arena.get_node("Eye%d" % index) is Marker2D, "eye marker stays")
 		await dispose(arena)
 	reset_state()
 	var gallery := load("res://tests/fixtures/gallery/B02.tscn") as PackedScene
@@ -372,4 +368,13 @@ func _areas(arena: Node) -> Array:
 	for node in arena.get_children():
 		if node.get("box") is Hitbox:
 			result.append(node)
+	return result
+
+
+func _rewards(node: Node) -> Array[PickupBase]:
+	var result: Array[PickupBase] = []
+	if node is PickupBase and node.persistent_id != &"":
+		result.append(node)
+	for child in node.get_children():
+		result.append_array(_rewards(child))
 	return result
