@@ -6,6 +6,7 @@ const SPRITE_FIXTURE := "res://tests/fixtures/sprites_fixture/sprites.json"
 
 func run() -> void:
 	await _item_visuals()
+	await _fragment_visuals()
 	await _effects()
 	await _timeout_and_blink()
 	await _carrier()
@@ -27,8 +28,10 @@ func _item_visuals() -> void:
 		pickup.item_id = id
 		arena.add_child(pickup)
 		var visual := pickup.get_node_or_null(Placeholder.VISUAL_NAME)
-		var expected := StringName("icon_%s" % id)
-		check(SpriteVisual.has_art(expected), "%s has its dedicated pickup icon art" % id)
+		var world_kind := StringName("item_%s" % id)
+		var icon_kind := StringName("icon_%s" % id)
+		var expected := world_kind if SpriteVisual.has_art(world_kind) else icon_kind
+		check(SpriteVisual.has_art(expected), "%s has verified dedicated pickup art" % id)
 		check(visual is SpriteVisual, "%s pickup uses its painted icon" % id)
 		if visual is SpriteVisual:
 			check_eq((visual as SpriteVisual).kind, expected, "%s pickup selects its dedicated icon" % id)
@@ -42,6 +45,36 @@ func _item_visuals() -> void:
 	await frames(2)
 	check_eq(GameState.acquired_item_ids().size(), 0, "showing item icons does not acquire tools")
 	await dispose(arena)
+
+	# If the world pickup art is absent, the dedicated icon remains the next choice.
+	var manifest_data: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(SpriteVisual.DEFAULT_MANIFEST)
+	)
+	var icon_manifest := "user://wickwarden_pickup_icon_fallback.json"
+	if manifest_data is Dictionary:
+		(manifest_data as Dictionary).erase("item_cinder_wick")
+		var manifest_file := FileAccess.open(icon_manifest, FileAccess.WRITE)
+		if manifest_file != null:
+			manifest_file.store_string(JSON.stringify(manifest_data))
+			manifest_file.close()
+			SpriteVisual.use_manifest(icon_manifest)
+			var icon_arena := make_arena()
+			var icon_fallback := PickupBase.new()
+			icon_fallback.kind = &"item"
+			icon_fallback.item_id = &"cinder_wick"
+			icon_arena.add_child(icon_fallback)
+			var icon_visual := icon_fallback.get_node_or_null(Placeholder.VISUAL_NAME)
+			check(icon_visual is SpriteVisual, "the existing tool icon remains a fallback")
+			if icon_visual is SpriteVisual:
+				check_eq(
+					(icon_visual as SpriteVisual).kind,
+					&"icon_cinder_wick",
+					"the icon is selected when world pickup art is absent"
+				)
+			await frames(2)
+			await dispose(icon_arena)
+			SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(icon_manifest))
 
 	# The fixture has full body art for `walker` and no tool icons, so it exercises the legacy art path.
 	SpriteVisual.use_manifest(SPRITE_FIXTURE)
@@ -70,9 +103,42 @@ func _item_visuals() -> void:
 	check(generic_visual is Placeholder, "an unknown item uses the registered generic item look")
 	if generic_visual is Placeholder:
 		check_eq((generic_visual as Placeholder).kind, &"item", "unknown item falls back to generic pickup")
+	var generic_fragment := PickupBase.new()
+	generic_fragment.kind = &"fragment"
+	generic_fragment.scope = &"c4"
+	fallback_arena.add_child(generic_fragment)
+	var fragment_visual := generic_fragment.get_node_or_null(Placeholder.VISUAL_NAME)
+	check(fragment_visual is Placeholder, "a cave without mapped fragment art keeps the fallback")
+	if fragment_visual is Placeholder:
+		check_eq((fragment_visual as Placeholder).kind, &"fragment", "fragment fallback keeps its generic look")
 	await frames(2)
 	await dispose(fallback_arena)
 	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+
+
+func _fragment_visuals() -> void:
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+	var arena := make_arena()
+	for cave in [&"c1", &"c2", &"c3"]:
+		var pickup := PickupBase.new()
+		pickup.kind = &"fragment"
+		pickup.scope = cave
+		arena.add_child(pickup)
+		var expected := StringName("fragment_%s" % cave)
+		var visual := pickup.get_node_or_null(Placeholder.VISUAL_NAME)
+		check(SpriteVisual.has_art(expected), "%s fragment has its mapped pickup art" % cave)
+		check(visual is SpriteVisual, "%s fragment uses painted art" % cave)
+		if visual is SpriteVisual:
+			check_eq((visual as SpriteVisual).kind, expected, "%s scope selects its fragment art" % cave)
+		var collider := pickup.get_child(0) as CollisionShape2D
+		check(
+			collider != null
+				and collider.shape is CircleShape2D
+				and (collider.shape as CircleShape2D).radius == PickupBase.PICKUP_RADIUS,
+			"%s fragment keeps the pickup radius" % cave
+		)
+	await frames(2)
+	await dispose(arena)
 
 
 func _effects() -> void:
@@ -282,7 +348,7 @@ func _requires_flag() -> void:
 	var gated_visual := gated_item.get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
 	check(gated_visual != null, "a gated item keeps its painted icon while hidden")
 	if gated_visual != null:
-		check_eq(gated_visual.kind, &"icon_reed_raft", "gated reed raft selects its dedicated icon")
+		check_eq(gated_visual.kind, &"item_reed_raft", "gated reed raft selects its world pickup art")
 	GameState.set_flag(&"test_raft_reward_unlocked")
 	check(gated_item.visible, "the gated item appears as soon as its flag is set")
 	await frames(3)
@@ -360,6 +426,11 @@ func _reward_scenes() -> void:
 		var other_flag := &"bigkey_c1" if kind == "big_key" else &"frag_c1"
 		var picked_flag := reward.flag_name()
 		check(reward.get_node_or_null("Visual") != null, "%s has a runtime Visual" % kind)
+		if kind == "fragment":
+			var fragment_visual := reward.get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
+			check(fragment_visual != null, "a scoped fragment uses its painted world art")
+			if fragment_visual != null:
+				check_eq(fragment_visual.kind, &"fragment_c2", "the gated reward keeps its cave-specific art")
 		check_eq(reward.collision_layer, Layers.PICKUP, "%s uses the pickup layer" % kind)
 		check(not reward.visible, "%s is hidden before the boss flag" % kind)
 		check(not reward.collect(player), "%s rejects direct collection while gated" % kind)

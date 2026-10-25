@@ -10,7 +10,7 @@ func run() -> void:
 	await _flare_melts_then_opens()
 	await _other_hits_do_nothing()
 	await _flag_keeps_it_open_on_reentry()
-	_scene_has_its_look()
+	await _scene_has_its_look()
 
 
 ## Builds a seal of `scene_path` with a seal id, in the arena at `at`.
@@ -106,3 +106,29 @@ func _scene_has_its_look() -> void:
 	var scene := load(SEAL) as PackedScene
 	check(scene != null, "the wax seal scene loads")
 	check(Placeholder.has_kind(&"wax_seal"), "the wax seal look is registered")
+	check(SpriteVisual.has_art(&"wax_seal"), "the wax seal has a verified painted sheet")
+	var arena := make_arena()
+	var painted: Variant = _make_seal(arena, &"painted", AT)
+	await frames(2)
+	var visual := painted.get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
+	check(visual != null, "painted wax art becomes the Visual child")
+	if visual != null:
+		check_eq(visual.kind, &"wax_seal", "the seal selects its painted kind")
+		check_eq(
+			visual.size_override, Vector2(192, 96), "the seal keeps its collision footprint argument"
+		)
+		check_eq(
+			visual.offset, Vector2(-96, -138), "the seal uses the authored [96, 186] anchor"
+		)
+	await dispose(arena)
+
+	SpriteVisual.use_manifest("res://tests/fixtures/sprites_fixture/sprites.json")
+	var fallback_arena := make_arena()
+	var fallback: Variant = _make_seal(fallback_arena, &"fallback", AT)
+	await frames(2)
+	check(
+		fallback.get_node_or_null(Placeholder.VISUAL_NAME) is Placeholder,
+		"missing wax art keeps Placeholder fallback"
+	)
+	await dispose(fallback_arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)

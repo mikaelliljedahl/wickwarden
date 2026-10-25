@@ -5,8 +5,7 @@ extends StaticBody2D
 ## reload. A hook swing, a sling slug, fire or any other hit does nothing. `melt()` is the same opening
 ## for any other flare source.
 ##
-## Visual: the Placeholder kind `wax_seal`, registered here, so no content work package edits
-## Placeholder.KINDS.
+## Visual: the painted kind `wax_seal`, with its Placeholder kind registered here as the missing-art fallback.
 
 const FLARE_KIND := &"flare"
 const MELT_FLAG_PREFIX := "melted_"
@@ -47,7 +46,7 @@ func _ready() -> void:
 	_hurtbox.add_child(hurt_shape)
 	add_child(_hurtbox)
 	_hurtbox.hurt.connect(_on_hurt)
-	Placeholder.attach(self, LOOK, 0.0, size)
+	SpriteVisual.attach(self, LOOK, 0.0, size)
 	if seal_id != &"" and GameState.has_flag(flag_name()):
 		_open(false)
 

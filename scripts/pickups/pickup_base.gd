@@ -82,6 +82,8 @@ func _ready() -> void:
 		var look := kind
 		if kind == &"item":
 			look = _item_visual_kind(item_id)
+		elif kind == &"fragment":
+			look = _fragment_visual_kind(scope)
 		SpriteVisual.attach(self, look)
 	if requires_flag != &"":
 		GameState.flag_changed.connect(_on_flag_changed)
@@ -92,12 +94,21 @@ func _ready() -> void:
 ## Keep item body art and the registered generic pickup as fallbacks for older or incomplete art.
 static func _item_visual_kind(id: StringName) -> StringName:
 	if ItemRegistry.items.has(id):
+		var world_pickup := StringName("item_%s" % id)
+		if SpriteVisual.has_art(world_pickup):
+			return world_pickup
 		var icon := StringName("icon_%s" % id)
 		if SpriteVisual.has_art(icon):
 			return icon
 	if SpriteVisual.has_art(id) or Placeholder.has_kind(id):
 		return id
 	return &"item"
+
+
+## Fragments have cave-specific painted pickup art when that cave's sheet is available.
+static func _fragment_visual_kind(fragment_scope: StringName) -> StringName:
+	var fragment_look := StringName("fragment_%s" % fragment_scope)
+	return fragment_look if SpriteVisual.has_art(fragment_look) else &"fragment"
 
 
 func _exit_tree() -> void:

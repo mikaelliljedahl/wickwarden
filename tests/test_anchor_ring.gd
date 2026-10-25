@@ -6,10 +6,12 @@ extends TestCase
 const RING_SCENE := "res://scenes/world/anchor_ring.tscn"
 const POCKET_SCENE := "res://scenes/world/anchor_pocket.tscn"
 const RING_AT := Vector2(900, 400)
+const SPRITE_FIXTURE := "res://tests/fixtures/sprites_fixture/sprites.json"
 
 
 func run() -> void:
 	await _ring_and_look()
+	await _visual_fallback_without_art()
 	_position_query()
 	_range_query()
 	await _reel_hit_emits_hooked()
@@ -34,7 +36,18 @@ func _ring_and_look() -> void:
 	check(pocket.is_in_group(&"anchor_ring"), "a pocket ring is in group anchor_ring")
 	check(ring.hurtbox.team == Layers.Team.NEUTRAL, "the hurtbox is NEUTRAL")
 	check(ring.hurtbox.collision_layer == Layers.PROP_HURTBOX, "the hurtbox sits on PROP_HURTBOX")
-	check(ring.get_node_or_null(Placeholder.VISUAL_NAME) != null, "a ring has a Visual child")
+	var ring_visual := ring.get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
+	var pocket_visual := pocket.get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
+	check(ring_visual != null, "painted ring art becomes the Visual child")
+	check(pocket_visual != null, "painted pocket art becomes the Visual child")
+	if ring_visual != null:
+		check_eq(ring_visual.kind, &"anchor_ring", "the ring selects its painted kind")
+		check_eq(ring_visual.radius_override, 24.0, "the ring keeps its 24 px footprint argument")
+		check_eq(ring_visual.offset, Vector2(-64, -130), "the ring uses the authored [64, 154] anchor")
+	if pocket_visual != null:
+		check_eq(pocket_visual.kind, &"anchor_pocket", "the pocket selects its painted kind")
+		check_eq(pocket_visual.radius_override, 24.0, "the pocket keeps its 24 px footprint argument")
+		check_eq(pocket_visual.offset, Vector2(-96, -162), "the pocket uses the authored [96, 186] anchor")
 	check(ring.get(&"look") == &"anchor_ring", "the ring scene uses the anchor_ring look")
 	check(pocket.get(&"look") == &"anchor_pocket", "the pocket scene uses the anchor_pocket look")
 	check(
@@ -42,6 +55,24 @@ func _ring_and_look() -> void:
 		"both looks are registered"
 	)
 	await dispose(arena)
+
+
+func _visual_fallback_without_art() -> void:
+	SpriteVisual.use_manifest(SPRITE_FIXTURE)
+	var arena := make_arena()
+	var ring: Variant = _make(arena, RING_SCENE, RING_AT)
+	var pocket: Variant = _make(arena, POCKET_SCENE, RING_AT + Vector2(200, 0))
+	await frames(2)
+	check(
+		ring.get_node_or_null(Placeholder.VISUAL_NAME) is Placeholder,
+		"a missing ring sheet keeps Placeholder fallback"
+	)
+	check(
+		pocket.get_node_or_null(Placeholder.VISUAL_NAME) is Placeholder,
+		"a missing pocket sheet keeps Placeholder fallback"
+	)
+	await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _position_query() -> void:

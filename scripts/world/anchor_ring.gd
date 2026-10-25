@@ -16,7 +16,8 @@ const HURT_RADIUS := 32.0
 const RING_KIND := &"anchor_ring"
 const POCKET_KIND := &"anchor_pocket"
 
-## Look of the ring: `anchor_ring` (cliff and shore) or `anchor_pocket` (a cache alcove). A Placeholder kind.
+## Look of the ring: `anchor_ring` (cliff and shore) or `anchor_pocket` (a cache alcove);
+## missing art falls back to Placeholder.
 @export var look: StringName = RING_KIND
 ## Largest distance in px from a firing point to which the ring can be reached. 0 means no limit.
 @export var max_range: float = 0.0
@@ -34,7 +35,7 @@ func _ready() -> void:
 	hurtbox.filter = _accepts_hit
 	add_child(hurtbox)
 	hurtbox.hurt.connect(_on_hurt)
-	Placeholder.attach(self, look, RING_RADIUS)
+	SpriteVisual.attach(self, look, RING_RADIUS)
 
 
 ## World position of the ring: the point the reel line runs to.
