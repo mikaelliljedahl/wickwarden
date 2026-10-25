@@ -1,0 +1,21 @@
+; The Mirrored Archive
+room cave_5_8
+terrain Vault of Names: a raised picking-tool shelf between grave-like name stacks.
+floor_color 0.13 0.15 0.19
+grid
+####################
+#..................#
+#..###....#####....#
+#..................#
+#...................
+#...................
+#..................#
+#..###....#####....#
+#..................#
+####################
+enemy hollow 8,3
+enemy hollow 8,6
+prop pedestal 4,4
+pickup big_key @432,454 id=bigkey_c5 scope=c5
+opener locked_door @1872,480 id=e187 scope=c5
+spawn Default @1488,528

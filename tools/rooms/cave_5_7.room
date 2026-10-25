@@ -1,0 +1,20 @@
+; The Mirrored Archive
+room cave_5_7
+terrain Reflecting Hall: staggered polished stacks leave a broad cross aisle.
+floor_color 0.13 0.15 0.19
+grid
+#########..#########
+#..................#
+#..####......####..#
+#..................#
+....................
+....................
+#..................#
+#...####.....####..#
+#..................#
+####################
+enemy tallow_blob 5,6
+enemy tallow_blob 14,3
+enemy tallow_blob 14,6
+opener locked_door @48,480 id=e187 scope=c5
+spawn Default @960,336
