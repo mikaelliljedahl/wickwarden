@@ -682,20 +682,18 @@ func _check_doors(id: String, room: Node, problems: Array[String]) -> void:
 			continue
 		partners.append(other)
 		var door := _door_to(room, other)
-		if door == null and edge["gate"] != null:
-			continue  # Gated mouths may be emitted by a scripted opener in _ready.
-		if door == null:
+		if door.is_empty():
 			problems.append("%s: no door to %s (edge %s)" % [id, other, edge["id"]])
 		elif scene_exists(WorldData.scene_path(other)):
 			var target := scene_root(WorldData.scene_path(other))
-			if target.get_node_or_null("Spawns/%s" % door.target_spawn) == null:
+			if target.get_node_or_null("Spawns/%s" % door["spawn"]) == null:
 				problems.append(
-					"%s: door to %s needs marker %s there" % [id, other, door.target_spawn]
+					"%s: door to %s needs marker %s there" % [id, other, door["spawn"]]
 				)
 		else:
 			pending["door %s -> %s: target scene not built yet" % [id, other]] = true
-	for door in descendants_of_class(room, RoomDoor):
-		var target_room := String((door as RoomDoor).target_room)
+	for door: Dictionary in _door_entries(room):
+		var target_room := String(door["target"])
 		var own_pocket_target := (
 			target_room.begins_with(id + "#")
 			and pockets_by_id.has(target_room)
@@ -708,11 +706,25 @@ func _check_doors(id: String, room: Node, problems: Array[String]) -> void:
 			)
 
 
-func _door_to(room: Node, other: String) -> RoomDoor:
+## Scene checks run before _ready, so concealed seams declare their eventual door explicitly.
+func _door_entries(room: Node) -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
 	for door in descendants_of_class(room, RoomDoor):
-		if String((door as RoomDoor).target_room) == other:
-			return door as RoomDoor
-	return null
+		entries.append({"target": String(door.target_room), "spawn": String(door.target_spawn)})
+	for seam in descendants_of_class(room, Area2D):
+		if _script_file(seam) != "hidden_seam.gd":
+			continue
+		var target := String(seam.get("door_target"))
+		if target != "":
+			entries.append({"target": target, "spawn": String(seam.get("door_spawn"))})
+	return entries
+
+
+func _door_to(room: Node, other: String) -> Dictionary:
+	for door: Dictionary in _door_entries(room):
+		if door["target"] == other:
+			return door
+	return {}
 
 
 # ---- geometry helpers ------------------------------------------------------------------------
