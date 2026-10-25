@@ -107,31 +107,43 @@ OPENER_SIZE = {
     # Bush's collision circle is contained by one 96 px tile; a wide screen uses one per gap tile.
     "cut_screen": (96, 96),
 }
-OPENER_SIZE.update({"thorn_door": (192, 96), "eye_portcullis": (192, 96), "hidden_seam": (192, 96),
+OPENER_SIZE.update({"thorn_door": (192, 96), "eye_portcullis": (192, 96), "eye_cell": (192, 96),
+                    "hidden_seam": (192, 96),
                     "heavy_stone": (96, 96), "heavy_boulder": (96, 96),
+                    "thorn_wall": (192, 96), "heavy_door": (192, 96),
                     "hook_tap_wall": (192, 96), "wax_seal": (192, 96),
                     "sealed_seam": (192, 96), "resonance_door": (192, 96),
+                    "resonance_stone": (192, 96), "resonance_vault": (192, 96),
                     "ninth_door": (192, 96),
                     "ward_blocker": (192, 96)})
-LINKED = {"eye_switch": "eye_portcullis", "ward_plate": "ward_blocker"}
+LINKED = {"eye_switch": ("eye_portcullis", "eye_cell"), "ward_plate": ("ward_blocker",)}
 SCRIPTED_OPENERS = {"thorn_door": ("thorn_door", "burn_id"),
+                    "thorn_wall": ("thorn_wall", "burn_id"),
                     "eye_portcullis": ("eye_portcullis", "eye_id"),
+                    "eye_cell": ("eye_cell", "eye_id"),
                     "hidden_seam": ("hidden_seam", "seam_id"),
                     "heavy_stone": ("heavy_stone", "stone_id"),
+                    "heavy_door": ("heavy_door", "stone_id"),
                     "heavy_boulder": ("heavy_boulder", "stone_id"),
                     "hook_tap_wall": ("hook_tap_wall", "seam_id"),
                     "wax_seal": ("wax_seal", "seal_id"),
                     "sealed_seam": ("sealed_seam", "seam_id"),
                     "resonance_door": ("resonance_door", "resonance_id"),
+                    "resonance_stone": ("resonance_stone", "resonance_id"),
+                    "resonance_vault": ("resonance_vault", "resonance_id"),
                     "ninth_door": ("ninth_door", None),
                     "ward_blocker": ("ward_plate", "ward_id")}
 # The Ninth Door has a fixed runtime flag and no exported id; id= names its compiler link.
 MOUTH_REQUIREMENTS = {
     "sealed seam": ("hidden", ["glow_jar"]),
     "resonance door": ("item", ["lantern_chime"]),
+    "resonance vault": ("item", ["lantern_chime"]),
+    "eye-switch cell": ("item", ["tallow_sling"]),
     "anchor ring pocket": ("item", ["reel_line"]),
     "sealed door (nine fragments)": ("boss", [f"frag:c{i}" for i in range(1, 10)]),
 }
+SCRIPTED_OPENER_LINKS = {"thorn_wall": "step", "heavy_door": "step", "resonance_stone": "step",
+                         "resonance_vault": "door", "eye_cell": "door"}
 OPENER_SIZE.update({"gate": (192, 96), "boss_door": (192, 96)})
 OPENER_OPTS = ("id", "size", "scope", "look", "braziers")
 PROP_SIZE = (96, 96)
@@ -1006,6 +1018,9 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
         if kind == "ward_blocker":
             node.props.append(("blocker", "true"))
         edge = next((e for e in world.edges if e["id"] == ident), None)
+        if kind in SCRIPTED_OPENER_LINKS and (edge is None or src.room_id not in (edge["a"], edge["b"])):
+            errors.append(f"{where_}: {kind} id must match its graph gate")
+            return False
         if edge is None and kind == "hidden_seam":
             for candidate in world.edges:
                 if (candidate.get("prop") == "hidden seam" and candidate.get("gate") == "hidden"
@@ -1015,10 +1030,14 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
                     if side is not None and ent.tile in exit_corridor(side):
                         errors.append(f"{where_}: hidden_seam id must match graph edge {candidate['id']}")
                         return False
-        expected = {"thorn_door": "thorn-sealed door", "eye_portcullis": ("eye-switch portcullis", "eye switch"),
+        expected = {"thorn_door": "thorn-sealed door", "thorn_wall": "thorn wall",
+                    "eye_portcullis": ("eye-switch portcullis", "eye switch"),
+                    "eye_cell": "eye-switch cell",
                     "heavy_stone": ("heavy stones", "heavy stone"), "heavy_boulder": "heavy boulder",
+                    "heavy_door": "heavy door",
                     "hook_tap_wall": "hook-tap wall", "wax_seal": "wax seal",
                     "sealed_seam": "sealed seam", "hidden_seam": "hidden seam", "resonance_door": "resonance door",
+                    "resonance_stone": "resonance stone", "resonance_vault": "resonance vault",
                     "ninth_door": "sealed door (nine fragments)",
                     "ward_blocker": "ward plate"}[kind]
         if edge is not None and (edge["prop"] not in (expected if isinstance(expected, tuple) else (expected,))
@@ -1027,21 +1046,40 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
             return False
         requirements = {"hook_tap_wall": ("hidden", ["hook"]),
                         "wax_seal": ("item", ["flare"]),
+                        "thorn_wall": ("item", ["cinder_wick"]),
                         "heavy_stone": ("item", ["heft_mitts"]),
+                        "heavy_door": ("item", ["heft_mitts"]),
                         "heavy_boulder": ("item", ["heft_mitts"]),
                         "eye_portcullis": ("item", ["tallow_sling"]),
+                        "eye_cell": ("item", ["tallow_sling"]),
                         "hidden_seam": ("hidden", ["glow_jar"]),
                         "sealed_seam": MOUTH_REQUIREMENTS["sealed seam"],
                         "resonance_door": MOUTH_REQUIREMENTS["resonance door"],
+                        "resonance_stone": MOUTH_REQUIREMENTS["resonance door"],
+                        "resonance_vault": MOUTH_REQUIREMENTS["resonance vault"],
                         "ninth_door": MOUTH_REQUIREMENTS["sealed door (nine fragments)"]}
         if edge is not None and kind in requirements:
             gate, needs = requirements[kind]
             if edge.get("gate") != gate or edge.get("needs") != needs:
                 errors.append(f"{where_}: {kind} does not match the graph gate requirements")
                 return False
+        if kind in SCRIPTED_OPENER_LINKS:
+            expected_link = SCRIPTED_OPENER_LINKS[kind]
+            other = edge["b"] if edge["a"] == src.room_id else edge["a"]
+            side = edge_side(world, src.room_id, other) if expected_link == "step" else None
+            if edge.get("link") != expected_link or (expected_link == "step"
+                                                       and (side is None or ent.tile not in exit_corridor(side))):
+                errors.append(f"{where_}: {kind} needs its graph {expected_link} physical gate in the corridor")
+                return False
+            if expected_link == "step":
+                world_size = (size[1], size[0]) if side in ("e", "w") else size
+                gap_span = world_size[0] if side in ("n", "s") else world_size[1]
+                if gap_span < 2 * TILE:
+                    errors.append(f"{where_}: {kind} must span 192 px across its graph exit")
+                    return False
         rec = world.room(src.room_id)
         side = corridor_side(ent.tile, rec["exits"])
-        if kind == "eye_portcullis" and side in ("e", "w"):
+        if kind in ("eye_portcullis", "thorn_wall", "heavy_door", "resonance_stone") and side in ("e", "w"):
             node.props.append(("rotation", "1.570796"))
             size = (size[1], size[0])
         tiles = tiles_of_rect(ent.pos[0]-size[0]/2, ent.pos[1]-size[1]/2, *size)
@@ -1434,10 +1472,34 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
             errors.append(f"{where(path, grid_line)}: cut exit {side} is walkable while its screen is intact")
         if not any(t in closed_flood(plan, spawn_tile, index) for t in GAP_TILES[side] for index in screens):
             errors.append(f"{where(path, grid_line)}: cut exit {side} stays blocked after a screen is cut")
+    scripted_gates = []
+    scripted_gate_sides = set()
+    for index, (opener, _) in enumerate(plan.openers):
+        if not opener.args or opener.args[0] not in (*SCRIPTED_OPENERS, "gate", "boss_door"):
+            continue
+        edge = next((e for e in world.edges if e["id"] == opener.opts.get("id")), None)
+        if edge is None or edge["link"] != "step" or rec["id"] not in (edge["a"], edge["b"]):
+            continue
+        other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+        side = edge_side(world, rec["id"], other)
+        if side is not None:
+            scripted_gate_sides.add(side)
+            scripted_gates.append((index, opener, edge, side))
     open_sides = []
     for side in rec["exits"]:
         corridor = exit_corridor(side)
-        if side in raft_sides or side in pit_sides or side in reel_sides or side in cut_sides or side in concealed_sides:
+        if side in scripted_gate_sides:
+            if any(tile in plan.static for tile in corridor):
+                blocked = next(tile for tile in corridor if tile in plan.static)
+                errors.append(f"{where(path, grid_line)}: exit {side} corridor blocked at tile {blocked}")
+            continue
+        if (
+            side in raft_sides
+            or side in pit_sides
+            or side in reel_sides
+            or side in cut_sides
+            or side in concealed_sides
+        ):
             continue
         if any(tile in plan.static for tile in corridor):
             blocked = next(tile for tile in corridor if tile in plan.static)
@@ -1447,20 +1509,12 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
             if any(tile not in reach for tile in corridor):
                 errors.append(f"{where(path, grid_line)}: exit {side} is not reachable from the spawn")
 
-    for index, (opener, _) in enumerate(plan.openers):
-        if not opener.args or opener.args[0] not in (*SCRIPTED_OPENERS, "gate", "boss_door"):
-            continue
-        edge = next((e for e in world.edges if e["id"] == opener.opts.get("id")), None)
-        if edge is None or edge["link"] != "step":
-            continue
-        other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
-        side = edge_side(world, rec["id"], other)
-        if side is not None:
-            if any(t in reach for t in GAP_TILES[side]):
-                errors.append(f"{where(path, opener.line)}: gate {edge['id']} is walkable while closed")
-            opened = closed_flood(plan, spawn_tile, index)
-            if not any(t in opened for t in GAP_TILES[side]):
-                errors.append(f"{where(path, opener.line)}: gate {edge['id']} stays blocked after opening")
+    for index, opener, edge, side in scripted_gates:
+        if any(t in reach for t in GAP_TILES[side]):
+            errors.append(f"{where(path, opener.line)}: gate {edge['id']} is walkable while closed")
+        opened = closed_flood(plan, spawn_tile, index)
+        if not any(t in opened for t in GAP_TILES[side]):
+            errors.append(f"{where(path, opener.line)}: gate {edge['id']} stays blocked after opening")
     for control in plan.controls:
         accessible = reaches(reach, control.tile) if control.verb == "eye_switch" else control.tile in reach
         if not accessible:
@@ -1687,10 +1741,12 @@ def link_door_blocker(src, rec, world, plan, door, errors) -> None:
              "brittle rocks": "cracked_wall", "locked door": "locked_door",
              "bush cluster": "cut_screen", "reed cluster": "cut_screen",
              "rush wall": "cut_screen", "ward plate": "ward_blocker",
-             "eye-switch cell": "eye_portcullis", "eye-switch portcullis": "eye_portcullis",
-             "heavy stones": "heavy_stone", "heavy boulder": "heavy_boulder",
+             "eye-switch cell": "eye_cell", "eye-switch portcullis": "eye_portcullis",
+             "heavy stones": "heavy_stone", "heavy stone": "heavy_stone",
+             "heavy door": "heavy_door", "heavy boulder": "heavy_boulder",
              "hook-tap wall": "hook_tap_wall", "wax seal": "wax_seal",
              "sealed seam": "sealed_seam", "resonance door": "resonance_door",
+             "resonance vault": "resonance_vault",
              "sealed door (nine fragments)": "ninth_door",
              "key alcove gate": "gate",
              "two braziers, gate": "gate", "boss door": "boss_door"}
@@ -1728,15 +1784,17 @@ def check_openers_and_ids(src: Source, plan: Plan, errors: list[str]) -> None:
             plan.gate_links.append((plan.entity_nodes[ent], [plan.braziers[i][0][1] for i in ids]))
     for control in plan.controls:
         ident = control.opts["id"]
-        matches = [e for e, _ in plan.openers if e.args[0] == LINKED[control.verb] and e.opts.get("id") == ident]
+        matches = [e for e, _ in plan.openers if e.args[0] in LINKED[control.verb] and e.opts.get("id") == ident]
         if len(matches) != 1:
-            errors.append(f"{where(src.path, control.line)}: {control.verb} needs exactly one linked {LINKED[control.verb]}")
+            linked = " or ".join(LINKED[control.verb])
+            errors.append(f"{where(src.path, control.line)}: {control.verb} needs exactly one linked {linked}")
         if sum(c.opts["id"] == ident for c in plan.controls) != 1:
             errors.append(f"{where(src.path, control.line)}: duplicate control id {ident}")
+    linked_kinds = {kind for kinds in LINKED.values() for kind in kinds}
     for ent, tiles in plan.openers:
         ident = ent.opts.get("id", "")
-        if ent.args and ent.args[0] in LINKED.values():
-            if not any(LINKED[c.verb] == ent.args[0] and c.opts["id"] == ident for c in plan.controls):
+        if ent.args and ent.args[0] in linked_kinds:
+            if not any(ent.args[0] in LINKED[c.verb] and c.opts["id"] == ident for c in plan.controls):
                 errors.append(f"{where(src.path, ent.line)}: blocker {ident} has no linked control")
         if ident:
             if ident in seen:

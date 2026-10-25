@@ -951,6 +951,189 @@ class MissingMouthOpeners(unittest.TestCase):
             self.assertTrue(any("walkable while closed" in e for e in errors), errors)
 
 
+class RemainingCaveOpenerGaps(unittest.TestCase):
+    STEP_CASES = (
+        ("e194", "resonance_stone", "resonance_stone", "resonance_id", ("cave_6_5", "cave_6_6"), ""),
+        ("e198", "heavy_door", "heavy_door", "stone_id", ("cave_6_8", "cave_6_10"), ""),
+        ("e212", "eye_portcullis", "eye_portcullis", "eye_id", ("cave_8_2", "cave_8_3"),
+         "eye_switch 12,3 id=e212"),
+        ("e223", "thorn_wall", "thorn_wall", "burn_id", ("cave_9_2", "cave_9_3"), ""),
+        ("e234", "thorn_wall", "thorn_wall", "burn_id", ("cave_10_2", "cave_10_3"), ""),
+        ("e238", "resonance_stone", "resonance_stone", "resonance_id", ("cave_10_6", "cave_10_7"), ""),
+        ("e244", "eye_portcullis", "eye_portcullis", "eye_id", ("cave_10_12", "cave_10_13"),
+         "eye_switch 12,3 id=e244"),
+    )
+    POSITIONS = {"n": "@960,144", "s": "@960,816", "w": "@144,432", "e": "@1776,432"}
+
+    def world_for_edge(self, edge_id, edge_change=None):
+        actual = real_world()
+        edge = dict(next(e for e in actual.edges if e["id"] == edge_id))
+        edge.update(edge_change or {})
+        rooms, pockets = [], []
+        for room_id in (edge["a"], edge["b"]):
+            record = actual.room(room_id)
+            if record["pocket"]:
+                pockets.append({"id": room_id, "grid": list(record["grid"]), "host": record["host"],
+                                "scope": record["scope"], "in_place": record["in_place"]})
+            else:
+                room = room_record(room_id, record["exits"], grid=record["grid"])
+                room.update(scope=record["scope"], dark=record["dark"])
+                rooms.append(room)
+        return world_of(rooms, pockets=pockets, edges=[edge]), edge, actual
+
+    def compile(self, edge_id, room_id, kind, extra="", edge_change=None, extra_entities="",
+                position_override=None, id_override=None):
+        world, edge, actual = self.world_for_edge(edge_id, edge_change)
+        other = edge["b"] if edge["a"] == room_id else edge["a"]
+        side = br.edge_side(world, room_id, other) if edge.get("link") == "step" else None
+        position = position_override or (self.POSITIONS[side] if side is not None else "@1440,480")
+        opener_id = id_override or edge_id
+        entities = [line for line in (extra_entities.strip(), f"opener {kind} {position} id={opener_id} {extra}".strip())
+                    if line]
+        if edge.get("link") == "door":
+            entities.append(f"door {other} Inside {position} blocker={edge_id}")
+        source = room_text(room_id, world.room(room_id)["exits"], "\n".join(entities))
+        text, errors = compile_text(source, world, f"{room_id}.room")
+        return text, errors, world, source, edge, actual
+
+    def assert_resolved_blocker_scene(self, text, expected_scene):
+        nodes = emitted_nodes(text)
+        doors = [(path, node, prop) for path, node in nodes.items()
+                 for prop in node["properties"] if prop.startswith("blocker_path = NodePath(")]
+        self.assertEqual(len(doors), 1)
+        door_path, _, blocker_prop = doors[0]
+        match = re.fullmatch(r'blocker_path = NodePath\("([^"]+)"\)', blocker_prop)
+        self.assertIsNotNone(match)
+        blocker_path = resolve_emitted_path(door_path, match.group(1), nodes)
+        self.assertEqual(nodes[blocker_path]["scene"], expected_scene)
+        return match.group(1)
+
+    def assert_step_gate_geometry(self, edge_id, room_id, kind, extra_entities=""):
+        text, errors, world, source, edge, _ = self.compile(edge_id, room_id, kind,
+                                                              extra_entities=extra_entities)
+        self.assertEqual(errors, [], (edge_id, room_id))
+        self.assertIsNotNone(text)
+        other = edge["b"] if edge["a"] == room_id else edge["a"]
+        side = br.edge_side(world, room_id, other)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / f"{room_id}.room"
+            path.write_text(source, encoding="utf-8")
+            parse_errors = []
+            src = br.parse_source(path, parse_errors)
+            self.assertEqual(parse_errors, [])
+            plan = br.build_plan(src, world, parse_errors)
+            self.assertEqual(parse_errors, [])
+            closed = br.closed_flood(plan, br.tile_of(*br.ROOM_CENTRE_PX), None)
+            opened = br.closed_flood(plan, br.tile_of(*br.ROOM_CENTRE_PX), 0)
+        gap = set(br.GAP_TILES[side])
+        self.assertFalse(gap & closed, f"{edge_id} {room_id} must be physically closed")
+        self.assertTrue(gap & opened, f"{edge_id} {room_id} must open when its scene is cleared")
+
+    def test_exact_step_scenes_exports_and_paired_ids_at_both_endpoints(self):
+        for edge_id, kind, scene, field, endpoints, extra_entities in self.STEP_CASES:
+            for room_id in endpoints:
+                with self.subTest(edge=edge_id, room=room_id):
+                    text, errors, world, _, edge, _ = self.compile(edge_id, room_id, kind,
+                                                                    extra_entities=extra_entities)
+                    self.assertEqual(errors, [])
+                    self.assertIn(f'path="res://scenes/world/{scene}.tscn"', text)
+                    self.assertIn(f'{field} = &"{edge_id}"', text)
+                    self.assertIn('size = Vector2(192, 96)', text)
+                    self.assertNotIn('requires_flag', text)
+                    self.assertNotIn('blocker_path', text)
+                    side = br.edge_side(world, room_id, edge["b"] if edge["a"] == room_id else edge["a"])
+                    if side in ("e", "w"):
+                        self.assertIn('rotation = 1.570796', text)
+                    else:
+                        self.assertNotIn('rotation = 1.570796', text)
+                    scene_text = (br.ROOT / f"scenes/world/{scene}.tscn").read_text(encoding="utf-8")
+                    if kind == "resonance_stone":
+                        self.assertIn("resonance_stone.gd", scene_text)
+                        self.assertIn('look = &"resonance_stone"', scene_text)
+                        runtime = (br.ROOT / "scripts/world/resonance_stone.gd").read_text(encoding="utf-8")
+                        self.assertIn('return hitbox.kind == &"chime"', runtime)
+                        self.assertIn('_shape.set_deferred("disabled", value)', runtime)
+                    elif kind == "heavy_door":
+                        self.assertIn("heavy_stone.gd", scene_text)
+                        self.assertIn('look = &"heavy_door"', scene_text)
+                        self.assertIn("mode = 1", scene_text)  # Scene-owned P06 PUSH mode.
+                        self.assertNotIn("mode =", text)  # The compiler does not rewrite its mode.
+                        runtime = (br.ROOT / "scripts/world/heavy_stone.gd").read_text(encoding="utf-8")
+                        self.assertIn("if mode != Mode.PUSH", runtime)
+                    elif kind == "eye_portcullis":
+                        self.assertIn("eye_switch.gd", scene_text)
+                        self.assertIn("blocker = true", scene_text)
+                    else:
+                        self.assertIn("burnable.gd", scene_text)
+                        self.assertIn('look = &"thorn_wall"', scene_text)
+                        runtime = (br.ROOT / "scripts/world/burnable.gd").read_text(encoding="utf-8")
+                        self.assertIn('return hitbox.kind == &"fire"', runtime)
+                        self.assertIn('_shape.set_deferred("disabled", true)', runtime)
+
+    def test_step_openers_block_and_clear_the_actual_graph_corridors(self):
+        for edge_id, kind, _, _, endpoints, extra_entities in self.STEP_CASES:
+            for room_id in endpoints:
+                with self.subTest(edge=edge_id, room=room_id):
+                    self.assert_step_gate_geometry(edge_id, room_id, kind, extra_entities)
+
+    def test_eye_cell_and_resonance_vault_use_their_real_door_scenes_and_links(self):
+        text, errors, _, _, _, _ = self.compile(
+            "e231", "cave_9_2", "eye_cell", extra_entities="eye_switch 12,3 id=e231")
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/eye_cell.tscn"', text)
+        self.assertIn('eye_id = &"e231"', text)
+        self.assertEqual(self.assert_resolved_blocker_scene(text, "res://scenes/world/eye_cell.tscn"),
+                         "../EyeCell1")
+        eye_scene = (br.ROOT / "scenes/world/eye_cell.tscn").read_text(encoding="utf-8")
+        self.assertIn("eye_switch.gd", eye_scene)
+        self.assertIn("blocker = true", eye_scene)
+        self.assertTrue(self.compile("e231", "cave_9_2", "eye_cell")[1], "the eye cell needs its linked switch")
+        self.assertTrue(self.compile("e231", "cave_9_2", "eye_portcullis", extra_entities="eye_switch 12,3 id=e231")[1])
+
+        text, errors, _, _, _, _ = self.compile("e232", "cave_9_9", "resonance_vault")
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/resonance_vault.tscn"', text)
+        self.assertIn('resonance_id = &"e232"', text)
+        self.assertEqual(self.assert_resolved_blocker_scene(text, "res://scenes/world/resonance_vault.tscn"),
+                         "../ResonanceVault1")
+        self.assertNotIn("requires_flag", text)
+        vault_scene = (br.ROOT / "scenes/world/resonance_vault.tscn").read_text(encoding="utf-8")
+        self.assertIn("resonance_stone.gd", vault_scene)
+        self.assertIn('look = &"resonance_vault"', vault_scene)
+
+    def test_scene_types_graph_props_capabilities_and_options_are_exact(self):
+        cases = (("e194", "cave_6_5", "resonance_stone", "resonance_door", ""),
+                 ("e198", "cave_6_8", "heavy_door", "heavy_stone", ""),
+                 ("e212", "cave_8_2", "eye_portcullis", "resonance_stone", "eye_switch 12,3 id=e212"),
+                 ("e223", "cave_9_2", "thorn_wall", "thorn_door", ""),
+                 ("e231", "cave_9_2", "eye_cell", "eye_portcullis", "eye_switch 12,3 id=e231"),
+                 ("e232", "cave_9_9", "resonance_vault", "resonance_stone", ""),
+                 ("e234", "cave_10_2", "thorn_wall", "thorn_door", ""),
+                 ("e238", "cave_10_6", "resonance_stone", "resonance_door", ""),
+                 ("e244", "cave_10_12", "eye_portcullis", "resonance_stone", "eye_switch 12,3 id=e244"))
+        for edge_id, room_id, required, wrong, extra_entities in cases:
+            with self.subTest(edge=edge_id, wrong=wrong):
+                self.assertTrue(self.compile(edge_id, room_id, wrong, extra_entities=extra_entities)[1],
+                                (edge_id, wrong))
+                self.assertTrue(self.compile(edge_id, room_id, required, id_override="missing_edge",
+                                             extra_entities=extra_entities)[1], (edge_id, "missing edge id"))
+                for change in (dict(prop="unrelated prop"), dict(gate="bomb"), dict(needs=["pitch_pot"])):
+                    self.assertTrue(self.compile(edge_id, room_id, required, edge_change=change,
+                                                 extra_entities=extra_entities)[1],
+                                    (edge_id, change))
+                for option in ("mode=0", "look=rock", "scope=ow", "size=0,96"):
+                    self.assertTrue(self.compile(edge_id, room_id, required, extra=option,
+                                                 extra_entities=extra_entities)[1],
+                                    (edge_id, option))
+
+    def test_heavy_door_local_size_must_physically_seal_the_rotated_exit(self):
+        # size= is the HeavyDoor scene's local body size; a 90-degree scene rotation swaps its
+        # world footprint. The actual west endpoint cannot be sealed by a horizontal 192x96 body.
+        _, errors, _, _, _, _ = self.compile("e198", "cave_6_8", "heavy_door", extra="size=96,192",
+                                              position_override="@144,432")
+        self.assertTrue(any("must span 192 px across its graph exit" in error for error in errors), errors)
+
+
 class AnchorRingCrossings(unittest.TestCase):
     def compile(self, host="ow_10_4", anchors=None, pit="pit @960,528 size=1728,288", extra="", gate_change=None):
         edge = dict(next(e for e in real_world().edges if e["id"] == "e079"))
