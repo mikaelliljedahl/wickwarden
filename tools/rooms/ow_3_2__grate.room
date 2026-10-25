@@ -1,0 +1,19 @@
+room ow_3_2#grate
+terrain Sunken Lane alcove: stone recess and exposed key niche
+floor_color 0.13 0.17 0.15
+grid
+####################
+#.......#..#.......#
+#.......#..#.......#
+#.......#..#.......#
+#..................#
+#..................#
+#..r............r..#
+#..................#
+#..................#
+####################
+pickup small_key 9,2 id=key_ow_2 scope=ow
+door ow_3_2 FromPocket 9,8
+spawn Inside 9,6
+; Key at (9,2); aim north from (9,4), 192px ray, wall-free except grate.
+grate @960,336

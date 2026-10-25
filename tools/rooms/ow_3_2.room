@@ -1,0 +1,20 @@
+room ow_3_2
+terrain Sunken Lane: broken banks framing a broad lane, vine sheltered alcove
+floor_color 0.16 0.22 0.18
+grid
+#########..#########
+#..t..........###..#
+#....#........#.#b.#
+#....#.............#
+#...................
+#...................
+#....#.............#
+#..t.#..........t..#
+#...b..............#
+#########..#########
+enemy tallow_blob 7,6
+enemy tallow_blob 13,6
+enemy skitterwick 12,3
+door ow_3_2#grate Inside 15,2
+spawn FromPocket 15,4
+spawn Default 9,3

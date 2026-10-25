@@ -1,0 +1,18 @@
+room ow_7_1
+terrain Eyegate: ruined gate piers, open crossing and northern firing court
+floor_color 0.16 0.22 0.18
+grid
+#########..#########
+#..t..............##
+#.....r...........##
+#.................##
+....................
+....................
+#.................##
+#...........r.....##
+#...t.............##
+#########..#########
+enemy hollow 7,6
+spawn Default 4,4
+eye_switch 13,2 id=e028
+opener eye_portcullis @1872,480 id=e028

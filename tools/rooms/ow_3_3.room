@@ -1,0 +1,20 @@
+room ow_3_3
+terrain Hermit's Rise: isolated hut on a stone terrace and broad clearing
+floor_color 0.16 0.22 0.18
+grid
+#########..#########
+#..............r...#
+#..t...............#
+#...........#...#..#
+#...........#...#..#
+#..................#
+#.....r............#
+#..t............t..#
+#....b.............#
+####################
+enemy bramble_snapper 7,6
+prop hut @1392,288 size=192,192
+door ow_3_3#hut Inside 14,4
+spawn FromPocket 14,6
+spawn Default 9,3
+opener thorn_door 14,4 id=e129
