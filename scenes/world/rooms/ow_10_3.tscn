@@ -59,12 +59,6 @@ script = ExtResource("5")
 size = Vector2(288, 192)
 kind = &"water"
 
-[node name="Hut1" type="StaticBody2D" parent="Props"]
-position = Vector2(1200, 192)
-script = ExtResource("5")
-size = Vector2(192, 96)
-kind = &"hut"
-
 [node name="Door1" type="Area2D" parent="Props"]
 position = Vector2(1200, 288)
 script = ExtResource("6")
@@ -88,6 +82,12 @@ position = Vector2(1488, 720)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"rock"
+
+[node name="Hut1" type="StaticBody2D" parent="Props"]
+position = Vector2(720, 816)
+script = ExtResource("5")
+size = Vector2(192, 96)
+kind = &"hut"
 
 [node name="Spawns" type="Node2D" parent="."]
 y_sort_enabled = true
