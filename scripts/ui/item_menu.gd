@@ -359,9 +359,10 @@ func _look(id: StringName) -> Dictionary:
 	return LOOK.get(id, DEFAULT_LOOK)
 
 
-## Same object-kind lookup as the HUD. Never substitute a player tool-use animation.
+## Prefer dedicated menu art, then accepted object art. Never use player tool-use sheets.
 ## Missing art stays a shape; unfound items never reveal their painted icon.
 func _icon_for(id: StringName) -> Texture2D:
 	if not is_found(id):
 		return null
-	return SpriteVisual.icon_of(id)
+	var icon := SpriteVisual.icon_of(StringName("icon_" + String(id)))
+	return icon if icon != null else SpriteVisual.icon_of(id)

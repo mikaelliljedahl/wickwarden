@@ -224,27 +224,40 @@ func _key_event(action: StringName, pressed: bool) -> InputEventKey:
 	return null
 
 
-## Use real accepted object frames, hide unowned art, and survive missing manifest entries.
+## Every owned tool uses its dedicated accepted icon; unowned tools keep silhouettes.
 func _item_art() -> void:
 	reset_state()
 	var menu = await _make_menu()
-	check(menu._icon_for(&"tether_moth") == null, "unfound items do not reveal accepted art")
-	for id in [&"tether_moth", &"pitch_pot"]:
+	for id in ItemRegistry.ids():
+		check(menu._icon_for(id) == null, "%s stays hidden before discovery" % id)
 		GameState.acquire_item(id)
-		var icon: Texture2D = menu._icon_for(id)
-		check(icon is AtlasTexture, "%s uses a single accepted object frame" % id)
-		if icon is AtlasTexture:
-			check_eq(icon.region, Rect2(0, 0, 96, 96), "the icon excludes adjacent frames")
-			check(
-				String(icon.atlas.resource_path).contains(String(id)),
-				"the icon belongs to the item, not a player tool-use sheet"
-			)
-	GameState.acquire_item(&"glow_jar")
+		var expected := SpriteVisual.icon_of(StringName("icon_" + String(id)))
+		check(expected != null, "%s has accepted dedicated icon art" % id)
+		check_eq(menu._icon_for(id), expected, "%s prefers its dedicated icon" % id)
+	menu.set_open(true)
+	await frames(2)
+	menu.set_open(false)
 	var original_manifest := SpriteVisual.manifest_path
+	var fallback_manifest := "user://item_menu_object_fallback.json"
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(original_manifest))
+	for id in ItemRegistry.ids():
+		manifest.erase("icon_" + String(id))
+	var file := FileAccess.open(fallback_manifest, FileAccess.WRITE)
+	file.store_string(JSON.stringify(manifest))
+	file.close()
+	SpriteVisual.use_manifest(fallback_manifest)
+	for id in [&"tether_moth", &"pitch_pot"]:
+		var icon: Texture2D = menu._icon_for(id)
+		check(icon is AtlasTexture, "%s falls back to accepted object art" % id)
+		if icon is AtlasTexture:
+			check_eq(icon.region, Rect2(0, 0, 96, 96), "fallback excludes adjacent frames")
+			check_eq(icon, SpriteVisual.icon_of(id), "fallback uses the object's own art")
 	SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
-	check(menu._icon_for(&"glow_jar") == null, "missing art retains the geometric fallback")
+	for id in ItemRegistry.ids():
+		check(menu._icon_for(id) == null, "%s has a shape fallback without art" % id)
 	menu.set_open(true)
 	await frames(2)
 	menu.set_open(false)
 	SpriteVisual.use_manifest(original_manifest)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(fallback_manifest))
 	await dispose(menu)
