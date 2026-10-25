@@ -1,0 +1,22 @@
+room cave_9_7
+terrain Anchor Shaft: brass workshop foundations frame clear tool crossings and return banks.
+floor_color 0.23 0.20 0.14
+grid
+####################
+#....#.............#
+#....#...##....##..#
+#....#.............#
+...................#
+...................#
+#....#.............#
+#....#...##....##..#
+#....#.............#
+####################
+pit @528,480 size=288,192
+anchor_ring @816,432
+anchor_ring @240,432
+enemy wickling 10,4
+enemy wickling 14,6
+prop pedestal 16,3
+pickup big_key @1584,358 id=bigkey_c9 scope=c9
+spawn Default 10,5

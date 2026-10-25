@@ -1,0 +1,20 @@
+room cave_9_8
+terrain Heavy Door Hall: brass workshop foundations frame clear tool crossings and return banks.
+floor_color 0.23 0.20 0.14
+grid
+#########..#########
+#..................#
+#..###......#####..#
+#..................#
+...................#
+...................#
+#..................#
+#..###......#####..#
+#..................#
+####################
+opener heavy_stone @960,144 id=e228
+opener locked_door @144,480 id=e229 scope=c9
+enemy hollow 6,4
+enemy hollow 13,5
+enemy wickling 15,3
+spawn Default 9,4

@@ -1,0 +1,22 @@
+room cave_9_6
+terrain Pit Landing: brass workshop foundations frame clear tool crossings and return banks.
+floor_color 0.23 0.20 0.14
+grid
+####################
+#.............#....#
+#..###........#....#
+#.............#....#
+#...................
+#...................
+#.............#....#
+#########..#########
+#.............#....#
+#########..#########
+pit @960,720 size=192,96
+pit @1392,480 size=288,192
+anchor_ring @1680,432
+anchor_ring @1104,432
+enemy skitterwick 5,4
+enemy skitterwick 10,2
+pickup small_key 7,2 id=key_c9_2 scope=c9
+spawn Default 9,4

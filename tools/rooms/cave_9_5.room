@@ -1,0 +1,25 @@
+room cave_9_5
+terrain Flooded Cellar: brass workshop foundations frame clear tool crossings and return banks.
+floor_color 0.23 0.20 0.14
+grid
+#########..#########
+#..................#
+#########..#########
+#..................#
+...................#
+...................#
+#..................#
+#..##..........##..#
+#..................#
+#########..#########
+water @48,480 size=96,192
+mooring @144,480 id=e225 target_room=cave_9_4 target_mooring=e225 landing_offset=56,0
+pit @960,240 size=192,96
+opener heavy_stone @960,816 id=e228
+shallows @480,624 size=384,192
+shallows @1440,432 size=384,192
+enemy fen_leech 4,6
+enemy fen_leech 14,4
+enemy tallow_blob 6,4
+enemy tallow_blob 13,7
+spawn Default @960,528
