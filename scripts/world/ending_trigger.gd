@@ -106,14 +106,18 @@ func _build_choice() -> void:
 		zone.add_child(shape)
 		add_child(zone)
 		_zones.append(zone)
-		var pedestal := Node2D.new()
-		pedestal.position = OFFSETS[index]
-		_presentation.add_child(pedestal)
-		SpriteVisual.attach(pedestal, &"pedestal", 0.0, Vector2(96, 96))
+		var kind := StringName("arena_lantern_%s" % CHOICES[index])
+		# Painted choice props include their stone stand. Only the fallback needs another one.
+		if not SpriteVisual.has_art(kind):
+			var pedestal := Node2D.new()
+			pedestal.name = "FallbackPedestal_%s" % CHOICES[index]
+			pedestal.position = OFFSETS[index]
+			_presentation.add_child(pedestal)
+			SpriteVisual.attach(pedestal, &"pedestal", 0.0, Vector2(96, 96))
 		var lamp := Node2D.new()
+		lamp.name = "Lantern_%s" % CHOICES[index]
 		lamp.position = OFFSETS[index] + Vector2(0, -48)
 		_presentation.add_child(lamp)
-		var kind := StringName("arena_lantern_%s" % CHOICES[index])
 		_register(kind, Color(1.0, 0.68, 0.23) if index == 0 else Color(0.6, 0.85, 1.0))
 		SpriteVisual.attach(lamp, kind, 30.0)
 		var light := PointLight2D.new()

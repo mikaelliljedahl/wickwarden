@@ -9,12 +9,45 @@ const ACTIONS_SKIP: Array[StringName] = [&"confirm", &"attack", &"ui_accept", &"
 
 
 func run() -> void:
+	await _choice_stands()
 	await _gating_and_choice()
 	await _both_codas()
 	await _skip_and_back()
 	await _persistence_and_continue()
 	await _unauthorized_entry()
 	reset_state()
+
+
+func _choice_stands() -> void:
+	for missing in [false, true]:
+		reset_state()
+		GameState.set_flag(&"boss_cave_10_14_defeated")
+		# The public test-manifest API simulates unavailable art without altering runtime files.
+		if missing:
+			SpriteVisual.use_manifest("res://tests/fixtures/no_ending_art.json")
+		var trigger = _instantiate(TRIGGER)
+		trigger.dry_run = true
+		trigger.position = Vector2(960, 480)
+		add_child(trigger)
+		for choice in [&"rekindle", &"wickwarden"]:
+			var kind := StringName("arena_lantern_%s" % choice)
+			var painted := SpriteVisual.has_art(kind)
+			check_eq(
+				painted, not missing, "%s painted availability in missing=%s" % [choice, missing]
+			)
+			var stand: Node = trigger.get_node_or_null("Visual/FallbackPedestal_%s" % choice)
+			check_eq(
+				stand != null, missing, "%s has a separate stand only without painted art" % choice
+			)
+			var visual: Node = trigger.get_node("Visual/Lantern_%s/Visual" % choice)
+			check_eq(
+				visual is SpriteVisual,
+				not missing,
+				"%s uses the actual painted or fallback visual" % choice
+			)
+		await _capture("choice-fallback" if missing else "choice-painted")
+		await dispose(trigger)
+		SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _gating_and_choice() -> void:
