@@ -86,7 +86,8 @@ func _pull_to(ring: Node) -> bool:
 	if not _is_solid_floor(landing):
 		return false
 	var path: Array[Vector2] = [landing]
-	return walker.begin_external_motion(path, PULL_SPEED, {"hurtbox": false})
+	# Only a validated anchor pull clears hazards. Ordinary path motion remains grounded.
+	return walker.begin_external_motion(path, PULL_SPEED, {"airborne": true, "hurtbox": false})
 
 
 ## Solid floor: no WORLD or WATER body and no pit zone at `spot`.

@@ -19,6 +19,10 @@ func run() -> void:
 	await _cooldown_after_the_line_settles()
 	await _tip_hits_an_enemy_for_one()
 	await _reelable_reports_reel_hits()
+	for width in [288.0, 384.0, 400.0]:
+		await _real_chasm_round_trip(width)
+	await _wide_chasm_refuses_unsafe_landing()
+	await _walking_boots_and_grounded_motion_fall()
 
 
 func _items() -> Array:
@@ -207,3 +211,101 @@ func _reelable_reports_reel_hits() -> void:
 	check_eq(hits.size(), 1, "a reel hit reports once")
 	check(hits.size() > 0 and hits[0] == tip, "reeled carries the reel hitbox")
 	await dispose(arena)
+
+
+func _chasm(arena: Node, width: float) -> Node2D:
+	var pit: Node2D = _make(arena, PIT_SCENE, START + Vector2(40 + width * 0.5, 0))
+	pit.size = Vector2(width, 384)
+	return pit
+
+
+## Actual tip, AnchorRings and PitZone in both directions: no stand-in motion or pit immunity.
+func _real_chasm_round_trip(width: float) -> void:
+	reset_state()
+	var arena := make_arena()
+	var hero := make_player(arena, START)
+	var pit := _chasm(arena, width)
+	var far := START + Vector2(width + 176, 0)
+	var ring: Node2D = _make(arena, RING_SCENE, far)
+	ring.max_range = 576.0
+	var home: Node2D = _make(arena, RING_SCENE, START - Vector2(72, 0))
+	home.max_range = 576.0
+	await frames(3)
+	_use(hero)
+	for direction in [Vector2.RIGHT, Vector2.LEFT]:
+		hero.facing = direction
+		Input.action_press(&"ward")
+		await frames(2)
+		check(hero.ward_up, "ward can be raised before firing")
+		check(hero.use_item(), "real reel fires across %d px chasm" % int(width))
+		var seen := false
+		var over_pit := false
+		for i in range(100):
+			await frames(1)
+			if hero.is_external_motion():
+				if not seen:
+					check(hero.is_airborne(), "validated real anchor pull is airborne")
+					check(not hero.is_on_raft(), "reel never claims raft provenance")
+					check(not hero.hurtbox.enabled, "reel keeps hurtbox off")
+					check(not hero.ward_up, "ward is down during reel motion")
+					check(not hero.use_item(), "items remain blocked during pull")
+					check(not hero.take_damage(1, far), "pull remains invulnerable")
+				seen = true
+				over_pit = over_pit or pit.holds(hero.global_position)
+			elif seen:
+				break
+		check(seen and over_pit, "actual anchor pull travels over live pit")
+		var expected := far - Vector2(72, 0) if direction == Vector2.RIGHT else START
+		check_eq(hero.global_position, expected, "reel stops exactly72 before target ring")
+		check_eq(GameState.health, 6, "real pit does not damage legitimate grapple")
+		check(not hero.is_airborne(), "arrival clears airborne state")
+		check(hero.hurtbox.enabled, "arrival restores hurtbox")
+		check(
+			not (hero.get_node("BodyShape") as CollisionShape2D).disabled, "arrival restores body"
+		)
+		release_inputs()
+		await seconds(0.7)
+		check(_tips().is_empty() and _items().is_empty(), "line settles before return grapple")
+	await dispose(arena)
+
+
+func _wide_chasm_refuses_unsafe_landing() -> void:
+	reset_state()
+	var arena := make_arena()
+	var hero := make_player(arena, START)
+	_chasm(arena, 480.0)
+	var ring: Node2D = _make(arena, RING_SCENE, START + Vector2(576, 0))
+	ring.max_range = 576.0
+	await frames(3)
+	_use(hero)
+	check(hero.use_item(), "line fires within576 toward480px pit")
+	await seconds(1.5)
+	check_eq(hero.global_position, START, "unsafe72px stop over480px pit is refused")
+	check(not hero.is_airborne(), "refused pull grants no airborne state")
+	check_eq(GameState.health, 6, "refusal stays safely on firing bank")
+	await dispose(arena)
+
+
+func _walking_boots_and_grounded_motion_fall() -> void:
+	for mode in [&"walk", &"boots", &"grounded_motion"]:
+		reset_state()
+		var arena := make_arena()
+		var hero := make_player(arena, START)
+		_chasm(arena, 288.0)
+		await frames(3)
+		if mode == &"walk":
+			Input.action_press(&"move_right")
+			await frames(8)
+			release_inputs()
+		elif mode == &"boots":
+			GameState.acquire_item(&"skitter_boots")
+			hero.facing = Vector2.RIGHT
+			check(hero.use_item(), "boots start ordinary192px leap")
+			await seconds(0.6)
+		else:
+			var path: Array[Vector2] = [START + Vector2(400, 0)]
+			hero.begin_external_motion(path, 900.0, {"hurtbox": false})
+			await seconds(0.6)
+		check_eq(GameState.health, 4, "%s still falls into reel-width pit" % mode)
+		check(not hero.is_external_motion(), "%s fall clears motion" % mode)
+		await dispose(arena)
