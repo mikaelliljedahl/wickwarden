@@ -9,11 +9,74 @@ var player: Player
 
 
 func run() -> void:
+	await _visual_adapters()
 	await _intro_and_armour()
 	await _real_chime_timing()
 	await _songs_and_ward()
 	await _fight_and_persistence()
 	await _reset_and_gallery()
+
+
+func _visual_adapters() -> void:
+	var keys := [&"dirge_head_bass", &"dirge_head_alto", &"dirge_head_treble"]
+	var image := Image.create(384, 384, false, Image.FORMAT_RGBA8)
+	image.fill(Color.WHITE)
+	check_eq(image.save_png("user://dirge_visual.png"), OK, "temporary art fixture saves")
+	for count in [0, 1, 3]:
+		var manifest := {}
+		for i in range(count):
+			var animations := {}
+			for animation in ["idle", "telegraph", "sing"]:
+				animations[animation] = {
+					"file": "user://dirge_visual.png", "frames": 1, "fps": 6, "loop": true
+				}
+			manifest[keys[i]] = {
+				"cell": [384, 384],
+				"anchor": [192, 292],
+				"foot": 340,
+				"radius": 48,
+				"animations": animations
+			}
+		var file := FileAccess.open("user://dirge_visual.json", FileAccess.WRITE)
+		file.store_string(JSON.stringify(manifest))
+		file.close()
+		SpriteVisual.use_manifest("user://dirge_visual.json")
+		await _setup()
+		check_eq(boss.visual.visible, count < 3, "container fallback needs all three painted heads")
+		for i in range(3):
+			var head: Variant = boss.heads[i]
+			check_eq(head.voice, i, "voice identity survives visual selection")
+			check_eq(
+				head.visual_kind, keys[i] if i < count else &"choir_head", "per-voice fallback"
+			)
+			check_eq(head.body_radius, 48.0, "paint does not change head radius")
+			var body := head.get_node("BodyShape") as CollisionShape2D
+			check_eq(body.shape.radius, 48.0, "paint keeps the actual body circle")
+			check_eq(head.contact_hitbox.damage, 2, "paint keeps head contact damage")
+			if i < count:
+				check(head.visual is SpriteVisual, "available voice uses painted visual")
+				check_eq(
+					head.visual.offset, Vector2(-192, -292), "contract foot anchor at body centre"
+				)
+			else:
+				check(head.visual is Placeholder, "missing voice keeps visible geometric fallback")
+		if count == 3:
+			await frames(95)
+			boss.song_left = 100
+			for head in boss.heads:
+				head.cancel_song()
+			var head: Variant = boss.heads[0]
+			head.begin_song()
+			await frames(2)
+			check_eq(head.visual.animation, &"telegraph", "real song starts with warning art")
+			await frames(50)
+			check_eq(head.visual.animation, &"sing", "art follows real 0.8 second attack boundary")
+			await _ring()
+			check(head.open_left > 0, "visual adapter keeps real chime opening")
+			check_eq(head.visual.animation, &"idle", "open window never shows closed stunned pose")
+			check_eq(head.song_age, -1.0, "visual update does not restart cancelled song")
+		await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _setup() -> void:
@@ -256,6 +319,15 @@ func _reset_and_gallery() -> void:
 		check_eq(
 			fixture.get_node("Enemies/DirgeChoir").parts().size(), 3, "gallery presents three heads"
 		)
+		var clone: Variant = fixture.get_node("Enemies/DirgeChoir")
+		for i in range(3):
+			var kind: StringName = clone.HEAD_ART[i]
+			check_eq(clone.heads[i].voice, i, "template clone keeps voice identity")
+			check_eq(
+				clone.heads[i].visual_kind,
+				kind if SpriteVisual.has_art(kind) else &"choir_head",
+				"template clone selects the corresponding painted voice or fallback"
+			)
 		var live_heads := 0
 		for node in fixture.get_node("Enemies").get_children():
 			if node is EnemyBase and node.get("choir") != null:
@@ -269,4 +341,7 @@ func _reset_and_gallery() -> void:
 			fixture.get_node("Enemies/DirgeChoir").is_in_intro(),
 			"room leave/reentry resets encounter"
 		)
+		clone = fixture.get_node("Enemies/DirgeChoir")
+		for i in range(3):
+			check_eq(clone.heads[i].voice, i, "reentry rebuilds the same three voice identities")
 		await dispose(fixture)

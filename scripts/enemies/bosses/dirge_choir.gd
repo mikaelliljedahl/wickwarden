@@ -3,6 +3,7 @@ extends "res://scripts/enemies/boss_base.gd"
 
 const HEAD_POINTS := [Vector2(336, 720), Vector2(1008, 720), Vector2(1584, 720)]
 const CHOIRLING := "res://scenes/enemies/choirling.tscn"
+const HEAD_ART: Array[StringName] = [&"dirge_head_bass", &"dirge_head_alto", &"dirge_head_treble"]
 var heads: Array[EnemyBase] = []
 var singers: Array[EnemyBase] = []
 var song_left := 0.0
@@ -41,6 +42,16 @@ class Head:
 			return
 		hurtbox.filter = _accept
 		set_contact_enabled(false)
+		if visual is SpriteVisual:
+			visual.auto_motion = false
+
+	# Presentation reads the existing song clock; the attack geometry and cues stay independent.
+	func _process(_delta: float) -> void:
+		if visual is SpriteVisual:
+			var animation := &"idle"
+			if song_age >= 0:
+				animation = &"telegraph" if song_age < 0.8 else &"sing"
+			visual.play_anim(animation)
 
 	func _accept(_hit: Hitbox) -> bool:
 		return is_instance_valid(choir) and choir.call(&"heads_active")
@@ -256,7 +267,14 @@ func _boss_ready() -> void:
 	var room := _room()
 	_origin = room.global_position if room != null else get_parent().global_position
 	call_deferred(&"_spawn_heads")
-	visual.visible = false
+	visual.visible = not _has_all_head_art()
+
+
+func _has_all_head_art() -> bool:
+	for kind in HEAD_ART:
+		if not SpriteVisual.has_art(kind):
+			return false
+	return true
 
 
 func _spawn_heads() -> void:
@@ -266,6 +284,8 @@ func _spawn_heads() -> void:
 	for i in range(3):
 		var head := Head.new()
 		head.voice = i
+		if SpriteVisual.has_art(HEAD_ART[head.voice]):
+			head.visual_kind = HEAD_ART[head.voice]
 		head.choir = self
 		adopt_part(head, arena_point(HEAD_POINTS[i]))
 		heads.append(head)
