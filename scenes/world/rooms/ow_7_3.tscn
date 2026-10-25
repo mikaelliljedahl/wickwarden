@@ -111,6 +111,7 @@ position = Vector2(1200, 432)
 script = ExtResource("7")
 target_room = &"ow_7_3#grotto"
 target_spawn = &"Inside"
+blocker_path = NodePath("../ReedCluster1")
 
 [node name="Reed6" type="StaticBody2D" parent="Props"]
 position = Vector2(1392, 432)
