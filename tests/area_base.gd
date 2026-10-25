@@ -16,7 +16,9 @@ const SCRIPT_DIR := "res://scripts/world/"
 const WALL_SCRIPTS := [
 	"locked_door.gd", "gate.gd", "cracked_wall.gd", "burnable.gd", "resonance_stone.gd"
 ]
-const SIDE_STEP := {"n": Vector2i(0, -1), "e": Vector2i(1, 0), "s": Vector2i(0, 1), "w": Vector2i(-1, 0)}
+const SIDE_STEP := {
+	"n": Vector2i(0, -1), "e": Vector2i(1, 0), "s": Vector2i(0, 1), "w": Vector2i(-1, 0)
+}
 ## Every gate prop name of world-plan 1.3 and 2.2 (the graph's `prop`) -> its script in scripts/world/.
 ## tests/test_world_graph.gd fails when a prop of the graph has no entry here.
 const PROP_SCRIPTS := {
@@ -74,7 +76,6 @@ var scene_cache: Dictionary = {}
 ## The room instance that room_problems() is checking, and its scene path: gates read it, not the disk copy.
 var subject_path := ""
 var subject_room: Node = null
-
 
 # ---- the graph -------------------------------------------------------------------------------
 
@@ -156,7 +157,9 @@ func placed_at(room_id: String) -> Array[Dictionary]:
 	for pickup: Dictionary in world_json["pickups"]:
 		var node := String(pickup["node"])
 		if _on_room(node, room_id):
-			records.append({"id": String(pickup["id"]), "node": node, "kind": String(pickup["kind"])})
+			records.append(
+				{"id": String(pickup["id"]), "node": node, "kind": String(pickup["kind"])}
+			)
 	var items: Dictionary = world_json["items"]
 	for capability: String in items:
 		var node := String(items[capability]["node"])
@@ -260,7 +263,11 @@ func _has_prop(root: Node, script: String, edge: Dictionary) -> bool:
 	while not stack.is_empty():
 		var node: Node = stack.pop_back()
 		var node_script: Script = node.get_script()
-		if node_script != null and node_script.resource_path == script and _key_scope_ok(node, edge):
+		if (
+			node_script != null
+			and node_script.resource_path == script
+			and _key_scope_ok(node, edge)
+		):
 			return true
 		stack.append_array(node.get_children())
 	return false
@@ -352,7 +359,9 @@ func _check_grid_and_exits(
 		if other == "" or not scene_exists(WorldData.scene_path(other)):
 			pending["%s: exit %s waits for room %s" % [id, side, other]] = true
 		else:
-			problems.append("%s: graph exit %s is missing in the scene (%s has its scene)" % [id, side, other])
+			problems.append(
+				"%s: graph exit %s is missing in the scene (%s has its scene)" % [id, side, other]
+			)
 
 
 func _check_enemies(id: String, enemies: Node, problems: Array[String]) -> void:
@@ -360,7 +369,8 @@ func _check_enemies(id: String, enemies: Node, problems: Array[String]) -> void:
 	var record: Dictionary = rooms_by_id.get(id, {})
 	var planned: Dictionary = record.get("enemies", {})
 	for name: String in planned:
-		plan[name.to_lower().replace(" ", "_")] = int(planned[name])
+		var key := name.to_lower().replace(" ", "_").trim_prefix("new:")
+		plan[key] = int(planned[name])
 	var counts := {}
 	for enemy in enemies.get_children():
 		var position := (enemy as Node2D).position
@@ -447,7 +457,11 @@ func _is_wall_like(node: Node) -> bool:
 
 
 func _check_layout(
-	id: String, enemies: Node, scene_exits: Array[String], geometry: Dictionary, problems: Array[String]
+	id: String,
+	enemies: Node,
+	scene_exits: Array[String],
+	geometry: Dictionary,
+	problems: Array[String]
 ) -> void:
 	var blocked: Dictionary = geometry["blocked"]
 	var walk: Dictionary = geometry["walk"]
@@ -471,16 +485,23 @@ func _check_layout(
 func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Array[String]) -> void:
 	var reach: Dictionary = geometry["reach"]
 	var nodes := descendants_of_class(room, PickupBase)
+	var shop_items: Array[Node] = []
+	for node in descendants_of_class(room, Area2D):
+		var script: Script = node.get_script()
+		if script != null and script.resource_path.ends_with("/shop_item.gd"):
+			shop_items.append(node)
+	nodes.append_array(shop_items)
 	var reachable := 0
 	var unreachable := 0
 	for node in nodes:
-		var pickup := node as PickupBase
-		if String(pickup.persistent_id) == "":
-			problems.append("%s: pickup %s has no persistent_id" % [id, pickup.name])
-		if reaches(reach, tile_of(pickup.position), true):
+		if node is PickupBase and String((node as PickupBase).persistent_id) == "":
+			problems.append("%s: pickup %s has no persistent_id" % [id, node.name])
+		if reaches(reach, tile_of((node as Node2D).position), true):
 			reachable += 1
 		else:
 			unreachable += 1
+			if shop_items.has(node):
+				problems.append("%s: shop stock %s is not reachable from the spawn" % [id, node.name])
 	var sealed := 0
 	var open := 0
 	for record in placed_at(id):
@@ -489,11 +510,20 @@ func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Arra
 		else:
 			open += 1
 	if nodes.size() < sealed + open:
-		problems.append("%s: %d pickups placed, the graph places %d" % [id, nodes.size(), sealed + open])
+		problems.append(
+			"%s: %d pickups placed, the graph places %d" % [id, nodes.size(), sealed + open]
+		)
 	if unreachable < sealed:
-		problems.append("%s: a sealed spot holds no unreachable pickup (%d of %d)" % [id, unreachable, sealed])
+		problems.append(
+			"%s: a sealed spot holds no unreachable pickup (%d of %d)" % [id, unreachable, sealed]
+		)
 	if reachable < open:
-		problems.append("%s: %d pickup(s) of the graph are not reachable from the spawn" % [id, open - reachable])
+		problems.append(
+			(
+				"%s: %d pickup(s) of the graph are not reachable from the spawn"
+				% [id, open - reachable]
+			)
+		)
 
 
 ## Every gated edge at this room must have its prop in a scene at either end.
@@ -501,8 +531,13 @@ func _check_gates(id: String, problems: Array[String]) -> void:
 	for edge: Dictionary in gated_edges_of(id):
 		match edge_status(edge):
 			"missing":
-				var text := "%s: gate %s (%s, %s-%s) has no %s"
-				problems.append(text % [id, edge["id"], edge["gate"], edge["a"], edge["b"], edge["prop"]])
+				if String(edge["prop"]) == "mooring and water":
+					pending["gate %s (mooring and water): compiler has no mooring line yet" % edge["id"]] = true
+				else:
+					var text := "%s: gate %s (%s, %s-%s) has no %s"
+					problems.append(
+						text % [id, edge["id"], edge["gate"], edge["a"], edge["b"], edge["prop"]]
+					)
 			"unknown":
 				problems.append("%s: prop %s has no entry in PROP_SCRIPTS" % [id, edge["prop"]])
 			"pending":
@@ -522,13 +557,23 @@ func _check_doors(id: String, room: Node, problems: Array[String]) -> void:
 		elif scene_exists(WorldData.scene_path(other)):
 			var target := scene_root(WorldData.scene_path(other))
 			if target.get_node_or_null("Spawns/%s" % door.target_spawn) == null:
-				problems.append("%s: door to %s needs marker %s there" % [id, other, door.target_spawn])
+				problems.append(
+					"%s: door to %s needs marker %s there" % [id, other, door.target_spawn]
+				)
 		else:
 			pending["door %s -> %s: target scene not built yet" % [id, other]] = true
 	for door in descendants_of_class(room, RoomDoor):
 		var target_room := String((door as RoomDoor).target_room)
-		if not partners.has(target_room):
-			problems.append("%s: door targets %s, which the graph does not link here" % [id, target_room])
+		var own_pocket_target := (
+			target_room.begins_with(id + "#")
+			and pockets_by_id.has(target_room)
+			and host_of(target_room) == id
+		)
+		var pocket_host_target := pockets_by_id.has(id) and host_of(id) == target_room
+		if not partners.has(target_room) and not own_pocket_target and not pocket_host_target:
+			problems.append(
+				"%s: door targets %s, which the graph does not link here" % [id, target_room]
+			)
 
 
 func _door_to(room: Node, other: String) -> RoomDoor:
