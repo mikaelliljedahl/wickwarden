@@ -1473,3 +1473,6 @@ the width of the hook swing in particular, in play.
 | `fx_rekindle_burst_v1.png` | 1536x1024 | `01a173b8-8b36-7612-ad75-e4e3ae83261c` | `exec-606030ed-f592-41e1-afcc-181308e2af70.png` | `6b2cbdf18ee606f5` | `log_art_resume_47.md` |
 | `fx_rekindle_burst_v2.png` | 1536x1024 | `01a173b8-89f7-7d21-8ed5-93517e17dd1e` | `exec-a8dcb182-b836-4fa6-8f42-2dc07c5fa973.png` | `e230fea1e4085036` | `log_art_resume_47.md` |
 | `fx_rekindle_burst_v3.png` | 1536x1024 | `01a173b8-8aea-7cf2-b87d-cdc4ea0b627c` | `exec-6cec8821-5fb9-44d7-ad39-14676709fe01.png` | `015b010fa3111780` | `log_art_resume_47.md` |
+
+| `lockpick_pickup_v1.png` | 1536x1024 | `01a173b6-dd52-7ea2-9a1e-db4817496668` | `exec-106cc047-cad6-4702-a1a7-f26f2e262f7f.png` | `f887f6dc0a5e0e47` | `lockpick-art-log.md` |
+| `lockpick_hud_v1.png` | 1254x1254 | `01a173b6-dd52-7ea2-9a1e-db4817496668` | `exec-d61727d7-86a1-4fe0-95e6-084527a44566.png` | `43c9c5575dea7cb6` | `lockpick-art-log.md` |
