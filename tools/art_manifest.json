@@ -108,7 +108,87 @@
   "wall_ruin": {"cell": [384, 384], "align": "center", "texture": true},
   "water": {"cell": [384, 384], "align": "center", "texture": true},
   "pond_bank": {"cell": [384, 384], "align": "center", "texture": true},
-  "wall_ruin_face": {"cell": [384, 384], "align": "center", "texture": true}
+  "wall_ruin_face": {"cell": [384, 384], "align": "center", "texture": true},
+ "icon_tether_moth": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_pitch_pot": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_cinder_wick": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_tallow_sling": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_reed_raft": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_heft_mitts": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_glow_jar": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_lantern_chime": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_skitter_boots": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
+ "icon_reel_line": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": false
+ }
  },
  "sheets": {
   "tamsin_walk": {
@@ -876,6 +956,257 @@
   "tex_wall_ruin": {"type": "texture", "output": "wall_ruin", "size": 384, "blend": 0.2},
   "tex_water": {"type": "texture", "output": "water", "size": 384, "blend": 0.2},
   "tex_pond_bank": {"type": "texture", "output": "pond_bank", "size": 384, "blend": 0.2},
-  "tex_wall_ruin_face": {"type": "texture", "output": "wall_ruin_face", "size": 384, "blend": 0.2}
+  "tex_wall_ruin_face": {"type": "texture", "output": "wall_ruin_face", "size": 384, "blend": 0.2},
+ "icon_tether_moth_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_tether_moth",
+      "kind": "icon_tether_moth",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_pitch_pot_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_pitch_pot",
+      "kind": "icon_pitch_pot",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        96
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_cinder_wick_v1": {
+  "key": "magenta",
+  "params": {"min_gap_y": 100},
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_cinder_wick",
+      "kind": "icon_cinder_wick",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_tallow_sling_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_tallow_sling",
+      "kind": "icon_tallow_sling",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_reed_raft_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_reed_raft",
+      "kind": "icon_reed_raft",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_heft_mitts_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_heft_mitts",
+      "kind": "icon_heft_mitts",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_glow_jar_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_glow_jar",
+      "kind": "icon_glow_jar",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_lantern_chime_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_lantern_chime",
+      "kind": "icon_lantern_chime",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_skitter_boots_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_skitter_boots",
+      "kind": "icon_skitter_boots",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "icon_reel_line_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "icon_reel_line",
+      "kind": "icon_reel_line",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        112,
+        112
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ }
  }
 }
