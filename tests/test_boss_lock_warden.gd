@@ -5,10 +5,64 @@ const GALLERY := "res://tests/fixtures/gallery/B09.tscn"
 
 
 func run() -> void:
+	await _plate_visual_states()
 	await _room_clone_lifecycle()
 	await _tools_and_finish()
 	await _attacks_and_reset()
 	await _lids_refill_and_phase_two()
+	if "--lock-world-captures" in OS.get_cmdline_user_args():
+		await _world_plate_capture()
+
+
+func _plate_visual_states() -> void:
+	# User-data fixtures exercise missing and incomplete art independently of mapper timing.
+	var texture_path := "user://b09_plate_fixture.png"
+	var manifest_path := "user://b09_plate_fixture.json"
+	var image := Image.create(160, 160, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.7, 0.5, 0.2))
+	check_eq(image.save_png(texture_path), OK, "plate fixture texture saves")
+	for mode in ["missing", "incomplete", "painted"]:
+		reset_state()
+		var animations := {"closed": {"file": texture_path, "frames": 1}}
+		if mode == "painted":
+			animations["open"] = {"file": texture_path, "frames": 1}
+		var manifest := {}
+		if mode != "missing":
+			manifest["lock_plate"] = {
+				"cell": [160, 160], "anchor": [80, 80], "centered": true, "animations": animations
+			}
+		var file := FileAccess.open(manifest_path, FileAccess.WRITE)
+		file.store_string(JSON.stringify(manifest))
+		file.close()
+		SpriteVisual.use_manifest(manifest_path)
+		var room := _fixture()
+		var boss = room.get_node("Enemies/LockWarden")
+		await seconds(1.6)
+		check_eq(boss.plates.size(), 4, "visual fixture keeps four targets")
+		for plate in boss.plates:
+			check_eq(plate._uses_painted_eye(), mode == "painted", "usable art alone hides eye")
+			check_eq(plate.eye.position, Vector2(0, -48), "visual keeps eye position")
+			check_eq(plate.plate_box.position, Vector2.ZERO, "visual keeps plate position")
+			if mode == "painted":
+				var visual := plate.get_node("Visual") as SpriteVisual
+				check_eq(visual.position, Vector2(16, -30), "constant painted target alignment")
+				check_eq(visual.animation, &"closed", "painted plate starts closed")
+				var hit := Hitbox.new()
+				hit.kind = &"sling"
+				check(plate._eye_accepts(hit), "painted eye accepts sling immediately")
+				check_eq(plate.lid_left, 6.0, "visual preserves six-second window")
+				hit.kind = &"explosion"
+				check(plate._plate_accepts(hit), "damage gate opens before visual update")
+				plate._refresh_plate_visual()
+				check_eq(visual.animation, &"open", "existing lid window selects open")
+				plate.lid_left = 0.001
+				plate._physics_process(0.002)
+				check_eq(visual.animation, &"closed", "expired window selects closed")
+				check(not plate._plate_accepts(hit), "expired window rejects damage")
+				check_eq(visual.position, Vector2(16, -30), "state change keeps offset")
+				hit.free()
+		await dispose(room)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _fixture() -> Room:
@@ -18,6 +72,70 @@ func _fixture() -> Room:
 	add_child(room)
 	room.enter()
 	return room
+
+
+func _world_plate_capture() -> void:
+	# Optional graphics proof runs only in an isolated project with the reviewed real mapping.
+	reset_state()
+	check(SpriteVisual.has_art(&"lock_plate"), "World proof requires real plate mapping")
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var scene := load("res://scenes/world/world.tscn") as PackedScene
+	var world := scene.instantiate() as World
+	viewport.add_child(world)
+	world.start_at(&"cave_9_10")
+	var room := world.get_room(&"cave_9_10")
+	var boss = room.get_node("Enemies/LockWarden1")
+	var player := world.player
+	player.set_hurtbox_enabled(self, false)
+	GameState.acquire_item(&"pitch_pot")
+	GameState.acquire_item(&"tallow_sling")
+	GameState.add_slugs(30)
+	GameState.add_pitch_pots(10)
+	player.place_at(room.global_position + Vector2(300, 192))
+	await seconds(1.6)
+	check_eq(boss.plates.size(), 4, "actual C9 Room has four painted targets")
+	await _capture_world_plate(viewport, "closed")
+	world.set_debug_draw(true)
+	await _capture_world_plate(viewport, "targets")
+	world.set_debug_draw(false)
+	for i in range(4):
+		var plate = boss.plates[0]
+		var visual := plate.get_node("Visual") as SpriteVisual
+		check(plate._uses_painted_eye(), "actual target suppresses fallback eye")
+		check_eq(visual.position, Vector2(16, -30), "actual Room uses reviewed offset")
+		GameState.set_active_item(&"tallow_sling")
+		player.place_at(plate.eye.global_position + Vector2(-240, 0))
+		player.facing = Vector2.RIGHT
+		check(player.use_item(), "World actual sling launches")
+		await seconds(0.5)
+		check(plate.lid_left > 5, "World actual slug opens live eye")
+		check_eq(visual.animation, &"open", "World painted eye reflects live opening")
+		await _capture_world_plate(viewport, "open-%d" % i)
+		GameState.set_active_item(&"pitch_pot")
+		player.place_at(plate.global_position + Vector2(-192, 0))
+		player.facing = Vector2.RIGHT
+		check(player.use_item(), "World actual pot placed")
+		player.place_at(room.global_position + Vector2(300, 192))
+		await seconds(1.9)
+		check(not is_instance_valid(plate), "broken painted target frees without animation delay")
+		check_eq(boss.plates.size(), 3 - i, "World pot removes exactly one target")
+	check_eq(boss.phase, 2, "World four real targets unlock core phase")
+	check_eq(boss.hp, 24, "World painted targets preserve core health")
+	check(boss.has_node("KeyholeVisual"), "unaccepted keyhole keeps procedural visual")
+	await seconds(0.7)
+	await _capture_world_plate(viewport, "plates-removed")
+	await dispose(viewport)
+
+
+func _capture_world_plate(viewport: SubViewport, label: String) -> void:
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var path := "/tmp/wickwarden-b09-world-%s.png" % label
+	check_eq(viewport.get_texture().get_image().save_png(path), OK, "World proof capture saves")
+	print("saved ", path)
 
 
 func _tools_and_finish() -> void:

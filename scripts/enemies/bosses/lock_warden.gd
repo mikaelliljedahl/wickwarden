@@ -18,6 +18,7 @@ class Plate:
 	var owner_boss: Node2D
 	var plate_box: Hurtbox
 	var eye: Hurtbox
+	var _painted_plate: SpriteVisual
 
 	func _ready() -> void:
 		plate_box = get_node("Model/PlateHurtbox") as Hurtbox
@@ -25,7 +26,27 @@ class Plate:
 		plate_box.hurt.connect(_plate_hit)
 		eye = get_node("Model/LidEye") as Hurtbox
 		eye.filter = _eye_accepts
-		SpriteVisual.attach(self, &"lock_plate", 34)
+		_painted_plate = SpriteVisual.attach(self, &"lock_plate", 34) as SpriteVisual
+		_refresh_plate_visual()
+
+	func _uses_painted_eye() -> bool:
+		if not is_instance_valid(_painted_plate) or _painted_plate.sprite_frames == null:
+			return false
+		for state in [&"closed", &"open"]:
+			var frames := _painted_plate.sprite_frames
+			if not frames.has_animation(state) or frames.get_frame_count(state) == 0:
+				return false
+			if frames.get_frame_texture(state, 0) == null:
+				return false
+		return true
+
+	func _refresh_plate_visual() -> void:
+		if not _uses_painted_eye():
+			return
+		_painted_plate.auto_motion = false
+		# One offset for every frame aligns the painted lid with the existing eye target.
+		_painted_plate.position = Vector2(16, -30)
+		_painted_plate.play_anim(&"open" if lid_left > 0 else &"closed")
 
 	func _eye_accepts(hit: Hitbox) -> bool:
 		if active and hit.kind == &"sling":
@@ -51,9 +72,12 @@ class Plate:
 
 	func _physics_process(delta: float) -> void:
 		lid_left = maxf(0, lid_left - delta)
+		_refresh_plate_visual()
 		queue_redraw()
 
 	func _draw() -> void:
+		if _uses_painted_eye():
+			return
 		draw_circle(
 			Vector2(0, -48), 22, Color(1, 0.8, 0.2) if lid_left > 0 else Color(0.25, 0.17, 0.07)
 		)
