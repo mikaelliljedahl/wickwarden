@@ -1,0 +1,15 @@
+[gd_scene format=3]
+[node name="NinthLanternArena" type="Node2D"]
+[node name="Visual" type="Node2D" parent="."]
+[node name="LeftPost" type="Polygon2D" parent="Visual"]
+position = Vector2(576, 96)
+polygon = PackedVector2Array(-20, -24, 20, -24, 20, 24, -20, 24)
+color = Color(0.45, 0.38, 0.3, 1)
+[node name="CentrePost" type="Polygon2D" parent="Visual"]
+position = Vector2(960, 96)
+polygon = PackedVector2Array(-20, -24, 20, -24, 20, 24, -20, 24)
+color = Color(0.45, 0.38, 0.3, 1)
+[node name="RightPost" type="Polygon2D" parent="Visual"]
+position = Vector2(1344, 96)
+polygon = PackedVector2Array(-20, -24, 20, -24, 20, 24, -20, 24)
+color = Color(0.45, 0.38, 0.3, 1)

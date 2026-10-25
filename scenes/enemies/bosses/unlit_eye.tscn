@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/enemies/boss_part.gd" id="1"]
+[node name="UnlitEye" type="CharacterBody2D"]
+script = ExtResource("1")
+max_hp = 3
+contact_damage = 0
+body_radius = 32.0
+visual_kind = &"unlit_eye"
+accepted_kinds = Array[StringName]([&"sling"])
