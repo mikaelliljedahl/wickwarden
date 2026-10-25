@@ -102,6 +102,16 @@ func _attach_visual() -> void:
 	if look == &"heavy_boulder" and size == Vector2(96, 96):
 		if SpriteVisual.has_art(&"heavy_stone"):
 			visual_kind = &"heavy_stone"
+	if look == &"heavy_door" and SpriteVisual.has_art(visual_kind):
+		# The body turns to cover the passage; the painted arch stays upright.
+		# Anchor its foot to the south edge of that rotated footprint.
+		var footprint := Vector2(
+			absf(cos(rotation)) * size.x + absf(sin(rotation)) * size.y,
+			absf(sin(rotation)) * size.x + absf(cos(rotation)) * size.y
+		)
+		var visual := SpriteVisual.attach(self, visual_kind, 0.0, footprint)
+		visual.rotation = -rotation
+		return
 	SpriteVisual.attach(self, visual_kind, 0.0, size)
 
 

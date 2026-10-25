@@ -14,6 +14,8 @@ var _hook_hits := 0
 
 
 func run() -> void:
+	await _painted_door_orientation()
+	await _streamed_c06_doors()
 	await _streamed_c09_throws()
 	await _paired_lift_rooms()
 	await _paired_push_flags()
@@ -442,4 +444,128 @@ func _c09_throw_capture() -> void:
 		get_viewport().get_texture().get_image().save_png("/tmp/p06-c09-down.png"),
 		OK,
 		"capture actual streamed C09 after downward throw"
+	)
+
+
+func _painted_door_orientation() -> void:
+	reset_state()
+	var arena := make_arena()
+	for angle in [0.0, PI * 0.5]:
+		for scene_path in [DOOR, LIFT, BOULDER]:
+			var stone := (load(scene_path) as PackedScene).instantiate() as Node2D
+			stone.position = AT
+			stone.rotation = angle
+			arena.add_child(stone)
+			await frames(2)
+			var visual := stone.get_node("Visual") as SpriteVisual
+			check(visual != null, "door and ordinary stones retain painted visuals")
+			if visual != null:
+				var expected: float = 0.0 if scene_path == DOOR else angle
+				check_near(visual.global_rotation, expected, 0.001, "only painted door stays upright")
+				check_eq(visual.scale, Vector2.ONE, "painted props keep contract scale")
+				if scene_path == DOOR:
+					var foot := visual.to_global(visual.offset + Vector2(96, 176))
+					var depth := 48.0 if angle == 0.0 else 96.0
+					check_near(foot.x, stone.global_position.x, 0.001, "door foot stays centred")
+					check_near(foot.y, stone.global_position.y + depth, 0.001, "foot on south edge")
+			check_near(stone.rotation, angle, 0.001, "visual attachment never rotates body")
+			var expected_size := Vector2(192, 96) if scene_path == DOOR else Vector2(96, 96)
+			check_eq(stone.get_node("Shape").shape.size, expected_size, "body size unchanged")
+			await dispose(stone)
+	SpriteVisual.use_manifest("res://tests/fixtures/missing_heavy_door_manifest.json")
+	var fallback := (load(DOOR) as PackedScene).instantiate() as Node2D
+	fallback.rotation = PI * 0.5
+	arena.add_child(fallback)
+	check(fallback.get_node("Visual") is Placeholder, "missing art retains placeholder")
+	check_near(fallback.get_node("Visual").rotation, 0.0, 0.001, "fallback rotation unchanged")
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+	await dispose(arena)
+
+
+func _streamed_c06_doors() -> void:
+	for source: StringName in [&"cave_6_8", &"cave_6_10"]:
+		reset_state()
+		SaveGame.enabled = false
+		var world := await make_world()
+		world.start_at(source)
+		var target: StringName = &"cave_6_10" if source == &"cave_6_8" else &"cave_6_8"
+		var room := world.current_room
+		for enemy in room.get_enemies():
+			enemy.queue_free()
+		var door: Variant = room.get_node("Props/HeavyDoor1")
+		var peer: Variant = world.get_room(target).get_node("Props/HeavyDoor1")
+		var player := world.player
+		player.set_hurtbox_enabled(self, false)
+		await frames(3)
+		await _door_capture("%s-closed" % source)
+		check_eq(door.mode, 1, "actual C06 door retains PUSH mode")
+		check_eq(door.collision_layer, Layers.WORLD, "door retains WORLD layer")
+		check_eq(door.collision_mask, Layers.WORLD, "door retains WORLD mask")
+		check_near(door.rotation, PI * 0.5, 0.001, "actual C06 body stays rotated")
+		check_near(door.get_node("Visual").global_rotation, 0.0, 0.001, "actual art upright")
+		var x := 240.0 if source == &"cave_6_8" else 1680.0
+		var action: StringName = &"move_left" if source == &"cave_6_8" else &"move_right"
+		player.place_at(room.global_position + Vector2(x, 480))
+		Input.action_press(action)
+		await frames(65)
+		release_inputs()
+		check_eq(world.get_current_room_id(), source, "closed door still covers passage")
+		check_eq(door.path, "", "walking without mitts leaves door unmoved")
+		check(not GameState.has_flag(&"moved_e198"), "closed control sets no gate flag")
+		GameState.acquire_item(&"heft_mitts")
+		GameState.set_active_item(&"heft_mitts")
+		player.place_at(door.global_position - Vector2(0, 180))
+		player.facing = Vector2.DOWN
+		check(player.use_item(), "real mitts grab actual C06 door")
+		Input.action_press(&"move_down")
+		await frames(180)
+		release_inputs()
+		check(door.path.length() >= 2, "actual push slides C06 door clear")
+		check_eq(peer.path, door.path, "disabled same-ID peer follows actual PUSH")
+		check(GameState.has_flag(&"moved_e198"), "actual slide sets canonical flag")
+		await _door_capture("%s-pushed" % source)
+		var saved_path: String = door.path
+		player.place_at(room.global_position + Vector2(x, 480))
+		Input.action_press(action)
+		await frames(90)
+		release_inputs()
+		check_eq(world.get_current_room_id(), target, "real player crosses pushed C06 gate")
+		var peer_room := world.current_room
+		player.place_at(peer_room.global_position + Vector2(1680 if x == 240 else 240, 480))
+		Input.action_press(&"move_right" if x == 240 else &"move_left")
+		await frames(90)
+		release_inputs()
+		check_eq(world.get_current_room_id(), source, "real player returns through shared gate")
+		SaveGame.enabled = true
+		check(SaveGame.save(), "C06 pushed gate saves to isolated slot")
+		await dispose(world)
+		GameState.reset()
+		check(SaveGame.load_into_state(), "C06 pushed gate reloads from disk")
+		SaveGame.enabled = false
+		world = await make_world()
+		world.start_at(source)
+		await frames(3)
+		for id in [source, target]:
+			var restored: Variant = world.get_room(id).get_node("Props/HeavyDoor1")
+			check_eq(restored.path, saved_path, "both ends restore saved PUSH path")
+			check_near(restored.get_node("Visual").global_rotation, 0.0, 0.001, "saved art upright")
+		await _door_capture("%s-reloaded" % source)
+		player = world.player
+		player.place_at(world.current_room.global_position + Vector2(x, 480))
+		Input.action_press(action)
+		await frames(90)
+		release_inputs()
+		check_eq(world.get_current_room_id(), target, "walk through gate after disk reload")
+		await dispose(world)
+
+
+func _door_capture(label: String) -> void:
+	if OS.get_environment("WICK_DOOR_CAPTURE") != "1":
+		return
+	await get_tree().process_frame
+	RenderingServer.force_draw(false)
+	check_eq(
+		get_viewport().get_texture().get_image().save_png("/tmp/p06-door-" + label + ".png"),
+		OK,
+		"capture actual painted C06 door"
 	)
