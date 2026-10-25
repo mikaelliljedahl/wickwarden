@@ -198,6 +198,10 @@ func _icon_for(kind: StringName) -> Texture2D:
 		var tool := SpriteVisual.icon_of(StringName("icon_" + String(kind)))
 		if tool != null:
 			return tool
+	if kind == &"tallow_slug":
+		var ammo_icon := SpriteVisual.icon_of(&"slug_bundle")
+		if ammo_icon != null:
+			return ammo_icon
 	if kind == &"big_key":
 		var counter := SpriteVisual.icon_of(&"hud_counter_big_key")
 		if counter != null:
