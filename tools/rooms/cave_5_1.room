@@ -1,0 +1,21 @@
+; The Mirrored Archive — room 1
+room cave_5_1
+terrain Still Foyer: paired stone shelves frame the quiet mouth and west approach.
+floor_color 0.15 0.17 0.21
+grid
+####################
+#..................#
+#..###........###..#
+#..................#
+...................#
+...................#
+#..................#
+#..###........###..#
+#..................#
+####################
+enemy mirror_shade 7,3
+enemy mirror_shade 12,6
+enemy duskmoth 10,2
+door ow_6_3 FromCave 16,5
+spawn Default 15,5
+spawn FromOverworld 15,5

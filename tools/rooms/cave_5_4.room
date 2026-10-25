@@ -1,0 +1,22 @@
+; The Mirrored Archive — room 4
+room cave_5_4
+terrain Index Hall: four corner braziers surround an open floor for the Warden and reflections.
+floor_color 0.15 0.17 0.21
+grid
+####################
+#..................#
+#..................#
+#..................#
+....................
+....................
+#..................#
+#..................#
+#..................#
+####################
+opener locked_door @1872,480 id=e183 scope=c5 size=96,192
+brazier 2,2 id=c5_index_nw
+brazier 17,2 id=c5_index_ne
+brazier 2,7 id=c5_index_sw
+brazier 17,7 id=c5_index_se
+miniboss mirror_warden @960,480
+spawn Default @1632,528
