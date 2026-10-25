@@ -29,3 +29,5 @@ B80 c9 v3, c10 v1–3 and title menu v1 verified by own-session SHA256/uniquenes
 B80 title menu v2 verified own-session hash/unique; opened `/tmp/wickwarden-art-wave7-review.jpg`; blank parchment centre clear, no text; log `log_art_resume_07.md`. Freed slot refilled with B81 death overlay v2.
 
 B80 now complete: title menu v3 and dialog cards v1–3 verified; B81 death overlays v1/v2 also verified. Own-session hashes unique; opened `/tmp/wickwarden-art-wave8-review.jpg`; log `log_art_resume_08.md`. Two ok, three weak, death overlay v1 failed (worker reports signature-like artifact; retained for cull). Six B81 jobs submitted (death v3, loading v1–3, credit divider v1/v2). Missing-prompt audit prepared B11/B82–86 partial prompts; 30 variants blocked by title text conflict/provisional memories.
+
+B81 loading wick v2/v3 and credit divider v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave9-review.jpg`; log `log_art_resume_09.md`. Loading sheets weak (unrequested brass bases), divider ok. Freed slots filled credit divider v3 and arena c1 v1/v2; six image jobs total.
