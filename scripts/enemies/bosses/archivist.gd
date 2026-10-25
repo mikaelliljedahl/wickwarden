@@ -50,6 +50,11 @@ class Copy:
 		box.hurt.connect(_hit)
 		add_child(box)
 
+	func _exit_tree() -> void:
+		# The encounter registry must never retain a freed copy.
+		if is_instance_valid(boss):
+			boss.copies.erase(self)
+
 	func _hit(hit: Hitbox) -> void:
 		if popped or hit.damage_for(box) <= 0:
 			return

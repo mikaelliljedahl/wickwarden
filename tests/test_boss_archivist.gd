@@ -111,12 +111,16 @@ func _copy_challenge() -> void:
 	check(helpers[0] is Hurtbox, "canonical copy helper remains a real hurtbox")
 	check(copy_probe.get_node_or_null("Shadow") == null, "copy helper cleanup adds no shadow")
 	await dispose(copy_probe)
+	check_eq(boss.copies.size(), 3, "disposing an independent clone preserves encounter copies")
 	await _hit(room, boss)
 	check_eq(boss.hp, 20, "unlit real rejects blind damage")
 	var decoy = boss.copies[0]
 	var at: Vector2 = decoy.global_position
 	await _hit(room, decoy)
 	check(not is_instance_valid(decoy), "decoy pops on real hitbox")
+	check_eq(boss.copies.size(), 2, "popped decoy unregisters before its object is freed")
+	for remaining in boss.copies:
+		check(is_instance_valid(remaining), "copy registry contains only live figures")
 	check_eq(boss.hp, 20, "decoy never damages boss HP")
 	check(at.distance_to(Vector2(960, 480)) <= 288.1, "copy on compass")
 	GameState.acquire_item(&"glow_jar")
