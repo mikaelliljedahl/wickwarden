@@ -10,6 +10,7 @@ func run() -> void:
 	_overworld(ids)
 	_caves(ids)
 	_pockets_and_unknown()
+	_lockpick_icon()
 
 
 func _overworld(ids: Array[String]) -> void:
@@ -65,3 +66,26 @@ func _pockets_and_unknown() -> void:
 	check_eq(Hud.room_cell(&"ow_12_0"), Vector2i(-1, -1), "an unknown overworld id has no cell")
 	check_eq(Hud.room_cell(&"cave_99"), Vector2i(-1, -1), "an unknown cave id has no cell")
 	check_eq(Hud.room_cell(&""), Vector2i(-1, -1), "the empty id has no cell")
+
+
+func _lockpick_icon() -> void:
+	var hud := Hud.new()
+	var original_manifest := SpriteVisual.manifest_path
+	var expected := SpriteVisual.icon_of(&"hud_counter_big_key")
+	check(expected != null, "the lockpick has dedicated HUD art")
+	check_eq(hud._icon_for(&"big_key"), expected, "the counter prefers dedicated HUD art")
+	var fallback_manifest := "user://hud_lockpick_fallback.json"
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(original_manifest))
+	manifest.erase("hud_counter_big_key")
+	var file := FileAccess.open(fallback_manifest, FileAccess.WRITE)
+	file.store_string(JSON.stringify(manifest))
+	file.close()
+	SpriteVisual.use_manifest(fallback_manifest)
+	var pickup := SpriteVisual.icon_of(&"big_key")
+	check(pickup != null, "the lockpick has pickup art for fallback")
+	check_eq(hud._icon_for(&"big_key"), pickup, "missing HUD art falls back to pickup art")
+	SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
+	check(hud._icon_for(&"big_key") == null, "missing lockpick art retains shape fallback")
+	SpriteVisual.use_manifest(original_manifest)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(fallback_manifest))
+	hud.free()

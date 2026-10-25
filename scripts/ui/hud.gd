@@ -183,12 +183,21 @@ func _draw_item_frame() -> void:
 ## Draws the kind's HUD icon, `side` px square, centred on `center`. False when the kind has no
 ## art (the caller then draws its placeholder shape).
 func _draw_icon(kind: StringName, center: Vector2, side: float) -> bool:
-	var icon := SpriteVisual.icon_of(kind)
+	var icon := _icon_for(kind)
 	if icon == null:
 		return false
 	var extent := Vector2(side, side)
 	canvas.draw_texture_rect(icon, Rect2(center - extent * 0.5, extent), false)
 	return true
+
+
+## Lockpick counters prefer the small HUD raster; pickup art remains the fallback.
+func _icon_for(kind: StringName) -> Texture2D:
+	if kind == &"big_key":
+		var counter := SpriteVisual.icon_of(&"hud_counter_big_key")
+		if counter != null:
+			return counter
+	return SpriteVisual.icon_of(kind)
 
 
 ## Keys of one scope. F4 makes keys scoped (`keys_in`); until it lands the single count is shown.
