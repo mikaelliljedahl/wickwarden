@@ -3,9 +3,11 @@ extends TestCase
 ## Q7 incremental integration coverage. Real player use, items and travelling hitboxes only.
 ## Controlled bare arenas and fixed initial positions; this is not a continuous playthrough.
 ## Pending: remaining tools/props, regular enemy matrix, all boss/miniboss weakness challenges,
-## armour/open-state permutations, ward, stun and provenance checks beyond these gate pairs.
+## all boss/miniboss challenges and full regular-enemy/ward/armour permutations remain pending.
 
-const TOOLS: Array[StringName] = [&"cinder_wick", &"tallow_sling", &"lantern_chime"]
+const TOOLS: Array[StringName] = [
+	&"cinder_wick", &"tallow_sling", &"lantern_chime", &"reel_line", &"tether_moth", &"glow_jar"
+]
 const GATES := [
 	["thorn_hedge", &"burn_id", &"cinder_wick", &"is_open", "burned_"],
 	["thorn_wall", &"burn_id", &"cinder_wick", &"is_open", "burned_"],
@@ -18,12 +20,25 @@ const GATES := [
 
 
 func run() -> void:
-	print("Q7 PARTIAL: 3 real tools x 7 real gate props; full combat matrix pending")
+	print("Q7 PARTIAL: 6 real tools x 7 real gate props; full combat matrix pending")
 	for row: Array in GATES:
 		for tool: StringName in TOOLS:
 			await _gate_pair(row, tool)
 	for tool: StringName in [&"cinder_wick", &"tallow_sling", &"lantern_chime", &"tether_moth"]:
 		await _snapper_pair(tool)
+	for prop: String in ["anchor_ring", "anchor_pocket", "reelable"]:
+		for tool: StringName in [&"reel_line", &"tallow_sling", &"lantern_chime"]:
+			await _reel_prop_pair(prop, tool)
+	for width: float in [120.0, 288.0]:
+		await _pit_pair(width, &"skitter_boots")
+		await _pit_pair(width, &"reel_line")
+	for prop: String in ["heavy_stone", "heavy_stones", "heavy_boulder", "heavy_door"]:
+		await _heavy_pair(prop)
+	await _mitts_throw_snapper()
+	for front: bool in [true, false]:
+		await _crab_slug(front)
+	for opened: bool in [false, true]:
+		await _watcher_slug(opened)
 
 
 func _gate(parent: Node, row: Array, at: Vector2) -> Node2D:
@@ -127,4 +142,200 @@ func _snapper_pair(tool: StringName) -> void:
 		check_eq(observations["damage"], 1, label + ": one actual slug damage")
 		check_eq(GameState.slugs, 11, label + ": one slug spent")
 	print("MATRIX ", label, " death=", observations["death"], " damage=", observations["damage"])
+	await dispose(arena)
+
+
+func _prop(parent: Node, name: String, at: Vector2) -> Node2D:
+	var scene := load("res://scenes/world/%s.tscn" % name) as PackedScene
+	check(scene != null, "real prop loads: " + name)
+	if scene == null:
+		return null
+	var node := scene.instantiate() as Node2D
+	node.position = at
+	parent.add_child(node)
+	return node
+
+
+func _equip(player: Player, tool: StringName) -> void:
+	GameState.acquire_item(tool)
+	GameState.set_active_item(tool)
+	player.facing = Vector2.RIGHT
+
+
+func _reel_prop_pair(prop: String, tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(300, 500))
+	var target := _prop(arena, prop, Vector2(700, 500))
+	if target == null:
+		await dispose(arena)
+		return
+	var hits: Array[StringName] = []
+	var signal_name := &"reeled" if prop == "reelable" else &"hooked"
+	target.connect(signal_name, func(hit: Hitbox) -> void: hits.append(hit.kind))
+	await frames(3)
+	_equip(player, tool)
+	var label := "%s -> %s" % [tool, prop]
+	check(player.use_item(), label + ": real activation")
+	await frames(2)
+	check(hits.is_empty(), label + ": tip has not travelled 400 px yet")
+	await seconds(1.5)
+	check_eq(hits.size(), 1 if tool == &"reel_line" else 0, label + ": accepted contacts")
+	if not hits.is_empty():
+		check_eq(hits[0], &"reel", label + ": real contact kind")
+	var pulls := tool == &"reel_line" and prop != "reelable"
+	check_near(player.global_position.x, 628.0 if pulls else 300.0, 1.0, label + ": landing")
+	check(not player.is_airborne(), label + ": motion settled")
+	check(player.hurtbox.enabled, label + ": hurtbox restored")
+	print("MATRIX ", label, " contacts=", hits.size())
+	await dispose(arena)
+
+
+func _pit_pair(width: float, tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var start := Vector2(300, 500)
+	var pit := _prop(arena, "pit", start + Vector2(40 + width * 0.5, 0))
+	var ring := _prop(arena, "anchor_ring", start + Vector2(width + 176, 0))
+	if pit == null or ring == null:
+		await dispose(arena)
+		return
+	pit.set(&"size", Vector2(width, 384))
+	ring.set(&"max_range", 576.0)
+	var player := make_player(arena, start)
+	await frames(3)
+	_equip(player, tool)
+	var label := "%s -> %.0f px real pit" % [tool, width]
+	check(player.use_item(), label + ": activation")
+	var crossed := false
+	for i in range(100):
+		await frames(1)
+		if pit.call(&"holds", player.global_position) and player.is_airborne():
+			crossed = true
+	check(crossed, label + ": traverses live pit while airborne")
+	var falls := tool == &"skitter_boots" and width == 288.0
+	check_eq(GameState.health, 4 if falls else 6, label + ": fall damage")
+	var landing := 300.0 if falls else 492.0
+	if tool == &"reel_line":
+		landing = ring.global_position.x - 72.0
+	check_near(player.global_position.x, landing, 1.0, label + ": final bank")
+	check(not player.is_airborne(), label + ": airborne clears")
+	print("MATRIX ", label, " falls=", falls)
+	await dispose(arena)
+
+
+func _heavy_pair(prop: String) -> void:
+	reset_state()
+	var arena := make_arena()
+	var start := Vector2(300, 500)
+	var player := make_player(arena, start)
+	# Set persistent identity before ready, as a compiled room does.
+	var scene := load("res://scenes/world/%s.tscn" % prop) as PackedScene
+	check(scene != null, "heavy scene loads: " + prop)
+	if scene == null:
+		await dispose(arena)
+		return
+	var stone := scene.instantiate() as Node2D
+	stone.set(&"stone_id", &"matrix_heavy")
+	stone.position = start + Vector2(100, 0)
+	arena.add_child(stone)
+	await frames(3)
+	_equip(player, &"tallow_sling")
+	check(player.use_item(), prop + ": actual slug fired")
+	await seconds(0.4)
+	check_eq(stone.global_position, start + Vector2(100, 0), prop + ": slug cannot move gate")
+	check(not GameState.has_flag(&"moved_matrix_heavy"), prop + ": no false opening flag")
+	_equip(player, &"heft_mitts")
+	var pushes := prop in ["heavy_boulder", "heavy_door"]
+	check(player.use_item(), prop + ": real grab")
+	await frames(2)
+	if pushes:
+		Input.action_press(&"move_right")
+	else:
+		await seconds(0.4)
+	check_eq(bool(stone.call(&"is_carried")), not pushes, prop + ": correct carry mode")
+	if pushes:
+		await seconds(0.8)
+		release_inputs()
+		check_near(stone.global_position.x, 496.0, 1.0, prop + ": one 96 px push")
+	else:
+		Input.action_press(&"use_item")
+		await frames(1)
+		release_inputs()
+		await seconds(0.9)
+	check(GameState.has_flag(&"moved_matrix_heavy"), prop + ": persistent opening")
+	print("MATRIX mitts -> ", prop, " push=", pushes)
+	await dispose(arena)
+
+
+func _mitts_throw_snapper() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(300, 500))
+	var rock := _prop(arena, "liftable_rock", Vector2(372, 500))
+	var enemy := make_enemy(arena, "res://scenes/enemies/bramble_snapper.tscn", Vector2(560, 500))
+	enemy.drops_enabled = false
+	var damage := [0]
+	enemy.damaged.connect(func(amount: int) -> void: damage[0] += amount)
+	await frames(3)
+	_equip(player, &"heft_mitts")
+	check(player.use_item(), "mitts/snapper: actual grab")
+	await seconds(0.4)
+	check(rock != null and rock.call(&"is_carried"), "mitts/snapper: carrying real rock")
+	Input.action_press(&"use_item")
+	await frames(1)
+	release_inputs()
+	await seconds(0.9)
+	# Target-specific combat matrix 5.9 says Mitts '-' for this target.
+	# Keep this strict: the generic thrown damage rule must not hide a target mismatch.
+	check_eq(damage[0], 0, "mitts/snapper: matrix requires no damage")
+	check(is_instance_valid(enemy) and not enemy.is_dead, "mitts/snapper: matrix requires survival")
+	await dispose(arena)
+
+
+func _crab_slug(front: bool) -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(300, 500))
+	var crab := make_enemy(arena, "res://scenes/enemies/brine_crab.tscn", Vector2(540, 500))
+	crab.drops_enabled = false
+	# Isolated armour fixture: RECOVER freezes facing/position; no guard or HP override.
+	crab.set(&"_state", 3)
+	crab.set(&"_timer", 5.0)
+	crab.set_facing_dir(Vector2.LEFT if front else Vector2.RIGHT)
+	var blocks := [0]
+	crab.guard_blocked.connect(func(_hit: Hitbox) -> void: blocks[0] += 1)
+	await frames(3)
+	_equip(player, &"tallow_sling")
+	check(player.use_item(), "crab: actual slug fired")
+	await seconds(0.6)
+	check_eq(crab.hp, 4 if front else 3, "crab: front blocks, rear loses 1 HP")
+	check_eq(blocks[0], 1 if front else 0, "crab: guard signal agrees with actual contact")
+	check_eq(GameState.slugs, 11, "crab: blocked and landed shots both spend ammo")
+	print("MATRIX sling -> crab front=", front, " HP=", crab.hp)
+	await dispose(arena)
+
+
+func _watcher_slug(opened: bool) -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(444, 480))
+	var eye := make_enemy(arena, "res://scenes/enemies/watcher_eye.tscn", Vector2(144, 480))
+	eye.room_rect = Rect2(96, 96, 1728, 768)
+	eye.drops_enabled = false
+	await frames(3)
+	_equip(player, &"tallow_sling")
+	player.facing = Vector2.LEFT
+	if opened:
+		# Wait for the real axis trigger, telegraph and projectile; no phase setter.
+		for i in range(150):
+			if not eye.invulnerable:
+				break
+			await frames(1)
+	check_eq(not eye.invulnerable, opened, "watcher: requested natural lid state reached")
+	check(player.use_item(), "watcher: actual slug fired")
+	await seconds(0.5)
+	check_eq(eye.hp, 1 if opened else 2, "watcher: one real slug only damages open lid")
+	check_eq(GameState.slugs, 11, "watcher: shot costs one slug")
+	print("MATRIX sling -> watcher open=", opened, " HP=", eye.hp)
 	await dispose(arena)
