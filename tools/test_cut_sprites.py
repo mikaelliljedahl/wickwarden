@@ -105,6 +105,42 @@ def mini_manifest(expected0: int = 5) -> dict:
     }
 
 
+def make_native_alpha_sheet(path: Path) -> np.ndarray:
+    """One RGBA pose with partial edges, transparent matte pixels and key-coloured content."""
+    canvas = np.empty((128, 128, 4), np.uint8)
+    canvas[:] = (255, 0, 255, 0)
+    canvas[20:84, 32:65] = (160, 120, 80, 255)
+    canvas[20:84, 32] = (137, 83, 31, 64)
+    canvas[20:84, 33] = (137, 83, 31, 128)
+    canvas[20:84, 34] = (137, 83, 31, 192)
+    canvas[40:45, 40:45] = (255, 0, 255, 255)  # Opaque content matches the legacy key.
+    canvas[50:55, 50:55] = (4, 5, 6, 255)  # Dark content must not be treated as a matte.
+    canvas[30, 60] = (8, 9, 10, 0)  # Legacy mode ignores the source alpha channel.
+    Image.fromarray(canvas, "RGBA").save(path)
+    return canvas
+
+
+def rgba_sheet_manifest(input_mode: str | None, include_key: bool = True) -> dict:
+    sheet = {
+        "rows": [
+            {
+                "poses": 1,
+                "outputs": [{"file": "rgba_pose", "kind": "fig", "anim": "idle", "scale": "fig"}],
+            }
+        ]
+    }
+    if include_key:
+        sheet["key"] = "magenta"
+    if input_mode is not None:
+        sheet["input_mode"] = input_mode
+    return {
+        "defaults": {},
+        "scale_groups": {"fig": {"measure": "height", "value": 64, "ref": [{"sheet": "rgba", "row": 0}]}},
+        "kinds": {"fig": {"cell": [96, 96], "foot": 88}},
+        "sheets": {"rgba": sheet},
+    }
+
+
 class CutCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -302,6 +338,54 @@ class CentredCase(unittest.TestCase):
                 cy = (a.sum(axis=1) * (np.arange(192) + 0.5)).sum() / a.sum()
                 self.assertAlmostEqual(cx, 96, delta=1.0)
                 self.assertAlmostEqual(cy, 96, delta=1.0)
+
+
+class NativeAlphaInput(unittest.TestCase):
+    def test_native_alpha_survives_loading_crop_resize_and_output_channels(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = make_native_alpha_sheet(root / "rgba.png")
+            manifest = rgba_sheet_manifest("native_alpha", include_key=False)
+            sheet = cut.Context(manifest, root).sheet("rgba")
+
+            self.assertNotIn("input_mode", cut.DEFAULTS)
+            np.testing.assert_array_equal(sheet.rgba[..., :3], source[..., :3].astype(np.float32))
+            np.testing.assert_array_equal(sheet.rgba[..., 3], source[..., 3].astype(np.float32) / 255.0)
+            pose = sheet.rows[0][0]
+            for x, y in ((30, 18), (33, 30), (42, 42), (52, 52), (60, 30)):
+                local = pose.rgba[y - pose.origin[1], x - pose.origin[0]]
+                expected = source[y, x].astype(np.float32)
+                expected[3] /= 255.0
+                np.testing.assert_array_equal(local, expected)
+
+            resized = cut.resize_rgba(pose.rgba, 1.0)
+            np.testing.assert_array_equal(resized[..., 3], pose.rgba[..., 3])
+            reduced = cut.resize_rgba(pose.rgba, 0.5)
+            self.assertTrue(np.any((reduced[..., 3] > 0.0) & (reduced[..., 3] < 1.0)))
+            self.assertTrue(np.any((reduced[..., 3] > 0.0) & (reduced[..., :3].max(axis=2) < 20.0)))
+            done, _, errors = cut.run(manifest, root, root / "out", root / "proofs")
+            self.assertEqual((done, errors), (["rgba"], []))
+            with Image.open(root / "out" / "rgba_pose.png") as output:
+                frame = np.asarray(output.convert("RGBA"))
+            pixels = {tuple(pixel) for pixel in frame.reshape(-1, 4)}
+            self.assertIn((137, 83, 31, 128), pixels)
+            self.assertIn((255, 0, 255, 255), pixels)
+            self.assertIn((4, 5, 6, 255), pixels)
+            self.assertIn(0, np.unique(frame[..., 3]))
+
+    def test_omitted_mode_keeps_legacy_key_matte_for_rgba_sources(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = make_native_alpha_sheet(root / "rgba.png")
+            manifest = rgba_sheet_manifest(None)
+            sheet = cut.Context(manifest, root).sheet("rgba")
+
+            self.assertIsNotNone(sheet.key)
+            self.assertEqual(sheet.rgba[18, 30, 3], 0.0)  # Transparent magenta background is removed.
+            self.assertEqual(sheet.rgba[42, 42, 3], 0.0)  # Opaque magenta still follows the key matte.
+            self.assertEqual(sheet.rgba[30, 33, 3], 1.0)  # Source alpha is ignored in legacy mode.
+            self.assertEqual(sheet.rgba[30, 60, 3], 1.0)  # Includes fully transparent dark RGB.
+            self.assertEqual(source[30, 33, 3], 128)
 
 
 class SegmentationModes(unittest.TestCase):

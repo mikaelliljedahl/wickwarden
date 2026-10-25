@@ -484,7 +484,7 @@ def merged_params(manifest: dict, sheet_def: dict, row_def: dict | None = None) 
 class SheetData:
     name: str
     rgba: np.ndarray
-    key: np.ndarray
+    key: np.ndarray | None
     params: dict
     rows: list[list[Pose]]
     boxes: list[list[tuple[int, int, int, int]]]
@@ -511,17 +511,32 @@ class Context:
         if not path.exists():
             raise CutError(f"sheet {name}: source image missing ({path})")
         params = merged_params(self.manifest, sheet_def)
-        rgb = np.asarray(Image.open(path).convert("RGB"), dtype=np.float32)
-        key = estimate_key(rgb, params["key_border"])
-        nominal = np.array(NOMINAL_KEYS[sheet_def["key"]], np.float32)
-        if np.linalg.norm(key - nominal) > 90.0:
-            print(f"warning: {name}: measured key {key.round().tolist()} is far from {sheet_def['key']}")
-        rgb_out, alpha = matte(rgb, key, params, sheet_def["key"])
-        alpha = remove_specks(alpha, params["det_floor"], params["speck_area"])
-        rgba = np.concatenate([rgb_out, alpha[..., None]], axis=2)
+        input_mode = sheet_def.get("input_mode", "key")
+        if input_mode not in {"key", "native_alpha"}:
+            raise CutError(f"sheet {name}: unknown input_mode {input_mode!r} (expected 'key' or 'native_alpha')")
+
+        with Image.open(path) as image:
+            if input_mode == "native_alpha":
+                # Native RGBA is authoritative: no key removal or despill. Keep the loaded alpha
+                # for crops and output; a cleaned copy is used only to find poses.
+                rgba = np.asarray(image.convert("RGBA"), dtype=np.float32)
+                rgba[..., 3] /= 255.0
+                key = None
+                detect_alpha = remove_specks(rgba[..., 3], params["det_floor"], params["speck_area"])
+            else:
+                # Keep the legacy RGB conversion and key-matte path unchanged for existing recipes.
+                rgb = np.asarray(image.convert("RGB"), dtype=np.float32)
+                key = estimate_key(rgb, params["key_border"])
+                nominal = np.array(NOMINAL_KEYS[sheet_def["key"]], np.float32)
+                if np.linalg.norm(key - nominal) > 90.0:
+                    print(f"warning: {name}: measured key {key.round().tolist()} is far from {sheet_def['key']}")
+                rgb_out, alpha = matte(rgb, key, params, sheet_def["key"])
+                alpha = remove_specks(alpha, params["det_floor"], params["speck_area"])
+                rgba = np.concatenate([rgb_out, alpha[..., None]], axis=2)
+                detect_alpha = alpha
         rows_def = sheet_def["rows"]
         row_params = [merged_params(self.manifest, sheet_def, r) for r in rows_def]
-        boxes = segment(alpha, params, row_params)
+        boxes = segment(detect_alpha, params, row_params)
         if len(boxes) != len(rows_def):
             raise CutError(f"sheet {name}: found {len(boxes)} rows, expected {len(rows_def)}")
         rows: list[list[Pose]] = []
