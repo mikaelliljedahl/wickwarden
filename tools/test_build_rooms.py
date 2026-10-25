@@ -804,6 +804,76 @@ class DoorBlockerLinks(unittest.TestCase):
         self.assertNotIn("blocker_path", text)
 
 
+class MissingMouthOpeners(unittest.TestCase):
+    CASES = [("e131", "hook_tap_wall", "seam_id", "192, 96"),
+             ("e132", "wax_seal", "seal_id", "192, 96"),
+             ("e251", "heavy_boulder", "stone_id", "96, 96")]
+
+    def compile(self, edge_id, kind, ident=None, extra="", edge_change=None):
+        # Use the actual normative gate, isolated from the other room workers' layouts.
+        edge = dict(next(e for e in real_world().edges if e["id"] == edge_id))
+        edge.update(edge_change or {})
+        host, target = edge["a"], edge["b"]
+        rooms = [room_record(host, [])]
+        pockets = []
+        if "#" in target:
+            pockets = [dict(id=target, grid=[5, 30], host=host, scope="ow", in_place=False)]
+        else:
+            rooms.append(room_record(target, [], grid=(6, 13)))
+        world = world_of(rooms, pockets=pockets, edges=[edge])
+        ident = ident or edge_id
+        source = room_text(host, [], f"opener {kind} 15,4 id={ident} {extra}\n"
+                           f"door {target} Inside 14,4 blocker={ident}")
+        return compile_text(source, world, host + ".room")
+
+    def test_real_gate_scenes_exports_and_offset_blocker_references(self):
+        for edge, kind, field, size in self.CASES:
+            with self.subTest(edge=edge):
+                ident = "cave6door" if edge == "e251" else edge
+                text, errors = self.compile(edge, kind, ident)
+                self.assertEqual(errors, [])
+                self.assertIn(f'res://scenes/world/{kind}.tscn', text)
+                self.assertIn(f'{field} = &"{ident}"', text)
+                self.assertIn(f'size = Vector2({size})', text)
+                self.assertIn(f'blocker_path = NodePath("../{br.camel(kind)}1")', text)
+                self.assertNotIn('requires_flag', text)
+                # Keep scene-owned mechanics, rather than overriding them with a look or mode.
+                scene = (br.ROOT / f"scenes/world/{kind}.tscn").read_text()
+                if kind == "hook_tap_wall":
+                    self.assertIn('hidden_seam.gd', scene)
+                    self.assertIn('hook_tap = true', scene)
+                elif kind == "heavy_boulder":
+                    self.assertIn('heavy_stone.gd', scene)
+                    self.assertIn('mode = 1', scene)
+                else:
+                    self.assertIn('wax_seal.gd', scene)
+
+    def test_wrong_scene_cannot_substitute_for_required_gate(self):
+        for edge, required, _, _ in self.CASES:
+            for kind in ("heavy_stone", "hook_tap_wall", "wax_seal", "heavy_boulder"):
+                if kind != required:
+                    self.assertTrue(self.compile(edge, kind)[1], (edge, kind))
+
+    def test_exact_graph_requirements_and_supported_options(self):
+        for edge, kind, _, _ in self.CASES:
+            for change in (dict(gate="bomb"), dict(needs=["pitch_pot"])):
+                self.assertTrue(self.compile(edge, kind, edge_change=change)[1])
+            for extra in ("size=0,96", "mode=0", "look=rock", "scope=ow"):
+                self.assertTrue(self.compile(edge, kind, extra=extra)[1])
+
+    def test_hidden_and_wax_footprints_really_seal_and_reopen(self):
+        # A two-tile passage must open only when the one physical opener is removed.
+        for edge, kind, _, _ in self.CASES[:2]:
+            gate = dict(next(e for e in real_world().edges if e["id"] == edge))
+            gate.update(a="ow_5_5", b="ow_5_6", link="step")
+            helper = ScriptedGateExtensions()
+            text, errors = helper.compile(f"opener {kind} @960,912 id={edge}", ["s"], edges=[gate])
+            self.assertEqual(errors, [])
+            self.assertIn('size = Vector2(192, 96)', text)
+            _, errors = helper.compile(f"opener {kind} 9,9 id={edge} size=96,96", ["s"], edges=[gate])
+            self.assertTrue(any("walkable while closed" in e for e in errors), errors)
+
+
 class CavePilot(unittest.TestCase):
     def encounter_world(self, role="boss", name="Kilnkeeper"):
         record = room_record("cave_1_8", [])

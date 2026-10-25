@@ -103,11 +103,16 @@ OPENER_SIZE = {
     "cut_screen": (96, 96),
 }
 OPENER_SIZE.update({"thorn_door": (192, 96), "eye_portcullis": (192, 96),
-                    "heavy_stone": (96, 96), "ward_blocker": (192, 96)})
+                    "heavy_stone": (96, 96), "heavy_boulder": (96, 96),
+                    "hook_tap_wall": (192, 96), "wax_seal": (192, 96),
+                    "ward_blocker": (192, 96)})
 LINKED = {"eye_switch": "eye_portcullis", "ward_plate": "ward_blocker"}
 SCRIPTED_OPENERS = {"thorn_door": ("thorn_door", "burn_id"),
                     "eye_portcullis": ("eye_portcullis", "eye_id"),
                     "heavy_stone": ("heavy_stone", "stone_id"),
+                    "heavy_boulder": ("heavy_boulder", "stone_id"),
+                    "hook_tap_wall": ("hook_tap_wall", "seam_id"),
+                    "wax_seal": ("wax_seal", "seal_id"),
                     "ward_blocker": ("ward_plate", "ward_id")}
 OPENER_SIZE.update({"gate": (192, 96), "boss_door": (192, 96)})
 OPENER_OPTS = ("id", "size", "scope", "look", "braziers")
@@ -947,10 +952,20 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
             node.props.append(("blocker", "true"))
         edge = next((e for e in world.edges if e["id"] == ident), None)
         expected = {"thorn_door": "thorn-sealed door", "eye_portcullis": "eye-switch portcullis",
-                    "heavy_stone": "heavy stones", "ward_blocker": "ward plate"}[kind]
+                    "heavy_stone": "heavy stones", "heavy_boulder": "heavy boulder",
+                    "hook_tap_wall": "hook-tap wall", "wax_seal": "wax seal",
+                    "ward_blocker": "ward plate"}[kind]
         if edge is not None and (edge["prop"] != expected or src.room_id not in (edge["a"], edge["b"])):
             errors.append(f"{where_}: {kind} id does not match this graph gate")
             return False
+        requirements = {"hook_tap_wall": ("hidden", ["hook"]),
+                        "wax_seal": ("item", ["flare"]),
+                        "heavy_boulder": ("item", ["heft_mitts"])}
+        if edge is not None and kind in requirements:
+            gate, needs = requirements[kind]
+            if edge.get("gate") != gate or edge.get("needs") != needs:
+                errors.append(f"{where_}: {kind} does not match the graph gate requirements")
+                return False
         rec = world.room(src.room_id)
         side = corridor_side(ent.tile, rec["exits"])
         if kind == "eye_portcullis" and side in ("e", "w"):
@@ -1406,7 +1421,9 @@ def link_door_blocker(src, rec, world, plan, door, errors) -> None:
              "bush cluster": "cut_screen", "reed cluster": "cut_screen",
              "rush wall": "cut_screen", "ward plate": "ward_blocker",
              "eye-switch cell": "eye_portcullis", "eye-switch portcullis": "eye_portcullis",
-             "heavy stones": "heavy_stone", "key alcove gate": "gate",
+             "heavy stones": "heavy_stone", "heavy boulder": "heavy_boulder",
+             "hook-tap wall": "hook_tap_wall", "wax seal": "wax_seal",
+             "key alcove gate": "gate",
              "two braziers, gate": "gate", "boss door": "boss_door"}
     kind = kinds.get(edge.get("prop"))
     if not edge.get("gate") or rec["pocket"] or edge.get("prop") == "grated alcove":
