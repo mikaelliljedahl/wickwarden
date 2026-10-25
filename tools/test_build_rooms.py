@@ -425,20 +425,21 @@ class ScriptedOpeners(unittest.TestCase):
 
     def hidden_stairs_world(self) -> br.World:
         return world_of(
-            [room_record("ow_0_2", ["e"]), room_record("cave_9_1", [])],
+            [dict(room_record("ow_0_2", ["e"]), scope="ow"),
+             dict(room_record("cave_9_1", []), scope="c9")],
             edges=[{"id": "e254", "a": "ow_0_2", "b": "cave_9_1", "link": "door", "gate": "hidden",
                     "needs": ["glow_jar"], "dir": "both", "prop": "hidden stairs"}],
         )
 
     def test_hidden_stairs_builds_a_persistent_target_door(self) -> None:
         text, errors = compile_text(
-            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_1 FromOverworld 5,5 id=lamp_stairs"),
+            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_1 FromOverworld 5,5 id=e254"),
             self.hidden_stairs_world(),
             "ow_0_2.room",
         )
         self.assertEqual(errors, [])
         self.assertIn('path="res://scenes/world/hidden_stairs.tscn"', text or "")
-        self.assertIn('seam_id = &"lamp_stairs"', text or "")
+        self.assertIn('seam_id = &"e254"', text or "")
         self.assertIn('door_target = &"cave_9_1"', text or "")
         self.assertIn('door_spawn = &"FromOverworld"', text or "")
 
@@ -449,6 +450,94 @@ class ScriptedOpeners(unittest.TestCase):
             "ow_0_2.room",
         )
         self.assertTrue(any("door to cave_9_2 is not a door of the graph for ow_0_2" in e for e in errors), errors)
+
+
+class HiddenStairsMouth(unittest.TestCase):
+    EDGE_ID = "e252"
+    OVERWORLD = "ow_10_2"
+    CAVE = "cave_7_1"
+
+    def world(self, edge_change: dict | None = None) -> br.World:
+        edge = dict(next(e for e in real_world().edges if e["id"] == self.EDGE_ID))
+        edge.update(edge_change or {})
+        rooms = [dict(room_record(self.OVERWORLD, ["n", "e", "s", "w"], grid=(10, 2)), scope="ow"),
+                 dict(room_record(self.CAVE, ["w"], grid=(52, 13)), scope="c7")]
+        return world_of(rooms, edges=[edge])
+
+    def compile(self, room_id: str, exits: list[str], entity: str, edge_change: dict | None = None):
+        source = room_text(room_id, exits, entity) if entity else room_text(room_id, exits, "")
+        return compile_text(source, self.world(edge_change), room_id + ".room")
+
+    def test_actual_e252_plain_cave_return_is_unblocked_and_paired(self) -> None:
+        text, errors = self.compile(self.CAVE, ["w"], f"door {self.OVERWORLD} FromCave 5,5")
+        self.assertEqual(errors, [])
+        self.assertIsNotNone(text)
+        nodes = emitted_nodes(text or "")
+        doors = [node for node in nodes.values() if node["scene"] is None and node["parent"] == "Props"
+                 and any(prop.startswith('target_room = &"ow_10_2"') for prop in node["properties"])]
+        self.assertEqual(len(doors), 1)
+        self.assertFalse(any("blocker_path" in prop or "requires_flag" in prop
+                             for node in doors for prop in node["properties"]))
+
+    def test_actual_e252_overworld_entry_keeps_revealable_geometry_and_glow_requirement(self) -> None:
+        text, errors = self.compile(
+            self.OVERWORLD, ["n", "e", "s", "w"],
+            f"hidden_stairs {self.CAVE} FromOverworld 5,5 id={self.EDGE_ID}",
+        )
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/hidden_stairs.tscn"', text or "")
+        self.assertIn('seam_id = &"e252"', text or "")
+        self.assertIn('door_target = &"cave_7_1"', text or "")
+        self.assertIn('door_spawn = &"FromOverworld"', text or "")
+        scene = (br.ROOT / "scenes/world/hidden_stairs.tscn").read_text(encoding="utf-8")
+        self.assertIn('path="res://scripts/world/hidden_seam.gd"', scene)
+        self.assertIn('look = &"hidden_stairs"', scene)
+        seam = (br.ROOT / "scripts/world/hidden_seam.gd").read_text(encoding="utf-8")
+        self.assertIn("const EXPOSE_TIME := 1.0", seam)
+        self.assertIn('var size: Vector2 = Vector2(192, 96)', seam)
+        self.assertIn('add_to_group(&"revealable")', seam)
+        self.assertIn("_set_open(false)", seam)
+        self.assertIn("_set_open(true)", seam)
+        self.assertIn("_body_shape.set_deferred(\"disabled\", open)", seam)
+        self.assertIn("_show_door()", seam)
+        jar = (br.ROOT / "scripts/items/jar.gd").read_text(encoding="utf-8")
+        self.assertIn('get_nodes_in_group(&"revealable")', jar)
+        self.assertIn('prop.call(&"reveal")', jar)
+        self.assertEqual(br.MOUTH_REQUIREMENTS["hidden stairs"], ("hidden", ["glow_jar"]))
+
+    def test_plain_overworld_ingress_and_missing_reveal_opener_are_rejected(self) -> None:
+        _, ingress_errors = self.compile(self.OVERWORLD, ["n", "e", "s", "w"],
+                                          f"door {self.CAVE} FromOverworld 5,5")
+        self.assertTrue(any("only valid from its cave mouth" in error for error in ingress_errors), ingress_errors)
+        _, missing_errors = self.compile(self.OVERWORLD, ["n", "e", "s", "w"], "")
+        self.assertTrue(any("needs exactly one graph-linked hidden_stairs opener" in error
+                            for error in missing_errors), missing_errors)
+
+    def test_hidden_stairs_must_match_e252_target_spawn_id_and_requirements(self) -> None:
+        variants = [
+            (f"hidden_stairs {self.CAVE} FromOverworld 5,5 id=other", None, "needs exactly one graph-linked"),
+            (f"hidden_stairs cave_7_2 FromOverworld 5,5 id=e252", None, "must target cave_7_1 FromOverworld"),
+            (f"hidden_stairs {self.CAVE} Default 5,5 id=e252", None, "must target cave_7_1 FromOverworld"),
+            (f"hidden_stairs {self.CAVE} FromOverworld 5,5 id=e252", {"needs": ["tallow_sling"]},
+             "must be a two-way hidden glow_jar door"),
+        ]
+        for entity, edge_change, expected in variants:
+            with self.subTest(entity=entity, edge_change=edge_change):
+                _, errors = self.compile(self.OVERWORLD, ["n", "e", "s", "w"], entity, edge_change)
+                self.assertTrue(any(expected in error for error in errors), errors)
+
+    def test_cave_return_rejects_wrong_target_marker_and_direction(self) -> None:
+        variants = [
+            (f"door ow_10_3 FromCave 5,5", None, "not a door of the graph"),
+            (f"door {self.OVERWORLD} FromOverworld 5,5", None, "must target FromCave"),
+            (f"door {self.OVERWORLD} FromCave 5,5 blocker=e252", None, "takes no blocker"),
+            (f"door {self.OVERWORLD} FromCave 5,5", {"dir": "a_to_b"},
+             "must be a two-way hidden glow_jar door"),
+        ]
+        for entity, edge_change, expected in variants:
+            with self.subTest(entity=entity, edge_change=edge_change):
+                _, errors = self.compile(self.CAVE, ["w"], entity, edge_change)
+                self.assertTrue(any(expected in error for error in errors), errors)
 
 
 class Geometry(unittest.TestCase):

@@ -136,6 +136,7 @@ SCRIPTED_OPENERS = {"thorn_door": ("thorn_door", "burn_id"),
 # The Ninth Door has a fixed runtime flag and no exported id; id= names its compiler link.
 MOUTH_REQUIREMENTS = {
     "sealed seam": ("hidden", ["glow_jar"]),
+    "hidden stairs": ("hidden", ["glow_jar"]),
     "resonance door": ("item", ["lantern_chime"]),
     "resonance vault": ("item", ["lantern_chime"]),
     "eye-switch cell": ("item", ["tallow_sling"]),
@@ -1692,6 +1693,34 @@ def check_doors(src: Source, rec: dict, world: World, plan: Plan, errors: list[s
         required_mouth = edge.get("prop") in MOUTH_REQUIREMENTS and not rec["pocket"]
         if (gate == "plain" or required_mouth) and not in_place and other not in placed:
             errors.append(f"{where(path, 1)}: graph door to {other} is not placed")
+        if edge.get("prop") == "hidden stairs" and not rec["pocket"]:
+            check_hidden_stairs_pair(src, rec, other, edge, world, plan, errors)
+
+
+def check_hidden_stairs_pair(src: Source, rec: dict, other: str, edge: dict, world: World,
+                             plan: Plan, errors: list[str]) -> None:
+    """Keep the revealed overworld entrance and the unblocked cave return as one exact graph pair."""
+    prefix = where(src.path, 1)
+    if (edge.get("link") != "door" or edge.get("gate") != "hidden"
+            or edge.get("needs") != ["glow_jar"] or edge.get("dir") != "both"):
+        errors.append(f"{prefix}: hidden stairs edge {edge['id']} must be a two-way hidden glow_jar door")
+        return
+    other_rec = world.room(other)
+    if rec["scope"] == "ow" and other_rec is not None and re.fullmatch(r"c[1-9][0-9]*", other_rec["scope"]):
+        stairs = [ent for ent, _ in plan.openers
+                  if ent.verb == "hidden_stairs" and ent.opts.get("id") == edge["id"]]
+        if len(stairs) != 1:
+            errors.append(f"{prefix}: hidden stairs edge {edge['id']} needs exactly one graph-linked hidden_stairs opener")
+        elif stairs[0].args != [other, "FromOverworld"]:
+            errors.append(f"{where(src.path, stairs[0].line)}: hidden stairs edge {edge['id']} must target {other} FromOverworld")
+        return
+    if (re.fullmatch(r"c[1-9][0-9]*", rec["scope"]) and other_rec is not None
+            and other_rec["scope"] == "ow"):
+        returns = [ent for ent in plan.doors if ent.verb == "door" and ent.args == [other, "FromCave"]]
+        if len(returns) != 1:
+            errors.append(f"{prefix}: hidden stairs cave mouth needs exactly one return door to {other} FromCave")
+        return
+    errors.append(f"{prefix}: hidden stairs edge {edge['id']} must pair one overworld room with one cave room")
 
 
 def check_anchor_mouth(src: Source, plan: Plan, door: Entity, errors: list[str]) -> None:
@@ -1735,6 +1764,20 @@ def link_door_blocker(src, rec, world, plan, door, errors) -> None:
             if requested:
                 errors.append(f"{where(src.path, door.line)}: anchor pocket uses a physical chasm, not blocker=")
             check_anchor_mouth(src, plan, door, errors)
+            return
+        if edge["prop"] == "hidden stairs":
+            other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+            other_rec = world.room(other)
+            if requested:
+                errors.append(f"{where(src.path, door.line)}: hidden-stairs cave return takes no blocker")
+                return
+            if (edge.get("link") != "door" or edge.get("dir") != "both"
+                    or not re.fullmatch(r"c[1-9][0-9]*", rec["scope"])
+                    or other_rec is None or other_rec["scope"] != "ow"):
+                errors.append(f"{where(src.path, door.line)}: a plain hidden-stairs return is only valid from its cave mouth")
+                return
+            if door.args[1] != "FromCave":
+                errors.append(f"{where(src.path, door.line)}: hidden-stairs cave return must target FromCave")
             return
     kinds = {"thorn-sealed door": "thorn_door", "thorn wall": "thorn_door",
              "cracked wall": "cracked_wall", "bomb wall": "cracked_wall",
