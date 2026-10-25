@@ -1239,6 +1239,67 @@ class ExistingCaveAliases(unittest.TestCase):
         self.assertEqual(errors, [])
 
 
+class CutScreenRespawnOutput(unittest.TestCase):
+    def test_actual_variant_scenes_are_emitted_under_room_respawn_container(self):
+        room = "cave_5_2"
+        world = world_of([room_record(room, [])])
+        room_script = (br.ROOT / "scripts/world/room.gd").read_text()
+        self.assertIn('const RESPAWN_CONTAINERS: Array[StringName] = [&"Enemies", &"Bushes"]', room_script)
+        self.assertIn('container.remove_child(child)', room_script)
+        self.assertIn('var node: Node = template.duplicate()', room_script)
+        self.assertIn('container.add_child(node)', room_script)
+        for look in ("dry_vine_screen", "moss_wall", "reed_cluster"):
+            with self.subTest(look=look):
+                source = room_text(room, [], f"opener cut_screen 5,5 look={look}\n"
+                                             f"opener cut_screen 6,5 look={look}")
+                text, errors = compile_text(source, world, room + ".room")
+                self.assertEqual(errors, [])
+                scene_path = f"res://scenes/world/{look}.tscn"
+                self.assertIn(f'path="{scene_path}"', text)
+                self.assertEqual(text.count(f'instance=ExtResource('), 2)
+                self.assertEqual(text.count('parent="Bushes" instance=ExtResource('), 2)
+                self.assertNotIn('parent="Props" instance=ExtResource(', text)
+                # Two authored Bush templates; cut frees one live copy, leave clears the other,
+                # and enter duplicates both templates back into the tracked container.
+                templates = [line for line in text.splitlines()
+                             if line.startswith('[node name=') and 'parent="Bushes"' in line]
+                active = list(templates)
+                active.pop(0)
+                active.clear()  # Room.leave/_clear_respawn_containers.
+                active.extend(templates)  # Room.enter/template.duplicate/add_child.
+                self.assertEqual(len(active), 2)
+                self.assertEqual(active, templates)
+                runtime_scene = (br.ROOT / f"scenes/world/{look}.tscn").read_text()
+                self.assertIn('scripts/world/bush.gd', runtime_scene)
+
+    def test_actual_e182_closed_open_and_regrow_use_the_tracked_parent(self):
+        edge = dict(next(e for e in real_world().edges if e["id"] == "e182"))
+        graph = real_world()
+        host = edge["a"]
+        target = edge["b"]
+        world = world_of([room_record(host, graph.room(host)["exits"], graph.room(host)["enemies"],
+                                         graph.room(host)["grid"]),
+                          room_record(target, graph.room(target)["exits"], graph.room(target)["enemies"],
+                                      graph.room(target)["grid"])],
+                         edges=[edge])
+        source = (br.ROOT / "tools/rooms/cave_5_2.room").read_text()
+        text, errors = compile_text(source, world, "cave_5_2.room")
+        self.assertEqual(errors, [])
+        self.assertEqual(text.count('parent="Bushes" instance=ExtResource('), 2)
+        self.assertNotIn('parent="Props" instance=ExtResource(', text)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "cave_5_2.room"
+            path.write_text(source)
+            errors = []
+            src = br.parse_source(path, errors)
+            plan = br.build_plan(src, world, errors)
+            self.assertEqual(errors, [])
+            closed = br.closed_flood(plan, (17, 5), None)
+            opened = br.closed_flood(plan, (17, 5), 0)
+            self.assertFalse(set(br.GAP_TILES["n"]) & closed)
+            self.assertTrue(set(br.GAP_TILES["n"]) & opened)
+
+
 class CavePilot(unittest.TestCase):
     def encounter_world(self, role="boss", name="Kilnkeeper"):
         record = room_record("cave_1_8", [])

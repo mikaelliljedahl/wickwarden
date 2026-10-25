@@ -1075,7 +1075,7 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
         size = OPENER_SIZE[kind]
         tiles = tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
         plan.openers.append((ent, tiles))
-        node = Node("", "Props", None, Res("PackedScene", CUT_SCREEN_SCENES[look]))
+        node = Node("", "Bushes", None, Res("PackedScene", CUT_SCREEN_SCENES[look]))
         node.props = [("position", vec2(*ent.pos))]
         node.base = camel(look)
         plan.singles.append((key, node))
