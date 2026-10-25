@@ -74,7 +74,7 @@ func _boss_ready() -> void:
 		var segment := Node2D.new()
 		segment.name = "Segment%d" % (i + 1)
 		_assembly.add_child(segment)
-		Placeholder.attach(segment, &"tidewick_body")
+		SpriteVisual.attach(segment, &"tidewick_body")
 		followers.append(segment)
 	tail = Hurtbox.new()
 	tail.name = "Tail"
@@ -82,7 +82,7 @@ func _boss_ready() -> void:
 	tail.filter = _tail_accepts
 	tail.hurt.connect(_tail_hit)
 	_assembly.add_child(tail)
-	tail_visual = Placeholder.attach(tail, &"tidewick_tail")
+	tail_visual = SpriteVisual.attach(tail, &"tidewick_tail")
 	tail_light = _light(tail, Color(1.0, 0.6, 0.2), 160.0)
 	ripple = Node2D.new()
 	_assembly.add_child(ripple)

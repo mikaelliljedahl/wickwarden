@@ -61,8 +61,8 @@ func _boss_ready() -> void:
 		if _plate != null:
 			add_child(_plate)
 			_plate.z_index = 1
-			Placeholder.attach(_plate, &"wax_plate")
-	visual = Placeholder.attach(self, &"kilnkeeper")
+			SpriteVisual.attach(_plate, &"wax_plate")
+	visual = SpriteVisual.attach(self, &"kilnkeeper", body_radius)
 
 
 func _enter_phase(_number: int) -> void:
@@ -123,6 +123,13 @@ func set_contact_enabled(enabled: bool) -> void:
 
 
 func _show_wax() -> void:
+	# Keep the original body as the fallback if the phase-two strip is unavailable.
+	var kind := &"kilnkeeper_p2" if phase == 2 else &"kilnkeeper"
+	if not SpriteVisual.has_art(kind):
+		kind = &"kilnkeeper"
+	var painted := visual as SpriteVisual
+	if painted != null and painted.kind != kind:
+		painted.set_kind(kind)
 	if _plate != null:
 		_plate.modulate = Color(1, 0.35, 0.1, 0.65) if is_molten() else Color.WHITE
 		# The furnace dims as its wax body breaks; there is no HUD boss bar.
