@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/minibosses/abacus_brute.tscn" id="2"]
+
+[node name="Gallery" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+floor_color = Color(0.2, 0.18, 0.18, 1)
+
+[node name="Enemies" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Miniboss" parent="Enemies" instance=ExtResource("2")]
+position = Vector2(720, 480)
+arena_id = &"cave_8_4"
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(1248, 480)
