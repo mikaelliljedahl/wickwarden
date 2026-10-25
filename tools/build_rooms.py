@@ -101,6 +101,13 @@ OPENER_SIZE = {
     # Bush's collision circle is contained by one 96 px tile; a wide screen uses one per gap tile.
     "cut_screen": (96, 96),
 }
+OPENER_SIZE.update({"thorn_door": (192, 96), "eye_portcullis": (192, 96),
+                    "heavy_stone": (96, 96), "ward_blocker": (192, 96)})
+LINKED = {"eye_switch": "eye_portcullis", "ward_plate": "ward_blocker"}
+SCRIPTED_OPENERS = {"thorn_door": ("thorn_door", "burn_id"),
+                    "eye_portcullis": ("eye_portcullis", "eye_id"),
+                    "heavy_stone": ("heavy_stone", "stone_id"),
+                    "ward_blocker": ("ward_plate", "ward_id")}
 OPENER_OPTS = ("id", "size", "scope", "look")
 PROP_SIZE = (96, 96)
 # Solid kinds a `prop` line may place: plain SolidBlocks in the hand-made scenes. A prop with its own script
@@ -110,6 +117,10 @@ POS_RE = re.compile(r"^(@)?(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$")
 IDENT_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 BOSS_FLAG_RE = re.compile(r"^boss_.+_defeated$")
 ENTITY_OPTS = {
+    "eye_switch": ("id",),
+    "ward_plate": ("id", "size", "blocks_required"),
+    "grate": ("size",),
+    "pit": ("size", "look"),
     "water": ("size",),
     "shallows": ("size",),
     "mooring": ("id", "target_room", "target_mooring", "landing_offset"),
@@ -494,6 +505,9 @@ class Plan:
         self.water: set[tuple[int, int]] = set()
         self.moorings: list[Entity] = []
         self.drop_exits: list[str] = []
+        self.controls: list[Entity] = []
+        self.grates: set[tuple[int, int]] = set()
+        self.pits: set[tuple[int, int]] = set()
 
 
 def build_plan(src: Source, world: World, errors: list[str]) -> Plan | None:
@@ -545,6 +559,8 @@ def build_plan(src: Source, world: World, errors: list[str]) -> Plan | None:
 def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, errors: list[str]) -> bool:
     where_ = where(src.path, ent.line)
     key = (ent.tile[1], ent.tile[0], seq)
+    if ent.verb in ("eye_switch", "ward_plate", "grate", "pit"):
+        return dispatch_scripted(ent, key, src, plan, errors)
     if ent.verb in ("water", "shallows", "mooring", "ledge"):
         return dispatch_crossing(ent, key, src, plan, world, errors)
     if ent.verb == "enemy":
@@ -747,12 +763,91 @@ def cache_pieces(ident: str, contents: str) -> list[tuple[str, str, int]] | None
     return pieces
 
 
+def dispatch_scripted(ent, key, src, plan, errors) -> bool:
+    kind = ent.verb
+    if ent.args:
+        errors.append(f"{where(src.path, ent.line)}: {kind} takes no positional arguments besides position")
+        return False
+    default = {"eye_switch": (60, 60), "ward_plate": (96, 96), "grate": (192, 96), "pit": (192, 192)}[kind]
+    size = parse_size(ent.opts["size"]) if "size" in ent.opts else default
+    if size is None:
+        errors.append(f"{where(src.path, ent.line)}: invalid size")
+        return False
+    scene = kind
+    node = Node("", "Props", None, Res("PackedScene", f"res://scenes/world/{scene}.tscn"))
+    node.base = camel(kind)
+    node.props = [("position", vec2(*ent.pos))]
+    if kind in LINKED:
+        ident = ent.opts.get("id", "")
+        if not IDENT_RE.fullmatch(ident):
+            errors.append(f"{where(src.path, ent.line)}: {kind} needs id=<snake_case id>")
+            return False
+        node.props.append(("eye_id" if kind == "eye_switch" else "ward_id", sname(ident)))
+        plan.controls.append(ent)
+    if kind != "eye_switch":
+        node.props.append(("size", vec2(*size)))
+    if kind == "ward_plate":
+        count = ent.opts.get("blocks_required", "3")
+        if not count.isdigit() or not 1 <= int(count) <= 20:
+            errors.append(f"{where(src.path, ent.line)}: blocks_required must be 1..20")
+            return False
+        node.props.append(("blocks_required", str(int(count))))
+    if kind == "pit":
+        look = ent.opts.get("look", "pit")
+        if look not in ("pit", "ravine"):
+            errors.append(f"{where(src.path, ent.line)}: pit look must be pit or ravine")
+            return False
+        node.props.append(("look", sname(look)))
+    tiles = tiles_of_rect(ent.pos[0]-size[0]/2, ent.pos[1]-size[1]/2, *size)
+    if kind == "grate" and tiles & plan.static:
+        errors.append(f"{where(src.path, ent.line)}: grate overlaps a solid obstacle")
+        return False
+    if kind in ("grate", "eye_switch", "pit"):
+        plan.static |= tiles
+    if kind == "grate":
+        plan.grates |= tiles
+    if kind == "pit":
+        plan.pits |= tiles
+    plan.singles.append((key, node))
+    return True
+
+
 def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: World, errors: list[str]) -> bool:
     where_ = where(src.path, ent.line)
     if len(ent.args) != 1 or ent.args[0] not in OPENER_SIZE:
         errors.append(f"{where_}: opener takes one of {', '.join(OPENER_SIZE)}")
         return False
     kind = ent.args[0]
+    if kind in SCRIPTED_OPENERS:
+        if set(ent.opts) - {"id", "size"}:
+            errors.append(f"{where_}: {kind} only takes id and size")
+            return False
+        ident = ent.opts.get("id", "")
+        size = parse_size(ent.opts["size"]) if "size" in ent.opts else OPENER_SIZE[kind]
+        if not IDENT_RE.fullmatch(ident) or size is None:
+            errors.append(f"{where_}: {kind} needs valid id and size")
+            return False
+        scene, field = SCRIPTED_OPENERS[kind]
+        node = Node("", "Props", None, Res("PackedScene", f"res://scenes/world/{scene}.tscn"))
+        node.base = camel(kind)
+        node.props = [("position", vec2(*ent.pos)), (field, sname(ident)), ("size", vec2(*size))]
+        if kind == "ward_blocker":
+            node.props.append(("blocker", "true"))
+        edge = next((e for e in world.edges if e["id"] == ident), None)
+        expected = {"thorn_door": "thorn-sealed door", "eye_portcullis": "eye-switch portcullis",
+                    "heavy_stone": "heavy stones", "ward_blocker": "ward plate"}[kind]
+        if edge is not None and (edge["prop"] != expected or src.room_id not in (edge["a"], edge["b"])):
+            errors.append(f"{where_}: {kind} id does not match this graph gate")
+            return False
+        rec = world.room(src.room_id)
+        side = corridor_side(ent.tile, rec["exits"])
+        if kind == "eye_portcullis" and side in ("e", "w"):
+            node.props.append(("rotation", "1.570796"))
+            size = (size[1], size[0])
+        tiles = tiles_of_rect(ent.pos[0]-size[0]/2, ent.pos[1]-size[1]/2, *size)
+        plan.openers.append((ent, tiles))
+        plan.singles.append((key, node))
+        return True
     if kind == "cut_screen":
         if set(ent.opts) - {"look"}:
             errors.append(f"{where_}: opener cut_screen only takes look=reed_cluster or look=rush_wall")
@@ -939,10 +1034,35 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
         landing = tile_of(ent.pos[0] + float(offset[0]), ent.pos[1] + float(offset[1]))
         if landing in plan.static:
             errors.append(f"{where(path, ent.line)}: mooring landing is on an obstacle")
+    pit_sides = set()
+    for edge in world.edges:
+        if edge.get("prop") not in ("ravine leap", "pit") or rec["id"] not in (edge["a"], edge["b"]):
+            continue
+        other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+        side = edge_side(world, rec["id"], other)
+        if side is None:
+            continue
+        pit_sides.add(side)
+        if not plan.pits:
+            errors.append(f"{where(path, grid_line)}: pit exit {side} needs a pit zone")
+        if any(t in reach for t in GAP_TILES[side]):
+            errors.append(f"{where(path, grid_line)}: pit exit {side} is walkable on foot")
+        # At tile centres a 192 px leap must land safely beyond a pit, without crossing WORLD bodies.
+        landings = []
+        solid = plan.static - plan.pits | closed
+        for start in reach:
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                middle = (start[0]+dx, start[1]+dy)
+                end = (start[0]+2*dx, start[1]+2*dy)
+                if middle in plan.pits and middle not in solid and end not in plan.static | closed:
+                    landings.append(end)
+        after = flood(landings, plan.static | closed)
+        if not any(t in after for t in GAP_TILES[side]):
+            errors.append(f"{where(path, grid_line)}: pit exit {side} has no safe 192 px leap")
     open_sides = []
     for side in rec["exits"]:
         corridor = exit_corridor(side)
-        if side in raft_sides:
+        if side in raft_sides or side in pit_sides:
             continue
         if any(tile in plan.static for tile in corridor):
             blocked = next(tile for tile in corridor if tile in plan.static)
@@ -952,6 +1072,24 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
             if any(tile not in reach for tile in corridor):
                 errors.append(f"{where(path, grid_line)}: exit {side} is not reachable from the spawn")
 
+    for index, (opener, _) in enumerate(plan.openers):
+        if not opener.args or opener.args[0] not in SCRIPTED_OPENERS:
+            continue
+        edge = next((e for e in world.edges if e["id"] == opener.opts.get("id")), None)
+        if edge is None or edge["link"] != "step":
+            continue
+        other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+        side = edge_side(world, rec["id"], other)
+        if side is not None:
+            if any(t in reach for t in GAP_TILES[side]):
+                errors.append(f"{where(path, opener.line)}: gate {edge['id']} is walkable while closed")
+            opened = closed_flood(plan, spawn_tile, index)
+            if not any(t in opened for t in GAP_TILES[side]):
+                errors.append(f"{where(path, opener.line)}: gate {edge['id']} stays blocked after opening")
+    for control in plan.controls:
+        accessible = reaches(reach, control.tile) if control.verb == "eye_switch" else control.tile in reach
+        if not accessible:
+            errors.append(f"{where(path, control.line)}: {control.verb} is unreachable with blockers closed")
     check_enemies(src, rec, plan, errors)
     check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors)
     check_shops(src, rec, world, plan, reach, errors)
@@ -975,6 +1113,30 @@ def check_enemies(src: Source, rec: dict, plan: Plan, errors: list[str]) -> None
             errors.append(f"{where(src.path, ent.line)}: hollow is not on a tile centre")
     if counts != rec["enemies"]:
         errors.append(f"{where(src.path, 1)}: enemies {counts}, the graph says {rec['enemies']}")
+
+
+def moth_fetchable(plan, target, reach) -> bool:
+    """Conservative straight launches: actual 420 px range, ignoring only permanent grates."""
+    blocked = (plan.static - plan.grates - plan.pits) | set().union(*(t for _, t in plan.openers))
+    for tile in reach:
+        start = centre_of(*tile)
+        dx, dy = target[0]-start[0], target[1]-start[1]
+        if (dx != 0 and dy != 0) or abs(dx)+abs(dy) > 420:
+            continue
+        distance = abs(dx)+abs(dy)
+        if not distance:
+            continue
+        crossed = set()
+        for step in range(int(distance)+1):
+            crossed.add(tile_of(start[0]+dx*step/distance, start[1]+dy*step/distance))
+        if crossed & plan.grates and not crossed & blocked:
+            return True
+    return False
+
+
+def moth_pocket(rec, world) -> bool:
+    return rec["pocket"] and any(e["prop"] == "grated alcove" and
+        rec["id"] in (e["a"], e["b"]) and "tether_moth" in e.get("needs", []) for e in world.edges)
 
 
 def check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors) -> None:
@@ -1006,6 +1168,16 @@ def check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors) 
         if ident not in graph:
             continue
         tile = ent.tile
+        if moth_pocket(rec, world):
+            # Every entry must remain outside the sealed key compartment.
+            starts = [spawn_tile] + [t for _, t, _ in plan.spawns]
+            for start in starts:
+                walk = flood([start], plan.static | set().union(*(t for _, t in plan.openers)))
+                if reaches(walk, tile):
+                    errors.append(f"{where(path, ent.line)}: moth pickup {ident} is walkable")
+                if not moth_fetchable(plan, ent.pos, walk):
+                    errors.append(f"{where(path, ent.line)}: moth pickup {ident} has no clear launch within 420 px across grate")
+            continue
         if graph[ident]["node"] != rec["id"]:
             # Sealed: in an in-place pocket. Closed, unreachable; exactly one opener opens it.
             if reaches(closed_flood(plan, spawn_tile, None), tile):
@@ -1082,8 +1254,18 @@ def check_doors(src: Source, rec: dict, world: World, plan: Plan, errors: list[s
 
 def check_openers_and_ids(src: Source, plan: Plan, errors: list[str]) -> None:
     seen: set[str] = set()
+    for control in plan.controls:
+        ident = control.opts["id"]
+        matches = [e for e, _ in plan.openers if e.args[0] == LINKED[control.verb] and e.opts.get("id") == ident]
+        if len(matches) != 1:
+            errors.append(f"{where(src.path, control.line)}: {control.verb} needs exactly one linked {LINKED[control.verb]}")
+        if sum(c.opts["id"] == ident for c in plan.controls) != 1:
+            errors.append(f"{where(src.path, control.line)}: duplicate control id {ident}")
     for ent, tiles in plan.openers:
         ident = ent.opts.get("id", "")
+        if ent.args and ent.args[0] in LINKED.values():
+            if not any(LINKED[c.verb] == ent.args[0] and c.opts["id"] == ident for c in plan.controls):
+                errors.append(f"{where(src.path, ent.line)}: blocker {ident} has no linked control")
         if ident:
             if ident in seen:
                 errors.append(f"{where(src.path, ent.line)}: id {ident} is used twice in this room")

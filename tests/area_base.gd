@@ -398,6 +398,12 @@ func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -
 	var water: Array[Rect2] = []
 	fixed.append_array(room.wall_rects())
 	for node in props.get_children():
+		if _script_file(node) == "ward_plate.gd" and not node.get("blocker"):
+			continue
+		if _script_file(node) == "pit_zone.gd":
+			var pit_size: Vector2 = node.get("size")
+			openable.append(Rect2((node as Node2D).position - pit_size * 0.5, pit_size))
+			continue
 		if node is Area2D and _script_file(node) == "water_zone.gd" and node.get("deep"):
 			var zone_size: Vector2 = node.get("size")
 			var rect := Rect2((node as Node2D).position - zone_size * 0.5, zone_size)
@@ -416,7 +422,8 @@ func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -
 			fixed.append(Rect2(block.position - block.size * 0.5, block.size))
 		elif _is_wall_like(node):
 			var size: Vector2 = node.get("size")
-			openable.append(Rect2((node as Node2D).position - size * 0.5, size))
+			var footprint := Rect2(-size * 0.5, size)
+			openable.append((node as Node2D).transform * footprint)
 		elif node is StaticBody2D and node.get("size") is Vector2:
 			var block_size: Vector2 = node.get("size")
 			fixed.append(Rect2((node as Node2D).position - block_size * 0.5, block_size))
@@ -457,6 +464,10 @@ func _overlaps(tiles: Dictionary, other: Dictionary) -> bool:
 
 
 func _is_wall_like(node: Node) -> bool:
+	if _script_file(node) in ["eye_switch.gd", "ward_plate.gd"]:
+		return node.get("blocker") == true
+	if _script_file(node) == "heavy_stone.gd":
+		return true
 	if node is LockedDoor or node is Gate:
 		return true
 	var script: Script = node.get_script()
@@ -555,6 +566,10 @@ func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Arra
 	for node in nodes:
 		if node is PickupBase and String((node as PickupBase).persistent_id) == "":
 			problems.append("%s: pickup %s has no persistent_id" % [id, node.name])
+		if _is_moth_pocket(id):
+			if _moth_pickup_valid(room, node as Node2D, geometry, problems):
+				reachable += 1
+			continue
 		if reaches(reach, tile_of((node as Node2D).position), true):
 			reachable += 1
 		else:
@@ -585,6 +600,57 @@ func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Arra
 		)
 
 
+func _is_moth_pocket(id: String) -> bool:
+	if not is_pocket(id):
+		return false
+	for edge: Dictionary in world_json["edges"]:
+		if edge["prop"] == "grated alcove" and (edge["a"] == id or edge["b"] == id):
+			return true
+	return false
+
+
+func _moth_pickup_valid(
+	room: Node, pickup: Node2D, geometry: Dictionary, problems: Array[String]
+) -> bool:
+	var grates := {}
+	for prop in room.get_node("Props").get_children():
+		if _script_file(prop) == "grate.gd":
+			var size: Vector2 = prop.get("size")
+			grates.merge(rect_tiles(Rect2((prop as Node2D).position - size * 0.5, size)))
+	var blocked: Dictionary = geometry["blocked"].duplicate()
+	for tile in grates:
+		blocked.erase(tile)
+	var starts: Array[Vector2i] = [geometry["spawn_tile"]]
+	for marker in room.get_node("Spawns").get_children():
+		starts.append(tile_of((marker as Node2D).position))
+	for start in starts:
+		var walk := flood([start], geometry["blocked"])
+		if reaches(walk, tile_of(pickup.position), true):
+			problems.append("moth pickup %s is walkable" % pickup.name)
+			return false
+		var found := false
+		for tile: Vector2i in walk:
+			var launch := Vector2(tile) * TILE + Vector2.ONE * TILE * 0.5
+			var delta := pickup.position - launch
+			if (delta.x != 0 and delta.y != 0) or delta.length() > 420.0:
+				continue
+			var clear := true
+			var crossed := false
+			for step in range(int(delta.length()) + 1):
+				var at := tile_of(launch + delta.normalized() * step)
+				if blocked.has(at):
+					clear = false
+				if grates.has(at):
+					crossed = true
+			if clear and crossed:
+				found = true
+				break
+		if not found:
+			problems.append("moth pickup %s has no clear launch within 420 px across grate" % pickup.name)
+			return false
+	return true
+
+
 ## Every gated edge at this room must have its prop in a scene at either end.
 func _check_gates(id: String, problems: Array[String]) -> void:
 	for edge: Dictionary in gated_edges_of(id):
@@ -607,10 +673,17 @@ func _check_gates(id: String, problems: Array[String]) -> void:
 ## goes elsewhere). A door's target spawn marker must exist in the target scene.
 func _check_doors(id: String, room: Node, problems: Array[String]) -> void:
 	var partners: Array[String] = []
-	for edge: Dictionary in plain_doors_of(id):
+	index_world()
+	for edge: Dictionary in world_json["edges"]:
+		if String(edge["link"]) != "door" or (edge["a"] != id and edge["b"] != id):
+			continue
 		var other := String(edge["b"]) if edge["a"] == id else String(edge["a"])
+		if is_in_place(other):
+			continue
 		partners.append(other)
 		var door := _door_to(room, other)
+		if door == null and edge["gate"] != null:
+			continue  # Gated mouths may be emitted by a scripted opener in _ready.
 		if door == null:
 			problems.append("%s: no door to %s (edge %s)" % [id, other, edge["id"]])
 		elif scene_exists(WorldData.scene_path(other)):

@@ -591,5 +591,106 @@ class Crossings(unittest.TestCase):
             self.assertTrue(errors, entity)
 
 
+
+
+class ScriptedGateExtensions(unittest.TestCase):
+    def compile(self, entities, exits=None, grid=None, edges=None):
+        exits = exits or []
+        world = world_of([room_record("ow_5_5", exits), room_record("ow_5_6", ["n"], grid=(5, 6))], edges=edges)
+        source = room_text("ow_5_5", exits, entities)
+        if grid:
+            source = "\n".join(["room ow_5_5", "grid", *grid, entities])
+        return compile_text(source, world, "ow_5_5.room")
+
+    def test_eye_pair_emits_real_scenes_and_shared_id(self):
+        text, errors = self.compile("eye_switch 12,3 id=e028\nopener eye_portcullis @1872,480 id=e028", ["e"])
+        self.assertEqual(errors, [])
+        self.assertIn('rotation = 1.570796', text)
+        self.assertEqual(text.count('eye_id = &"e028"'), 2)
+        self.assertIn('scenes/world/eye_portcullis.tscn', text)
+
+    def test_missing_or_mismatched_eye_link_fails(self):
+        for lines in ["opener eye_portcullis 15,4 id=e028",
+                      "eye_switch 12,3 id=other\nopener eye_portcullis 15,4 id=e028"]:
+            with self.subTest(lines=lines):
+                self.assertTrue(self.compile(lines)[1])
+
+    def test_duplicate_control_fails(self):
+        self.assertTrue(self.compile("eye_switch 12,3 id=e028\neye_switch 13,3 id=e028\nopener eye_portcullis 15,4 id=e028")[1])
+
+    def test_thorn_and_heavy_use_existing_persistent_apis(self):
+        for kind, field, size in [("thorn_door", "burn_id", "192, 96"), ("heavy_stone", "stone_id", "96, 96")]:
+            text, errors = self.compile(f"opener {kind} 15,4 id=e063")
+            self.assertEqual(errors, [])
+            self.assertIn(f'{field} = &"e063"', text)
+            self.assertIn(f'size = Vector2({size})', text)
+
+    def test_gate_id_must_match_graph_type(self):
+        edge = dict(id="e063", a="ow_5_5", b="ow_5_6", prop="heavy stones", link="step", gate="item")
+        self.assertTrue(self.compile("opener thorn_door 15,4 id=e063", edges=[edge])[1])
+
+    def test_heavy_gate_must_seal_both_gap_tiles(self):
+        edge = dict(id="e063", a="ow_5_5", b="ow_5_6", prop="heavy stones", link="step", gate="item")
+        _, errors = self.compile("opener heavy_stone @960,912 id=e063 size=192,96", ["s"], edges=[edge])
+        self.assertEqual(errors, [])
+        _, errors = self.compile("opener heavy_stone 9,9 id=e063", ["s"], edges=[edge])
+        self.assertTrue(any("walkable while closed" in e for e in errors), errors)
+
+    def test_ward_pair_and_production_shooter_options(self):
+        lines = "ward_plate 12,3 id=e257 blocks_required=4\nopener ward_blocker 15,4 id=e257"
+        text, errors = self.compile(lines)
+        self.assertEqual(errors, [])
+        self.assertEqual(text.count('ward_id = &"e257"'), 2)
+        self.assertIn('blocker = true', text)
+        self.assertIn('blocks_required = 4', text)
+        for option in ['blocks_required=0', 'blocks_required=21', 'test_spore_post=true']:
+            self.assertTrue(self.compile(lines.replace('blocks_required=4', option))[1])
+
+    def test_pit_gate_requires_barrier_and_safe_landing(self):
+        edge = dict(id="e093", a="ow_5_5", b="ow_5_6", prop="ravine leap", link="step", gate="item")
+        for width in (96, 288):
+            source = f'pit @960,720 size=1728,{width} look=ravine'
+            text, errors = self.compile(source, ["s"], edges=[edge])
+            if width == 96:
+                self.assertEqual(errors, [])
+                self.assertIn('look = &"ravine"', text)
+            else:
+                self.assertTrue(any('safe 192' in e for e in errors), errors)
+        self.assertTrue(any('walkable' in e for e in self.compile('pit 2,2', ["s"], edges=[edge])[1]))
+
+
+class PermanentGrateFetch(unittest.TestCase):
+    def compile(self, key="5,2", grate=True, bypass=False, wall=False, spawn="5,5"):
+        host = "ow_5_5"
+        pocket = host + "#grate"
+        world = world_of([room_record(host, [])], pockets=[dict(id=pocket, grid=[5,30], scope="ow", host=host, in_place=False)],
+                         pickups=[dict(id="key_ow_2", kind="small_key", node=pocket)],
+                         edges=[dict(id="e130", a=host, b=pocket, prop="grated alcove", needs=["tether_moth"], link="door", gate="item")])
+        grid = open_grid([])
+        grid[3] = '#' * 20
+        if grate:
+            grid[3] = grid[3][:5] + '..' + grid[3][7:]
+        if bypass:
+            grid[3] = grid[3][:15] + '.' + grid[3][16:]
+        lines = [f'spawn Default {spawn}', f'pickup small_key {key} id=key_ow_2']
+        if grate:
+            lines += ['grate @576,336 size=192,96']
+        if wall:
+            grid[2] = '#' * 20
+        source = '\n'.join([f'room {pocket}', 'grid', *grid, *lines])
+        return compile_text(source, world, 'ow_5_5__grate.room')
+
+    def test_permanent_grate_key_is_fetchable(self):
+        text, errors = self.compile(key="5,1")
+        self.assertEqual(errors, [])
+        self.assertIn('scenes/world/grate.tscn', text)
+        self.assertNotIn('burn_id', text)
+
+    def test_no_blanket_unreachable_pickup_waiver(self):
+        for opts in [dict(grate=False), dict(bypass=True), dict(key="15,1"), dict(wall=True), dict(spawn="5,1")]:
+            with self.subTest(opts=opts):
+                self.assertTrue(self.compile(**opts)[1])
+
+
 if __name__ == "__main__":
     unittest.main()
