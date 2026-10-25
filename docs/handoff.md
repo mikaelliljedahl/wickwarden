@@ -9,23 +9,31 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
+Active-wave inventory (2026-10-25, observed committed HEAD `6b98cb2`): **96 room scenes = 63/88 overworld + 16 separate pockets + 17 cave rooms (8 C01, 9 C02)**; **95 .room sources**, because historical `cave_1` is handmade. Counts exclude uncommitted writer files. This is a documentation snapshot, not a new integrated green gate. No freeze, broad test run or push is authorized during the active wave; await the root's next stable-checkpoint instruction. Last verified personal origin/main remains `04dc6511573b8670971c532534270db13ffc7e3a`.
+
+New delivered content: C02.a `fa8adee`, C02.b `880398d`, C02.c `944222b`, exit approaches `13ca767`, canonical B02 rewards `7501956`, and preloaded BossDoor synchronization `9e468b0`. C02 assembled tool/gate/reward acceptance is now committed as `ecff7e6` (the lead reported 157 disk checks before commit); this supersedes the earlier pending-test status. R2 acceptance `5c6462f` and R4 acceptance `82ae92b` landed. R3.a `4814c93` and R5.c `d10783e` add rooms. MB2 Sump Lurker/Lull Mauler pair is committed in `7e09325`; independent review remains active. Free-steering raft combat/rider API is committed in `3466f30`, replacing the prior fixed-lane-only limitation. B03 Tidewick `0b12e99` remains partial pending final real-raft combat tests; do not mark B03 complete.
+
+Compiler/entrance support landed: hook walls, wax seals and push-boulder openers `609be53`; anchor rings and reel-only exit validation `bc4c02a` (previously pending); linked seam/pushed-boulder readiness `9845b23`. One-tile push-boulder painted body `96aa8f1` is committed. Composition passes `7dae9c4` and `32642b4` group vegetation/cattails/cliff scree around clear routes; these do not establish complete world-art acceptance.
+
+Current queue from the root: R3.b/c/d, R5.d, R6.a/b/c (R6.a can resume after committed anchor support), B03 final real-raft testing, MB2 independent review, Reel/pit fix, heavy-boulder body follow-up and composition P1. Already-landed stone/composition commits above supersede their matching substeps; remaining follow-ups must be confirmed by their workers. No recursive delegation by integration. Priorities: finish coherent writer commits and real-tool reviews, reconcile assembled-region/cave acceptance, then run the next root-authorized stable gate and checkpoint. C03 and later cave targets remain future content; a missing destination in that set is not by itself an entrance defect.
+
+Temporary silent-testing rule: every graphical Godot invocation uses `--audio-driver Dummy`. Active agent streams are muted per the root; leave the browser untouched. This operator changed no audio/system/browser settings. Preserve all 77 foreign staged paths plus art/provenance/import/UID dirt; commit only the two living documents with explicit paths.
+
+Art/polish backlog remains separate from delivered mechanics: new cave/miniboss/boss and projectile fallback bodies, fragment/reward presentation, terrain/edge composition and pickup/shop presentation need scoped runtime audits and integration. P2 invisible collider tails, long HUD labels and capture-exit ObjectDB/resource cleanup warnings remain open unless a worker proves a fix. Earlier zero-fallback QA covered the original placed-entity set, not all newly built content. Source production is closed; no claim of all art complete or human balance approval is made.
+
 Push outcome: verified checkpoint `e1391ad4451157548aa164f3f29b45bcc5a4d2d4` was pushed to personal `mikaelliljedahl/wickwarden` origin/main at **2026-10-25 17:35:31 UTC**; `git ls-remote` exactly matched local HEAD. It includes checked runtime `d72aec1`, complete C01 construction/acceptance and the integration record. Authentication used the actual installed GitHub CLI, the personal-account token and a command-local credential helper; no repository config changed. This documentation-only follow-up records that successful push and is pushed afterward; its own final hash is reported externally to avoid a recursive self-reference. Broad implementation may resume after the follow-up push is verified.
 
 Final integration gate passed on `d72aec1` (2026-10-25): **84/84 Godot suites**, gdlint with no problems, current generated world data, **124 Python tests**, **74/74 room sources**, **20 art tests**, and global ownership (**92 WPs / 53 batches**). Tracked runtime/source Git hashes match HEAD. Logs: `/tmp/wick-release-{check,rooms,art,ownership}.log`; hash audit `/tmp/wick-release-hashes.json`. HUD commit `d72aec1` changes only `hud.gd` / `test_hud_map.gd` (explicit F11 ownership passed) and supplies dedicated equipped icons for all ten tools. Integration opened `/tmp/wick-hud-all-ten.png`; existing fixed-width labels remain clipped for some long names. The older `/tmp/wick-c01-boss-rewards.png` shows reward placement and fragment presentation but predates the HUD correction. C01 independent review is GO. Key investigation found no mechanical blocker; synthetic old-format-1 keys remain visible. Human balance/feel approval is not claimed.
 
 Presentation backlog remains: C01 miniboss/boss bodies and fragment art, P2 invisible collider tails, and capture-exit ObjectDB/resource cleanup warnings. No blanket full-art completion is claimed. All 77 foreign staged paths, provenance/art replacements and import/UID dirt remain protected. Source production is closed; future caves and backlog audits do not block this checkpoint.
 
-Current integration snapshot (2026-10-25, code/art HEAD `d72aec1`): MB1 Hollow Captain and Thorn Warden (`e65b7b5`, actual-tool checks `b4e3c1a`), M0 reset (`7b92e01`), B01 Kilnkeeper (`3c1dddc`, death-contact fix `a9bdedb`) and B02 Briar Mother (`36899fa`, decision 46 in `e91212b`) are committed. F4 scoped rewards (`a4dd00d`), F6 cave compiler/validation (`1f9993c`, `daff879`, `3a1574c`), F3 cave checks (`519c16b`), R1 assembled-area/route acceptance (`1d91efb`, `4e635c0`), paired burnables (`1b5457b`) and paired gate/lock synchronization (`e5b78cf`, 37 worker checks) have landed.
-
-C01 is committed: first four rooms `deec8c1`, rooms 5–8 and the crack pocket `4bb839e`, assembled area and physical route acceptance `4facb6e`. Worker reports 84 Godot suites and 124 Python tests passing. Prior active-tree blockers are resolved: room-owned rewards `bc78242`, inherited pocket darkness `09a5893`, scoped BossDoor geometry validation `0d4ff46`. Actual committed totals are **75 room scenes: 55 overworld, 12 separate pockets and 8 C01 rooms**, with **74 .room sources**; historical `cave_1` is handmade. C02–C10 room construction has not started. Outer independent C01 review is read-only; human playthrough approval remains open.
-
-HUD `d72aec1` is committed and the frozen-tree final integration gate is green. The authorized personal-origin checkpoint push is being recorded below; future cave construction is not a dependency.
+Earlier C01/HUD checkpoint: C01 construction and assembled physical-route acceptance landed in `deec8c1`, `4bb839e` and `4facb6e`; HUD dedicated tool icons landed in `d72aec1`. The 84-suite gate below belongs to that earlier checkpoint and does not certify the active wave above.
 
 Presentation sweep (`fb5fd5a`, `cdec164`, `607fae0`, `2021975`, `a92286d`, `c065bc5`, `e5db629`, `8b6ecc9`, `c986419`) maps placed props, travel zones, decoys, soft ward light and target-specific entrances. Root independent QA reports zero fallback bodies among the original 67 placed entities. Wickling body art is committed in `42d8393`. Seven tool/projectile body mappings landed in `1f4e7ea`; runtime presentation `421bf42` and `cbb4b20` paints transient tool bodies, softens held cues, aligns rolling flame art and keeps the raft rider visible. C01 miniboss/boss bodies and fragment presentation still need visual integration/polish; do not infer complete cave art from the tool pass. This is not final visual polish. P2 barrier art still has invisible collider tails where painted alpha ends before the collision rectangle; this remains open. Preserve concealed mouths, decorative ow_2_6 huts and the existing S1/R2 door physics. Missing C3 destination content is future construction, not a door defect.
 
 Source-art coordinator is closed: final FX `d2fe1a5`, provenance checkpoint `2fa8c69`; no image producer is currently running. Runtime art acceptance remains separate. Arena retreat is a pending owner question; no new physical barrier is approved. B01 uses the existing harmless M0 default API without an adapter.
 
-Latest verified personal origin/main checkpoint: `e1391ad` (push record above). The current gate is green as recorded above; older results below are historical. Foreign staged source deletions, untracked replacements, shared provenance changes and import/UID files remain protected.
+Latest verified personal origin/main checkpoint: `04dc651`. Green results below are historical; the active wave has no new integration gate yet. Foreign staged source deletions, untracked replacements, shared provenance changes and import/UID files remain protected.
 
 ### All-ten item-menu icon integration
 
@@ -40,16 +48,16 @@ Latest verified personal origin/main checkpoint: `e1391ad` (push record above). 
 | Wave | State | Notes |
 |---|---|---|
 | 0 foundation | Delivered | F0–F14, G1, D1–D3; subsequent compiler/API fixes integrated. |
-| 1 props, tools, regular monsters | Delivered with deviation | T03 remains a fixed-lane raft; free steering is pending. P15 runtime watcher regression and pocket entry pass. |
+| 1 props, tools, regular monsters | Delivered with deviation | Free-steering raft combat/rider API landed in `3466f30`. P15 runtime watcher regression and pocket entry pass. |
 | 2 Brackwater R1 | Room batches landed | Assembled area/route acceptance landed in `1d91efb` and `4e635c0`. |
-| 2 Thornwood R2 | R2.a–d room batches landed | R2.c completed in `ed60cf3`; R2.d `eab67e7`. |
-| 2 Tallowfen/Mirrormere R4 | R4.a–f room batches landed | R4.d `e2e551a`, R4.e `25c65b3`; regional acceptance remains. |
-| 2 Gravelight R5 | R5.a–b landed | R5.a gate follow-ups `c709196`, `b542a4e`; R5.c/d remain. |
-| 2 Cinderflats R3, Hushmarch R6 | Not delivered | MB1 and B01/B02 landed; MB2–MB5 and B03–B10 remain. |
-| 3 caves C01–C10, ending E1 | C01 committed | Both batches and assembled area/physical route tests landed; C02–C10 and E1 remain. |
+| 2 Thornwood R2 | R2.a–d room batches landed | Regional acceptance landed in `5c6462f`. |
+| 2 Tallowfen/Mirrormere R4 | R4.a–f room batches landed | Regional acceptance landed in `82ae92b`. |
+| 2 Gravelight R5 | R5.a–c landed | R5.c `d10783e`; R5.d active. |
+| 2 Cinderflats R3, Hushmarch R6 | Active | R3.a landed; R3.b–d and R6.a–c active. MB2 committed/review active; B03 partial. |
+| 3 caves C01–C10, ending E1 | C01/C02 committed | C02 acceptance `ecff7e6`; C03–C10 and E1 remain. |
 | 4 QA, 5 release | Not delivered | Full wave 2 is not complete. |
 
-Actual committed scenes: **75 (55 overworld, 12 pockets, 8 C01 rooms)**; **74 authored .room sources**, with historical `cave_1` handmade.
+Actual committed scenes at the active-wave snapshot: **96 (63 overworld, 16 pockets, 17 cave rooms)**; **95 authored .room sources**, with historical `cave_1` handmade.
 
 ### Resolved at this checkpoint
 
@@ -65,7 +73,7 @@ Workers captured and opened their room/runtime images under `/tmp`. Integration 
 ### Remaining work and owner decisions
 
 1. Finish remaining wave-2 regions/batches, region area/route tests, minibosses and bosses, after the committed C01 pilot, alongside later wave 3. Preserve hidden entrances and tool requirements; do not make every cave entrance obvious.
-2. Free-steering raft remains unbuilt (needed by Tidewick); existing raft is fixed-lane. Human playthrough/feel approval remains open.
+2. Free-steering raft API is committed; Tidewick real-raft combat testing remains active. Human playthrough/feel approval remains open.
 3. Binding conflict: `ow_1_5#cache` is separate in graph/runtime but described in place in world-plan table 7.1.1. Owner decision required before normative edits. Exit corridor depth wording versus compiler `EXIT_DEPTH=3` also remains open.
 4. Sling damage is settled by decision 43: **1**, despite stale interface tables saying 2; do not reopen the settled number. Watcher-eye stun length and mirror-shade decoy remain owner questions.
 5. Presentation gaps remain: bridge/boardwalk art, bush-cluster cut-screen look, stone steps/cracked-wall nook and standing lamp. Art sheet quality/culling, manifest integration and in-play approval are pending.
