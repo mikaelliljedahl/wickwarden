@@ -107,7 +107,7 @@ wall_id = &"ow_2_0_cache"
 
 [node name="ThornHedge1" parent="Props" instance=ExtResource("7")]
 position = Vector2(1872, 480)
-burn_id = &"ow_2_0_hedge"
+burn_id = &"e005"
 rotation = 1.570796
 
 [node name="Spawns" type="Node2D" parent="."]
