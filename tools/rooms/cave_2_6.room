@@ -1,0 +1,24 @@
+; The Briar Hollow
+room cave_2_6
+terrain Overgrown Walk: root pillars flank an open eye-switch firing aisle.
+floor_color 0.12 0.17 0.13
+grid
+####################
+#..................#
+#..#............#..#
+#..................#
+#...................
+#...................
+#..................#
+#..#............#..#
+#..................#
+#########..#########
+enemy tallow_blob 5,3
+enemy tallow_blob 6,6
+enemy spitcap 14,2
+enemy spitcap 14,7
+pickup small_key 5,7 id=key_c2_2 scope=c2
+pickup slug_bundle 11,6 id=slug_bundle_cave_2_6
+eye_switch 15,4 id=e160
+opener eye_portcullis @1872,480 id=e160
+spawn Default @960,528

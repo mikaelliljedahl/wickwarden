@@ -1,0 +1,21 @@
+; The Briar Hollow
+room cave_2_7
+terrain Eye Loft: the Lockpick rests on a root-bound plinth.
+floor_color 0.12 0.17 0.13
+grid
+####################
+#..................#
+#..#............#..#
+#..................#
+...................#
+...................#
+#..................#
+#..#............#..#
+#..................#
+####################
+enemy bramble_snapper 12,6
+prop pedestal 15,2
+pickup big_key @1488,262 id=bigkey_c2 scope=c2
+eye_switch 4,4 id=e160
+opener eye_portcullis @48,480 id=e160
+spawn Default @960,528
