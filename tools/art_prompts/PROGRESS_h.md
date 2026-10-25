@@ -61,3 +61,5 @@ B84 intro04v1–3/05v1 verified own-session hashes/unique; opened `/tmp/wickward
 B84 hookv2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave27-review.jpg`; log `log_art_resume_27.md`. V2weak wall-mounted sconce, v3ok free hookpole. Submitted endingAv2/v3,six jobs total.
 
 B84 intro06v1–3/endingAv1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave28-review.jpg`; log `log_art_resume_28.md`. All4ok (Tamsin+cave/fallen lantern; warm valley ending). Submitted endingBv1–3/creditsv1,six total withendingAv2/v3pending.
+
+B84 endingAv2/v3 complete (all18B84present); B85 endingBv1/v3 and creditsv1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave29-review.jpg`; log `log_art_resume_29.md`. Creditsweak added Tamsin/busy village; endings4ok. Submitted title_splashv1–3/creditsv2/v3,six total withendingBv2pending.
