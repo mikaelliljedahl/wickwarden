@@ -37,6 +37,14 @@ const COLS := 20
 const ROWS := 10
 const EXIT_DEPTH := 3
 const SCRIPT_DIR := "res://scripts/world/"
+const CUT_VARIANTS := {
+	"bush cluster": &"reed_cluster",
+	"dry vine screen": &"dry_vine_screen",
+	"moss wall": &"moss_wall",
+	"reed cluster": &"reed_cluster",
+	"reed wall": &"rush_wall",
+	"rush wall": &"rush_wall",
+}
 const WALL_SCRIPTS := [
 	"locked_door.gd", "gate.gd", "cracked_wall.gd", "burnable.gd", "resonance_stone.gd"
 ]
@@ -305,6 +313,17 @@ func _has_prop(root: Node, script: String, edge: Dictionary) -> bool:
 
 
 func _key_scope_ok(node: Node, edge: Dictionary) -> bool:
+	if edge["gate"] == "cut":
+		if edge.get("needs", []) != ["hook"] or not CUT_VARIANTS.has(edge.get("prop", "")):
+			return false
+		var script: Script = node.get_script()
+		var variant: Variant = node.get("variant")
+		return (
+			script != null
+			and script.resource_path == SCRIPT_DIR + "bush.gd"
+			and (variant is StringName or variant is String)
+			and StringName(variant) == CUT_VARIANTS[edge["prop"]]
+		)
 	if edge["gate"] == "boss":
 		var script: Script = node.get_script()
 		if script != null and script.resource_path == SCRIPT_DIR + "ninth_door.gd":
@@ -494,7 +513,11 @@ func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -
 			var block_size: Vector2 = node.get("size")
 			fixed.append(Rect2((node as Node2D).position - block_size * 0.5, block_size))
 	for bush in bushes.get_children():
-		fixed.append(Rect2((bush as Node2D).position - Vector2(34, 34), Vector2(68, 68)))
+		var bush_rect := Rect2((bush as Node2D).position - Vector2(34, 34), Vector2(68, 68))
+		if _is_graph_cut_bush(room, bush) and _overlaps(rect_tiles(bush_rect), gated_tiles):
+			openable.append(bush_rect)
+		else:
+			fixed.append(bush_rect)
 	var closed: Array[Rect2] = fixed.duplicate()
 	closed.append_array(openable)
 	var walls: Array[Rect2] = fixed.duplicate()
@@ -520,6 +543,14 @@ func _gated_corridor_tiles(id: String) -> Dictionary:
 		for tile in exit_tiles(side):
 			tiles[tile] = true
 	return tiles
+
+
+## Only an exact Bush variant named by a cut edge can be removed from the future-open walk.
+func _is_graph_cut_bush(room: Node, bush: Node) -> bool:
+	for edge: Dictionary in gated_edges_of(String(room.get("room_id"))):
+		if edge["gate"] == "cut" and _key_scope_ok(bush, edge):
+			return true
+	return false
 
 
 func _overlaps(tiles: Dictionary, other: Dictionary) -> bool:

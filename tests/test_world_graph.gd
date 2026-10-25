@@ -17,6 +17,7 @@ func run() -> void:
 	_broken_rooms_are_rejected()
 	_gates_may_stand_in_gated_exits()
 	_ninth_door_gate_regressions()
+	_cut_screen_gate_regressions()
 	_boss_door_geometry_regressions()
 	_cave_validation_regressions()
 	_print_pending()
@@ -440,3 +441,72 @@ func _ninth_door_gate_regressions() -> void:
 	check(not _key_scope_ok(impostor, edge), "plain body with door metadata is rejected")
 	impostor.free()
 	door.free()
+
+
+## The physical cut screen is checked at both ends of e182, while only its exact graph-named Bush
+## variant is omitted from the future-open corridor flood.
+func _cut_screen_gate_regressions() -> void:
+	var edge: Dictionary = {}
+	for candidate: Dictionary in world_json["edges"]:
+		if candidate["id"] == "e182":
+			edge = candidate
+	check(not edge.is_empty(), "canonical C5 dry-vine edge e182 exists")
+	if edge.is_empty():
+		return
+	check(edge_status(edge) == "ok", "e182 has the exact dry-vine Bush at an endpoint")
+	var wrong: Dictionary = edge.duplicate(true)
+	wrong["prop"] = "moss wall"
+	var script := load(SCRIPT_DIR + "bush.gd") as Script
+	var sample := script.new() as Node
+	sample.set("variant", &"dry_vine_screen")
+	check(not _key_scope_ok(sample, wrong), "wrong cut-screen kind is rejected")
+	wrong = edge.duplicate(true)
+	wrong["needs"] = ["bomb"]
+	check(not _key_scope_ok(sample, wrong), "wrong cut requirement is rejected")
+	var impostor := SolidBlock.new()
+	impostor.set_meta("variant", &"dry_vine_screen")
+	check(not _key_scope_ok(impostor, edge), "unrelated solid with matching metadata is rejected")
+	impostor.free()
+	sample.free()
+	for id: String in ["cave_5_2", "cave_5_3"]:
+		var room := _instance(id)
+		check(room != null, "%s scene is available for e182 validation" % id)
+		if room == null:
+			continue
+		var bushes: Node = room.get_node("Bushes")
+		check(_has_prop(room, SCRIPT_DIR + "bush.gd", edge), "%s has its real e182 screen" % id)
+		for bush in bushes.get_children():
+			check(_key_scope_ok(bush, edge), "%s dry-vine variant satisfies e182" % id)
+		var side := "n" if id == "cave_5_2" else "s"
+		var gated_tiles := _gated_corridor_tiles(id)
+		var geometry := _geometry(room, room.get_node("Props"), bushes, gated_tiles)
+		for bush in bushes.get_children():
+			check(geometry["blocked"].has(tile_of(bush.position)), "%s closed screen blocks" % id)
+		for tile in exit_tiles(side):
+			check(geometry["reach"].has(tile), "%s e182 approach is reachable when cut" % id)
+		for bush in bushes.get_children():
+			bush.set("variant", &"rush_wall")
+		geometry = _geometry(room, room.get_node("Props"), bushes, gated_tiles)
+		check(
+			geometry["walk"].has(exit_tiles(side)[2]),
+			"%s wrong Bush variant still blocks its corridor" % id
+		)
+		var solid_room := _instance(id)
+		var solid_bushes: Node = solid_room.get_node("Bushes")
+		for bush in solid_bushes.get_children():
+			var block := SolidBlock.new()
+			block.position = bush.position
+			block.size = Vector2(68, 68)
+			bushes = solid_bushes
+			bushes.remove_child(bush)
+			bush.free()
+			solid_room.get_node("Props").add_child(block)
+		geometry = _geometry(
+			solid_room, solid_room.get_node("Props"), solid_bushes, _gated_corridor_tiles(id)
+		)
+		check(
+			geometry["walk"].has(exit_tiles(side)[2]),
+			"%s identical unrelated solid blocks its corridor" % id
+		)
+		solid_room.free()
+		room.free()
