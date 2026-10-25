@@ -1,0 +1,21 @@
+; Briar Mother's Crown: dry root floor beneath the hanging thorn canopy.
+room cave_2_9
+terrain Root floor and thorn canopy: open lanes beneath the three swaying seed-eyes.
+floor_color 0.16 0.23 0.12
+grid
+####################
+#..................#
+#..................#
+#..................#
+...................#
+...................#
+#..................#
+#..................#
+#..................#
+####################
+arena briar_mother @0,0
+boss briar_mother @960,192
+opener boss_door @48,480 id=e162 size=192,96
+spawn Default @192,480
+pickup fragment @960,480 id=frag_c2 scope=c2 requires=boss_cave_2_9_defeated
+pickup wick_core @1152,480 id=wick_core_c2 requires=boss_cave_2_9_defeated
