@@ -50,6 +50,30 @@ func _test_decoy_art_and_fallback() -> void:
 			check((look as SpriteVisual).flip_h, "painted decoy follows left facing")
 			var body := enemy.visual as SpriteVisual
 			var reflection := look as SpriteVisual
+			var body_material := body.material as ShaderMaterial
+			var reflection_material := reflection.material as ShaderMaterial
+			check(body_material != null, "painted real shade has a silhouette material")
+			check(reflection_material != null, "painted reflection has a silhouette material")
+			check(body_material != reflection_material, "pair materials are independent resources")
+			check_eq(
+				body_material.shader.code,
+				reflection_material.shader.code,
+				"pair uses the same silhouette profile"
+			)
+			check_eq(
+				body_material.get_shader_parameter("cell_size"),
+				Vector2(32, 32),
+				"atlas sampling uses the loaded frame's cell"
+			)
+			var shadow := body.get_node("ContactShadow") as Sprite2D
+			check(
+				shadow.material == null and not shadow.use_parent_material,
+				"silhouette does not recolour the existing contact shadow"
+			)
+			enemy.call("_set_flash", true)
+			check_eq(body.modulate, Color(4, 4, 4, 1), "material retains base damage flash tint")
+			check_eq(reflection.modulate, Color.WHITE, "real hit flash does not mutate reflection")
+			enemy.call("_set_flash", false)
 			await get_tree().process_frame
 			await get_tree().process_frame
 			check(body.is_playing(), "moving real shade plays its walk")

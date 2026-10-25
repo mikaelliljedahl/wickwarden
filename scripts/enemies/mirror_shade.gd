@@ -30,6 +30,44 @@ const ECHO_KNOCKBACK := 640.0
 const ECHO_KNOCKBACK_TIME := 0.14
 const WARD_ARMOR_DEG := 120.0
 const LIT_TINT := Color(0.12, 0.12, 0.16, 1.0)
+## Source RGB is deliberately irrelevant: the shade is a silhouette, not a coloured costume.
+## Keep continuous source alpha and CanvasItem tint; sample only inside the current atlas cell.
+const SILHOUETTE_SHADER := """
+shader_type canvas_item;
+uniform vec2 cell_size = vec2(192.0);
+varying vec4 shade_tint;
+void vertex() {
+	shade_tint = COLOR;
+}
+float cell_alpha(float sample_alpha, vec2 uv, vec2 lo, vec2 hi) {
+ if (any(lessThan(uv, lo)) || any(greaterThan(uv, hi))) {
+  return 0.0;
+ }
+ return sample_alpha;
+}
+void fragment() {
+	vec2 span = TEXTURE_PIXEL_SIZE * cell_size;
+	vec2 lo = floor(UV / span) * span;
+	vec2 hi = lo + span;
+	float alpha = texture(TEXTURE, UV).a;
+	vec2 pixel = TEXTURE_PIXEL_SIZE;
+ vec2 right = UV + vec2(pixel.x, 0.0);
+ vec2 left = UV - vec2(pixel.x, 0.0);
+ vec2 down = UV + vec2(0.0, pixel.y);
+ vec2 up = UV - vec2(0.0, pixel.y);
+ vec2 safe_lo = lo + pixel * 0.5;
+ vec2 safe_hi = hi - pixel * 0.5;
+ float inner = min(
+  min(cell_alpha(texture(TEXTURE, clamp(right, safe_lo, safe_hi)).a, right, lo, hi),
+   cell_alpha(texture(TEXTURE, clamp(left, safe_lo, safe_hi)).a, left, lo, hi)),
+  min(cell_alpha(texture(TEXTURE, clamp(down, safe_lo, safe_hi)).a, down, lo, hi),
+   cell_alpha(texture(TEXTURE, clamp(up, safe_lo, safe_hi)).a, up, lo, hi)));
+	float edge = clamp(alpha - inner, 0.0, 1.0);
+	vec3 body = vec3(0.025, 0.035, 0.055);
+	vec3 outline = vec3(0.30, 0.34, 0.40);
+	COLOR = vec4(mix(body, outline, edge * 0.55), alpha) * shade_tint;
+}
+"""
 
 ## The glow jar script (T05), loaded at run time with a null check. Its static is_lit(pos) reads group `glow_light`.
 var _glow_jar: Script
@@ -74,10 +112,26 @@ func _enemy_ready() -> void:
 	_decoy_look = SpriteVisual.attach(_decoy, DECOY_KIND)
 	if _decoy_look is SpriteVisual:
 		(_decoy_look as SpriteVisual).auto_motion = false
+	_apply_silhouette(visual)
+	_apply_silhouette(_decoy_look)
 	# Observe the body's presentation after SpriteVisual updates its motion animation.
 	process_priority = 1
 	_echo = _make_echo_hitbox()
 	add_child(_echo)
+
+
+func _apply_silhouette(look: Node2D) -> void:
+	if not look is SpriteVisual:
+		return
+	var shader := Shader.new()
+	shader.code = SILHOUETTE_SHADER
+	var silhouette := ShaderMaterial.new()
+	silhouette.shader = shader
+	var texture := (look as SpriteVisual).sprite_frames.get_frame_texture(
+		(look as SpriteVisual).animation, 0
+	)
+	silhouette.set_shader_parameter("cell_size", texture.get_size())
+	look.material = silhouette
 
 
 ## The reflection has no CharacterBody2D velocity to drive SpriteVisual's auto-motion.
