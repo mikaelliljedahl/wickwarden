@@ -66,6 +66,7 @@ CUT_SCREEN_PROPS = {"reed cluster": "reed_cluster", "rush wall": "rush_wall",
                     "moss wall": "moss_wall", "dry vine screen": "dry_vine_screen"}
 RAFT_PROPS = ("mooring and water", "flooded passage")
 HIDDEN_STAIRS_SCENE = "res://scenes/world/hidden_stairs.tscn"
+ENDING_TRIGGER_SCENE = "res://scenes/world/ending_trigger.tscn"
 ITEM_PICKUP_SCENE = "res://scenes/pickups/item_pickup.tscn"
 PICKUP_SCENES = {
     "wick_core": "res://scenes/pickups/wick_core.tscn",
@@ -173,6 +174,7 @@ ENTITY_OPTS = {
     "opener": OPENER_OPTS,
     "door": ("blocker",),
     "hidden_stairs": ("id",),
+    "ending_trigger": (),
     "spawn": (),
     "shop": ("id",),
     "cache": ("id",),
@@ -740,6 +742,18 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
         return True
     if ent.verb == "hidden_stairs":
         return dispatch_hidden_stairs(ent, key, src, plan, errors)
+    if ent.verb == "ending_trigger":
+        if ent.args:
+            errors.append(f"{where_}: ending_trigger takes only a position")
+            return False
+        if src.room_id != "cave_10_14":
+            errors.append(f"{where_}: ending_trigger is only valid in cave_10_14")
+            return False
+        node = Node("", "Props", None, Res("PackedScene", ENDING_TRIGGER_SCENE))
+        node.base = "EndingTrigger"
+        node.props = [("position", vec2(*ent.pos))]
+        plan.singles.append((key, node))
+        return True
     if ent.verb == "shop":
         return dispatch_shop(ent, key, src, plan, errors)
     if ent.verb == "cache":
@@ -1695,6 +1709,8 @@ def check_doors(src: Source, rec: dict, world: World, plan: Plan, errors: list[s
             errors.append(f"{where(path, 1)}: graph door to {other} is not placed")
         if edge.get("prop") == "hidden stairs" and not rec["pocket"]:
             check_hidden_stairs_pair(src, rec, other, edge, world, plan, errors)
+        if edge.get("id") == "e255" or edge.get("prop") == "sealed door (nine fragments)":
+            check_ninth_door_pair(src, rec, other, edge, world, plan, errors)
 
 
 def check_hidden_stairs_pair(src: Source, rec: dict, other: str, edge: dict, world: World,
@@ -1721,6 +1737,40 @@ def check_hidden_stairs_pair(src: Source, rec: dict, other: str, edge: dict, wor
             errors.append(f"{prefix}: hidden stairs cave mouth needs exactly one return door to {other} FromCave")
         return
     errors.append(f"{prefix}: hidden stairs edge {edge['id']} must pair one overworld room with one cave room")
+
+
+def check_ninth_door_pair(src: Source, rec: dict, other: str, edge: dict, world: World,
+                          plan: Plan, errors: list[str]) -> None:
+    """Keep e255's real nine-fragment overworld blocker paired with its plain cave-side return."""
+    prefix = where(src.path, 1)
+    needs = [f"frag:c{i}" for i in range(1, 10)]
+    if (edge.get("id") != "e255" or edge.get("a") != "ow_10_8" or edge.get("b") != "cave_10_1"
+            or edge.get("link") != "door" or edge.get("gate") != "boss"
+            or edge.get("needs") != needs or edge.get("dir") != "both"
+            or edge.get("prop") != "sealed door (nine fragments)"):
+        errors.append(f"{prefix}: e255 must remain the two-way nine-fragment sealed door")
+        return
+    other_rec = world.room(other)
+    if rec["id"] == "ow_10_8" and other == "cave_10_1" and other_rec is not None and other_rec["scope"] == "c10":
+        expected_spawn = "FromOverworld"
+    elif rec["id"] == "cave_10_1" and other == "ow_10_8" and other_rec is not None and other_rec["scope"] == "ow":
+        expected_spawn = "FromCave"
+    else:
+        errors.append(f"{prefix}: e255 must pair ow_10_8 with cave_10_1")
+        return
+    mouths = [ent for ent in plan.doors if ent.verb == "door" and ent.args[0] == other]
+    if len(mouths) != 1:
+        errors.append(f"{prefix}: e255 needs exactly one paired door to {other}")
+        return
+    mouth = mouths[0]
+    if mouth.args[1] != expected_spawn:
+        errors.append(f"{where(src.path, mouth.line)}: e255 door to {other} must target {expected_spawn}")
+    if rec["id"] == "ow_10_8":
+        openers = [ent for ent, _ in plan.openers if ent.verb == "opener" and ent.args == ["ninth_door"]]
+        if len(openers) != 1:
+            errors.append(f"{prefix}: ow_10_8 e255 needs exactly one real ninth_door opener")
+        elif (plan.entity_nodes[mouth], plan.entity_nodes[openers[0]]) not in plan.door_links:
+            errors.append(f"{where(src.path, mouth.line)}: e255 door must link to the real ninth_door blocker")
 
 
 def check_anchor_mouth(src: Source, plan: Plan, door: Entity, errors: list[str]) -> None:
@@ -1778,6 +1828,21 @@ def link_door_blocker(src, rec, world, plan, door, errors) -> None:
                 return
             if door.args[1] != "FromCave":
                 errors.append(f"{where(src.path, door.line)}: hidden-stairs cave return must target FromCave")
+            return
+        if (edge["id"] == "e255" and edge["prop"] == "sealed door (nine fragments)"
+                and rec["id"] == "cave_10_1"):
+            other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+            other_rec = world.room(other)
+            if requested:
+                errors.append(f"{where(src.path, door.line)}: e255 cave return takes no blocker")
+                return
+            if (edge.get("link") != "door" or edge.get("dir") != "both"
+                    or rec["id"] != "cave_10_1" or rec["scope"] != "c10"
+                    or other != "ow_10_8" or other_rec is None or other_rec["scope"] != "ow"):
+                errors.append(f"{where(src.path, door.line)}: plain e255 return is only valid from cave_10_1 to ow_10_8")
+                return
+            if door.args[1] != "FromCave":
+                errors.append(f"{where(src.path, door.line)}: e255 cave return must target FromCave")
             return
     kinds = {"thorn-sealed door": "thorn_door", "thorn wall": "thorn_door",
              "cracked wall": "cracked_wall", "bomb wall": "cracked_wall",

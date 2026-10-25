@@ -540,6 +540,98 @@ class HiddenStairsMouth(unittest.TestCase):
                 self.assertTrue(any(expected in error for error in errors), errors)
 
 
+class NinthDoorReturn(unittest.TestCase):
+    OVERWORLD = "ow_10_8"
+    CAVE = "cave_10_1"
+
+    def world(self, edge_change: dict | None = None) -> br.World:
+        actual = real_world()
+        edge = dict(next(e for e in actual.edges if e["id"] == "e255"))
+        edge.update(edge_change or {})
+        overworld = actual.room(self.OVERWORLD)
+        cave = actual.room(self.CAVE)
+        rooms = [dict(room_record(self.OVERWORLD, overworld["exits"], grid=overworld["grid"]), scope="ow"),
+                 dict(room_record(self.CAVE, cave["exits"], grid=cave["grid"]), scope="c10")]
+        return world_of(rooms, edges=[edge])
+
+    def compile(self, room_id: str, entity: str, edge_change: dict | None = None):
+        world = self.world(edge_change)
+        rec = world.room(room_id)
+        return compile_text(room_text(room_id, rec["exits"], entity), world, room_id + ".room")
+
+    def test_actual_e255_plain_cave_return_is_unblocked(self) -> None:
+        text, errors = self.compile(self.CAVE, f"door {self.OVERWORLD} FromCave 5,5")
+        self.assertEqual(errors, [])
+        self.assertIn('target_room = &"ow_10_8"', text or "")
+        self.assertNotIn("blocker_path", text or "")
+        self.assertNotIn("requires_flag", text or "")
+
+    def test_actual_e255_overworld_ingress_keeps_the_real_nine_fragment_door(self) -> None:
+        source = f"opener ninth_door 5,5 id=e255\ndoor {self.CAVE} FromOverworld 6,5 blocker=e255"
+        text, errors = self.compile(self.OVERWORLD, source)
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/ninth_door.tscn"', text or "")
+        self.assertIn('blocker_path = NodePath("../NinthDoor1")', text or "")
+        scene = (br.ROOT / "scenes/world/ninth_door.tscn").read_text(encoding="utf-8")
+        self.assertIn('path="res://scripts/world/ninth_door.gd"', scene)
+        door_script = (br.ROOT / "scripts/world/ninth_door.gd").read_text(encoding="utf-8")
+        self.assertIn('GameState.FRAGMENT_CAVES', door_script)
+        self.assertIn("func can_open()", door_script)
+        self.assertIn("GameState.has_fragment", door_script)
+
+    def test_plain_overworld_ingress_and_wrong_return_pairs_are_rejected(self) -> None:
+        _, ingress_errors = self.compile(self.OVERWORLD, f"door {self.CAVE} FromOverworld 5,5")
+        self.assertTrue(any("needs exactly one ninth_door blocker" in error for error in ingress_errors), ingress_errors)
+        variants = [
+            ("door ow_10_7 FromCave 5,5", None, "not a door of the graph"),
+            (f"door {self.OVERWORLD} FromOverworld 5,5", None, "must target FromCave"),
+            (f"door {self.OVERWORLD} FromCave 5,5 blocker=e255", None, "takes no blocker"),
+            (f"door {self.OVERWORLD} FromCave 5,5", {"dir": "a_to_b"}, "two-way nine-fragment"),
+            (f"door {self.OVERWORLD} FromCave 5,5", {"needs": [f"frag:c{i}" for i in range(1, 9)]},
+             "mouth requirements do not match graph prop"),
+        ]
+        for entity, edge_change, expected in variants:
+            with self.subTest(entity=entity, edge_change=edge_change):
+                _, errors = self.compile(self.CAVE, entity, edge_change)
+                self.assertTrue(any(expected in error for error in errors), errors)
+
+
+class EndingTriggerEntity(unittest.TestCase):
+    FINAL_ROOM = "cave_10_14"
+
+    def world(self, room_id: str = FINAL_ROOM) -> br.World:
+        actual = real_world().room(room_id)
+        return world_of([dict(room_record(room_id, actual["exits"], grid=actual["grid"]), scope=actual["scope"])])
+
+    def test_final_room_emits_only_the_e1_scene_at_the_authored_position(self) -> None:
+        text, errors = compile_text(room_text(self.FINAL_ROOM, ["e"], "ending_trigger @960,480"),
+                                    self.world(), self.FINAL_ROOM + ".room")
+        self.assertEqual(errors, [])
+        nodes = emitted_nodes(text or "")
+        triggers = [node for node in nodes.values() if node["scene"] == "res://scenes/world/ending_trigger.tscn"]
+        self.assertEqual(len(triggers), 1)
+        self.assertEqual(triggers[0]["parent"], "Props")
+        self.assertEqual(triggers[0]["properties"], ["position = Vector2(960, 480)"])
+        scene = (br.ROOT / "scenes/world/ending_trigger.tscn").read_text(encoding="utf-8")
+        self.assertIn('path="res://scripts/world/ending_trigger.gd"', scene)
+        script = (br.ROOT / "scripts/world/ending_trigger.gd").read_text(encoding="utf-8")
+        self.assertIn('const BOSS_FLAG := &"boss_cave_10_14_defeated"', script)
+        self.assertIn("const DEATH_FADE_TIME := 2.0", script)
+        self.assertNotIn("ending_rekindle", text or "")
+        self.assertNotIn("ending_wickwarden", text or "")
+
+    def test_ending_trigger_is_rejected_outside_final_room_and_has_no_options(self) -> None:
+        _, room_errors = compile_text(room_text("cave_10_13", ["e"], "ending_trigger 5,5"),
+                                      self.world("cave_10_13"), "cave_10_13.room")
+        self.assertTrue(any("only valid in cave_10_14" in error for error in room_errors), room_errors)
+        _, option_errors = compile_text(room_text(self.FINAL_ROOM, ["e"], "ending_trigger 5,5 id=ending"),
+                                        self.world(), self.FINAL_ROOM + ".room")
+        self.assertTrue(any("takes no option 'id'" in error for error in option_errors), option_errors)
+        _, argument_errors = compile_text(room_text(self.FINAL_ROOM, ["e"], "ending_trigger unknown 5,5"),
+                                          self.world(), self.FINAL_ROOM + ".room")
+        self.assertTrue(any("takes only a position" in error for error in argument_errors), argument_errors)
+
+
 class Geometry(unittest.TestCase):
     def test_merge_is_row_major_and_greedy(self) -> None:
         grid = ["." * 20 for _ in range(10)]
@@ -977,19 +1069,24 @@ class MissingMouthOpeners(unittest.TestCase):
 
     def compile(self, edge_id, kind, ident=None, extra="", edge_change=None):
         # Use the actual normative gate, isolated from the other room workers' layouts.
-        edge = dict(next(e for e in real_world().edges if e["id"] == edge_id))
+        actual = real_world()
+        edge = dict(next(e for e in actual.edges if e["id"] == edge_id))
         edge.update(edge_change or {})
         host, target = edge["a"], edge["b"]
-        rooms = [room_record(host, [])]
+        host_record = actual.room(host)
+        host_room = dict(room_record(host, [], grid=host_record["grid"]), scope=host_record["scope"])
+        rooms = [host_room]
         pockets = []
         if "#" in target:
             pockets = [dict(id=target, grid=[5, 30], host=host, scope="ow", in_place=False)]
         else:
-            rooms.append(room_record(target, [], grid=(6, 13)))
+            target_record = actual.room(target)
+            rooms.append(dict(room_record(target, [], grid=target_record["grid"]), scope=target_record["scope"]))
         world = world_of(rooms, pockets=pockets, edges=[edge])
         ident = ident or edge_id
+        spawn = "FromOverworld" if edge_id == "e255" else "Inside"
         source = room_text(host, [], f"opener {kind} 15,4 id={ident} {extra}\n"
-                           f"door {target} Inside 14,4 blocker={ident}")
+                           f"door {target} {spawn} 14,4 blocker={ident}")
         return compile_text(source, world, host + ".room")
 
     def test_real_gate_scenes_exports_and_offset_blocker_references(self):
