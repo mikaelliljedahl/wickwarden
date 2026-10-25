@@ -7,19 +7,17 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ---
 
-Lockpick presentation complete (2026-10-25): owner decision 45 and label `5081d18`, art dependency `86ea218`. Runtime aliases `bigkey` / `big_key` use the new 96px forged-steel pickup (idle + three glints); HUD prefers dedicated 64px `hud_counter_big_key`, falling back to pickup art and then geometry. Internal IDs, save flags, scope and mechanics are unchanged; all ten tool icons remain intact. Art evidence: [lockpick-art-log.md](../tools/source_art/lockpick-art-log.md). Actual World cave captures opened: `/tmp/wickwarden-lockpick-final-cave.png` (pickup plus dedicated HUD icon) and `/tmp/wickwarden-lockpick-final-menu.png` (LOCKPICK and held C1). `make check` passed all 70 Godot suites, lint, current world data and 96 Python tests; `make rooms-check` passed 66/66; global ownership passed 92 WPs / 53 batches. Logs: `/tmp/wickwarden-lockpick-final-{check,rooms,ownership,capture}.log`. Temporary capture exit cleanup warnings remain (12 objects / 6 resources); no script or draw errors. Source/provenance-only `d2fe1a5` is included. This verified checkpoint is authorized for personal origin/main push; exact remote hash is reported after push. Inherited art staging and shared provenance edits remain untouched.
-
 ## Status (update at every push)
 
-Last updated: 2026-10-25, all-ten menu-icon checkpoint. Read [state.md](state.md) next.
+Current integration snapshot (2026-10-25, code/art HEAD `42d8393`): MB1 Hollow Captain and Thorn Warden (`e65b7b5`, actual-tool checks `b4e3c1a`), M0 reset (`7b92e01`), B01 Kilnkeeper (`3c1dddc`, death-contact fix `a9bdedb`) and B02 Briar Mother (`36899fa`, decision 46 in `e91212b`) are committed. F4 scoped rewards (`a4dd00d`), F6 cave compiler/validation (`1f9993c`, `daff879`, `3a1574c`), F3 cave checks (`519c16b`), R1 assembled-area/route acceptance (`1d91efb`, `4e635c0`), paired burnables (`1b5457b`) and paired gate/lock synchronization (`e5b78cf`, 37 worker checks) have landed.
 
-- **Push outcome:** all-ten menu-icon checkpoint `df2dc70` successfully pushed to personal origin/main on 2026-10-25, with exact remote equality verified by `git ls-remote`. It includes pipeline `b2e516c`, menu `43552ec`, art checkpoint `bae0a42` and pipeline verification record `b1fdde9`. This push-status followup is prepared on art-only parent `f33ab9b` (rekindle motes image/progress/log); it and that later art are included in the final status push. The status commit cannot name itself; final pushed hash and equality are reported to the lead after pushing.
-- **Authentication:** the prescribed shell command failed because the local `gh` wrapper emits mise output on stdout. Successful push used the actual installed GitHub CLI binary with the same personal-account token and a command-local `gh auth git-credential` helper override; no repository credential config changed.
-- **Gates green:** `make check`: all 70 test files passed, gdlint reported no problems, world data up to date, 96 Python tests OK. `make rooms-check`: checked 66 of 66 sources. `python3 tools/check_ownership.py --global`: 92 WPs, 53 room batches; 192 graph rooms/33 pockets each assigned once; no wave 1–5 path overlap.
-- **Logs:** `/tmp/wickwarden-final-check.log`, `/tmp/wickwarden-final-rooms.log`, `/tmp/wickwarden-final-ownership.log`. Commit stats/path review since `ebf58bb`: `/tmp/wickwarden-checkpoint-scopes.txt`, `/tmp/wickwarden-checkpoint-ownership-review.txt`. Room migration commits each contain one scene in the named batch; repaired raft waiver is isolated to F3 `tests/area_base.gd`.
-- **Shared tree:** no uncommitted tracked code or room edits at verification. Preexisting staged art deletions/replacements and untracked art, handover brief and UID files remain protected. Do not reset, stash, clean, bulk-add or sweep these into commits.
-- **Workflow:** owner replaced Haiku with ATF Codex **GPT-6.1 Sol low** for coding and authorized parallel agents. Root only orchestrates. Final integration explicitly owns only `docs/state.md`, `docs/handoff.md` and verified personal-account pushes. Continuous push authorization applies after green gates.
-- **Current work:** art coordinator `job_01a173820ec1786e8386bedaad3f4b23` continues generation at six image jobs. Earlier code jobs and the former integration assignment are finished/cancelled; no stale active job table is retained. Do not wait for all art to finish before checkpointing. Art progress files are production records, not proof of runtime integration.
+C01a (`deec8c1`) commits the first four Wick Cellar rooms with 44 worker physical checks and independent review GO. Committed world scenes total **70: 55 overworld, 11 pockets and 4 cave rooms**; **69 .room sources** accompany them because historical `cave_1` remains handmade. C01b is actively building rooms 5–8 and the crack pocket (worker `job_01a173ef57207fa58b84eab19aacd6ae`, follow-up `job_01a173f96ccd74529988eaec9a6c7c1b`). Its uncommitted files are not delivered content. Full C01 lead area/route tests are not yet written or passed; C02–C10 room construction has not started.
+
+Presentation sweep (`fb5fd5a`, `cdec164`, `607fae0`, `2021975`, `a92286d`, `c065bc5`, `e5db629`, `8b6ecc9`, `c986419`) maps placed props, travel zones, decoys, soft ward light and target-specific entrances. Root independent QA reports zero fallback bodies among the original 67 placed entities. New cave Wicklings now have committed body art `42d8393`; independent recheck is pending. Visible transient tool bodies still use Placeholder in some cases; the exact list is pending. This is not final visual polish. P2 art alpha extent versus barrier collision is an open review item. Preserve concealed mouths, decorative ow_2_6 huts and the existing S1/R2 door physics. Missing C3 destination content is future construction, not a door defect.
+
+Source-art coordinator is closed: final FX `d2fe1a5`, provenance checkpoint `2fa8c69`; no image producer is currently running. Runtime art acceptance remains separate. Arena retreat is a pending owner question; no new physical barrier is approved. B01 uses the existing harmless M0 default API without an adapter.
+
+Latest previously verified personal origin/main checkpoint: `2fa8c69`. Current integration gates and the next push are pending; older green results below are historical only. Foreign staged source deletions, untracked replacements, shared provenance changes and import/UID files remain protected.
 
 ### All-ten item-menu icon integration
 
@@ -35,15 +33,15 @@ Last updated: 2026-10-25, all-ten menu-icon checkpoint. Read [state.md](state.md
 |---|---|---|
 | 0 foundation | Delivered | F0–F14, G1, D1–D3; subsequent compiler/API fixes integrated. |
 | 1 props, tools, regular monsters | Delivered with deviation | T03 remains a fixed-lane raft; free steering is pending. P15 runtime watcher regression and pocket entry pass. |
-| 2 Brackwater R1 | Room batches landed | Regional acceptance/route tests remain. |
+| 2 Brackwater R1 | Room batches landed | Assembled area/route acceptance landed in `1d91efb` and `4e635c0`. |
 | 2 Thornwood R2 | R2.a–d room batches landed | R2.c completed in `ed60cf3`; R2.d `eab67e7`. |
 | 2 Tallowfen/Mirrormere R4 | R4.a–f room batches landed | R4.d `e2e551a`, R4.e `25c65b3`; regional acceptance remains. |
 | 2 Gravelight R5 | R5.a–b landed | R5.a gate follow-ups `c709196`, `b542a4e`; R5.c/d remain. |
-| 2 Cinderflats R3, Hushmarch R6 | Not delivered | Also all minibosses MB1–MB5 and bosses B01–B10 remain. |
-| 3 caves C01–C10, ending E1 | Not delivered | Historical dev `cave_1` exists; missing cave 2/5/9 destinations are expected wave-3 work. |
+| 2 Cinderflats R3, Hushmarch R6 | Not delivered | MB1 and B01/B02 landed; MB2–MB5 and B03–B10 remain. |
+| 3 caves C01–C10, ending E1 | C01 partial | C01a committed, C01b active; full C01 acceptance, C02–C10 and E1 remain. |
 | 4 QA, 5 release | Not delivered | Full wave 2 is not complete. |
 
-Actual built scenes: **55/88 overworld rooms, 11 separate pockets, one historical cave scene**. The compiler checks 66 authored sources; these numbers count different things and should not be substituted for one another.
+Actual committed scenes: **70 (55 overworld, 11 pockets, 4 cave rooms)**; **69 authored .room sources**, with historical `cave_1` handmade. Uncommitted C01b rooms are excluded.
 
 ### Resolved at this checkpoint
 
@@ -58,7 +56,7 @@ Workers captured and opened their room/runtime images under `/tmp`. Integration 
 
 ### Remaining work and owner decisions
 
-1. Finish remaining wave-2 regions/batches, region area/route tests, minibosses and bosses, then the cave pilot and wave 3. Preserve hidden entrances and tool requirements; do not make every cave entrance obvious.
+1. Finish remaining wave-2 regions/batches, region area/route tests, minibosses and bosses, alongside the partial C01 pilot and later wave 3. Preserve hidden entrances and tool requirements; do not make every cave entrance obvious.
 2. Free-steering raft remains unbuilt (needed by Tidewick); existing raft is fixed-lane. Human playthrough/feel approval remains open.
 3. Binding conflict: `ow_1_5#cache` is separate in graph/runtime but described in place in world-plan table 7.1.1. Owner decision required before normative edits. Exit corridor depth wording versus compiler `EXIT_DEPTH=3` also remains open.
 4. Sling damage is settled by decision 43: **1**, despite stale interface tables saying 2; do not reopen the settled number. Watcher-eye stun length and mirror-shade decoy remain owner questions.
@@ -67,11 +65,7 @@ Workers captured and opened their room/runtime images under `/tmp`. Integration 
 
 ### Art checkpoint
 
-Provenance refresh `a1cf76d` verifies **all 48 resumed coordinator rows through art commit `5be01e9`**, with exact own-session image bytes. This is the verified provenance coverage boundary. Later art commits (starting `55c172d`, five new PNGs with source logs and append rows) await the coordinator's next coherent provenance follow-up; generation does not block this checkpoint.
-
-The 18 older fire/smoke/dust/sparks filenames flagged by the filename audit are **inherited producer staging/provenance debt**, separate from the resumed 48-row verification. The producer's working provenance has 36 removed rows, alongside the preexisting staged source deletions and untracked replacements protected since takeover. Integration must not commit, restore or require that unrelated art set for this checkpoint.
-
-At art snapshot `9fc4aec`: **1,328 committed source PNGs**, **99 committed source logs**. The filename-only audit lists 40 absent committed provenance names in `/tmp/wickwarden-current-art-coverage.json`; that total combines the 18 inherited names and 22 later coordinator outputs, and is not a failed own-session verification. Historical `PROGRESS.md` is stale; consult range progress and logs. Current coordinator `job_01a173820ec1786e8386bedaad3f4b23` maintains six image jobs. Runtime manifest integration, culling and owner approval remain separate work.
+Source coordinator is closed. Final FX `d2fe1a5` and provenance checkpoint `2fa8c69` are committed. No image producer is active. Inherited staged source deletions/replacements and shared provenance dirt remain protected. Runtime mappings, transient tool art, visual polish and owner approval are separate from completed source production.
 
 ### Next checkpoint procedure
 
@@ -317,7 +311,7 @@ Staged files: check `git diff --cached --stat` before any commit. Commit with ex
 1. **Orient.** Read this file, then [state.md](state.md). Delegate shell inspection: `git log --oneline | head -20`, `git status` and `git diff --cached --stat`. Note HEAD. Update the status section here if it is out of date.
 2. **Read the binding rules.** `decisions.md`, `code-contract.md` section 1 and section 16, `world-work-packages.md` sections 3, 4, 5 and 13. Skim `world-plan.md` and `monsters-bosses-tools.md` only where a WP names them.
 3. **Delegate the gate check.** Have the integration worker run `make check` and `python3 tools/check_ownership.py --global`. Both must be green. If not, the first WP is a fix, not new content.
-4. **Continue from the checkpoint.** Read current work and remaining batches above. Foundation and wave 1 are delivered; choose remaining wave 2 work with satisfied dependencies and disjoint ownership. Art production continues separately.
+4. **Continue from the checkpoint.** Read current work and remaining batches above. Foundation and wave 1 are delivered; choose remaining wave 2 work with satisfied dependencies and disjoint ownership. Source production is closed; runtime art integration continues separately.
 5. **Start ATF workers.** Use Codex GPT-6.1 Sol low for coding, with the brief of section 4. Parallel only with disjoint files. The root lead only orchestrates; delegate shell checks and document work too.
 6. **Delegate verification of each result.** `git show --stat <hash>`, `python3 tools/check_ownership.py <WP>` with the stdin list, `make check` on HEAD. Fix or send back. Update `docs/state.md` when a WP lands.
 7. **Art, when the wave needs it.** Pick the next batch from `docs/art-inventory.md` section 4 whose prompts exist (or write them with the README rules). Run the Codex recipe (section 5). Verify SHA-256, log, provenance, commit only art paths. Stop all jobs after the wave.
@@ -340,5 +334,5 @@ Staged files: check `git diff --cached --stat` before any commit. Commit with ex
 - **Edge strips:** the image tool returns about 2.5:1 (for example 1983x793 or 2048x768) where docs/asset-contract.md asks for 4:1 (1536x384). The cut tool needs a rule for this before `edge_*` files can be cut: either crop and scale to the contract size, or order again. `edge_cave_floor_to_wall_v2` and `edge_cave_water_v2` failed (band too low, magenta above).
 - **Sizes:** every 1024x1024 request returned 1254x1254. The cut tool must scale with one factor. Sheets of 1536x1024 return as requested.
 - **Weak groups that need new prompts** (details in tools/art_prompts/PROGRESS_*.md and tools/source_art/log_bNN.md): brine crab front and rear views (side profile), choirling (too mossy; try `hush_skitterwick.png` as reference), mirror shade (coloured Tamsin instead of silhouette), many walk cycles that repeat poses 1=3 and 2=4, `wax_seal` (drips read as blood), `dry_vine_screen` and `bush_cluster` (cut would count wrong blobs), `pocket_plain_door` (too ornate), `pocket_lighthouse_door` (square base).
-- **Producers:** Claude-side producers a-h ran on the previous lead's account. b (12-19) and d (28-35) finished. Check PROGRESS_a, _c, _e, _f, _g, _h for the rest. Producers e (36-47) and g (60-71) were still working when the lead stopped. Resume missing ranges through ATF under the current takeover workflow (see the art section above).
+- **Producers:** Claude-side producers a-h ran on the previous lead's account. b (12-19) and d (28-35) finished. Check PROGRESS_a, _c, _e, _f, _g, _h for the rest. Those historical producer states are superseded by the closed source coordinator recorded above; do not restart generation from this historical note.
 - Build agents choose the best variant (v1-v3) when they use an image; the owner does not cull.
