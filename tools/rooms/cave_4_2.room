@@ -1,0 +1,23 @@
+; The Sleeping Foundry
+room cave_4_2
+terrain Slag Hall: paired slag benches leave clear north firing and east lock approaches.
+floor_color 0.19 0.17 0.15
+grid
+#########..#########
+#..................#
+#..###.............#
+#..................#
+....................
+....................
+#..................#
+#..###........###..#
+#..................#
+####################
+eye_switch 12,2 id=e172
+opener eye_portcullis @960,48 id=e172
+opener locked_door @1872,480 id=e173 scope=c4 size=96,192
+enemy skitterwick 6,3
+enemy skitterwick 13,6
+enemy skitterwick 15,3
+enemy hollow 7,6
+spawn Default 9,5

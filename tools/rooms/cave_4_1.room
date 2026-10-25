@@ -1,0 +1,22 @@
+; The Sleeping Foundry
+room cave_4_1
+terrain Cold Forecourt: two cold furnace shoulders frame the mouth and east aisle.
+floor_color 0.19 0.17 0.15
+grid
+####################
+#..................#
+#..###........###..#
+#..................#
+#...................
+#...................
+#..................#
+#..###........###..#
+#..................#
+####################
+enemy hollow 8,3
+enemy hollow 13,6
+enemy cinder_wisp 13,3
+enemy cinder_wisp 7,7
+door ow_9_2 FromCave 5,5
+spawn Default 7,5
+spawn FromOverworld 7,5

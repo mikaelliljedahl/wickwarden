@@ -1,0 +1,18 @@
+; The Sleeping Foundry
+room cave_4_4
+terrain Banked Furnace: cooled furnace shoulders leave the broad central slag-return floor clear.
+floor_color 0.19 0.17 0.15
+grid
+####################
+#..................#
+#..###........###..#
+#..................#
+....................
+....................
+#..................#
+#..###........###..#
+#..................#
+####################
+opener locked_door @48,480 id=e173 scope=c4 size=96,192
+miniboss lull_mauler 11,5
+spawn Default 5,5
