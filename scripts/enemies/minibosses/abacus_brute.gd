@@ -34,6 +34,13 @@ func _init() -> void:
 	)
 
 
+func _boss_ready() -> void:
+	# Only this body's drawn floor cues use this material; Visual keeps its own lighting.
+	var cue_material := CanvasItemMaterial.new()
+	cue_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	material = cue_material
+
+
 func _enter_phase(_number: int) -> void:
 	state = State.WALK
 	_timer = APPROACH
@@ -151,15 +158,50 @@ func _draw() -> void:
 	if is_dead or is_dying():
 		return
 	if rail_hp > 0 and not is_stunned():
+		# Tarnished rail rim: the same guarded front, with a soft contact edge.
+		var start := facing_dir.angle() - deg_to_rad(70.0)
+		var end := facing_dir.angle() + deg_to_rad(70.0)
+		draw_arc(Vector2.ZERO, 52.0, start, end, 28, Color(0.22, 0.17, 0.12, 0.3), 15.0, true)
+		draw_arc(Vector2.ZERO, 52.0, start, end, 28, Color(0.65, 0.57, 0.4, 0.65), 6.0, true)
+		draw_arc(Vector2.ZERO, 50.0, start, end, 28, Color(0.85, 0.79, 0.61, 0.5), 1.5, true)
+	if state == State.TELEGRAPH or state == State.WHIRL:
+		_draw_chain_scuff()
+
+
+func _draw_chain_scuff() -> void:
+	# The outer edge stays at the hit radius. All dust and bead marks lie inside it.
+	var active := state == State.WHIRL
+	var strength := 1.0 if active else 0.75
+	draw_arc(
+		Vector2.ZERO,
+		WHIRL_RADIUS - 7.0,
+		0,
+		TAU,
+		96,
+		Color(0.61, 0.48, 0.31, 0.12 * strength),
+		14.0,
+		true
+	)
+	draw_arc(
+		Vector2.ZERO, WHIRL_RADIUS, 0, TAU, 96, Color(0.78, 0.69, 0.51, 0.22 * strength), 3.0, true
+	)
+	var turn := (1.0 - _timer / WHIRL_TIME) * TAU if active else 0.0
+	for i in range(24):
+		var angle := float(i) * TAU / 24.0 + 0.035 * sin(float(i) * 2.3) + turn
+		var length := 0.11 + 0.055 * sin(float(i) * 2.7)
+		var radius := WHIRL_RADIUS - 5.0 - 3.0 * sin(float(i) * 1.8)
 		draw_arc(
 			Vector2.ZERO,
-			52.0,
-			facing_dir.angle() - deg_to_rad(70.0),
-			facing_dir.angle() + deg_to_rad(70.0),
-			28,
-			Color(0.9, 0.8, 0.5),
-			8.0
+			radius,
+			angle,
+			angle + length,
+			5,
+			Color(0.73, 0.59, 0.38, 0.4 * strength),
+			3.0 + 1.5 * sin(float(i) * 1.7),
+			true
 		)
-	if state == State.TELEGRAPH or state == State.WHIRL:
-		var color := Color(1, 0.65, 0.25, 0.8)
-		draw_arc(Vector2.ZERO, WHIRL_RADIUS, 0, TAU, 64, color, 5.0)
+		var bead := Vector2.from_angle(angle) * (WHIRL_RADIUS - 8.0)
+		draw_circle(bead, 3.5, Color(0.32, 0.24, 0.16, 0.4 * strength), true, -1.0, true)
+		draw_circle(
+			bead - Vector2(0.7, 1.0), 1.6, Color(0.9, 0.81, 0.63, 0.6 * strength), true, -1.0, true
+		)
