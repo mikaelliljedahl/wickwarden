@@ -136,7 +136,13 @@ func _set_open(open: bool) -> void:
 	is_shown = open
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as CanvasItem
 	if visual != null:
-		visual.visible = open
+		# Revealed stairs use the door's painted P14 stairs, without a second backing.
+		var painted_stairs := (
+			look == &"hidden_stairs"
+			and door_target != &""
+			and SpriteVisual.has_art(&"pocket_stairs")
+		)
+		visual.visible = open and not painted_stairs
 	# Deferred: a reveal can happen during a physics step (a hook hit), where shapes may not change.
 	_body_shape.set_deferred("disabled", open)
 	if open:

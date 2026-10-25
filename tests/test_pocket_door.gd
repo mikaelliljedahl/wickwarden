@@ -21,6 +21,7 @@ func run() -> void:
 	reset_state()
 	world = await make_world()
 	player = world.player
+	await _built_entrance_looks()
 	_variants_have_their_look()
 	await _same_scene_both_sides()
 	await _enter_and_leave()
@@ -162,3 +163,41 @@ func _enter_and_leave() -> void:
 	)
 	world.start_at(&"ow_0_0")
 	await frames(2)
+
+
+## Audit the 26 built overworld/pocket entrances, plus the historical cave exit.
+func _built_entrance_looks() -> void:
+	var count := 0
+	for pocket_id in RoomDoor.POCKET_LOOKS:
+		for id in [pocket_id, pocket_id.get_slice("#", 0)]:
+			var packed := load(WorldData.scene_path(id)) as PackedScene
+			check(packed != null, "%s entrance scene loads" % id)
+			var room := packed.instantiate() as Room
+			add_child(room)
+			await frames(1)
+			for child in room.get_node("Props").get_children():
+				if not child is RoomDoor:
+					continue
+				count += 1
+				var expected: StringName = (
+					&"pocket_plain" if "#" in id else RoomDoor.POCKET_LOOKS[pocket_id]
+				)
+				check_eq(child.entrance_kind(), expected, "%s uses its actual entrance" % id)
+				var visual := child.get_node("Visual")
+				if SpriteVisual.has_art(expected):
+					check_eq(visual.get("kind"), expected, "%s shows published art" % id)
+			await dispose(room)
+	for id in ["ow_1_1", "ow_3_5", "ow_5_1", "ow_6_3", "cave_1"]:
+		var packed := load(WorldData.scene_path(id)) as PackedScene
+		var room := packed.instantiate() as Room
+		add_child(room)
+		for child in room.get_node("Props").get_children():
+			if child is RoomDoor:
+				count += 1
+				check_eq(
+					child.entrance_kind(),
+					&"cave_exit" if id == "cave_1" else &"cave_mouth",
+					"%s preserves the real cave entrance" % id
+				)
+		await dispose(room)
+	check_eq(count, 27, "all 26 built entrances and the cave exit audited")

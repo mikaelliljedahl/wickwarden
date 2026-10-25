@@ -18,6 +18,21 @@ extends Area2D
 ## Optional persistent opener requirement, using the opener's existing GameState flag.
 @export var requires_flag: StringName = &""
 
+## P14 presentation for built pocket entrances; routing and opener requirements stay scene-owned.
+const POCKET_LOOKS := {
+	"ow_1_2#shop": &"pocket_stall",
+	"ow_1_5#cache": &"pocket_grotto",
+	"ow_3_2#grate": &"pocket_plain",
+	"ow_3_3#hut": &"pocket_hut",
+	"ow_4_1#cache": &"pocket_grotto",
+	"ow_5_5#cache": &"pocket_grotto",
+	"ow_6_0#shop": &"pocket_grotto",
+	"ow_6_5#shop": &"pocket_lighthouse",
+	"ow_7_2#bag": &"pocket_grotto",
+	"ow_7_3#grotto": &"pocket_grotto",
+	"ow_8_5#ward": &"pocket_stairs",
+}
+
 var _blockers: Array[WeakRef] = []
 var _blockers_bound := false
 
@@ -33,9 +48,22 @@ func _ready() -> void:
 	var shape := CollisionShape2D.new()
 	shape.shape = rect
 	add_child(shape)
-	# Every RoomDoor is a cave door: the cave side is cave_exit, the overworld side cave_mouth.
-	var art := &"cave_exit" if _in_dark_room() else &"cave_mouth"
+	var art := entrance_kind()
 	SpriteVisual.attach(self, art if SpriteVisual.has_art(art) else &"door_marker", 0.0, size)
+
+
+## Select art from the actual destination and host, never from the gate's current state.
+func entrance_kind() -> StringName:
+	if get_parent().get("look") == &"hidden_stairs":
+		return &"pocket_stairs"
+	if _in_dark_room():
+		return &"cave_exit"
+	var host: Node = get_parent()
+	while host != null and not host is Room:
+		host = host.get_parent()
+	if host is Room and "#" in String(host.room_id):
+		return &"pocket_plain"
+	return POCKET_LOOKS.get(String(target_room), &"cave_mouth")
 
 
 ## True when the nearest Room above this door is dark (the cave side).

@@ -6,6 +6,7 @@ func run() -> void:
 	for id in [&"ow_7_3", &"ow_1_5", &"ow_4_1", &"ow_6_0", &"ow_3_5"]:
 		await _check_entrance(id)
 	await _explicit_requirements()
+	await _revealed_stairs_look()
 
 
 func _check_entrance(id: StringName) -> void:
@@ -38,6 +39,7 @@ func _check_entrance(id: StringName) -> void:
 	await frames(5)
 	check(door.has_overlapping_bodies(), "%s reproduces trigger edge overlap" % id)
 	check(not world.is_transitioning(), "%s intact opener prevents entry" % id)
+	check(not door.get_node("Visual").visible, "%s intact opener conceals entrance art" % id)
 	check_eq(world.get_current_room_id(), id, "%s stays outside" % id)
 	var flag := &""
 	if opener is Bush:
@@ -48,6 +50,7 @@ func _check_entrance(id: StringName) -> void:
 		opener.call("on_explosion", opener.global_position, 96.0)
 	check(door._gate_is_open(), "%s required opener enables entry" % id)
 	await frames(4)
+	check(door.get_node("Visual").visible, "%s opened entrance art is visible" % id)
 	if ResourceLoader.exists(WorldData.scene_path(String(door.target_room))):
 		check(world.is_transitioning(), "%s enters after opening" % id)
 	if flag != &"":
@@ -96,3 +99,27 @@ func _explicit_requirements() -> void:
 	arena.add_child(linked)
 	check(not linked._gate_is_open(), "missing explicit blocker fails closed")
 	await dispose(arena)
+
+
+func _revealed_stairs_look() -> void:
+	reset_state()
+	var scene := load(WorldData.scene_path("ow_0_2")) as PackedScene
+	check(scene != null, "actual hidden stairs scene loads")
+	if scene == null:
+		return
+	var room := scene.instantiate() as Room
+	add_child(room)
+	var stairs := room.get_node("Props/HiddenStairs1")
+	check(not stairs.get_node("Visual").visible, "unrevealed stairs stay concealed")
+	check(stairs.get_node_or_null("Door") == null, "unrevealed stairs have no door")
+	stairs.call("_unseal")
+	await frames(2)
+	var door := stairs.get_node("Door") as RoomDoor
+	check_eq(door.entrance_kind(), &"pocket_stairs", "revealed stairs never become a cave mouth")
+	check_eq(
+		stairs.get_node("Visual").visible,
+		not SpriteVisual.has_art(&"pocket_stairs"),
+		"painted stairs replace the redundant backing only when available"
+	)
+	check_eq(door.position, Vector2.ZERO, "stairs presentation keeps the trigger in place")
+	await dispose(room)
