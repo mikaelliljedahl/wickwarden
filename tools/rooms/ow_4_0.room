@@ -1,18 +1,18 @@
-; ow_4_0 Hedgerow (Thornwood): two long hedge rows with a lane between them. The bramble snapper is rooted in a
-; nook beside the lane. Exits: E to Owl Clearing, W to Thorn Gate. No gates.
+; Hedgerow: short boundary hedge stands frame a broad east-west fighting lane.
+; Breaks between the stands expose the side clearings; the snapper guards the northern nook.
 room ow_4_0
 terrain Hedgerow: hedge rows
 floor_color 0.18 0.24 0.16
 grid
 ####################
+#.ttt...tt.........#
 #..................#
-#.tttttttt.........#
 #.....bb...........#
 ....................
 ....................
 #...bb.............#
-#.......tttttttt...#
 #..................#
+#..........ttt.....#
 ####################
 enemy skitterwick 6,6
 enemy skitterwick 16,1

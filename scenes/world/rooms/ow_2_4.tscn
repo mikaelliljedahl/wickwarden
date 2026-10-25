@@ -33,75 +33,21 @@ y_sort_enabled = true
 y_sort_enabled = true
 
 [node name="Water1" type="StaticBody2D" parent="Props"]
-position = Vector2(768, 144)
+position = Vector2(912, 192)
 script = ExtResource("3")
-size = Vector2(192, 96)
+size = Vector2(480, 192)
 kind = &"water"
 
 [node name="Water2" type="StaticBody2D" parent="Props"]
-position = Vector2(1728, 144)
+position = Vector2(864, 336)
 script = ExtResource("3")
-size = Vector2(192, 96)
+size = Vector2(384, 96)
 kind = &"water"
 
 [node name="Water3" type="StaticBody2D" parent="Props"]
-position = Vector2(384, 240)
+position = Vector2(1296, 720)
 script = ExtResource("3")
-size = Vector2(192, 96)
-kind = &"water"
-
-[node name="Water4" type="StaticBody2D" parent="Props"]
-position = Vector2(864, 240)
-script = ExtResource("3")
-size = Vector2(192, 96)
-kind = &"water"
-
-[node name="Water5" type="StaticBody2D" parent="Props"]
-position = Vector2(912, 336)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"water"
-
-[node name="Water6" type="StaticBody2D" parent="Props"]
-position = Vector2(1584, 384)
-script = ExtResource("3")
-size = Vector2(96, 192)
-kind = &"water"
-
-[node name="Water7" type="StaticBody2D" parent="Props"]
-position = Vector2(1680, 480)
-script = ExtResource("3")
-size = Vector2(96, 192)
-kind = &"water"
-
-[node name="Water8" type="StaticBody2D" parent="Props"]
-position = Vector2(960, 528)
-script = ExtResource("3")
-size = Vector2(192, 96)
-kind = &"water"
-
-[node name="Water9" type="StaticBody2D" parent="Props"]
-position = Vector2(720, 624)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"water"
-
-[node name="Water10" type="StaticBody2D" parent="Props"]
-position = Vector2(1440, 624)
-script = ExtResource("3")
-size = Vector2(192, 96)
-kind = &"water"
-
-[node name="Water11" type="StaticBody2D" parent="Props"]
-position = Vector2(384, 720)
-script = ExtResource("3")
-size = Vector2(192, 96)
-kind = &"water"
-
-[node name="Water12" type="StaticBody2D" parent="Props"]
-position = Vector2(1104, 816)
-script = ExtResource("3")
-size = Vector2(96, 96)
+size = Vector2(288, 288)
 kind = &"water"
 
 [node name="Tree1" type="StaticBody2D" parent="Props"]
@@ -111,115 +57,79 @@ size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree2" type="StaticBody2D" parent="Props"]
-position = Vector2(432, 144)
+position = Vector2(240, 144)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree3" type="StaticBody2D" parent="Props"]
-position = Vector2(1104, 144)
+position = Vector2(1584, 144)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree4" type="StaticBody2D" parent="Props"]
-position = Vector2(1392, 144)
+position = Vector2(1680, 144)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree5" type="StaticBody2D" parent="Props"]
-position = Vector2(1488, 240)
+position = Vector2(1776, 144)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree6" type="StaticBody2D" parent="Props"]
-position = Vector2(144, 336)
+position = Vector2(144, 240)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree7" type="StaticBody2D" parent="Props"]
-position = Vector2(432, 336)
+position = Vector2(1584, 240)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree8" type="StaticBody2D" parent="Props"]
-position = Vector2(1104, 336)
+position = Vector2(1680, 240)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
 
 [node name="Tree9" type="StaticBody2D" parent="Props"]
-position = Vector2(1488, 336)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree10" type="StaticBody2D" parent="Props"]
-position = Vector2(1776, 336)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree11" type="StaticBody2D" parent="Props"]
-position = Vector2(912, 432)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree12" type="StaticBody2D" parent="Props"]
-position = Vector2(432, 528)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree13" type="StaticBody2D" parent="Props"]
 position = Vector2(144, 624)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
 
+[node name="Tree10" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 624)
+script = ExtResource("3")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree11" type="StaticBody2D" parent="Props"]
+position = Vector2(144, 720)
+script = ExtResource("3")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree12" type="StaticBody2D" parent="Props"]
+position = Vector2(240, 720)
+script = ExtResource("3")
+size = Vector2(96, 96)
+kind = &"tree"
+
+[node name="Tree13" type="StaticBody2D" parent="Props"]
+position = Vector2(624, 816)
+script = ExtResource("3")
+size = Vector2(96, 96)
+kind = &"tree"
+
 [node name="Tree14" type="StaticBody2D" parent="Props"]
-position = Vector2(432, 624)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree15" type="StaticBody2D" parent="Props"]
-position = Vector2(1104, 624)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree16" type="StaticBody2D" parent="Props"]
-position = Vector2(1776, 624)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree17" type="StaticBody2D" parent="Props"]
-position = Vector2(720, 720)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree18" type="StaticBody2D" parent="Props"]
-position = Vector2(1296, 720)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree19" type="StaticBody2D" parent="Props"]
-position = Vector2(528, 816)
-script = ExtResource("3")
-size = Vector2(96, 96)
-kind = &"tree"
-
-[node name="Tree20" type="StaticBody2D" parent="Props"]
-position = Vector2(1392, 816)
+position = Vector2(720, 816)
 script = ExtResource("3")
 size = Vector2(96, 96)
 kind = &"tree"
