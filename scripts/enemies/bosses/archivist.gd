@@ -36,8 +36,15 @@ class Copy:
 	var popped := false
 
 	func _ready() -> void:
+		# A duplicate carries generated children; replace its helper rather than
+		# leave an extra hidden target behind the newly painted copy.
+		for child in get_children():
+			if child is Hurtbox:
+				remove_child(child)
+				child.free()
 		SpriteVisual.attach(self, &"archivist_decoy", 48.0)
 		box = Hurtbox.new()
+		box.name = "Hurtbox"
 		box.team = Layers.Team.ENEMY
 		box.add_circle(48)
 		box.hurt.connect(_hit)
@@ -108,6 +115,17 @@ func _init() -> void:
 		)
 
 
+func _enemy_ready() -> void:
+	# Clean snapshots before BossBase can take its defeated/retired early return.
+	# Only this actor's generated shadow is retired; authored arena props are untouched.
+	for child in get_children():
+		if child.has_meta(&"archivist_generated_shadow") or child.name == &"Shadow":
+			remove_child(child)
+			child.free()
+	shadow = null
+	super._enemy_ready()
+
+
 func _boss_ready() -> void:
 	if visual is SpriteVisual:
 		visual.auto_motion = false
@@ -115,6 +133,7 @@ func _boss_ready() -> void:
 	rng.randomize()
 	shadow = Node2D.new()
 	shadow.name = "Shadow"
+	shadow.set_meta(&"archivist_generated_shadow", true)
 	add_child(shadow)
 	var polygon := Polygon2D.new()
 	polygon.color = Color(0.01, 0.01, 0.025, 0.9)

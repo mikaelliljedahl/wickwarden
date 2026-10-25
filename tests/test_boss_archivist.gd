@@ -5,10 +5,51 @@ const SCENE := "res://scenes/enemies/bosses/archivist.tscn"
 
 
 func run() -> void:
+	await _shadow_lifecycle()
 	await _copy_challenge()
 	await _attacks_and_reset()
 	await _ward()
 	await _physical_finish()
+
+
+func _shadow_count(boss: Node, expected: int) -> void:
+	var polygons := boss.find_children("*", "Polygon2D", true, false)
+	check_eq(polygons.size(), expected, "exact canonical shadow geometry, including hidden nodes")
+	if expected == 1:
+		check_eq(polygons[0].get_parent(), boss.get("shadow"), "only polygon belongs to public shadow")
+		check(not boss.get("shadow").visible, "canonical shadow starts hidden without jar")
+
+
+func _shadow_lifecycle() -> void:
+	reset_state()
+	var arena := make_arena()
+	var fresh := make_enemy(arena, SCENE, Vector2(960, 480))
+	_shadow_count(fresh, 1)
+	await dispose(arena)
+	for grid in [Vector2i.ZERO, Vector2i(20, 14)]:
+		reset_state()
+		var packed := load("res://scenes/world/rooms/cave_5_10.tscn") as PackedScene
+		check(packed != null, "actual built C5 boss room loads")
+		var room := packed.instantiate() as Room
+		room.grid = grid
+		add_child(room)
+		for visit in range(3):
+			room.enter()
+			var boss := room.get_node("Enemies/Archivist1") as Node2D
+			_shadow_count(boss, 1)
+			check(room.get_rect().has_point(boss.global_position), "cloned boss retains translated room anchor")
+			var old_shadow: WeakRef = weakref(boss.get("shadow"))
+			room.leave()
+			await frames(2)
+			check(old_shadow.get_ref() == null, "leaving frees generated shadow geometry")
+		GameState.set_flag(&"boss_cave_5_10_defeated")
+		room.enter()
+		var retired := room.get_node("Enemies/Archivist1") as EnemyBase
+		check(retired.is_dead and not retired.visible, "defeated template clone retires")
+		_shadow_count(retired, 0)
+		check(not retired.hurtbox.enabled and not retired.contact_hitbox.active,
+			"retired clone exposes no damage or contact")
+		await dispose(room)
 
 
 func _fixture() -> Room:
@@ -60,6 +101,16 @@ func _copy_challenge() -> void:
 				check(look.get_node_or_null("ContactShadow") == null,
 					"painted decoy never acquires a contact shadow")
 		check(copy.get_node_or_null("Shadow") == null, "decoy has no jar-reveal shadow")
+	# Copy helpers can also be duplicated independently by snapshot tooling.
+	var copy_probe := boss.copies[0].duplicate() as Node2D
+	var stale_helper: WeakRef = weakref(copy_probe.find_children("*", "Area2D", true, false)[0])
+	room.add_child(copy_probe)
+	check(stale_helper.get_ref() == null, "copy ready frees its cloned old hurtbox helper")
+	var helpers := copy_probe.find_children("*", "Area2D", true, false)
+	check_eq(helpers.size(), 1, "copy clone has exactly one generated hurtbox")
+	check(helpers[0] is Hurtbox, "canonical copy helper remains a real hurtbox")
+	check(copy_probe.get_node_or_null("Shadow") == null, "copy helper cleanup adds no shadow")
+	await dispose(copy_probe)
 	await _hit(room, boss)
 	check_eq(boss.hp, 20, "unlit real rejects blind damage")
 	var decoy = boss.copies[0]
