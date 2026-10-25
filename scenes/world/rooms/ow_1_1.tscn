@@ -113,7 +113,7 @@ kind = &"rock"
 position = Vector2(1392, 240)
 script = ExtResource("6")
 target_room = &"cave_1"
-target_spawn = &"Default"
+target_spawn = &"FromOverworld"
 
 [node name="Rock8" type="StaticBody2D" parent="Props"]
 position = Vector2(1488, 240)

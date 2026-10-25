@@ -16,5 +16,5 @@ grid
 enemy spitcap 5,3
 enemy tallow_blob 6,7
 enemy tallow_blob 17,8
-door cave_1 Default 14,2
+door cave_1 FromOverworld 14,2
 spawn FromCave 14,4
