@@ -1,0 +1,20 @@
+room ow_9_0
+terrain Smoke Terrace: broken vent shelves beside a wide road, wax seals the north-east vent
+floor_color 0.28 0.22 0.18
+grid
+####################
+#............####..#
+#...rrr......#..#..#
+#...r........#..#..#
+....................
+....................
+#..................#
+#............rrr...#
+#..................#
+#########..#########
+enemy hollow 7,6
+enemy hollow 12,6
+opener wax_seal @1440,336 id=e132
+door ow_9_0#cache Inside @1440,336
+spawn FromPocket @1440,456
+spawn Default 10,5

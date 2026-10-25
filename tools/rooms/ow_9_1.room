@@ -1,0 +1,22 @@
+room ow_9_1
+terrain Slag Road: broad four-way slag crossing with a ward vault recessed into the north-west bank
+floor_color 0.28 0.22 0.18
+grid
+#########..#########
+#.####.............#
+#.#..#........rr...#
+#.#..#.........r...#
+....................
+....................
+#..................#
+#.............rrr..#
+#..................#
+#########..#########
+enemy cinder_wisp 7,3
+enemy cinder_wisp 11,2
+enemy cinder_wisp 13,3
+ward_plate 7,6 id=e256
+opener ward_blocker @384,336 id=e256
+door ow_9_1#ward Inside @384,240
+spawn FromPocket @384,456
+spawn Default 10,5

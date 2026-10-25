@@ -1,0 +1,20 @@
+room ow_8_1
+terrain Portcullis Court: paired gate piers flank an open east-west court and northern road
+floor_color 0.28 0.22 0.18
+grid
+#########..#########
+#..................#
+#..rr.........rr...#
+#..r...............#
+....................
+....................
+#..r...............#
+#..rr.........rr...#
+#..................#
+####################
+enemy skitterwick 12,3
+enemy skitterwick 14,6
+enemy hollow 7,7
+eye_switch 6,2 id=e028
+opener eye_portcullis @48,480 id=e028
+spawn Default 10,5

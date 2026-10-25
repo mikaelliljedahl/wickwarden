@@ -1,0 +1,20 @@
+room ow_8_0
+terrain Ash Rim: low ash banks frame a broad east-south sweep; a hollow seam in the north bank
+floor_color 0.28 0.22 0.18
+grid
+####################
+#.####.............#
+#.#..#.......rr....#
+#.#..#........r....#
+#...................
+#...................
+#..................#
+#..rr..............#
+#...r..............#
+#########..#########
+enemy cinder_wisp 13,6
+enemy cinder_wisp 6,6
+opener hook_tap_wall @384,336 id=e131
+door ow_8_0#cache Inside @384,336
+spawn FromPocket @384,456
+spawn Default 10,5
