@@ -13,6 +13,7 @@ func run() -> void:
 	await _ride_across_rooms()
 	await _speed_scales()
 	await _hurtbox_sources()
+	await _fall_api_requires_grounded_pit()
 
 
 func _straight_path() -> void:
@@ -242,3 +243,36 @@ func _ride_across_rooms() -> void:
 	check_eq(world.current_room.room_id, &"ow_1_0", "the ride ends in the next room")
 	check(not world.is_transitioning(), "the slide is over")
 	await dispose(world)
+
+
+func _fall_api_requires_grounded_pit() -> void:
+	reset_state()
+	var arena := make_arena()
+	var hero := make_player(arena, Vector2(500, 500))
+	await frames(2)
+	check(not hero.take_fall_damage(null), "fall requires a live source")
+	check(not hero.take_fall_damage(arena), "ordinary source cannot bypass damage immunity")
+	var scene := load("res://scenes/world/pit.tscn") as PackedScene
+	check(scene != null, "real pit scene is available")
+	if scene == null:
+		await dispose(arena)
+		return
+	var pit: Node2D = scene.instantiate()
+	arena.add_child(pit)
+	pit.global_position = Vector2(800, 500)
+	pit.set_physics_process(false)
+	await frames(2)
+	check(not hero.take_fall_damage(pit), "pit geometry must hold the player")
+	var path: Array[Vector2] = [Vector2(1000, 500)]
+	hero.begin_external_motion(path, 300.0, {"airborne": true, "hurtbox": false})
+	hero.global_position = pit.global_position
+	check(not hero.take_fall_damage(pit), "airborne player cannot be charged a fall")
+	check_eq(GameState.health, 6, "airborne fall rejection preserves health")
+	check(hero.is_external_motion(), "rejected fall does not cancel airborne motion")
+	hero.end_external_motion()
+	check(hero.take_fall_damage(pit), "grounded genuine pit fall is accepted")
+	check_eq(GameState.health, 4, "fall API has fixed two-half-heart cost")
+	check(hero.take_fall_damage(pit), "same fall episode still asks pit to relocate")
+	check_eq(GameState.health, 4, "same fall episode charges health only once")
+	check(not hero.take_damage(1, Vector2.ZERO), "ordinary damage still honors fall i-frames")
+	await dispose(arena)

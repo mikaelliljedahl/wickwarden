@@ -58,7 +58,8 @@ func _fall(player: Player) -> void:
 		return
 	_last_fall_frame = Engine.get_physics_frames()
 	var dest := _safe_position if _has_safe else _fallback_position()
-	player.take_damage(FALL_DAMAGE, global_position, 0.0)
+	if not player.take_fall_damage(self):
+		return
 	if not player.is_dead():
 		player.place_at(dest)
 

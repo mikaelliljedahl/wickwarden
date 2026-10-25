@@ -21,6 +21,7 @@ const WALK_SPEED := 360.0
 const STOP_TIME := 0.06
 const BODY_RADIUS := 26.0
 const IFRAME_TIME := 0.9
+const FALL_DAMAGE := 2
 const BLINK_INTERVAL := 0.08
 
 const SWING_ARC_DEG := 110.0
@@ -68,6 +69,7 @@ var _attack_prev: bool = false
 var _item_prev: bool = false
 var _cycle_prev: bool = false
 var _iframes: float = 0.0
+var _fall_recovery := false
 var _knock_velocity: Vector2 = Vector2.ZERO
 var _knock_time: float = 0.0
 var _locked: bool = false  # World freezes the player with process_mode; this is for tests/cutscenes
@@ -279,6 +281,40 @@ func take_damage(
 	return true
 
 
+## A genuine grounded pit fall costs two half-hearts even during hit i-frames.
+## Only a live pit whose public geometry holds this player can report it. Airborne travel
+## remains safe. Recovery rearms on safe ground, preventing repeated charges at an unsafe spawn.
+## True asks the pit to relocate, including recovery frames that cost no additional health.
+## False means invalid/dead/airborne: do not relocate or apply another damage path.
+func take_fall_damage(pit: Node2D) -> bool:
+	if (
+		state == State.DEAD
+		or is_airborne()
+		or not is_instance_valid(pit)
+		or not pit.is_inside_tree()
+		or not pit.is_in_group(&"pit_zone")
+		or not pit.has_method(&"holds")
+		or not bool(pit.call(&"holds", global_position))
+	):
+		return false
+	end_external_motion()
+	_knock_time = 0.0
+	if not _fall_recovery:
+		_fall_recovery = true
+		_apply_hit(FALL_DAMAGE, pit.global_position, 0.0, 0.0)
+	return true
+
+
+## A fall episode ends only after the body reaches ground outside every live pit.
+func _refresh_fall_recovery() -> void:
+	if not _fall_recovery or is_external_motion():
+		return
+	for pit in get_tree().get_nodes_in_group(&"pit_zone"):
+		if pit.holds(global_position):
+			return
+	_fall_recovery = false
+
+
 # ---- External motion (raft, boots, reel line, mitts) ----------------------------------------
 
 
@@ -457,6 +493,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_update_items()
 	_update_lamp_glow()
+	_refresh_fall_recovery()
 
 
 func _update_motion(delta: float) -> void:
