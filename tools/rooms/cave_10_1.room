@@ -1,0 +1,19 @@
+room cave_10_1
+terrain Ninth Stair: broken stair shoulders frame the open return landing.
+floor_color 0.15 0.13 0.17
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+#...................
+#...................
+#..................#
+#..##..........##..#
+#..................#
+####################
+enemy husk_hound 8,3
+enemy husk_hound 12,6
+door ow_10_8 FromCave 5,4
+spawn FromOverworld 7,4
+spawn Default 7,4
