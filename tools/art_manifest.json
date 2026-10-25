@@ -2,6 +2,7 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+"lock_plate": {"measure": "fit", "value": [100, 112], "ref": [{"sheet": "lock_plate_v1", "row": 0}, {"sheet": "lock_plate_v1", "row": 1}, {"sheet": "lock_plate_v1", "row": 2}]},
 "hidden_seam": {"measure": "fit", "value": [116, 110], "ref": [{"sheet": "hidden_seam_v1", "row": 1}]},
 "wick_automaton": {"measure": "fit", "value": [150, 180], "ref": [{"sheet": "wick_automaton_walk_down_v1", "row": 0}, {"sheet": "wick_automaton_walk_side_v1", "row": 0}, {"sheet": "wick_automaton_walk_up_v1", "row": 0}]},
 "corrows_echo": {"measure": "fit", "value": [160, 180], "ref": [{"sheet": "corrows_echo_walk_down_v1", "row": 0}, {"sheet": "corrows_echo_walk_side_v1", "row": 0}, {"sheet": "corrows_echo_walk_up_v2", "row": 0}]},
@@ -1393,6 +1394,7 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"lock_plate": {"cell": [160, 160], "align": "center", "anchor": [80.0, 80.0], "radius": 34, "mirror_side": false},
 "thorn_wall": {"cell": [192, 192], "align": "foot", "foot": 186, "prop": true, "rect_h": 96},
 "eye_cell": {"cell": [192, 192], "align": "foot", "foot": 186, "prop": true, "rect_h": 96},
 "fragment_c9": {"cell": [96, 96], "align": "foot", "foot": 88},
@@ -2090,6 +2092,7 @@
  }
  },
  "sheets": {
+"lock_plate_v1": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"kind": "lock_plate", "anim": "closed", "file": "lock_plate_closed", "scale": "lock_plate", "fps": 6, "poses": [0, 1], "loop": true}, {"kind": "lock_plate", "anim": "idle", "file": "lock_plate_closed", "scale": "lock_plate", "fps": 6, "poses": [0, 1], "loop": true}]}, {"poses": 3, "outputs": [{"kind": "lock_plate", "anim": "opening", "file": "lock_plate_opening", "scale": "lock_plate", "fps": 6, "poses": [0, 3], "loop": false}]}, {"poses": 1, "outputs": [{"kind": "lock_plate", "anim": "open", "file": "lock_plate_open", "scale": "lock_plate", "fps": 6, "poses": [0, 1], "loop": true}]}, {"skip": true, "outputs": []}]},
 "thorn_wall_v1": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"kind": "thorn_wall", "anim": "idle", "file": "thorn_wall_idle", "poses": 0, "scale": {"measure": "fit", "value": [180, 174]}, "fps": 1, "loop": true}]}, {"poses": 5, "outputs": []}, {"poses": 1, "outputs": []}]},
 "eye_cell_v1": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"kind": "eye_cell", "anim": "idle", "file": "eye_cell_idle", "poses": 0, "scale": {"measure": "fit", "value": [180, 174]}, "fps": 1, "loop": true}]}, {"poses": 3, "outputs": []}, {"poses": 1, "outputs": []}]},
 "fragment_c9_v2": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "fragment_c9", "anim": "idle", "file": "fragment_c9_idle", "poses": 0, "scale": {"measure": "fit", "value": [84, 82]}, "fps": 1, "loop": true}]}]},

@@ -1,4 +1,43 @@
 {
+  "lock_plate": {
+    "cell": [
+      160,
+      160
+    ],
+    "anchor": [
+      80.0,
+      80.0
+    ],
+    "radius": 34.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "closed": {
+        "file": "res://assets/sprites/lock_plate_closed.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/lock_plate_closed.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "opening": {
+        "file": "res://assets/sprites/lock_plate_opening.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": false
+      },
+      "open": {
+        "file": "res://assets/sprites/lock_plate_open.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
   "thorn_wall": {
     "cell": [
       192,
