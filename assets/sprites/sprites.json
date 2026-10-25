@@ -1,4 +1,32 @@
 {
+  "hidden_seam": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/hidden_seam_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "revealed": {
+        "file": "res://assets/sprites/hidden_seam_revealed.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": false
+      }
+    }
+  },
   "wick_automaton": {
     "cell": [
       256,

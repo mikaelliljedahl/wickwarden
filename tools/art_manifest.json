@@ -2,6 +2,7 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+"hidden_seam": {"measure": "fit", "value": [116, 110], "ref": [{"sheet": "hidden_seam_v1", "row": 1}]},
 "wick_automaton": {"measure": "fit", "value": [150, 180], "ref": [{"sheet": "wick_automaton_walk_down_v1", "row": 0}, {"sheet": "wick_automaton_walk_side_v1", "row": 0}, {"sheet": "wick_automaton_walk_up_v1", "row": 0}]},
 "corrows_echo": {"measure": "fit", "value": [160, 180], "ref": [{"sheet": "corrows_echo_walk_down_v1", "row": 0}, {"sheet": "corrows_echo_walk_side_v1", "row": 0}, {"sheet": "corrows_echo_walk_up_v2", "row": 0}]},
 "unlit_hush_hand": {"measure": "fit", "value": [180, 160], "ref": [{"sheet": "unlit_hush_hand_v1", "row": 0}, {"sheet": "unlit_hush_hand_v1", "row": 1}, {"sheet": "unlit_hush_hand_v1", "row": 2}]},
@@ -1392,6 +1393,7 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"hidden_seam": {"cell": [128, 128], "align": "foot", "foot": 122, "prop": true, "rect_h": 96},
 "wick_automaton": {"cell": [256, 256], "align": "foot", "anchor": [128.0, 204], "radius": 32, "mirror_side": true, "foot": 236},
 "corrows_echo": {"cell": [256, 256], "align": "foot", "anchor": [128.0, 206], "radius": 30, "mirror_side": true, "foot": 236},
 "unlit_hush_hand": {"cell": [192, 192], "align": "foot", "anchor": [96.0, 76], "radius": 100, "mirror_side": true, "foot": 176},
@@ -2085,6 +2087,7 @@
  }
  },
  "sheets": {
+"hidden_seam_v1": {"key": "magenta", "rows": [{"poses": 1, "outputs": []}, {"poses": 3, "outputs": [{"kind": "hidden_seam", "anim": "idle", "file": "hidden_seam_idle", "poses": 2, "scale": "hidden_seam", "fps": 1, "loop": true}, {"kind": "hidden_seam", "anim": "revealed", "file": "hidden_seam_revealed", "poses": [0, 3], "scale": "hidden_seam", "fps": 6, "loop": false}]}]},
 "wick_automaton_walk_down_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "wick_automaton", "anim": "walk_down", "file": "wick_automaton_walk_down", "scale": "wick_automaton", "fps": 6, "poses": [0, 4], "loop": true}, {"kind": "wick_automaton", "anim": "idle_down", "file": "wick_automaton_idle_down", "scale": "wick_automaton", "fps": 6, "poses": 0, "loop": true}]}]},
 "wick_automaton_walk_side_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "wick_automaton", "anim": "walk_side", "file": "wick_automaton_walk_side", "scale": "wick_automaton", "fps": 6, "poses": [0, 4], "loop": true}, {"kind": "wick_automaton", "anim": "idle_side", "file": "wick_automaton_idle_side", "scale": "wick_automaton", "fps": 6, "poses": 0, "loop": true}]}]},
 "wick_automaton_walk_up_v1": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "wick_automaton", "anim": "walk_up", "file": "wick_automaton_walk_up", "scale": "wick_automaton", "fps": 6, "poses": [0, 4], "loop": true}, {"kind": "wick_automaton", "anim": "idle_up", "file": "wick_automaton_idle_up", "scale": "wick_automaton", "fps": 6, "poses": 0, "loop": true}]}]},
