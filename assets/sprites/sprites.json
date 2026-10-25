@@ -1,4 +1,198 @@
 {
+  "flame": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "roll": {
+        "file": "res://assets/sprites/flame_roll.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/flame_roll.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "stand": {
+        "file": "res://assets/sprites/flame_stand.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "fade": {
+        "file": "res://assets/sprites/flame_fade.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "slug": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      32.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "flight": {
+        "file": "res://assets/sprites/slug_flight.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/slug_flight.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "reed_raft": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      220.0
+    ],
+    "foot": 220,
+    "mirror_side": false,
+    "animations": {
+      "bob": {
+        "file": "res://assets/sprites/reed_raft_bob.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/reed_raft_bob.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "jar_thrown": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      32.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "tumble": {
+        "file": "res://assets/sprites/jar_thrown_tumble.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/jar_thrown_tumble.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "jar_lit": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "loop": {
+        "file": "res://assets/sprites/jar_lit_loop.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/jar_lit_loop.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "reel_tip": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "flight": {
+        "file": "res://assets/sprites/reel_tip_flight.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/reel_tip_flight.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "beam_bolt": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "flight": {
+        "file": "res://assets/sprites/beam_bolt_flight.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/beam_bolt_flight.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
   "wickling": {
     "cell": [
       96,

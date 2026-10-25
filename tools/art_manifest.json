@@ -2,6 +2,141 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+ "body_flame": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "flame_cinder_v3",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "flame_cinder_v3",
+    "row": 1,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "flame_cinder_v3",
+    "row": 2,
+    "poses": [
+     0,
+     3
+    ]
+   }
+  ]
+ },
+ "body_slug": {
+  "measure": "fit",
+  "value": [
+   52,
+   52
+  ],
+  "ref": [
+   {
+    "sheet": "slug_tallow_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   }
+  ]
+ },
+ "body_reed_raft": {
+  "measure": "fit",
+  "value": [
+   244,
+   214
+  ],
+  "ref": [
+   {
+    "sheet": "reed_raft_vehicle_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   }
+  ]
+ },
+ "body_jar_thrown": {
+  "measure": "fit",
+  "value": [
+   52,
+   52
+  ],
+  "ref": [
+   {
+    "sheet": "jar_thrown_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "body_jar_lit": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "jar_lit_v3",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "body_reel_tip": {
+  "measure": "fit",
+  "value": [
+   84,
+   84
+  ],
+  "ref": [
+   {
+    "sheet": "reel_tip_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   }
+  ]
+ },
+ "body_beam_bolt": {
+ "measure": "fit",
+ "value": [
+  84,
+  72
+ ],
+ "ref": [
+  {
+   "sheet": "proj_beam_bolt_v1",
+   "row": 0,
+   "poses": [
+    0,
+    2
+   ]
+  }
+ ]
+},
  "wickling_body": {
   "measure": "fit",
   "value": [
@@ -98,6 +233,58 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+ "flame": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "slug": {
+  "cell": [
+   64,
+   64
+  ],
+  "align": "center"
+ },
+ "reed_raft": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "foot",
+  "foot": 220
+ },
+ "jar_thrown": {
+  "cell": [
+   64,
+   64
+  ],
+  "align": "center"
+ },
+ "jar_lit": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "reel_tip": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "center"
+ },
+ "beam_bolt": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "center"
+ },
  "wickling": {
   "cell": [
    96,
@@ -359,6 +546,301 @@
  }
  },
  "sheets": {
+ "flame_cinder_v3": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "flame",
+      "anim": "roll",
+      "file": "flame_roll",
+      "scale": "body_flame",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       4
+      ]
+     },
+     {
+      "kind": "flame",
+      "anim": "idle",
+      "file": "flame_roll",
+      "scale": "body_flame",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       4
+      ]
+     }
+    ]
+   },
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "flame",
+      "anim": "stand",
+      "file": "flame_stand",
+      "scale": "body_flame",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       4
+      ]
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "flame",
+      "anim": "fade",
+      "file": "flame_fade",
+      "scale": "body_flame",
+      "fps": 8,
+      "loop": false,
+      "poses": [
+       0,
+       3
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "slug_tallow_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "slug",
+      "anim": "flight",
+      "file": "slug_flight",
+      "scale": "body_slug",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       2
+      ]
+     },
+     {
+      "kind": "slug",
+      "anim": "idle",
+      "file": "slug_flight",
+      "scale": "body_slug",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       2
+      ]
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [],
+    "skip": true
+   }
+  ]
+ },
+ "reed_raft_vehicle_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "reed_raft",
+      "anim": "bob",
+      "file": "reed_raft_bob",
+      "scale": "body_reed_raft",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       2
+      ]
+     },
+     {
+      "kind": "reed_raft",
+      "anim": "idle",
+      "file": "reed_raft_bob",
+      "scale": "body_reed_raft",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       2
+      ]
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [],
+    "skip": true
+   },
+   {
+    "poses": 2,
+    "outputs": [],
+    "skip": true
+   }
+  ]
+ },
+ "jar_thrown_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "jar_thrown",
+      "anim": "tumble",
+      "file": "jar_thrown_tumble",
+      "scale": "body_jar_thrown",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       4
+      ]
+     },
+     {
+      "kind": "jar_thrown",
+      "anim": "idle",
+      "file": "jar_thrown_tumble",
+      "scale": "body_jar_thrown",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       4
+      ]
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [],
+    "skip": true
+   }
+  ]
+ },
+ "jar_lit_v3": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "jar_lit",
+     "anim": "loop",
+     "file": "jar_lit_loop",
+     "scale": "body_jar_lit",
+     "fps": 8,
+     "loop": true,
+     "poses": [
+      0,
+      4
+     ]
+    },
+    {
+     "kind": "jar_lit",
+     "anim": "idle",
+     "file": "jar_lit_loop",
+     "scale": "body_jar_lit",
+     "fps": 8,
+     "loop": true,
+     "poses": [
+      0,
+      4
+     ]
+    }
+   ]
+  }
+ ],
+ "params": {
+  "split": "components"
+ }
+},
+ "reel_tip_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "reel_tip",
+      "anim": "flight",
+      "file": "reel_tip_flight",
+      "scale": "body_reel_tip",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       2
+      ]
+     },
+     {
+      "kind": "reel_tip",
+      "anim": "idle",
+      "file": "reel_tip_flight",
+      "scale": "body_reel_tip",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       2
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "proj_beam_bolt_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 5,
+    "outputs": [
+     {
+      "kind": "beam_bolt",
+      "anim": "flight",
+      "file": "beam_bolt_flight",
+      "scale": "body_beam_bolt",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       2
+      ]
+     },
+     {
+      "kind": "beam_bolt",
+      "anim": "idle",
+      "file": "beam_bolt_flight",
+      "scale": "body_beam_bolt",
+      "fps": 8,
+      "loop": true,
+      "poses": [
+       0,
+       2
+      ]
+     }
+    ]
+   }
+  ]
+ },
  "wickling_v3": {
   "key": "magenta",
   "rows": [
