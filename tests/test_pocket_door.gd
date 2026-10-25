@@ -184,6 +184,9 @@ func _built_entrance_looks() -> void:
 				)
 				check_eq(child.entrance_kind(), expected, "%s uses its actual entrance" % id)
 				var visual := child.get_node("Visual")
+				if child.target_room in [&"ow_1_2#shop", &"ow_3_3#hut"]:
+					check(not visual.visible, "%s uses the aligned painted building door" % id)
+					check(child.monitoring, "%s keeps its entrance trigger active" % id)
 				if SpriteVisual.has_art(expected):
 					check_eq(visual.get("kind"), expected, "%s shows published art" % id)
 			await dispose(room)

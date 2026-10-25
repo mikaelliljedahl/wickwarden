@@ -50,6 +50,13 @@ func _ready() -> void:
 	add_child(shape)
 	var art := entrance_kind()
 	SpriteVisual.attach(self, art if SpriteVisual.has_art(art) else &"door_marker", 0.0, size)
+	if _uses_building_door():
+		get_node(Placeholder.VISUAL_NAME).visible = false
+
+
+## These painted building thresholds align with the unchanged entrance triggers.
+func _uses_building_door() -> bool:
+	return target_room in [&"ow_1_2#shop", &"ow_3_3#hut"]
 
 
 ## Select art from the actual destination and host, never from the gate's current state.
@@ -81,7 +88,7 @@ func _physics_process(_delta: float) -> void:
 	# A concealed mouth appears only after its opener is removed.
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as CanvasItem
 	if visual != null:
-		visual.visible = gate_open
+		visual.visible = gate_open and not _uses_building_door()
 	if not gate_open or not has_overlapping_bodies():
 		return
 	var world := get_tree().get_first_node_in_group(&"world")
