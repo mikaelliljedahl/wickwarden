@@ -14,6 +14,8 @@ const SHALLOW_KIND := &"shallow_water"
 @export var size: Vector2 = Vector2(192, 192)
 ## True: a deep zone with a blocking body on layer WATER. False: a shallow zone that walkers cross.
 @export var deep: bool = true
+## Opt in to free steering; existing authored lane crossings retain their behavior.
+@export var raft_free_steering: bool = false
 
 
 func _init() -> void:

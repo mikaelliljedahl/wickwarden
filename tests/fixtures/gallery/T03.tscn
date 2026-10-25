@@ -44,3 +44,14 @@ size = Vector2(768, 480)
 [node name="Shallows" parent="Props" instance=ExtResource("4")]
 position = Vector2(1620, 800)
 size = Vector2(192, 192)
+
+[node name="FreeBasin" parent="Props" instance=ExtResource("2")]
+position = Vector2(1000, 780)
+size = Vector2(768, 192)
+raft_free_steering = true
+
+[node name="FreeDock" type="StaticBody2D" parent="Props"]
+position = Vector2(584, 780)
+script = ExtResource("3")
+mooring_id = &"free_dock"
+landing_offset = Vector2(-56, 0)

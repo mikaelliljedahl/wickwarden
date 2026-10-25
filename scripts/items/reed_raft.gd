@@ -1,11 +1,6 @@
 extends ItemBase
-## Reed raft (T03), fixed lane. `use_item` within BOARD_RANGE px of a Mooring post boards the raft: Tamsin stands
-## still for BOARD_TIME s with her actions locked. Then she rides the post's `get_ride_path()` to the target post at
-## RIDE_SPEED through the Player motion API (walls and water do not stop it; the path crosses room edges). The raft
-## node follows her and leaves group `items` while it rides, so the World's room-change sweep does not free it.
-## It finishes when the ride ends: arrival, or death or place_at, which both end the motion. No ammo.
-## Refused away from a mooring, or when the target post is not in the tree (empty path). Spec: monsters-bosses-tools
-## 5.4. Free steering is not built (a later WP); the boarding and the lane are the only ride modes here.
+## Reed raft: authored fixed lanes and opt-in free-steering deep-water basins.
+## Player advances free steering in physics, so World slides pause the rider and vehicle together.
 
 const BOARD_RANGE := 72.0
 const BOARD_TIME := 0.3
@@ -20,6 +15,14 @@ var _boarding: bool = false
 var _board_left: float = 0.0
 var _riding: bool = false
 var _path: Array[Vector2] = []
+var _free_steering := false
+var _launch := Vector2.ZERO
+var _source_post: Node2D
+var _left_source := false
+var _ride_velocity := Vector2.ZERO
+const ACCELERATION := RIDE_SPEED / 0.2
+const DECELERATION := RIDE_SPEED / 0.4
+const DOCK_RADIUS := 80.0
 
 
 func _init() -> void:
@@ -44,11 +47,13 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if _riding and is_instance_valid(_hero):
+		_hero.end_external_motion()
 	_release_hero()
 
 
-## Boards at the nearest mooring in range when that post has a target in the tree. Refused (nothing spent) when
-## there is no mooring in range, no target, Tamsin is dead or in a motion, or another raft is in the tree.
+## Boards at the nearest mooring in range, into an adjacent opt-in basin or its existing paired lane.
+## Refused when neither is available, the player is dead or in motion, or another raft is live.
 func activate() -> bool:
 	_hero = player as Player
 	if _hero == null or _hero.is_dead() or _hero.is_external_motion() or active_count() > 1:
@@ -57,7 +62,9 @@ func activate() -> bool:
 	if post == null:
 		return false
 	var path: Array[Vector2] = post.call(&"get_ride_path")
-	if path.is_empty():
+	_source_post = post
+	_free_steering = _find_launch(post)
+	if path.is_empty() and not _free_steering:
 		return false
 	_path = path
 	remove_from_group(&"items")
@@ -84,11 +91,18 @@ func _physics_process(delta: float) -> void:
 		_start_ride()
 
 
-## Begins the ride along the lane. A refused motion (the player died meanwhile) ends the item at once.
+## Begins the selected free-water or lane motion after boarding. Refusal frees the vehicle.
 func _start_ride() -> void:
 	_boarding = false
 	_release_hero()
-	if not _hero.begin_external_motion(_path, RIDE_SPEED):
+	var accepted := false
+	if _free_steering:
+		accepted = _hero.begin_raft_motion(self)
+		if accepted:
+			_hero.global_position = _launch
+	else:
+		accepted = _hero.begin_external_motion(_path, RIDE_SPEED)
+	if not accepted:
 		finish()
 		return
 	_riding = true
@@ -122,3 +136,92 @@ func _nearest_mooring() -> Node2D:
 			best = post
 			best_dist = dist
 	return best
+
+
+## Advances the vehicle only from Player physics. Every displacement uses the same swept union.
+func advance_raft(delta: float, push: Vector2, direction: Vector2) -> void:
+	var rate := DECELERATION if direction.is_zero_approx() else ACCELERATION
+	_ride_velocity = _ride_velocity.move_toward(direction * RIDE_SPEED, rate * delta)
+	var start := _hero.global_position
+	var after_push := _sweep_water(start, push)
+	_hero.global_position = _sweep_water(after_push, _ride_velocity * delta)
+	_hero.velocity = (_hero.global_position - after_push) / delta
+	global_position = _hero.global_position
+	if not is_instance_valid(_source_post):
+		_left_source = true
+	elif global_position.distance_to(_source_post.global_position) > DOCK_RADIUS:
+		_left_source = true
+	for node in get_tree().get_nodes_in_group(MOORING_GROUP):
+		if node == _source_post and not _left_source:
+			continue
+		if global_position.distance_to(node.global_position) <= DOCK_RADIUS:
+			_land(node)
+			return
+
+
+## Explicit raft use lands only at a nearby dock, including the launch dock.
+func request_dock() -> bool:
+	for post in get_tree().get_nodes_in_group(MOORING_GROUP):
+		if _hero.global_position.distance_to(post.global_position) <= DOCK_RADIUS:
+			_land(post)
+			return true
+	return false
+
+
+func _land(post: Node2D) -> void:
+	var landing: Vector2 = post.landing_position()
+	_hero.end_external_motion()
+	_hero.global_position = landing
+
+
+func _find_launch(post: Node2D) -> bool:
+	var best := BOARD_RANGE
+	var found := false
+	for zone in _deep_zones():
+		if not zone.raft_free_steering:
+			continue
+		var point: Vector2 = zone.nearest_point(post.global_position)
+		var distance := point.distance_to(post.global_position)
+		if distance <= best:
+			best = distance
+			_launch = point
+			found = true
+	return found
+
+
+func _deep_zones() -> Array[Node]:
+	var zones: Array[Node] = []
+	for zone in get_tree().get_nodes_in_group(&"water_zone"):
+		if zone.deep:
+			zones.append(zone)
+	return zones
+
+
+## Segment/rectangle intervals are merged from t=0. Stop at the first land gap, even when
+## the endpoint lies in another water rectangle. Touching rectangles form one continuous union.
+func _sweep_water(start: Vector2, displacement: Vector2) -> Vector2:
+	if displacement.is_zero_approx():
+		return start
+	var intervals: Array[Vector2] = []
+	for zone in _deep_zones():
+		var rect: Rect2 = zone.global_rect()
+		var enter := 0.0
+		var leave := 1.0
+		for axis in range(2):
+			if absf(displacement[axis]) < 0.00001:
+				if start[axis] < rect.position[axis] or start[axis] > rect.end[axis]:
+					leave = -1.0
+			else:
+				var a := (rect.position[axis] - start[axis]) / displacement[axis]
+				var b := (rect.end[axis] - start[axis]) / displacement[axis]
+				enter = maxf(enter, minf(a, b))
+				leave = minf(leave, maxf(a, b))
+		if enter <= leave:
+			intervals.append(Vector2(enter, leave))
+	intervals.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.x < b.x)
+	var reach := 0.0
+	for interval in intervals:
+		if interval.x > reach + 0.000001:
+			break
+		reach = maxf(reach, interval.y)
+	return start + displacement * clampf(reach, 0.0, 1.0)

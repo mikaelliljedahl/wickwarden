@@ -73,6 +73,8 @@ var _knock_time: float = 0.0
 var _locked: bool = false  # World freezes the player with process_mode; this is for tests/cutscenes
 var _body_shape: CollisionShape2D
 var _motion_active: bool = false
+var _raft_controller: Node
+var _raft_push := Vector2.ZERO
 var _motion_airborne: bool = false
 var _motion_path: Array[Vector2] = []
 var _motion_index: int = 0
@@ -227,6 +229,8 @@ func respawn(pos: Vector2) -> void:
 ## Item API. Uses the active sub-item (GameState.active_item) through ItemRegistry. Returns true
 ## if an item instance was created and accepted the use.
 func use_item() -> bool:
+	if is_on_raft():
+		return bool(_raft_controller.request_dock())
 	var id := GameState.active_item
 	if id == &"" or state != State.NORMAL or _motion_active or actions_locked():
 		return false
@@ -310,12 +314,45 @@ func begin_external_motion(path: Array[Vector2], speed: float, options: Dictiona
 	return true
 
 
+## Starts a combat raft controlled through advance_raft(delta, push, input) and request_dock().
+## Generic path motions keep their existing action and damage rules.
+func begin_raft_motion(controller: Node) -> bool:
+	if (
+		not is_instance_valid(controller)
+		or not controller.has_method(&"advance_raft")
+		or not controller.has_method(&"request_dock")
+	):
+		return false
+	var path: Array[Vector2] = [global_position]
+	if not begin_external_motion(path, 240.0):
+		return false
+	_raft_controller = controller
+	_raft_push = Vector2.ZERO
+	return true
+
+
+## True only for a live free-steering raft rider, never a leap or a fixed-lane ride.
+func is_on_raft() -> bool:
+	return _motion_active and is_instance_valid(_raft_controller) and not is_dead()
+
+
+## Queues world-space displacement for the next physics step's water-union sweep.
+## Sustained pushes pass velocity * delta. Accepted damage already adds its own 96 px push.
+func push_raft(displacement: Vector2) -> bool:
+	if not is_on_raft() or not displacement.is_finite():
+		return false
+	_raft_push += displacement
+	return true
+
+
 ## Ends the external motion now and restores the body shape and the hurtbox. A no-op when no
 ## motion runs. Emits motion_finished, whatever ended the motion.
 func end_external_motion() -> void:
 	if not _motion_active:
 		return
 	_motion_active = false
+	_raft_controller = null
+	_raft_push = Vector2.ZERO
 	_motion_airborne = false
 	_motion_path.clear()
 	_motion_index = 0
@@ -382,6 +419,23 @@ func _physics_process(delta: float) -> void:
 	var attack_pressed := attack_held and not _attack_prev
 	var attack_released := _attack_prev and not attack_held
 	_attack_prev = attack_held
+
+	if is_on_raft():
+		_update_attack(delta, attack_held, attack_pressed, attack_released)
+		_update_ward()
+		var input_dir := (
+			Vector2.ZERO
+			if _locked
+			else Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
+		)
+		if not ward_up and input_dir != Vector2.ZERO and not _locked:
+			_update_facing(input_dir)
+		var push := _raft_push
+		_raft_push = Vector2.ZERO
+		_raft_controller.advance_raft(delta, push, input_dir)
+		_update_items()
+		_update_lamp_glow()
+		return
 
 	if _motion_active:
 		_update_motion(delta)
@@ -656,6 +710,13 @@ func _apply_hit(
 	hurtbox.invulnerable = true
 	# A hit cancels swing, charge and ward.
 	reset_actions()
+	if is_on_raft():
+		var direction := global_position - from_pos
+		if hitbox != null and hitbox.knockback_direction != Vector2.ZERO:
+			direction = hitbox.knockback_direction
+		if direction.is_zero_approx():
+			direction = -facing
+		push_raft(direction.normalized() * 96.0)
 	if knock_speed > 0.0 and not _motion_active:
 		var dir := global_position - from_pos
 		if hitbox != null and hitbox.knockback_direction != Vector2.ZERO:

@@ -29,6 +29,12 @@ func run() -> void:
 	await _death_ends_ride()
 	await _death_while_boarding_frees_raft()
 	await _room_fixture()
+	await _free_steering_controls()
+	await _free_union_and_push()
+	await _free_combat()
+	await _free_cleanup()
+	await _free_room_slide()
+	await _free_auto_dock()
 
 
 func _make_zone(parent: Node, deep: bool) -> Area2D:
@@ -386,3 +392,219 @@ func _room_fixture() -> void:
 	check(room.get_node_or_null("Props/WestMooring") != null, "the fixture has the west post")
 	check(room.get_node_or_null("Props/EastMooring") != null, "the fixture has the east post")
 	await dispose(room)
+
+
+## Single-dock basin, with no paired target: free steering must not need a lane.
+func _free_basin() -> Array:
+	reset_state()
+	var arena := make_arena()
+	var zone := _make_zone(arena, true)
+	zone.size = Vector2(600, 600)
+	zone.global_position = Vector2(700, 500)
+	zone.raft_free_steering = true
+	var post: Variant = _make_post(arena, &"dock", &"", &"", Vector2(368, 400))
+	var hero := make_player(arena, post.landing_position())
+	await frames(2)
+	_give_raft(hero)
+	check(hero.use_item(), "a single dock boards free water without a paired target")
+	await seconds(0.2)
+	check(not hero.is_on_raft(), "free boarding takes at least 0.3 seconds")
+	await seconds(0.2)
+	check(hero.is_on_raft(), "free boarding enters raft rider state")
+	check(hero.is_external_motion(), "raft is an external motion")
+	check(hero.hurtbox.enabled, "free rider hurtbox is on")
+	var body := hero.get_node("BodyShape") as CollisionShape2D
+	check(body.disabled, "free rider body is off")
+	return [arena, hero, zone, post]
+
+
+func _free_steering_controls() -> void:
+	var setup := await _free_basin()
+	var hero: Player = setup[1]
+	Input.action_press(&"move_right")
+	await frames(6)
+	check_near(hero.velocity.x, 120.0, 21.0, "raft accelerates halfway in 0.1 seconds")
+	await frames(8)
+	check_near(hero.velocity.length(), 240.0, 1.0, "raft reaches 240 in 0.2 seconds")
+	Input.action_press(&"move_down")
+	await frames(15)
+	check_near(hero.velocity.length(), 240.0, 1.0, "diagonal raft speed is normalized")
+	release_inputs()
+	await frames(12)
+	check_near(hero.velocity.length(), 120.0, 12.0, "raft brakes halfway in 0.2 seconds")
+	await frames(14)
+	check_near(hero.velocity.length(), 0.0, 1.0, "raft stops within 0.4 seconds")
+	GameState.set_active_item(&"tether_moth")
+	check(not hero.use_item(), "other tools cannot spawn afloat away from a dock")
+	check(hero.is_on_raft(), "refused use leaves the rider afloat")
+	hero.global_position = Vector2(440, 400)
+	check(hero.use_item(), "use_item docks within 80 even with another selected tool")
+	check_eq(hero.global_position, setup[3].landing_position(), "dock uses public landing marker")
+	await frames(2)
+	check(not hero.is_on_raft(), "docking clears raft query")
+	check(not (hero.get_node("BodyShape") as CollisionShape2D).disabled, "dock restores body")
+	await dispose(setup[0])
+
+
+func _free_union_and_push() -> void:
+	var setup := await _free_basin()
+	var arena: Node = setup[0]
+	var hero: Player = setup[1]
+	var zone: Node2D = setup[2]
+	var second := _make_zone(arena, true)
+	second.size = Vector2(200, 600)
+	second.global_position = Vector2(1100, 500)
+	var island := _make_zone(arena, true)
+	island.size = Vector2(200, 600)
+	island.global_position = Vector2(1400, 500)
+	await frames(2)
+	hero.global_position = Vector2(950, 500)
+	check(hero.push_raft(Vector2(150, 0)), "raft accepts queued displacement")
+	check_near(hero.global_position.x, 950, 0.01, "push waits for physics")
+	await frames(2)
+	check_near(hero.global_position.x, 1100, 0.01, "push crosses touching water seam")
+	var shallow_bridge := _make_zone(arena, false)
+	shallow_bridge.size = Vector2(100, 600)
+	shallow_bridge.global_position = Vector2(1250, 500)
+	await frames(2)
+	hero.push_raft(Vector2(300, 0))
+	await frames(2)
+	check_near(
+		hero.global_position.x,
+		1200,
+		0.01,
+		"shallow water does not bridge disconnected deep-water gap"
+	)
+	second.global_position.x += 1.0
+	hero.global_position = Vector2(950, 500)
+	hero.push_raft(Vector2(150, 0))
+	await frames(2)
+	check_near(hero.global_position.x, 1000, 0.01, "even a one-pixel land gap stops sweep")
+	hero.global_position = Vector2(700, 500)
+	var before := hero.global_position
+	check(hero.take_damage(1, before - Vector2(20, 0)), "ordinary hit is accepted afloat")
+	check(not hero.take_damage(1, before - Vector2(20, 0)), "iframes reject duplicate hit")
+	await frames(2)
+	check_near(hero.global_position.x - before.x, 96, 0.01, "accepted hit pushes exactly96 once")
+	for i in range(30):
+		hero.push_raft(Vector2(0, 200.0 / FPS))
+		await frames(1)
+	check_near(hero.global_position.y - before.y, 100, 4, "sustained200 push integrates time")
+	check(zone.contains_point(hero.global_position), "all displacement stays in water")
+	await dispose(arena)
+
+
+func _free_combat() -> void:
+	var setup := await _free_basin()
+	var arena: Node = setup[0]
+	var hero: Player = setup[1]
+	hero.global_position = Vector2(700, 500)
+	hero.facing = Vector2.RIGHT
+	var front := make_dummy(arena, Vector2(790, 500), 12)
+	front.collision_mask = 0
+	await frames(2)
+	Input.action_press(&"attack")
+	await frames(6)
+	check_eq(front.hp, 10, "real afloat hook hit deals full2 damage")
+	await seconds(0.9)
+	check(hero.charge_ready, "real held attack charges afloat")
+	var west := make_dummy(arena, Vector2(580, 500), 8)
+	west.collision_mask = 0
+	await frames(2)
+	Input.action_release(&"attack")
+	await frames(8)
+	check_eq(west.hp, 4, "real afloat flare hits behind for full4 damage")
+	await seconds(0.4)
+	Input.action_press(&"ward")
+	await frames(2)
+	check(hero.ward_up, "ward raises afloat")
+	var bolt := EnemyProjectile.fire(arena, hero.global_position + Vector2(150, 0), Vector2.LEFT)
+	await frames(50)
+	check(not is_instance_valid(bolt) or bolt.is_destroyed, "afloat ward stops actual projectile")
+	check_eq(GameState.health, 6, "ward block causes no rider damage")
+	check_eq(hero.global_position, Vector2(700, 500), "blocked shot causes no96 push")
+	release_inputs()
+	EnemyProjectile.fire(arena, hero.global_position - Vector2(150, 0), Vector2.RIGHT)
+	await frames(50)
+	check_eq(GameState.health, 5, "actual unwarded projectile damages afloat rider")
+	check_near(hero.global_position.x, 796, 0.01, "actual projectile triggers exactly96 raft push")
+	await dispose(arena)
+
+
+func _free_cleanup() -> void:
+	var setup := await _free_basin()
+	var hero: Player = setup[1]
+	hero.global_position = Vector2(700, 500)
+	hero.take_damage(6, Vector2(650, 500))
+	await frames(2)
+	check(hero.is_dead() and not hero.is_on_raft(), "death clears raft state")
+	check(_rafts().is_empty(), "death frees vehicle")
+	check(not hero.push_raft(Vector2(96, 0)), "dead/off-raft push is refused")
+	await dispose(setup[0])
+	setup = await _free_basin()
+	hero = setup[1]
+	hero.place_at(Vector2(300, 500))
+	await frames(2)
+	check(not hero.is_external_motion() and _rafts().is_empty(), "teleport cleans raft state")
+	check(not (hero.get_node("BodyShape") as CollisionShape2D).disabled, "teleport restores body")
+	await dispose(setup[0])
+	setup = await _free_basin()
+	hero = setup[1]
+	_rafts()[0].queue_free()
+	await frames(3)
+	check(not hero.is_external_motion(), "freeing vehicle restores player motion state")
+	check(
+		not (hero.get_node("BodyShape") as CollisionShape2D).disabled,
+		"freeing vehicle restores body"
+	)
+	await dispose(setup[0])
+
+
+## Use two real World rooms, replacing no gates or world transition code.
+func _free_room_slide() -> void:
+	reset_state()
+	var world := await make_world()
+	world.start_at(&"ow_0_0")
+	await frames(2)
+	for id in [&"ow_0_0", &"ow_1_0"]:
+		var room := world.get_room(id)
+		var water := _make_zone(room.get_node("Props"), true)
+		water.size = Vector2(1920, 300)
+		water.position = Vector2(960, 480)
+		water.raft_free_steering = true
+	var room := world.get_room(&"ow_0_0")
+	var post: Variant = _make_post(room.get_node("Props"), &"free", &"", &"", Vector2(1750, 480))
+	world.player.place_at(post.landing_position())
+	_give_raft(world.player)
+	await frames(2)
+	check(world.player.use_item(), "free raft boards in actual World")
+	await seconds(0.4)
+	Input.action_press(&"move_right")
+	await seconds(1.0)
+	check(world.is_transitioning(), "free rider triggers existing room slide")
+	check(world.player.is_on_raft(), "slide retains free rider state")
+	await seconds(0.8)
+	check_eq(world.current_room.room_id, &"ow_1_0", "free raft crosses into next room")
+	check(world.player.is_on_raft(), "free raft survives transient sweep and room slide")
+	check(world.player.velocity.x > 200.0, "free steering resumes after room slide")
+	release_inputs()
+	world.player.end_external_motion()
+	await dispose(world)
+
+
+func _free_auto_dock() -> void:
+	var setup := await _free_basin()
+	var hero: Player = setup[1]
+	Input.action_press(&"move_right")
+	await frames(35)
+	check(hero.is_on_raft(), "source dock does not immediately auto-land at launch")
+	Input.action_release(&"move_right")
+	Input.action_press(&"move_left")
+	for i in range(70):
+		await frames(1)
+		if not hero.is_on_raft():
+			break
+	release_inputs()
+	check(not hero.is_on_raft(), "returning into source dock automatically lands")
+	check_eq(hero.global_position, setup[3].landing_position(), "auto dock lands on shore marker")
+	await dispose(setup[0])

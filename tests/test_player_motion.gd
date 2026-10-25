@@ -22,12 +22,16 @@ func _straight_path() -> void:
 	await frames(2)
 	var path: Array[Vector2] = [Vector2(800, 500), Vector2(800, 700)]
 	var empty: Array[Vector2] = []
+	check(not player.begin_raft_motion(null), "missing controller is refused")
+	check(not player.begin_raft_motion(self), "controller without raft methods is refused")
 	var finished := [false]
 	player.motion_finished.connect(func() -> void: finished[0] = true)
 	check(not player.begin_external_motion(empty, 300.0), "an empty path is refused")
 	check(not player.begin_external_motion(path, 0.0), "a speed of zero is refused")
 	check(player.begin_external_motion(path, 300.0), "a motion starts on a free player")
 	check(player.is_external_motion(), "the motion runs")
+	check(not player.is_on_raft(), "generic motion is not a combat raft")
+	check(not player.push_raft(Vector2(96, 0)), "generic motion refuses raft pushes")
 	check(not player.is_airborne(), "a walking motion is not airborne")
 	check(not player.begin_external_motion(path, 300.0), "a second motion is refused")
 	await frames(30)
