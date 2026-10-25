@@ -1,4 +1,68 @@
 {
+  "thorn_wall": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/thorn_wall_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "eye_cell": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/eye_cell_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c9": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c9_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "hidden_seam": {
     "cell": [
       128,
