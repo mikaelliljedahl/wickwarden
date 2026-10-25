@@ -883,6 +883,39 @@ class CavePilot(unittest.TestCase):
             self.assertIsNone(text)
             self.assertTrue(errors)
 
+    def test_standalone_generated_arena_fights_with_one_persistent_reward_each(self):
+        import os
+        import subprocess
+        source = room_text("cave_1_8", ["w"],
+                           "arena kilnkeeper @0,0\nboss kilnkeeper @1488,480\n"
+                           "pickup fragment @960,480 id=frag_c1 scope=c1 requires=boss_cave_1_8_defeated\n"
+                           "pickup wick_core @1152,480 id=wick_core_c1 requires=boss_cave_1_8_defeated\n"
+                           "spawn Default @192,480")
+        text, errors = compile_text(source, real_world(), "cave_1_8.room")
+        self.assertEqual(errors, [])
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture = Path(tmp) / "kilnkeeper_reward.tscn"
+            fixture.write_text(text, encoding="utf-8")
+            env = dict(os.environ, WICKWARDEN_KILNKEEPER_ROOM=str(fixture))
+            result = subprocess.run([sys.executable, str(br.ROOT / "tools/run_godot_check.py"),
+                                     "boss_kilnkeeper"], cwd=br.ROOT, env=env,
+                                    capture_output=True, text=True, timeout=90)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_arena_reward_declarations_reject_duplicate_and_kind_mismatch(self):
+        base = ("arena kilnkeeper @0,0\nboss kilnkeeper 15,5\n"
+                "pickup fragment 10,5 id=frag_c1 scope=c1 requires=boss_cave_1_8_defeated\n"
+                "pickup wick_core 12,5 id=wick_core_c1 requires=boss_cave_1_8_defeated")
+        for entities, diagnostic in (
+            (base + "\npickup fragment 9,5 id=frag_c1 scope=c1 requires=boss_cave_1_8_defeated", "placed twice"),
+            (base.replace("pickup fragment", "pickup wick_core").replace(" scope=c1", ""), "graph says fragment"),
+        ):
+            with self.subTest(diagnostic=diagnostic):
+                text, errors = compile_text(room_text("cave_1_8", ["w"], entities),
+                                            real_world(), "cave_1_8.room")
+                self.assertIsNone(text)
+                self.assertTrue(any(diagnostic in error for error in errors), errors)
+
     def test_both_boss_reward_kinds_need_exact_room_flag(self):
         world = real_world()
         rewards = {p["id"]:p for p in world.pickups}

@@ -1,6 +1,7 @@
 extends TestCase
 
 const BOSS := "res://scenes/enemies/bosses/kilnkeeper.tscn"
+const REWARD_ROOM := "res://scenes/world/rooms/cave_1_8.tscn"
 const FLAG := &"boss_cave_1_8_defeated"
 
 
@@ -86,10 +87,31 @@ func _cast(player: Player, boss: Variant) -> void:
 
 func _armour_and_fight() -> void:
 	reset_state()
-	var arena := make_arena()
+	var fixture := OS.get_environment("WICKWARDEN_KILNKEEPER_ROOM")
+	var scene := load(REWARD_ROOM if fixture.is_empty() else fixture) as PackedScene
+	check(scene != null, "compiled C01 boss room loads")
+	if scene == null:
+		return
+	var arena := scene.instantiate() as Room
+	add_child(arena)
+	arena.enter()
+	var rewards := _rewards(arena)
+	check_eq(rewards.size(), 2, "compiled room traversal finds exactly two real pickups")
+	for reward in rewards:
+		check(not reward.visible, "living boss hides reward")
+		check(not reward.collect(), "living boss prevents reward collection")
+		check_eq(reward.requires_flag, FLAG, "reward requires actual boss defeat")
+		if reward.kind == &"fragment":
+			check_eq(reward.scope, &"c1", "fragment has canonical cave scope")
+			check_eq(reward.persistent_id, &"frag_c1", "fragment has canonical ID")
+			check_eq(reward.position, Vector2(960, 480), "fragment keeps planned position")
+		else:
+			check_eq(reward.persistent_id, &"wick_core_c1", "core has canonical ID")
+			check_eq(reward.position, Vector2(1152, 480), "core keeps planned position")
 	var player := make_player(arena, Vector2(192, 192))
 	player.set_hurtbox_enabled(self, false)
-	var boss = _boss(arena, Vector2(1000, 480))
+	var boss = arena.get_node("Enemies").get_child(0)
+	check(not boss.drops_enabled, "boss does not duplicate placed rewards through drops")
 	await seconds(1.6)
 	check_eq(boss.hp, 24, "intro completes at full HP")
 	for kind in [&"hook", &"flare", &"explosion", &"sling", &"thrown"]:
@@ -136,9 +158,30 @@ func _armour_and_fight() -> void:
 	check(not boss.is_arena_locked(), "death releases the inherited arena lock")
 	await seconds(1.6)
 	check(not is_instance_valid(boss), "death throes finish after 1.5 seconds")
-	var retired = _boss(arena, Vector2(1000, 480))
-	check(retired.is_dead and not retired.visible, "defeated boss stays dead on reentry")
+	check_eq(_rewards(arena).size(), 2, "actual defeat leaves exactly the two placed rewards")
+	var max_health := GameState.max_health
+	var kinds: Array[StringName] = []
+	for reward in rewards:
+		kinds.append(reward.kind)
+		check(reward.visible, "actual defeat reveals reward")
+		check(reward.collect(player), "reward collects after actual defeat")
+		check(not reward.collect(player), "same reward cannot collect twice")
+	check_eq(kinds.count(&"fragment"), 1, "one actual fragment")
+	check_eq(kinds.count(&"wick_core"), 1, "one actual wick core")
+	check(GameState.has_flag(&"frag_c1"), "fragment grants C1 progression")
+	check_eq(GameState.max_health, max_health + 2, "one core grants one heart")
+	check(GameState.has_flag(&"picked_frag_c1"), "canonical fragment ID persists")
+	check(GameState.has_flag(&"picked_wick_core_c1"), "canonical core ID persists")
 	await dispose(arena)
+	var reentry := scene.instantiate() as Room
+	add_child(reentry)
+	reentry.enter()
+	await frames(2)
+	check_eq(_rewards(reentry).size(), 0, "collected rewards stay absent on actual room reentry")
+	var retired = reentry.get_node("Enemies").get_child(0)
+	check(retired.is_dead and not retired.visible, "defeated boss stays dead on reentry")
+	check_eq(GameState.max_health, max_health + 2, "reentry does not grant another heart")
+	await dispose(reentry)
 
 
 func _molten_expiry_and_splash() -> void:
@@ -234,13 +277,7 @@ func _arena_scene() -> void:
 		var pillar := props.get_node("Pillar%d" % index) as SolidBlock
 		check_eq(pillar.size, Vector2(96, 96), "solid pillar is one tile")
 		check_eq(pillar.collision_layer, Layers.WORLD, "pillar blocks WORLD bodies")
-	var fragment := props.get_node("Fragment") as PickupBase
-	var core := props.get_node("WickCore") as PickupBase
-	check_eq(fragment.scope, &"c1", "fragment is scoped to C1")
-	check_eq(fragment.persistent_id, &"frag_c1", "placed fragment has the planned ID")
-	check_eq(core.persistent_id, &"wick_core_c1", "placed core has the planned ID")
-	check_eq(fragment.requires_flag, FLAG, "fragment waits for defeat")
-	check(not fragment.visible and not core.visible, "rewards stay hidden before defeat")
+	check_eq(_rewards(props).size(), 0, "arena owns geometry only; cave owns rewards")
 	check_eq(room.exits, [&"w"], "west retreat stays open, no physical shutter")
 	var boss = room.get_node("Enemies/Kilnkeeper")
 	await seconds(4.0)
@@ -254,3 +291,12 @@ func _arena_scene() -> void:
 	check(boss.is_molten(), "phase 2 capture has the four-tick molten state")
 	check(largest_fan >= 5, "phase 2 demonstration fires its five-ball fan")
 	await dispose(room)
+
+
+func _rewards(node: Node) -> Array[PickupBase]:
+	var result: Array[PickupBase] = []
+	if node is PickupBase and node.persistent_id != &"":
+		result.append(node)
+	for child in node.get_children():
+		result.append_array(_rewards(child))
+	return result

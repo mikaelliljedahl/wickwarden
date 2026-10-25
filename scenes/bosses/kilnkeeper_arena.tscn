@@ -1,8 +1,6 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/pickups/fragment.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/pickups/wick_core.tscn" id="3"]
 
 [ext_resource type="Script" path="res://scripts/art/placeholder.gd" id="4"]
 
@@ -31,17 +29,6 @@ position = Vector2(1392, 624)
 script = ExtResource("1")
 size = Vector2(96, 96)
 kind = &"kiln_pillar"
-
-[node name="Fragment" parent="." instance=ExtResource("2")]
-position = Vector2(960, 480)
-scope = &"c1"
-persistent_id = &"frag_c1"
-requires_flag = &"boss_cave_1_8_defeated"
-
-[node name="WickCore" parent="." instance=ExtResource("3")]
-position = Vector2(1152, 480)
-persistent_id = &"wick_core_c1"
-requires_flag = &"boss_cave_1_8_defeated"
 
 [node name="KilnMouth" type="Node2D" parent="."]
 position = Vector2(1824, 480)
