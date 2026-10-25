@@ -9,3 +9,5 @@ B47savev1/healv1/v2/sparklev3 verified own-session hashes/unique; opened `/tmp/w
 B47healv3 verified own-session hash/unique; opened `/tmp/wickwarden-art-wave35-review.jpg`; weak flame-like/bright cores. Log `log_art_resume_35.md`. Freed slot filled optional ninth-doorv3,six image jobs total.
 
 B47savev2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave36-review.jpg`; log `log_art_resume_36.md`; bothok. Ready twelve B47variants complete; six8-frame variants deferred pending scale concern review.
+
+Final recovery wave47: coordinator confirmed closed; six final boss-death-wax/rekindle-burst variants complete. All six opened individually and matched their own native-session SHA256. Eight poses visible; weak candle/puddle similarity and explosive rekindle subject drift remain. Sources retained unchanged; no cutting/resizing or new image jobs. See log_art_resume_47.md. Edge recipe stopped; failed aspect/subject sources remain debt.

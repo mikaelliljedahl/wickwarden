@@ -1355,3 +1355,121 @@ the width of the hook swing in particular, in play.
 | `arena_c3_v1.png` | 1536x1024 | `01a17391-f70c-7651-ac3d-90794610ff5d` | `exec-85386d45-4c1a-46cc-be05-a56c769d522a.png` | `ba4beba54c82ff95` | `log_art_resume_12.md` |
 | `arena_c2_v3.png` | 1536x1024 | `01a17391-f6cb-7e03-a30e-d42ee46ea598` | `exec-df46c937-a1cb-4973-a75f-6fad9d5e42f1.png` | `b7e272544a3db286` | `log_art_resume_12.md` |
 | `arena_c1_v3.png` | 1536x1024 | `01a17391-f56a-79b1-abc8-769a76efd4ee` | `exec-36d87765-7c41-406f-bd31-9f400eca1627.png` | `84bdbf27cdb91998` | `log_art_resume_12.md` |
+
+| `arena_c3_v3.png` | 1536x1024 | `01a17393-3f74-7d20-a752-86218563f7d9` | `exec-677a12b2-4be2-4cce-ade5-883e14629285.png` | `d1651214264f21d0` | `log_art_resume_13.md` |
+| `tex_cave_brick_ground_v2.png` | 1254x1254 | `01a17393-3f12-7bd1-94e6-39fde6138d95` | `exec-c6385f11-aa6b-454b-b685-c3ccca9ed943.png` | `657effbac7a5f6ae` | `log_art_resume_13.md` |
+| `tex_cave_brick_ground_v1.png` | 1254x1254 | `01a17393-3e84-7412-b8ae-502a5715b568` | `exec-a99204d4-d44c-448a-8d98-6bb70f61b762.png` | `34cb86a76befb5b1` | `log_art_resume_13.md` |
+| `arena_c2_v2.png` | 1536x1024 | `01a17391-f634-7fe0-af3a-69b8b2447c8f` | `exec-1e2ea737-07e4-4f39-ac80-6d73db3f2492.png` | `414b26d1a545284a` | `log_art_resume_13.md` |
+| `arena_c2_v1.png` | 1536x1024 | `01a17391-f7b8-7922-ae9e-197d62fda5cf` | `exec-48ded55b-7a92-4910-baa4-df27bfa675c9.png` | `93c464ea47f43ab6` | `log_art_resume_13.md` |
+| `tex_cave_brick_wall_face_v2.png` | 1254x1254 | `01a17394-9f21-7cf0-a85c-23a02d2366ff` | `exec-4c6df629-e64e-4490-9a02-651a2f0fe213.png` | `9f4a88d19726de6a` | `log_art_resume_14.md` |
+| `tex_cave_brick_wall_face_v1.png` | 1254x1254 | `01a17394-9d58-77a2-95d7-b84bd4c302ac` | `exec-25561021-35cb-4318-b828-082c2cd3af5e.png` | `27565a3e08ebf1e8` | `log_art_resume_14.md` |
+| `tex_cave_brick_wall_v2.png` | 1254x1254 | `01a17394-9dda-7fc1-97b8-261537814788` | `exec-09d9d591-f847-4fc7-95ef-384b04e10a37.png` | `5eff53f13f3bad6c` | `log_art_resume_14.md` |
+| `tex_cave_brick_wall_v1.png` | 1254x1254 | `01a17394-9f21-76b3-825a-ea72e5357a79` | `exec-b4c8f9f0-8cfc-478c-9624-7c4e1588fd1f.png` | `2b382ac677e28deb` | `log_art_resume_14.md` |
+| `tex_cave_brick_ground_v3.png` | 1254x1254 | `01a17393-3f9b-75f2-afa2-aa13c4959456` | `exec-1bb48df9-e3c5-4dc2-af24-aee26b041185.png` | `22b4c2d978b48b4f` | `log_art_resume_14.md` |
+| `tex_cave_brick_wall_v3.png` | 1254x1254 | `01a17394-9e80-7203-93eb-3a6dd586a292` | `exec-42dfc0a3-5ecb-44fe-a875-cec9c2523263.png` | `6694ce99ff637723` | `log_art_resume_15.md` |
+| `arena_c5_v1.png` | 1536x1024 | `01a17396-0ba3-7f20-a4a4-fbb468d0f612` | `exec-dd73d347-f75a-409f-86d7-3bc2fbe5fbbd.png` | `8e146321c9f19876` | `log_art_resume_16.md` |
+| `arena_c4_v3.png` | 1536x1024 | `01a17396-0d2e-7761-82ea-1eefea82e233` | `exec-b7e38ac1-2057-4ef4-a161-c61ffa402948.png` | `e0c8c075a4830ec6` | `log_art_resume_16.md` |
+| `arena_c4_v2.png` | 1536x1024 | `01a17396-0a99-7d12-b4db-d4898df5258c` | `exec-76f6f933-1228-43c3-b59e-464555d4ad7c.png` | `5fdc0e77d11849a8` | `log_art_resume_16.md` |
+| `arena_c4_v1.png` | 1536x1024 | `01a17396-0ace-7b52-8b0e-c3db7f7914f8` | `exec-97965cb0-7b9d-4d24-bd75-7db9468aebd2.png` | `f249a58ad68547c4` | `log_art_resume_16.md` |
+| `tex_cave_brick_wall_face_v3.png` | 1254x1254 | `01a17396-0b5a-74a2-8317-8fd2377e9318` | `exec-393ccfef-6b2d-4771-a569-caad9fbb067d.png` | `02ff86babcd1b5e8` | `log_art_resume_16.md` |
+| `arena_c7_v1.png` | 1536x1024 | `01a17397-a03b-7633-85b9-1dd16112d598` | `exec-42357189-107a-4b73-850a-8cdb9ebf4216.png` | `3d04204962d14c1e` | `log_art_resume_17.md` |
+| `arena_c6_v3.png` | 1536x1024 | `01a17397-9ffc-7653-8051-5fd1afd69244` | `exec-9cd4a34d-160e-406f-9e2d-eea8e028716d.png` | `9530eb200d83a7c2` | `log_art_resume_17.md` |
+| `arena_c6_v2.png` | 1536x1024 | `01a17397-a0af-7403-9d50-d59fdd1bb611` | `exec-e056f6ec-41d8-4acf-9c03-709b830a3ce1.png` | `d4883a7f9bb62eb8` | `log_art_resume_17.md` |
+| `arena_c6_v1.png` | 1536x1024 | `01a17397-9f81-7b22-b95f-f9965fc943ce` | `exec-62ee1cb5-0b73-420b-ab8d-1937e302b198.png` | `2d61c1b1a1e7f5d3` | `log_art_resume_17.md` |
+| `arena_c5_v3.png` | 1536x1024 | `01a17397-9f00-7c82-859a-29b16dbd873b` | `exec-ba1d9e1b-3c71-4873-83f4-95f9df5df943.png` | `e8eff9f6d9da0185` | `log_art_resume_17.md` |
+| `arena_c5_v2.png` | 1536x1024 | `01a17396-f7c4-7211-9d62-9aa8f9a7dcad` | `exec-1da3ffdf-1878-478c-9277-79060c050710.png` | `dd82ed0ad95760b1` | `log_art_resume_17.md` |
+| `arena_c8_v3.png` |1536x1024| `01a17399-3dbb-74e3-b6a3-02415c5fe282` | `exec-f0a0a21b-c15c-48fc-bfcd-14fd47af0ad1.png` | `9970aa19dec7500c` | `log_art_resume_19.md` |
+| `arena_c9_v1.png` |1536x1024| `01a17399-3d49-73a0-8fe6-5938942cd4a3` | `exec-397066c6-41b0-4bac-83e7-cd6144324aef.png` | `d9f0f75a20909f0e` | `log_art_resume_19.md` |
+| `arena_c8_v2.png` |1536x1024| `01a17399-3e3d-7242-80d1-8f9e21b4f045` | `exec-7539a91d-6d41-49aa-853f-3fcfd72e718e.png` | `efeaa77b8a7d482b` | `log_art_resume_20.md` |
+| `arena_c8_v1.png` |1536x1024| `01a17399-3bff-7781-9752-544fe7defda4` | `exec-a25dae09-30b7-4b33-ab86-bcbba8605c45.png` | `e272ee25355d62e1` | `log_art_resume_20.md` |
+| `arena_c7_v3.png` |1536x1024| `01a17399-3b7c-7f51-acc3-8c9af0e51b78` | `exec-2aedf381-5731-4079-86e9-c13a066b0963.png` | `457468f5aa8c1524` | `log_art_resume_20.md` |
+| `arena_c7_v2.png` |1536x1024| `01a17399-408e-7ad0-9eb8-5a1671ec44b9` | `exec-9b76172a-923e-45f0-950c-0066e5967f75.png` | `075eb611166b0db0` | `log_art_resume_20.md` |
+| `arena_c9_v3.png` |1536x1024| `01a1739a-4c25-7861-a2bf-585f17d6f7df` | `exec-367d3da0-9d32-4f9a-b988-cb2a99b491de.png` | `b3f5aba7b428c617` | `log_art_resume_21.md` |
+| `arena_c9_v2.png` |1536x1024| `01a1739a-49c7-7041-9b26-37aefd0829f1` | `exec-2976fd40-24d8-4286-ae2b-9ca01de3ec8a.png` | `9e40f0aa7f3d3b49` | `log_art_resume_21.md` |
+| `intro_01_lanterns_v1.png` |1536x1024| `01a1739b-141c-7bb3-a0d5-290184a6eb81` | `exec-3088f4f1-895b-4129-b5b8-855449e32b61.png` | `592bc925b9069d77` | `log_art_resume_22.md` |
+| `arena_c10_v3.png` |1536x1024| `01a1739b-130a-7063-a54f-b0887150f183` | `exec-32ab6b56-8d57-451b-be77-c01373e8e4de.png` | `208588ef9134838b` | `log_art_resume_22.md` |
+| `arena_c10_v2.png` |1536x1024| `01a1739b-13a7-7c70-bdf4-0f8f952515c4` | `exec-f529dc4c-2996-472d-8082-c51d9a271e88.png` | `6a70cec00ec9a194` | `log_art_resume_22.md` |
+| `arena_c10_v1.png` |1536x1024| `01a1739b-1289-7ef3-b356-c764efdaab30` | `exec-466959ba-2f21-455d-bb78-89750f968d7d.png` | `90203d62b1a121e8` | `log_art_resume_22.md` |
+| `intro_01_lanterns_v3.png` |1536x1024| `01a1739c-341f-7c90-928c-722d25c84d07` | `exec-609a7f00-726d-49b0-92e7-1a23a895979b.png` | `5397210368fe85cb` | `log_art_resume_23.md` |
+| `intro_01_lanterns_v2.png` |1536x1024| `01a1739c-34ae-7a10-bc01-ffbe8cd77c8e` | `exec-f8316f2b-d339-4961-b8c5-211027030ff6.png` | `2f66420ca8fbe858` | `log_art_resume_23.md` |
+| `intro_03_dusk_v1.png` |1536x1024| `01a1739d-18b7-7fc0-bbeb-8284e9350389` | `exec-82d5bd66-8ac2-49a8-99d7-d328fc656b3d.png` | `c5bcc40a221c1a58` | `log_art_resume_24.md` |
+| `intro_02_lanternfall_v3.png` |1536x1024| `01a1739d-18fa-7e02-858d-77fde91b10ca` | `exec-b6e4b632-4c77-4296-b808-80f7224e8af4.png` | `dd3216fda54c3226` | `log_art_resume_24.md` |
+| `intro_02_lanternfall_v2.png` |1536x1024| `01a1739d-17e9-7eb2-a181-45eb41849f30` | `exec-257b5215-684a-4530-b5ad-189dc8dea870.png` | `2ce8077c24c048b7` | `log_art_resume_24.md` |
+| `intro_02_lanternfall_v1.png` |1536x1024| `01a1739d-19cd-7252-82bc-c079f532a6fc` | `exec-c01bec26-3a36-496d-ad98-4a5fdc88b10e.png` | `dc079b764fbb8e52` | `log_art_resume_24.md` |
+| `intro_03_dusk_v3.png` |1536x1024| `01a1739d-e379-70b3-b4cb-a4f1ab65aa05` | `exec-ad9bf4a9-452c-4500-810e-a991045a6637.png` | `8571ef8a8acd1b2e` | `log_art_resume_25.md` |
+| `intro_03_dusk_v2.png` |1536x1024| `01a1739d-e241-7b42-abdf-a563cf440ca2` | `exec-0adc917b-4548-42af-9079-0b1d1c9895f6.png` | `0fd885aa2dcd2f01` | `log_art_resume_25.md` |
+| `intro_05_hook_v1.png` |1536x1024| `01a1739e-e621-75d1-bec7-5cf62ca993f9` | `exec-700fefe8-1657-4913-9fc8-63afb4e7faec.png` | `8ae9b83223139ebc` | `log_art_resume_26.md` |
+| `intro_04_tamsin_v3.png` |1536x1024| `01a1739e-e6a9-7272-a734-8c508b4ff146` | `exec-c9419d02-5f6d-4b83-ab8f-a26c869f35f8.png` | `61182e1ceb091de8` | `log_art_resume_26.md` |
+| `intro_04_tamsin_v2.png` |1536x1024| `01a1739e-e60e-7573-8dfa-3af24fae4126` | `exec-b7262cc0-49bc-44a3-822d-bbd92bd2f733.png` | `b80e1c5f708ac592` | `log_art_resume_26.md` |
+| `intro_04_tamsin_v1.png` |1536x1024| `01a1739e-e691-72c1-a5a7-ba6a9a8716c7` | `exec-17b01655-48ae-4c8d-9271-799feb36a2f1.png` | `fa7dc6da08f2d81f` | `log_art_resume_26.md` |
+| `intro_05_hook_v3.png` |1536x1024| `01a1739f-cf32-7ca0-95ca-c4fcb8907773` | `exec-9f569698-6869-492c-a084-c6c8e9c793a4.png` | `c04e4eaa2d9ee032` | `log_art_resume_27.md` |
+| `intro_05_hook_v2.png` |1536x1024| `01a1739f-cd00-7712-906a-78a1ed3aa8fb` | `exec-95d62fb0-794d-4b87-86ad-faea8107878f.png` | `7dfe1d36d4b6c4d3` | `log_art_resume_27.md` |
+| `ending_a_rekindle_v1.png` |1536x1024| `01a173a0-b660-7870-85d4-abe45fb9b5e6` | `exec-1fe2bc2b-ce09-42ab-812c-6e80ecf4233f.png` | `e9927a115194b28b` | `log_art_resume_28.md` |
+| `intro_06_setout_v3.png` |1536x1024| `01a173a0-b4b6-7101-9418-73b2a04a6680` | `exec-f78a8427-84cb-4241-8ac4-305a948eca3b.png` | `b8ea33e2ea7b43d7` | `log_art_resume_28.md` |
+| `intro_06_setout_v2.png` |1536x1024| `01a173a0-b559-7100-b8b4-aa66c552e2e7` | `exec-84f59266-f900-408e-a807-d31cc8ceddbe.png` | `9a9d66677fa81be4` | `log_art_resume_28.md` |
+| `intro_06_setout_v1.png` |1536x1024| `01a173a0-b25a-7961-828a-2994f7f9f02b` | `exec-cd9f0d62-0849-455c-a544-ee4da318ef02.png` | `b56101814ca0f6d8` | `log_art_resume_28.md` |
+| `credits_bg_v1.png` |1536x1024| `01a173a2-fd99-7823-af41-113cebcb65d5` | `exec-de2e4dea-43fd-40d4-85d7-86ac1d54f6d4.png` | `dc213226dd1bb53e` | `log_art_resume_29.md` |
+| `ending_b_dawn_v3.png` |1536x1024| `01a173a2-fcee-7be0-b36b-463354bde146` | `exec-22c27cd8-c96f-47a6-ba90-2f6fd8628015.png` | `0b75314e9c67682b` | `log_art_resume_29.md` |
+| `ending_b_dawn_v1.png` |1536x1024| `01a173a2-fd67-75e3-b481-1bdb64dd04ef` | `exec-6a335295-f5e6-4f79-98f4-b05af7a01ec7.png` | `aa0ad39ef3444d58` | `log_art_resume_29.md` |
+| `ending_a_rekindle_v3.png` |1536x1024| `01a173a1-df99-75b2-827f-06d57385beaf` | `exec-28f869a8-f751-4b72-9986-c1153ad833d4.png` | `67d65c2db622c23e` | `log_art_resume_29.md` |
+| `ending_a_rekindle_v2.png` |1536x1024| `01a173a1-de9f-7e63-a2f4-2217c3160f06` | `exec-e399fdb2-6519-4bda-b128-e2c5b82c6f9f.png` | `f286dcff14f00495` | `log_art_resume_29.md` |
+| `ending_b_dawn_v2.png` |1536x1024| `01a173a2-fcc2-7921-b099-2bdc1877f10b` | `exec-64c0cb52-1d8b-4f87-9198-3b56e11974a4.png` | `b754c09287fb12de` | `log_art_resume_30.md` |
+| `credits_bg_v3.png` |1536x1024| `01a173a4-5c61-72e2-80d7-4ab47a6d27bf` | `exec-88331aad-d82f-4a94-8553-943a0d6d9771.png` | `feaf927a8ebbe226` | `log_art_resume_31.md` |
+| `credits_bg_v2.png` |1536x1024| `01a173a4-5c79-7ae2-8c0f-cd9945004715` | `exec-64987774-92db-48d6-bf50-e621705de444.png` | `7fabf4c3714846d1` | `log_art_resume_31.md` |
+| `title_splash_v3.png` |1536x1024| `01a173a4-5b80-7e00-afbb-ebf566ef67be` | `exec-d48ea59f-0b69-483b-8a7f-6bc5e659065d.png` | `a3f547efba37553a` | `log_art_resume_31.md` |
+| `title_splash_v2.png` |1536x1024| `01a173a4-5b66-79e3-b4ba-3aa8c4fb85a4` | `exec-8dfec49a-8b29-44ad-9b7d-55a5f481d76a.png` | `2ead284257cb9515` | `log_art_resume_31.md` |
+| `fx_rekindle_motes_v1.png` |1536x1024| `01a173a5-6d2a-7cf2-b49a-4b569b3773cd` | `exec-d15374fc-d6a7-439b-87ef-524ed1b10390.png` | `3589bce0e78d1352` | `log_art_resume_32.md` |
+| `fx_pickup_sparkle_v2.png` |1536x1024| `01a173a6-c304-7762-b124-39f5a553dc87` | `exec-9c341258-31b5-47e3-9d60-b65e8c25063b.png` | `1d252a42a0e54942` | `log_art_resume_33.md` |
+| `fx_pickup_sparkle_v1.png` |1536x1024| `01a173a6-c216-7403-8436-96c45988a2ab` | `exec-0b5bce13-3f83-471b-91ea-6b92a9df7f9f.png` | `551e3b031bea7fcf` | `log_art_resume_33.md` |
+| `fx_rekindle_motes_v3.png` |1536x1024| `01a173a6-c0bd-72e1-9254-01dabb3c5c54` | `exec-32718b0e-2946-48aa-88c3-f1fc13c8ca11.png` | `cb1f8484343f1400` | `log_art_resume_33.md` |
+| `fx_rekindle_motes_v2.png` |1536x1024| `01a173a6-c27d-7fa3-a5e1-5706b86e3e78` | `exec-d5b1418c-39a1-4e79-97c8-60ebeca95174.png` | `f6a0c0d6baaf7ccb` | `log_art_resume_33.md` |
+| `fx_save_wick_v1.png` |1536x1024| `01a173a8-cb03-7552-95cb-474d2370150a` | `exec-5ea7d08e-738a-4cd1-a271-58c0cfd0229b.png` | `859335bd9ffe5994` | `log_art_resume_34.md` |
+| `fx_heal_glow_v2.png` |1536x1024| `01a173a8-cb1f-7713-be45-8522a95b7a46` | `exec-0ad3ba41-b39e-498e-ade8-130df10992ee.png` | `df8afff416926384` | `log_art_resume_34.md` |
+| `fx_heal_glow_v1.png` |1536x1024| `01a173a8-cac7-7532-802d-737abbecff3c` | `exec-822b22a1-119e-4069-a377-e94d7cdbb3c1.png` | `db92c66a0ecba93b` | `log_art_resume_34.md` |
+| `fx_pickup_sparkle_v3.png` |1536x1024| `01a173a7-b191-7811-bfc6-ee948f66b0c0` | `exec-be8f70dc-beb8-41e3-b769-98354744bc49.png` | `6ab05900463a45cf` | `log_art_resume_34.md` |
+| `fx_heal_glow_v3.png` |1536x1024| `01a173a8-ca90-7453-a214-201984d19e81` | `exec-b8004c55-812b-4ce7-9517-5b9d718b7a2b.png` | `c48be0ad81105987` | `log_art_resume_35.md` |
+| `backdrop_ninth_door_v2.png` |1774x887| `01a173aa-0cbb-7e81-a5e6-87090dd488fd` | `exec-cfccce33-8366-42eb-9611-4024f9642b0f.png` | `527fda2402522b47` | `log_art_resume_36.md` |
+| `backdrop_ninth_door_v1.png` |1774x887| `01a173aa-0a93-7972-a387-2729da6be929` | `exec-14305113-2ae0-47b6-9f80-dd4a25233582.png` | `92d211989761ee51` | `log_art_resume_36.md` |
+| `fx_save_wick_v3.png` |1536x1024| `01a173aa-0bfb-7323-a90e-58b9a03526a5` | `exec-587dd8df-c0d2-4164-ae6e-a8353d131354.png` | `81ce6e7389961cf1` | `log_art_resume_36.md` |
+| `fx_save_wick_v2.png` |1536x1024| `01a173aa-0abe-7253-b192-dddec796d6d1` | `exec-20a05866-8d41-4b6b-981c-1965c362f9ed.png` | `cdd1c1587aa606e6` | `log_art_resume_36.md` |
+| `ninth_hollow_vista_v1.png` |1536x1024| `01a173ab-d003-7622-a45a-766416d02c42` | `exec-0b03e851-1466-4c6d-9bc8-bd1cdf8614d0.png` | `d10a3df9746c3b14` | `log_art_resume_37.md` |
+| `backdrop_start_village_v3.png` |1774x887| `01a173ab-d10c-7082-9afb-bd57085cf3cd` | `exec-6f1eeb40-bd2a-4ff0-b0a6-79a35f7cd660.png` | `4660c15b8e37e46b` | `log_art_resume_37.md` |
+| `backdrop_start_village_v2.png` |1774x887| `01a173ab-d083-7e91-b897-901ce36a2d70` | `exec-73ea57dd-f449-4aaa-a7a8-775f089a8618.png` | `ac81fb91c15e6b91` | `log_art_resume_37.md` |
+| `backdrop_start_village_v1.png` |1774x887| `01a173ab-cf71-7483-a156-b6372326c4b2` | `exec-a6bdcd7b-96df-4fd1-aa31-139b36bd5517.png` | `b2003f40e5a4291f` | `log_art_resume_37.md` |
+| `backdrop_ninth_door_v3.png` |1774x887| `01a173ab-32ac-78d1-bfc9-a14bc75e89ac` | `exec-ce315abc-7675-42d2-9555-e65eada74db1.png` | `569353cccc680a8f` | `log_art_resume_37.md` |
+| `ninth_hollow_vista_v2.png` |1536x1024| `01a173ad-89b4-7db3-bca6-92782800bbfd` | `exec-4057af72-d61b-4b64-98e0-428cffcd0d32.png` | `8971ad899cbc44e0` | `log_art_resume_38.md` |
+| `ninth_hollow_vista_v3.png` |1536x1024| `01a173ad-89d8-7df3-b083-33158e92de7a` | `exec-255e1279-bf06-4a9c-b453-6b0ee2e6acc5.png` | `2a12c8b352af0827` | `log_art_resume_39.md` |
+| `edge_thorn_to_ash_v3.png` |2048x768| `01a173ad-8abb-77a3-9e7f-d20282c3d941` | `exec-c6a9eebf-b444-4878-b1b1-3649431ce76e.png` | `0befa6b5e63d5a0c` | `log_art_resume_39.md` |
+| `edge_thorn_to_ash_v2.png` |2048x768| `01a173ad-8955-7580-bc44-b451e4486d07` | `exec-88b7b7c4-37e5-41f9-b955-80b2c983a1e1.png` | `9a9c36aeabd13c87` | `log_art_resume_39.md` |
+| `edge_thorn_to_ash_v1.png` |2172x724| `01a173ad-8aa3-79d1-be62-4c4bf4d45546` | `exec-80163cda-5cc2-45b6-a5a4-2548672d38e6.png` | `9db6c7ba6ee66f1d` | `log_art_resume_39.md` |
+| `edge_grass_to_fen_v1.png` |2172x724| `01a173ae-d00c-7493-8996-590523a0228c` | `exec-5b498632-b430-4e39-95f3-533567e47f6d.png` | `93805fae0bc07206` | `log_art_resume_40.md` |
+| `edge_fen_to_gravel_v2.png` |2048x768| `01a173af-7d93-7372-b1a5-8ac059abc845` | `exec-8690e0cb-487e-4257-8d4c-7fa1de974d6e.png` | `fd94ccdd130c8a3d` | `log_art_resume_41.md` |
+| `edge_fen_to_gravel_v1.png` |2172x724| `01a173af-7da3-7d70-b7dc-5408c8612c32` | `exec-87e9d2ad-4123-4f35-b98f-a42da756e3b6.png` | `74c2374f03b03a02` | `log_art_resume_41.md` |
+| `edge_grass_to_fen_v3.png` |2172x724| `01a173af-7d66-7e03-b1a5-ae5d2d98f930` | `exec-595dcdce-9602-4147-9c9b-e70058f8d892.png` | `5d9cfe098fa9e4aa` | `log_art_resume_41.md` |
+| `edge_grass_to_fen_v2.png` |2172x724| `01a173af-7c5c-7522-aca1-7c9f353fbd08` | `exec-344aca51-6767-491e-90db-f15cc708807d.png` | `18587a26fa0c0aab` | `log_art_resume_41.md` |
+| `edge_ash_to_gravel_v3.png` |2172x724| `01a173b1-c90d-7db3-9cd8-c65f014b5aff` | `exec-0382bf64-8cc6-484a-8b5a-27cd893f33f9.png` | `e8edb5cf1e362966` | `log_art_resume_42.md` |
+| `edge_ash_to_gravel_v1.png` |2172x724| `01a173b1-cd11-7d82-80e7-693dc37aa23a` | `exec-961a12b3-273a-4817-b600-0d7aec86e38b.png` | `30c8b3dbbb84f382` | `log_art_resume_42.md` |
+| `edge_fen_to_gravel_v3.png` |2056x765| `01a173b0-c035-7a81-b347-fb48d432b716` | `exec-1099d3ac-8b88-4433-88c8-93fdd0917bbf.png` | `08d8c70e0ad58c36` | `log_art_resume_42.md` |
+| `title_splash_v1.png` |1536x1024| `01a173a4-5aef-7901-8c2c-84aa806d1cad` | `exec-b16e6f57-19d5-474b-b9c8-af647a625953.png` | `58c6aafcde0b573c` | `log_art_resume_42.md` |
+| `edge_ash_to_salt_v2.png` |2048x768| `01a173b3-7ae5-72b1-be32-a8fc17f60599` | `exec-7577421e-ac1c-4cb8-b8bf-8cdbac98fe1c.png` | `9235da9729c43afb` | `log_art_resume_43.md` |
+| `edge_ash_to_salt_v1.png` |1983x793| `01a173b3-79ac-75f0-9690-13e00ea6ad2b` | `exec-954b27e4-65af-4362-932d-853fe2111937.png` | `d22135dbb6688e66` | `log_art_resume_43.md` |
+| `edge_gravel_to_salt_v3.png` |2172x724| `01a173b3-7933-79b3-9930-07027bebe7cc` | `exec-e5f0c386-2876-4bda-883b-d9878224ab56.png` | `9402f969b765af27` | `log_art_resume_43.md` |
+| `edge_gravel_to_salt_v2.png` |2172x724| `01a173b3-7a86-70e0-bcd1-72dc72241a0e` | `exec-013c6318-599f-446f-88b0-d9cb19d31212.png` | `d8bbcee6b4172f32` | `log_art_resume_43.md` |
+| `edge_gravel_to_salt_v1.png` |2172x724| `01a173b1-c94d-7ae2-8da6-ae690f4cc386` | `exec-a12b06f0-ab61-4430-ac54-164460421fbf.png` | `7650e372cda550f0` | `log_art_resume_43.md` |
+| `edge_ash_to_gravel_v2.png` |2032x774| `01a173b1-c826-79e2-b846-bfa16a903f63` | `exec-2cc54e0d-7a5d-421d-9f11-b933966c6560.png` | `16765bc587afdfbc` | `log_art_resume_43.md` |
+| `edge_shore_foam_v2.png` |1983x793| `01a173b5-3e00-7420-98b8-9c647829f0cd` | `exec-73f09e02-f1bf-459e-a899-ad7f35c2c15d.png` | `3934444d14b5e265` | `log_art_resume_45.md` |
+| `edge_shore_foam_v1.png` |2021x778| `01a173b5-3d8e-7870-82c7-bc3f0527a931` | `exec-43027e5c-f08b-4b11-a08c-30685140d1f7.png` | `00bae1140fe1c2de` | `log_art_resume_45.md` |
+| `edge_path_border_v2.png` |1994x789| `01a173b5-3e83-7d43-be33-5baa5eee345f` | `exec-28327228-2e0b-411c-b311-e3d2b3484ce7.png` | `2405bff06c2e97c3` | `log_art_resume_45.md` |
+| `edge_path_border_v1.png` |1983x793| `01a173b5-3c68-7721-b1ad-73decd3ac424` | `exec-a1772c6c-d2ac-4ec4-86f2-8f7182cbdd97.png` | `21d46fa1129972e6` | `log_art_resume_45.md` |
+| `edge_cliff_shadow_v3.png` |1983x793| `01a173b6-b7a2-72f0-a797-89ac1e4f88fe` | `exec-5791fd34-9364-4aca-bd6f-6c72fe38bd4b.png` | `00f93be5ea53d409` | `log_art_resume_46.md` |
+| `edge_cliff_shadow_v2.png` |1983x793| `01a173b6-b661-72f3-b2de-a55c7bb5eb6b` | `exec-3e5eb545-7f4c-42c2-b3cb-99e44bce761a.png` | `b9d813855c6a517e` | `log_art_resume_46.md` |
+| `edge_cliff_shadow_v1.png` |1983x793| `01a173b6-b6b3-7802-a548-7d549250002b` | `exec-2c374c05-6f1f-45e1-b7d8-7e99162932e7.png` | `21919802f3cbffa7` | `log_art_resume_46.md` |
+| `edge_shore_foam_v3.png` |1983x793| `01a173b6-b796-70b0-ab7d-09668ec84fba` | `exec-d711e144-bf9b-4aab-a775-76df0947ee10.png` | `66ff92ec5556bc06` | `log_art_resume_46.md` |
+| `edge_path_border_v3.png` |1983x793| `01a173b5-3f07-7780-9fde-bbc8797cd5a0` | `exec-248f88f7-e4cb-40a7-8b51-df6ade80f0b2.png` | `f3bb3315a4390d87` | `log_art_resume_46.md` |
+| `edge_ash_to_salt_v3.png` |2172x724| `01a173b5-3d7a-7a91-b1e0-a75a735578a4` | `exec-85ddcb38-ca51-4a12-8501-21268b32561f.png` | `7b7317cc40b8ba5b` | `log_art_resume_46.md` |
+| `fx_boss_death_wax_v1.png` | 1536x1024 | `01a173b8-89be-7e11-83f9-d0895f1ca78d` | `exec-22e2217b-7d41-4103-bd50-938a6d64aafa.png` | `4620d49db180c0d8` | `log_art_resume_47.md` |
+| `fx_boss_death_wax_v2.png` | 1536x1024 | `01a173b8-88d2-7961-b958-064cca945385` | `exec-f89075a1-5e00-4633-821d-93ba76dc840f.png` | `0dcede8b98441a5f` | `log_art_resume_47.md` |
+| `fx_boss_death_wax_v3.png` | 1536x1024 | `01a173b8-8935-70f2-89b9-e3b3d34498b7` | `exec-42376760-9291-4f7c-9f81-c888f4a1f0bb.png` | `de2e2ef751bbded8` | `log_art_resume_47.md` |
+| `fx_rekindle_burst_v1.png` | 1536x1024 | `01a173b8-8b36-7612-ad75-e4e3ae83261c` | `exec-606030ed-f592-41e1-afcc-181308e2af70.png` | `6b2cbdf18ee606f5` | `log_art_resume_47.md` |
+| `fx_rekindle_burst_v2.png` | 1536x1024 | `01a173b8-89f7-7d21-8ed5-93517e17dd1e` | `exec-a8dcb182-b836-4fa6-8f42-2dc07c5fa973.png` | `e230fea1e4085036` | `log_art_resume_47.md` |
+| `fx_rekindle_burst_v3.png` | 1536x1024 | `01a173b8-8aea-7cf2-b87d-cdc4ea0b627c` | `exec-6cec8821-5fb9-44d7-ad39-14676709fe01.png` | `015b010fa3111780` | `log_art_resume_47.md` |
