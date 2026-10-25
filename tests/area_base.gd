@@ -332,6 +332,7 @@ func room_problems(id: String, room: Node) -> Array[String]:
 	var geometry := _geometry(room, props, bushes, _gated_corridor_tiles(id))
 	_check_layout(id, enemies, scene_exits, geometry, problems)
 	_check_pickups(id, room, geometry, problems)
+	_check_crossings(id, props, enemies, geometry, problems)
 	_check_gates(id, problems)
 	_check_doors(id, room, problems)
 	subject_path = ""
@@ -394,8 +395,18 @@ func _off_tile_centre(p: Vector2) -> bool:
 func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -> Dictionary:
 	var fixed: Array[Rect2] = []
 	var openable: Array[Rect2] = []
+	var water: Array[Rect2] = []
 	fixed.append_array(room.wall_rects())
 	for node in props.get_children():
+		if node is Area2D and _script_file(node) == "water_zone.gd" and node.get("deep"):
+			var zone_size: Vector2 = node.get("size")
+			var rect := Rect2((node as Node2D).position - zone_size * 0.5, zone_size)
+			fixed.append(rect)
+			water.append(rect)
+			continue
+		if _script_file(node) == "mooring.gd":
+			fixed.append(Rect2((node as Node2D).position - Vector2(16, 16), Vector2(32, 32)))
+			continue
 		if node is PickupBase or node is Area2D:
 			continue
 		if node is Brazier:
@@ -421,6 +432,7 @@ func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -
 	var walk := blocked_tiles(walls)
 	var spawn_tile := tile_of(_spawn_position(room))
 	return {
+		"water": blocked_tiles(water),
 		"blocked": blocked,
 		"walk": walk,
 		"reach": flood([spawn_tile], walk),
@@ -469,6 +481,8 @@ func _check_layout(
 	if blocked.has(geometry["spawn_tile"]):
 		problems.append("%s: the default spawn is inside an obstacle" % id)
 	for side in scene_exits:
+		if _has_raft_mooring(id, side):
+			continue
 		var tiles := exit_tiles(side)
 		for tile in tiles:
 			if walk.has(tile):
@@ -478,8 +492,53 @@ func _check_layout(
 				problems.append("%s: exit %s is not reachable from the spawn" % [id, side])
 				break
 	for enemy in enemies.get_children():
-		if blocked.has(tile_of((enemy as Node2D).position)):
+		var tile := tile_of((enemy as Node2D).position)
+		if _script_file(enemy) == "fen_leech.gd" and geometry["water"].has(tile):
+			continue
+		if blocked.has(tile):
 			problems.append("%s: %s starts on an obstacle" % [id, enemy.name])
+
+
+func _script_file(node: Node) -> String:
+	var script: Script = node.get_script()
+	return script.resource_path.get_file() if script != null else ""
+
+
+func _has_raft_mooring(id: String, side: String) -> bool:
+	if subject_room == null:
+		return false
+	var other: String = room_by_grid.get(WorldData.grid(id) + SIDE_STEP[side], "")
+	for node in subject_room.get_node("Props").get_children():
+		if _script_file(node) == "mooring.gd" and String(node.get("target_room")) == other:
+			return true
+	return false
+
+
+func _check_crossings(
+	id: String, props: Node, enemies: Node, geometry: Dictionary, problems: Array[String]
+) -> void:
+	var zones: Array[Rect2] = []
+	for node in props.get_children():
+		if _script_file(node) in ["water_zone.gd", "shallow_zone.gd"]:
+			var size: Vector2 = node.get("size")
+			zones.append(Rect2((node as Node2D).position - size * 0.5, size))
+	for side: String in WorldData.exits(id):
+		if not _has_raft_mooring(id, side):
+			continue
+		for tile in exit_tiles(side):
+			if (tile.x in [0, COLS - 1] or tile.y in [0, ROWS - 1]) and geometry["reach"].has(tile):
+				problems.append("%s: raft exit %s is walkable on foot" % [id, side])
+	if zones.is_empty():
+		return
+	for enemy in enemies.get_children():
+		if _script_file(enemy) != "fen_leech.gd":
+			continue
+		var contained := false
+		for zone in zones:
+			if zone.has_point((enemy as Node2D).position):
+				contained = true
+		if not contained:
+			problems.append("%s: fen leech %s is outside water or shallows" % [id, enemy.name])
 
 
 func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Array[String]) -> void:
@@ -532,7 +591,7 @@ func _check_gates(id: String, problems: Array[String]) -> void:
 		match edge_status(edge):
 			"missing":
 				if String(edge["prop"]) == "mooring and water":
-					pending["gate %s (mooring and water): compiler has no mooring line yet" % edge["id"]] = true
+					pending["gate %s (mooring and water): room mooring/water repairs pending" % edge["id"]] = true
 				else:
 					var text := "%s: gate %s (%s, %s-%s) has no %s"
 					problems.append(

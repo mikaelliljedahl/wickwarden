@@ -515,5 +515,75 @@ class Caches(unittest.TestCase):
             self.assertIsNotNone(br.cache_pieces(cache["id"], cache["contents"]), cache["contents"])
 
 
+class Crossings(unittest.TestCase):
+    def world(self, enemies=None):
+        return world_of([room_record("ow_5_5", ["e"], enemies, (5, 5)),
+                         room_record("ow_6_5", ["w"], grid=(6, 5))], edges=[
+            {"a": "ow_5_5", "b": "ow_6_5", "link": "step", "gate": "item",
+             "dir": "both", "prop": "mooring and water"}])
+
+    def compile(self, entities, world=None):
+        return compile_text(room_text("ow_5_5", ["e"], entities), world or self.world(), "ow_5_5.room")
+
+    def test_water_and_mooring_block_foot_exit(self):
+        text, errors = self.compile("water @1728,480 size=192,768\n"
+                                    "mooring 15,3 id=east target_room=ow_6_5 target_mooring=west")
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/water_zone.tscn"', text)
+        self.assertIn('deep = true', text)
+        self.assertIn('mooring_id = &"east"', text)
+
+    def test_post_without_water_does_not_gate_exit(self):
+        _, errors = self.compile("mooring 15,3 id=east target_room=ow_6_5 target_mooring=west")
+        self.assertTrue(any("walkable on foot" in e for e in errors), errors)
+
+    def test_narrow_water_can_be_walked_around(self):
+        _, errors = self.compile("water 17,4 size=96,96\n"
+                                "mooring 15,3 id=east target_room=ow_6_5 target_mooring=west")
+        self.assertTrue(any("walkable on foot" in e for e in errors), errors)
+
+    def test_water_without_post_is_rejected(self):
+        _, errors = self.compile("water @1728,480 size=192,768")
+        self.assertTrue(any("needs a mooring" in e for e in errors), errors)
+
+    def test_mooring_landing_must_be_clear(self):
+        _, errors = self.compile("water @1728,480 size=192,768\n"
+                                "mooring 15,3 id=east target_room=ow_6_5 target_mooring=west landing_offset=240,0")
+        self.assertTrue(any("landing is on an obstacle" in e for e in errors), errors)
+
+    def test_duplicate_mooring_ids_rejected(self):
+        post = "mooring 15,3 id=east target_room=ow_6_5 target_mooring=west"
+        _, errors = self.compile(post + "\n" + post)
+        self.assertTrue(any("duplicate mooring id" in e for e in errors), errors)
+
+    def test_unknown_target_rejected(self):
+        _, errors = self.compile("mooring 15,3 id=east target_room=ow_9_9 target_mooring=west")
+        self.assertTrue(any("graph raft edge" in e for e in errors), errors)
+
+    def test_shallows_contain_leeches(self):
+        world = world_of([room_record("ow_5_5", [], {"Fen leech": 1})])
+        source = room_text("ow_5_5", [], "shallows 5,5 size=192,192\nenemy fen_leech 5,5")
+        text, errors = compile_text(source, world, "ow_5_5.room")
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/shallow_zone.tscn"', text)
+        _, errors = compile_text(source.replace("enemy fen_leech 5,5", "enemy fen_leech 8,5"), world, "ow_5_5.room")
+        self.assertTrue(any("must start in water or shallows" in e for e in errors), errors)
+
+    def test_ledge_only_emits_outgoing_drop(self):
+        world = self.world()
+        world.edges[0].update(gate="oneway", dir="a>b", prop="cliff drop")
+        text, errors = self.compile("ledge e 18,4 size=48,288", world)
+        self.assertEqual(errors, [])
+        self.assertIn('drop_exits = Array[StringName]([&"e"])', text)
+        _, errors = compile_text(room_text("ow_6_5", ["w"], "ledge w 1,4"), world, "ow_6_5.room")
+        self.assertTrue(any("outgoing graph one-way" in e for e in errors), errors)
+
+    def test_bad_sizes_and_offsets_rejected(self):
+        for entity in ["water 5,5 size=-1,96", "shallows 5,5 size=0,96",
+                       "mooring 5,5 id=x target_room=ow_6_5 target_mooring=y landing_offset=no"]:
+            _, errors = self.compile(entity)
+            self.assertTrue(errors, entity)
+
+
 if __name__ == "__main__":
     unittest.main()

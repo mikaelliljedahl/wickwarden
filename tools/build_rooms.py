@@ -110,6 +110,10 @@ POS_RE = re.compile(r"^(@)?(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$")
 IDENT_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 BOSS_FLAG_RE = re.compile(r"^boss_.+_defeated$")
 ENTITY_OPTS = {
+    "water": ("size",),
+    "shallows": ("size",),
+    "mooring": ("id", "target_room", "target_mooring", "landing_offset"),
+    "ledge": ("size",),
     "enemy": (),
     "pickup": ("id", "requires", "scope"),
     "prop": ("size",),
@@ -486,6 +490,10 @@ class Plan:
         self.pickups: list[tuple[Entity, str, str]] = []  # (entity, persistent id, kind); a cache is kind cache
         self.shops: list[tuple[Entity, str, str, str]] = []  # (entity, shop id, stock kind, stock id or "")
         self.doors: list[Entity] = []
+        self.zones: list[tuple[Entity, tuple[float, float]]] = []
+        self.water: set[tuple[int, int]] = set()
+        self.moorings: list[Entity] = []
+        self.drop_exits: list[str] = []
 
 
 def build_plan(src: Source, world: World, errors: list[str]) -> Plan | None:
@@ -537,6 +545,8 @@ def build_plan(src: Source, world: World, errors: list[str]) -> Plan | None:
 def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, errors: list[str]) -> bool:
     where_ = where(src.path, ent.line)
     key = (ent.tile[1], ent.tile[0], seq)
+    if ent.verb in ("water", "shallows", "mooring", "ledge"):
+        return dispatch_crossing(ent, key, src, plan, world, errors)
     if ent.verb == "enemy":
         if len(ent.args) != 1 or not IDENT_RE.match(snake(ent.args[0])):
             errors.append(f"{where_}: enemy takes one monster name")
@@ -602,6 +612,73 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
     if ent.verb == "cache":
         return dispatch_cache(ent, key, src, plan, world, errors)
     return dispatch_pickup(ent, key, src, plan, errors)
+
+
+def edge_side(world: World, room_id: str, other: str) -> str | None:
+    a, b = world.room(room_id), world.room(other)
+    if a is None or b is None:
+        return None
+    delta = (b["grid"][0] - a["grid"][0], b["grid"][1] - a["grid"][1])
+    return {(0, -1): "n", (1, 0): "e", (0, 1): "s", (-1, 0): "w"}.get(delta)
+
+
+def dispatch_crossing(ent, key, src, plan, world, errors) -> bool:
+    def fail(message):
+        errors.append(f"{where(src.path, ent.line)}: {message}")
+        return False
+
+    verb = ent.verb
+    scene = {"water": "water_zone", "shallows": "shallow_zone", "mooring": "mooring", "ledge": "ledge"}[verb]
+    node = Node("", "Props", None, Res("PackedScene", f"res://scenes/world/{scene}.tscn"))
+    node.base = camel(scene)
+    node.props = [("position", vec2(*ent.pos))]
+    if verb == "mooring":
+        if ent.args or any(not IDENT_RE.fullmatch(ent.opts.get(k, "")) for k in ("id", "target_room", "target_mooring")):
+            return fail("mooring takes id=, target_room= and target_mooring= identifiers")
+        target = ent.opts["target_room"]
+        if not any(e["prop"] in ("mooring and water", "flooded passage") and
+                   {e["a"], e["b"]} == {src.room_id, target} for e in world.edges):
+            return fail("mooring target must match a graph raft edge")
+        if any(m.opts["id"] == ent.opts["id"] for m in plan.moorings):
+            return fail("duplicate mooring id")
+        for option, prop in (("id", "mooring_id"), ("target_room", "target_room"), ("target_mooring", "target_mooring")):
+            node.props.append((prop, sname(ent.opts[option])))
+        if "landing_offset" in ent.opts:
+            match = POS_RE.fullmatch(ent.opts["landing_offset"])
+            if match is None or match.group(1):
+                return fail("landing_offset takes two pixel numbers")
+            offset = (float(match.group(2)), float(match.group(3)))
+            node.props.append(("landing_offset", vec2(*offset)))
+        plan.moorings.append(ent)
+        plan.static |= tiles_of_rect(ent.pos[0] - 16, ent.pos[1] - 16, 32, 32)
+    else:
+        size = parse_size(ent.opts.get("size", "288,48" if verb == "ledge" else "192,192"))
+        if size is None:
+            return fail("size takes two positive numbers")
+        if verb == "ledge":
+            if len(ent.args) != 1 or ent.args[0] not in SIDES:
+                return fail("ledge takes one side n/e/s/w")
+            side = ent.args[0]
+            outgoing = [e for e in world.edges if e["gate"] == "oneway" and
+                        ((e["a"] == src.room_id and e["dir"] == "a>b") or
+                         (e["b"] == src.room_id and e["dir"] == "b>a"))]
+            if not any(edge_side(world, src.room_id, e["b"] if e["a"] == src.room_id else e["a"]) == side for e in outgoing):
+                return fail("ledge side must be an outgoing graph one-way drop")
+            if side in plan.drop_exits:
+                return fail("duplicate ledge side")
+            plan.drop_exits.append(side)
+        else:
+            if ent.args:
+                return fail(f"{verb} takes a position and optional size=")
+            plan.zones.append((ent, size))
+            if verb == "water":
+                tiles = tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, *size)
+                plan.water |= tiles
+                plan.static |= tiles
+                node.props.append(("deep", "true"))
+        node.props.append(("size", vec2(*size)))
+    plan.singles.append((key, node))
+    return True
 
 
 def dispatch_shop(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
@@ -845,9 +922,28 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
 
     closed = set().union(*(t for _, t in plan.openers)) if plan.openers else set()
     reach = flood([spawn_tile], plan.static | closed)
+    raft_sides = {}
+    if plan.moorings or plan.water:
+        for edge in world.edges:
+            if edge["prop"] != "mooring and water" or rec["id"] not in (edge["a"], edge["b"]):
+                continue
+            other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+            side = edge_side(world, rec["id"], other)
+            raft_sides[side] = other
+            if not any(m.opts["target_room"] == other for m in plan.moorings):
+                errors.append(f"{where(path, grid_line)}: raft exit {side} needs a mooring to {other}")
+            if any(tile in reach for tile in GAP_TILES.get(side, [])):
+                errors.append(f"{where(path, grid_line)}: raft exit {side} is walkable on foot")
+    for ent in plan.moorings:
+        offset = ent.opts.get("landing_offset", "0,56").split(",")
+        landing = tile_of(ent.pos[0] + float(offset[0]), ent.pos[1] + float(offset[1]))
+        if landing in plan.static:
+            errors.append(f"{where(path, ent.line)}: mooring landing is on an obstacle")
     open_sides = []
     for side in rec["exits"]:
         corridor = exit_corridor(side)
+        if side in raft_sides:
+            continue
         if any(tile in plan.static for tile in corridor):
             blocked = next(tile for tile in corridor if tile in plan.static)
             errors.append(f"{where(path, grid_line)}: exit {side} corridor blocked at tile {blocked}")
@@ -868,7 +964,11 @@ def check_enemies(src: Source, rec: dict, plan: Plan, errors: list[str]) -> None
     for _, node, ent in plan.enemies:
         name = node.enemy
         counts[name] = counts.get(name, 0) + 1
-        if ent.tile in plan.static:
+        habitat = any(abs(ent.pos[0] - z.pos[0]) <= size[0] / 2 and
+                      abs(ent.pos[1] - z.pos[1]) <= size[1] / 2 for z, size in plan.zones)
+        if name == "fen_leech" and plan.zones and not habitat:
+            errors.append(f"{where(src.path, ent.line)}: fen_leech must start in water or shallows")
+        if ent.tile in plan.static and not (name == "fen_leech" and habitat and ent.tile in plan.water):
             errors.append(f"{where(src.path, ent.line)}: enemy {name} starts on an obstacle")
         centred = ent.pos[0] % TILE == TILE / 2 and ent.pos[1] % TILE == TILE / 2
         if name == "hollow" and not centred:
@@ -1074,6 +1174,9 @@ def emit(src: Source, rec: dict, plan: Plan) -> str:
         ("grid", f"Vector2i({rec['grid'][0]}, {rec['grid'][1]})"),
         ("exits", f"Array[StringName]([{exits}])"),
     ]
+    if plan.drop_exits:
+        drops = ", ".join(sname(side) for side in sorted(plan.drop_exits))
+        root.props.append(("drop_exits", f"Array[StringName]([{drops}])"))
     if rec["dark"]:
         root.props.append(("dark", "true"))
     if src.floor is not None:
