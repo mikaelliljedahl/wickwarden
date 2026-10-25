@@ -88,21 +88,23 @@ func _approach_offset_is_small() -> void:
 	var arena := make_arena()
 	var enemy = make_enemy(arena, SCENE, AT)
 	enemy.room_rect = ROOM
-	var player := make_player(arena, AT + Vector2(300, 0))
+	# Let asynchronous setup finish without starting the run or moving the enemy.
+	enemy.set_physics_process(false)
+	make_player(arena, AT + Vector2(300, 0))
 	await frames(2)
 	var offset: float = enemy.approach_offset_deg()
 	check(absf(offset) <= 35.0, "approach offset is within +-35 degrees (got %.1f)" % offset)
-	var aimed := false
-	for i in range(60):
-		player.global_position = AT + Vector2(300, 0)
-		await frames(1)
-		if enemy.is_running() and enemy.velocity.length() > 1.0:
-			var to_player: Vector2 = enemy.direction_to_player()
-			var angle := rad_to_deg(absf(enemy.velocity.angle_to(to_player)))
-			check_near(angle, absf(offset), 1.0, "run follows the member's own offset")
-			aimed = true
-			break
-	check(aimed, "the wickling was seen running")
+	# A run aims once at its start, not at the bearing from its later position.
+	var to_player: Vector2 = enemy.direction_to_player()
+	enemy.set_physics_process(true)
+	await frames(2)
+	check(enemy.is_running(), "the wickling was seen running")
+	check(enemy.velocity.length() > 1.0, "the running wickling moves")
+	var angle := rad_to_deg(to_player.angle_to(enemy.velocity))
+	check_near(angle, offset, 1.0, "run follows the member's own signed offset")
+	var run_velocity: Vector2 = enemy.velocity
+	await frames(5)
+	check_eq(enemy.velocity, run_velocity, "run keeps its initial direction as the bearing changes")
 	await dispose(arena)
 
 
