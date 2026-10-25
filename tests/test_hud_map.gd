@@ -1,7 +1,7 @@
 extends TestCase
 ## Minimap cells (Hud.room_cell) for all 192 rooms of the graph: overworld rooms on their grid cell
 ## of the 12x9 map, cave rooms on the local 5x5 grid of their cave (smallest x and y at 0), pockets
-## and unknown ids without a cell. Pure data check, no scene.
+## and unknown ids without a cell. Also checks equipped-tool and counter icon selection.
 
 
 func run() -> void:
@@ -11,6 +11,7 @@ func run() -> void:
 	_caves(ids)
 	_pockets_and_unknown()
 	_lockpick_icon()
+	_tool_icons()
 
 
 func _overworld(ids: Array[String]) -> void:
@@ -86,6 +87,39 @@ func _lockpick_icon() -> void:
 	check_eq(hud._icon_for(&"big_key"), pickup, "missing HUD art falls back to pickup art")
 	SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
 	check(hud._icon_for(&"big_key") == null, "missing lockpick art retains shape fallback")
+	SpriteVisual.use_manifest(original_manifest)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(fallback_manifest))
+	hud.free()
+
+
+func _tool_icons() -> void:
+	var hud := Hud.new()
+	var original_manifest := SpriteVisual.manifest_path
+	check_eq(ItemRegistry.ids().size(), 10, "all ten registered tools are covered")
+	for id: StringName in ItemRegistry.ids():
+		var expected := SpriteVisual.icon_of(StringName("icon_" + String(id)))
+		check(expected != null, "%s has dedicated tool art" % id)
+		check_eq(hud._icon_for(id), expected, "%s prefers its dedicated icon" % id)
+	for kind in [&"brass_coin", &"key", &"pitch_pot_bundle", &"tallow_slug", &"fragment"]:
+		check_eq(hud._icon_for(kind), SpriteVisual.icon_of(kind), "%s counter is unchanged" % kind)
+	var fallback_manifest := "user://hud_tool_fallback.json"
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(original_manifest))
+	for id in ItemRegistry.ids():
+		manifest.erase("icon_" + String(id))
+	var file := FileAccess.open(fallback_manifest, FileAccess.WRITE)
+	file.store_string(JSON.stringify(manifest))
+	file.close()
+	SpriteVisual.use_manifest(fallback_manifest)
+	for id: StringName in ItemRegistry.ids():
+		check_eq(hud._icon_for(id), SpriteVisual.icon_of(id), "%s falls back to object art" % id)
+	for id in [&"tether_moth", &"pitch_pot"]:
+		var icon := hud._icon_for(id) as AtlasTexture
+		check(icon != null, "%s has accepted object fallback art" % id)
+		if icon != null:
+			check_eq(icon.region, Rect2(0, 0, 96, 96), "object fallback excludes adjacent frames")
+	SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
+	for id: StringName in ItemRegistry.ids():
+		check(hud._icon_for(id) == null, "%s retains placeholder without art" % id)
 	SpriteVisual.use_manifest(original_manifest)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(fallback_manifest))
 	hud.free()

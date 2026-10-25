@@ -191,8 +191,13 @@ func _draw_icon(kind: StringName, center: Vector2, side: float) -> bool:
 	return true
 
 
+## Registered tools prefer dedicated icons; object art remains the fallback.
 ## Lockpick counters prefer the small HUD raster; pickup art remains the fallback.
 func _icon_for(kind: StringName) -> Texture2D:
+	if ItemRegistry.items.has(kind):
+		var tool := SpriteVisual.icon_of(StringName("icon_" + String(kind)))
+		if tool != null:
+			return tool
 	if kind == &"big_key":
 		var counter := SpriteVisual.icon_of(&"hud_counter_big_key")
 		if counter != null:
