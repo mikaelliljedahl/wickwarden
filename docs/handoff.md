@@ -17,17 +17,21 @@ Last updated: 2026-10-25, Codex takeover in progress. Read this section, then [s
 - **Room quality:** the owner reports confusing dense-tree layouts in non-original rooms. A review is active; preserve the original six rooms. Captures must be saved under `/tmp` and opened before reporting visual findings.
 - **Push:** continuous push authorization remains, but this takeover snapshot must not be pushed while workers actively edit the tree. The integration worker pushes only when instructed by the lead after verification.
 
+The baseline gate before active edits was green, as confirmed by the lead. Landed since takeover: compiler support for raft crossings, shallows and directional ledges (`7cd8343`); shared Thorn Gate burn flag (`9de34d5`); partial R2.c North Cliff and hermit hut interior (`dec2f78`, four owned source/scene paths). R2.c remains incomplete. Integrated acceptance is pending. The e248 bomb-door test issue is assigned to the extension worker, which now owns `tests/area_base.gd`; the status worker must not edit it.
+
+Owner clarification: hidden cave entrances under bushes or behind bombable rocks are a desirable challenge. Preserve graph secrets and tool requirements. Layout review must not make every entrance obvious.
+
 Live-tree verifier check during concurrent edits: `make check` stopped at `test_world_graph` (1 of 69 suites failed; 1 of 829 graph checks): `ow_3_5` has a door to `cave_3_1`, which the graph does not link there. Reported to the lead for the active R4.d owner. Log: `/tmp/wickwarden-takeover-baseline-check.log`. This is not a clean committed-baseline result; rerun after workers finish.
 
 ### Active takeover assignments
 
-These are launched assignments, not landed work. Workers must report commits and checks before status changes to done.
+Assignment progress is listed below; landed commits are recorded above. Workers must report commits and checks before a whole assignment changes to done.
 
 | Assignment | ATF job |
 |---|---|
-| Compiler gate fixes | `job_01a173820cf1771a94d7e5c7eb18bd32` |
-| Priority room fixes | `job_01a173820d2e7321acdc70b5616dfe23` |
-| R2.c | `job_01a173820d5276dd90625cb93810348d` |
+| Compiler gate fixes (core landed `7cd8343`; extension/test work pending) | `job_01a173820cf1771a94d7e5c7eb18bd32` |
+| Priority room fixes (hedge flag landed `9de34d5`; remaining work pending) | `job_01a173820d2e7321acdc70b5616dfe23` |
+| R2.c (partial `dec2f78`; remaining rooms pending) | `job_01a173820d5276dd90625cb93810348d` |
 | R4.d | `job_01a173820d7c777388c8a60e0e1c73db` |
 | R5.a | `job_01a173820e5675af8424b555a9d71a42` |
 | Existing room layout review | `job_01a173820e897747ba2082ffb7108908` |
@@ -56,15 +60,15 @@ The integration verifier owns only `docs/state.md` and `docs/handoff.md` for sta
 - Codex `low` (`gpt-6-luna`) did the mechanical parts (P15, T06, compiler F6b/F6c, F7b, test fixes).
 - Brief for room workers: `docs/handover/room-batch-brief.md` (new this session). Worker brief for WPs: `docs/handover/worker-brief.md`.
 - Compiler lines now available (`docs/room-kit.md`): `prop`, `opener cracked_wall`, `opener locked_door`, `opener thorn_hedge`, `opener cut_screen look=reed_cluster|rush_wall`, `hidden_stairs`, `door`, `spawn`, `shop`, `cache`, `pickup`. Dev rooms keep dev pickup ids via an alias table (F6c).
-- Test rules (decided in session 2): exits to neighbours without a scene are PENDING (`dfca0d5`); area checks strip `new:` from enemy plans and accept pocket doors (`a9220f1`); a missing `mooring and water` gate is PENDING until the compiler has a mooring line.
+- Test rules (decided in session 2): exits to neighbours without a scene are PENDING (`dfca0d5`); area checks strip `new:` from enemy plans and accept pocket doors (`a9220f1`); the old missing-mooring waiver was superseded by `7cd8343` compiler and area-check support; affected rooms still need verification.
 
 ### BUGS AND GAPS TO FIX (ordered by priority)
 
 **Must fix (gameplay or data correctness):**
-1. **Thorn hedge id mismatch.** R1.b `ow_2_0` uses `burn_id ow_2_0_hedge`; R2.a `ow_3_0` uses `id=e005`. The two sides of graph edge e005 must share one id, or the burned flags differ. Fix: give both `id=e005` (or the graph id of the edge). Check `flags` after the fix.
-2. **Raft gates not enforced.** The compiler has no `mooring` line, so the lake exits are walkable on foot: R2.b `ow_6_1` S (e027); R4.a `ow_4_3` E (e055), `ow_5_3` N/E/S/W (e055, e057); R4.b `ow_6_2` (e027, e042, e044, e045), `ow_6_3` (e045, e057, e059, e060), `ow_7_3` (e046, e059, e061); R5.b `ow_5_6` N (e089). The area test waives these as pending (`a9220f1`). Fix: add `mooring` (and `water`) compiler line, place `mooring.tscn`, recompile the rooms above, and REMOVE the pending waiver in `tests/area_base.gd` for `mooring and water`.
-3. **Fen leeches on floor.** No `shallows` zone line. Leeches stand on floor: R4.a `ow_1_3`, `ow_5_3`; R4.c `ow_1_4` (2); R4.b `ow_6_3` (2), `ow_7_3` (1). Fix: `shallows` line (M3 `shallow_zone.tscn`).
-4. **Drop ledge not placed.** R5.b `ow_4_6` N (e087, one-way drop from `ow_4_5`). Fix: ledge line (F8 `ledge.tscn`).
+1. **Thorn hedge id mismatch — fixed in `9de34d5`.** R1.b `ow_2_0` uses `burn_id ow_2_0_hedge`; R2.a `ow_3_0` uses `id=e005`. The two sides of graph edge e005 must share one id, or the burned flags differ. Fix: give both `id=e005` (or the graph id of the edge). Check `flags` after the fix.
+2. **Raft gates not enforced — room updates pending.** Compiler support landed in `7cd8343`; previously there was no `mooring` line, so the lake exits are walkable on foot: R2.b `ow_6_1` S (e027); R4.a `ow_4_3` E (e055), `ow_5_3` N/E/S/W (e055, e057); R4.b `ow_6_2` (e027, e042, e044, e045), `ow_6_3` (e045, e057, e059, e060), `ow_7_3` (e046, e059, e061); R5.b `ow_5_6` N (e089). The area test waives these as pending (`a9220f1`). Fix: add `mooring` (and `water`) compiler line, place `mooring.tscn`, recompile the rooms above, and REMOVE the pending waiver in `tests/area_base.gd` for `mooring and water`.
+3. **Fen leeches on floor — room updates pending.** `shallows` compiler support landed in `7cd8343`. Leeches stand on floor: R4.a `ow_1_3`, `ow_5_3`; R4.c `ow_1_4` (2); R4.b `ow_6_3` (2), `ow_7_3` (1). Fix: `shallows` line (M3 `shallow_zone.tscn`).
+4. **Drop ledge not placed — room updates pending.** Directional ledge compiler support landed in `7cd8343`. R5.b `ow_4_6` N (e087, one-way drop from `ow_4_5`). Fix: ledge line (F8 `ledge.tscn`).
 5. **`ow_1_5#cache` in place or not?** R4.c built it as a separate scene (`ow_1_5__cache`), the graph says `in_place=False`, the table 7.1.1 says in place. Owner to confirm, then fix the scene or the table.
 6. **Pocket door without graph door line (unverified in game).** R2.a `ow_4_1#cache` door sits on the cracked-wall tile (`door ow_4_1#cache Inside 17,2`). It fires only after the wall breaks. Check in game; same pattern will be needed for R2.d `ow_7_2#bag`.
 7. **Hidden stairs and glow jar unverified in game.** `ow_0_2` stairs (to `cave_9_1`) are hidden until the jar reveals them. Check the reveal path in play.

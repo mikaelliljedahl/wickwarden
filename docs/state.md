@@ -19,6 +19,10 @@ The owner replaced Haiku with ATF Codex **GPT-6.1 Sol low** for all coding; Clau
 
 The owner reports confusing dense-tree layouts in non-original rooms. Quality review is active; preserve the original six. Open spec conflicts remain listed in handoff; this takeover does not resolve them.
 
+The baseline gate before active edits was green, as confirmed by the lead. Landed since takeover: compiler support for raft crossings, shallows and directional ledges (`7cd8343`); shared Thorn Gate burn flag (`9de34d5`); partial R2.c North Cliff and hermit hut interior (`dec2f78`, four owned source/scene paths). R2.c remains incomplete. Integrated acceptance is pending. The e248 bomb-door test issue is assigned to the extension worker, which now owns `tests/area_base.gd`; the status worker must not edit it.
+
+Owner clarification: hidden cave entrances under bushes or behind bombable rocks are a desirable challenge. Preserve graph secrets and tool requirements. Layout review must not make every entrance obvious.
+
 Live-tree verifier check during concurrent edits: `make check` stopped at `test_world_graph` (1 of 69 suites failed; 1 of 829 graph checks): `ow_3_5` has a door to `cave_3_1`, which the graph does not link there. Reported to the lead for the active R4.d owner. Log: `/tmp/wickwarden-takeover-baseline-check.log`. This is not a clean committed-baseline result; rerun after workers finish.
 
 ## Step 1: the dev world (what runs today)
