@@ -37,3 +37,9 @@ Validation:
 - `uv run --with pillow==12.3.0 --with numpy python /tmp/validate-tool-icons.py`: deterministic regeneration, source hashes, preserved original manifest entries, exact ten-kind addition, RGBA/soft alpha, clear borders and key-removal checks passed (`/tmp/tool-icon-validation.log`).
 
 Runtime interface: `SpriteVisual.icon_of('icon_' + id)` resolves `idle`, frame 0, through `assets/sprites/sprites.json` to `res://assets/sprites/icon_<id>.png`. All ten cells and atlas regions are 128x128, with anchor [64,64], centered=true, mirror_side=false. Menu/HUD code integration remains owned by its UI package.
+
+### Independent-verifier follow-up
+
+The strengthened `/tmp/validate-tool-icons.gd` explicitly calls `SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)`, then checks `has_art` and `icon_of` for all ten names, the AtlasTexture region [0,0,128,128], expected `idle.file` path, and equality of the backing image bytes to that PNG (plus resource path when imported). All ten pass; `/tmp/tool-icon-runtime.log` records the paths.
+
+Compared against `/tmp/wickwarden-icon-preflight-ql_w3voj`: all 61 runtime PNG hashes, all 30 accepted-world source/output hashes, and all 30 original icon-variant hashes are unchanged. All 43 preexisting runtime entries equal both the pre-cut snapshot and `assets/sprites/sprites.json` at preflight HEAD `8b9ede0ba44f7fa0947e924ba57a9e63c8c6890d`. The separately saved `runtime-manifest-baseline.json` contains eight first-pass icon entries (51 total), so it was captured after the first partial cut; its added terrain `centered: true` normalization was deliberately not retained. Results: `/tmp/tool-icon-verifier-baseline.log`.
