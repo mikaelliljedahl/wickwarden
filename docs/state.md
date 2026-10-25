@@ -1,6 +1,6 @@
 # Wickwarden — state
 
-Status as of 2026-10-25: all ten item-menu icons integrated (pipeline `b2e516c`, menu `43552ec`) and verified with the full checks at code checkpoint `43552ec`; later source-art-only checkpoint `bae0a42` is included in the pending personal-origin push. See [handoff.md](handoff.md) for push outcome, current art pipeline and verification logs. The document index is [README.md](README.md).
+Status as of 2026-10-25: all ten item-menu icons integrated (pipeline `b2e516c`, menu `43552ec`) and verified with the full checks at code checkpoint `43552ec`; personal origin/main was verified at pushed checkpoint `df2dc70`. Later source-art-only `f33ab9b` and this push-status followup are included in the final status push. See [handoff.md](handoff.md) for push outcome, current art pipeline and verification logs. The document index is [README.md](README.md).
 
 ## Item-menu art checkpoint
 
