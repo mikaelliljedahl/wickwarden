@@ -1,0 +1,20 @@
+room cave_4_8
+terrain Bellows Loft: two bellows banks flank the raised lockpick dais.
+floor_color 0.19 0.17 0.15
+grid
+####################
+#..................#
+#...###......###...#
+#..................#
+...................#
+...................#
+#..................#
+#...###......###...#
+#..................#
+####################
+enemy skitterwick 7,3
+enemy skitterwick 7,6
+prop pedestal 14,4
+pickup big_key @1392,454 id=bigkey_c4 scope=c4
+opener locked_door @48,480 id=e177 scope=c4
+spawn Default @960,528

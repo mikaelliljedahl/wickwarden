@@ -1,0 +1,23 @@
+room cave_4_7
+terrain Quench Hall: a wax-bright alcove recessed between quench-bank shoulders.
+floor_color 0.19 0.17 0.15
+grid
+#########..#########
+#............#####.#
+#..###.......#...#.#
+#............#...#.#
+....................
+....................
+#..................#
+#..###.............#
+#..................#
+####################
+enemy tallow_blob 5,3
+enemy tallow_blob 6,6
+enemy cinder_wisp 12,6
+enemy cinder_wisp 14,7
+opener locked_door @1872,480 id=e177 scope=c4
+opener wax_seal @1488,336 id=e180
+door cave_4_7#seal Inside @1488,240 blocker=e180
+spawn FromPocket @1488,456
+spawn Default @960,528

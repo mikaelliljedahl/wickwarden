@@ -1,0 +1,19 @@
+room cave_4_7#seal
+terrain Sealed Quench Cache: brass and provisions behind a melted wax lip.
+floor_color 0.19 0.17 0.15
+grid
+####################
+#..................#
+#...##........##...#
+#...##........##...#
+#..................#
+#..................#
+#...##........##...#
+#...##........##...#
+#..................#
+####################
+cache 9,3 id=cache_cave_4_7
+pickup slug_bundle 12,3 id=slug_bundle_cave_4_7
+door cave_4_7 FromPocket 9,7
+spawn Inside 9,5
+spawn Default 9,5

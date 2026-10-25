@@ -1,0 +1,20 @@
+room cave_4_6
+terrain Heavy Vault: stone piers frame the key beneath the cold furnace arch.
+floor_color 0.19 0.17 0.15
+grid
+####################
+#..................#
+#..##..........##..#
+#..##..........##..#
+#..................#
+#..................#
+#..##..........##..#
+#..##..........##..#
+#..................#
+#########..#########
+enemy cinder_wisp 6,3
+enemy cinder_wisp 13,3
+prop pedestal 9,2
+pickup small_key @912,262 id=key_c4_2 scope=c4
+opener heavy_stone @960,912 id=e175 size=192,96
+spawn Default @960,720
