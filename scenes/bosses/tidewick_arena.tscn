@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/water_zone.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/world/mooring.tscn" id="2"]
+
+[node name="TidewickArena" type="Node2D"]
+
+[node name="Basin" parent="." instance=ExtResource("1")]
+position = Vector2(1056, 480)
+size = Vector2(1536, 768)
+deep = true
+
+[node name="Dock" parent="." instance=ExtResource("2")]
+position = Vector2(240, 432)
+mooring_id = &"tidewick_dock"
+landing_offset = Vector2(-56, 48)
