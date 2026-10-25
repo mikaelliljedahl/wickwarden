@@ -5,6 +5,7 @@ const GALLERY := "res://tests/fixtures/gallery/B09.tscn"
 
 
 func run() -> void:
+	await _room_clone_lifecycle()
 	await _tools_and_finish()
 	await _attacks_and_reset()
 	await _lids_refill_and_phase_two()
@@ -213,3 +214,98 @@ func _capture(room: Room, label: String) -> void:
 	print("saved ", path)
 	room.reparent(self, false)
 	await dispose(viewport)
+
+
+func _helper_counts(boss: Node) -> Vector2i:
+	var counts := Vector2i.ZERO
+	for child in boss.get_node("Hurtbox").get_children():
+		if child is CollisionShape2D:
+			counts.x += 1
+	var script = boss.get_script()
+	for child in boss.get_children():
+		if child.get_script() == script.KeyholeVisual:
+			counts.y += 1
+	return counts
+
+
+func _room_clone_lifecycle() -> void:
+	for grid in [Vector2i.ZERO, Vector2i(2, 3)]:
+		reset_state()
+		var scene := load(GALLERY) as PackedScene
+		var room := scene.instantiate() as Room
+		room.grid = grid
+		# An authored child must survive generated-helper retirement.
+		var sentinel := Node2D.new()
+		sentinel.name = "AuthoredSentinel"
+		room.get_node("Enemies/LockWarden/Hurtbox").add_child(sentinel)
+		add_child(room)
+		var actor_scene := load("res://scenes/enemies/bosses/lock_warden.tscn") as PackedScene
+		var fresh = actor_scene.instantiate()
+		fresh.position = Vector2(960, 600)
+		fresh.room_rect = room.interior_rect()
+		room.get_node("Props").add_child(fresh)
+		check_eq(_helper_counts(fresh), Vector2i(1, 1), "fresh canonical core and keyhole")
+		await seconds(1.6)
+		check_eq(fresh.plates.size(), 4, "fresh canonical four plates")
+		await dispose(fresh)
+		for visit in range(3):
+			room.enter()
+			var boss = room.get_node("Enemies/LockWarden")
+			check_eq(_helper_counts(boss), Vector2i(1, 1), "Room clone canonical core and keyhole")
+			check(boss.hurtbox.has_node("AuthoredSentinel"), "authored helper survives")
+			check_eq(boss.hurtbox.hurt.get_connections().size(), 1, "one live core signal target")
+			await seconds(1.6)
+			check_eq(boss.plates.size(), 4, "Room clone four public plates")
+			var script = boss.get_script()
+			var actual_plates := 0
+			for child in boss.get_children():
+				if child.get_script() == script.Plate:
+					actual_plates += 1
+			check_eq(actual_plates, 4, "exactly four actual plate helpers")
+			var live_targets: Array[Hurtbox] = [boss.hurtbox]
+			for plate in boss.plates:
+				live_targets.append(plate.eye)
+				live_targets.append(plate.plate_box)
+			for target in get_tree().get_nodes_in_group(&"hurtboxes"):
+				if boss.is_ancestor_of(target):
+					check(
+						live_targets.has(target),
+						"no stale generated hurt target outside public targets"
+					)
+			for i in range(4):
+				var plate = boss.plates[i]
+				var expected: Vector2 = room.global_position + Vector2(960, 600) + boss.OFFSETS[i]
+				check(plate.is_inside_tree(), "public plate is live")
+				check_eq(plate.owner_boss, boss, "plate targets current clone")
+				check_eq(
+					plate.global_position, expected, "plate stays at translated canonical position"
+				)
+				check_eq(
+					plate.eye.global_position,
+					expected + Vector2(0, -48),
+					"eye is translated with plate"
+				)
+				check_eq(
+					plate.plate_box.hurt.get_connections().size(), 1, "one live plate signal target"
+				)
+			check_eq(
+				boss.hurtbox.global_position,
+				room.global_position + Vector2(960, 600),
+				"core has no origin-space copy"
+			)
+			room.leave()
+			await frames(2)
+			check(room.get_node("Enemies").get_children().is_empty(), "leave removes live targets")
+		GameState.set_flag(&"boss_cave_9_10_defeated")
+		room.enter()
+		var retired = room.get_node("Enemies/LockWarden")
+		check(retired.is_dead, "defeated clone retires")
+		check_eq(
+			_helper_counts(retired), Vector2i.ZERO, "retired clone has no generated core or keyhole"
+		)
+		check(retired.plates.is_empty(), "retired clone has no plates")
+		check(
+			retired.has_node("BodyShape") and retired.has_node("ContactHitbox/Shape"),
+			"authored body and contact survive"
+		)
+		await dispose(room)

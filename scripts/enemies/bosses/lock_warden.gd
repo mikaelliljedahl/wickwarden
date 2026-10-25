@@ -1,6 +1,7 @@
 extends "res://scripts/enemies/boss_base.gd"
 ## Stationary two-tool lock. Persistent fragment and core are placed by C09.
 
+const GENERATED_HELPER := &"lock_warden_generated_helper"
 const OFFSETS := [Vector2(-128, -96), Vector2(128, -96), Vector2(-128, 96), Vector2(128, 96)]
 var plates: Array[Node2D] = []
 var volley_left := 3.5
@@ -129,12 +130,30 @@ func _init() -> void:
 			)
 
 
+func _ready() -> void:
+	# Room snapshots already-ready actors. Retire copied runtime helpers before the
+	# base can rebuild an active boss or retire a persistently defeated one.
+	_remove_generated_helpers(self)
+	super._ready()
+
+
+func _remove_generated_helpers(parent: Node) -> void:
+	for child in parent.get_children():
+		if child.has_meta(GENERATED_HELPER):
+			parent.remove_child(child)
+			child.free()
+		else:
+			_remove_generated_helpers(child)
+
+
 func _boss_ready() -> void:
-	hurtbox.add_circle(28)
+	var core := hurtbox.add_circle(28)
+	core.set_meta(GENERATED_HELPER, true)
 	hurtbox.filter = _core_accepts
 	contact_hitbox.setup(Layers.Team.ENEMY)
 	var lens := KeyholeVisual.new()
 	lens.name = "KeyholeVisual"
+	lens.set_meta(GENERATED_HELPER, true)
 	add_child(lens)
 
 
@@ -159,6 +178,7 @@ func _create_plates() -> void:
 		return
 	for offset in OFFSETS:
 		var plate := Plate.new()
+		plate.set_meta(GENERATED_HELPER, true)
 		plate.owner_boss = self
 		plate.active = true
 		# The owned resource supplies the plate's scene structure.
