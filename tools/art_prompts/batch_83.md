@@ -82,7 +82,7 @@ Target: 1920x960. Scale the whole source uniformly; preserve the contracted targ
 - Output file: `tools/source_art/backdrop_ninth_door_v1.png`
 - Key colour: none (single painting, used as is)
 - Size: 1920x960
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/backdrop_ninth_door.png`
 
@@ -104,7 +104,7 @@ Image size: 1920x960.
 - Output file: `tools/source_art/backdrop_ninth_door_v2.png`
 - Key colour: none (single painting, used as is)
 - Size: 1920x960
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/backdrop_ninth_door.png`
 
@@ -126,7 +126,7 @@ Image size: 1920x960.
 - Output file: `tools/source_art/backdrop_ninth_door_v3.png`
 - Key colour: none (single painting, used as is)
 - Size: 1920x960
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/backdrop_ninth_door.png`
 
@@ -152,7 +152,7 @@ Target: 1920x960. Scale the whole source uniformly; preserve the contracted targ
 - Output file: `tools/source_art/backdrop_start_village_v1.png`
 - Key colour: none (single painting, used as is)
 - Size: 1920x960
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/backdrop_start_village.png`
 
@@ -174,7 +174,7 @@ Image size: 1920x960.
 - Output file: `tools/source_art/backdrop_start_village_v2.png`
 - Key colour: none (single painting, used as is)
 - Size: 1920x960
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/backdrop_start_village.png`
 
@@ -196,7 +196,7 @@ Image size: 1920x960.
 - Output file: `tools/source_art/backdrop_start_village_v3.png`
 - Key colour: none (single painting, used as is)
 - Size: 1920x960
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tex_wall_ruin.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/backdrop_start_village.png`
 

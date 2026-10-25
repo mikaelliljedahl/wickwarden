@@ -20,3 +20,5 @@ C10 follow-up reference correction: no reference for ungenerated arena C10 entri
 Intro01v2/v3 scene painting reference omitted to avoid unrelated sprite-sheet content dominating scenery. Fenced subjects unchanged; intro01v1 already in flight with original style reference.
 
 B84 non-character landscape scenes intro02/03 now omit unrelated sprite style reference to avoid content copying; exact fenced subjects unchanged. Character/tool-detail scenes retain needed design refs.
+
+Optional landscape backdrops B83/B86 now use no unrelated sprite-sheet style reference; scenes are fully described in exact unchanged fenced prompts. Optional production follows remaining ready required outputs; blocked effects/edges remain deferred.

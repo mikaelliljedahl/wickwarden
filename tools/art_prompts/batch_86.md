@@ -32,7 +32,7 @@ Target: 1920x1080. Stills use the largest 16:9 crop; no cut-tool pass.
 - Output file: `tools/source_art/ninth_hollow_vista_v1.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tamsin_walk_side.png` (style and material reference; attach to image call), `/home/mikael/code/github/wickwarden/tools/source_art/ow_props.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 1 of 3
 - Accepted name after the cull: `tools/source_art/ninth_hollow_vista.png`
 
@@ -54,7 +54,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/ninth_hollow_vista_v2.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tamsin_walk_side.png` (style and material reference; attach to image call), `/home/mikael/code/github/wickwarden/tools/source_art/ow_props.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 2 of 3
 - Accepted name after the cull: `tools/source_art/ninth_hollow_vista.png`
 
@@ -76,7 +76,7 @@ Image size: 1536x1024.
 - Output file: `tools/source_art/ninth_hollow_vista_v3.png`
 - Key colour: none (single painting, used as is)
 - Size: 1536x1024
-- Reference images: `/home/mikael/code/github/wickwarden/tools/source_art/tamsin_walk_side.png` (style and material reference; attach to image call), `/home/mikael/code/github/wickwarden/tools/source_art/ow_props.png` (style and material reference; attach to image call)
+- Reference images: none (scene specified; avoid unrelated sprite-sheet content)
 - Variant: 3 of 3
 - Accepted name after the cull: `tools/source_art/ninth_hollow_vista.png`
 
