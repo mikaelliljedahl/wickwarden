@@ -1,4 +1,48 @@
 {
+  "wax_plate": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      90
+    ],
+    "foot": 90,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 84,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/b01_wax_plate_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "kiln_pillar": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      90
+    ],
+    "foot": 90,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/b01_kiln_pillar_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "arena_lantern_rekindle": {
     "cell": [
       160,

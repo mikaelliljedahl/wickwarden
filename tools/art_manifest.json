@@ -1375,6 +1375,8 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"wax_plate": {"cell": [96, 96], "align": "foot", "foot": 90, "prop": true, "rect_h": 84},
+"kiln_pillar": {"cell": [96, 96], "align": "foot", "foot": 90, "prop": true, "rect_h": 96},
  "arena_lantern_rekindle": {
   "cell": [
    160,
@@ -2049,6 +2051,8 @@
  }
  },
  "sheets": {
+"b01_wax_plate_candidate_v20261025a": {"input_mode": "native_alpha", "rows": [{"poses": 1, "outputs": [{"file": "b01_wax_plate_idle", "kind": "wax_plate", "anim": "idle", "poses": 0, "scale": {"measure": "fit", "value": [76, 84]}, "fps": 1, "loop": true}]}]},
+"b01_kiln_pillar_candidate_v20261025a": {"input_mode": "native_alpha", "rows": [{"poses": 1, "outputs": [{"file": "b01_kiln_pillar_idle", "kind": "kiln_pillar", "anim": "idle", "poses": 0, "scale": {"measure": "fit", "value": [84, 84]}, "fps": 1, "loop": true}]}]},
  "arena_lantern_rekindle_v1": {
   "key": "magenta",
   "rows": [
