@@ -9,6 +9,7 @@ func run() -> void:
 	await _dive_and_phases()
 	await _ward_and_slash()
 	await _real_dodge()
+	await _fall_api()
 
 
 func _fixture() -> Room:
@@ -197,4 +198,40 @@ func _real_dodge() -> void:
 	check_eq(GameState.health, 6, "boots carry player clear of damage4 landing")
 	check_near(player.global_position.y, 432, 1, "dodge reaches next island safely")
 	check_eq(boss.target, Vector2(960, 240), "dive does not track airborne player")
+	await dispose(room)
+
+
+func _fall_api() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/GloamKnight")
+	var player := make_player(room, Vector2(960, 192))
+	await frames(3)
+	check(player.take_damage(1, player.global_position, 0), "ordinary hit starts real i-frames")
+	check(player.is_invulnerable(), "player has hit immunity before fall")
+	player.place_at(Vector2(960, 330))
+	await frames(3)
+	check_eq(GameState.health, 3, "genuine pit costs2 despite hit i-frames")
+	check_eq(player.global_position, Vector2(960, 192), "public fall API returns to island A")
+	check_eq(boss.hp, 36, "nonlethal fall does not reset or damage boss")
+	var pit: Node2D
+	for zone in get_tree().get_nodes_in_group(&"pit_zone"):
+		if zone.holds(Vector2(960, 330)):
+			pit = zone
+	check(pit != null, "real arena pit found")
+	var safe := player.global_position
+	pit._fall(player)
+	check_eq(GameState.health, 3, "safe-ground fall callback rejected")
+	check_eq(player.global_position, safe, "rejected fall never relocates player")
+	await frames(3)
+	player.place_at(Vector2(960, 330))
+	await frames(3)
+	check_eq(GameState.health, 1, "new fall after safe ground charges2 again")
+	check_eq(player.global_position, Vector2(960, 192), "second fall returns A")
+	await frames(3)
+	player.place_at(Vector2(960, 330))
+	await frames(3)
+	check(player.is_dead(), "lethal fall uses real player death flow")
+	check_eq(player.global_position, Vector2(960, 330), "lethal fall is not relocated")
+	check_eq(boss.phase, 1, "player death keeps normal boss reset pipeline")
 	await dispose(room)

@@ -31,9 +31,8 @@ class ArenaPit:
 	var entry := Vector2.ZERO
 
 	func _fall(player: Player) -> void:
-		_safe_position = entry
-		_has_safe = true
-		super._fall(player)
+		if player.take_fall_damage(self) and not player.is_dead():
+			player.place_at(entry)
 
 
 class AttackVisual:
