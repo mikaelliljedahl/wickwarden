@@ -1,0 +1,21 @@
+room ow_10_8
+terrain The Ninth Door: a monumental stone crown with a broad southern approach
+floor_color 0.21 0.24 0.25
+grid
+#########..#########
+#..rr.........rr...#
+#...........######.#
+#...........#....#.#
+............#....#.#
+............#....#.#
+#...........##..##.#
+#..................#
+#..rr.........rr...#
+####################
+enemy husk_hound 5,3
+enemy husk_hound 9,6
+enemy husk_hound 16,7
+opener ninth_door @1440,624 id=e255
+door cave_10_1 FromOverworld @1440,528 blocker=e255
+spawn FromCave @1440,720
+spawn Default 9,5

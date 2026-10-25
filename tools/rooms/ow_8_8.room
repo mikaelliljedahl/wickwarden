@@ -1,0 +1,23 @@
+room ow_8_8
+terrain Black Pier: a broken western pier across a salt-black chasm
+floor_color 0.21 0.24 0.25
+grid
+#########..#########
+#..rr...........rr.#
+########...........#
+#..................#
+#...................
+#...................
+#..................#
+#..................#
+#..r..........rr...#
+####################
+pit @624,576 size=288,576
+anchor_ring @336,528 look=anchor_pocket
+anchor_ring @912,528
+door ow_8_8#cache Inside 2,7
+spawn FromPocket 3,6
+spawn Default 10,5
+enemy husk_hound 12,3
+enemy husk_hound 16,6
+enemy husk_hound 10,7

@@ -1,0 +1,21 @@
+room ow_11_7
+terrain Lantern Graveyard: paired stone memorials around a silent eastern crypt
+floor_color 0.21 0.24 0.25
+grid
+####################
+#..rr...........rr.#
+#..rr.........rr...#
+#.............####.#
+..............#..#.#
+.................#.#
+#.............####.#
+#..rr..............#
+#..rr...........rr.#
+####################
+enemy husk_hound 7,3
+enemy husk_hound 9,7
+enemy hollow 12,2
+opener sealed_seam 14,5 id=e144 size=96,96
+door ow_11_7#cache Inside 15,5 blocker=e144
+spawn FromPocket 16,4
+spawn Default 4,5
