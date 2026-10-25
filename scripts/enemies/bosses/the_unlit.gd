@@ -127,6 +127,11 @@ func _enter_phase(number: int) -> void:
 	if is_instance_valid(lantern):
 		lantern.global_position = _phase_origin + LANTERN
 		lantern.hurtbox.enabled = number == 3 and not is_pausing()
+		# The accepted P1 mass includes the lamp; its overlapping fallback hides it.
+		# Later phases still show the existing separate lantern and reel target.
+		var lamp_look := lantern.get_node_or_null("Visual") as Node2D
+		if lamp_look != null:
+			lamp_look.visible = number != 1 or not SpriteVisual.has_art(&"unlit_p1_mass")
 	queue_redraw()
 
 
@@ -511,6 +516,9 @@ class Hand:
 		hurtbox.enabled = false
 		set_contact_enabled(false)
 		visual.modulate.a = 0.25
+		if visual is SpriteVisual:
+			visual.auto_motion = false
+			visual.add_child(HandPresentation.new())
 
 	func _enemy_physics(delta: float) -> void:
 		age += delta
@@ -525,6 +533,23 @@ class Hand:
 
 	func _draw() -> void:
 		draw_arc(Vector2.ZERO, 100, 0, TAU, 48, Color(0.9, 0.6, 0.3), 4)
+
+
+class HandPresentation:
+	extends Node
+	## Observe the existing three-second lifetime; sinking remains a live obstacle.
+	## No animation callback controls contact, HP, collision or retirement.
+	var _shown: StringName = &""
+
+	func _process(_delta: float) -> void:
+		var look := get_parent() as SpriteVisual
+		var hand := look.get_parent() as Hand
+		var state: StringName = &"rise" if hand.age < 1.0 else &"hold"
+		if hand.age >= 2.5:
+			state = &"sink"
+		if state != _shown and look.sprite_frames.has_animation(state):
+			_shown = state
+			look.play_anim(state)
 
 
 class Band:

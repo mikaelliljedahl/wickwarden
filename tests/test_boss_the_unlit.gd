@@ -20,6 +20,117 @@ func run() -> void:
 	await _full_physical_fight()
 	await _hazards_and_ward()
 	await _scheduled_attacks()
+	await _world_presentation()
+	await _missing_art_presentation()
+
+
+func _missing_art_presentation() -> void:
+	reset_state()
+	SpriteVisual.use_manifest("res://tests/fixtures/b10_missing_art.json")
+	var room := _fixture()
+	var boss = room.get_node("Enemies/TheUnlit")
+	await seconds(1.7)
+	check(boss.visual is Placeholder, "missing mass retains body fallback")
+	check(boss.lantern.get_node("Visual").visible, "missing mass retains lantern fallback")
+	var hand = boss.Hand.new()
+	room.add_child(hand)
+	await frames(2)
+	check(hand.visual is Placeholder, "missing hand retains fallback")
+	check_eq(hand.visual.get_child_count(), 0, "missing hand needs no presentation observer")
+	await dispose(room)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+
+
+## Positioned visual fixture in the real streamed C10 room, not an earned route.
+func _world_presentation() -> void:
+	reset_state()
+	var packed := load("res://scenes/world/world.tscn") as PackedScene
+	check(packed != null, "actual World scene loads")
+	if packed == null:
+		return
+	var world := packed.instantiate() as World
+	if captures:
+		capture_viewport.add_child(world)
+	else:
+		add_child(world)
+	world.start_at(&"cave_10_14")
+	world.player.set_hurtbox_enabled(self, false)
+	world.player.place_at(world.current_room.position + Vector2(1280, 480))
+	var boss = world.current_room.get_node("Enemies/TheUnlit1")
+	await seconds(1.7)
+	if captures:
+		check(SpriteVisual.has_art(&"unlit_p1_mass"), "capture requires accepted mass art")
+		check(SpriteVisual.has_art(&"unlit_hush_hand"), "capture requires accepted hand art")
+	if SpriteVisual.has_art(&"unlit_p1_mass"):
+		check(boss.visual is SpriteVisual, "World P1 selects accepted mass")
+		check_eq(boss.visual.animation, &"idle", "World P1 plays mass idle")
+		check_eq(boss.visual.sprite_frames.get_frame_count(&"idle"), 2, "mass idle has two frames")
+		check_eq(boss.visual.offset, Vector2(-384, -384), "floating mass centre preserved")
+	check_eq(
+		boss.lantern.get_node("Visual").visible,
+		not SpriteVisual.has_art(&"unlit_p1_mass"),
+		"only painted P1 suppresses overlapping lantern body fallback"
+	)
+	await _capture("world-c10-p1")
+	var hand: EnemyBase
+	for tick in range(360):
+		for hazard in boss._hazards:
+			if is_instance_valid(hazard) and hazard.get_script() == boss.Hand:
+				hand = hazard
+				break
+		if hand != null:
+			break
+		await frames(1)
+	check(hand != null, "World C10 naturally schedules hands")
+	if hand != null:
+		await seconds(0.3)
+		_check_hand_look(hand, &"rise", false)
+		await _capture("world-c10-hand-rise")
+		await seconds(0.9)
+		_check_hand_look(hand, &"hold", true)
+		await _capture("world-c10-hand-hold")
+		await seconds(1.65)
+		_check_hand_look(hand, &"sink", true)
+		await _capture("world-c10-hand-sink")
+		await seconds(0.25)
+		check(not is_instance_valid(hand), "sink preserves three-second retirement")
+	# Labelled presentation phase fixtures; the existing fight proves real tools.
+	boss.hp = 60
+	boss._start_phase(2)
+	await seconds(1.7)
+	check(not SpriteVisual.has_art(&"unlit_p2_shell"), "shell remains HOLD fallback")
+	await _capture("world-c10-p2-fallback")
+	boss.hp = 24
+	boss._start_phase(3)
+	await seconds(1.7)
+	check(is_instance_valid(boss.lantern), "World P3 keeps canonical lantern")
+	check(boss.lantern.hurtbox.enabled, "World P3 exposes actual reel target")
+	check(boss.lantern.get_node("Visual").visible, "P3 preserves lantern target fallback")
+	await _capture("world-c10-p3-fallback")
+	GameState.set_flag(&"boss_cave_10_14_defeated")
+	world.start_at(&"cave_10_13")
+	world.start_at(&"cave_10_14")
+	await frames(3)
+	var retired = world.current_room.get_node("Enemies/TheUnlit1")
+	check(retired.is_dead and not retired.visible, "World saved defeat retires actor")
+	for target in get_tree().get_nodes_in_group(&"reelable"):
+		check(not retired.is_ancestor_of(target), "World retired actor has no reel target")
+	await _capture("world-c10-retired")
+	await dispose(world)
+
+
+func _check_hand_look(hand: EnemyBase, state: StringName, active: bool) -> void:
+	check_eq(hand.contact_hitbox.active, active, "hand contact unchanged during " + state)
+	check_eq(hand.hurtbox.enabled, active, "hand hurtbox unchanged during " + state)
+	if SpriteVisual.has_art(&"unlit_hush_hand"):
+		check(hand.visual is SpriteVisual, "hand selects accepted art")
+		check_eq(hand.visual.animation, state, "natural hand presentation " + state)
+		check_eq(
+			hand.visual.sprite_frames.get_frame_count(state),
+			{&"rise": 4, &"hold": 2, &"sink": 3}[state],
+			"accepted hand frame count " + state
+		)
+		check_eq(hand.visual.offset, Vector2(-96, -76), "hand contractual foot anchor")
 
 
 func _fixture() -> Room:
