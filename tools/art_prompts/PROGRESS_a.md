@@ -71,3 +71,5 @@ B10ash-gravelv1/v3,fen-gravelv3 verified own-session hashes/unique; opened `/tmp
 B10six sources(ash-gravelv2,gravel-saltv1–3,ash-saltv1/v2)verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave43-review.jpg`; log `log_art_resume_43.md`. All6FAILEDwrongaspect/fade/subject. Submitted finalB10ash-saltv3+B11pathv1–3/shorev1/v2,six jobs total.
 
 B11pathv1/v2,shorev1/v2 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave45-review.jpg`; log `log_art_resume_45.md`. All4FAILEDwrongaspect; gaps,seams,addedrockbank/flecks. Submitted shorev3/cliffv1–3,six jobs total.
+
+B10all18sources and B11all18sources now present: final6edges verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave46-review.jpg`; log `log_art_resume_46.md`. All6FAILEDwrongaspect/key/subject;cliffsrockledge notshadow. All27resumededges failcutcompatibility. Six remaining B47eight-frame source jobs submitted unchanged; resolution/upscale concern retained for cull/pipeline, no cell/layout edits.
