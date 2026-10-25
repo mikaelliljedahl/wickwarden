@@ -14,6 +14,8 @@ var _hook_hits := 0
 
 
 func run() -> void:
+	await _paired_lift_rooms()
+	await _paired_push_flags()
 	await _groups_and_looks()
 	await _player_push_requires_mitts()
 	await _push_needs_hold_then_slides()
@@ -236,3 +238,118 @@ func _player_push_requires_mitts() -> void:
 	check(GameState.has_flag(&"moved_cave6door"), "actual mitts push sets the gate flag")
 	await frames(30)
 	await dispose(arena)
+
+
+func _paired_lift_rooms() -> void:
+	reset_state()
+	var connections := GameState.flag_changed.get_connections().size()
+	var arena := make_arena()
+	var rooms: Array[Node2D] = []
+	for id in ["ow_9_3", "ow_9_4"]:
+		var packed := load("res://scenes/world/rooms/%s.tscn" % id) as PackedScene
+		check(packed != null, "actual e063 room loads")
+		if packed == null:
+			await dispose(arena)
+			return
+		var room := packed.instantiate() as Node2D
+		arena.add_child(room)
+		room.position = Vector2(0, rooms.size() * 960)
+		room.visible = true
+		rooms.append(room)
+	var stone: Variant = rooms[0].get_node("Props/HeavyStone1")
+	var peer: Variant = rooms[1].get_node("Props/HeavyStone1")
+	var landings := [0, 0]
+	stone.shattered.connect(func(_at: Vector2) -> void: landings[0] += 1)
+	peer.shattered.connect(func(_at: Vector2) -> void: landings[1] += 1)
+	rooms[1].process_mode = Node.PROCESS_MODE_DISABLED
+	var player := make_player(arena, stone.global_position - Vector2(0, 100))
+	GameState.acquire_item(&"heft_mitts")
+	GameState.set_active_item(&"heft_mitts")
+	player.facing = Vector2.DOWN
+	await frames(2)
+	GameState.set_flag(&"moved_e063_other")
+	GameState.set_flag(&"moved_e063", false)
+	check(not peer.get_node("Shape").disabled, "unrelated and false flags leave peer solid")
+	check(player.use_item(), "actual mitts lift e063")
+	await frames(24)
+	check(stone.is_carried(), "actual e063 carried")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	player.reset_actions()
+	await frames(75)
+	check(GameState.has_flag(&"moved_e063"), "actual throw opens canonical e063 flag")
+	check(_gone(peer), "disabled preloaded north peer disappears after actual throw")
+	check_eq(landings, [1, 0], "hard throw reset lands once without replaying peer landing")
+	rooms[1].process_mode = Node.PROCESS_MODE_INHERIT
+	player.place_at(Vector2(960, 820))
+	Input.action_press(&"move_down")
+	await frames(45)
+	release_inputs()
+	check(player.global_position.y > 1040, "actual body crosses e063 south")
+	Input.action_press(&"move_up")
+	await frames(45)
+	release_inputs()
+	check(player.global_position.y < 880, "actual body returns north through preloaded peer")
+	await _stone_probe("e063-open")
+	var saved := load("res://scenes/world/heavy_stone.tscn") as PackedScene
+	check(saved != null, "saved LIFT scene loads")
+	if saved != null:
+		var restored := saved.instantiate()
+		restored.stone_id = &"e063"
+		arena.add_child(restored)
+		await frames(2)
+		check(_gone(restored), "saved LIFT opening restores without replaying throw")
+	await dispose(arena)
+	check_eq(
+		GameState.flag_changed.get_connections().size(),
+		connections,
+		"real paired LIFT callbacks cleaned up"
+	)
+
+
+func _paired_push_flags() -> void:
+	reset_state()
+	var connections := GameState.flag_changed.get_connections().size()
+	var arena := make_arena()
+	var first: Variant = _make(arena, BOULDER, &"paired_push", AT)
+	var peer: Variant = _make(arena, BOULDER, &"paired_push", AT + Vector2(0, 300))
+	peer.process_mode = Node.PROCESS_MODE_DISABLED
+	await frames(2)
+	GameState.set_flag(&"moved_paired_push_other@RR")
+	GameState.set_flag(&"moved_paired_push@R", false)
+	check_eq(peer.position, AT + Vector2(0, 300), "unrelated and false paths ignored")
+	await _push(first, Vector2.RIGHT, 36)
+	check_eq(peer.path, "R", "disabled PUSH peer receives completed path")
+	check_near(peer.position.x, AT.x + STEP, 0.5, "peer translates once")
+	GameState.set_flag(&"moved_paired_push@R")
+	check_near(peer.position.x, AT.x + STEP, 0.5, "repeated path does not translate twice")
+	check_near(first.position.x, AT.x + STEP, 0.5, "publisher does not translate twice")
+	check(not peer.get_node("Shape").disabled, "persisted PUSH peer stays physically solid")
+	check((peer.collision_layer & Layers.WORLD) != 0, "persisted PUSH peer retains WORLD layer")
+	await _push(first, Vector2.RIGHT, 36)
+	check_near(peer.position.x, AT.x + STEP * 2, 0.5, "second path uses original position")
+	var saved: Variant = _make(arena, BOULDER, &"paired_push", AT + Vector2(0, 600))
+	await frames(2)
+	check_near(saved.position.x, AT.x + STEP * 2, 0.5, "new instance restores same saved position")
+	await dispose(arena)
+	check_eq(
+		GameState.flag_changed.get_connections().size(), connections, "stone callbacks cleaned up"
+	)
+
+
+func _stone_probe(label: String) -> void:
+	if OS.get_environment("WICK_STONE_CAPTURE") != "1":
+		return
+	var camera := Camera2D.new()
+	camera.position = Vector2(960, 960)
+	camera.zoom = Vector2(0.55, 0.55)
+	add_child(camera)
+	camera.make_current()
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	check_eq(
+		get_viewport().get_texture().get_image().save_png("/tmp/p06-" + label + ".png"),
+		OK,
+		"opened e063 visual proof"
+	)

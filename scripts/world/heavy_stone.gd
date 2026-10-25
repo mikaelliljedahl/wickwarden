@@ -49,6 +49,8 @@ var _slide_from := Vector2.ZERO
 var _slide_to := Vector2.ZERO
 var _slide_t := 0.0
 var _slide_letter := ""
+var _home := Vector2.ZERO
+var _publishing := false
 
 
 func _init() -> void:
@@ -108,15 +110,47 @@ func _can_lift() -> bool:
 
 
 func _on_ready() -> void:
-	if stone_id == &"" or not GameState.has_flag(_moved_flag()):
+	_home = position
+	if stone_id != &"":
+		GameState.flag_changed.connect(_on_flag_changed)
+		_sync_saved_state()
+
+
+func _exit_tree() -> void:
+	if GameState.flag_changed.is_connected(_on_flag_changed):
+		GameState.flag_changed.disconnect(_on_flag_changed)
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	if not value or _publishing or stone_id == &"" or is_queued_for_deletion():
+		return
+	if flag == _moved_flag() or String(flag).begins_with(String(_path_flag(""))):
+		_sync_saved_state()
+
+
+## Signals also reach preloaded rooms with processing disabled. Restore silently, without
+## repeating a throw, landing hit, sound or slide. PUSH keeps its collision at the saved position.
+func _sync_saved_state() -> void:
+	if not GameState.has_flag(_moved_flag()):
 		return
 	if mode == Mode.LIFT:
+		# The local landing still owns its short-lived damage hitbox and cleanup timer.
+		if state == State.SHATTERED:
+			return
+		carrier = null
 		state = State.SHATTERED
+		_hitbox.deactivate()
 		_hide_body()
 		queue_free()
 		return
-	path = _saved_path()
-	position += Vector2(_offset_of(path)) * STEP
+	var saved := _saved_path()
+	if saved == path:
+		return
+	path = saved
+	_sliding = false
+	_hold = 0.0
+	_hold_dir = Vector2i.ZERO
+	position = _home + Vector2(_offset_of(path)) * STEP
 
 
 func _on_shattered() -> void:
@@ -160,9 +194,11 @@ func _record_step(letter: String) -> void:
 	path += letter
 	if stone_id == &"":
 		return
+	_publishing = true
 	GameState.set_flag(_moved_flag())
 	GameState.set_flag(_path_flag(before), false)
 	GameState.set_flag(_path_flag(path))
+	_publishing = false
 
 
 ## The path flag of the last saved path of this stone, or "" when none is saved.
