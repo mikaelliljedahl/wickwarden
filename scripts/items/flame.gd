@@ -18,6 +18,8 @@ const FADE_TIME := 0.4
 const TICK_DAMAGE := 1
 const TICK_INTERVAL := 0.5
 const MAX_RAY_HITS := 8
+const LIGHT_RADIUS := 220.0
+const LIGHT_COLOR := Color(1.0, 0.7, 0.35)
 
 ## Non-zero: the flame launches from where it stands in this direction (a placed flame in a gallery fixture).
 ## The cinder wick calls launch() instead.
@@ -52,6 +54,15 @@ func _ready() -> void:
 	add_circle(RADIUS)
 	_register_kinds()
 	SpriteVisual.attach(self, &"flame", RADIUS)
+	var glow := PointLight2D.new()
+	glow.name = "Glow"
+	glow.texture = LightTexture.make()
+	glow.texture_scale = LightTexture.scale_for(LIGHT_RADIUS)
+	glow.color = LIGHT_COLOR
+	glow.energy = 1.0
+	glow.shadow_enabled = false
+	glow.enabled = true
+	add_child(glow)
 	# A placed flame launches on the first physics frame: the physics space must hold the bodies around it.
 	_placed_pending = place_dir != Vector2.ZERO
 

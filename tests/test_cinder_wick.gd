@@ -41,6 +41,20 @@ func _refuses_a_second_flame() -> void:
 	check_eq(_items().size(), 1, "a refused use leaves no second item in the tree")
 	await seconds(0.3)
 	check_eq(_flames().size(), 1, "one flame is in the world after the 0.2 s root")
+	var flame := _flames()[0] as Area2D
+	var glow := flame.get_node_or_null("Glow") as PointLight2D
+	check(glow != null and glow.enabled, "the active flame carries an enabled point light")
+	if glow != null:
+		check_near(
+			glow.texture_scale,
+			LightTexture.scale_for(220.0),
+			0.001,
+			"the flame light uses the established 220 px brazier radius"
+		)
+		check(
+			glow.color.r > glow.color.b and glow.color.g > glow.color.b,
+			"the flame light uses a warm color"
+		)
 	await seconds(4.5)
 	check_eq(_flames().size(), 0, "the flame is gone after its 3.0 s stand")
 	check_eq(_items().size(), 0, "the item ends with its flame")
