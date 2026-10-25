@@ -1,0 +1,19 @@
+; The Drowned Wick Works — room 4
+room cave_3_4
+terrain Pump Hall: a broad shallow pump basin leaves dry shores and both approaches clear.
+floor_color 0.12 0.18 0.19
+grid
+####################
+#..................#
+#...##........##...#
+#..................#
+....................
+....................
+#..................#
+#...##........##...#
+#..................#
+####################
+opener locked_door @48,480 id=e165 scope=c3 size=96,192
+shallows @960,480 size=576,288
+miniboss sump_lurker @960,480
+spawn Default @288,528

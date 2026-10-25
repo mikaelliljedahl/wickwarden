@@ -1,0 +1,21 @@
+; The Drowned Wick Works — room 3
+room cave_3_3
+terrain Mossed Pump Room: moss veils the pump stair beneath the small key.
+floor_color 0.12 0.18 0.19
+grid
+####################
+#..................#
+#...##........##...#
+#..................#
+#..................#
+#..................#
+#..................#
+#...##........##...#
+#..................#
+#########..#########
+opener cut_screen 9,9 look=moss_wall
+opener cut_screen 10,9 look=moss_wall
+enemy wickling 7,3
+enemy wickling 12,3
+pickup small_key 10,3 id=key_c3_1 scope=c3
+spawn Default @960,720

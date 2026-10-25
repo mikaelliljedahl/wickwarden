@@ -1,0 +1,25 @@
+; The Drowned Wick Works — room 2
+room cave_3_2
+terrain Cistern: paired shallow cisterns frame the moss arch and the east lock.
+floor_color 0.12 0.18 0.19
+grid
+#########..#########
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..##..........##..#
+#..................#
+####################
+opener cut_screen 9,0 look=moss_wall
+opener cut_screen 10,0 look=moss_wall
+opener locked_door @1872,480 id=e165 scope=c3 size=96,192
+shallows @624,288 size=288,192
+shallows @1296,672 size=288,192
+enemy fen_leech 6,3
+enemy fen_leech 13,7
+enemy tallow_blob 13,3
+enemy tallow_blob 6,6
+spawn Default @960,528

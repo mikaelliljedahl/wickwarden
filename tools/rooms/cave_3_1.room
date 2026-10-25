@@ -1,0 +1,24 @@
+; The Drowned Wick Works — room 1
+room cave_3_1
+terrain Floodgate Hall: flooded pump troughs flank the dry entrance walk.
+floor_color 0.12 0.18 0.19
+grid
+####################
+#..................#
+#..##..............#
+#..................#
+#...................
+#...................
+#..................#
+#.............##...#
+#..................#
+####################
+shallows @624,288 size=384,192
+shallows @1392,672 size=384,192
+enemy fen_leech 6,2
+enemy fen_leech 13,6
+enemy duskmoth 13,3
+opener cracked_wall 5,7 id=e248
+door ow_3_5 FromCave 5,7 blocker=e248
+spawn Default 5,6
+spawn FromOverworld 5,6
