@@ -70,6 +70,7 @@ position = Vector2(432, 432)
 script = ExtResource("6")
 target_room = &"ow_8_5#ward"
 target_spawn = &"Inside"
+blocker_path = NodePath("../WardBlocker1")
 
 [node name="WardBlocker1" parent="Props" instance=ExtResource("5")]
 position = Vector2(432, 528)
