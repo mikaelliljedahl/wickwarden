@@ -45,3 +45,5 @@ B82 C5v2/v3,C6v1–3,C7v1 verified own-session hashes/unique; opened `/tmp/wickw
 B82 C8v3/C9v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave19-review.jpg`; log `log_art_resume_19.md`. Both weak: C1 circular brick layout dominates intended regional subjects. C9v2/v3 submitted into freed slots before visual verdict, six jobs. C10 ungenerated refs removed to avoid reference-content copying; fenced prompts unchanged.
 
 B82 C7v2/v3,C8v1/v2 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave20-review.jpg`; log `log_art_resume_20.md`. Four weak C1 circular layout copied (C8v1 adds brass motifs). Submitted C10v1–3 without refs and intro01v1 with specified style ref; C9v2/v3pending, six jobs total.
+
+B82 complete: C9v2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave21-review.jpg`; log `log_art_resume_21.md`. Both weak C1layout drift. Freed slots filled intro01v2/v3 without sprite reference; prompt reference lines updated, fenced prompts unchanged. Six jobs total.
