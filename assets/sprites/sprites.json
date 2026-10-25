@@ -1,4 +1,383 @@
 {
+  "mooring": {
+    "cell": [
+      96,
+      160
+    ],
+    "anchor": [
+      48.0,
+      154
+    ],
+    "foot": 154,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 32,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/mooring.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "eye_switch": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 56,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/eye_switch.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "eye_switch_on": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 56,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/eye_switch_on.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "eye_portcullis": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/eye_portcullis.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "ward_plate": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/ward_plate.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "ward_blocker": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/ward_blocker.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "thorn_hedge": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/thorn_hedge.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "thorn_door": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/thorn_door.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "bramble_snapper": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      146.0
+    ],
+    "foot": 176,
+    "radius": 30.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/bramble_snapper.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "fen_leech": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      150.0
+    ],
+    "foot": 176,
+    "radius": 26.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fen_leech.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "watcher_eye": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      64.0
+    ],
+    "mirror_side": true,
+    "centered": true,
+    "animations": {
+      "idle_down": {
+        "file": "res://assets/sprites/watcher_eye_idle_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/watcher_eye_idle_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/watcher_eye_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "grate": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      122
+    ],
+    "foot": 122,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/grate.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "heavy_stone": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/heavy_stone.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "hidden_stairs": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/hidden_stairs.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "pot_bag": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      48.0
+    ],
+    "foot": 58,
+    "radius": 10.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/pot_bag.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "slug_bundle": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      48.0
+    ],
+    "foot": 58,
+    "radius": 10.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/slug_bundle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "tallow_flask": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      48.0
+    ],
+    "foot": 58,
+    "radius": 10.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tallow_flask.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "rush_wall": {
     "cell": [
       192,
