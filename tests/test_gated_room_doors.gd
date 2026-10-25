@@ -9,6 +9,8 @@ func run() -> void:
 	await _revealed_stairs_look()
 	await _offset_seam()
 	await _pushed_boulder()
+	for id in [&"ow_1_5", &"ow_5_5", &"ow_7_3"]:
+		await _regrowing_cut_entrance(id)
 
 
 func _check_entrance(id: StringName) -> void:
@@ -25,10 +27,11 @@ func _check_entrance(id: StringName) -> void:
 	if door == null:
 		await dispose(world)
 		return
-	var opener: Node2D
-	for child in room.get_node("Props").get_children():
-		if child is StaticBody2D and child.position == door.position:
-			opener = child
+	var opener := door.get_node_or_null(door.blocker_path) as Node2D
+	if door.blocker_path.is_empty():
+		for child in room.get_node("Props").get_children():
+			if child is StaticBody2D and child.position == door.position:
+				opener = child
 	check(opener != null, "%s has an authoritative opener" % id)
 	if opener == null:
 		await dispose(world)
@@ -64,6 +67,7 @@ func _check_entrance(id: StringName) -> void:
 	check(scene != null, "%s scene reloads" % id)
 	var reloaded := scene.instantiate() as Room
 	add_child(reloaded)
+	reloaded.enter()
 	await frames(2)
 	for child in reloaded.get_node("Props").get_children():
 		if child is RoomDoor:
@@ -96,6 +100,10 @@ func _explicit_requirements() -> void:
 	check(not offset._gate_is_open(), "explicit link blocks even with offset opener")
 	bush.cut_down()
 	check(offset._gate_is_open(), "cutting linked offset opener enables entrance")
+	offset.blocker_path = NodePath("../WrongAfterBinding")
+	check(not offset._gate_is_open(), "bad replacement path cannot reuse a cut blocker cache")
+	offset.blocker_path = NodePath("../OffsetBush")
+	check(offset._gate_is_open(), "valid path rebinds the actual cut actor")
 	var linked := RoomDoor.new()
 	linked.blocker_path = NodePath("../Missing")
 	arena.add_child(linked)
@@ -244,3 +252,130 @@ func _probe_image(label: String) -> void:
 	await RenderingServer.frame_post_draw
 	var path := "/tmp/wick-door-" + label + ".png"
 	check_eq(get_viewport().get_texture().get_image().save_png(path), OK, "probe capture " + label)
+
+
+func _regrowing_cut_entrance(id: StringName) -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var packed := load(WorldData.scene_path(String(id))) as PackedScene
+	check(packed != null, "%s generated scene exists" % id)
+	if packed == null:
+		return
+	var preview := packed.instantiate() as Room
+	var preview_door := _pocket_entrance(preview)
+	check(preview_door != null, "%s has generated pocket entrance" % id)
+	if preview_door == null:
+		preview.free()
+		return
+	check(
+		preview_door.get_node_or_null(preview_door.blocker_path) is Bush,
+		"%s authored cross-container path resolves before ready" % id
+	)
+	# Querying early must not permanently capture the template instead of its live clone.
+	check(not preview_door._gate_is_open(), "%s authored template starts closed" % id)
+	add_child(preview)
+	check(
+		preview.get_node("Bushes").get_child_count() == 0,
+		"%s ready snapshots bushes out of live container" % id
+	)
+	check(
+		preview_door.get_node_or_null(preview_door.blocker_path) == null,
+		"%s null before enter is expected template lifecycle" % id
+	)
+	check(not preview_door._gate_is_open(), "%s inactive empty container fails closed" % id)
+	preview.enter()
+	check(
+		preview_door.get_node_or_null(preview_door.blocker_path) is Bush,
+		"%s enter clones bush under authored name" % id
+	)
+	check(not preview_door._gate_is_open(), "%s live clone overrides early template binding" % id)
+	await dispose(preview)
+	var world := await make_world()
+	world.start_at(id)
+	var room := world.get_room(id)
+	var door := _pocket_entrance(room)
+	var player := world.player
+	player.set_hurtbox_enabled(self, false)
+	for enemy in room.get_enemies():
+		enemy.drops_enabled = false
+		enemy.kill()
+	await frames(3)
+	var bush := door.get_node_or_null(door.blocker_path) as Bush
+	check(bush != null, "%s active World resolves live cut blocker" % id)
+	if bush == null:
+		await dispose(world)
+		return
+	var first_id := bush.get_instance_id()
+	bush.drops_enabled = false
+	check(not door._gate_is_open(), "%s actual active entrance starts blocked" % id)
+	var entrance_at := door.global_position
+	var target := door.target_room
+	var approach := (room.get_spawn_position(&"FromPocket") - entrance_at).normalized()
+	player.place_at(entrance_at + approach * 130.0)
+	player.facing = -approach
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	await frames(15)
+	check(door._gate_is_open(), "%s actual hook cut opens pocket entrance" % id)
+	await _walk_to_pocket(world, entrance_at, approach, target)
+	check_eq(world.get_current_room_id(), target, "%s physically enters pocket after cut" % id)
+	if world.get_current_room_id() != target:
+		await dispose(world)
+		return
+	var pocket := world.get_room(target)
+	var back: RoomDoor
+	for node in pocket.get_node("Props").get_children():
+		if node is RoomDoor and node.target_room == id:
+			back = node
+	check(back != null, "%s pocket has actual return door" % id)
+	if back == null:
+		await dispose(world)
+		return
+	player.place_at(back.global_position + Vector2(0, -100))
+	await _hold_for_room(world, &"move_down", id)
+	room = world.get_room(id)
+	door = _pocket_entrance(room)
+	await frames(3)
+	var regrown := door.get_node_or_null(door.blocker_path) as Bush
+	check(regrown != null, "%s pocket return regrows named blocker" % id)
+	if regrown != null:
+		check(regrown.get_instance_id() != first_id, "%s return uses new live instance" % id)
+	check(not door._gate_is_open(), "%s regrown blocker closes cached door" % id)
+	check(not door.get_node("Visual").visible, "%s regrown secret entrance concealed again" % id)
+	# Reenter the same live room object once more, without relying on an unload.
+	room.leave()
+	check(not door._gate_is_open(), "%s empty between visits stays closed" % id)
+	room.enter()
+	check(
+		door.get_node_or_null(door.blocker_path) is Bush,
+		"%s repeated entry resolves newest clone" % id
+	)
+	check(not door._gate_is_open(), "%s repeated entry cannot inherit dead cut reference" % id)
+	await dispose(world)
+
+
+func _pocket_entrance(room: Room) -> RoomDoor:
+	for node in room.get_node("Props").get_children():
+		if node is RoomDoor and "#" in String(node.target_room):
+			return node
+	return null
+
+
+func _walk_to_pocket(world: World, at: Vector2, approach: Vector2, target: StringName) -> void:
+	if world.get_current_room_id() == target:
+		return
+	world.player.place_at(at + approach * 130.0)
+	var action := &"move_up" if approach.y > 0 else &"move_right"
+	await _hold_for_room(world, action, target)
+
+
+func _hold_for_room(world: World, action: StringName, target: StringName) -> void:
+	Input.action_press(action)
+	for tick in range(180):
+		await frames(1)
+		if world.get_current_room_id() == target:
+			break
+	release_inputs()
+	await seconds(0.5)
+	check_eq(world.get_current_room_id(), target, "actual walking reaches expected pocket/host")

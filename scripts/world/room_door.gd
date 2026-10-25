@@ -35,6 +35,7 @@ const POCKET_LOOKS := {
 
 var _blockers: Array[WeakRef] = []
 var _blockers_bound := false
+var _bound_path: NodePath
 
 
 func _init() -> void:
@@ -96,19 +97,25 @@ func _physics_process(_delta: float) -> void:
 		world.call("warp_to", target_room, target_spawn, fade)
 
 
-## Bind once, after all sibling openers have completed _ready. Older scenes put the opener
-## at exactly the door origin; this identifies the opener, never a player-distance threshold.
+## Explicit links follow live room actors: Bushes are cloned on entry and freed on leave.
+## Legacy colocated permanent Props still bind once. A cut actor may disappear during this
+## visit, but a replacement at the same path always becomes authoritative again.
 func _gate_is_open() -> bool:
-	if not _blockers_bound:
-		if not blocker_path.is_empty():
-			var blocker := get_node_or_null(blocker_path)
-			if blocker == null:
-				return false
-			_blockers.append(weakref(blocker))
-		else:
-			for sibling in get_parent().get_children():
-				if sibling is StaticBody2D and sibling.position == position:
-					_blockers.append(weakref(sibling))
+	if _bound_path != blocker_path:
+		_blockers.clear()
+		_blockers_bound = false
+		_bound_path = blocker_path
+	if not blocker_path.is_empty():
+		var blocker := get_node_or_null(blocker_path)
+		if blocker != null:
+			_blockers.assign([weakref(blocker)])
+			_blockers_bound = true
+		elif not _blockers_bound or _room_is_inactive():
+			return false
+	elif not _blockers_bound:
+		for sibling in get_parent().get_children():
+			if sibling is StaticBody2D and sibling.position == position:
+				_blockers.append(weakref(sibling))
 		_blockers_bound = true
 	if requires_flag != &"" and not GameState.has_flag(requires_flag):
 		return false
@@ -127,10 +134,8 @@ func _gate_is_open() -> bool:
 			# HiddenSeam owns a WORLD body below its Area2D root.
 			if not bool(blocker.get("is_shown")) or _has_solid_shape(blocker):
 				return false
-		elif (
-			blocker.is_in_group(&"heavy")
-			and blocker.get("mode") == 1  # HeavyStone.Mode.PUSH; LIFT keeps removal semantics.
-		):
+		# HeavyStone.Mode.PUSH; LIFT keeps removal semantics.
+		elif blocker.is_in_group(&"heavy") and blocker.get("mode") == 1:
 			# PUSH stones stay solid. A completed public path alone is insufficient:
 			# the actual body must also have cleared this entrance's footprint.
 			if String(blocker.get("path")).is_empty() or _has_solid_shape(blocker, true):
@@ -138,6 +143,16 @@ func _gate_is_open() -> bool:
 		elif _has_solid_shape(blocker):
 			return false
 	return true
+
+
+## Between visits the Bushes container is intentionally empty, not an opened entrance.
+func _room_is_inactive() -> bool:
+	var ancestor := get_parent()
+	while ancestor != null:
+		if ancestor is Room:
+			return not ancestor.is_entered
+		ancestor = ancestor.get_parent()
+	return false
 
 
 ## Inspect actual WORLD shapes, including wrapper props such as a seam's child Body.
