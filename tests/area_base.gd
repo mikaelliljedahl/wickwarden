@@ -656,13 +656,10 @@ func _check_gates(id: String, problems: Array[String]) -> void:
 	for edge: Dictionary in gated_edges_of(id):
 		match edge_status(edge):
 			"missing":
-				if String(edge["prop"]) == "mooring and water":
-					pending["gate %s (mooring and water): room mooring/water repairs pending" % edge["id"]] = true
-				else:
-					var text := "%s: gate %s (%s, %s-%s) has no %s"
-					problems.append(
-						text % [id, edge["id"], edge["gate"], edge["a"], edge["b"], edge["prop"]]
-					)
+				var text := "%s: gate %s (%s, %s-%s) has no %s"
+				problems.append(
+					text % [id, edge["id"], edge["gate"], edge["a"], edge["b"], edge["prop"]]
+				)
 			"unknown":
 				problems.append("%s: prop %s has no entry in PROP_SCRIPTS" % [id, edge["prop"]])
 			"pending":
