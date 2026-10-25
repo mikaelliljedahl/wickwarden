@@ -1,0 +1,21 @@
+room ow_2_7
+terrain Last Pier: broken banks around a broad landing and a rush-choked east passage
+floor_color 0.19 0.26 0.23
+grid
+#########..#########
+#..................#
+#.ww.............ee#
+#.ww...............#
+#...................
+#...................
+#..................#
+#.www.........wwww.#
+#..................#
+####################
+shallows @624,528 size=288,192
+shallows @1296,624 size=288,192
+enemy fen_leech 6,5
+enemy fen_leech 13,6
+opener cut_screen 19,4 look=rush_wall
+opener cut_screen 19,5 look=rush_wall
+spawn Default 10,3

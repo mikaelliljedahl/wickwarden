@@ -1,0 +1,19 @@
+room ow_2_6
+terrain Candle Sheds: two sheds face a broad north-south working lane
+floor_color 0.25 0.24 0.18
+grid
+#########..#########
+#..................#
+#..................#
+#..................#
+...................#
+...................#
+#..................#
+#..b............b..#
+#..................#
+#########..#########
+prop hut @528,336 size=288,192
+prop hut @1488,336 size=288,192
+enemy hollow 6,6
+enemy hollow 14,5
+spawn Default 10,3

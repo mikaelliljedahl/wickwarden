@@ -1,0 +1,18 @@
+room ow_1_6
+terrain Tallow Works: low rusted vat rims flank the open works yard
+floor_color 0.27 0.25 0.18
+grid
+#########..#########
+#..................#
+#..rr.........rr...#
+#..rr.........rr...#
+#...................
+#...................
+#..................#
+#..rr.........rr...#
+#..................#
+####################
+enemy tallow_blob 6,3
+enemy tallow_blob 13,5
+enemy tallow_blob 8,7
+spawn Default 10,3
