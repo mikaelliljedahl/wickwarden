@@ -9,7 +9,7 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-Updated 2026-10-25 20:55 UTC. The final gated runtime is `fd5e59725ff1114881c4d5d567aaf56f8c9017e2`, and `HEAD` equals it before this docs-only checkpoint record. The last published `origin/main` is `1eebc1e`; the user authorized publishing the tested runtime and docs. Personal remote: https://github.com/mikaelliljedahl/wickwarden.git. Record the exact push time and remote SHA after verification.
+Updated 2026-10-25 20:58 UTC. Final gated runtime `fd5e59725ff1114881c4d5d567aaf56f8c9017e2` was published in docs-bearing commit `fd7982d3fade5f63b270ea103c2375ff892db1e3`. The first checkpoint push advanced personal `origin/main` from `1eebc1eaf59a64ec95c9e904b3257f01e8f46458`; `ls-remote` returned exact `fd7982d3fade5f63b270ea103c2375ff892db1e3` at 20:58:06 UTC under account `mikaelliljedahl`. Personal remote: https://github.com/mikaelliljedahl/wickwarden.git. This final status follow-up changes only these two docs and preserves the tested runtime tree.
 
 **Final gate evidence:** isolated logs are in `/tmp/wickwarden-finalpause-fd5e597-logs/`. `make check` passed 133/133 Godot suites, lint and world-data checks; Python generator/compiler tests passed 172. `rooms-check` passed 221/221, `art-test` 22/22, and global ownership passed for 92 WPs and 53 batches (192 rooms, 33 pockets). The first import and all graphics used Dummy audio. The verifier reported no timeout, SIGSEGV, engine/script/parse error, leak, skip or waiver. The detached test worktree was removed. These results apply to `fd5e597` only.
 
@@ -232,7 +232,7 @@ REPORT (your final message, max 15 lines):
 
 ## 6. Current working tree (other agents)
 
-The tested code snapshot is `fd5e59725ff1114881c4d5d567aaf56f8c9017e2`; no code/art changes follow it. The last remote runtime is `1eebc1e`, and the final authorized push is in progress. The shared index has 77 foreign staged paths (fingerprint recorded above), plus foreign unstaged and untracked work. The two unstaged tracked paths are `docs/art-provenance.md` (36 FX rows removed) and `tools/art_prompts/PROGRESS_e.md` (producer-E batches 43–45 updated; 46–47 not started). Preserve them and all art, import and UID files. The all-ten guide and README link are in `d83944f`, with correction `bb0821b` independently reviewed; leave both files untouched. After this checkpoint, commit only `docs/state.md` and `docs/handoff.md` with explicit paths; no broad staging, reset, stash, clean, amend or history rewrite.
+The tested code snapshot is `fd5e59725ff1114881c4d5d567aaf56f8c9017e2`; no code/art changes follow it. The first checkpoint push published the tested runtime and status docs. The shared index has 77 foreign staged paths (fingerprint recorded above), plus foreign unstaged and untracked work. The two unstaged tracked paths are `docs/art-provenance.md` (36 FX rows removed) and `tools/art_prompts/PROGRESS_e.md` (producer-E batches 43–45 updated; 46–47 not started). Preserve them and all art, import and UID files. The all-ten guide and README link are in `d83944f`, with correction `bb0821b` independently reviewed; leave both files untouched. This status follow-up commits only `docs/state.md` and `docs/handoff.md` with explicit paths; no broad staging, reset, stash, clean, amend or history rewrite.
 
 ## 7. Owner preferences (for the orchestrating lead)
 

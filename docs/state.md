@@ -1,6 +1,6 @@
 # Current status
 
-Updated 2026-10-25 at 20:55 UTC from exact tested runtime `fd5e59725ff1114881c4d5d567aaf56f8c9017e2`. `HEAD` equals that SHA; it is a descendant of the last published runtime `1eebc1eaf59a64ec95c9e904b3257f01e8f46458`. The full checkpoint is ready for the authorized personal-origin push; the remote remains at `1eebc1e` until that push is verified.
+Updated 2026-10-25 at 20:58 UTC after publishing the full-gated runtime `fd5e59725ff1114881c4d5d567aaf56f8c9017e2`. Its docs-bearing commit `fd7982d3fade5f63b270ea103c2375ff892db1e3` was pushed fast-forward from `1eebc1eaf59a64ec95c9e904b3257f01e8f46458`; personal remote verification returned `fd7982d3fade5f63b270ea103c2375ff892db1e3` at 20:58:06 UTC. This follow-up changes only the two status documents.
 
 **Final checkpoint gate:** logs are in `/tmp/wickwarden-finalpause-fd5e597-logs/`. `make check` passed 133/133 Godot suites, lint and world-data checks; Python generator/compiler tests passed 172. `rooms-check` passed 221/221, `art-test` passed 22/22, and global ownership passed for 92 work packages and 53 batches (192 rooms, 33 pockets). The isolated run used Dummy audio from the first import. The verifier reported no timeouts, SIGSEGV, engine/script/parse errors, leaks, skips, or waivers. The detached gate worktree was removed after testing. Do not extend this gate to later code.
 
@@ -37,7 +37,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The exact current code snapshot `fd5e59725ff1114881c4d5d567aaf56f8c9017e2` passed the full gate described above; no code, art, test, source, room, or cutter change exists after it. The current documentation update is the only addition. The final exact-SHA publication is in progress under the user's authorization; record the remote result in the handoff after verification. Preserve the 77 staged paths and all dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS; the guide does not count as Q3. Human balance and visual feel, continuous human playthrough, Q5 per-room review, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
+The published runtime is exactly `fd5e59725ff1114881c4d5d567aaf56f8c9017e2`; its status-bearing commit `fd7982d3fade5f63b270ea103c2375ff892db1e3` contains only `docs/state.md` and `docs/handoff.md` beyond the tested tree. This final docs-only publication record preserves the same runtime blobs. Preserve the 77 staged paths and all dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS; the guide does not count as Q3. Human balance and visual feel, continuous human playthrough, Q5 per-room review, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
