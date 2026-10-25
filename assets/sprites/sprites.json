@@ -1,4 +1,122 @@
 {
+  "rush_wall": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      176
+    ],
+    "foot": 176,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 80,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/rush_wall.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "reed_cluster": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      176
+    ],
+    "foot": 176,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 80,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/reed_cluster.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "bigkey": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      78.0
+    ],
+    "foot": 88,
+    "radius": 10.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/lockpick_bigkey_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "glint": {
+        "file": "res://assets/sprites/lockpick_bigkey_glint.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "big_key": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      78.0
+    ],
+    "foot": 88,
+    "radius": 10.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/lockpick_big_key_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "glint": {
+        "file": "res://assets/sprites/lockpick_big_key_glint.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "hud_counter_big_key": {
+    "cell": [
+      64,
+      64
+    ],
+    "anchor": [
+      32.0,
+      32.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/lockpick_hud.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "player": {
     "cell": [
       192,
@@ -1327,80 +1445,6 @@
     "animations": {
       "idle": {
         "file": "res://assets/sprites/icon_reel_line.png",
-        "frames": 1,
-        "fps": 1.0,
-        "loop": true
-      }
-    }
-  },
-  "bigkey": {
-    "cell": [
-      96,
-      96
-    ],
-    "anchor": [
-      48.0,
-      78.0
-    ],
-    "foot": 88,
-    "radius": 10.0,
-    "mirror_side": false,
-    "animations": {
-      "idle": {
-        "file": "res://assets/sprites/lockpick_bigkey_idle.png",
-        "frames": 1,
-        "fps": 1.0,
-        "loop": true
-      },
-      "glint": {
-        "file": "res://assets/sprites/lockpick_bigkey_glint.png",
-        "frames": 3,
-        "fps": 6.0,
-        "loop": true
-      }
-    }
-  },
-  "big_key": {
-    "cell": [
-      96,
-      96
-    ],
-    "anchor": [
-      48.0,
-      78.0
-    ],
-    "foot": 88,
-    "radius": 10.0,
-    "mirror_side": false,
-    "animations": {
-      "idle": {
-        "file": "res://assets/sprites/lockpick_big_key_idle.png",
-        "frames": 1,
-        "fps": 1.0,
-        "loop": true
-      },
-      "glint": {
-        "file": "res://assets/sprites/lockpick_big_key_glint.png",
-        "frames": 3,
-        "fps": 6.0,
-        "loop": true
-      }
-    }
-  },
-  "hud_counter_big_key": {
-    "cell": [
-      64,
-      64
-    ],
-    "anchor": [
-      32.0,
-      32.0
-    ],
-    "mirror_side": false,
-    "centered": true,
-    "animations": {
-      "idle": {
-        "file": "res://assets/sprites/lockpick_hud.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true

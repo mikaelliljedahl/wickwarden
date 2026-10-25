@@ -79,6 +79,8 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+ "rush_wall": {"cell": [192, 192], "foot": 176, "prop": true, "rect_h": 80},
+ "reed_cluster": {"cell": [192, 192], "foot": 176, "prop": true, "rect_h": 80},
  "bigkey": {
   "cell": [
    96,
@@ -232,6 +234,8 @@
  }
  },
  "sheets": {
+ "rush_wall_v3": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"file": "rush_wall", "kind": "rush_wall", "anim": "idle", "poses": 0, "scale": {"measure": "fit", "value": [176, 164]}, "fps": 1, "loop": true}]}, {"poses": 3, "skip": true, "outputs": []}]},
+ "reed_cluster_v3": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"file": "reed_cluster", "kind": "reed_cluster", "anim": "idle", "poses": 0, "scale": {"measure": "fit", "value": [176, 164]}, "fps": 1, "loop": true}]}, {"poses": 3, "skip": true, "outputs": []}]},
  "lockpick_pickup_v1": {
   "key": "magenta",
   "rows": [
