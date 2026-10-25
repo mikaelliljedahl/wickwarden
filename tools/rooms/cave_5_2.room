@@ -1,0 +1,22 @@
+; The Mirrored Archive — room 2
+room cave_5_2
+terrain Hall of Faces: two grouped shelves leave a broad crossing beneath the vine arch.
+floor_color 0.15 0.17 0.21
+grid
+#########..#########
+#..................#
+#...###......###...#
+#..................#
+....................
+....................
+#..................#
+#...###......###...#
+#..................#
+####################
+opener cut_screen 9,1 look=dry_vine_screen
+opener cut_screen 10,1 look=dry_vine_screen
+opener locked_door @48,480 id=e183 scope=c5 size=96,192
+enemy hollow 6,4
+enemy hollow 13,5
+enemy mirror_shade 11,6
+spawn Default @1632,528

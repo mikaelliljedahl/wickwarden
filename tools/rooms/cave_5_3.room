@@ -1,0 +1,21 @@
+; The Mirrored Archive — room 3
+room cave_5_3
+terrain Dust Reading Room: dry vines at the entry guard the key between reading shelves.
+floor_color 0.15 0.17 0.21
+grid
+####################
+#..................#
+#..####......####..#
+#..................#
+#..................#
+#..................#
+#..###........###..#
+#..................#
+#..................#
+#########..#########
+opener cut_screen 9,8 look=dry_vine_screen
+opener cut_screen 10,8 look=dry_vine_screen
+pickup small_key 10,3 id=key_c5_1 scope=c5
+enemy wickling 6,4
+enemy wickling 13,4
+spawn Default @960,720
