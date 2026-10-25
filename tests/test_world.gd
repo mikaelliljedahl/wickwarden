@@ -6,6 +6,7 @@ extends TestCase
 
 
 func run() -> void:
+	_terrain_family()
 	await _entry_refills()
 	var world := await make_world()
 	await _streaming(world)
@@ -614,3 +615,26 @@ func _entry_refills() -> void:
 	room.enter()
 	check_eq(props.get_child_count(), 3, "state reset leaves exactly two fresh refills")
 	await dispose(arena)
+
+
+func _terrain_family() -> void:
+	var room := Room.new()
+	for id in ["cave_9_1", "cave_9_4", "cave_9_2#cell", "cave_9_9#vault", "cave_1"]:
+		room.room_id = StringName(id)
+		for lights_off in [false, true]:
+			room.dark = lights_off
+			check(room._uses_cave_terrain(), "%s keeps cave terrain independent of lighting" % id)
+	for id in ["ow_0_0", "ow_2_0#cache", "unknown_test_room"]:
+		room.room_id = StringName(id)
+		for lights_off in [false, true]:
+			room.dark = lights_off
+			check(not room._uses_cave_terrain(), "%s keeps outdoor terrain independent of lighting" % id)
+	room.free()
+	var scene := load(WorldData.scene_path("cave_9_1")) as PackedScene
+	check(scene != null, "actual C09 scene loads for terrain regression")
+	if scene != null:
+		var workshop := scene.instantiate() as Room
+		workshop.room_id = &"cave_9_1"
+		check(not workshop.dark, "C09 remains intentionally lit")
+		check(workshop._uses_cave_terrain(), "actual lit C09 uses cave terrain")
+		workshop.free()

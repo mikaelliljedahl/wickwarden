@@ -81,7 +81,8 @@ func _exit_tree() -> void:
 func _draw() -> void:
 	# Terrain textures are sampled by world position, so neighbouring rooms line up. floor_color
 	# stays as a soft tint. Flat colours when a texture is missing.
-	var floor_tex := SpriteVisual.texture_of(&"ground_cave" if dark else &"ground_grass")
+	var cave_terrain := _uses_cave_terrain()
+	var floor_tex := SpriteVisual.texture_of(&"ground_cave" if cave_terrain else &"ground_grass")
 	var floor_tint := floor_color.lerp(Color.WHITE, 0.55)
 	var room_rect := Rect2(Vector2.ZERO, WorldConst.ROOM_SIZE)
 	if not build_walls:
@@ -93,7 +94,7 @@ func _draw() -> void:
 	# The wall texture fills the whole room; the floor is then drawn over it inside a wavy edge
 	# (BorderEdge), followed by contact shadow, vignette, dark band and lit lip. All of this is
 	# visual only: collision still uses wall_rects().
-	var wall_tex := SpriteVisual.texture_of(&"wall_cave" if dark else &"wall_hedge")
+	var wall_tex := SpriteVisual.texture_of(&"wall_cave" if cave_terrain else &"wall_hedge")
 	if wall_tex != null:
 		_draw_world_tiled(wall_tex, room_rect)
 	else:
@@ -105,7 +106,7 @@ func _draw() -> void:
 		WorldConst.WALL_THICKNESS,
 		exits,
 		_edge_seed(),
-		dark,
+		cave_terrain,
 		WorldConst.EXIT_WIDTH * 0.5
 	)
 	if floor_tex != null:
@@ -119,6 +120,11 @@ func _draw() -> void:
 	draw_mesh(_vignette, null)
 	draw_mesh(edge.ao_mesh, null)
 	draw_mesh(edge.lip_mesh, null)
+
+
+## Terrain follows cave scope, including pockets. Darkness controls lighting independently.
+func _uses_cave_terrain() -> bool:
+	return WorldData.scope_of(room_id).begins_with("c")
 
 
 ## Deterministic per room: the same border every frame and every visit.
