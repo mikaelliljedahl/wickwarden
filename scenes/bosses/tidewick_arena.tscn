@@ -9,8 +9,9 @@
 position = Vector2(1056, 480)
 size = Vector2(1536, 768)
 deep = true
+raft_free_steering = true
 
 [node name="Dock" parent="." instance=ExtResource("2")]
 position = Vector2(240, 432)
 mooring_id = &"tidewick_dock"
-landing_offset = Vector2(-56, 48)
+landing_offset = Vector2(-56, 0)

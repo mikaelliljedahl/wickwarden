@@ -212,7 +212,8 @@ func _tail_accepts(hit: Hitbox) -> bool:
 		return false
 	if hit.kind not in [&"hook", &"flare"] or hit.team != Layers.Team.PLAYER:
 		return false
-	return false  # Await the separately owned public raft-rider contract.
+	var hero := get_player() as Player
+	return hero != null and hero.is_on_raft() and hit.source == hero
 
 
 func _tail_hit(hit: Hitbox) -> void:
@@ -302,8 +303,14 @@ func _start_wave() -> void:
 	wave_age = 0.0
 
 
-func _push_wave_rider(_delta: float) -> void:
-	pass  # Raft's public water-clamped impulse interface is being delivered separately.
+func _push_wave_rider(delta: float) -> void:
+	var hero := get_player() as Player
+	if hero == null or not hero.is_on_raft():
+		return
+	var shape := wave.get_child(0) as CollisionShape2D
+	var rect := shape.shape as RectangleShape2D
+	if Rect2(wave.global_position - rect.size * 0.5, rect.size).has_point(hero.global_position):
+		hero.push_raft(wave_direction * 200.0 * delta)
 
 
 func _spawn_leeches() -> void:
