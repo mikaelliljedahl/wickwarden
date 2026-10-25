@@ -1,0 +1,4 @@
+[gd_scene format=3]
+; The heads are boss-owned parts; this open floor contains no rewards or retreat barriers.
+[node name="DirgeFloor" type="Node2D"]
+[node name="Visual" type="Node2D" parent="."]
