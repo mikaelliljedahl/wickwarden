@@ -49,3 +49,7 @@ Notes:
 - Batch 27 stopped on a hidden_stairs_v1 relative reference path error (rejected by the tool). Retry with the absolute path worked. Use absolute reference paths in every job.
 - Limit of six running jobs was exceeded once (seven submitted in batch 41); the extra one was cancelled before it started.
 - Bridge test: `agentteamforge_submit_job` works from pi (job `job_01a16f94...`, session `01a16f95-01c2-7d63-bf9f-3377d934afa8`, output verified against its own session folder).
+
+## Resumed Codex production, 2026-10-25
+
+B11 prompt file prepared (18 entries). Brick ground v1/v2 generated, own-session SHA256 matched and unique; opened `/tmp/wickwarden-art-wave13-review.jpg`; log `log_art_resume_13.md`. Both weak: irregular stone rather than brick; v1 adds metal straps. Returned1254x1254 unscaled; seamless tiling not tested. v3 remains pending. Five wall/face jobs submitted, six total including groundv3. Provenance append rows under `/tmp/wickwarden-art-provenance-additions.md`; shared provenance untouched.

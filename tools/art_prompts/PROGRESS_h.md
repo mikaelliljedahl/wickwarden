@@ -35,3 +35,5 @@ B81 loading wick v2/v3 and credit divider v1 verified own-session hashes/unique;
 B81 death v3, loading v1, dividers v2/v3 and arena c1 v1/v2 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave10-review.jpg`; log `log_art_resume_10.md`. Loading/death weak; divider/floor paintings ok, arena target aspect still needs pipeline handling. Submitted c1 v3,c2 v1–3,c3 v1/v2; six image jobs.
 
 B81 c1 v3,c2 v3,c3 v1/v2 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave12-review.jpg`; log `log_art_resume_12.md`. C3 weak upright pump (v2 also lantern); C1/C2 clear floor-only. Submitted c3 v3 plus B11 brick-ground v1–3 in freed slots; c2 v1/v2 still pending, six image jobs total.
+
+B81 now complete: c2 v1/v2 and c3 v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave13-review.jpg`; log `log_art_resume_13.md`. c2 v2 weak possible standing growth; C3v3 floor-level pump. All18 B81 variants present.
