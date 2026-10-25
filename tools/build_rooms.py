@@ -129,7 +129,7 @@ ENTITY_OPTS = {
     "pickup": ("id", "requires", "scope"),
     "prop": ("size",),
     "opener": OPENER_OPTS,
-    "door": (),
+    "door": ("blocker",),
     "hidden_stairs": ("id",),
     "spawn": (),
     "shop": ("id",),
@@ -504,6 +504,8 @@ class Plan:
         self.zones: list[tuple[Entity, tuple[float, float]]] = []
         self.water: set[tuple[int, int]] = set()
         self.moorings: list[Entity] = []
+        self.entity_nodes: dict[Entity, Node] = {}
+        self.door_links: list[tuple[Node, Node]] = []
         self.drop_exits: list[str] = []
         self.controls: list[Entity] = []
         self.grates: set[tuple[int, int]] = set()
@@ -550,6 +552,10 @@ def build_plan(src: Source, world: World, errors: list[str]) -> Plan | None:
     ok = True
     for seq, ent in enumerate(src.entities):
         ok = dispatch(ent, seq, src, plan, world, errors) and ok
+        key = (ent.tile[1], ent.tile[0], seq)
+        for candidate_key, node in plan.singles:
+            if candidate_key == key:
+                plan.entity_nodes[ent] = node
     if not ok:
         return None
     plan.singles.sort(key=lambda pair: pair[0])
@@ -849,8 +855,11 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
         plan.singles.append((key, node))
         return True
     if kind == "cut_screen":
-        if set(ent.opts) - {"look"}:
-            errors.append(f"{where_}: opener cut_screen only takes look=reed_cluster or look=rush_wall")
+        if set(ent.opts) - {"look", "id"}:
+            errors.append(f"{where_}: opener cut_screen only takes look= and optional id=")
+            return False
+        if "id" in ent.opts and not IDENT_RE.fullmatch(ent.opts["id"]):
+            errors.append(f"{where_}: cut_screen id must be snake_case")
             return False
         look = ent.opts.get("look", "")
         if look not in CUT_SCREEN_SCENES:
@@ -1246,10 +1255,48 @@ def check_doors(src: Source, rec: dict, world: World, plan: Plan, errors: list[s
             errors.append(f"{where_}: door to {ent.args[0]} stands on an obstacle")
         if ent.args[0] not in partners:
             errors.append(f"{where_}: door to {ent.args[0]} is not a door of the graph for {rec['id']}")
+        if ent.verb == "door":
+            link_door_blocker(src, rec, world, plan, ent, errors)
     for other, gate in partners.items():
         in_place = world.rooms.get(other, {}).get("in_place", False)
         if gate == "plain" and not in_place and other not in placed:
             errors.append(f"{where(path, 1)}: plain door to {other} is not placed")
+
+
+def link_door_blocker(src, rec, world, plan, door, errors) -> None:
+    """Bind an authored gate mouth to its actual opener, even with an offset trigger.
+
+    Pocket return doors and the permanent-grate pocket entrance are freely entered. No item-owned
+    capability or invented flag is used as a substitute for a physical opener's state.
+    """
+    edge = next((e for e in world.door_edges(rec["id"])
+                 if door.args[0] in (e["a"], e["b"])), None)
+    requested = door.opts.get("blocker")
+    if edge is None:
+        return  # check_doors already reports the invalid graph destination.
+    kinds = {"thorn-sealed door": "thorn_door", "thorn wall": "thorn_door",
+             "cracked wall": "cracked_wall", "bomb wall": "cracked_wall",
+             "brittle rocks": "cracked_wall", "locked door": "locked_door",
+             "bush cluster": "cut_screen", "reed cluster": "cut_screen",
+             "rush wall": "cut_screen", "ward plate": "ward_blocker",
+             "eye-switch cell": "eye_portcullis", "eye-switch portcullis": "eye_portcullis",
+             "heavy stones": "heavy_stone"}
+    kind = kinds.get(edge.get("prop"))
+    if not edge.get("gate") or rec["pocket"] or edge.get("prop") == "grated alcove":
+        if requested:
+            errors.append(f"{where(src.path, door.line)}: this freely entered door takes no blocker")
+        return
+    candidates = [ent for ent, _ in plan.openers if ent.verb == "opener" and ent.args == [kind]]
+    if requested:
+        candidates = [ent for ent in candidates if ent.opts.get("id") == requested]
+    else:
+        matching_id = [ent for ent in candidates if ent.opts.get("id") == edge["id"]]
+        colocated = [ent for ent in candidates if ent.pos == door.pos]
+        candidates = matching_id or colocated or candidates
+    if len(candidates) != 1:
+        errors.append(f"{where(src.path, door.line)}: gate door needs exactly one {kind or 'supported'} blocker; use blocker=<opener id> to disambiguate")
+        return
+    plan.door_links.append((plan.entity_nodes[door], plan.entity_nodes[candidates[0]]))
 
 
 def check_openers_and_ids(src: Source, plan: Plan, errors: list[str]) -> None:
@@ -1366,6 +1413,9 @@ def emit(src: Source, rec: dict, plan: Plan) -> str:
         root.props.append(("floor_color", f"Color({num(r)}, {num(g)}, {num(b)}, 1)"))
     enemies = [node for _, node, _ in sorted(plan.enemies, key=lambda pair: pair[0])]
     children = name_all(plan, enemies)
+    for door, blocker in plan.door_links:
+        door.props = [(key, value) for key, value in door.props if key != "blocker_path"]
+        door.props.append(("blocker_path", f'NodePath("../{blocker.name}")'))
     containers = [Node(name, ".", "Node2D") for name in ("Enemies", "Bushes", "Props", "Spawns")]
     for container in containers:
         container.props = [("y_sort_enabled", "true")]

@@ -692,5 +692,48 @@ class PermanentGrateFetch(unittest.TestCase):
                 self.assertTrue(self.compile(**opts)[1])
 
 
+class DoorBlockerLinks(unittest.TestCase):
+    def compile(self, kind="thorn_door", prop="thorn-sealed door", extra="", door_opts="", offset=True):
+        host, pocket = "ow_5_5", "ow_5_5#cache"
+        world = world_of([room_record(host, [])],
+                         pockets=[dict(id=pocket, grid=[5, 30], host=host, scope="ow", in_place=False)],
+                         edges=[dict(id="e129", a=host, b=pocket, link="door", gate="item", prop=prop)])
+        options = "look=reed_cluster id=mouth" if kind == "cut_screen" else "id=mouth"
+        door_pos = "14,4" if offset else "15,4"
+        lines = f"opener {kind} 15,4 {options}\n{extra}\ndoor {pocket} Inside {door_pos} {door_opts}"
+        return compile_text(room_text(host, [], lines), world, "ow_5_5.room")
+
+    def test_offset_and_colocated_thorn_cracked_and_cut_link_named_nodes(self):
+        for kind, prop, name in [("thorn_door", "thorn-sealed door", "ThornDoor1"),
+                                 ("cracked_wall", "cracked wall", "CrackedWall1"),
+                                 ("cut_screen", "reed cluster", "ReedCluster1")]:
+            for offset in (True, False):
+                with self.subTest(kind=kind, offset=offset):
+                    text, errors = self.compile(kind, prop, offset=offset)
+                    self.assertEqual(errors, [])
+                    self.assertIn(f'blocker_path = NodePath("../{name}")', text)
+                    self.assertNotIn('requires_flag', text)
+
+    def test_ambiguous_offset_requires_explicit_compiler_id(self):
+        extra = "opener thorn_door 17,6 id=other"
+        self.assertTrue(self.compile(extra=extra)[1])
+        text, errors = self.compile(extra=extra, door_opts="blocker=other")
+        self.assertEqual(errors, [])
+        self.assertIn('blocker_path = NodePath("../ThornDoor2")', text)
+        self.assertTrue(self.compile(extra=extra, door_opts="blocker=missing")[1])
+
+    def test_grate_pocket_portal_is_free(self):
+        host, pocket = "ow_5_5", "ow_5_5#grate"
+        world = world_of([room_record(host, [])],
+                         pockets=[dict(id=pocket, grid=[5, 30], host=host, scope="ow", in_place=False)],
+                         edges=[dict(id="e130", a=host, b=pocket, link="door", gate="item", prop="grated alcove")])
+        text, errors = compile_text(room_text(host, [], f"door {pocket} Inside 15,4"), world, "ow_5_5.room")
+        self.assertEqual(errors, [])
+        self.assertNotIn("blocker_path", text)
+        text, errors = compile_text(room_text(pocket, [], f"door {host} FromPocket 15,4"), world, "ow_5_5__grate.room")
+        self.assertEqual(errors, [])
+        self.assertNotIn("blocker_path", text)
+
+
 if __name__ == "__main__":
     unittest.main()
