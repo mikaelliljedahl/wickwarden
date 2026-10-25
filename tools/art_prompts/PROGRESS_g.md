@@ -26,3 +26,7 @@ Range: `docs/art-inventory.md` section 4, batches B60 to B71 (204 images in 68 u
 ## Recipe used
 
 One Codex job per image (`cheapest`), at most six running at once, idempotency key = job id. Each job copies its PNG from its own session folder; the copy is checked against that folder by SHA-256 and against all other `tools/source_art/` files for duplicates. Each image is viewed and given a verdict (ok, weak with the reason); the agent's own report is used as a second look. Anchor units are chosen after their first generation and dependents are regenerated into the batch file (`render.py` in the scratchpad fills the design reference line).
+
+## Resumed Codex production, 2026-10-25
+
+B71 partial: `hud_heart_full_v1`–`v3` and `unlit_chains_v1`–`v2` generated, own-session hashes verified, no duplicate source hashes, visually opened in `/tmp/wickwarden-art-wave1-review.jpg`. Three hearts ok; two chains weak (middle-row baseline varies). Log: `tools/source_art/log_b71_resume_01.md`. Provenance rows staged separately in `/tmp/wickwarden-art-provenance-additions.md` for lead reconciliation; shared provenance untouched. `unlit_chains_v3` still running at this checkpoint.
