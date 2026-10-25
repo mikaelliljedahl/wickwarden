@@ -1,0 +1,19 @@
+room cave_10_4
+terrain Hollow Gate: a broad dry court runs to the flooded eastern landing.
+floor_color 0.15 0.13 0.17
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..##..........##..#
+#..................#
+####################
+miniboss corrows_echo @960,480
+opener locked_door @48,480 id=e235 scope=c10
+water @1872,480 size=96,192
+mooring @1776,480 id=e236 target_room=cave_10_5 target_mooring=e236 landing_offset=-56,0
+spawn Default 3,4

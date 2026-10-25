@@ -1,0 +1,20 @@
+room cave_10_2
+terrain Root Hall: root piers frame the north garden and eastern lock.
+floor_color 0.15 0.13 0.17
+grid
+#########..#########
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..##..........##..#
+#..................#
+####################
+enemy husk_hound 6,3
+enemy husk_hound 13,6
+enemy hollow 12,3
+opener thorn_wall @960,48 id=e234
+opener locked_door @1872,480 id=e235 scope=c10
+spawn Default 4,4

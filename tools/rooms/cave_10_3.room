@@ -1,0 +1,20 @@
+room cave_10_3
+terrain Wax Gardens: twin wax beds surround the garden key.
+floor_color 0.15 0.13 0.17
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+#..................#
+#..................#
+#..................#
+#..##..........##..#
+#..................#
+#########..#########
+enemy husk_hound 6,3
+enemy husk_hound 13,3
+enemy wickling 12,6
+pickup small_key 9,3 id=key_c10_1 scope=c10
+opener thorn_wall @960,912 id=e234
+spawn Default 9,7
