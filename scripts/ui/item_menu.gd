@@ -257,7 +257,7 @@ func _draw_status(font: Font, left: float) -> void:
 	_canvas.draw_string(
 		font,
 		Vector2(big_x, top.y + 52),
-		"BIG KEY",
+		"LOCKPICK",
 		HORIZONTAL_ALIGNMENT_LEFT,
 		-1,
 		FONT_LABEL,

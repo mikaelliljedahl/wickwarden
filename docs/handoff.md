@@ -7,6 +7,8 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ---
 
+Lockpick presentation update (2026-10-25): the item-menu status label now reads **LOCKPICK** (owner decision 45). Internal IDs, save flags and cave mechanics are unchanged. The B22 world pickup and B72 HUD counter source designs still depict ornate keys and need new lockpick art; no source, manifest or runtime art was changed in this update. Verification: `make test T="item_menu hud pickups"` (3 suites) and `make lint` passed; actual World menu capture `/tmp/wickwarden-menu-lockpick.png` was opened and shows the readable LOCKPICK heading. The temporary capture harness retains the previously observed exit cleanup warnings.
+
 ## Status (update at every push)
 
 Last updated: 2026-10-25, all-ten menu-icon checkpoint. Read [state.md](state.md) next.

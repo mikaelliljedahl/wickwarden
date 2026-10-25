@@ -2,6 +2,8 @@
 
 Status as of 2026-10-25: all ten item-menu icons integrated (pipeline `b2e516c`, menu `43552ec`) and verified with the full checks at code checkpoint `43552ec`; personal origin/main was verified at pushed checkpoint `df2dc70`. Later source-art-only `f33ab9b` and this push-status followup are included in the final status push. See [handoff.md](handoff.md) for push outcome, current art pipeline and verification logs. The document index is [README.md](README.md).
 
+Lockpick presentation update (2026-10-25): the item-menu status label now reads **LOCKPICK** (owner decision 45). Internal IDs, save flags and cave mechanics are unchanged. The B22 world pickup and B72 HUD counter source designs still depict ornate keys and need new lockpick art; no source, manifest or runtime art was changed in this update. Verification: `make test T="item_menu hud pickups"` (3 suites) and `make lint` passed; actual World menu capture `/tmp/wickwarden-menu-lockpick.png` was opened and shows the readable LOCKPICK heading. The temporary capture harness retains the previously observed exit cleanup warnings.
+
 ## Item-menu art checkpoint
 
 All ten found tools now show dedicated painted icons: Tether Moth, Pitch Pot, Cinder Wick, Tallow Sling, Reed Raft, Heft Mitts, Glow Jar, Lantern Chime, Skitter Boots and Reel Line. `item_menu.gd` asks `SpriteVisual.icon_of` for `icon_<id>` first, then accepted object art, then the existing geometric fallback. Unfound tools retain silhouettes and question marks; navigation, equip and layout are unchanged. No found-item placeholder remains with the committed icon set. HUD rendering is unchanged.

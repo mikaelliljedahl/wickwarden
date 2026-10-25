@@ -69,3 +69,7 @@ These decisions are binding. The project owner made them on 2026-10-24.
 
 43. Tallow sling damage is 1 per slug hit, as `docs/monsters-bosses-tools.md` section 5.2 and its keyhole and boss numbers say (sling 1). The WP header rule that the monster file wins on numbers applies. Code-contract 16.3 and `world-work-packages.md` section 4 say 2; those lines are wrong and are corrected in a later docs pass, not by a worker.
 44. The intro plays on every New game. It is skippable at any press (F14). A finished or skipped intro may write `intro_seen`, but `intro_seen` never suppresses the intro. This reads the F13 text "so a second new game still lets the player skip with one press" as the rule.
+
+## Owner presentation decision (2026-10-25)
+
+45. The player-facing name of the former Big Key is **Lockpick**. Its requested original art is a practical tool with a wide, uneven forged-steel picking blade and a brass thumb grip, clearly distinct from an ornate key. Replace the world pickup and HUD counter artwork accordingly. Current internal `big_key` / `bigkey` identifiers, `bigkey_cN` save flags, APIs, cave scope and mechanics stay unchanged; this decision changes presentation only.
