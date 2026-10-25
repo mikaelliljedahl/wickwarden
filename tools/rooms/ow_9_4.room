@@ -15,3 +15,4 @@ grid
 enemy watcher_eye 17,3
 enemy watcher_eye 17,7
 spawn Default 7,5
+opener heavy_stone @960,48 id=e063 size=192,96

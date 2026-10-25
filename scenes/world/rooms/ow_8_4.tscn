@@ -86,9 +86,9 @@ size = Vector2(384, 192)
 
 [node name="Mooring1" parent="Props" instance=ExtResource("5")]
 position = Vector2(432, 528)
-mooring_id = &"e075_ow_8_4"
+mooring_id = &"e075"
 target_room = &"ow_7_4"
-target_mooring = &"e075_ow_7_4"
+target_mooring = &"e075"
 landing_offset = Vector2(96, 0)
 
 [node name="Rock9" type="StaticBody2D" parent="Props"]
