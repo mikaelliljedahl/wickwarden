@@ -1,0 +1,27 @@
+room ow_5_7#shop
+terrain Stone mason: four wares on a cut-stone counter
+floor_color 0.23 0.23 0.21
+grid
+####################
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+prop wall 3,3 size=96,288
+prop wall 16,3 size=96,288
+prop pedestal 6,3
+prop pedestal 8,3
+prop pedestal 11,3
+prop pedestal 13,3
+shop S4 ember @624,358
+shop S4 pot_bundle @816,358 id=pot_bundle_s4
+shop S4 tallow_flask @1104,358
+shop S4 slug_bundle @1296,358 id=slug_bundle_s4
+door ow_5_7 FromPocket 9,8
+spawn Inside 9,6
+spawn Default 9,6

@@ -1,0 +1,18 @@
+room ow_7_7
+terrain Windcut: curved cliff shelves and a sheltered turning ground
+floor_color 0.23 0.23 0.21
+grid
+#########..#########
+#..............rrr.#
+#..rr...........rr.#
+#..rr..............#
+#..............rr..#
+#..............rr..#
+#..rr..............#
+#..rr..............#
+#......rrrrrr......#
+####################
+enemy spitcap 5,5
+enemy spitcap 14,3
+enemy hollow 12,7
+spawn Default 9,3

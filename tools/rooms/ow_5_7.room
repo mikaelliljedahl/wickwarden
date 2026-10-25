@@ -1,0 +1,21 @@
+room ow_5_7
+terrain Statuary: paired carved stones around the mason yard
+floor_color 0.23 0.23 0.21
+grid
+####################
+#...rr........rr...#
+#...rr........rr...#
+#..................#
+...................#
+...................#
+#..rr..........rr..#
+#..rr..........rr..#
+#..................#
+#########..#########
+enemy watcher_eye 4,3
+enemy watcher_eye 15,3
+enemy hollow 13,7
+prop wall 9,2 size=384,96
+door ow_5_7#shop Inside 9,3
+spawn FromPocket 9,5
+spawn Default 7,5

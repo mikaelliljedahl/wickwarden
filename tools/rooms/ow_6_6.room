@@ -1,0 +1,23 @@
+room ow_6_6
+terrain Choir Steps: shore terrace and boulder-sealed choir mouth
+floor_color 0.23 0.23 0.21
+grid
+#########..#########
+#..rr..............#
+#..rr..............#
+#............###...#
+.............#......
+.............#......
+#............###...#
+#..rr..............#
+#..rr..............#
+####################
+enemy hollow 6,3
+enemy hollow 9,7
+enemy watcher_eye 3,6
+water @960,48 size=192,96
+mooring @960,144 id=e090 target_room=ow_6_5 target_mooring=e090 landing_offset=0,56
+opener heavy_boulder 15,4 id=cave6door
+door cave_6_1 FromOverworld 15,4 blocker=cave6door
+spawn FromCave 15,7
+spawn Default 7,5

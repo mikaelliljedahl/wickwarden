@@ -1,0 +1,18 @@
+room ow_7_6
+terrain Gravelight Terrace: broad crossing between weathered stone shoulders
+floor_color 0.23 0.23 0.21
+grid
+####################
+#..rr.........rr...#
+#..rr.........rr...#
+#..................#
+....................
+....................
+#..................#
+#..rr.........rr...#
+#..rr.........rr...#
+#########..#########
+enemy spitcap 5,3
+enemy spitcap 14,6
+enemy hollow 12,3
+spawn Default 7,5
