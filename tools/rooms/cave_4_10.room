@@ -1,0 +1,21 @@
+; Colossus' Bed: uninterrupted floor for the falling shards and sweeping arms.
+room cave_4_10
+terrain Cold foundry: a silent open casting bed beneath the sleeping wax giant.
+floor_color 0.20 0.19 0.17
+grid
+#########..#########
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+arena hushed_colossus @0,0
+boss hushed_colossus @960,640
+opener boss_door @960,48 id=e179 size=192,96
+spawn Default @960,240
+pickup fragment @864,480 id=frag_c4 scope=c4 requires=boss_cave_4_10_defeated
+pickup wick_core @1056,480 id=wick_core_c4 requires=boss_cave_4_10_defeated
