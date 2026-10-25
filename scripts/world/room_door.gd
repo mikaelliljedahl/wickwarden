@@ -13,6 +13,13 @@ extends Area2D
 @export var size: Vector2 = Vector2(96, 96)
 ## False: switch rooms instantly without the fade.
 @export var fade: bool = true
+## Explicit opener link for entrances whose blocker is not centred on the trigger.
+@export var blocker_path: NodePath
+## Optional persistent opener requirement, using the opener's existing GameState flag.
+@export var requires_flag: StringName = &""
+
+var _blockers: Array[WeakRef] = []
+var _blockers_bound := false
 
 
 func _init() -> void:
@@ -42,8 +49,48 @@ func _in_dark_room() -> bool:
 
 
 func _physics_process(_delta: float) -> void:
-	if not has_overlapping_bodies():
+	var gate_open := _gate_is_open()
+	# A concealed mouth appears only after its opener is removed.
+	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as CanvasItem
+	if visual != null:
+		visual.visible = gate_open
+	if not gate_open or not has_overlapping_bodies():
 		return
 	var world := get_tree().get_first_node_in_group(&"world")
 	if world != null and world.has_method("warp_to") and not world.call("is_transitioning"):
 		world.call("warp_to", target_room, target_spawn, fade)
+
+
+## Bind once, after all sibling openers have completed _ready. Older scenes put the opener
+## at exactly the door origin; this identifies the opener, never a player-distance threshold.
+func _gate_is_open() -> bool:
+	if not _blockers_bound:
+		if not blocker_path.is_empty():
+			var blocker := get_node_or_null(blocker_path)
+			if blocker == null:
+				return false
+			_blockers.append(weakref(blocker))
+		else:
+			for sibling in get_parent().get_children():
+				if sibling is StaticBody2D and sibling.position == position:
+					_blockers.append(weakref(sibling))
+		_blockers_bound = true
+	if requires_flag != &"" and not GameState.has_flag(requires_flag):
+		return false
+	for reference in _blockers:
+		var blocker: Node = reference.get_ref()
+		# Cut bushes and shattered rocks are freed; retained openers expose their state.
+		if blocker == null:
+			continue
+		if blocker is Bush:
+			if not blocker.is_cut:
+				return false
+		elif blocker.get("is_open") != null:
+			if not bool(blocker.get("is_open")):
+				return false
+		elif blocker is CollisionObject2D:
+			if (blocker.collision_layer & Layers.WORLD) != 0:
+				for child in blocker.get_children():
+					if child is CollisionShape2D and not child.disabled:
+						return false
+	return true
