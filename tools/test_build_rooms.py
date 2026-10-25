@@ -378,7 +378,7 @@ class ScriptedOpeners(unittest.TestCase):
             world,
             "ow_1_2.room",
         )
-        self.assertTrue(any("opener cut_screen needs look=reed_cluster or look=rush_wall" in e for e in errors), errors)
+        self.assertTrue(any("opener cut_screen needs look=reed_cluster, rush_wall or moss_wall" in e for e in errors), errors)
 
     def hidden_stairs_world(self) -> br.World:
         return world_of(
@@ -1020,6 +1020,84 @@ class RemainingRegionMouths(unittest.TestCase):
                         dict(options="blocker=e145"), dict(change={"needs": ["hook"]})):
             with self.subTest(options=options):
                 self.assertTrue(self.anchor_pocket(**options)[1])
+
+
+class CisternCompilerGaps(unittest.TestCase):
+    def raft(self, edge_id, host_is_a=True, water=True, post=True, narrow=False, prop=None):
+        edge = dict(next(e for e in real_world().edges if e["id"] == edge_id))
+        if prop is not None:
+            edge["prop"] = prop
+        graph = real_world()
+        host = edge["a"] if host_is_a else edge["b"]
+        other = edge["b"] if host_is_a else edge["a"]
+        side = br.edge_side(graph, host, other)
+        opposite = {"n": "s", "s": "n", "e": "w", "w": "e"}[side]
+        world = world_of([room_record(host, [side], grid=tuple(graph.room(host)["grid"])),
+                          room_record(other, [opposite], grid=tuple(graph.room(other)["grid"]))], edges=[edge])
+        position, size, mooring = {
+            "n": ("@960,192", "1728,192", "9,4"),
+            "s": ("@960,768", "1728,192", "9,5"),
+            "e": ("@1728,480", "192,768", "15,3"),
+            "w": ("@192,480", "192,768", "4,3"),
+        }[side]
+        entities = []
+        if water:
+            entities.append(f"water {'5,2' if narrow else position} size={'96,96' if narrow else size}")
+        if post:
+            entities.append(f"mooring {mooring} id=source target_room={other} target_mooring=arrival")
+        return compile_text(room_text(host, [side], "\n".join(entities)), world, host + ".room")
+
+    def test_actual_flooded_edges_on_each_side_keep_water_and_paired_lane_exports(self):
+        for edge_id in ("e167", "e168"):
+            for host_is_a in (True, False):
+                with self.subTest(edge=edge_id, side=host_is_a):
+                    text, errors = self.raft(edge_id, host_is_a)
+                    self.assertEqual(errors, [])
+                    self.assertIn('res://scenes/world/water_zone.tscn', text)
+                    self.assertIn('res://scenes/world/mooring.tscn', text)
+                    self.assertIn('deep = true', text)
+                    self.assertIn('mooring_id = &"source"', text)
+                    self.assertIn('target_mooring = &"arrival"', text)
+                    edge = next(e for e in real_world().edges if e["id"] == edge_id)
+                    target = edge['b'] if host_is_a else edge['a']
+                    self.assertIn(f'target_room = &"{target}"', text)
+
+    def test_flooded_passages_keep_existing_denial_and_post_requirements(self):
+        for edge_id in ("e167", "e168"):
+            for options, message in [(dict(post=False), "needs a mooring"),
+                                     (dict(water=False), "walkable on foot"),
+                                     (dict(narrow=True), "walkable on foot")]:
+                _, errors = self.raft(edge_id, **options)
+                self.assertTrue(any(message in e for e in errors), errors)
+            _, errors = self.raft(edge_id, post=False, prop="ordinary corridor")
+            self.assertTrue(any("corridor blocked" in e for e in errors), errors)
+
+    def test_actual_e164_emits_real_cuttable_moss_and_seals_then_opens(self):
+        edge = dict(next(e for e in real_world().edges if e["id"] == "e164"))
+        graph = real_world()
+        for host, other, side, row in [(edge['a'], edge['b'], 'n', 0),
+                                        (edge['b'], edge['a'], 's', 9)]:
+            world = world_of([room_record(host, [side], grid=tuple(graph.room(host)["grid"])),
+                              room_record(other, [], grid=tuple(graph.room(other)["grid"]))], edges=[edge])
+            source = room_text(host, [side], f"opener cut_screen 9,{row} look=moss_wall\n"
+                               f"opener cut_screen 10,{row} look=moss_wall")
+            text, errors = compile_text(source, world, host + '.room')
+            self.assertEqual(errors, [])
+            self.assertIn('res://scenes/world/moss_wall.tscn', text)
+            self.assertIn('[node name="MossWall1"', text)
+            with tempfile.TemporaryDirectory() as tmp:
+                path = Path(tmp) / (host + '.room')
+                path.write_text(source)
+                errors = []
+                src = br.parse_source(path, errors)
+                plan = br.build_plan(src, world, errors)
+                self.assertEqual(errors, [])
+                spawn = br.tile_of(*br.ROOM_CENTRE_PX)
+                self.assertFalse(set(br.GAP_TILES[side]) & br.closed_flood(plan, spawn, None))
+                self.assertTrue(set(br.GAP_TILES[side]) & br.closed_flood(plan, spawn, 0))
+        scene = (br.ROOT / 'scenes/world/moss_wall.tscn').read_text()
+        self.assertIn('scripts/world/bush.gd', scene)
+        self.assertIn('variant = &"moss_wall"', scene)
 
 
 class CavePilot(unittest.TestCase):

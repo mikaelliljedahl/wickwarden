@@ -59,7 +59,9 @@ THORN_HEDGE_SCENE = "res://scenes/world/thorn_hedge.tscn"
 CUT_SCREEN_SCENES = {
     "reed_cluster": "res://scenes/world/reed_cluster.tscn",
     "rush_wall": "res://scenes/world/rush_wall.tscn",
+    "moss_wall": "res://scenes/world/moss_wall.tscn",
 }
+RAFT_PROPS = ("mooring and water", "flooded passage")
 HIDDEN_STAIRS_SCENE = "res://scenes/world/hidden_stairs.tscn"
 ITEM_PICKUP_SCENE = "res://scenes/pickups/item_pickup.tscn"
 PICKUP_SCENES = {
@@ -759,7 +761,7 @@ def dispatch_crossing(ent, key, src, plan, world, errors) -> bool:
         if ent.args or any(not IDENT_RE.fullmatch(ent.opts.get(k, "")) for k in ("id", "target_room", "target_mooring")):
             return fail("mooring takes id=, target_room= and target_mooring= identifiers")
         target = ent.opts["target_room"]
-        if not any(e["prop"] in ("mooring and water", "flooded passage") and
+        if not any(e["prop"] in RAFT_PROPS and
                    {e["a"], e["b"]} == {src.room_id, target} for e in world.edges):
             return fail("mooring target must match a graph raft edge")
         if any(m.opts["id"] == ent.opts["id"] for m in plan.moorings):
@@ -1031,7 +1033,7 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
             return False
         look = ent.opts.get("look", "")
         if look not in CUT_SCREEN_SCENES:
-            errors.append(f"{where_}: opener cut_screen needs look=reed_cluster or look=rush_wall")
+            errors.append(f"{where_}: opener cut_screen needs look=reed_cluster, rush_wall or moss_wall")
             return False
         size = OPENER_SIZE[kind]
         tiles = tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
@@ -1287,10 +1289,12 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
     raft_sides = {}
     if plan.moorings or plan.water:
         for edge in world.edges:
-            if edge["prop"] != "mooring and water" or rec["id"] not in (edge["a"], edge["b"]):
+            if edge["prop"] not in RAFT_PROPS or rec["id"] not in (edge["a"], edge["b"]):
                 continue
             other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
-            side = edge_side(world, rec["id"], other)
+            side = edge_side(world, rec["id"], other) if edge["link"] == "step" else None
+            if side is None:
+                continue
             raft_sides[side] = other
             if not any(m.opts["target_room"] == other for m in plan.moorings):
                 errors.append(f"{where(path, grid_line)}: raft exit {side} needs a mooring to {other}")
