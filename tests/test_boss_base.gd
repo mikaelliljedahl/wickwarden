@@ -71,6 +71,8 @@ func run() -> void:
 	await _intro()
 	await _hazards_and_phase_effects()
 	await _arena_lock_and_reset()
+	await _reset_combat_state()
+	await _reset_intro_combat_state()
 	await _miniboss_mode()
 	await _defeated_stays_dead()
 	await _resupply_and_death_drops()
@@ -217,6 +219,72 @@ func _arena_lock_and_reset() -> void:
 	await dispose(arena)
 
 
+func _reset_combat_state() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss := _make_boss(&"reset_combat", &"cave_test_reset_combat", [12])
+	boss.miniboss = true
+	boss.knockback_scale = 1.0
+	arena.add_child(boss)
+	boss.global_position = Vector2(960, 480)
+	await frames(2)
+	check(boss.apply_damage(12, Vector2.ZERO), "reset setup enters phase 2 with damage immunity")
+	boss.stun(1.5)
+	boss.hit_wall = true
+	var shot := boss.fire_projectile(null, Vector2.RIGHT, 100.0, 1)
+	var eye := Eye.new()
+	boss.adopt_part(eye, Vector2(480, 240))
+	await frames(1)
+	check(boss.is_stunned() and boss.is_knocked_back(), "reset setup has stun and knockback")
+	check(boss.hurtbox.invulnerable, "reset setup has hurtbox immunity")
+	boss.reset_fight()
+	check(not boss.is_stunned(), "reset clears inherited stun immediately")
+	check(not boss.is_knocked_back(), "reset clears inherited knockback immediately")
+	check_eq(boss.velocity, Vector2.ZERO, "reset stops movement immediately")
+	check(not boss.hit_wall, "reset clears stale wall contact")
+	check_eq(boss.hp, 24, "combat reset restores full hp")
+	check_eq(boss.phase, 1, "combat reset restores phase 1")
+	check(not boss.is_pausing(), "combat reset clears the phase pause")
+	check(boss.can_be_hurt(), "combat reset clears damage immunity immediately")
+	check(not boss.hurtbox.invulnerable, "combat reset synchronizes hurtbox immunity immediately")
+	check(not boss.is_dead and not boss.is_defeated(), "reset keeps an undefeated boss alive")
+	var ticks := boss.physics_ticks
+	var at := boss.global_position
+	await frames(2)
+	check(boss.physics_ticks > ticks, "combat resumes without waiting for the old stun")
+	check_eq(boss.global_position, at, "old knockback cannot move the reset boss")
+	check(not is_instance_valid(shot), "reset removes projectiles")
+	check(not is_instance_valid(eye), "reset removes parts")
+	check(boss.apply_damage(2, Vector2.ZERO), "a fresh hit lands after reset")
+	check_eq(boss.hp, 22, "fresh damage uses restored hp")
+	check(boss.is_knocked_back(), "fresh damage can still apply knockback")
+	check(not boss.apply_damage(2, Vector2.ZERO), "fresh damage still grants normal i-frames")
+	await dispose(arena)
+
+
+func _reset_intro_combat_state() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss := _make_boss(&"reset_intro", &"cave_test_reset_intro", [])
+	arena.add_child(boss)
+	await frames(2)
+	boss.apply_damage(2, Vector2.ZERO)
+	boss.stun(1.5)
+	boss.apply_knockback(Vector2.RIGHT * 480.0, 1.0)
+	boss.intro_time = 0.1
+	boss.reset_fight()
+	check(boss.is_in_intro(), "reset restarts the boss intro")
+	check(not boss.hurtbox.enabled and boss.invulnerable, "reset intro protects the boss")
+	check(boss.hurtbox.invulnerable, "reset intro synchronizes hurtbox immunity")
+	check(not boss.contact_hitbox.active, "reset intro disables contact")
+	check(not boss.apply_damage(2, Vector2.ZERO), "no damage during reset intro")
+	await seconds(0.15)
+	check(not boss.is_in_intro(), "old stun and knockback cannot delay the reset intro")
+	check(boss.hurtbox.enabled and boss.contact_hitbox.active, "reset intro restores combat")
+	check(boss.apply_damage(2, Vector2.ZERO), "old i-frames cannot outlast the reset intro")
+	await dispose(arena)
+
+
 func _miniboss_mode() -> void:
 	reset_state()
 	var arena := make_arena()
@@ -256,6 +324,10 @@ func _defeated_stays_dead() -> void:
 	check(not boss.visible, "a defeated boss is hidden")
 	check(not boss.hurtbox.enabled, "a defeated boss has no hurtbox")
 	check_eq(boss.physics_ticks, 0, "a defeated boss never runs")
+	boss.reset_fight()
+	check(boss.is_dead and not boss.visible, "reset cannot revive a retired boss")
+	check(not boss.hurtbox.enabled, "retired boss stays unhittable after reset")
+	check(GameState.has_flag(&"boss_cave_test_2_defeated"), "reset preserves the defeat flag")
 	await dispose(arena)
 
 

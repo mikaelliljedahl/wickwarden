@@ -383,6 +383,14 @@ func _defeat() -> void:
 
 
 func _reset_state() -> void:
+	# EnemyBase timers otherwise delay the new fight or carry old hits into it.
+	_stun_time = 0.0
+	_knock_time = 0.0
+	_knock_velocity = Vector2.ZERO
+	_iframe_time = 0.0
+	_flash_time = 0.0
+	velocity = Vector2.ZERO
+	hit_wall = false
 	hp = max_hp
 	phase = 1
 	_fight_started = false
@@ -400,6 +408,7 @@ func _reset_state() -> void:
 	var intro := _intro_left > 0.0
 	hurtbox.enabled = not intro
 	invulnerable = intro
+	hurtbox.invulnerable = intro
 	set_contact_enabled(not intro)
 	if visual != null:
 		visual.modulate = Color.WHITE
