@@ -1,0 +1,20 @@
+room ow_10_1
+terrain Kiln Fields: burnt orchard clumps and a locked kiln recessed in the north bank
+floor_color 0.28 0.22 0.18
+grid
+####################
+#..bb..#....#......#
+#..b...#....#.rr...#
+#......##..##.r....#
+....................
+....................
+#..................#
+#...rr........bb...#
+#....r........b....#
+#########..#########
+opener locked_door @960,336 id=e133 scope=ow
+door ow_10_1#hut Inside @960,240 blocker=e133
+spawn FromPocket @960,480
+enemy hollow 5,3
+enemy hollow 14,6
+spawn Default 10,5

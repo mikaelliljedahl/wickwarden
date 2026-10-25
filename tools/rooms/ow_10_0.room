@@ -1,0 +1,18 @@
+room ow_10_0
+terrain Cinder Crown: broken stone crater rim around a broad ash basin
+floor_color 0.28 0.22 0.18
+grid
+####################
+#.....rrrrrr.......#
+#....rr....rr......#
+#...........rr.....#
+.............r.....#
+...................#
+#...bb.......rr....#
+#...b....rrrrr.....#
+#..................#
+####################
+enemy hollow 10,4
+enemy cinder_wisp 7,3
+enemy cinder_wisp 12,6
+spawn Default 4,5

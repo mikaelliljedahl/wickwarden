@@ -1,0 +1,18 @@
+room ow_11_1
+terrain Ember Shore: long east cliff ridge and wind-scoured ash shore
+floor_color 0.28 0.22 0.18
+grid
+####################
+#.............rrr..#
+#..bb.........rr...#
+#..b...........r...#
+................r..#
+................r..#
+#..............rr..#
+#...rr........rr...#
+#....r.............#
+#########..#########
+enemy duskmoth 7,3
+enemy duskmoth 12,6
+enemy cinder_wisp 13,3
+spawn Default 9,5

@@ -1,0 +1,23 @@
+room ow_8_2
+terrain Ash Bridge: broad surviving causeway between two broken ravine basins
+floor_color 0.28 0.22 0.18
+grid
+####################
+#..................#
+#..................#
+#..................#
+#...................
+#...................
+#..................#
+#..................#
+#..................#
+####################
+pit @912,192 size=1248,192 look=ravine
+pit @912,768 size=1248,192 look=ravine
+prop rock 2,2
+prop rock 2,7
+prop rock 16,2
+prop rock 16,7
+enemy skitterwick 7,4
+enemy skitterwick 13,5
+spawn Default 10,5

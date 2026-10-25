@@ -1,0 +1,18 @@
+room ow_10_1#hut
+terrain Kiln hut: cold masonry hearth framing the pot satchel
+floor_color 0.28 0.22 0.18
+grid
+####################
+#..................#
+#...###......###...#
+#..................#
+#..................#
+#..................#
+#...rr........rr...#
+#..................#
+#..................#
+####################
+prop pedestal 9,3
+pickup pot_bag @912,358 id=pot_bag_2
+door ow_10_1 FromPocket 9,8
+spawn Inside 9,6
