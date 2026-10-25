@@ -51,97 +51,97 @@ script = ExtResource("4")
 y_sort_enabled = true
 
 [node name="Reed1" type="StaticBody2D" parent="Props"]
-position = Vector2(336, 144)
+position = Vector2(240, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed2" type="StaticBody2D" parent="Props"]
-position = Vector2(912, 144)
+position = Vector2(336, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed3" type="StaticBody2D" parent="Props"]
-position = Vector2(1296, 144)
+position = Vector2(432, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed4" type="StaticBody2D" parent="Props"]
-position = Vector2(1392, 144)
+position = Vector2(1296, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed5" type="StaticBody2D" parent="Props"]
-position = Vector2(240, 240)
+position = Vector2(1392, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed6" type="StaticBody2D" parent="Props"]
-position = Vector2(336, 240)
+position = Vector2(1488, 144)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed7" type="StaticBody2D" parent="Props"]
-position = Vector2(1104, 240)
+position = Vector2(240, 240)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed8" type="StaticBody2D" parent="Props"]
-position = Vector2(1008, 336)
+position = Vector2(336, 240)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed9" type="StaticBody2D" parent="Props"]
-position = Vector2(1584, 336)
+position = Vector2(1392, 240)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed10" type="StaticBody2D" parent="Props"]
-position = Vector2(336, 432)
+position = Vector2(1488, 240)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed11" type="StaticBody2D" parent="Props"]
-position = Vector2(624, 528)
+position = Vector2(240, 336)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed12" type="StaticBody2D" parent="Props"]
-position = Vector2(1008, 528)
+position = Vector2(1488, 624)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed13" type="StaticBody2D" parent="Props"]
-position = Vector2(1104, 528)
+position = Vector2(1584, 624)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed14" type="StaticBody2D" parent="Props"]
-position = Vector2(1104, 624)
-script = ExtResource("5")
-size = Vector2(96, 96)
-kind = &"reed"
-
-[node name="Reed15" type="StaticBody2D" parent="Props"]
 position = Vector2(240, 720)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
+[node name="Reed15" type="StaticBody2D" parent="Props"]
+position = Vector2(336, 720)
+script = ExtResource("5")
+size = Vector2(96, 96)
+kind = &"reed"
+
 [node name="Reed16" type="StaticBody2D" parent="Props"]
-position = Vector2(1392, 720)
+position = Vector2(432, 720)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
@@ -153,19 +153,19 @@ size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed18" type="StaticBody2D" parent="Props"]
-position = Vector2(432, 816)
+position = Vector2(336, 816)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed19" type="StaticBody2D" parent="Props"]
-position = Vector2(528, 816)
+position = Vector2(432, 816)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed20" type="StaticBody2D" parent="Props"]
-position = Vector2(1200, 816)
+position = Vector2(528, 816)
 script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
