@@ -40,7 +40,6 @@ var _shape: CollisionShape2D
 var _pad_area: Area2D
 var _spore_post: Node2D
 var _spore_timer: float = 0.35
-var _watched_hitboxes: Dictionary = {}
 var _counted_hitboxes: Dictionary = {}
 
 
@@ -130,13 +129,11 @@ func _on_node_added(node: Node) -> void:
 
 
 func _watch_hitbox(hitbox: Hitbox) -> void:
-	if not hitbox.blockable:
-		return
-	var id := hitbox.get_instance_id()
-	if _watched_hitboxes.has(id):
-		return
-	_watched_hitboxes[id] = true
-	hitbox.blocked.connect(_on_hitbox_blocked.bind(hitbox))
+	# node_added fires before the spawning parent finishes configuring its hitbox.
+	# Subscribe immediately; eligibility is checked when the ward actually blocks it.
+	var callback := _on_hitbox_blocked.bind(hitbox)
+	if not hitbox.blocked.is_connected(callback):
+		hitbox.blocked.connect(callback)
 
 
 func _physics_process(delta: float) -> void:

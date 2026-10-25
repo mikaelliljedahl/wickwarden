@@ -11,6 +11,7 @@ func run() -> void:
 	await _blocks_only_while_on_the_pad()
 	await _opens_and_persists_for_matching_blocker()
 	await _test_spore_post_opens_pad()
+	await _runtime_watcher_opens_room()
 	_scene_has_placeholder_looks()
 
 
@@ -163,6 +164,81 @@ func _test_spore_post_opens_pad() -> void:
 	check(blocker.is_open, "the test spore post opens its linked blocker")
 	Input.action_release(&"ward")
 	await dispose(arena)
+
+
+func _runtime_watcher_opens_room() -> void:
+	reset_state()
+	var world := await make_world()
+	world.start_at(&"ow_8_5", &"Default")
+	await frames(3)
+	var room := world.get_room(&"ow_8_5")
+	var pad: Variant
+	var blocker: Variant
+	for part in get_tree().get_nodes_in_group(&"ward_plate"):
+		if room.is_ancestor_of(part):
+			pad = part
+	for part in get_tree().get_nodes_in_group(&"ward_blocker"):
+		if room.is_ancestor_of(part):
+			blocker = part
+	check(pad != null and blocker != null, "the actual terrace room has its ward puzzle")
+	if pad == null or blocker == null:
+		await dispose(world)
+		return
+	check_eq(pad.blocks_required, 3, "the actual room requires three blocks")
+	# Keep the runtime shooter; isolate its puzzle from roaming combat damage.
+	for enemy in room.get_enemies():
+		if enemy.name != &"WatcherEye1":
+			enemy.queue_free()
+	world.player.place_at(pad.global_position)
+	world.player.facing = Vector2.RIGHT
+	Input.action_press(&"ward")
+	var seen: Dictionary = {}
+	for frame in range(900):
+		await frames(1)
+		for shot in get_tree().get_nodes_in_group(&"projectiles"):
+			if not shot is EnemyProjectile or not room.is_ancestor_of(shot):
+				continue
+			var hitbox: Hitbox = shot.hitbox
+			if seen.has(hitbox.get_instance_id()):
+				continue
+			seen[hitbox.get_instance_id()] = true
+			var callback: Callable = pad._on_hitbox_blocked.bind(hitbox)
+			check(
+				hitbox.blocked.is_connected(callback),
+				"a spawned beam is watched before any manual rediscovery"
+			)
+			# Repeated discovery must not add another callback.
+			pad._watch_existing_hitboxes()
+			pad._on_node_added(hitbox)
+			var connections := 0
+			for connection in hitbox.blocked.get_connections():
+				if connection.callable == callback:
+					connections += 1
+			check_eq(connections, 1, "each runtime watcher beam has exactly one pad connection")
+		if pad.is_satisfied:
+			break
+	check_eq(seen.size(), 3, "three actual watcher beams reach the puzzle")
+	check_eq(pad.blocks_absorbed, 3, "runtime watcher ward blocks count exactly once each")
+	check(pad.is_satisfied and blocker.is_open, "three watcher blocks open the room blocker")
+	check(GameState.has_flag(&"ward_e257"), "the room puzzle persists its completion flag")
+	await frames(2)
+	check((blocker.get_node("Shape") as CollisionShape2D).disabled, "the room blocker unblocks")
+	if OS.get_cmdline_user_args().has("--ward-capture"):
+		await RenderingServer.frame_post_draw
+		get_viewport().get_texture().get_image().save_png("/tmp/ward-runtime-open.png")
+	Input.action_release(&"ward")
+	await dispose(world)
+	var later := await make_world()
+	later.start_at(&"ow_8_5", &"Default")
+	await frames(3)
+	for part in get_tree().get_nodes_in_group(&"ward_blocker"):
+		if later.get_room(&"ow_8_5").is_ancestor_of(part):
+			check(part.is_open, "the actual room blocker stays open after reloading")
+			check(
+				(part.get_node("Shape") as CollisionShape2D).disabled,
+				"the reloaded room blocker stays non-solid"
+			)
+	await dispose(later)
 
 
 func _scene_has_placeholder_looks() -> void:
