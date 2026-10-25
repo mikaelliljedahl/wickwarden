@@ -695,11 +695,11 @@ class ScriptedGateExtensions(unittest.TestCase):
             self.assertIn(f'size = Vector2({size})', text)
 
     def test_gate_id_must_match_graph_type(self):
-        edge = dict(id="e063", a="ow_5_5", b="ow_5_6", prop="heavy stones", link="step", gate="item")
+        edge = dict(id="e063", a="ow_5_5", b="ow_5_6", prop="heavy stones", link="step", gate="item", needs=["heft_mitts"])
         self.assertTrue(self.compile("opener thorn_door 15,4 id=e063", edges=[edge])[1])
 
     def test_heavy_gate_must_seal_both_gap_tiles(self):
-        edge = dict(id="e063", a="ow_5_5", b="ow_5_6", prop="heavy stones", link="step", gate="item")
+        edge = dict(id="e063", a="ow_5_5", b="ow_5_6", prop="heavy stones", link="step", gate="item", needs=["heft_mitts"])
         _, errors = self.compile("opener heavy_stone @960,912 id=e063 size=192,96", ["s"], edges=[edge])
         self.assertEqual(errors, [])
         _, errors = self.compile("opener heavy_stone 9,9 id=e063", ["s"], edges=[edge])
@@ -1151,6 +1151,92 @@ class DryVineScreen(unittest.TestCase):
         self.assertIn('variant = &"dry_vine_screen"', scene)
         self.assertIn('"dry_vine_screen"', script)
         self.assertIn('hitbox.kind == &"hook"', script)
+
+
+class ExistingCaveAliases(unittest.TestCase):
+    def compile_edge(self, edge_id, lines, wrong_edge=None, host_is_a=True):
+        edge = dict(next(e for e in real_world().edges if e["id"] == edge_id))
+        edge.update(wrong_edge or {})
+        graph = real_world()
+        host, target = (edge["a"], edge["b"]) if host_is_a else (edge["b"], edge["a"])
+        rooms = [room_record(host, list(graph.room(host)["exits"]), grid=tuple(graph.room(host)["grid"])),
+                 room_record(target, list(graph.room(target)["exits"]), grid=tuple(graph.room(target)["grid"]))]
+        world = world_of(rooms, edges=[edge])
+        source = room_text(host, list(graph.room(host)["exits"]), lines)
+        return compile_text(source, world, host + ".room")
+
+    def test_e172_eye_switch_alias_keeps_real_sling_control_and_portcullis(self):
+        for edge_id in ("e172", "e212", "e244"):
+            for host_is_a, opener_pos in ((True, "@960,48"), (False, "@960,912")):
+                lines = f"eye_switch 12,3 id={edge_id}\nopener eye_portcullis {opener_pos} id={edge_id}"
+                text, errors = self.compile_edge(edge_id, lines, host_is_a=host_is_a)
+                self.assertEqual(errors, [])
+                self.assertIn('res://scenes/world/eye_switch.tscn', text)
+                self.assertIn('res://scenes/world/eye_portcullis.tscn', text)
+                self.assertEqual(text.count(f'eye_id = &"{edge_id}"'), 2)
+            self.assertIn('blocker = true', (br.ROOT / 'scenes/world/eye_portcullis.tscn').read_text())
+        _, errors = self.compile_edge("e172", "eye_switch 12,3 id=e172\nopener eye_portcullis @960,48 id=e172",
+                                      {"needs": ["reel_line"]})
+        self.assertTrue(any("does not match the graph gate requirements" in e for e in errors), errors)
+        _, errors = self.compile_edge("e172", "eye_switch 12,3 id=e172\nopener heavy_stone 9,0 id=e172")
+        self.assertTrue(errors)
+
+    def test_e175_singular_is_the_existing_lift_mode_heavy_stone(self):
+        text, errors = self.compile_edge(
+            "e175", "opener heavy_stone @960,48 id=e175 size=192,96")
+        self.assertEqual(errors, [])
+        self.assertIn('res://scenes/world/heavy_stone.tscn', text)
+        self.assertIn('stone_id = &"e175"', text)
+        self.assertIn('size = Vector2(192, 96)', text)
+        scene = (br.ROOT / "scenes/world/heavy_stone.tscn").read_text()
+        self.assertIn('mode = 0', scene)  # LIFT; singular gate is not the PUSH boulder.
+        _, errors = self.compile_edge("e175", "opener heavy_boulder @960,48 id=e175 size=192,96")
+        self.assertTrue(errors)
+        for needs in (["pitch_pot"], ["heft_mitts", "tallow_sling"]):
+            _, errors = self.compile_edge("e175", "opener heavy_stone @960,48 id=e175 size=192,96",
+                                          {"needs": needs})
+            self.assertTrue(any("graph gate requirements" in e for e in errors), errors)
+
+    def test_e185_hidden_seam_uses_shared_reveal_id_and_real_closed_body(self):
+        for host_is_a, position in ((True, "@960,48"), (False, "@960,912")):
+            text, errors = self.compile_edge("e185", f"opener hidden_seam {position} id=e185",
+                                             host_is_a=host_is_a)
+            self.assertEqual(errors, [])
+            self.assertIn('res://scenes/world/hidden_seam.tscn', text)
+            self.assertIn('seam_id = &"e185"', text)
+            self.assertIn('size = Vector2(192, 96)', text)
+            self.assertNotIn('hook_tap = true', text)
+            self.assertNotIn('RoomDoor', text)
+            scene = (br.ROOT / "scenes/world/hidden_seam.tscn").read_text()
+            script = (br.ROOT / "scripts/world/hidden_seam.gd").read_text()
+            self.assertIn('look = &"hidden_seam"', scene)
+            self.assertIn('revealable', script)
+            wrong = self.compile_edge("e185", f"opener hidden_seam {position} id=e185 hook_tap=true",
+                                      host_is_a=host_is_a)[1]
+            self.assertTrue(wrong)
+        for change in ({"needs": ["tether_moth"]}, {"gate": "item"}, {"prop": "sealed seam"}):
+            _, errors = self.compile_edge("e185", "opener hidden_seam @960,48 id=e185", change)
+            self.assertTrue(errors)
+        # Without the seam the graph passage is accidentally open; a wrong id cannot bind e185.
+        _, errors = self.compile_edge("e185", "")
+        self.assertTrue(any("graph-linked seam" in e for e in errors), errors)
+        _, errors = self.compile_edge("e185", "opener hidden_seam @960,48 id=other")
+        self.assertTrue(any("id must match graph edge e185" in e for e in errors), errors)
+
+    def test_hyphen_normalization_is_limited_to_encounter_scene_names(self):
+        world = real_world()
+        self.assertEqual(world.room("cave_4_4")["encounters"]["miniboss"], "lull_mauler")
+        self.assertEqual(next(e["id"] for e in world.edges if e["id"] == "e175"), "e175")
+        self.assertEqual(br.encounter_snake("Corrow's Echo"), "corrows_echo")
+        self.assertEqual(world.room("cave_10_4")["encounters"]["miniboss"], "corrows_echo")
+        for name in ("Lull-Mauler", "lull_mauler"):
+            text, errors = compile_text(room_text("cave_4_4", world.room("cave_4_4")["exits"], f"miniboss {name} 10,5"),
+                                        world, "cave_4_4.room")
+            self.assertEqual(errors, [])
+            self.assertIn('res://scenes/enemies/minibosses/lull_mauler.tscn', text)
+        _, errors = compile_text(room_text("cave_4_4", world.room("cave_4_4")["exits"], "miniboss lull_mauler 10,5"),
+                                 world, "cave_4_4.room")
+        self.assertEqual(errors, [])
 
 
 class CavePilot(unittest.TestCase):

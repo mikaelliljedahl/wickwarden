@@ -107,7 +107,7 @@ OPENER_SIZE = {
     # Bush's collision circle is contained by one 96 px tile; a wide screen uses one per gap tile.
     "cut_screen": (96, 96),
 }
-OPENER_SIZE.update({"thorn_door": (192, 96), "eye_portcullis": (192, 96),
+OPENER_SIZE.update({"thorn_door": (192, 96), "eye_portcullis": (192, 96), "hidden_seam": (192, 96),
                     "heavy_stone": (96, 96), "heavy_boulder": (96, 96),
                     "hook_tap_wall": (192, 96), "wax_seal": (192, 96),
                     "sealed_seam": (192, 96), "resonance_door": (192, 96),
@@ -116,6 +116,7 @@ OPENER_SIZE.update({"thorn_door": (192, 96), "eye_portcullis": (192, 96),
 LINKED = {"eye_switch": "eye_portcullis", "ward_plate": "ward_blocker"}
 SCRIPTED_OPENERS = {"thorn_door": ("thorn_door", "burn_id"),
                     "eye_portcullis": ("eye_portcullis", "eye_id"),
+                    "hidden_seam": ("hidden_seam", "seam_id"),
                     "heavy_stone": ("heavy_stone", "stone_id"),
                     "heavy_boulder": ("heavy_boulder", "stone_id"),
                     "hook_tap_wall": ("hook_tap_wall", "seam_id"),
@@ -265,6 +266,11 @@ def snake(name: str) -> str:
     return text[4:] if text.startswith("new:") else text
 
 
+def encounter_snake(name: str) -> str:
+    """Normalize only graph encounter names to the scene filename convention."""
+    return snake(name.replace("-", " ").replace("'", "").replace("’", ""))
+
+
 def persistent_pickup_id(room_id: str, graph_id: str) -> str:
     """Return the legacy persistent id for a dev pickup, or the graph id everywhere else."""
     return DEV_PICKUP_ID_ALIASES.get(room_id, {}).get(graph_id, graph_id)
@@ -286,7 +292,7 @@ class World:
                 "dark": bool(room["dark"]),
                 "scope": room["scope"],
                 "enemies": {snake(n): int(c) for n, c in room["enemies"].items()},
-                "encounters": {role: snake(graph_nodes.get(room["id"], {}).get(role, {})["name"])
+                "encounters": {role: encounter_snake(graph_nodes.get(room["id"], {}).get(role, {})["name"])
                                for role in ("miniboss", "boss")
                                if "name" in graph_nodes.get(room["id"], {}).get(role, {})},
                 "pocket": False,
@@ -648,10 +654,12 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
             return False
         return True
     if ent.verb in ("enemy", "miniboss", "boss"):
-        if len(ent.args) != 1 or not IDENT_RE.match(snake(ent.args[0])):
+        if len(ent.args) != 1 or not IDENT_RE.match(
+            encounter_snake(ent.args[0]) if ent.verb in ("boss", "miniboss") else snake(ent.args[0])
+        ):
             errors.append(f"{where_}: enemy takes one monster name")
             return False
-        name = snake(ent.args[0])
+        name = encounter_snake(ent.args[0]) if ent.verb in ("boss", "miniboss") else snake(ent.args[0])
         directory = {"enemy": "", "boss": "bosses/", "miniboss": "minibosses/"}[ent.verb]
         node = Node("", "Enemies", None, Res("PackedScene", f"res://scenes/enemies/{directory}{name}.tscn"))
         node.props = [("position", vec2(*ent.pos))]
@@ -998,18 +1006,31 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
         if kind == "ward_blocker":
             node.props.append(("blocker", "true"))
         edge = next((e for e in world.edges if e["id"] == ident), None)
-        expected = {"thorn_door": "thorn-sealed door", "eye_portcullis": "eye-switch portcullis",
-                    "heavy_stone": "heavy stones", "heavy_boulder": "heavy boulder",
+        if edge is None and kind == "hidden_seam":
+            for candidate in world.edges:
+                if (candidate.get("prop") == "hidden seam" and candidate.get("gate") == "hidden"
+                        and candidate.get("needs") == ["glow_jar"] and src.room_id in (candidate["a"], candidate["b"])):
+                    other = candidate["b"] if candidate["a"] == src.room_id else candidate["a"]
+                    side = edge_side(world, src.room_id, other)
+                    if side is not None and ent.tile in exit_corridor(side):
+                        errors.append(f"{where_}: hidden_seam id must match graph edge {candidate['id']}")
+                        return False
+        expected = {"thorn_door": "thorn-sealed door", "eye_portcullis": ("eye-switch portcullis", "eye switch"),
+                    "heavy_stone": ("heavy stones", "heavy stone"), "heavy_boulder": "heavy boulder",
                     "hook_tap_wall": "hook-tap wall", "wax_seal": "wax seal",
-                    "sealed_seam": "sealed seam", "resonance_door": "resonance door",
+                    "sealed_seam": "sealed seam", "hidden_seam": "hidden seam", "resonance_door": "resonance door",
                     "ninth_door": "sealed door (nine fragments)",
                     "ward_blocker": "ward plate"}[kind]
-        if edge is not None and (edge["prop"] != expected or src.room_id not in (edge["a"], edge["b"])):
+        if edge is not None and (edge["prop"] not in (expected if isinstance(expected, tuple) else (expected,))
+                                or src.room_id not in (edge["a"], edge["b"])):
             errors.append(f"{where_}: {kind} id does not match this graph gate")
             return False
         requirements = {"hook_tap_wall": ("hidden", ["hook"]),
                         "wax_seal": ("item", ["flare"]),
+                        "heavy_stone": ("item", ["heft_mitts"]),
                         "heavy_boulder": ("item", ["heft_mitts"]),
+                        "eye_portcullis": ("item", ["tallow_sling"]),
+                        "hidden_seam": ("hidden", ["glow_jar"]),
                         "sealed_seam": MOUTH_REQUIREMENTS["sealed seam"],
                         "resonance_door": MOUTH_REQUIREMENTS["resonance door"],
                         "ninth_door": MOUTH_REQUIREMENTS["sealed door (nine fragments)"]}
@@ -1374,6 +1395,26 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
             reverse = reel_reach(plan, flood(gap, plan.static | closed), closed)
             if spawn_tile not in reverse:
                 errors.append(f"{where(path, grid_line)}: reel exit {side} needs a return anchor pull")
+    concealed_sides = set()
+    for edge in world.edges:
+        if (edge.get("gate") != "hidden" or edge.get("prop") != "hidden seam"
+                or rec["id"] not in (edge["a"], edge["b"])):
+            continue
+        other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+        side = edge_side(world, rec["id"], other)
+        if side is None:
+            continue
+        seams = [i for i, (ent, _) in enumerate(plan.openers)
+                 if ent.args == ["hidden_seam"] and ent.opts.get("id") == edge["id"]
+                 and ent.tile in exit_corridor(side)]
+        if not seams:
+            errors.append(f"{where(path, grid_line)}: hidden exit {side} needs its graph-linked seam in the corridor")
+            continue
+        concealed_sides.add(side)
+        if any(t in reach for t in GAP_TILES[side]):
+            errors.append(f"{where(path, grid_line)}: hidden exit {side} is walkable while concealed")
+        if not any(t in closed_flood(plan, spawn_tile, index) for t in GAP_TILES[side] for index in seams):
+            errors.append(f"{where(path, grid_line)}: hidden exit {side} stays blocked after reveal")
     cut_sides = set()
     for edge in world.edges:
         if (edge.get("gate") != "cut" or edge.get("prop") not in CUT_SCREEN_PROPS
@@ -1396,7 +1437,7 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
     open_sides = []
     for side in rec["exits"]:
         corridor = exit_corridor(side)
-        if side in raft_sides or side in pit_sides or side in reel_sides or side in cut_sides:
+        if side in raft_sides or side in pit_sides or side in reel_sides or side in cut_sides or side in concealed_sides:
             continue
         if any(tile in plan.static for tile in corridor):
             blocked = next(tile for tile in corridor if tile in plan.static)
