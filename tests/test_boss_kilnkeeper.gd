@@ -6,11 +6,106 @@ const FLAG := &"boss_cave_1_8_defeated"
 
 
 func run() -> void:
+	await _plate_visual_adapter()
+	if _capture_requested():
+		return
 	await _death_contact()
 	await _armour_and_fight()
 	await _molten_expiry_and_splash()
 	await _attacks_and_reset()
 	await _arena_scene()
+
+
+func _plate_visual_adapter() -> void:
+	for missing_art in [false, true]:
+		reset_state()
+		SpriteVisual.use_manifest(
+			(
+				"res://tests/fixtures/no_wax_plate_art.json"
+				if missing_art
+				else SpriteVisual.DEFAULT_MANIFEST
+			)
+		)
+		var scene := load(REWARD_ROOM) as PackedScene
+		check(scene != null, "compiled C01 boss room loads for visual adapter")
+		if scene == null:
+			SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+			return
+		var room := scene.instantiate() as Room
+		add_child(room)
+		room.enter()
+		await frames(2)
+		var boss := room.get_node("Enemies").get_child(0) as Node2D
+		var fallbacks := _plate_fallbacks(boss)
+		check_eq(
+			SpriteVisual.has_art(&"wax_plate"),
+			not missing_art,
+			"wax plate art availability follows the selected manifest"
+		)
+		var painted_plates := 0
+		for node in boss.find_children("*", "AnimatedSprite2D", true, false):
+			if node is SpriteVisual and node.kind == &"wax_plate":
+				painted_plates += 1
+		check_eq(
+			painted_plates > 0, not missing_art, "wax plate uses its painted or procedural visual"
+		)
+		if missing_art:
+			var visible_fallbacks := 0
+			for fallback in fallbacks:
+				if fallback.visible:
+					visible_fallbacks += 1
+			check(
+				visible_fallbacks > 0, "missing wax plate art keeps the procedural fallback visible"
+			)
+		else:
+			for fallback in fallbacks:
+				check(
+					not fallback.visible, "painted wax plate hides inherited procedural rectangles"
+				)
+		check(
+			boss.get_node_or_null("BodyShape") is CollisionShape2D, "body collision stays present"
+		)
+		check(boss.get_node_or_null("Hurtbox") is Hurtbox, "hurtbox stays present")
+		check(boss.get_node_or_null("ContactHitbox") is Hitbox, "contact hitbox stays present")
+		check(boss.get_node_or_null("WaxPlate") != null, "functional wax plate child stays present")
+		if _capture_requested():
+			await _capture_adapter_world("fallback" if missing_art else "painted")
+		await dispose(room)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+
+
+func _plate_fallbacks(boss: Node) -> Array[Placeholder]:
+	var fallbacks: Array[Placeholder] = []
+	for node in boss.find_children("*", "Placeholder", true, false):
+		var fallback := node as Placeholder
+		if fallback != null and fallback.kind == &"wax_plate":
+			fallbacks.append(fallback)
+	return fallbacks
+
+
+func _capture_requested() -> bool:
+	return DisplayServer.get_name() != "headless" and "--b01-captures" in OS.get_cmdline_user_args()
+
+
+func _capture_adapter_world(tag: String) -> void:
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var world := (load("res://scenes/world/world.tscn") as PackedScene).instantiate() as World
+	viewport.add_child(world)
+	await get_tree().physics_frame
+	GameState.acquire_item(&"tether_moth")
+	GameState.acquire_item(&"pitch_pot")
+	GameState.add_pitch_pots(3)
+	GameState.damage(3)
+	world.start_at(&"cave_1_8", &"Default")
+	world.player.place_at(world.get_room(&"cave_1_8").global_position + Vector2(1300, 480))
+	await frames(60)
+	await RenderingServer.frame_post_draw
+	var path := "/tmp/wickwarden-b01-%s.png" % tag
+	check_eq(viewport.get_texture().get_image().save_png(path), OK, "saves B01 %s capture" % tag)
+	await dispose(viewport)
 
 
 func _death_contact() -> void:

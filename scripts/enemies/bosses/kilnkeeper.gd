@@ -65,6 +65,16 @@ func _boss_ready() -> void:
 	visual = SpriteVisual.attach(self, &"kilnkeeper", body_radius)
 	if visual is SpriteVisual:
 		visual.auto_motion = false
+	_suppress_painted_plate_fallbacks()
+
+
+func _suppress_painted_plate_fallbacks() -> void:
+	if not SpriteVisual.has_art(&"wax_plate"):
+		return
+	for node in find_children("*", "Placeholder", true, false):
+		var fallback := node as Placeholder
+		if fallback != null and fallback.kind == &"wax_plate":
+			fallback.visible = false
 
 
 func _process(_delta: float) -> void:
