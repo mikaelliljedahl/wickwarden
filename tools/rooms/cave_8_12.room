@@ -1,0 +1,20 @@
+room cave_8_12
+terrain Hoard Floor: four coin heaps and decorative ring pillars surround an open fighting floor.
+floor_color 0.23 0.19 0.12
+grid
+####################
+#..................#
+#..................#
+#..................#
+#...................
+#...................
+#..................#
+#..................#
+#..................#
+####################
+arena coinwyrm @0,0
+boss coinwyrm @960,480
+opener boss_door @1872,480 id=e221
+spawn Default @1632,480
+pickup fragment 9,3 id=frag_c8 scope=c8 requires=boss_cave_8_12_defeated
+pickup wick_core 9,6 id=wick_core_c8 requires=boss_cave_8_12_defeated

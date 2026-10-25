@@ -1,0 +1,19 @@
+room cave_8_11
+terrain Auditor Gate: paired ledger banks make a clear central procession to the hoard.
+floor_color 0.23 0.19 0.12
+grid
+####################
+#..................#
+#....##......##....#
+#....##......##....#
+....................
+....................
+#....##......##....#
+#....##......##....#
+#..................#
+####################
+enemy brine_crab 8,3
+enemy brine_crab 11,6
+opener locked_door @1872,480 id=e220 scope=c8
+opener boss_door @48,480 id=e221
+spawn Default @1632,480

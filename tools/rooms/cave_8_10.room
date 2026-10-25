@@ -1,0 +1,19 @@
+room cave_8_10
+terrain Counting Floor: four counting benches flank a broad cross aisle.
+floor_color 0.23 0.19 0.12
+grid
+#########..#########
+#..................#
+#...##........##...#
+#...##........##...#
+...................#
+...................#
+#...##........##...#
+#...##........##...#
+#..................#
+####################
+enemy wickling 8,3
+enemy wickling 11,5
+enemy wickling 8,7
+opener locked_door @48,480 id=e220 scope=c8
+spawn Default @960,192

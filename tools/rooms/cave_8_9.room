@@ -1,0 +1,19 @@
+room cave_8_9
+terrain Locked Till: paired vault shelves frame the till; the south aisle stays clear.
+floor_color 0.23 0.19 0.12
+grid
+####################
+#..................#
+#....##......##....#
+#....##......##....#
+...................#
+...................#
+#............##....#
+#............##....#
+#..................#
+#########..#########
+enemy hollow 8,3
+enemy hollow 12,6
+opener locked_door @48,480 id=e218 scope=c8
+pickup small_key 9,2 id=key_c8_3 scope=c8
+spawn Default @336,480
