@@ -43,3 +43,7 @@ Other anchors are recorded when chosen (see `PROGRESS_g.md`).
 - Key colour magenta `#FF00FF` on every sheet of this range; no subject uses magenta.
 - Facing wording (from `PROGRESS.md`) is the same for monsters: down = the front faces the viewer, body square to the camera; up = the back faces the viewer; side = strict profile, facing right.
 - Reference images: `tools/source_art/tamsin_walk_side.png` (style and light) for creatures and HUD; `tools/source_art/ow_props.png` for props and the unlit and lock units.
+
+## Resumed B71 anchor, 2026-10-25
+
+`hud_heart_full_v1.png` is the producer pick for remaining dependent HUD-heart work, not an owner acceptance. Half/empty v1–3 and beat v1–2 were generated without this anchor because unresolved PENDING references were missed; keep this defect visible in the logs.
