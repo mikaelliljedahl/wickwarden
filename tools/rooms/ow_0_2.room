@@ -18,3 +18,4 @@ enemy skitterwick 11,2
 enemy skitterwick 2,8
 enemy tallow_blob 7,8
 hidden_stairs cave_9_1 FromOverworld @576,432 id=ow_0_2_stairs
+spawn FromCave @576,528

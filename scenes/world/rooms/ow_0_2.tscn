@@ -123,3 +123,6 @@ kind = &"reed"
 
 [node name="Spawns" type="Node2D" parent="."]
 y_sort_enabled = true
+
+[node name="FromCave" type="Marker2D" parent="Spawns"]
+position = Vector2(576, 528)
