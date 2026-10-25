@@ -3,7 +3,7 @@ extends Area2D
 ## rectangle of `size` px centred on the node's origin, in group `shallows`. It has no collision and does
 ## not detect anything: enemies ask it geometric questions (`contains_point`, `nearest_point`).
 ##
-## Rooms place zones over the water tiles (R4, C03, C09, C10). Visual: the Placeholder kind `shallow_water`.
+## Rooms place zones over the water tiles (R4, C03, C09, C10). Visual: the shared painted shallow-water terrain.
 
 const GROUP := &"shallows"
 const KIND := &"shallow_water"
@@ -21,7 +21,9 @@ func _init() -> void:
 
 func _ready() -> void:
 	add_to_group(GROUP)
-	Placeholder.attach(self, KIND, 0.0, size)
+	var painter := load("res://scripts/art/world_zone_visual.gd") as Script
+	if painter != null:
+		painter.attach(self, KIND, size)
 
 
 ## Global rectangle of the zone (no rotation or scale is applied).

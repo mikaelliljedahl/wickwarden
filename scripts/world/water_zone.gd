@@ -28,7 +28,9 @@ func _ready() -> void:
 	add_to_group(SHALLOWS_GROUP)
 	if deep:
 		_add_blocker()
-	Placeholder.attach(self, DEEP_KIND if deep else SHALLOW_KIND, 0.0, size)
+	var painter := load("res://scripts/art/world_zone_visual.gd") as Script
+	if painter != null:
+		painter.attach(self, DEEP_KIND if deep else SHALLOW_KIND, size)
 
 
 ## Global rectangle of the zone (no rotation or scale is applied).

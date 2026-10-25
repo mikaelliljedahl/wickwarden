@@ -49,7 +49,7 @@ func _ready() -> void:
 	_post.shape = rect
 	add_child(_post)
 	_add_dock_zone()
-	Placeholder.attach(self, KIND, 0.0, POST_SIZE)
+	SpriteVisual.attach(self, KIND, 0.0, POST_SIZE)
 
 
 func _draw() -> void:

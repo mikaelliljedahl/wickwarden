@@ -94,7 +94,10 @@ func _ready_pad() -> void:
 	_pad_area.collision_mask = Layers.PLAYER_BODY
 	_pad_area.add_child(sensor_shape)
 	add_child(_pad_area)
-	Placeholder.attach(self, PLATE_LOOK, 0.0, size)
+	var visual := SpriteVisual.attach(self, PLATE_LOOK, 0.0, size)
+	var painter := load("res://scripts/art/world_zone_visual.gd") as Script
+	if painter != null:
+		painter.ward_progress(self, visual)
 	_watch_existing_hitboxes()
 	get_tree().node_added.connect(_on_node_added)
 	if ward_id != &"" and GameState.has_flag(flag_name()):
@@ -112,7 +115,9 @@ func _ready_blocker() -> void:
 	_shape.name = "Shape"
 	_shape.shape = rect
 	add_child(_shape)
-	Placeholder.attach(self, BLOCKER_LOOK, 0.0, size)
+	SpriteVisual.attach(
+		self, BLOCKER_LOOK if SpriteVisual.has_art(BLOCKER_LOOK) else &"gate", 0.0, size
+	)
 	if ward_id != &"" and GameState.has_flag(flag_name()):
 		_open(false)
 
@@ -174,7 +179,7 @@ func _make_spore_post() -> void:
 	_spore_post.name = "SporePost"
 	_spore_post.position = spore_post_offset
 	add_child(_spore_post)
-	Placeholder.attach(_spore_post, SPORE_POST_LOOK, 0.0, LOOKS[SPORE_POST_LOOK]["size"])
+	SpriteVisual.attach(_spore_post, SPORE_POST_LOOK, 0.0, LOOKS[SPORE_POST_LOOK]["size"])
 
 
 func _fire_test_spore() -> void:

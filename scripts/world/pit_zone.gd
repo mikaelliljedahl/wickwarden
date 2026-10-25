@@ -6,7 +6,7 @@ extends Node2D
 ##
 ## Geometry, not a physics overlap: the body touches the pit when its centre is within the footprint
 ## grown by the body radius. This is exact on the frame of a move (an Area2D overlap lags one frame).
-## Visual: the Placeholder kind `look` (pit or ravine). Scenes set it; the kinds are registered here.
+## Visual: the shared textured void and rock rim (pit or ravine).
 
 ## Footprint in px, centred on the origin.
 @export var size: Vector2 = Vector2(192, 192)
@@ -29,7 +29,9 @@ func _init() -> void:
 
 func _ready() -> void:
 	add_to_group(&"pit_zone")
-	Placeholder.attach(self, look, 0.0, size)
+	var painter := load("res://scripts/art/world_zone_visual.gd") as Script
+	if painter != null:
+		painter.attach(self, look, size)
 
 
 func _physics_process(_delta: float) -> void:
@@ -100,5 +102,7 @@ static func _register_looks() -> void:
 		&"pit", {"shape": "rect", "color": Color(0.05, 0.05, 0.08), "size": Vector2(192, 192)}, true
 	)
 	Placeholder.register_kind(
-		&"ravine", {"shape": "rect", "color": Color(0.08, 0.07, 0.11), "size": Vector2(576, 96)}, true
+		&"ravine",
+		{"shape": "rect", "color": Color(0.08, 0.07, 0.11), "size": Vector2(576, 96)},
+		true
 	)

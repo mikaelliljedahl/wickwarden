@@ -92,7 +92,7 @@ func _ready_switch() -> void:
 	hurtbox.filter = _accepts_hit
 	add_child(hurtbox)
 	hurtbox.hurt.connect(_on_hurt)
-	Placeholder.attach(self, SWITCH_KIND, SWITCH_RADIUS)
+	SpriteVisual.attach(self, SWITCH_KIND, SWITCH_RADIUS)
 	if eye_id != &"" and GameState.has_flag(flag_name()):
 		is_on = true
 		hurtbox.enabled = false
@@ -107,7 +107,7 @@ func _ready_blocker() -> void:
 	_shape.name = "Shape"
 	_shape.shape = rect
 	add_child(_shape)
-	Placeholder.attach(self, look, 0.0, size)
+	SpriteVisual.attach(self, look, 0.0, size)
 	if eye_id != &"" and GameState.has_flag(flag_name()):
 		_open(false)
 
