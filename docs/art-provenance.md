@@ -1302,3 +1302,31 @@ It never quantizes the palette or thresholds the alpha. `make art-test` runs its
 The lead session looked at every source sheet and at the room screenshots in
 `docs/screens/step2/`. No human visual approval is claimed yet. The user will judge the art, and
 the width of the hook swing in particular, in play.
+
+## Resumed source records (2026-10-25)
+
+| Source | Size | Session | Output | SHA-256 prefix | Log |
+|---|---|---|---|---|---|
+| `hud_heart_full_v3.png` | 1536x1024 | `01a17383-ea02-7fc0-adac-9fd3254d3b81` | `exec-afcd3c08-3f3b-4382-b5e3-d32e0a8e0c91.png` | `a944a8678086fcf2` | `log_b71_resume_01.md` |
+| `hud_heart_full_v2.png` | 1536x1024 | `01a17383-e959-7c53-b73c-feae8ad33eb1` | `exec-770d059b-3e9f-4bf5-9484-b014c8a26693.png` | `1fff40d022de68e9` | `log_b71_resume_01.md` |
+| `hud_heart_full_v1.png` | 1536x1024 | `01a17383-e803-77f1-b6d2-521958cfb945` | `exec-eb1e01dd-c920-4006-9dc2-f5cd4cd5956c.png` | `69df497a9e4979e5` | `log_b71_resume_01.md` |
+| `unlit_chains_v2.png` | 1536x1024 | `01a17383-e8ff-79f1-a38e-c7ab77080e54` | `exec-9bcd98ab-f074-4576-9260-1dec6e6f95e9.png` | `35eace6e21b1c0e2` | `log_b71_resume_01.md` |
+| `unlit_chains_v1.png` | 1536x1024 | `01a17383-e7b6-7c70-8c1f-57a6a8b9b9b7` | `exec-f61001a4-99ef-4b6f-9537-d69b64360edc.png` | `a2997dbe432ddfa9` | `log_b71_resume_01.md` |
+| `hud_heart_beat_v2.png` | 1536x1024 | `01a17385-ede1-7dd2-82d2-3ebbf5b2f0d2` | `exec-a30001be-5a3d-4921-810d-9c69c4a24ae7.png` | `ccff1f1a1cfd75e8` | `log_b71_resume_02.md` |
+| `hud_heart_beat_v1.png` | 1536x1024 | `01a17385-efd2-79b1-b57c-cc4736e30b08` | `exec-46912037-fd3a-4ec7-8842-2c9d282513a1.png` | `396f3e34f4a92db7` | `log_b71_resume_02.md` |
+| `hud_heart_half_empty_v3.png` | 1536x1024 | `01a17385-ef94-7c01-bb4d-f0853eb724c7` | `exec-456b283c-dfa9-4579-ae7b-d83f0e9f3835.png` | `9fa3ab4941594b25` | `log_b71_resume_02.md` |
+| `hud_heart_half_empty_v2.png` | 1536x1024 | `01a17385-eec3-7092-8576-feaaebf5dcce` | `exec-246d95a9-1525-4104-85ea-f18811d53638.png` | `a9763b5bf9704a56` | `log_b71_resume_02.md` |
+| `hud_heart_half_empty_v1.png` | 1536x1024 | `01a17385-ef4e-7261-9307-fd15cf599418` | `exec-45364cde-0577-4c43-996b-1eebb2adb294.png` | `f414d0785f636568` | `log_b71_resume_02.md` |
+| `unlit_chains_v3.png` | 1536x1024 | `01a17383-e874-73c2-b6a7-37d87cac1acd` | `exec-bb332fe5-b255-4c90-8309-7f2f2c0bd2da.png` | `63c54c3cf12b9075` | `log_b71_resume_02.md` |
+| `hud_item_frame_v2.png` | 1536x1024 | `01a17387-4fee-74e3-831b-745222faae24` | `exec-0ac1c695-cc68-4a9c-a87f-d6a39bcf6fab.png` | `65bfee7d0c1b78e5` | `log_b71_resume_03.md` |
+| `hud_item_frame_v1.png` | 1536x1024 | `01a17387-4f3b-7cc2-8653-5bc1dccb61af` | `exec-8bdb795d-d5a8-4260-97a0-010ef94691d8.png` | `8772c707e1d1766b` | `log_b71_resume_03.md` |
+| `hud_wick_core_slot_v3.png` | 1536x1024 | `01a17387-4d6e-7ed2-a852-205ad044ed22` | `exec-ed732585-25f5-42d7-b2a3-95c169f8b55c.png` | `b9ecdb9847eb0cf0` | `log_b71_resume_03.md` |
+| `hud_wick_core_slot_v2.png` | 1536x1024 | `01a17387-4e9d-7a70-9ccf-90f1bfda2fd4` | `exec-f39bd113-2fb8-4eb3-a60f-6c546e436781.png` | `e578fd31953008fb` | `log_b71_resume_03.md` |
+| `hud_wick_core_slot_v1.png` | 1536x1024 | `01a17387-4d98-7b73-96ed-204ee109c04b` | `exec-177b3304-d6fa-49ba-8a00-9f12d3cdaa91.png` | `cc730c54b2c7e27f` | `log_b71_resume_03.md` |
+| `hud_heart_beat_v3.png` | 1536x1024 | `01a17387-4b4d-7d60-b10d-f583cfa1b7e6` | `exec-3b81c000-b5da-422e-8c31-eb1403a75f58.png` | `ef261ff88ebb90a0` | `log_b71_resume_03.md` |
+| `warp_icon_c9_v2.png` | 1536x1024 | `01a17389-7234-7432-8d8b-535b732fb0d0` | `exec-d35c14a2-c5b0-45af-8822-501fb9de16cb.png` | `0124113ece51480c` | `log_art_resume_04.md` |
+| `warp_icon_c8_v2.png` | 1536x1024 | `01a17389-73ae-7d83-91fe-85a83f14f208` | `exec-319c5200-376b-44d0-8d30-91e1448bf2f0.png` | `472e2d7f2b685186` | `log_art_resume_04.md` |
+| `hud_item_frame_v3.png` | 1536x1024 | `01a17389-705a-7181-b1ed-7c288025a645` | `exec-75e94535-6e00-4a3e-baad-47c0101fc7e0.png` | `f205fad02de3f6be` | `log_art_resume_04.md` |
+| `warp_icon_c9_v1.png` | 1536x1024 | `01a17389-7187-7361-84b0-0d167472957d` | `exec-a5942636-a9d4-47df-b476-7a941f830372.png` | `1ad064f733f9ba7f` | `log_art_resume_05.md` |
+| `warp_icon_c8_v3.png` | 1536x1024 | `01a17389-730f-75a0-bc09-748b0e415f75` | `exec-38ba859c-48e3-4559-bdfa-05149733e7de.png` | `d4d3d568e3390337` | `log_art_resume_05.md` |
+| `warp_icon_c8_v1.png` | 1536x1024 | `01a17389-70ab-7f63-843b-9bb5a78216bd` | `exec-170eaa63-ca34-42b5-8375-6f413ab75eeb.png` | `ce13b4871e9cc4fd` | `log_art_resume_05.md` |
