@@ -1,8 +1,11 @@
 extends TestCase
 ## Pickups: effects, collection by the player and by a carrier, timeout and blink, persistence.
 
+const SPRITE_FIXTURE := "res://tests/fixtures/sprites_fixture/sprites.json"
+
 
 func run() -> void:
+	await _item_visuals()
 	await _effects()
 	await _timeout_and_blink()
 	await _carrier()
@@ -12,6 +15,64 @@ func run() -> void:
 	await _reward_scenes()
 	await _pot_bag_and_slug_bundle()
 	await _slug_drop_gating()
+
+
+func _item_visuals() -> void:
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+	var arena := make_arena()
+	for raw_id in ItemRegistry.ids():
+		var id := StringName(raw_id)
+		var pickup := PickupBase.new()
+		pickup.kind = &"item"
+		pickup.item_id = id
+		arena.add_child(pickup)
+		var visual := pickup.get_node_or_null(Placeholder.VISUAL_NAME)
+		var expected := StringName("icon_%s" % id)
+		check(SpriteVisual.has_art(expected), "%s has its dedicated pickup icon art" % id)
+		check(visual is SpriteVisual, "%s pickup uses its painted icon" % id)
+		if visual is SpriteVisual:
+			check_eq((visual as SpriteVisual).kind, expected, "%s pickup selects its dedicated icon" % id)
+		var collider := pickup.get_child(0) as CollisionShape2D
+		check(
+			collider != null
+				and collider.shape is CircleShape2D
+				and (collider.shape as CircleShape2D).radius == PickupBase.PICKUP_RADIUS,
+			"%s icon leaves the pickup radius unchanged" % id
+		)
+	await frames(2)
+	check_eq(GameState.acquired_item_ids().size(), 0, "showing item icons does not acquire tools")
+	await dispose(arena)
+
+	# The fixture has full body art for `walker` and no tool icons, so it exercises the legacy art path.
+	SpriteVisual.use_manifest(SPRITE_FIXTURE)
+	var fallback_arena := make_arena()
+	var body_art := PickupBase.new()
+	body_art.kind = &"item"
+	body_art.item_id = &"walker"
+	fallback_arena.add_child(body_art)
+	var body_visual := body_art.get_node_or_null(Placeholder.VISUAL_NAME)
+	check(body_visual is SpriteVisual, "an accepted item body art remains a fallback")
+	if body_visual is SpriteVisual:
+		check_eq((body_visual as SpriteVisual).kind, &"walker", "accepted body art keeps its kind")
+	var registered := PickupBase.new()
+	registered.kind = &"item"
+	registered.item_id = &"tether_moth"
+	fallback_arena.add_child(registered)
+	var registered_visual := registered.get_node_or_null(Placeholder.VISUAL_NAME)
+	check(registered_visual is Placeholder, "a registered item placeholder remains a fallback")
+	if registered_visual is Placeholder:
+		check_eq((registered_visual as Placeholder).kind, &"tether_moth", "registered item look keeps its kind")
+	var generic := PickupBase.new()
+	generic.kind = &"item"
+	generic.item_id = &"missing_item_art"
+	fallback_arena.add_child(generic)
+	var generic_visual := generic.get_node_or_null(Placeholder.VISUAL_NAME)
+	check(generic_visual is Placeholder, "an unknown item uses the registered generic item look")
+	if generic_visual is Placeholder:
+		check_eq((generic_visual as Placeholder).kind, &"item", "unknown item falls back to generic pickup")
+	await frames(2)
+	await dispose(fallback_arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _effects() -> void:
@@ -210,6 +271,22 @@ func _requires_flag() -> void:
 	arena.add_child(later)
 	await frames(3)
 	check_eq(GameState.currency, 2, "a pickup whose flag is already set is active at once")
+	var gated_item := PickupBase.new()
+	gated_item.kind = &"item"
+	gated_item.item_id = &"reed_raft"
+	gated_item.requires_flag = &"test_raft_reward_unlocked"
+	gated_item.global_position = player.global_position
+	arena.add_child(gated_item)
+	await frames(2)
+	check(not gated_item.visible, "a gated item stays hidden before its unlock flag")
+	var gated_visual := gated_item.get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
+	check(gated_visual != null, "a gated item keeps its painted icon while hidden")
+	if gated_visual != null:
+		check_eq(gated_visual.kind, &"icon_reed_raft", "gated reed raft selects its dedicated icon")
+	GameState.set_flag(&"test_raft_reward_unlocked")
+	check(gated_item.visible, "the gated item appears as soon as its flag is set")
+	await frames(3)
+	check(GameState.has_item(&"reed_raft"), "the unlocked item still grants its registered tool")
 	await dispose(arena)
 
 

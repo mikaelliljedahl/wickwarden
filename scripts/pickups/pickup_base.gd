@@ -81,12 +81,23 @@ func _ready() -> void:
 	if get_node_or_null(Placeholder.VISUAL_NAME) == null:
 		var look := kind
 		if kind == &"item":
-			var has_item_look := SpriteVisual.has_art(item_id) or Placeholder.has_kind(item_id)
-			look = item_id if has_item_look else &"item"
+			look = _item_visual_kind(item_id)
 		SpriteVisual.attach(self, look)
 	if requires_flag != &"":
 		GameState.flag_changed.connect(_on_flag_changed)
 		_refresh_gate()
+
+
+## Dedicated tool icons fit the world pickup presentation better than the full-size tool bodies.
+## Keep item body art and the registered generic pickup as fallbacks for older or incomplete art.
+static func _item_visual_kind(id: StringName) -> StringName:
+	if ItemRegistry.items.has(id):
+		var icon := StringName("icon_%s" % id)
+		if SpriteVisual.has_art(icon):
+			return icon
+	if SpriteVisual.has_art(id) or Placeholder.has_kind(id):
+		return id
+	return &"item"
 
 
 func _exit_tree() -> void:
