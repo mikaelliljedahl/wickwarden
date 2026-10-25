@@ -1,0 +1,26 @@
+{
+  "rekindle": {
+    "id": "ending_a_rekindle",
+    "lines": [
+      "Tamsin lifts her lamp to the last wick.",
+      "Above Vey, the Nine Lanterns burn again.",
+      "Warmth returns to the valley. So does the old cost."
+    ],
+    "hold": 8
+  },
+  "wickwarden": {
+    "id": "ending_b_dawn",
+    "lines": [
+      "Tamsin puts out the last lantern.",
+      "The Hush settle. The valley grows quiet.",
+      "Slowly, the dusk gives way to a dawn of its own."
+    ],
+    "hold": 8
+  },
+  "credits": [
+    "WICKWARDEN",
+    "A game by Mikael Liljedahl",
+    "Thank you for playing."
+  ],
+  "credits_hold": 8
+}
