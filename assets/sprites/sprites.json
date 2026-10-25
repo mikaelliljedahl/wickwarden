@@ -1,4 +1,800 @@
 {
+  "hollow_captain": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      206.0
+    ],
+    "foot": 236,
+    "radius": 30.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_down": {
+        "file": "res://assets/sprites/hollow_captain_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/hollow_captain_idle_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/hollow_captain_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/hollow_captain_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "thorn_warden": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      206.0
+    ],
+    "foot": 236,
+    "radius": 30.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_down": {
+        "file": "res://assets/sprites/thorn_warden_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/thorn_warden_idle_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/thorn_warden_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/thorn_warden_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "kilnkeeper": {
+    "cell": [
+      512,
+      512
+    ],
+    "anchor": [
+      256.0,
+      410.0
+    ],
+    "foot": 470,
+    "radius": 60.0,
+    "mirror_side": true,
+    "animations": {
+      "idle_down": {
+        "file": "res://assets/sprites/kilnkeeper_idle_down.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_down": {
+        "file": "res://assets/sprites/kilnkeeper_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "slag_fan_down": {
+        "file": "res://assets/sprites/kilnkeeper_slag_fan_down.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/kilnkeeper_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/kilnkeeper_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "kilnkeeper_p2": {
+    "cell": [
+      512,
+      512
+    ],
+    "anchor": [
+      256.0,
+      410.0
+    ],
+    "foot": 470,
+    "radius": 60.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_side": {
+        "file": "res://assets/sprites/kilnkeeper_p2_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/kilnkeeper_p2_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "splash_side": {
+        "file": "res://assets/sprites/kilnkeeper_p2_splash_side.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      },
+      "rush_side": {
+        "file": "res://assets/sprites/kilnkeeper_p2_rush_side.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "briar_canopy": {
+    "cell": [
+      768,
+      512
+    ],
+    "anchor": [
+      384.0,
+      256.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/briar_canopy_idle.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "eye_lost": {
+        "file": "res://assets/sprites/briar_canopy_eye_lost.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "briar_bloom": {
+    "cell": [
+      512,
+      512
+    ],
+    "anchor": [
+      256.0,
+      256.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/briar_bloom_idle.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "sweep": {
+        "file": "res://assets/sprites/briar_bloom_sweep.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "briar_eye": {
+    "cell": [
+      128,
+      192
+    ],
+    "anchor": [
+      64.0,
+      154.0
+    ],
+    "foot": 180,
+    "radius": 26.0,
+    "mirror_side": false,
+    "animations": {
+      "raised": {
+        "file": "res://assets/sprites/briar_eye_raised.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "lower": {
+        "file": "res://assets/sprites/briar_eye_lower.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      },
+      "idle": {
+        "file": "res://assets/sprites/briar_eye_idle.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "spore": {
+        "file": "res://assets/sprites/briar_eye_spore.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "briar_seed": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      64.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "fall": {
+        "file": "res://assets/sprites/briar_seed_fall.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/briar_seed_idle.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "burst": {
+        "file": "res://assets/sprites/briar_seed_burst.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "sump_lurker": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      300.0
+    ],
+    "foot": 340,
+    "radius": 40.0,
+    "mirror_side": true,
+    "animations": {
+      "surface": {
+        "file": "res://assets/sprites/sump_lurker_surface.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      },
+      "bite": {
+        "file": "res://assets/sprites/sump_lurker_bite.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      },
+      "idle": {
+        "file": "res://assets/sprites/sump_lurker_idle.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "spit": {
+        "file": "res://assets/sprites/sump_lurker_spit.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "dive": {
+        "file": "res://assets/sprites/sump_lurker_dive.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "tidewick_head": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      128.0
+    ],
+    "mirror_side": true,
+    "centered": true,
+    "animations": {
+      "walk_side": {
+        "file": "res://assets/sprites/tidewick_head_walk_side.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/tidewick_head_idle_side.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "spit_side": {
+        "file": "res://assets/sprites/tidewick_head_spit_side.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "scorched_side": {
+        "file": "res://assets/sprites/tidewick_head_scorched_side.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_down": {
+        "file": "res://assets/sprites/tidewick_head_walk_down.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/tidewick_head_idle_down.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "tidewick_body": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      96.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tidewick_body_idle.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "reverse": {
+        "file": "res://assets/sprites/tidewick_body_reverse.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "tidewick_tail": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      128.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tidewick_tail_idle.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "surface": {
+        "file": "res://assets/sprites/tidewick_tail_surface.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      },
+      "exposed": {
+        "file": "res://assets/sprites/tidewick_tail_exposed.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "cinder_wisp": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      64.0
+    ],
+    "mirror_side": true,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/cinder_wisp_idle.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "move": {
+        "file": "res://assets/sprites/cinder_wisp_move.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "swell": {
+        "file": "res://assets/sprites/cinder_wisp_swell.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "husk_hound": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      150.0
+    ],
+    "foot": 176,
+    "radius": 26.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_side": {
+        "file": "res://assets/sprites/husk_hound_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/husk_hound_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "brine_crab": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      146.0
+    ],
+    "foot": 176,
+    "radius": 30.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_side": {
+        "file": "res://assets/sprites/brine_crab_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/brine_crab_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "item_cinder_wick": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/item_cinder_wick_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "glint": {
+        "file": "res://assets/sprites/item_cinder_wick_glint.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "item_tallow_sling": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/item_tallow_sling_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "glint": {
+        "file": "res://assets/sprites/item_tallow_sling_glint.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "item_reed_raft": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/item_reed_raft_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "glint": {
+        "file": "res://assets/sprites/item_reed_raft_glint.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c1": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c1_idle.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c2": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c2_idle.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c3": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c3_idle.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "moss_wall": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/moss_wall_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "wax_seal": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/wax_seal_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "melt": {
+        "file": "res://assets/sprites/wax_seal_melt.png",
+        "frames": 5,
+        "fps": 8.0,
+        "loop": false
+      },
+      "open": {
+        "file": "res://assets/sprites/wax_seal_open.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "anchor_ring": {
+    "cell": [
+      128,
+      160
+    ],
+    "anchor": [
+      64.0,
+      154
+    ],
+    "foot": 154,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 48,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/anchor_ring_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "anchor_pocket": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 48,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/anchor_pocket_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "boss_door": {
+    "cell": [
+      192,
+      288
+    ],
+    "anchor": [
+      96.0,
+      282
+    ],
+    "foot": 282,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/boss_door_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "unlock": {
+        "file": "res://assets/sprites/boss_door_unlock.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": false
+      },
+      "open": {
+        "file": "res://assets/sprites/boss_door_open.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "flame": {
     "cell": [
       96,

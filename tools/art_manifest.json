@@ -2,6 +2,768 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+ "encounter_hollow_captain": {
+  "measure": "fit",
+  "value": [
+   244,
+   230
+  ],
+  "ref": [
+   {
+    "sheet": "hollow_captain_walk_down_v3",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "hollow_captain_walk_down_v3",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "hollow_captain_walk_side_v2",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "hollow_captain_walk_side_v2",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_thorn_warden": {
+  "measure": "fit",
+  "value": [
+   244,
+   230
+  ],
+  "ref": [
+   {
+    "sheet": "thorn_warden_walk_down_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "thorn_warden_walk_down_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "thorn_warden_walk_side_v2",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "thorn_warden_walk_side_v2",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_kilnkeeper": {
+ "measure": "fit",
+ "value": [
+  500,
+  464
+ ],
+ "ref": [
+  {
+   "sheet": "kilnkeeper_p1_down_v3",
+   "row": 0,
+   "poses": [
+    0,
+    2
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p1_down_v3",
+   "row": 1,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p1_down_v3",
+   "row": 2,
+   "poses": [
+    0,
+    3
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p1_side_v3",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p1_side_v3",
+   "row": 0,
+   "poses": 0
+  },
+  {
+   "sheet": "kilnkeeper_p2_side_v3",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p2_side_v3",
+   "row": 0,
+   "poses": 0
+  },
+  {
+   "sheet": "kilnkeeper_p2_side_v3",
+   "row": 1,
+   "poses": [
+    0,
+    3
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p2_side_v3",
+   "row": 2,
+   "poses": [
+    0,
+    2
+   ]
+  }
+ ]
+},
+ "encounter_kilnkeeper_p2": {
+ "measure": "fit",
+ "value": [
+  500,
+  464
+ ],
+ "ref": [
+  {
+   "sheet": "kilnkeeper_p1_down_v3",
+   "row": 0,
+   "poses": [
+    0,
+    2
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p1_down_v3",
+   "row": 1,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p1_down_v3",
+   "row": 2,
+   "poses": [
+    0,
+    3
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p1_side_v3",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p1_side_v3",
+   "row": 0,
+   "poses": 0
+  },
+  {
+   "sheet": "kilnkeeper_p2_side_v3",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p2_side_v3",
+   "row": 0,
+   "poses": 0
+  },
+  {
+   "sheet": "kilnkeeper_p2_side_v3",
+   "row": 1,
+   "poses": [
+    0,
+    3
+   ]
+  },
+  {
+   "sheet": "kilnkeeper_p2_side_v3",
+   "row": 2,
+   "poses": [
+    0,
+    2
+   ]
+  }
+ ]
+},
+ "encounter_briar_canopy": {
+  "measure": "fit",
+  "value": [
+   756,
+   384.0
+  ],
+  "ref": [
+   {
+    "sheet": "briar_mother_p1_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "briar_mother_p1_v1",
+    "row": 1,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_briar_bloom": {
+  "measure": "fit",
+  "value": [
+   500,
+   384.0
+  ],
+  "ref": [
+   {
+    "sheet": "briar_bloom_p2_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "briar_bloom_p2_v1",
+    "row": 1,
+    "poses": [
+     0,
+     2
+    ]
+   }
+  ]
+ },
+ "encounter_briar_eye": {
+  "measure": "fit",
+  "value": [
+   116,
+   174
+  ],
+  "ref": [
+   {
+    "sheet": "seed_eye_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "seed_eye_v1",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   },
+   {
+    "sheet": "seed_eye_v1",
+    "row": 2,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "seed_eye_v1",
+    "row": 3,
+    "poses": [
+     0,
+     2
+    ]
+   }
+  ]
+ },
+ "encounter_briar_seed": {
+  "measure": "fit",
+  "value": [
+   116,
+   96.0
+  ],
+  "ref": [
+   {
+    "sheet": "briar_seed_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "briar_seed_v1",
+    "row": 1,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "briar_seed_v1",
+    "row": 2,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "encounter_sump_lurker": {
+  "measure": "fit",
+  "value": [
+   372,
+   334
+  ],
+  "ref": [
+   {
+    "sheet": "sump_lurker_v3",
+    "row": 0,
+    "poses": [
+     0,
+     3
+    ]
+   },
+   {
+    "sheet": "sump_lurker_v3",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   },
+   {
+    "sheet": "sump_lurker_v3",
+    "row": 2,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "sump_lurker_v3",
+    "row": 2,
+    "poses": [
+     2,
+     4
+    ]
+   },
+   {
+    "sheet": "sump_lurker_v3",
+    "row": 3,
+    "poses": [
+     0,
+     3
+    ]
+   }
+  ]
+ },
+ "encounter_tidewick_head": {
+  "measure": "fit",
+  "value": [
+   244,
+   192.0
+  ],
+  "ref": [
+   {
+    "sheet": "tidewick_head_side_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "tidewick_head_side_v1",
+    "row": 1,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "tidewick_head_side_v1",
+    "row": 2,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "tidewick_head_down_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   }
+  ]
+ },
+ "encounter_tidewick_body": {
+  "measure": "fit",
+  "value": [
+   180,
+   144.0
+  ],
+  "ref": [
+   {
+    "sheet": "tidewick_body_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "tidewick_body_v1",
+    "row": 1,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_tidewick_tail": {
+  "measure": "fit",
+  "value": [
+   244,
+   192.0
+  ],
+  "ref": [
+   {
+    "sheet": "tidewick_tail_v1",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "tidewick_tail_v1",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   },
+   {
+    "sheet": "tidewick_tail_v1",
+    "row": 2,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "encounter_cinder_wisp": {
+  "measure": "fit",
+  "value": [
+   116,
+   96.0
+  ],
+  "ref": [
+   {
+    "sheet": "cinder_wisp_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "cinder_wisp_v1",
+    "row": 1,
+    "poses": [
+     0,
+     2
+    ]
+   }
+  ]
+ },
+ "encounter_husk_hound": {
+  "measure": "fit",
+  "value": [
+   180,
+   170
+  ],
+  "ref": [
+   {
+    "sheet": "husk_hound_walk_side_v2",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "husk_hound_walk_side_v2",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_brine_crab": {
+  "measure": "fit",
+  "value": [
+   180,
+   170
+  ],
+  "ref": [
+   {
+    "sheet": "brine_crab_walk_side_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "brine_crab_walk_side_v1",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_item_cinder_wick": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "item_cinder_wick_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "item_cinder_wick_v1",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   }
+  ]
+ },
+ "encounter_item_tallow_sling": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "item_tallow_sling_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "item_tallow_sling_v1",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   }
+  ]
+ },
+ "encounter_item_reed_raft": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "item_reed_raft_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "item_reed_raft_v1",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   }
+  ]
+ },
+ "encounter_fragment_c1": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "fragment_c1_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "encounter_fragment_c2": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "fragment_c2_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "encounter_fragment_c3": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "fragment_c3_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "encounter_moss_wall": {
+  "measure": "fit",
+  "value": [
+   180,
+   180
+  ],
+  "ref": [
+   {
+    "sheet": "moss_wall_v1",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_wax_seal": {
+  "measure": "fit",
+  "value": [
+   180,
+   180
+  ],
+  "ref": [
+   {
+    "sheet": "wax_seal_v3",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "wax_seal_v3",
+    "row": 1,
+    "poses": [
+     0,
+     5
+    ]
+   },
+   {
+    "sheet": "wax_seal_v3",
+    "row": 2,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_anchor_ring": {
+  "measure": "fit",
+  "value": [
+   116,
+   148
+  ],
+  "ref": [
+   {
+    "sheet": "anchor_ring_v2",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_anchor_pocket": {
+  "measure": "fit",
+  "value": [
+   180,
+   180
+  ],
+  "ref": [
+   {
+    "sheet": "anchor_pocket_v1",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "encounter_boss_door": {
+  "measure": "fit",
+  "value": [
+   180,
+   276
+  ],
+  "ref": [
+   {
+    "sheet": "boss_door_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "boss_door_v1",
+    "row": 1,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "boss_door_v1",
+    "row": 2,
+    "poses": 0
+   }
+  ]
+ },
  "body_flame": {
   "measure": "fit",
   "value": [
@@ -233,6 +995,234 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+ "hollow_captain": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "foot",
+  "foot": 236,
+  "radius": 30,
+  "mirror_side": true
+ },
+ "thorn_warden": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "foot",
+  "foot": 236,
+  "radius": 30,
+  "mirror_side": true
+ },
+ "kilnkeeper": {
+  "cell": [
+   512,
+   512
+  ],
+  "align": "foot",
+  "foot": 470,
+  "radius": 60,
+  "mirror_side": true
+ },
+ "kilnkeeper_p2": {
+  "cell": [
+   512,
+   512
+  ],
+  "align": "foot",
+  "foot": 470,
+  "radius": 60,
+  "mirror_side": true
+ },
+ "briar_canopy": {
+  "cell": [
+   768,
+   512
+  ],
+  "align": "center"
+ },
+ "briar_bloom": {
+  "cell": [
+   512,
+   512
+  ],
+  "align": "center"
+ },
+ "briar_eye": {
+  "cell": [
+   128,
+   192
+  ],
+  "align": "foot",
+  "foot": 180,
+  "radius": 26
+ },
+ "briar_seed": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center"
+ },
+ "sump_lurker": {
+  "cell": [
+   384,
+   384
+  ],
+  "align": "foot",
+  "foot": 340,
+  "radius": 40,
+  "mirror_side": true
+ },
+ "tidewick_head": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "center",
+  "mirror_side": true
+ },
+ "tidewick_body": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "center"
+ },
+ "tidewick_tail": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "center"
+ },
+ "cinder_wisp": {
+  "cell": [
+   128,
+   128
+  ],
+  "align": "center",
+  "mirror_side": true
+ },
+ "husk_hound": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 176,
+  "radius": 26,
+  "mirror_side": true
+ },
+ "brine_crab": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 176,
+  "radius": 30,
+  "mirror_side": true
+ },
+ "item_cinder_wick": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "item_tallow_sling": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "item_reed_raft": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "fragment_c1": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "fragment_c2": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "fragment_c3": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "moss_wall": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 96
+ },
+ "wax_seal": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 96
+ },
+ "anchor_ring": {
+  "cell": [
+   128,
+   160
+  ],
+  "align": "foot",
+  "foot": 154,
+  "prop": true,
+  "rect_h": 48
+ },
+ "anchor_pocket": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 48
+ },
+ "boss_door": {
+  "cell": [
+   192,
+   288
+  ],
+  "align": "foot",
+  "foot": 282,
+  "prop": true,
+  "rect_h": 96
+ },
  "flame": {
   "cell": [
    96,
@@ -546,6 +1536,1234 @@
  }
  },
  "sheets": {
+ "hollow_captain_walk_down_v3": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "hollow_captain",
+      "anim": "walk_down",
+      "file": "hollow_captain_walk_down",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "idle_down",
+      "file": "hollow_captain_idle_down",
+      "poses": 0,
+      "scale": "encounter_hollow_captain",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "hollow_captain_walk_side_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "hollow_captain",
+      "anim": "walk_side",
+      "file": "hollow_captain_walk_side",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "idle_side",
+      "file": "hollow_captain_idle_side",
+      "poses": 0,
+      "scale": "encounter_hollow_captain",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "thorn_warden_walk_down_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "thorn_warden",
+      "anim": "walk_down",
+      "file": "thorn_warden_walk_down",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_thorn_warden",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "thorn_warden",
+      "anim": "idle_down",
+      "file": "thorn_warden_idle_down",
+      "poses": 0,
+      "scale": "encounter_thorn_warden",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "thorn_warden_walk_side_v2": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "thorn_warden",
+     "anim": "walk_side",
+     "file": "thorn_warden_walk_side",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "encounter_thorn_warden",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "thorn_warden",
+     "anim": "idle_side",
+     "file": "thorn_warden_idle_side",
+     "poses": 0,
+     "scale": "encounter_thorn_warden",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  }
+ ],
+ "params": {
+  "min_gap": 1
+ }
+},
+ "kilnkeeper_p1_down_v3": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "kilnkeeper",
+      "anim": "idle_down",
+      "file": "kilnkeeper_idle_down",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_kilnkeeper",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "kilnkeeper",
+      "anim": "walk_down",
+      "file": "kilnkeeper_walk_down",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_kilnkeeper",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "kilnkeeper",
+      "anim": "slag_fan_down",
+      "file": "kilnkeeper_slag_fan_down",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_kilnkeeper",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ],
+  "params": {
+   "band_floor": 0.9,
+   "min_gap_y": 1
+  }
+ },
+ "kilnkeeper_p1_side_v3": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "kilnkeeper",
+     "anim": "walk_side",
+     "file": "kilnkeeper_walk_side",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "encounter_kilnkeeper",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "kilnkeeper",
+     "anim": "idle_side",
+     "file": "kilnkeeper_idle_side",
+     "poses": 0,
+     "scale": "encounter_kilnkeeper",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  },
+  {
+   "poses": 1,
+   "skip": true,
+   "outputs": []
+  }
+ ]
+},
+ "kilnkeeper_p2_side_v3": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "kilnkeeper_p2",
+     "anim": "walk_side",
+     "file": "kilnkeeper_p2_walk_side",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "encounter_kilnkeeper_p2",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "kilnkeeper_p2",
+     "anim": "idle_side",
+     "file": "kilnkeeper_p2_idle_side",
+     "poses": 0,
+     "scale": "encounter_kilnkeeper_p2",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  },
+  {
+   "poses": 3,
+   "outputs": [
+    {
+     "kind": "kilnkeeper_p2",
+     "anim": "splash_side",
+     "file": "kilnkeeper_p2_splash_side",
+     "poses": [
+      0,
+      3
+     ],
+     "scale": "encounter_kilnkeeper_p2",
+     "fps": 8,
+     "loop": true
+    }
+   ]
+  },
+  {
+   "poses": 2,
+   "outputs": [
+    {
+     "kind": "kilnkeeper_p2",
+     "anim": "rush_side",
+     "file": "kilnkeeper_p2_rush_side",
+     "poses": [
+      0,
+      2
+     ],
+     "scale": "encounter_kilnkeeper_p2",
+     "fps": 8,
+     "loop": true
+    }
+   ]
+  }
+ ],
+ "params": {
+  "band_floor": 0.9,
+  "min_gap_y": 1
+ }
+},
+ "briar_mother_p1_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "briar_canopy",
+      "anim": "idle",
+      "file": "briar_canopy_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_briar_canopy",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "briar_canopy",
+      "anim": "eye_lost",
+      "file": "briar_canopy_eye_lost",
+      "poses": 0,
+      "scale": "encounter_briar_canopy",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "briar_bloom_p2_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "briar_bloom",
+      "anim": "idle",
+      "file": "briar_bloom_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_briar_bloom",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "briar_bloom",
+      "anim": "sweep",
+      "file": "briar_bloom_sweep",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_briar_bloom",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "seed_eye_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "briar_eye",
+      "anim": "raised",
+      "file": "briar_eye_raised",
+      "poses": 0,
+      "scale": "encounter_briar_eye",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "briar_eye",
+      "anim": "lower",
+      "file": "briar_eye_lower",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_briar_eye",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "briar_eye",
+      "anim": "idle",
+      "file": "briar_eye_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_briar_eye",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "briar_eye",
+      "anim": "spore",
+      "file": "briar_eye_spore",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_briar_eye",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "briar_seed_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "briar_seed",
+      "anim": "fall",
+      "file": "briar_seed_fall",
+      "poses": 0,
+      "scale": "encounter_briar_seed",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "briar_seed",
+      "anim": "idle",
+      "file": "briar_seed_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_briar_seed",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "briar_seed",
+      "anim": "burst",
+      "file": "briar_seed_burst",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_briar_seed",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   }
+  ]
+ },
+ "sump_lurker_v3": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "sump_lurker",
+      "anim": "surface",
+      "file": "sump_lurker_surface",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_sump_lurker",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "sump_lurker",
+      "anim": "bite",
+      "file": "sump_lurker_bite",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_sump_lurker",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   },
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "sump_lurker",
+      "anim": "idle",
+      "file": "sump_lurker_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_sump_lurker",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "sump_lurker",
+      "anim": "spit",
+      "file": "sump_lurker_spit",
+      "poses": [
+       2,
+       4
+      ],
+      "scale": "encounter_sump_lurker",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "sump_lurker",
+      "anim": "dive",
+      "file": "sump_lurker_dive",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_sump_lurker",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   }
+  ],
+  "params": {
+   "min_gap": 1
+  }
+ },
+ "tidewick_head_side_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "tidewick_head",
+      "anim": "walk_side",
+      "file": "tidewick_head_walk_side",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_tidewick_head",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "tidewick_head",
+      "anim": "idle_side",
+      "file": "tidewick_head_idle_side",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_tidewick_head",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "tidewick_head",
+      "anim": "spit_side",
+      "file": "tidewick_head_spit_side",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_tidewick_head",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "tidewick_head",
+      "anim": "scorched_side",
+      "file": "tidewick_head_scorched_side",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_tidewick_head",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "tidewick_head_down_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "tidewick_head",
+      "anim": "walk_down",
+      "file": "tidewick_head_walk_down",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_tidewick_head",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "tidewick_head",
+      "anim": "idle_down",
+      "file": "tidewick_head_idle_down",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_tidewick_head",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "tidewick_body_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "tidewick_body",
+      "anim": "idle",
+      "file": "tidewick_body_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_tidewick_body",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "tidewick_body",
+      "anim": "reverse",
+      "file": "tidewick_body_reverse",
+      "poses": 0,
+      "scale": "encounter_tidewick_body",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ],
+  "params": {
+   "noise_area": 500,
+   "min_gap": 1
+  }
+ },
+ "tidewick_tail_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "tidewick_tail",
+      "anim": "idle",
+      "file": "tidewick_tail_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_tidewick_tail",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "tidewick_tail",
+      "anim": "surface",
+      "file": "tidewick_tail_surface",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_tidewick_tail",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   },
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "tidewick_tail",
+      "anim": "exposed",
+      "file": "tidewick_tail_exposed",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_tidewick_tail",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "cinder_wisp_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "cinder_wisp",
+      "anim": "idle",
+      "file": "cinder_wisp_idle",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_cinder_wisp",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "cinder_wisp",
+      "anim": "move",
+      "file": "cinder_wisp_move",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_cinder_wisp",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "cinder_wisp",
+      "anim": "swell",
+      "file": "cinder_wisp_swell",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_cinder_wisp",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "husk_hound_walk_side_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "husk_hound",
+      "anim": "walk_side",
+      "file": "husk_hound_walk_side",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_husk_hound",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "husk_hound",
+      "anim": "idle_side",
+      "file": "husk_hound_idle_side",
+      "poses": 0,
+      "scale": "encounter_husk_hound",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "brine_crab_walk_side_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "brine_crab",
+      "anim": "walk_side",
+      "file": "brine_crab_walk_side",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_brine_crab",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "brine_crab",
+      "anim": "idle_side",
+      "file": "brine_crab_idle_side",
+      "poses": 0,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "item_cinder_wick_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "item_cinder_wick",
+      "anim": "idle",
+      "file": "item_cinder_wick_idle",
+      "poses": 0,
+      "scale": "encounter_item_cinder_wick",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "item_cinder_wick",
+      "anim": "glint",
+      "file": "item_cinder_wick_glint",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_item_cinder_wick",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "item_tallow_sling_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "item_tallow_sling",
+      "anim": "idle",
+      "file": "item_tallow_sling_idle",
+      "poses": 0,
+      "scale": "encounter_item_tallow_sling",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "item_tallow_sling",
+      "anim": "glint",
+      "file": "item_tallow_sling_glint",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_item_tallow_sling",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "item_reed_raft_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "item_reed_raft",
+      "anim": "idle",
+      "file": "item_reed_raft_idle",
+      "poses": 0,
+      "scale": "encounter_item_reed_raft",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "item_reed_raft",
+      "anim": "glint",
+      "file": "item_reed_raft_glint",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "encounter_item_reed_raft",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "fragment_c1_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "fragment_c1",
+      "anim": "idle",
+      "file": "fragment_c1_idle",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_fragment_c1",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "fragment_c2_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "fragment_c2",
+      "anim": "idle",
+      "file": "fragment_c2_idle",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_fragment_c2",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "fragment_c3_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "fragment_c3",
+      "anim": "idle",
+      "file": "fragment_c3_idle",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_fragment_c3",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "moss_wall_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "moss_wall",
+      "anim": "idle",
+      "file": "moss_wall_idle",
+      "poses": 0,
+      "scale": "encounter_moss_wall",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [],
+    "skip": true
+   }
+  ]
+ },
+ "wax_seal_v3": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "wax_seal",
+      "anim": "idle",
+      "file": "wax_seal_idle",
+      "poses": 0,
+      "scale": "encounter_wax_seal",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 5,
+    "outputs": [
+     {
+      "kind": "wax_seal",
+      "anim": "melt",
+      "file": "wax_seal_melt",
+      "poses": [
+       0,
+       5
+      ],
+      "scale": "encounter_wax_seal",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   },
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "wax_seal",
+      "anim": "open",
+      "file": "wax_seal_open",
+      "poses": 0,
+      "scale": "encounter_wax_seal",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ],
+  "params": {
+   "min_gap": 1
+  }
+ },
+ "anchor_ring_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "anchor_ring",
+      "anim": "idle",
+      "file": "anchor_ring_idle",
+      "poses": 0,
+      "scale": "encounter_anchor_ring",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "anchor_pocket_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "anchor_pocket",
+      "anim": "idle",
+      "file": "anchor_pocket_idle",
+      "poses": 0,
+      "scale": "encounter_anchor_pocket",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "boss_door_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "boss_door",
+      "anim": "idle",
+      "file": "boss_door_idle",
+      "poses": 0,
+      "scale": "encounter_boss_door",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "boss_door",
+      "anim": "unlock",
+      "file": "boss_door_unlock",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_boss_door",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   },
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "boss_door",
+      "anim": "open",
+      "file": "boss_door_open",
+      "poses": 0,
+      "scale": "encounter_boss_door",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
  "flame_cinder_v3": {
   "key": "magenta",
   "rows": [
