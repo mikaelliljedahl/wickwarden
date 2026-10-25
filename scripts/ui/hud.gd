@@ -176,7 +176,7 @@ func _draw_item_frame() -> void:
 		label,
 		HORIZONTAL_ALIGNMENT_CENTER,
 		80,
-		13
+		11
 	)
 
 
