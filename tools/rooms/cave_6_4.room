@@ -1,0 +1,18 @@
+; The Choir Vault — room 4
+room cave_6_4
+terrain Singing Hall: wide aisles circle the singer between four stone choir stalls.
+floor_color 0.15 0.14 0.19
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..##..........##..#
+#..................#
+####################
+opener locked_door @48,480 id=e192 scope=c6 size=96,192
+miniboss choir_warden @960,480
+spawn Default @288,528

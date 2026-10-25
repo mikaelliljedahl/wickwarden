@@ -1,0 +1,21 @@
+; The Choir Vault — room 3
+room cave_6_3
+terrain Cracked Loft: a loose stone arch leads to the key beneath paired loft shelves.
+floor_color 0.15 0.14 0.19
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+#..................#
+#..................#
+#..##..........##..#
+#..................#
+#..................#
+#########..#########
+opener cracked_wall 9,9 id=e191_left
+opener cracked_wall 10,9 id=e191_right
+pickup small_key 10,2 id=key_c6_1 scope=c6
+enemy choirling 6,4
+enemy choirling 13,4
+spawn Default @960,720

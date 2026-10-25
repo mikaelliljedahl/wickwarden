@@ -1,0 +1,22 @@
+; The Choir Vault — room 1
+room cave_6_1
+terrain Echo Steps: paired stone benches frame the boulder mouth and east nave.
+floor_color 0.15 0.14 0.19
+grid
+####################
+#..................#
+#..##.......##.....#
+#..................#
+#...................
+#...................
+#..................#
+#..##.......##.....#
+#..................#
+####################
+opener heavy_boulder 5,7 id=cave6door
+door ow_6_6 FromCave 5,7 blocker=cave6door
+spawn Default 5,6
+spawn FromOverworld 5,6
+enemy choirling 11,3
+enemy choirling 14,6
+enemy duskmoth 7,3

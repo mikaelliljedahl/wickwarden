@@ -1,0 +1,22 @@
+; The Choir Vault — room 2
+room cave_6_2
+terrain Nave: north cracked arch and east lock between grouped stone pews.
+floor_color 0.15 0.14 0.19
+grid
+#########..#########
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..##..........##..#
+#..................#
+####################
+opener cracked_wall 9,0 id=e191_left
+opener cracked_wall 10,0 id=e191_right
+opener locked_door @1872,480 id=e192 scope=c6 size=96,192
+enemy hollow 6,3
+enemy hollow 13,3
+enemy hollow 13,6
+spawn Default @960,528
