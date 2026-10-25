@@ -1,0 +1,22 @@
+room cave_8_5
+terrain Coin Press: paired press foundations frame the brass reel shaft and the southern work floor.
+floor_color 0.22 0.19 0.12
+grid
+#########..#########
+#...####....####...#
+#...####....####...#
+#...####....####...#
+....####....####...#
+....####....####...#
+#..................#
+#..................#
+#..................#
+#########..#########
+pit @960,432 size=384,288
+anchor_ring @1008,144
+anchor_ring @1008,720
+enemy hollow 4,6
+enemy hollow 15,7
+prop pedestal 6,7
+pickup item reel_line @624,742
+spawn Default @960,816

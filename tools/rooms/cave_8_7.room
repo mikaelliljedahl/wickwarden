@@ -1,0 +1,20 @@
+room cave_8_7
+terrain Gilded Walk: narrow entry trench opens onto a raised gilded vault between paired strongbox foundations.
+floor_color 0.22 0.19 0.12
+grid
+####################
+#.#................#
+#.#....###....###..#
+#.#................#
+...................#
+...................#
+#.#................#
+#.#....###....###..#
+#.#................#
+####################
+pit @240,480 size=96,192
+enemy brine_crab 7,4
+enemy brine_crab 14,5
+prop pedestal 16,3
+pickup big_key @1584,358 id=bigkey_c8 scope=c8
+spawn Default 10,5

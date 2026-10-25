@@ -1,0 +1,22 @@
+room cave_8_6
+terrain Anchor Gallery: a suspended southern counting bridge faces two anchor banks; the east vault has a leap trench.
+floor_color 0.22 0.19 0.12
+grid
+####################
+#................#.#
+#..###...........#.#
+#................#.#
+#...................
+#...................
+#..#####....######.#
+#..#####....######.#
+#..#####....######.#
+#########..#########
+pit @960,528 size=384,288
+anchor_ring @1008,240
+anchor_ring @1008,816
+pit @1680,480 size=96,192
+enemy wickling 5,3
+enemy wickling 12,2
+pickup small_key 8,2 id=key_c8_2 scope=c8
+spawn Default @960,144
