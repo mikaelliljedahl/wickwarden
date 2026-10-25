@@ -227,6 +227,18 @@ func _runtime_watcher_opens_room() -> void:
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("/tmp/ward-runtime-open.png")
 	Input.action_release(&"ward")
+	# Walk through the opened blocker into the real pocket door trigger.
+	world.player.place_at(blocker.global_position + Vector2(0, 96))
+	Input.action_press(&"move_up")
+	for frame in range(90):
+		await frames(1)
+		if world.get_current_room_id() == &"ow_8_5#ward":
+			break
+	Input.action_release(&"move_up")
+	check_eq(
+		world.get_current_room_id(), &"ow_8_5#ward",
+		"the opened blocker permits walking into the actual ward pocket"
+	)
 	await dispose(world)
 	var later := await make_world()
 	later.start_at(&"ow_8_5", &"Default")
