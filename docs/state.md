@@ -1,29 +1,25 @@
 # Wickwarden — state
 
-Status as of 2026-10-25, Codex takeover in progress (see handoff.md status section for bugs and next steps). Read this first: it says what is done, what is running and what comes next.
-It is updated when a step or a work package lands. The index of all documents is [README.md](README.md) in this folder.
+Status as of 2026-10-25: integrated checkpoint verified at `a1cf76d` (code checkpoint `90c7c0a`). See [handoff.md](handoff.md) for push status, pending work and verification logs. The document index is [README.md](README.md).
 
 ## Where the project stands
 
 | Part | Status | Documents |
 |---|---|---|
-| Step 1: dev world | Done. Seven rooms, five monster types, tether moth, pitch pot, cracked wall, locked door, brazier gate, and the route test. Historical plan. | [dev-world-plan.md](dev-world-plan.md); details in "Step 1" below |
-| Step 2: art pass | Done. GPT Image art for every dev-world entity and room, cut by `make art`. The owner has not yet approved it in play. | [asset-contract.md](asset-contract.md), [art-provenance.md](art-provenance.md); details in "Step 2" below |
-| Planning of the full game | Done: world plan, work packages, monster/boss/tool spec, owner decisions, art inventory, intro script. | [world-plan.md](world-plan.md), [world-work-packages.md](world-work-packages.md), [monsters-bosses-tools.md](monsters-bosses-tools.md), [decisions.md](decisions.md), [art-inventory.md](art-inventory.md), [intro-script.md](intro-script.md) |
-| World build (waves 0 and 1 done; wave 2 in progress) | Wave 0 (foundation F0–F14, G1, D1–D3) done. Wave 1 done (P01–P15, T01–T08, M0–M5) with deviations: T03 raft is a fixed lane (free steering not built), player body has the WATER mask (F7b). Wave 2: Brackwater R1 rooms done; R2.a, R2.b, R4.a–R4.c, R5.b done; 32 of 88 overworld rooms built. Active takeover batches: R2.c, R4.d, R5.a (not yet accepted as landed). Not started: R2.d, R3, R4.e/f, R5.c/d, R6, minibosses, bosses, caves, ending, QA. Open bugs and next steps: [handoff.md](handoff.md) section Status. | [world-work-packages.md](world-work-packages.md) section 5, [code-contract.md](code-contract.md) section 16 |
-| Art for the full game | Batches 1 to 3 done: 42 Tamsin sheet images, logged in `tools/source_art/log_b01.md` and `log_b02_b03.md`, not yet in the art manifest. Batches 4 to 86 in production. | [art-inventory.md](art-inventory.md) section 4; progress in `tools/art_prompts/PROGRESS.md` |
+| Step 1: dev world | Done: seven rooms and the tested tool/key/core route. | [dev-world-plan.md](dev-world-plan.md) |
+| Step 2: art pass | Done for dev-world entities; owner approval in play remains open. | [asset-contract.md](asset-contract.md), [art-provenance.md](art-provenance.md) |
+| Full game planning | Done; binding plans and owner decisions govern implementation. | [world-plan.md](world-plan.md), [world-work-packages.md](world-work-packages.md), [code-contract.md](code-contract.md), [decisions.md](decisions.md) |
+| World build | Waves 0 and 1 delivered, with fixed-lane raft deviation. Wave 2 remains partial: **55/88 overworld rooms, 11 separate pocket scenes**, plus historical `cave_1`. R1, R2.a–d, R4.a–f and R5.a–b room batches landed. R3, R6, R5.c–d, region acceptance tests, minibosses and bosses remain. | [handoff.md](handoff.md), [world-work-packages.md](world-work-packages.md) |
+| Caves, ending, QA and release | Waves 3–5 not delivered. Missing cave 2/5/9 targets are expected future cave content. | [world-work-packages.md](world-work-packages.md) |
+| Full game art | At verified `a1cf76d`: **1,306 committed source PNGs**, all named in 95 committed source logs; 18 effect PNGs still lack committed provenance rows (handoff lists them). Generation continues with six image jobs; source production does not mean runtime manifest integration or visual approval. | `tools/art_prompts/PROGRESS_*.md`, `tools/source_art/log_*.md`, [art-provenance.md](art-provenance.md) |
 
-Takeover baseline HEAD is `ebf58bb`. The lead reported `make check` and global ownership green immediately before dispatch; integrated checks are due after worker commits. The verifier independently confirmed global ownership green. Initial shared-tree snapshot: 77 staged paths, 148 untracked paths, 5 unstaged tracked paths. Preexisting art deletions and replacements must stay untouched.
+The owner replaced the prior Haiku workflow with ATF Codex **GPT-6.1 Sol low** for coding and authorized parallel agents. The lead orchestrates; this integration worker owns only state/handoff and the delegated verified push. Preexisting staged art deletions, untracked replacements and unrelated UID files remain untouched.
 
-The owner replaced Haiku with ATF Codex **GPT-6.1 Sol low** for all coding; Claude quota is exhausted. The root lead only orchestrates. Delegated workers execute code, shell verification, status updates and explicitly instructed integration pushes. Seven active jobs cover compiler gates, priority room fixes, R2.c, R4.d, R5.a, existing room layout review and art production restart. Job ids and current handoff are in [handoff.md](handoff.md).
+Integrated checks passed: `make check` (70 test files, lint, current world data and 96 Python tests), `make rooms-check` (66/66 sources), and `python3 tools/check_ownership.py --global` (92 WPs, 53 room batches, no overlapping wave 1–5 paths). Logs: `/tmp/wickwarden-final-check.log`, `/tmp/wickwarden-final-rooms.log`, `/tmp/wickwarden-final-ownership.log`. Commit scope review: `/tmp/wickwarden-checkpoint-ownership-review.txt`.
 
-The owner reports confusing dense-tree layouts in non-original rooms. Quality review is active; preserve the original six. Open spec conflicts remain listed in handoff; this takeover does not resolve them.
+Resolved since takeover: paired raft/water gates and strict area validation, leech shallows, directional ledges, shared hedge identifiers, opener-linked pocket doors, concealed-entrance validation and cave spawn markers; R2.c tool gates/grate fetch, R4.d/e/f and R5.a rooms; title viewport activation; actual watcher projectile ward blocks and entry into the unlocked pocket; stable wickling offset regression. Compiler-output migration landed as eight owned scene commits followed by `90c7c0a` removing the repaired raft waiver. Earlier concurrent-tree graph failure at `ow_3_5` is resolved by the passing integrated graph suite.
 
-The baseline gate before active edits was green, as confirmed by the lead. Landed since takeover: compiler support for raft crossings, shallows and directional ledges (`7cd8343`); shared Thorn Gate burn flag (`9de34d5`); partial R2.c North Cliff and hermit hut interior (`dec2f78`, four owned source/scene paths). R2.c remains incomplete. Integrated acceptance is pending. The e248 bomb-door test issue is assigned to the extension worker, which now owns `tests/area_base.gd`; the status worker must not edit it.
-
-Owner clarification: hidden cave entrances under bushes or behind bombable rocks are a desirable challenge. Preserve graph secrets and tool requirements. Layout review must not make every entrance obvious.
-
-Live-tree verifier check during concurrent edits: `make check` stopped at `test_world_graph` (1 of 69 suites failed; 1 of 829 graph checks): `ow_3_5` has a door to `cave_3_1`, which the graph does not link there. Reported to the lead for the active R4.d owner. Log: `/tmp/wickwarden-takeover-baseline-check.log`. This is not a clean committed-baseline result; rerun after workers finish.
+The owner wants secret cave entrances under bushes or behind bombable rocks preserved, including tool challenges. Layout review clarified the orchard and hedgerow routes (`1fb01dc`) without changing that intent. Remaining specifications and polish are recorded in handoff; binding documents were not changed.
 
 ## Step 1: the dev world (what runs today)
 
@@ -157,9 +153,8 @@ Not covered: the hook has no hit detection against rocks or walls, so there is n
 
 ## Next steps
 
-1. Collect the active takeover worker reports and verify their commits before marking work landed. Continue independent room work when a compiler dependency blocks a gate.
-2. Review opened `/tmp` captures for the dense-tree layout concern; preserve the original six rooms.
-3. On lead follow-up, run integrated `make check`, rooms checks and commit ownership review. Do not compile others' rooms or regenerate unchanged world data.
-4. Update landed status, then execute continuous push only when instructed by the lead. Resume image production through ATF, with image inspection, hashes, logs and provenance handled by the assigned art worker.
-5. Resolve the pocket placement and exit-depth conflicts with the owner; continue remaining wave 2 batches and region tests, then minibosses, bosses and caves.
-6. Play step 2 with `make run` and `make dev` to judge swing width, walk timing and balance. Tune only through agreed constants.
+1. Continue art production with inspection, own-session hashes, source logs and provenance; finish runtime art integration and owner approval separately.
+2. Build R5.c/d, R3 and R6, add regional area/route tests and complete minibosses/bosses before the cave pilot.
+3. Resolve the pocket placement and exit-depth conflicts with the owner. Preserve secret entrances and tool challenges.
+4. Keep checks green at each delegated checkpoint and push under the standing authorization with protected explicit paths.
+5. Play with `make run` and `make dev` to judge swing width, walk timing and balance; tune only agreed constants.
