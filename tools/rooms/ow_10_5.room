@@ -1,0 +1,20 @@
+room ow_10_5
+terrain Anchor Beach: iron moorings face a deep shore cleft; broad salt banks on either side
+floor_color 0.24 0.26 0.27
+grid
+#########..#########
+#..rr...........rr.#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..r............r..#
+#..................#
+#########..#########
+spawn Default 9,6
+pit @960,432 size=1728,288 look=ravine
+anchor_ring 9,0 max_range=576
+anchor_ring 9,7 max_range=576
+enemy brine_crab 5,7
+enemy brine_crab 14,7

@@ -1,0 +1,19 @@
+room ow_9_6
+terrain Ravine Landing: two narrow arrival banks overlook the broken northern and western rim
+floor_color 0.24 0.26 0.27
+grid
+#########..#########
+#########..#########
+##.................#
+##..rr.............#
+....................
+....................
+##.................#
+##............rr...#
+##.................#
+#########..#########
+spawn Default 9,5
+pit @960,144 size=192,96 look=ravine
+pit @144,480 size=96,192 look=ravine
+enemy hollow 14,3
+enemy husk_hound 6,6

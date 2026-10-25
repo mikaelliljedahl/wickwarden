@@ -1,0 +1,17 @@
+room ow_11_5
+terrain Salt Flats: broken salt ridges flank a broad exposed basin
+floor_color 0.24 0.26 0.27
+grid
+####################
+#..................#
+#..rrr........rrr..#
+#..r............r..#
+#..................#
+#..................#
+#...rr........rr...#
+#..................#
+#..................#
+#########..#########
+spawn Default 9,7
+enemy husk_hound 6,4
+enemy husk_hound 14,4

@@ -1,0 +1,17 @@
+room ow_8_7
+terrain Cold Quay: ruined quay walls frame a clear way toward the counting gate
+floor_color 0.24 0.26 0.27
+grid
+####################
+#..................#
+#.#####.......rr...#
+#.#................#
+#.#.................
+#.#.................
+#.#####............#
+#..............rr..#
+#..................#
+#########..#########
+spawn Default 10,6
+enemy husk_hound 7,3
+enemy husk_hound 13,6
