@@ -61,3 +61,5 @@ B11 wallv3 verified own-session hash/unique, opened `/tmp/wickwarden-art-wave15-
 B11 all9 brick texture variants now generated: facev3 verified own-session hash/unique, opened `/tmp/wickwarden-art-wave16-review.jpg`; coherent brick/iron;1254-square and seams unverified. Log `log_art_resume_16.md`. Nine B11 edge variants remain, known source aspect/cut issue deferred.
 
 B10thorn-ashv1–3 generated/own-session hash matched/unique; opened `/tmp/wickwarden-art-wave39-review.jpg`; log `log_art_resume_39.md`. All3FAILED wrong sourceaspect(2172x724or2048x768),purple fringe/debris. Kept unchanged; uniform384x96cut impossible. Submitted grass-fenv2/v3,fen-gravelv1/v2;six jobs total.
+
+B10grass-fenv1 verified own-session hash/unique; opened `/tmp/wickwarden-art-wave40-review.jpg`; FAILED3:1aspect/nonflatkey/standingreeds. Actual source path resolved by own-session hash, worker report malformed. Log `log_art_resume_40.md`. Freed slot filled fen-gravelv3,six total.
