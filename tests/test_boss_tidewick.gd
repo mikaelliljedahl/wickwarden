@@ -10,13 +10,16 @@ func run() -> void:
 	await _phases_reset_and_rewards()
 	await _real_raft_combat()
 	await _real_undertow()
+	# Actual C3 basin coordinates exposed origin-relative hit-direction rounding.
+	await _real_undertow(Vector2i(20, 14))
 	await _real_ember_ward()
 
 
-func _fixture() -> Room:
+func _fixture(grid: Vector2i = Vector2i.ZERO) -> Room:
 	var packed := load(GALLERY) as PackedScene
 	check(packed != null, "basin gallery loads")
 	var room := packed.instantiate() as Room
+	room.grid = grid
 	add_child(room)
 	room.enter()
 	return room
@@ -227,9 +230,9 @@ func _real_raft_combat() -> void:
 	await dispose(room)
 
 
-func _real_undertow() -> void:
+func _real_undertow(grid: Vector2i = Vector2i.ZERO) -> void:
 	reset_state()
-	var room := _fixture()
+	var room := _fixture(grid)
 	var boss = room.get_node("Enemies/Tidewick")
 	boss.rng.seed = 12345
 	var hero := await _board(room)

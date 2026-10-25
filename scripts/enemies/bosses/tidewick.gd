@@ -297,6 +297,8 @@ func _start_wave() -> void:
 		)
 	)
 	wave.source = wave
+	# The band carries riders downstream even when they straddle its centre.
+	wave.knockback_direction = wave_direction
 	wave.active = true
 	Placeholder.attach(wave, &"tidewick_wave", 0.0, rect.size)
 	add_hazard(wave)
