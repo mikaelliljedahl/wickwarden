@@ -1,0 +1,20 @@
+; ow_1_1 Crossroads. Cave mouth C1 north-east; the south exit (to Ford Road) is new in R1.
+room ow_1_1
+terrain crossroads, rocks, trees
+floor_color 0.24 0.24 0.18
+grid
+#########..#########
+#.tt........rrrrr.t#
+#.t.........rr.rr..#
+#..................#
+....................
+....................
+#..rr.........rr...#
+#..r............r..#
+#.tt........bb.....#
+#########..#########
+enemy spitcap 5,3
+enemy tallow_blob 6,7
+enemy tallow_blob 17,8
+door cave_1 Default 14,2
+spawn FromCave 14,4

@@ -1,0 +1,18 @@
+; ow_1_0 Wickfield. Layout as built in the dev world.
+room ow_1_0
+terrain open field, rocks, bushes
+floor_color 0.22 0.28 0.17
+grid
+####################
+#..r...b.........r.#
+#......bbb...r.....#
+#..................#
+....................
+......r.......r.....
+#..........b.......#
+#.b.........bbb....#
+#.r..............r.#
+#########..#########
+enemy skitterwick 12,3
+enemy skitterwick 7,6
+enemy skitterwick 16,7

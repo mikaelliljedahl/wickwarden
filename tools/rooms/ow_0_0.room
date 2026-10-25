@@ -1,0 +1,20 @@
+; ow_0_0 Brackwater Edge (start room). Layout as built in the dev world; the graph row is the source.
+room ow_0_0
+terrain village edge, huts, sign post
+floor_color 0.2 0.27 0.18
+grid
+####################
+#.......t.......bb.#
+#.......t..........#
+#..................#
+#...................
+#...................
+#......bb..........#
+#..t............r..#
+#..t...............#
+#########..#########
+enemy spitcap 12,3
+enemy spitcap 14,8
+prop hut @336,240 size=288,288
+prop sign_post @720,432 size=48,64
+spawn Default @480,480

@@ -1,0 +1,21 @@
+; ow_0_1 Reedpond. Layout as built in the dev world; the tether moth lies on the pedestal.
+room ow_0_1
+terrain pond, reeds
+floor_color 0.16 0.25 0.25
+grid
+#########..#########
+#...ee.............#
+#....e.............#
+#..ewwwww..........#
+#.ewwwwww...........
+#.ewwwwww...........
+#..ewwwe...........#
+#...eee............#
+#...........ee.....#
+####################
+enemy duskmoth 2,2
+enemy duskmoth 13,2
+enemy duskmoth 16,7
+enemy duskmoth 8,8
+prop pedestal @1392,720 size=72,72
+pickup item tether_moth @1392,742
