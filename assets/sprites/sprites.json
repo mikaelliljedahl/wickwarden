@@ -1,4 +1,81 @@
 {
+  "arena_lantern_rekindle": {
+    "cell": [
+      160,
+      224
+    ],
+    "anchor": [
+      80.0,
+      218
+    ],
+    "foot": 218,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 60,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/arena_lantern_rekindle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "arena_lantern_wickwarden": {
+    "cell": [
+      160,
+      224
+    ],
+    "anchor": [
+      80.0,
+      218
+    ],
+    "foot": 218,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 60,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/arena_lantern_wickwarden.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "npc_corrow_wax": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      198.0
+    ],
+    "foot": 236,
+    "radius": 38.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/npc_corrow_wax_idle.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "speak": {
+        "file": "res://assets/sprites/npc_corrow_wax_speak.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "fade": {
+        "file": "res://assets/sprites/npc_corrow_wax_fade.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
   "lull_mauler": {
     "cell": [
       320,
