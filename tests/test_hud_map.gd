@@ -100,12 +100,17 @@ func _tool_icons() -> void:
 		var expected := SpriteVisual.icon_of(StringName("icon_" + String(id)))
 		check(expected != null, "%s has dedicated tool art" % id)
 		check_eq(hud._icon_for(id), expected, "%s prefers its dedicated icon" % id)
-	for kind in [&"brass_coin", &"key", &"pitch_pot_bundle", &"fragment"]:
+	for kind in [&"brass_coin", &"key", &"pitch_pot_bundle"]:
 		check_eq(hud._icon_for(kind), SpriteVisual.icon_of(kind), "%s counter is unchanged" % kind)
 	var slug_bundle_icon := SpriteVisual.icon_of(&"slug_bundle")
 	check(slug_bundle_icon != null, "sling ammo has accepted bundle pickup art")
 	check_eq(
 		hud._icon_for(&"tallow_slug"), slug_bundle_icon, "sling ammo counter uses bundle pickup art"
+	)
+	var fragment_icon := SpriteVisual.icon_of(&"fragment_c1")
+	check(fragment_icon != null, "C1 fragment has accepted pickup art")
+	check_eq(
+		hud._icon_for(&"fragment"), fragment_icon, "fragment counter uses cave pickup art"
 	)
 	var fallback_manifest := "user://hud_tool_fallback.json"
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(original_manifest))

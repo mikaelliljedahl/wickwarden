@@ -202,6 +202,10 @@ func _icon_for(kind: StringName) -> Texture2D:
 		var ammo_icon := SpriteVisual.icon_of(&"slug_bundle")
 		if ammo_icon != null:
 			return ammo_icon
+	if kind == &"fragment":
+		var fragment_icon := SpriteVisual.icon_of(&"fragment_c1")
+		if fragment_icon != null:
+			return fragment_icon
 	if kind == &"big_key":
 		var counter := SpriteVisual.icon_of(&"hud_counter_big_key")
 		if counter != null:
