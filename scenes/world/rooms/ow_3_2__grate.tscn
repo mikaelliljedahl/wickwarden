@@ -37,6 +37,18 @@ script = ExtResource("2")
 size = Vector2(96, 288)
 kind = &"wall"
 
+[node name="Wall3" type="StaticBody2D" parent="Props"]
+position = Vector2(768, 816)
+script = ExtResource("2")
+size = Vector2(192, 96)
+kind = &"wall"
+
+[node name="Wall4" type="StaticBody2D" parent="Props"]
+position = Vector2(1056, 816)
+script = ExtResource("2")
+size = Vector2(192, 96)
+kind = &"wall"
+
 [node name="Key1" parent="Props" instance=ExtResource("3")]
 position = Vector2(912, 240)
 persistent_id = &"key_ow_2"
