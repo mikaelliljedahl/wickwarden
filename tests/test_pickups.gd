@@ -9,6 +9,7 @@ func run() -> void:
 	await _persistence_and_items()
 	await _scoped_keys_big_keys_and_fragments()
 	await _requires_flag()
+	await _reward_scenes()
 	await _pot_bag_and_slug_bundle()
 	await _slug_drop_gating()
 
@@ -255,3 +256,62 @@ func _slug_drop_gating() -> void:
 	GameState.reset()
 	GameState.acquire_item(&"tallow_sling")
 	check_eq(DropTable.roll(0.8), &"slug_bundle", "roll() reads the sling from GameState")
+
+
+func _reward_scenes() -> void:
+	for kind in ["big_key", "fragment"]:
+		reset_state()
+		var scene := load("res://scenes/pickups/%s.tscn" % kind) as PackedScene
+		check(scene != null, "%s scene loads" % kind)
+		if scene == null:
+			continue
+		var reward := scene.instantiate() as PickupBase
+		check(reward != null, "%s scene instantiates as PickupBase" % kind)
+		if reward == null:
+			continue
+		check_eq(reward.kind, StringName(kind), "%s scene selects its existing kind" % kind)
+		check_eq(reward.timeout, 0.0, "%s is a placed pickup without a timeout" % kind)
+		var arena := make_arena()
+		var player := make_player(arena, Vector2(300, 300))
+		reward.scope = &"c2"
+		reward.persistent_id = StringName("scene_%s_c2" % kind)
+		reward.requires_flag = &"boss_cave_2_9_defeated"
+		reward.position = player.position
+		arena.add_child(reward)
+		await frames(3)
+		var effect_flag := &"bigkey_c2" if kind == "big_key" else &"frag_c2"
+		var other_flag := &"bigkey_c1" if kind == "big_key" else &"frag_c1"
+		var picked_flag := reward.flag_name()
+		check(reward.get_node_or_null("Visual") != null, "%s has a runtime Visual" % kind)
+		check_eq(reward.collision_layer, Layers.PICKUP, "%s uses the pickup layer" % kind)
+		check(not reward.visible, "%s is hidden before the boss flag" % kind)
+		check(not reward.collect(player), "%s rejects direct collection while gated" % kind)
+		check(not reward.begin_carry(player), "%s rejects carrying while gated" % kind)
+		check(not GameState.has_flag(effect_flag), "%s overlap cannot bypass its gate" % kind)
+		check(not GameState.has_flag(picked_flag), "%s is not persisted before collection" % kind)
+		GameState.set_flag(&"boss_cave_1_8_defeated")
+		check(not reward.visible, "%s ignores another boss flag" % kind)
+		GameState.set_flag(&"boss_cave_2_9_defeated")
+		check(reward.visible, "%s appears when its required flag is set" % kind)
+		await frames(3)
+		check(not is_instance_valid(reward), "%s is collected by the player" % kind)
+		check(GameState.has_flag(effect_flag), "%s grants its scoped flag" % kind)
+		check(not GameState.has_flag(other_flag), "%s leaves other caves unchanged" % kind)
+		check(GameState.has_flag(picked_flag), "%s persists collection" % kind)
+		check_eq(GameState.keys_in(&"c2"), 0, "%s does not grant a small key" % kind)
+		var again := scene.instantiate() as PickupBase
+		again.scope = &"c2"
+		again.persistent_id = StringName("scene_%s_c2" % kind)
+		arena.add_child(again)
+		await frames(2)
+		check(not is_instance_valid(again), "%s stays gone on a room revisit" % kind)
+		var unlocked := scene.instantiate() as PickupBase
+		unlocked.scope = &"c3"
+		unlocked.requires_flag = &"boss_cave_2_9_defeated"
+		unlocked.position = player.position
+		arena.add_child(unlocked)
+		check(unlocked.visible, "%s starts active if the required flag already exists" % kind)
+		await frames(3)
+		var next_flag := &"bigkey_c3" if kind == "big_key" else &"frag_c3"
+		check(GameState.has_flag(next_flag), "%s also collects with a preexisting flag" % kind)
+		await dispose(arena)
