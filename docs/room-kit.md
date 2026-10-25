@@ -82,6 +82,11 @@ such). A hollow must stand on a tile centre; the compiler checks it whatever the
 
 | Line | Output |
 |---|---|
+| `miniboss <name> <pos>` / `boss <name> <pos>` | the raw graph encounter, exactly once, in `Enemies`, from `scenes/enemies/minibosses/<name>.tscn` or `scenes/enemies/bosses/<name>.tscn`. These are separate from regular enemy counts. Missing scenes fail compilation. |
+| `arena <boss name> <pos>` | explicit instance of `scenes/bosses/<name>_arena.tscn` in `Props`; the name must match this room’s graph boss. Use `@0,0` for room-local arena geometry. At most one; the file must exist. |
+| `brazier <pos> id=<id>` | a `Brazier` using the committed script, with `brazier_id`. Solid on its tile. |
+| `opener gate <pos> id=<edge id> braziers=<id>,<id> [size=<w>,<h>]` | `Gate` script with `gate_id`, `size` and typed `Array[NodePath]` references to the named room braziers. The edge must be a graph brazier gate touching this room. The graph prop `two braziers, gate` requires two distinct references. |
+| `opener boss_door <pos> id=<edge id> [size=<w>,<h>]` | `boss_door.tscn`, with its `cave` export taken from room scope; the graph edge must require that cave’s big key. |
 | `enemy <name> <pos>` | an instance of `scenes/enemies/<name>.tscn` in `Enemies`. Names are the graph names in lower case with spaces as `_` (`tallow_blob`); a `NEW:` prefix is dropped. |
 | `pickup item <tool id> <pos>` | `item_pickup.tscn` with `persistent_id` and `item_id` = the tool id |
 | `pickup <kind> <pos> id=<id> [requires=<flag>] [scope=<s>]` | the scene of the kind (table below); a `small_key` takes the room's scope unless `scope=` says otherwise (`scope=` is an error for other kinds) |
@@ -153,10 +158,11 @@ Room files identify pickups by graph id for validation. In the seven dev rooms, 
 ids used by code-contract section 15 and the dev tests: `wick_core_ow_2_0` becomes `wick_core_cache`, and `key_ow_1`
 becomes `cave_key`; `tether_moth` and `pitch_pot` keep their names. Pickups in other rooms keep their graph ids.
 
-## Out of scope for this compiler
+## Additional validation and limits
 
-- Other props with their own script (`burnable.gd` thorn walls and doors, `gate.gd`, `brazier.gd`, `eye_switch.gd`, ...)
+- Other props with their own script not listed above
   still need an entity line each. The compiler refuses them as `prop` lines until their entity kind exists.
-- Gates (`gate` edges) are not checked against an opener here; `tests/test_world_graph.gd` and the area tests do
-  that on the built scenes.
-- Pickups with `after_boss` in the graph must carry `requires=boss_<room>_defeated`; the compiler checks the form only.
+- Completeness of all graph gates remains checked by `tests/test_world_graph.gd` and the area tests. Authored cave gate and boss-door lines are checked against their graph edge and footprint.
+- Pickups with `after_boss` in the graph must carry the exact `requires=boss_<pickup node>_defeated`, including wick cores and fragments.
+
+Cave gate sizes default to 192 x 96. East/west step gates swap width and height; step gates must block their own graph corridor while closed and allow passage when opened. Brazier ids must be unique and gate references must resolve exactly once after output node sorting. Arena door locking remains outside the compiler. The historical `cave_1` remains handmade.

@@ -108,14 +108,14 @@ SCRIPTED_OPENERS = {"thorn_door": ("thorn_door", "burn_id"),
                     "eye_portcullis": ("eye_portcullis", "eye_id"),
                     "heavy_stone": ("heavy_stone", "stone_id"),
                     "ward_blocker": ("ward_plate", "ward_id")}
-OPENER_OPTS = ("id", "size", "scope", "look")
+OPENER_SIZE.update({"gate": (192, 96), "boss_door": (192, 96)})
+OPENER_OPTS = ("id", "size", "scope", "look", "braziers")
 PROP_SIZE = (96, 96)
 # Solid kinds a `prop` line may place: plain SolidBlocks in the hand-made scenes. A prop with its own script
 # (burnable, gate, eye switch, ...) needs its own entity kind here first, so it cannot compile as a plain block.
 PROP_KINDS = ("hut", "pedestal", "sign_post", "wall", "water", "rock", "tree", "reed")
 POS_RE = re.compile(r"^(@)?(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$")
 IDENT_RE = re.compile(r"^[a-z][a-z0-9_]*$")
-BOSS_FLAG_RE = re.compile(r"^boss_.+_defeated$")
 ENTITY_OPTS = {
     "eye_switch": ("id",),
     "ward_plate": ("id", "size", "blocks_required"),
@@ -126,6 +126,10 @@ ENTITY_OPTS = {
     "mooring": ("id", "target_room", "target_mooring", "landing_offset"),
     "ledge": ("size",),
     "enemy": (),
+    "miniboss": (),
+    "boss": (),
+    "arena": (),
+    "brazier": ("id",),
     "pickup": ("id", "requires", "scope"),
     "prop": ("size",),
     "opener": OPENER_OPTS,
@@ -249,6 +253,7 @@ class World:
         self.prices: dict[str, dict[str, int]] = (shop_prices or {}).get("shops", {})
         graph_contents = {p["id"]: p["contents"] for p in (graph or {}).get("pickups", []) if "contents" in p}
         self.rooms: dict[str, dict] = {}
+        graph_nodes = {n["id"]: n for n in (graph or {}).get("nodes", [])}
         for room in data["rooms"]:
             self.rooms[room["id"]] = {
                 "id": room["id"],
@@ -257,6 +262,9 @@ class World:
                 "dark": bool(room["dark"]),
                 "scope": room["scope"],
                 "enemies": {snake(n): int(c) for n, c in room["enemies"].items()},
+                "encounters": {role: snake(graph_nodes.get(room["id"], {}).get(role, {})["name"])
+                               for role in ("miniboss", "boss")
+                               if "name" in graph_nodes.get(room["id"], {}).get(role, {})},
                 "pocket": False,
                 "host": None,
                 "in_place": False,
@@ -279,7 +287,7 @@ class World:
                 "id": p["id"],
                 "kind": p["kind"],
                 "node": p["node"],
-                "after_boss": False,
+                "after_boss": bool(p.get("after_boss")),
                 "shop": p.get("shop"),
                 "contents": graph_contents.get(p["id"], p.get("contents", "")),
             }
@@ -510,6 +518,8 @@ class Plan:
         self.controls: list[Entity] = []
         self.grates: set[tuple[int, int]] = set()
         self.pits: set[tuple[int, int]] = set()
+        self.braziers: dict[str, list[tuple[Entity, Node]]] = {}
+        self.gate_links: list[tuple[Node, list[Node]]] = []
 
 
 def build_plan(src: Source, world: World, errors: list[str]) -> Plan | None:
@@ -569,12 +579,43 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
         return dispatch_scripted(ent, key, src, plan, errors)
     if ent.verb in ("water", "shallows", "mooring", "ledge"):
         return dispatch_crossing(ent, key, src, plan, world, errors)
-    if ent.verb == "enemy":
+    if ent.verb == "brazier":
+        ident = ent.opts.get("id", "")
+        if ent.args or not IDENT_RE.fullmatch(ident):
+            errors.append(f"{where_}: brazier needs id=<snake_case id> and no other arguments")
+            return False
+        if ent.tile in plan.static:
+            errors.append(f"{where_}: brazier overlaps a solid obstacle")
+            return False
+        node = Node("", "Props", "StaticBody2D")
+        node.base = "Brazier"
+        node.props = [("position", vec2(*ent.pos)),
+                      ("script", Res("Script", "res://scripts/world/brazier.gd")),
+                      ("brazier_id", sname(ident))]
+        plan.braziers.setdefault(ident, []).append((ent, node))
+        plan.static.add(ent.tile)
+        plan.singles.append((key, node))
+        return True
+    if ent.verb == "arena":
+        expected = world.room(src.room_id).get("encounters", {}).get("boss")
+        if ent.args != [expected] or expected is None:
+            errors.append(f"{where_}: arena must name this graph room's boss")
+            return False
+        node = Node("", "Props", None, Res("PackedScene", f"res://scenes/bosses/{expected}_arena.tscn"))
+        node.base = "Arena"
+        node.props = [("position", vec2(*ent.pos))]
+        plan.singles.append((key, node))
+        if sum(e.verb == "arena" for e in src.entities) != 1:
+            errors.append(f"{where_}: only one arena instance is allowed")
+            return False
+        return True
+    if ent.verb in ("enemy", "miniboss", "boss"):
         if len(ent.args) != 1 or not IDENT_RE.match(snake(ent.args[0])):
             errors.append(f"{where_}: enemy takes one monster name")
             return False
         name = snake(ent.args[0])
-        node = Node("", "Enemies", None, Res("PackedScene", f"res://scenes/enemies/{name}.tscn"))
+        directory = {"enemy": "", "boss": "bosses/", "miniboss": "minibosses/"}[ent.verb]
+        node = Node("", "Enemies", None, Res("PackedScene", f"res://scenes/enemies/{directory}{name}.tscn"))
         node.props = [("position", vec2(*ent.pos))]
         node.base = camel(name)
         node.enemy = name
@@ -824,6 +865,51 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
         errors.append(f"{where_}: opener takes one of {', '.join(OPENER_SIZE)}")
         return False
     kind = ent.args[0]
+    if kind in ("gate", "boss_door"):
+        allowed = {"id", "size", "braziers"} if kind == "gate" else {"id", "size"}
+        ident = ent.opts.get("id", "")
+        edge = next((e for e in world.edges if e["id"] == ident), None)
+        expected_gate = "brazier" if kind == "gate" else "boss"
+        if (set(ent.opts) - allowed or edge is None or edge["gate"] != expected_gate
+                or src.room_id not in (edge["a"], edge["b"])):
+            errors.append(f"{where_}: {kind} needs the matching graph edge id and supported options")
+            return False
+        if kind == "boss_door" and edge.get("needs") != [f"bigkey:{src.scope}"]:
+            errors.append(f"{where_}: boss_door graph needs must match the room's cave big key")
+            return False
+        size = parse_size(ent.opts["size"]) if "size" in ent.opts else OPENER_SIZE[kind]
+        if size is None:
+            errors.append(f"{where_}: invalid size")
+            return False
+        other = edge["b"] if edge["a"] == src.room_id else edge["a"]
+        side = edge_side(world, src.room_id, other) if edge["link"] == "step" else None
+        if side is not None and ent.tile not in exit_corridor(side):
+            errors.append(f"{where_}: {kind} must stand in its graph exit corridor")
+            return False
+        if side in ("e", "w"):
+            size = (size[1], size[0])
+        node = Node("", "Props", "StaticBody2D" if kind == "gate" else None,
+                    None if kind == "gate" else Res("PackedScene", "res://scenes/world/boss_door.tscn"))
+        node.base = camel(kind)
+        node.props = [("position", vec2(*ent.pos)), ("size", vec2(*size))]
+        if kind == "gate":
+            node.props.extend([("script", Res("Script", "res://scripts/world/gate.gd")), ("gate_id", sname(ident))])
+            ids = ent.opts.get("braziers", "").split(",")
+            if not ids or any(not IDENT_RE.fullmatch(i) for i in ids) or len(set(ids)) != len(ids):
+                errors.append(f"{where_}: gate needs distinct braziers=<id>,<id> references")
+                return False
+            if edge.get("prop") == "two braziers, gate" and len(ids) != 2:
+                errors.append(f"{where_}: graph gate requires two braziers")
+                return False
+        else:
+            node.props.append(("cave", sname(src.scope)))
+        tiles = tiles_of_rect(ent.pos[0]-size[0]/2, ent.pos[1]-size[1]/2, *size)
+        plan.openers.append((ent, tiles))
+        plan.singles.append((key, node))
+        return True
+    if "braziers" in ent.opts:
+        errors.append(f"{where_}: only opener gate takes braziers=")
+        return False
     if kind in SCRIPTED_OPENERS:
         if set(ent.opts) - {"id", "size"}:
             errors.append(f"{where_}: {kind} only takes id and size")
@@ -1082,7 +1168,7 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
                 errors.append(f"{where(path, grid_line)}: exit {side} is not reachable from the spawn")
 
     for index, (opener, _) in enumerate(plan.openers):
-        if not opener.args or opener.args[0] not in SCRIPTED_OPENERS:
+        if not opener.args or opener.args[0] not in (*SCRIPTED_OPENERS, "gate", "boss_door"):
             continue
         edge = next((e for e in world.edges if e["id"] == opener.opts.get("id")), None)
         if edge is None or edge["link"] != "step":
@@ -1110,7 +1196,11 @@ def check_enemies(src: Source, rec: dict, plan: Plan, errors: list[str]) -> None
     counts: dict[str, int] = {}
     for _, node, ent in plan.enemies:
         name = node.enemy
-        counts[name] = counts.get(name, 0) + 1
+        role = ent.verb
+        if role == "enemy":
+            counts[name] = counts.get(name, 0) + 1
+        elif rec.get("encounters", {}).get(role) != name:
+            errors.append(f"{where(src.path, ent.line)}: {role} {name} does not match the graph encounter")
         habitat = any(abs(ent.pos[0] - z.pos[0]) <= size[0] / 2 and
                       abs(ent.pos[1] - z.pos[1]) <= size[1] / 2 for z, size in plan.zones)
         if name == "fen_leech" and plan.zones and not habitat:
@@ -1120,6 +1210,9 @@ def check_enemies(src: Source, rec: dict, plan: Plan, errors: list[str]) -> None
         centred = ent.pos[0] % TILE == TILE / 2 and ent.pos[1] % TILE == TILE / 2
         if name == "hollow" and not centred:
             errors.append(f"{where(src.path, ent.line)}: hollow is not on a tile centre")
+    for role, name in rec.get("encounters", {}).items():
+        if sum(ent.verb == role and node.enemy == name for _, node, ent in plan.enemies) != 1:
+            errors.append(f"{where(src.path, 1)}: graph {role} {name} must be placed exactly once")
     if counts != rec["enemies"]:
         errors.append(f"{where(src.path, 1)}: enemies {counts}, the graph says {rec['enemies']}")
 
@@ -1167,8 +1260,8 @@ def check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors) 
             continue
         if graph[ident]["kind"] != kind:
             errors.append(f"{where_}: pickup {ident} is kind {kind}, the graph says {graph[ident]['kind']}")
-        if graph[ident]["after_boss"] and not BOSS_FLAG_RE.match(ent.opts.get("requires", "")):
-            errors.append(f"{where_}: {ident} comes after a boss, give requires=boss_<room>_defeated")
+        if graph[ident]["after_boss"] and ent.opts.get("requires") != f"boss_{graph[ident]['node']}_defeated":
+            errors.append(f"{where_}: {ident} comes after a boss, give requires=boss_{graph[ident]['node']}_defeated")
     for ident, rec_pickup in graph.items():
         if ident not in placed:
             errors.append(f"{where(path, 1)}: graph pickup {ident} ({rec_pickup['kind']}) is not placed")
@@ -1280,7 +1373,8 @@ def link_door_blocker(src, rec, world, plan, door, errors) -> None:
              "bush cluster": "cut_screen", "reed cluster": "cut_screen",
              "rush wall": "cut_screen", "ward plate": "ward_blocker",
              "eye-switch cell": "eye_portcullis", "eye-switch portcullis": "eye_portcullis",
-             "heavy stones": "heavy_stone"}
+             "heavy stones": "heavy_stone", "key alcove gate": "gate",
+             "two braziers, gate": "gate", "boss door": "boss_door"}
     kind = kinds.get(edge.get("prop"))
     if not edge.get("gate") or rec["pocket"] or edge.get("prop") == "grated alcove":
         if requested:
@@ -1301,6 +1395,18 @@ def link_door_blocker(src, rec, world, plan, door, errors) -> None:
 
 def check_openers_and_ids(src: Source, plan: Plan, errors: list[str]) -> None:
     seen: set[str] = set()
+    for ident, entries in plan.braziers.items():
+        seen.add(ident)
+        if len(entries) != 1:
+            errors.append(f"{where(src.path, entries[0][0].line)}: duplicate brazier id {ident}")
+    for ent, _ in plan.openers:
+        if ent.args != ["gate"]:
+            continue
+        ids = ent.opts["braziers"].split(",")
+        if any(len(plan.braziers.get(i, [])) != 1 for i in ids):
+            errors.append(f"{where(src.path, ent.line)}: gate references missing or duplicate brazier")
+        else:
+            plan.gate_links.append((plan.entity_nodes[ent], [plan.braziers[i][0][1] for i in ids]))
     for control in plan.controls:
         ident = control.opts["id"]
         matches = [e for e, _ in plan.openers if e.args[0] == LINKED[control.verb] and e.opts.get("id") == ident]
@@ -1413,6 +1519,9 @@ def emit(src: Source, rec: dict, plan: Plan) -> str:
         root.props.append(("floor_color", f"Color({num(r)}, {num(g)}, {num(b)}, 1)"))
     enemies = [node for _, node, _ in sorted(plan.enemies, key=lambda pair: pair[0])]
     children = name_all(plan, enemies)
+    for gate, braziers in plan.gate_links:
+        paths = ", ".join(f'NodePath("../{b.name}")' for b in braziers)
+        gate.props.append(("braziers", f"Array[NodePath]([{paths}])"))
     for door, blocker in plan.door_links:
         door.props = [(key, value) for key, value in door.props if key != "blocker_path"]
         door.props.append(("blocker_path", f'NodePath("../{blocker.name}")'))

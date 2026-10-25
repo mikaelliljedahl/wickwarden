@@ -735,5 +735,144 @@ class DoorBlockerLinks(unittest.TestCase):
         self.assertNotIn("blocker_path", text)
 
 
+class CavePilot(unittest.TestCase):
+    def encounter_world(self, role="boss", name="Kilnkeeper"):
+        record = room_record("cave_1_8", [])
+        record["scope"] = "c1"
+        return br.World({"rooms": [record], "pockets": [], "edges": [], "pickups": [], "items": {}},
+                        graph={"nodes": [{"id": record["id"], role: {"name": name}}]})
+
+    def test_raw_graph_roles_survive_empty_runtime_enemy_counts(self):
+        world = real_world()
+        self.assertEqual(world.room("cave_1_5")["encounters"], {"miniboss": "hollow_captain"})
+        self.assertEqual(world.room("cave_1_8")["encounters"], {"boss": "kilnkeeper"})
+
+    def test_encounters_use_owned_scene_directories(self):
+        from unittest.mock import patch
+        for role, name, directory in (("boss", "kilnkeeper", "bosses"),
+                                       ("miniboss", "hollow_captain", "minibosses")):
+            with self.subTest(role=role), patch.object(Path, "is_file", return_value=True):
+                text, errors = compile_text(room_text("cave_1_8", [], f"{role} {name} 5,5"),
+                                            self.encounter_world(role, name), "cave_1_8.room")
+                self.assertEqual(errors, [])
+                self.assertIn(f"res://scenes/enemies/{directory}/{name}.tscn", text)
+
+    def test_missing_encounter_scene_fails(self):
+        from unittest.mock import patch
+        original = Path.is_file
+        with patch.object(Path, "is_file", lambda p: False if p.name == "kilnkeeper.tscn" else original(p)):
+            text, errors = compile_text(room_text("cave_1_8", [], "boss kilnkeeper 5,5"),
+                                        self.encounter_world(), "cave_1_8.room")
+        self.assertIsNone(text)
+        self.assertTrue(any("bosses/kilnkeeper.tscn does not exist" in e for e in errors))
+
+    def test_missing_wrong_duplicate_and_regular_encounters_fail(self):
+        for entities in ("", "boss hollow_captain 5,5", "boss kilnkeeper 5,5\nboss kilnkeeper 6,5",
+                         "enemy kilnkeeper 5,5", "miniboss kilnkeeper 5,5"):
+            text, errors = compile_text(room_text("cave_1_8", [], entities), self.encounter_world(), "cave_1_8.room")
+            self.assertIsNone(text)
+            self.assertTrue(any("graph" in e for e in errors), errors)
+
+    def test_arena_explicit_position_and_missing_resource(self):
+        from unittest.mock import patch
+        source = room_text("cave_1_8", [], "boss kilnkeeper 5,5\narena kilnkeeper @0,0")
+        with patch.object(Path, "is_file", return_value=True):
+            text, errors = compile_text(source, self.encounter_world(), "cave_1_8.room")
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/bosses/kilnkeeper_arena.tscn"', text)
+        self.assertIn('[node name="Arena1" parent="Props"', text)
+        self.assertIn("position = Vector2(0, 0)", text)
+        _, errors = compile_text(source, self.encounter_world(), "cave_1_8.room")
+        self.assertTrue(any("kilnkeeper_arena.tscn does not exist" in e for e in errors))
+
+    def test_wrong_duplicate_and_malformed_arena_fail(self):
+        for arena in ("arena hollow @0,0", "arena kilnkeeper @0,0\narena kilnkeeper @0,0",
+                      "arena kilnkeeper", "arena kilnkeeper @0,0 file=anything"):
+            text, errors = compile_text(room_text("cave_1_8", [], "boss kilnkeeper 5,5\n" + arena),
+                                        self.encounter_world(), "cave_1_8.room")
+            self.assertIsNone(text)
+            self.assertTrue(errors)
+
+    def gate_world(self, kind="brazier"):
+        a = room_record("cave_1_4", ["n"], grid=(2,13))
+        b = room_record("cave_1_5", ["s"], grid=(2,12))
+        a["scope"] = b["scope"] = "c1"
+        return world_of([a,b], edges=[{"id": "e149", "a": a["id"], "b": b["id"],
+            "gate": kind, "link": "step", "prop": "two braziers, gate" if kind == "brazier" else "boss door",
+            "needs": ["hook"] if kind == "brazier" else ["bigkey:c1"]}])
+
+    def gate_source(self, opener="opener gate @960,48 id=e149 braziers=left,right"):
+        return room_text("cave_1_4", ["n"], "brazier 5,5 id=right\nbrazier 4,5 id=left\n" + opener)
+
+    def test_gate_wires_ids_to_sorted_node_names(self):
+        source = (FIXTURES / "cave_pilot.room").read_text()
+        text, errors = compile_text(source, self.gate_world(), "cave_1_4.room")
+        self.assertEqual(text, (FIXTURES / "expected_cave_pilot.tscn").read_text())
+        self.assertEqual(errors, [])
+        self.assertIn('braziers = Array[NodePath]([NodePath("../Brazier1"), NodePath("../Brazier2")])', text)
+        self.assertIn('gate_id = &"e149"', text)
+        self.assertIn('brazier_id = &"left"', text)
+
+    def test_gate_bad_links_policy_and_placement_fail(self):
+        for source in (self.gate_source().replace("left,right", "left,missing"),
+                       self.gate_source().replace("left,right", "left,left"),
+                       self.gate_source().replace("left,right", "left"),
+                       self.gate_source().replace("id=right", "id=left"),
+                       self.gate_source().replace("id=e149", "id=e999"),
+                       self.gate_source().replace("@960,48", "5,4"),
+                       self.gate_source().replace("@960,48", "9,0")):
+            text, errors = compile_text(source, self.gate_world(), "cave_1_4.room")
+            self.assertIsNone(text)
+            self.assertTrue(errors)
+
+    def test_east_boss_door_swaps_footprint(self):
+        world = self.gate_world("boss")
+        world.rooms["cave_1_4"]["exits"] = ["e"]
+        world.rooms["cave_1_5"]["grid"] = (3, 13)
+        source = room_text("cave_1_4", ["e"], "opener boss_door @1872,480 id=e149")
+        text, errors = compile_text(source, world, "cave_1_4.room")
+        self.assertEqual(errors, [])
+        self.assertIn("size = Vector2(96, 192)", text)
+
+    def test_brazier_on_obstacle_is_rejected(self):
+        source = self.gate_source().replace("brazier 5,5", "brazier 0,0")
+        text, errors = compile_text(source, self.gate_world(), "cave_1_4.room")
+        self.assertIsNone(text)
+        self.assertTrue(any("brazier overlaps a solid obstacle" in e for e in errors))
+
+    def test_boss_door_uses_actual_cave_export(self):
+        text, errors = compile_text(self.gate_source("opener boss_door @960,48 id=e149"),
+                                    self.gate_world("boss"), "cave_1_4.room")
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scenes/world/boss_door.tscn"', text)
+        self.assertIn('cave = &"c1"', text)
+        self.assertNotIn('door_id', text)
+
+    def test_boss_door_rejects_other_cave_key_and_wrong_gate(self):
+        for world in (self.gate_world(), self.gate_world("boss")):
+            world.edges[0]["needs"] = ["bigkey:c2"]
+            text, errors = compile_text(self.gate_source("opener boss_door @960,48 id=e149"),
+                                        world, "cave_1_4.room")
+            self.assertIsNone(text)
+            self.assertTrue(errors)
+
+    def test_both_boss_reward_kinds_need_exact_room_flag(self):
+        world = real_world()
+        rewards = {p["id"]:p for p in world.pickups}
+        self.assertTrue(rewards["wick_core_c1"]["after_boss"])
+        self.assertTrue(rewards["frag_c1"]["after_boss"])
+        from unittest.mock import patch
+        base = "boss kilnkeeper 5,5\npickup fragment 10,5 id=frag_c1 requires=boss_cave_1_8_defeated\npickup wick_core 12,5 id=wick_core_c1 requires=boss_cave_1_8_defeated"
+        for wrong in ("boss_cave_2_9_defeated", "boss_nonsense_defeated", ""):
+            for ident in ("frag_c1", "wick_core_c1"):
+                entities = base.replace(f"id={ident} requires=boss_cave_1_8_defeated", f"id={ident} requires={wrong}")
+                text, errors = compile_text(room_text("cave_1_8", ["w"], entities), world, "cave_1_8.room")
+                self.assertIsNone(text)
+                self.assertTrue(any(f"{ident} comes after a boss" in e for e in errors), errors)
+        with patch.object(Path, "is_file", return_value=True):
+            text, errors = compile_text(room_text("cave_1_8", ["w"], base), world, "cave_1_8.room")
+        self.assertEqual(errors, [])
+
+
 if __name__ == "__main__":
     unittest.main()
