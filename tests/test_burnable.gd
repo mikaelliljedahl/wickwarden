@@ -9,6 +9,7 @@ const AT := Vector2(400, 400)
 
 
 func run() -> void:
+	await _loaded_pair_tracks_persistent_burn()
 	await _fire_burns_then_opens()
 	await _other_hits_do_nothing()
 	await _flag_keeps_it_open_on_reentry()
@@ -64,6 +65,41 @@ func _fire_burns_then_opens() -> void:
 	fire.deactivate()
 	await dispose(fire)
 	await dispose(arena)
+
+
+func _loaded_pair_tracks_persistent_burn() -> void:
+	reset_state()
+	var arena := make_arena()
+	var first: Variant = _make_prop(arena, HEDGE, &"e005", AT)
+	var paired: Variant = _make_prop(arena, HEDGE, &"e005", AT + Vector2(800, 0))
+	var other: Variant = _make_prop(arena, HEDGE, &"other_gate", AT + Vector2(0, 400))
+	# Neighbour rooms can already be loaded with processing disabled by World.
+	paired.process_mode = Node.PROCESS_MODE_DISABLED
+	await frames(2)
+	check(not paired.is_open, "the already-loaded counterpart starts closed")
+	var fire := _make_hit(arena, &"fire", AT)
+	await seconds(1.5)
+	check(first.is_open, "real fire burns the first paired instance")
+	check(GameState.has_flag(&"burned_e005"), "the shared gate flag is persistent state")
+	check(paired.is_open, "an already-loaded frozen counterpart follows the shared burn flag")
+	check(not paired.is_burning, "the counterpart opens without a second burn delay")
+	check(not paired.is_in_group(&"burnable"), "the counterpart leaves the burnable group")
+	check(not paired.get_node("Hurtbox").enabled, "the counterpart hurtbox is disabled")
+	check(
+		(paired.get_node("Shape") as CollisionShape2D).disabled,
+		"the counterpart collision opens even while its room is frozen"
+	)
+	check(not (paired.get_node("Visual") as CanvasItem).visible, "paired thorns disappear")
+	check(not other.is_open and not other.is_burning, "a different burn id is unaffected")
+	GameState.set_flag(&"burned_other_gate", false)
+	check(not other.is_open, "a false flag does not burn a gate")
+	fire.deactivate()
+	await dispose(arena)
+	var later := make_arena()
+	var restored: Variant = _make_prop(later, HEDGE, &"e005", AT)
+	await frames(2)
+	check(restored.is_open, "the same shared flag opens a newly loaded counterpart")
+	await dispose(later)
 
 
 func _other_hits_do_nothing() -> void:

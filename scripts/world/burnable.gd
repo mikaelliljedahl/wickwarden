@@ -53,7 +53,15 @@ func _ready() -> void:
 	add_child(_hurtbox)
 	_hurtbox.hurt.connect(_on_hurt)
 	SpriteVisual.attach(self, look, 0.0, size)
+	GameState.flag_changed.connect(_on_flag_changed)
 	if burn_id != &"" and GameState.has_flag(flag_name()):
+		_open(false)
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	# Paired gates can already exist in a neighbour room with processing disabled.
+	# The persistent flag opens both sides, without replaying the burn or its sound.
+	if value and not is_open and burn_id != &"" and flag == flag_name():
 		_open(false)
 
 
