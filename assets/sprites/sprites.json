@@ -1,4 +1,106 @@
 {
+  "mirror_shade": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      148.0
+    ],
+    "foot": 176,
+    "radius": 28.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_down": {
+        "file": "res://assets/sprites/mirror_shade_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/mirror_shade_idle_down.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/mirror_shade_walk_up.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/mirror_shade_idle_up.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/mirror_shade_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/mirror_shade_idle_side.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "mirror_shade_decoy": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      148.0
+    ],
+    "foot": 176,
+    "radius": 28.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_down": {
+        "file": "res://assets/sprites/mirror_shade_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/mirror_shade_idle_down.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/mirror_shade_walk_up.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/mirror_shade_idle_up.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/mirror_shade_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/mirror_shade_idle_side.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
   "lock_plate": {
     "cell": [
       160,
