@@ -267,14 +267,7 @@ func _boss_ready() -> void:
 	var room := _room()
 	_origin = room.global_position if room != null else get_parent().global_position
 	call_deferred(&"_spawn_heads")
-	visual.visible = not _has_all_head_art()
-
-
-func _has_all_head_art() -> bool:
-	for kind in HEAD_ART:
-		if not SpriteVisual.has_art(kind):
-			return false
-	return true
+	visual.visible = false
 
 
 func _spawn_heads() -> void:

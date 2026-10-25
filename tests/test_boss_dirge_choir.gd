@@ -42,7 +42,7 @@ func _visual_adapters() -> void:
 		file.close()
 		SpriteVisual.use_manifest("user://dirge_visual.json")
 		await _setup()
-		check_eq(boss.visual.visible, count < 3, "container fallback needs all three painted heads")
+		check(not boss.visual.visible, "nonphysical container stays hidden with any head art coverage")
 		for i in range(3):
 			var head: Variant = boss.heads[i]
 			check_eq(head.voice, i, "voice identity survives visual selection")
