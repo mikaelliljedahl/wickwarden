@@ -9,129 +9,79 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-- Date: 2026-10-24, session 2 (lead: pi/Claude orchestrator via AgentTeamForge, ATF). Workers: Codex `low` (gpt-6-luna) for mechanics, pi `anthropic/claude-haiku-5-5` for feel and room batches.
-- Gate: `make check` GREEN at a9220f1/d1787e2 (69 test files, lint clean, 72 Python tests). Note: tests/test_wickling.gd `run follows the member's own offset` failed once in a full run and passed alone and on re-run; flaky, check its tolerance.
-- Checkpoint (end of session 2): HEAD d1787e2 pushed after green `make check`. Wave 1 closed. Wave 2 running: R2.a, R2.b, R4.a, R4.b, R4.c, R5.b landed as room batches. R1.a NOT committed (see open points). Last `make check` run is recorded in the push note below.
-- Session 2 landed: P15 `cb16dd3`, T04 `2df477a`, T06 `073f5ba`, T03 `5f42b99` (fixed lane; free steering NOT built, a later WP), F7b `7131dc4` (player mask gets WATER), F6b `db7ea39` (compiler: thorn_hedge, cut_screen, hidden_stairs lines), F6c `fdef2ff` (dev-id alias, dev rooms keep `wick_core_cache`), R1.b `bdc4e37`/`ed17c1c`/`77702bb` (ow_2_1, shop S1, ow_0_2, ow_1_2, ow_2_0), R2.a `3f0c4ad`, R4.a `fa1f483`, test_world pending rule `dfca0d5`.
-- Session 2 decisions (lead): (1) T03 raft = fixed lane per WP row; free steering later. (2) Player WATER mask in (F7b). (3) Dev rooms keep dev ids (room-kit). (4) test_world: exits to scene-less neighbours are pending, not failed (wave 2 builds incrementally). (5) Pilot rule of R1 is done: R2/R4/R5 batches started after R2.a/R4.a landed clean.
-- Landed late in session 2: R2.b `33f92c9` (Thornwood ow_5_0, ow_5_1, ow_6_0 + shop pocket, ow_6_1), R4.b `3892b3f` (ow_6_2, ow_6_3, ow_7_3 + grotto, ow_0_4), R4.c `45664cb` (Tallowfen/Mirrormere, cellar pocket, ow_1_5 cache, ow_2_4), R5.b `ce2e387` (Gravelight ow_3_7, ow_4_6, ow_4_7, ow_5_6). Job for R2.b reported `needs_reconciliation` (interactive completion unobserved); commit exists, check its report once.
-- OPEN, not committed: R1.a (ow_0_0, ow_0_1, ow_1_0, ow_1_1 .room and .tscn, UNTRACKED in working tree). Compiled and rooms-check OK. Blocker: `make test T=world` fails `test_world_graph` (1 of 5 suites; pending-list logic for neighbours of built rooms, see commit dfca0d5 for test_world only). Next step: fix test_world_graph pending handling the same way as test_world, then commit the four rooms.
-- OPEN: R2.c, R2.d, R3.*, R5.a/c/d, R6.*, R4.d/e/f, all caves C01..C10, bosses B01..B10, minibosses MB1..MB5: not started. Missing compiler lines (report from batches): eye switch / portcullis, burnable doors (thorn_door), drop ledge, moorings, shallow zones, pits and ravine leaps, heavy stones, anchor rings, glow-jar hidden seams (only hidden_stairs exists), shop-cache pickup check in test_world_graph (`ow_1_2#shop: 0 pickups placed`).
-- OPEN: free steering raft (monsters-bosses-tools 5.4, Tidewick needs it) is not built; T03 is a fixed lane.
-- OPEN lint: `tests/test_lantern_chime.gd` trailing whitespace (T06 report said make lint FAIL once; T06 later reported `Success: no problems found`, verify).
-- OPEN decision for owner: ATF usage. Session 2 ran about 25 ATF jobs before the limit.
-- Repo rule for the next session: commit with explicit paths only. `tests/area_base.gd` has an uncommitted hunk from another agent. Leave it or ask the owner first. Do not run `make format` (it rewrites other agents' files).
-- Briefs for the next orchestrator and its workers: `docs/handover/worker-brief.md` (WP workers) and `docs/handover/art-producer-brief.md` (art producers). They are copies of the briefs the workers read.
+Last updated: 2026-10-25, end of session 2. Read this section, then [state.md](state.md).
 
-| Part | State |
-|---|---|
-| Step 1, Step 2, planning | Done. |
-| Wave 0 (F0–F14) | Done. F14 `309ab00`; FX1 `5e87f4e` (title test for the intro, area wall list). |
-| Wave 1 (P01–P15, T01–T08, M0–M5) | Landed: M0 `c0adbd7`, M1 `b19ada3`, M2 `3406d6c`, M3 `aa56121`, M4 `dd18a26`, M5 `a41a7cf`, P01 `fe259ab`, P02 `b3ee104`, P03 `c56fda5`, P04 `203f04a`, P05 `c027332`, P06 `e36f4d3`, P07 `ac6347b`, P08 `82f3cee`, P09 `1bb21b2`, P10 `d0491de`, P11 `01b3b80`, P12 `218df59`, P13 `efa583e`, P14 `3dc6397`, P15 **not started**, T01 `376daae`, T02 `882020d`, T03 **not started**, T04 **not started**, T05 `970d28e`, T06 **not started**, T07 `cd3afaa`, T08 `89fa8fc`. |
-| Wave 2 (R1–R6, MB1–MB5, B01–B10) | Not started. |
-| Wave 3 (C01–C10, E1) | Not started. |
-| Wave 4 (Q1–Q9) | Not started. |
-| Wave 5 (Z1–Z3) | Not started. |
+- **HEAD `12202f7` = `origin/main`. Nothing unpushed.** Code gate: `make check` GREEN at `d1787e2` (69 test files, gdlint clean, 72 Python tests). Later commits (`a1fa12d`, `12202f7`) are docs only.
+- **Working tree:** no uncommitted room or code files. The index has 77 staged entries from the art producers (deletions under `tools/source_art/` and `tools/art_prompts/`). They are NOT ours. Do not commit them without the owner's decision.
+- **Overworld rooms built: 32 of 88** (`.room` sources in `tools/rooms/`, compiled to `scenes/world/rooms/`). Five pockets have their own file. Caves (104 rooms), pockets in caves, bosses, minibosses, the ending and waves 3 to 5 are NOT started.
+- **ATF budget:** the Claude/Haiku quota ran out during session 2 (about 25 ATF jobs). Codex (`gpt-6-luna`) had about 10 % weekly left at the end. The next session should first check the quotas.
 
-Open WPs in wave 1: P15 (WardPlate), T03 (reed_raft, needs `water_zone.gd` from T03 itself), T04 (heft_mitts, needs P06's grab API), T06 (lantern_chime, needs F10 done: ok). Run them with the worker brief (`docs/handover/worker-brief.md`). Each owns its files in `tools/wp_ownership.json`.
+### Wave status
 
-Decisions taken by the orchestrator: 43 (sling damage 1; monster file wins), 44 (intro plays on every New game).
+| Wave | State | Notes |
+|---|---|---|
+| 0 (foundation F0–F14, G1, D1–D3) | Done | F6b `db7ea39`, F6c `fdef2ff`, F7b `7131dc4` added after the wave. |
+| 1 (props P01–P15, tools T01–T08, monsters M0–M5) | Done with deviations | P15 `cb16dd3`, T04 `2df477a`, T06 `073f5ba`, T03 `5f42b99` (fixed lane, see bugs). |
+| 2 Brackwater R1 (pilot) | Rooms done | R1.a `d1787e2`, R1.b `bdc4e37`/`ed17c1c`/`77702bb`. Region lead test `tests/test_area_brackwater.gd` NOT written. |
+| 2 Thornwood R2 | Partly | R2.a `3f0c4ad`, R2.b `33f92c9`. NOT started: R2.c (`7_0`, `7_1` Eyegate, `3_2` +grate, `3_3` +hut), R2.d (`4_2` drop ledge, `5_2`, `7_2` +bag). |
+| 2 Tallowfen/Mirrormere R4 | Partly | R4.a `fa1f483`, R4.b `3892b3f`, R4.c `45664cb`. NOT started: R4.d, R4.e, R4.f. |
+| 2 Gravelight R5 | Partly | R5.b `ce2e387`. NOT started: R5.a, R5.c, R5.d. |
+| 2 Hushmarch R6, Cinderflats R3 | Not started | R3 needs P12/P15/M2; R6 needs P07/P11. |
+| 2 minibosses MB1–MB5, bosses B01–B10 | Not started | M0 base exists. |
+| 3 caves C01–C10, ending E1 | Not started | |
+| 4 QA Q1–Q9, 5 Z1–Z3 | Not started | |
 
-Spec points that need a decision or a docs fix (workers reported them, nothing changed in normative docs):
-- Sling damage: code-contract 16.3 and WP section 4 still say 2 (decision 43 says 1). Fix the docs in a later pass.
-- Flags missing from code-contract 16.4: `melted_<seal>` (P12), `moved_<id>` and `moved_<id>@<path>` (P06). Liftables do not persist.
-- `tests/area_base.gd` WALL_SCRIPTS lacks `boss_door.gd` and `ninth_door.gd` (P10, P11). Fix in an FX.
-- Watcher eye stun: row says 1.5 s, moth stun is 2.0 s. Code uses 2.0 s (M4). Owner decides.
-- Mirror shade decoy: monster file and WP row differ (position copy vs facing). Code follows the monster file (M5). Owner decides.
-- Leech surfaced-only hits and deep water (M3, T03): T03 must add deep water to group `shallows` or leeches stay in shallows only.
-- Throw hit timing (P06): monster file says active in flight, world plan says on landing. Code: in flight until 0.15 s after landing.
-- Reel line pull stop 72 px and landing rules (T08): code follows the monster file; light-enemy pull not done (no WP row).
-- P08 hidden seam is invisible until revealed (WP row). The world plan asks for a faint cue. Design call for the owner.
-- P10 boss door: rooms must set `cave`. Without it `push_error` at `_ready`.
-- M0: arena lock implemented (WP row), monster file 4.0 says doors do not shut. Owner decides.
-- `.uid` files of several WPs were written by hand (no `make import`). Run `make import` once in a check.
+### How the room batches were run (session 2)
 
-Art (producers a–d started at the end of the takeover session; their state is in `tools/art_prompts/PROGRESS_<x>.md`):
-- Batches with no log and no images yet: 26, 27, 40–59 (progress files a, c, e, f), 67–71 (g; 69 partly done), 80 (partly, 4 of 19 done), 81–86 (81 has prompts only; 82–86 have no prompts; 10 and 11 have no prompts).
-- About 183 untracked files in `tools/source_art/` from earlier producers (not reconciled with logs). A reconciler should check their SHA-256 and logs before committing.
-- Art producers use `docs/handover/art-producer-brief.md`. They take the PNG only from `~/.codex/generated_images/<session_id>/`.
+- Haiku (`pi` backend, `anthropic/claude-haiku-5-5`, effort high) wrote the room batches and the feel parts (T03, T04, R-batches).
+- Codex `low` (`gpt-6-luna`) did the mechanical parts (P15, T06, compiler F6b/F6c, F7b, test fixes).
+- Brief for room workers: `docs/handover/room-batch-brief.md` (new this session). Worker brief for WPs: `docs/handover/worker-brief.md`.
+- Compiler lines now available (`docs/room-kit.md`): `prop`, `opener cracked_wall`, `opener locked_door`, `opener thorn_hedge`, `opener cut_screen look=reed_cluster|rush_wall`, `hidden_stairs`, `door`, `spawn`, `shop`, `cache`, `pickup`. Dev rooms keep dev pickup ids via an alias table (F6c).
+- Test rules (decided in session 2): exits to neighbours without a scene are PENDING (`dfca0d5`); area checks strip `new:` from enemy plans and accept pocket doors (`a9220f1`); a missing `mooring and water` gate is PENDING until the compiler has a mooring line.
 
-### Questions for the owner
-- Continue with API credits: which WP order first? Suggested: finish wave 1 (P15, T03, T04, T06), then wave 2 region batches.
-- Art: is the cost of about 500 Codex image jobs acceptable (no weekly quota, but API cost if the image jobs bill per call)?
-- The decisions in the list above (watcher stun length, decoy behaviour, arena lock) need an answer before wave 2 bosses.
+### BUGS AND GAPS TO FIX (ordered by priority)
 
-### Wave 0 detail
+**Must fix (gameplay or data correctness):**
+1. **Thorn hedge id mismatch.** R1.b `ow_2_0` uses `burn_id ow_2_0_hedge`; R2.a `ow_3_0` uses `id=e005`. The two sides of graph edge e005 must share one id, or the burned flags differ. Fix: give both `id=e005` (or the graph id of the edge). Check `flags` after the fix.
+2. **Raft gates not enforced.** The compiler has no `mooring` line, so the lake exits are walkable on foot: R2.b `ow_6_1` S (e027); R4.a `ow_4_3` E (e055), `ow_5_3` N/E/S/W (e055, e057); R4.b `ow_6_2` (e027, e042, e044, e045), `ow_6_3` (e045, e057, e059, e060), `ow_7_3` (e046, e059, e061); R5.b `ow_5_6` N (e089). The area test waives these as pending (`a9220f1`). Fix: add `mooring` (and `water`) compiler line, place `mooring.tscn`, recompile the rooms above, and REMOVE the pending waiver in `tests/area_base.gd` for `mooring and water`.
+3. **Fen leeches on floor.** No `shallows` zone line. Leeches stand on floor: R4.a `ow_1_3`, `ow_5_3`; R4.c `ow_1_4` (2); R4.b `ow_6_3` (2), `ow_7_3` (1). Fix: `shallows` line (M3 `shallow_zone.tscn`).
+4. **Drop ledge not placed.** R5.b `ow_4_6` N (e087, one-way drop from `ow_4_5`). Fix: ledge line (F8 `ledge.tscn`).
+5. **`ow_1_5#cache` in place or not?** R4.c built it as a separate scene (`ow_1_5__cache`), the graph says `in_place=False`, the table 7.1.1 says in place. Owner to confirm, then fix the scene or the table.
+6. **Pocket door without graph door line (unverified in game).** R2.a `ow_4_1#cache` door sits on the cracked-wall tile (`door ow_4_1#cache Inside 17,2`). It fires only after the wall breaks. Check in game; same pattern will be needed for R2.d `ow_7_2#bag`.
+7. **Hidden stairs and glow jar unverified in game.** `ow_0_2` stairs (to `cave_9_1`) are hidden until the jar reveals them. Check the reveal path in play.
 
-| WP | Content | Commit | State |
-|---|---|---|---|
-| G1 | Graph: ward puzzles, sling ammo rule | `2ea7e6d` (plus `671764e` dark flag) | Done |
-| D1 | Decisions written into world plan | `fc9d71c` | Done |
-| D2 | Ownership manifest and checker | `c13219b` | Done |
-| D3 | Intro script | `49eb6d6` | Done |
-| F0 | Code contract section 16 | `b7c900b`, `c936226` | Done |
-| F1 | Runtime world data (`data/world_data.json`, `scripts/core/world_data.gd`) | `5495b45` | Done |
-| F2 | World runtime: data-driven rooms, streaming | `ba537ac` | Done (`state.md` still says running; stale) |
-| F3 | Graph-versus-scenes test, area test base | `5094372` | Done |
-| F4 | Scoped keys, big keys, fragments, gated pickups | `cf058bc` | Done |
-| F5 | Wallet, pot capacity, bags, slug ammo | `606aae9` | Done |
-| F6 | Room kit: `tools/build_rooms.py`, `docs/room-kit.md` | `e433d40` (committed by another agent; 28 unit tests OK) | Done |
-| F7 | Player motion and modifier API | `9e394e4` | Done |
-| F8 | One-way ledge drops | `92ef136` | Done |
-| F9 | Shops | `d512e39` | Done |
-| F10 | Item subscreen | `0325e58` | Done |
-| F11 | Minimap for 192 rooms | `8b7c0b0` | Done |
-| F12 | Save system | `e89353b` | Done |
-| F13 | Title screen and new-game flow | `04c90ee` | Done (committed by a pi agent; lead has not re-verified `make check`) |
-| F14 | Intro sequence | none | Not started. Can start now (F13, D3 done). |
-| Fix-ups | Cave mouth flags `dd9fd08`, shop checkpoint test `ca33a0c`, shop and cache lines in the room kit `5430704`, Makefile and area test `95f21e2` | see log | Done. A job for `GameState.from_dict` may still be open: check `git log`. |
+**Should fix (visual / polish, from batch screenshots):**
+8. `ow_6_1` bridge (floor gap as bridge) has no visual; `ow_1_4` boardwalk has no planks (no prop kind).
+9. `ow_1_5` gate e136 is a bush cluster; `cut_screen` only takes `reed_cluster|rush_wall`. Placed `reed_cluster` as stand-in; `bush_cluster.tscn` exists. Add the look.
+10. `ow_5_6` stone steps and `ow_4_1` cracked-wall nook (reads like a cave mouth): art/prop, not logic.
+11. `ow_6_3` standing lamp prop not placed (R4.b report; no prop kind).
 
-### Art status
+**Spec conflicts (decide, then fix doc or compiler):**
+12. `docs/room-kit.md` says the exit corridor is "three tiles deep, ring included". The compiler uses ring + 3 = 4 tiles (`EXIT_DEPTH=3`). R5.b followed the compiler. Pick one and fix the other.
+13. Sling damage: code-contract 16.3 and WP section 4 say 2; decision 43 says 1 (old item).
+14. Watcher eye stun length and mirror shade decoy (old open items, owner).
 
-| Batches | State |
-|---|---|
-| 1–7 | Prompts, sources, logs committed. Batches 1–3 have known defects (see section 5). |
-| 12–15 | Committed with logs. Many units weak; owner culls. |
-| 20–24 | Committed with logs. |
-| 25 | Log `log_b25.md` committed. `PROGRESS_c.md` still says "not started" (stale). |
-| 28–31 | Committed with logs. |
-| 36 | Committed with log. Boardwalk tiles weak. |
-| 37 | In progress (producer e). Prompt `batch_37.md` not committed. |
-| 60 | Committed with prompts, sources and log (producer g). |
-| 72 | Committed with log (producer h). |
-| Prompts exist, no log yet | 8, 16–19, 26, 27, 32–35, 38–59, 61–71, 73, 74 (several untracked). Check `tools/source_art/` before a batch. |
-| Prompts not written | 9, 10, 11, 75–86 |
+**Tests and code debt:**
+15. `tests/test_wickling.gd` "run follows the member's own offset" failed once in a full `make check` run, passed alone and on re-run. Flaky: check the tolerance (1.0 px) or the physics frames.
+16. Free steering raft (monsters-bosses-tools 5.4; Tidewick needs it) NOT built. T03 is a fixed lane (decision this session). Needs a RAFT controller mode in `player.gd`.
+17. Region lead tests not written: `tests/test_area_brackwater.gd`, `test_route_brackwater.gd`, and the area tests of R2, R4, R5.
+18. Many `.uid` files were written by hand. Run `make import` once and check git.
+19. `tests/test_world_graph.gd` counts shop stock via the new area_base code (`a9220f1`). Confirm it still counts after step 2.
 
-Counts at writing: `tools/source_art/` has 517 entries, 485 of them PNG. `docs/art-inventory.md` has 397 rows, 1461 images, 86 batches.
+### Next steps (in this order)
 
-### Last checks (at writing)
+1. Fix bugs 1 to 4 (small codex `low` WP for the compiler lines `mooring`, `shallows`, `ledge`; then Haiku recompiles the affected rooms). Remove the pending waiver for moorings in the same commit.
+2. Decide 5 and 12 with the owner (owner decisions, do not guess).
+3. Start the remaining wave 2 batches: R2.c, R2.d, R4.d, R4.e, R4.f, R5.a, R5.c, R5.d (Haiku room batches), then R3 and R6 (need P12, P15, M2, P07, P11 — all done).
+4. Region lead tests (bug 17).
+5. Minibosses and bosses (MB1–MB5, B01–B10), then caves (wave 3).
 
-- `make check`: green. Import, 30 test files passed (`all 30 test files passed in 5s`), gdlint "no problems found", `data/world_data.json` up to date, `tools/test_gen_world_data.py` 23 tests OK.
-- `python3 tools/check_ownership.py --global`: OK. 92 WPs, 53 room batches, 192 rooms and 33 pockets, no path owned twice in waves 1–5.
-- `python3 -m unittest tools/test_check_ownership.py`: 23 tests OK.
-- `python3 tools/check_world_graph.py --stats --rounds --orders`: exit 0, mutation self-test OK.
-- Note: `make check` does not run the graph checker or the ownership tests. Run them too before a push that touches those files.
+### Owner decisions open
 
-### Open decisions
+- ATF budget: which quota to spend first, and whether a new session should start with Codex (cheap) only.
+- Bugs 5 and 12 above.
+- Art: approval of batches 1–3 in play; art producers still committing (batches up to 69).
 
-None open. `docs/decisions.md` (2026-10-24, decisions 1–42) answers all points of the plan, including the open questions of `world-work-packages.md` section 15 (decisions 14–25). The decision wins over the plan.
-
-Open points that need the owner:
-- Human visual approval of step 2 and of art batches 1–3 (play with `make run` and `make dev`).
-- Hook swing width (`SWING_ARC_DEG`, `SWING_REACH` in `scripts/player/player.gd`): owner finds it wide.
-- Walk cycle reads a little lame. Possible fix: a six-pose cycle or another fps, before a new Codex sheet.
-- Edge strip cut tool (see section 5).
-
-### Known stale documents
-
-- `docs/state.md`: says F2 is running, F3–F14 not started, `make check` has 25 test files (now 30), and "Next steps 1. Land F2". Update it when a WP lands (AGENTS rule).
-- `tools/art_prompts/PROGRESS.md`: says next batch is 4 and "no prompt file for batch 4 exists". Both false.
-- `tools/art_prompts/README.md`: says prompts written are batches 1 to 3 only.
-- `tools/art_prompts/PROGRESS_c.md`: batches 25–27 "not started" (25 has a log).
-- `tools/art_prompts/PROGRESS_e.md`: batch 37 "in progress" (verify).
-- `docs/art-inventory.md` section 5, item 3: says the intro script does not exist (D3 is done).
-- `Makefile`: `world-check` runs only the generator check. The graph checker (`tools/check_world_graph.py`) and the ownership tests are not in `make check`. The `rooms` and `rooms-check` targets are still stubs although `tools/build_rooms.py` exists.
-- `tools/art_prompts/PROGRESS_f.md`, `PROGRESS_g.md` and `DESIGNS_g.md` do not exist. Producer f keeps its design notes in `DESIGNS_f.md`; producer g in its logs.
 
 ---
 
