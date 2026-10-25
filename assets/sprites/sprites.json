@@ -1,4 +1,341 @@
 {
+  "heavy_door": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      176
+    ],
+    "foot": 176,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "closed": {
+        "file": "res://assets/sprites/heavy_door_closed.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "pushed": {
+        "file": "res://assets/sprites/heavy_door_pushed.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": false
+      },
+      "idle": {
+        "file": "res://assets/sprites/heavy_door_closed.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "resonance_door": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      176
+    ],
+    "foot": 176,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "dormant": {
+        "file": "res://assets/sprites/resonance_door_dormant.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/resonance_door_dormant.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "awake": {
+        "file": "res://assets/sprites/resonance_door_awake.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "open": {
+        "file": "res://assets/sprites/resonance_door_open.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "resonance_vault": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      176
+    ],
+    "foot": 176,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "dormant": {
+        "file": "res://assets/sprites/resonance_vault_dormant.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/resonance_vault_dormant.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "awake": {
+        "file": "res://assets/sprites/resonance_vault_awake.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "open": {
+        "file": "res://assets/sprites/resonance_vault_open.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "resonance_stone": {
+    "cell": [
+      128,
+      192
+    ],
+    "anchor": [
+      64.0,
+      176
+    ],
+    "foot": 176,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "dormant": {
+        "file": "res://assets/sprites/resonance_stone_dormant.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/resonance_stone_dormant.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "awake": {
+        "file": "res://assets/sprites/resonance_stone_awake.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "choirling": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      64.0
+    ],
+    "radius": 24.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "hover": {
+        "file": "res://assets/sprites/choirling_hover.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/choirling_hover.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "walk": {
+        "file": "res://assets/sprites/choirling_hover.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "dirge_head_bass": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      292.0
+    ],
+    "foot": 340,
+    "radius": 48.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/dirge_head_bass_idle.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "telegraph": {
+        "file": "res://assets/sprites/dirge_head_bass_telegraph.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": true
+      },
+      "sing": {
+        "file": "res://assets/sprites/dirge_head_bass_sing.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "recovery": {
+        "file": "res://assets/sprites/dirge_head_bass_recovery.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "dirge_head_alto": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      292.0
+    ],
+    "foot": 340,
+    "radius": 48.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/dirge_head_alto_idle.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "telegraph": {
+        "file": "res://assets/sprites/dirge_head_alto_telegraph.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": true
+      },
+      "sing": {
+        "file": "res://assets/sprites/dirge_head_alto_sing.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "recovery": {
+        "file": "res://assets/sprites/dirge_head_alto_recovery.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "dirge_head_treble": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      292.0
+    ],
+    "foot": 340,
+    "radius": 48.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/dirge_head_treble_idle.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "telegraph": {
+        "file": "res://assets/sprites/dirge_head_treble_telegraph.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": true
+      },
+      "sing": {
+        "file": "res://assets/sprites/dirge_head_treble_sing.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "recovery": {
+        "file": "res://assets/sprites/dirge_head_treble_recovery.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "treble_note": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "fly": {
+        "file": "res://assets/sprites/treble_note_fly.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "impact": {
+        "file": "res://assets/sprites/treble_note_impact.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": false
+      },
+      "idle": {
+        "file": "res://assets/sprites/treble_note_fly.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "flight": {
+        "file": "res://assets/sprites/treble_note_fly.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
   "wax_plate": {
     "cell": [
       96,
