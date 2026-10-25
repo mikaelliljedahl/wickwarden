@@ -230,7 +230,7 @@ Drops: Fragment of Warmth, wick core. Art: a furnace-bellied wax giant with a cr
 
 | Phase | Attack | Numbers |
 |---|---|---|
-| 1 (3 eyes) | Spore bolt | Each lowered eye fires every 2.0 s at Tamsin: telegraph 0.4 s, 300 px/s, damage 2. Ward blocks. |
+| 1 (3 eyes) | Spore bolt | Each lowered eye fires every 2.0 s at Tamsin: telegraph 0.5 s, 300 px/s, damage 2. Ward blocks. |
 | 1 | Seed drop | Every 4.0 s a seed falls within 192 px of Tamsin: floor marker 0.8 s, lands (HP 1). If not destroyed in 3.0 s it bursts (ring radius 120, damage 2, not blockable) and leaves a bramble snapper; at most 3 snappers alive, after that seeds only burst. Hook, flare and fire destroy a seed. |
 | 1 | Eye lost | For every dead eye, remaining eyes fire 0.4 s faster and seeds drop 0.5 s faster. |
 | 2 (bloom, all eyes dead) | Thorn sweep | Every 3.0 s. Telegraph 0.7 s (rows flash). Three horizontal bands of 96 px across the whole width, active 0.3 s, damage 2, leaving two safe rows. Not blockable. |

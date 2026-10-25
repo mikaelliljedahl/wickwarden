@@ -73,3 +73,7 @@ These decisions are binding. The project owner made them on 2026-10-24.
 ## Owner presentation decision (2026-10-25)
 
 45. The player-facing name of the former Big Key is **Lockpick**. Its requested original art is a practical tool with a wide, uneven forged-steel picking blade and a brass thumb grip, clearly distinct from an ornate key. Replace the world pickup and HUD counter artwork accordingly. Current internal `big_key` / `bigkey` identifiers, `bigkey_cN` save flags, APIs, cave scope and mechanics stay unchanged; this decision changes presentation only.
+
+## Owner combat decision (2026-10-25)
+
+46. Briar Mother phase 1 spore bolt telegraph is 0.5 s. The shot cadence of 2.0 s and the 0.4 s firing acceleration per dead eye remain unchanged.
