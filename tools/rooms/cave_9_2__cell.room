@@ -1,0 +1,18 @@
+room cave_9_2#cell
+terrain Eye Cell: grouped archive shelves surround Corrow's brass cache.
+floor_color 0.19 0.16 0.12
+grid
+####################
+#..................#
+#..###.......###...#
+#..................#
+#..................#
+#..................#
+#..................#
+#..###.......###...#
+#..................#
+####################
+cache 9,3 id=cache_cave_9_2
+door cave_9_2 FromPocket 9,7
+spawn Inside 9,5
+spawn Default 9,5

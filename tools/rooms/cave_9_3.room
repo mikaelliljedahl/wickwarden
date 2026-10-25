@@ -1,0 +1,19 @@
+room cave_9_3
+terrain Wax Study: wax shelves embrace the scoped study key with a broad south approach.
+floor_color 0.19 0.16 0.12
+grid
+####################
+#..................#
+#..###.......###...#
+#..................#
+#..................#
+#..................#
+#..................#
+#..###.......###...#
+#..................#
+#########..#########
+enemy wickling 6,4
+enemy wickling 13,4
+pickup small_key 9,3 id=key_c9_1 scope=c9
+opener thorn_wall @960,912 id=e223
+spawn Default 9,6

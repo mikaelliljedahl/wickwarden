@@ -1,0 +1,19 @@
+room cave_9_1
+terrain Hidden Stair: broken lamp-stone shelves frame the revealed stair and east aisle.
+floor_color 0.19 0.16 0.12
+grid
+####################
+#..................#
+#..###.......###...#
+#..................#
+#...................
+#...................
+#..................#
+#..###.......###...#
+#..................#
+####################
+enemy hollow 8,3
+enemy hollow 13,6
+door ow_0_2 FromCave 4,4
+spawn FromOverworld 4,6
+spawn Default 4,6

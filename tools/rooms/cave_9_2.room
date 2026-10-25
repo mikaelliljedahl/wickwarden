@@ -1,0 +1,24 @@
+room cave_9_2
+terrain Letters Hall: paired letter shelves flank the central study aisle and southern eye cell.
+floor_color 0.19 0.16 0.12
+grid
+#########..#########
+#..................#
+#..###.......###...#
+#..................#
+....................
+....................
+#..................#
+#..###.......###...#
+#..................#
+####################
+enemy hollow 6,4
+enemy hollow 13,3
+enemy hollow 15,6
+opener thorn_wall @960,48 id=e223
+opener locked_door @1872,480 id=e224 scope=c9
+opener eye_cell @960,720 id=e231
+eye_switch 12,6 id=e231
+door cave_9_2#cell Inside @960,720 blocker=e231
+spawn FromPocket 9,6
+spawn Default 3,4
