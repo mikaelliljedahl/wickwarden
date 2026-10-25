@@ -16,6 +16,7 @@ func run() -> void:
 	_persistent_ids_unique()
 	_broken_rooms_are_rejected()
 	_gates_may_stand_in_gated_exits()
+	_ninth_door_gate_regressions()
 	_boss_door_geometry_regressions()
 	_cave_validation_regressions()
 	_print_pending()
@@ -337,6 +338,12 @@ func _boss_door_geometry_regressions() -> void:
 	var door := packed.instantiate() as Node2D
 	door.set("cave", &"c1")
 	check(_has_prop(door, SCRIPT_DIR + "boss_door.gd", edge), "exact C1 boss gate matches")
+	for candidate: Dictionary in world_json["edges"]:
+		if candidate["id"] == "e255":
+			check(
+				not _key_scope_ok(door, candidate),
+				"true BossDoor cannot satisfy NinthDoor fragments"
+			)
 	door.set("cave", &"c2")
 	check(not _key_scope_ok(door, edge), "another cave's big key cannot satisfy e152")
 	door.set("cave", &"c1")
@@ -391,3 +398,45 @@ func _boss_door_geometry_regressions() -> void:
 				_mentions(problems, "which the graph does not link"), "wrong door target rejected"
 			)
 		room.free()
+
+
+## e255 shares the boss gate category but uses nine fragments, never a cave big key.
+func _ninth_door_gate_regressions() -> void:
+	var edge: Dictionary = {}
+	for candidate: Dictionary in world_json["edges"]:
+		if candidate["id"] == "e255":
+			edge = candidate
+	check(not edge.is_empty(), "canonical Ninth Door edge exists")
+	var packed := load("res://scenes/world/ninth_door.tscn") as PackedScene
+	check(packed != null, "real NinthDoor loads")
+	if edge.is_empty() or packed == null:
+		return
+	var door := packed.instantiate()
+	check(_has_prop(door, SCRIPT_DIR + "ninth_door.gd", edge), "exact nine fragment scopes pass")
+	var changed := edge.duplicate(true)
+	changed["needs"].reverse()
+	check(_key_scope_ok(door, changed), "fragment scope order is immaterial")
+	changed["needs"].pop_back()
+	check(not _key_scope_ok(door, changed), "eight fragment scopes fail")
+	changed = edge.duplicate(true)
+	changed["needs"][8] = "frag:c10"
+	check(not _key_scope_ok(door, changed), "substituted fragment scope fails")
+	changed["needs"][8] = "frag:c8"
+	check(not _key_scope_ok(door, changed), "duplicate fragment scope fails")
+	changed["needs"][8] = "bigkey:c9"
+	check(not _key_scope_ok(door, changed), "wrong capability kind fails")
+	changed = edge.duplicate(true)
+	changed["prop"] = "boss door"
+	check(not _key_scope_ok(door, changed), "NinthDoor cannot stand in for a BossDoor")
+	changed = edge.duplicate(true)
+	changed["needs"] = ["door_ninth"]
+	door.set("is_open", true)
+	check(
+		not _key_scope_ok(door, changed), "open state and persistence flag cannot replace fragments"
+	)
+	var impostor := SolidBlock.new()
+	impostor.set_meta("cave", &"c1")
+	impostor.set_meta("is_open", true)
+	check(not _key_scope_ok(impostor, edge), "plain body with door metadata is rejected")
+	impostor.free()
+	door.free()

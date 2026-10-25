@@ -306,7 +306,20 @@ func _has_prop(root: Node, script: String, edge: Dictionary) -> bool:
 
 func _key_scope_ok(node: Node, edge: Dictionary) -> bool:
 	if edge["gate"] == "boss":
-		var cave := String(node.get("cave"))
+		var script: Script = node.get_script()
+		if script != null and script.resource_path == SCRIPT_DIR + "ninth_door.gd":
+			var fragments: Array[String] = []
+			for number in range(1, 10):
+				fragments.append("frag:c%d" % number)
+			var needs: Array = edge.get("needs", []).duplicate()
+			needs.sort()
+			return edge.get("prop", "") == "sealed door (nine fragments)" and needs == fragments
+		if not _is_boss_door(node) or edge.get("prop", "") != "boss door":
+			return false
+		var cave_value: Variant = node.get("cave")
+		if not (cave_value is StringName or cave_value is String):
+			return false
+		var cave := String(cave_value)
 		return (
 			GameState.cave_number(StringName(cave)) > 0
 			and edge.get("needs", []) == ["bigkey:" + cave]
