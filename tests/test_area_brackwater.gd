@@ -23,6 +23,7 @@ func run() -> void:
 	# Missing later cave content is pending under F3; R1 still requires the real stairs above.
 	for item: String in pending:
 		print("PENDING R1: ", item)
+	_graph_contract()
 	_mutations_fail()
 	free_scenes()
 
@@ -42,3 +43,27 @@ func _mutations_fail() -> void:
 		door.target_room = &"ow_0_0"
 	check(not room_problems("ow_1_2", broken).is_empty(), "a shop door to the wrong room is rejected")
 	broken.free()
+
+
+func _graph_contract() -> void:
+	var actual: Array[String] = []
+	for id: String in rooms_by_id:
+		if rooms_by_id[id]["region"] == "brackwater":
+			actual.append(id)
+	actual.sort()
+	var expected: Array[String] = []
+	expected.assign(REGION)
+	expected.sort()
+	check_eq(actual, expected, "acceptance covers exactly the graph's eight Brackwater rooms")
+	for pair in [
+		["ow_2_0", "ow_3_0", "item", "cinder_wick"],
+		["ow_1_2", "ow_1_3", "cut", "hook"],
+		["ow_0_2", "cave_9_1", "hidden", "glow_jar"],
+		["ow_2_0", "ow_2_0#cache", "bomb", "pitch_pot"],
+	]:
+		var edge := WorldData.edge_between(pair[0], pair[1])
+		check(not edge.is_empty(), "%s -> %s is a real graph edge" % [pair[0], pair[1]])
+		check_eq(edge.get("gate"), pair[2], "%s gate type" % pair[0])
+		check_eq(edge.get("needs"), [pair[3]], "%s gate capability" % pair[0])
+	var lock := WorldData.edge_between("ow_2_1", "ow_2_1#closet")
+	check_eq(lock.get("key"), "ow", "the historical pot closet spends an overworld key")

@@ -1,8 +1,6 @@
 extends "res://tests/test_dev_world_route.gd"
 ## Run the unchanged historical route first: real moth/pot pickups, braziers, key, lock and core.
 ## Then exercise R1 tools and doors on assembled rooms. Placement skips walking, as in the dev route.
-## Transitional C1 integration: ow_1_1 targets Default; cave_1 lacks FromOverworld.
-## The inherited historical route remains valid until R1.a/C01 supplies that marker pair.
 ## Cave tools are granted as an explicit later-game loadout; their source caves belong to other WPs.
 
 
@@ -109,6 +107,12 @@ func _thorn_border() -> void:
 	check(hedge != null, "the east border has a real thorn hedge")
 	if hedge == null:
 		return
+	player.place_at(ruin.global_position + Vector2(1740, 480))
+	Input.action_press(&"move_right")
+	await seconds(0.5)
+	Input.action_release(&"move_right")
+	check_eq(world.get_current_room_id(), &"ow_2_0", "unburned hedge prevents east travel")
+	check(player.global_position.x < ruin.global_position.x + 1872, "hedge physically blocks")
 	await _swing_at(hedge.global_position, Vector2.RIGHT)
 	check(not hedge.is_open, "the hook cannot open the cinder-wick gate")
 	GameState.acquire_item(&"cinder_wick")
@@ -119,6 +123,14 @@ func _thorn_border() -> void:
 	await seconds(1.8)
 	check(hedge.is_open, "cinder fire burns the border hedge")
 	check(GameState.has_flag(&"burned_e005"), "the graph border burn persists")
+	player.place_at(ruin.global_position + Vector2(1740, 480))
+	Input.action_press(&"move_right")
+	await seconds(1.2)
+	Input.action_release(&"move_right")
+	check_eq(world.get_current_room_id(), &"ow_3_0", "burned border enters actual Thorn Gate")
+	var arrival := world.get_room(&"ow_3_0")
+	var counterpart := _find(arrival, "burnable.gd")
+	check(counterpart != null and counterpart.is_open, "paired border hedge shares its burn flag")
 	await _enter(&"ow_0_0")
 	ruin = await _enter(&"ow_2_0")
 	check(_find(ruin, "burnable.gd").is_open, "the hedge stays open on reload")
