@@ -121,6 +121,10 @@ func throw(dir: Vector2) -> void:
 	var heading := dir.normalized()
 	if heading == Vector2.ZERO:
 		heading = Vector2.DOWN
+	# The carried shape overlaps its owner, especially when thrown down through them.
+	# Exclude only that body; keep WORLD walls and every other obstacle solid.
+	if carrier is PhysicsBody2D:
+		add_collision_exception_with(carrier as PhysicsBody2D)
 	carrier = null
 	state = State.FLYING
 	_fly_dir = heading

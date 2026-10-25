@@ -14,6 +14,7 @@ var _hook_hits := 0
 
 
 func run() -> void:
+	await _streamed_c09_throws()
 	await _paired_lift_rooms()
 	await _paired_push_flags()
 	await _groups_and_looks()
@@ -352,4 +353,93 @@ func _stone_probe(label: String) -> void:
 		get_viewport().get_texture().get_image().save_png("/tmp/p06-" + label + ".png"),
 		OK,
 		"opened e063 visual proof"
+	)
+
+
+## Real Player grab/carry/input throw at e228, including DOWN through the carrier.
+func _streamed_c09_throws() -> void:
+	for direction in [Vector2.DOWN, Vector2.UP, Vector2.LEFT, Vector2.RIGHT]:
+		reset_state()
+		SaveGame.enabled = false
+		var world := await make_world()
+		world.warp_to(&"cave_9_5", &"FromSouth", false)
+		var room := world.current_room
+		for enemy in room.get_enemies():
+			enemy.queue_free()
+		var player := world.player
+		player.set_hurtbox_enabled(self, false)
+		var stone: Variant = room.get_node("Props/HeavyStone1")
+		var peer: Variant = world.get_room(&"cave_9_8").get_node("Props/HeavyStone1")
+		var landings: Array[Vector2] = []
+		stone.shattered.connect(func(at: Vector2) -> void: landings.append(at))
+		GameState.acquire_item(&"heft_mitts")
+		GameState.set_active_item(&"heft_mitts")
+		player.place_at(stone.global_position - Vector2(0, 100))
+		player.facing = Vector2.DOWN
+		await frames(3)
+		check(player.use_item(), "streamed e228 actual grab starts")
+		await frames(24)
+		check(stone.is_carried(), "streamed e228 actually carried")
+		var start := player.global_position
+		if direction == Vector2.RIGHT:
+			var obstacle := make_arena([Rect2(start + Vector2(200, -140), Vector2(20, 200))])
+			obstacle.reparent(world)
+		player.facing = direction
+		Input.action_press(&"use_item")
+		await frames(2)
+		Input.action_release(&"use_item")
+		if is_instance_valid(stone):
+			check_eq(stone.collision_layer, Layers.WORLD, "flight retains WORLD obstacle body")
+			check_eq(stone.collision_mask, Layers.WORLD, "flight still tests WORLD obstacles")
+			check(
+				stone.get_collision_exceptions().has(player), "flight excludes actual carrier only"
+			)
+		var stayed_safe := true
+		for tick in range(78):
+			await frames(1)
+			stayed_safe = stayed_safe and player.global_position.distance_to(start) < 1.0
+		check(stayed_safe, "carrier stays safe throughout flight and landing")
+		print(
+			"e228 throw ", direction, " hero local=", player.global_position - room.global_position
+		)
+		check(player.global_position.distance_to(start) < 1.0, "throw never pushes its carrier")
+		check_eq(world.get_current_room_id(), &"cave_9_5", "throw keeps carrier in active room")
+		check_eq(landings.size(), 1, "actual streamed throw shatters once")
+		check(_gone(stone), "streamed flying stone finishes")
+		check(GameState.has_flag(&"moved_e228"), "real smash persists e228")
+		check(_gone(peer), "disabled streamed peer opens from real smash")
+		if direction == Vector2.RIGHT and not landings.is_empty():
+			check(
+				landings[0].x < start.x + 200 and landings[0].x > start.x + 100,
+				"genuine noncarrier WORLD obstacle stops real throw"
+			)
+		if direction == Vector2.DOWN:
+			await _c09_throw_capture()
+			Input.action_press(&"move_down")
+			await frames(65)
+			release_inputs()
+			await frames(35)
+			check_eq(
+				world.get_current_room_id(), &"cave_9_8", "real player walks through smashed gate"
+			)
+			world.warp_to(&"ow_0_0", &"Start", false)
+			await frames(3)
+			world.warp_to(&"cave_9_5", &"FromSouth", false)
+			await frames(3)
+			check(
+				world.current_room.get_node_or_null("Props/HeavyStone1") == null,
+				"unloaded e228 stays smashed on reload"
+			)
+		await dispose(world)
+
+
+func _c09_throw_capture() -> void:
+	if OS.get_environment("WICK_STONE_CAPTURE") != "1":
+		return
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	check_eq(
+		get_viewport().get_texture().get_image().save_png("/tmp/p06-c09-down.png"),
+		OK,
+		"capture actual streamed C09 after downward throw"
 	)
