@@ -10,6 +10,7 @@ func run() -> void:
 	await _ward_and_slash()
 	await _real_dodge()
 	await _fall_api()
+	await _streamed_falls()
 
 
 func _fixture() -> Room:
@@ -235,3 +236,51 @@ func _fall_api() -> void:
 	check_eq(player.global_position, Vector2(960, 330), "lethal fall is not relocated")
 	check_eq(boss.phase, 1, "player death keeps normal boss reset pipeline")
 	await dispose(room)
+
+
+func _streamed_falls() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var packed := load("res://scenes/world/world.tscn") as PackedScene
+	check(packed != null, "actual World loads")
+	var world := packed.instantiate() as World
+	add_child(world)
+	world.start_at(&"cave_7_11")
+	var player := world.player
+	var room := world.get_room(&"cave_7_11")
+	check_eq(room.global_position, Vector2(96000, 14400), "actual C7 streamed origin")
+	var count := 0
+	for visit in range(3):
+		room = world.get_room(&"cave_7_11")
+		var boss = room.get_node("Enemies").get_child(0)
+		check_eq(boss._origin, room.global_position, "live clone uses translated room origin")
+		check_eq(boss.arena.get_parent(), room.get_node("Props"), "clone references live arena")
+		var pits := 0
+		for node in boss.arena.get_children():
+			if node.has_method("holds"):
+				pits += 1
+		if visit == 0:
+			count = pits
+		check_eq(pits, count, "visits never clone stale arena helpers")
+		player.place_at(room.global_position + Vector2(960, 192))
+		await frames(3)
+		var health := GameState.health
+		check(player.take_damage(1, player.global_position, 0), "streamed ordinary hit accepted")
+		player.place_at(room.global_position + Vector2(960, 330))
+		await frames(3)
+		check_eq(GameState.health, health - 3, "streamed fall charges2 through hit immunity")
+		check_eq(
+			player.global_position, room.global_position + Vector2(960, 192),
+			"streamed fall returns exact island A after fresh visit/death/reentry"
+		)
+		check_eq(boss.hp, 36, "nonlethal streamed fall preserves fight")
+		if visit == 0:
+			await seconds(1.1)
+			check(player.take_damage(99, player.global_position, 0), "real World lethal hit")
+			await seconds(4)
+			check(not player.is_dead(), "real World death flow respawns")
+		elif visit == 1:
+			world.start_at(&"ow_0_0")
+		world.start_at(&"cave_7_11")
+		GameState.full_heal()
+	await dispose(world)

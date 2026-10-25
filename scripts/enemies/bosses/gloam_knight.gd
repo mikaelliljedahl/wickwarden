@@ -28,11 +28,12 @@ var _origin := Vector2.ZERO
 
 class ArenaPit:
 	extends "res://scripts/world/pit_zone.gd"
+	# Room-local: pits outlive the boss templates and live clones.
 	var entry := Vector2.ZERO
 
 	func _fall(player: Player) -> void:
 		if player.take_fall_damage(self) and not player.is_dead():
-			player.place_at(entry)
+			player.place_at(_owning_room().to_global(entry))
 
 
 class AttackVisual:
@@ -148,7 +149,9 @@ func _ready() -> void:
 		var pit := ArenaPit.new()
 		pit.name = template.name + "Zone"
 		pit.size = template.get_meta("pit_size")
-		pit.entry = _origin + CENTRES[0]
+		# Room._ready translates the room after its children build these pits.
+		# Keep the destination room-local, independent of the boss respawn clone.
+		pit.entry = CENTRES[0]
 		pit.position = template.position
 		pit.set_meta("side_island", template.has_meta("side_island"))
 		pit.process_mode = (
