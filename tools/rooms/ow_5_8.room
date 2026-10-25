@@ -1,0 +1,18 @@
+room ow_5_8
+terrain Lowest Stair: tide-scoured stone tiers with a broad switchback
+floor_color 0.23 0.23 0.21
+grid
+#########..#########
+#..rr.........rrr..#
+#..rr.........rrr..#
+#..................#
+...................#
+...................#
+#..rrr.............#
+#..rrr........rrr..#
+#.............rrr..#
+####################
+enemy skitterwick 5,3
+enemy skitterwick 13,4
+enemy skitterwick 9,7
+spawn Default 9,3

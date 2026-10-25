@@ -1,0 +1,19 @@
+room ow_4_8#cache
+terrain South Cliff cache: core shrine inside the fractured cliff
+floor_color 0.23 0.23 0.21
+grid
+####################
+#..................#
+#..rr..........rr..#
+#..rr..........rr..#
+#..................#
+#..................#
+#..................#
+#..rr..........rr..#
+#..................#
+####################
+prop pedestal 9,3
+pickup wick_core @912,358 id=wick_core_ow_4_8
+door ow_4_8 FromPocket 9,8
+spawn Inside 9,6
+spawn Default 9,6

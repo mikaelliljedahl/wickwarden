@@ -1,0 +1,20 @@
+room ow_4_8
+terrain South Cliff: sheltering cliff shelves and a fractured sealed niche
+floor_color 0.23 0.23 0.21
+grid
+#########..#########
+#..rr.........rr...#
+#..rr..............#
+#..........#####...#
+#..........#...#....
+#..........#...#....
+#..........#...#...#
+#..........##.##...#
+#..rrrr............#
+####################
+enemy hollow 5,3
+enemy hollow 7,7
+opener cracked_wall 13,7 id=ow_4_8_cache
+door ow_4_8#cache Inside 13,6 blocker=ow_4_8_cache
+spawn FromPocket 13,8
+spawn Default 9,4
