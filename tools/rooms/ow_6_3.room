@@ -17,7 +17,7 @@ grid
 #########..#########
 enemy fen_leech 2,3
 enemy fen_leech 17,6
-door cave_5_1 Default 8,3
+door cave_5_1 FromOverworld 8,3
 spawn FromCave 8,4
 spawn Default 2,1
 ; Deep water seals each raft exit; the edge id pairs the shore posts.

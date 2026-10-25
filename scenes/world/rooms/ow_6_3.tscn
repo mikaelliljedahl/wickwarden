@@ -110,7 +110,7 @@ size = Vector2(192, 192)
 position = Vector2(816, 336)
 script = ExtResource("8")
 target_room = &"cave_5_1"
-target_spawn = &"Default"
+target_spawn = &"FromOverworld"
 
 [node name="WaterZone2" parent="Props" instance=ExtResource("5")]
 position = Vector2(48, 480)

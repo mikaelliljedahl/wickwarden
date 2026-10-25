@@ -17,5 +17,5 @@ grid
 enemy hollow 5,2
 enemy hollow 12,7
 opener cracked_wall 17,3 id=ow_2_0_cache
-opener thorn_hedge @1872,480 id=ow_2_0_hedge
+opener thorn_hedge @1872,480 id=e005
 pickup wick_core 17,1 id=wick_core_ow_2_0
