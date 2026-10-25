@@ -1,0 +1,23 @@
+room cave_3_7
+terrain Drowned Gallery: flooded inlet and reed beds conceal a forgotten core.
+floor_color 0.11 0.18 0.18
+grid
+####################
+#..............b...#
+#..#..........b.b..#
+#..................#
+...................#
+...................#
+#..................#
+#..#............#..#
+#..................#
+####################
+shallows @624,288 size=480,192
+shallows @1296,672 size=480,192
+enemy fen_leech 5,3
+enemy fen_leech 7,2
+enemy fen_leech 13,7
+pickup wick_core 15,2 id=wick_core_c3_hidden
+water @48,480 size=96,192
+mooring @144,480 id=e168 target_room=cave_3_6 target_mooring=e168 landing_offset=56,0
+spawn Default @288,480

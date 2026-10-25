@@ -1,0 +1,24 @@
+room cave_3_6
+terrain Sluice Walk: two flooded sluices flank a dry lockpick landing.
+floor_color 0.11 0.18 0.18
+grid
+####################
+#..................#
+#..#............#..#
+#..................#
+#...................
+#...................
+#..................#
+#..#............#..#
+#..................#
+#########..#########
+shallows @480,336 size=384,192
+shallows @1392,624 size=384,192
+enemy fen_leech 4,3
+enemy fen_leech 14,6
+pickup big_key 12,3 id=bigkey_c3 scope=c3
+water @960,912 size=192,96
+mooring @960,816 id=e167 target_room=cave_3_5 target_mooring=e167 landing_offset=0,-56
+water @1872,480 size=96,192
+mooring @1776,480 id=e168 target_room=cave_3_7 target_mooring=e168 landing_offset=-56,0
+spawn Default @960,720

@@ -1,0 +1,21 @@
+room cave_3_5
+terrain Dry Dock: raised tool pedestal beside the northern flooded sluice.
+floor_color 0.11 0.18 0.18
+grid
+#########..#########
+#..................#
+#..#............#..#
+#..................#
+...................#
+...................#
+#..................#
+#..#............#..#
+#..................#
+#########..#########
+enemy tallow_blob 5,3
+enemy tallow_blob 14,6
+prop pedestal 13,3
+pickup item reed_raft @1296,358
+water @960,48 size=192,96
+mooring @960,144 id=e167 target_room=cave_3_6 target_mooring=e167 landing_offset=0,56
+spawn Default @960,528
