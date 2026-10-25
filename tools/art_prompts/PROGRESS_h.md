@@ -75,3 +75,5 @@ B83ninthdoorv3/villagev1–3 and B86vistav1 verified own-session hashes/unique; 
 B86vistav2 verified own-session hash/unique; opened `/tmp/wickwarden-art-wave38-review.jpg`; ok. Log `log_art_resume_38.md`. Freed slot filled B10grass-fenv1,six jobs total.
 
 B86ready3complete: vistav3 verified own-session hash/unique, opened `/tmp/wickwarden-art-wave39-review.jpg`; ok,log `log_art_resume_39.md`. Memories27deferred.
+
+B83ready15complete: title_splashv1 job timed out, but sole own-session PNG recovered unchanged,hash verified/unique,opened `/tmp/wickwarden-art-wave42-review.jpg`; ok. Log `log_art_resume_42.md`; no regeneration. Titlelogo3blocked text conflict.
