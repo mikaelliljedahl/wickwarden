@@ -1,0 +1,24 @@
+; The Wick Cellar
+room cave_1_6
+terrain Kiln Row: a straight kiln aisle, with a brittle store arch to the north.
+floor_color 0.16 0.125 0.105
+grid
+####################
+#........#.#.......#
+#........#.#.......#
+#........#.#.......#
+....................
+....................
+#..................#
+#..rr..........rr..#
+#..................#
+####################
+enemy hollow 5,3
+enemy hollow 14,3
+enemy tallow_blob 10,6
+opener locked_door @48,480 id=e151 scope=c1 size=96,192
+opener boss_door @1872,480 id=e152 size=96,192
+opener cracked_wall 10,3 id=e154
+door cave_1_6#crack Inside 10,2
+spawn FromPocket 10,5
+spawn Default @960,528

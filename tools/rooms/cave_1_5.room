@@ -1,0 +1,22 @@
+; The Wick Cellar
+room cave_1_5
+terrain Wax Stair: a broad patrol court below the raised wick pedestal.
+floor_color 0.16 0.125 0.105
+grid
+####################
+#..................#
+#..##..........##..#
+#..##..........##..#
+#...................
+#...................
+#..................#
+#..................#
+#..................#
+#########..#########
+miniboss hollow_captain @960,480
+prop pedestal @960,240
+pickup item cinder_wick @960,262
+brazier 6,7 id=c1_hall_west
+brazier 13,7 id=c1_hall_east
+opener gate @960,912 id=e149 braziers=c1_hall_west,c1_hall_east size=192,96
+spawn Default @960,720

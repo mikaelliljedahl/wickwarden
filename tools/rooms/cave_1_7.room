@@ -1,0 +1,20 @@
+; The Wick Cellar
+room cave_1_7
+terrain Ash Closet: broken storage bays surround the Lockpick plinth.
+floor_color 0.16 0.125 0.105
+grid
+####################
+#..................#
+#..##..............#
+#..##..............#
+...................#
+...................#
+#..................#
+#..rr..........rr..#
+#..................#
+####################
+enemy skitterwick 7,3
+enemy skitterwick 14,6
+prop pedestal 15,2
+pickup big_key @1488,262 id=bigkey_c1 scope=c1
+spawn Default @960,528

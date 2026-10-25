@@ -1,0 +1,19 @@
+; The Wick Cellar
+room cave_1_6#crack
+terrain Sealed store: a quiet cache beyond the broken kiln wall.
+floor_color 0.16 0.125 0.105
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+#..................#
+#..................#
+#..rr..........rr..#
+#..................#
+#..................#
+####################
+cache @960,336 id=cache_cave_1_6
+door cave_1_6 FromPocket @960,816
+spawn Inside @960,600
+spawn Default @960,600

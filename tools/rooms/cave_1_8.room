@@ -1,0 +1,21 @@
+; The Wick Cellar
+room cave_1_8
+terrain Kilnkeeper's Floor: four kiln pillars leave a clear central fighting aisle.
+floor_color 0.16 0.125 0.105
+grid
+####################
+#..................#
+#..................#
+#..................#
+...................#
+...................#
+#..................#
+#..................#
+#..................#
+####################
+arena kilnkeeper @0,0
+boss kilnkeeper @1488,480
+opener boss_door @48,480 id=e152 size=96,192
+pickup fragment @960,480 id=frag_c1 scope=c1 requires=boss_cave_1_8_defeated
+pickup wick_core @1152,480 id=wick_core_c1 requires=boss_cave_1_8_defeated
+spawn Default @192,480
