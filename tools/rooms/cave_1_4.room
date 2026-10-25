@@ -1,0 +1,23 @@
+; The Wick Cellar
+room cave_1_4
+terrain Kiln Hall: twin lamps flank the north arch; the east lock guards Kiln Row.
+floor_color 0.16 0.125 0.105
+grid
+#########..#########
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..rr..........rr..#
+#..................#
+####################
+brazier 6,2 id=c1_hall_west
+brazier 13,2 id=c1_hall_east
+opener gate @960,48 id=e149 braziers=c1_hall_west,c1_hall_east size=192,96
+opener locked_door @1872,480 id=e151 scope=c1 size=96,192
+enemy hollow 5,3
+enemy hollow 14,6
+enemy spitcap 10,7
+spawn Default @960,528

@@ -12,7 +12,7 @@
 script = ExtResource("1")
 room_id = &"cave_1"
 grid = Vector2i(1, 13)
-exits = Array[StringName]([])
+exits = Array[StringName]([&"e", &"w"])
 dark = true
 floor_color = Color(0.12, 0.11, 0.14, 1)
 
@@ -71,12 +71,12 @@ size = Vector2(96, 96)
 kind = &"rock"
 
 [node name="BrazierWest" type="StaticBody2D" parent="Props"]
-position = Vector2(336, 528)
+position = Vector2(336, 624)
 script = ExtResource("4")
 brazier_id = &"cave_west"
 
 [node name="BrazierEast" type="StaticBody2D" parent="Props"]
-position = Vector2(1584, 528)
+position = Vector2(1584, 624)
 script = ExtResource("4")
 brazier_id = &"cave_east"
 

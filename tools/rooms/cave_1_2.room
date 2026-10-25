@@ -1,0 +1,20 @@
+; The Wick Cellar
+room cave_1_2
+terrain Spent Wicks: collapsed storage bays frame a broad turning hall.
+floor_color 0.16 0.125 0.105
+grid
+#########..#########
+#..................#
+#..##..........##..#
+#..##..............#
+#...................
+#...................
+#...........##.....#
+#..rr.......##.....#
+#..................#
+####################
+enemy skitterwick 6,3
+enemy skitterwick 14,6
+enemy duskmoth 5,6
+enemy duskmoth 14,2
+spawn Default 10,5

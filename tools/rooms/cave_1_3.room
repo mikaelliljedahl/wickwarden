@@ -1,0 +1,20 @@
+; The Wick Cellar
+room cave_1_3
+terrain Grated Store: a sealed northern store and an open moth launch court.
+floor_color 0.16 0.125 0.105
+grid
+####################
+#......#....#......#
+#......#....#......#
+#......##..##......#
+#..................#
+#..................#
+#..rr..........rr..#
+#..................#
+#..................#
+#########..#########
+grate @960,336 size=192,96
+pickup small_key 10,2 id=key_c1_1 scope=c1
+enemy wickling 5,5
+enemy wickling 14,5
+spawn Default @960,528
