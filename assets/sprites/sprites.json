@@ -1,4 +1,193 @@
 {
+  "wick_automaton": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      204.0
+    ],
+    "foot": 236,
+    "radius": 32.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_down": {
+        "file": "res://assets/sprites/wick_automaton_walk_down.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/wick_automaton_idle_down.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/wick_automaton_walk_side.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/wick_automaton_idle_side.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/wick_automaton_walk_up.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/wick_automaton_idle_up.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "corrows_echo": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      206.0
+    ],
+    "foot": 236,
+    "radius": 30.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_down": {
+        "file": "res://assets/sprites/corrows_echo_walk_down.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/corrows_echo_idle_down.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "walk_side": {
+        "file": "res://assets/sprites/corrows_echo_walk_side.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/corrows_echo_idle_side.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/corrows_echo_walk_up.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/corrows_echo_idle_up.png",
+        "frames": 1,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "unlit_hush_hand": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      76.0
+    ],
+    "foot": 176,
+    "radius": 100.0,
+    "mirror_side": true,
+    "animations": {
+      "rise": {
+        "file": "res://assets/sprites/unlit_hush_hand_rise.png",
+        "frames": 4,
+        "fps": 6.0,
+        "loop": false
+      },
+      "hold": {
+        "file": "res://assets/sprites/unlit_hush_hand_hold.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/unlit_hush_hand_hold.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "sink": {
+        "file": "res://assets/sprites/unlit_hush_hand_sink.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": false
+      }
+    }
+  },
+  "unlit_p1_mass": {
+    "cell": [
+      768,
+      768
+    ],
+    "anchor": [
+      384.0,
+      384.0
+    ],
+    "radius": 120.0,
+    "mirror_side": true,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_p1_mass_idle.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "wax_hook": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 16.0,
+    "mirror_side": true,
+    "centered": true,
+    "animations": {
+      "fly": {
+        "file": "res://assets/sprites/wax_hook_fly.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/wax_hook_fly.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
   "pale_squire": {
     "cell": [
       256,
