@@ -1,5 +1,7 @@
 # Wickwarden — state
 
+Push outcome: verified checkpoint `e1391ad4451157548aa164f3f29b45bcc5a4d2d4` was pushed to personal `mikaelliljedahl/wickwarden` origin/main at **2026-10-25 17:35:31 UTC**; `git ls-remote` exactly matched local HEAD. It includes checked runtime `d72aec1`, complete C01 construction/acceptance and the integration record. Authentication used the actual installed GitHub CLI, the personal-account token and a command-local credential helper; no repository config changed. This documentation-only follow-up records that successful push and is pushed afterward; its own final hash is reported externally to avoid a recursive self-reference. Broad implementation may resume after the follow-up push is verified.
+
 Final integration gate passed on `d72aec1` (2026-10-25): **84/84 Godot suites**, gdlint with no problems, current generated world data, **124 Python tests**, **74/74 room sources**, **20 art tests**, and global ownership (**92 WPs / 53 batches**). Tracked runtime/source Git hashes match HEAD. Logs: `/tmp/wick-release-{check,rooms,art,ownership}.log`; hash audit `/tmp/wick-release-hashes.json`. HUD commit `d72aec1` changes only `hud.gd` / `test_hud_map.gd` (explicit F11 ownership passed) and supplies dedicated equipped icons for all ten tools. Integration opened `/tmp/wick-hud-all-ten.png`; existing fixed-width labels remain clipped for some long names. The older `/tmp/wick-c01-boss-rewards.png` shows reward placement and fragment presentation but predates the HUD correction. C01 independent review is GO. Key investigation found no mechanical blocker; synthetic old-format-1 keys remain visible. Human balance/feel approval is not claimed.
 
 Presentation backlog remains: C01 miniboss/boss bodies and fragment art, P2 invisible collider tails, and capture-exit ObjectDB/resource cleanup warnings. No blanket full-art completion is claimed. All 77 foreign staged paths, provenance/art replacements and import/UID dirt remain protected. Source production is closed; future caves and backlog audits do not block this checkpoint.
@@ -14,7 +16,7 @@ Presentation sweep (`fb5fd5a`, `cdec164`, `607fae0`, `2021975`, `a92286d`, `c065
 
 Source-art coordinator is closed: final FX `d2fe1a5`, provenance checkpoint `2fa8c69`; no image producer is currently running. Runtime art acceptance remains separate. Arena retreat is a pending owner question; no new physical barrier is approved. B01 uses the existing harmless M0 default API without an adapter.
 
-Latest previously verified personal origin/main checkpoint: `2fa8c69`. The current gate is green as recorded above; older results below are historical. Foreign staged source deletions, untracked replacements, shared provenance changes and import/UID files remain protected.
+Latest verified personal origin/main checkpoint: `e1391ad` (push record above). The current gate is green as recorded above; older results below are historical. Foreign staged source deletions, untracked replacements, shared provenance changes and import/UID files remain protected.
 
 ## Item-menu art checkpoint
 
