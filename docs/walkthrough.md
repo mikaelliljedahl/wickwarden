@@ -54,7 +54,7 @@ Use the item menu to equip any tool you have found. Q/I or Y cycles the active i
 | A deep-water lane between posts | Use the Reed Raft at a mooring and steer to the next post. On the raft, only Hook, Charge Flare, and Ward work. |
 | Heavy stone or sliding door | Equip Heft Mitts and face the prop. For a liftable stone, tap Use Item to pick it up and tap Use Item again to throw it. For a push boulder or door, tap Use Item while facing it, then keep moving toward it; it slides one tile after about half a second. |
 | A pit or ravine | Use Skitter Boots to leap up to 192 pixels in the facing direction and land on the far bank. |
-| A resonance stone or door | Tap Use Item with the Lantern Chime equipped. Hold it to open the warp picker for cave mouths you have visited. |
+| A resonance stone or door | Tap Use Item with the Lantern Chime equipped. The chime is in C6's Bell Room (`cave_6_5`). At Counting Gate (`ow_9_7`), the radial ring reaches 480 px and opens the resonance door to C8 (`cave_8_1`). Keyboard: E/K; controller: X. Holding for 1.2 seconds opens the warp picker instead of ringing. |
 | An anchor ring over a gap | Aim the Reel Line at the ring to pull yourself across. It does not create a bridge across an arbitrary pit. |
 | An eye switch | Shoot it with the Tallow Sling. Hook swings do not activate it, and each switch costs one slug. |
 
