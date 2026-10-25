@@ -1,0 +1,20 @@
+room cave_5_10
+terrain The Last Page: six low lecterns surround the jar-lit copy circle.
+floor_color 0.14 0.15 0.21
+grid
+#########..#########
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+arena archivist @0,0
+boss archivist @960,480
+opener boss_door @960,48 id=e189
+spawn Default @960,192
+pickup fragment 6,7 id=frag_c5 scope=c5 requires=boss_cave_5_10_defeated
+pickup wick_core 13,7 id=wick_core_c5 requires=boss_cave_5_10_defeated

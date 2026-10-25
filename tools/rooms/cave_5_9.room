@@ -1,0 +1,18 @@
+room cave_5_9
+terrain Polished archive stone: paired reading banks frame the clear approach to the Last Page.
+floor_color 0.16 0.17 0.23
+grid
+####################
+#..................#
+#..###........###..#
+#..................#
+...................#
+...................#
+#..###........###..#
+#..................#
+#..................#
+#########..#########
+enemy mirror_shade 6,3
+enemy mirror_shade 13,6
+opener boss_door @960,912 id=e189
+spawn Default 2,4
