@@ -1,0 +1,21 @@
+room ow_11_2
+terrain Slag Cache: broken slag shelves around a bomb-scarred eastern notch
+floor_color 0.28 0.23 0.20
+grid
+#########..#########
+#..rr.........rr...#
+#..r...........r...#
+#..............rrr.#
+.................r.#
+..............rr.r.#
+#..bb.........r..r.#
+#..br.........rrrr.#
+#..................#
+####################
+enemy cinder_wisp 6,3
+enemy cinder_wisp 12,4
+enemy cinder_wisp 7,7
+opener cracked_wall 16,5 id=e135
+door ow_11_2#cache Inside 16,5 blocker=e135
+spawn FromPocket 14,4
+spawn Default 9,4

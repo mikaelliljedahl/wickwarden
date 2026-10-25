@@ -1,0 +1,18 @@
+room ow_11_2#cache
+terrain Slag Cache pocket: a wick core between two dark stone shelves
+floor_color 0.23 0.21 0.19
+grid
+####################
+#..................#
+#...rr........rr...#
+#...r..........r...#
+#..................#
+#..................#
+#...r..........r...#
+#...rr........rr...#
+#..................#
+####################
+prop pedestal 9,3
+pickup wick_core @912,358 id=wick_core_ow_11_2
+door ow_11_2 FromPocket 9,8
+spawn Inside 9,6

@@ -1,0 +1,19 @@
+room ow_10_4
+terrain Anchor Ledge: iron rings on opposing cliff banks above a broad shore chasm
+floor_color 0.29 0.25 0.22
+grid
+#########..#########
+#..rr.........rr...#
+#..rb.........br...#
+#..................#
+#..................#
+#..................#
+#..................#
+#..rr.........rr...#
+#..rb.........br...#
+#########..#########
+enemy hollow 6,2
+spawn Default 9,2
+pit @960,528 size=1728,288 look=ravine
+anchor_ring @912,792
+anchor_ring @912,240
