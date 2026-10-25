@@ -2,6 +2,365 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+ "c45_lull_mauler": {
+  "measure": "fit",
+  "value": [
+   308,
+   286
+  ],
+  "ref": [
+   {
+    "sheet": "lull_mauler_walk_side_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "lull_mauler_walk_side_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "lull_mauler_walk_down_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "lull_mauler_walk_down_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "lull_mauler_walk_up_v3",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "lull_mauler_walk_up_v3",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "c45_mauler_slag_chunk": {
+  "measure": "fit",
+  "value": [
+   84,
+   84
+  ],
+  "ref": [
+   {
+    "sheet": "slag_chunk_v1",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "c45_hushed_colossus": {
+  "measure": "fit",
+  "value": [
+   628,
+   594
+  ],
+  "ref": [
+   {
+    "sheet": "hushed_colossus_body_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "hushed_colossus_body_v1",
+    "row": 1,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "hushed_colossus_body_v1",
+    "row": 2,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "hushed_colossus_body_v1",
+    "row": 3,
+    "poses": [
+     0,
+     2
+    ]
+   }
+  ]
+ },
+ "c45_colossus_shard": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "colossus_shard_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "colossus_shard_v1",
+    "row": 1,
+    "poses": 0
+   },
+   {
+    "sheet": "colossus_shard_v1",
+    "row": 1,
+    "poses": 1
+   },
+   {
+    "sheet": "colossus_shard_v1",
+    "row": 1,
+    "poses": 2
+   },
+   {
+    "sheet": "colossus_shard_v1",
+    "row": 2,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "c45_mirror_warden": {
+  "measure": "fit",
+  "value": [
+   244,
+   230
+  ],
+  "ref": [
+   {
+    "sheet": "mirror_warden_walk_side_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "mirror_warden_walk_side_v1",
+    "row": 0,
+    "poses": 0
+   }
+  ]
+ },
+ "c45_archivist": {
+  "measure": "fit",
+  "value": [
+   244,
+   192.0
+  ],
+  "ref": [
+   {
+    "sheet": "archivist_p1_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "archivist_p1_v1",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   },
+   {
+    "sheet": "archivist_p1_v1",
+    "row": 2,
+    "poses": [
+     0,
+     3
+    ]
+   },
+   {
+    "sheet": "archivist_p2_p3_v2",
+    "row": 0,
+    "poses": [
+     0,
+     3
+    ]
+   },
+   {
+    "sheet": "archivist_p2_p3_v2",
+    "row": 1,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "archivist_p2_p3_v2",
+    "row": 2,
+    "poses": [
+     0,
+     3
+    ]
+   },
+   {
+    "sheet": "archivist_p2_p3_v2",
+    "row": 3,
+    "poses": [
+     0,
+     3
+    ]
+   }
+  ]
+ },
+ "c45_archivist_decoy": {
+  "measure": "fit",
+  "value": [
+   244,
+   192.0
+  ],
+  "ref": [
+   {
+    "sheet": "archivist_decoy_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
+ "c45_choir_warden": {
+  "measure": "fit",
+  "value": [
+   244,
+   230
+  ],
+  "ref": [
+   {
+    "sheet": "choir_warden_walk_side_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   },
+   {
+    "sheet": "choir_warden_walk_side_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "choir_warden_actions_down_v3",
+    "row": 0,
+    "poses": [
+     0,
+     2
+    ]
+   },
+   {
+    "sheet": "choir_warden_actions_down_v3",
+    "row": 0,
+    "poses": [
+     2,
+     4
+    ]
+   },
+   {
+    "sheet": "choir_warden_actions_down_v3",
+    "row": 1,
+    "poses": 0
+   }
+  ]
+ },
+ "c45_item_heft_mitts": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "item_heft_mitts_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "item_heft_mitts_v1",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   }
+  ]
+ },
+ "c45_item_glow_jar": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "item_glow_jar_v1",
+    "row": 0,
+    "poses": 0
+   },
+   {
+    "sheet": "item_glow_jar_v1",
+    "row": 1,
+    "poses": [
+     0,
+     3
+    ]
+   }
+  ]
+ },
+ "c45_fragment_c4": {
+ "measure": "fit",
+ "value": [
+  84,
+  82
+ ],
+ "ref": [
+  {
+   "sheet": "fragment_c4_v1",
+   "row": 0,
+   "poses": 3
+  }
+ ]
+},
+ "c45_fragment_c5": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "fragment_c5_v1",
+    "row": 0,
+    "poses": [
+     0,
+     4
+    ]
+   }
+  ]
+ },
  "encounter_hollow_captain": {
   "measure": "fit",
   "value": [
@@ -995,6 +1354,110 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+ "lull_mauler": {
+  "cell": [
+   320,
+   320
+  ],
+  "align": "foot",
+  "foot": 292,
+  "radius": 40,
+  "mirror_side": true
+ },
+ "mauler_slag_chunk": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 90,
+  "prop": true,
+  "rect_h": 96
+ },
+ "hushed_colossus": {
+  "cell": [
+   640,
+   640
+  ],
+  "align": "foot",
+  "foot": 600,
+  "radius": 90
+ },
+ "colossus_shard": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88,
+  "radius": 36
+ },
+ "mirror_warden": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "foot",
+  "foot": 236,
+  "radius": 30,
+  "mirror_side": true
+ },
+ "archivist": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "center"
+ },
+ "archivist_decoy": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "center"
+ },
+ "choir_warden": {
+  "cell": [
+   256,
+   256
+  ],
+  "align": "foot",
+  "foot": 236,
+  "radius": 30,
+  "mirror_side": true
+ },
+ "item_heft_mitts": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "item_glow_jar": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "fragment_c4": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
+ "fragment_c5": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88
+ },
  "hollow_captain": {
   "cell": [
    256,
@@ -1536,6 +1999,681 @@
  }
  },
  "sheets": {
+ "lull_mauler_walk_side_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "lull_mauler",
+      "anim": "walk_side",
+      "file": "lull_mauler_walk_side",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_lull_mauler",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "lull_mauler",
+      "anim": "idle_side",
+      "file": "lull_mauler_idle_side",
+      "poses": 0,
+      "scale": "c45_lull_mauler",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ],
+  "params": {
+   "min_gap": 1
+  }
+ },
+ "lull_mauler_walk_down_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "lull_mauler",
+      "anim": "walk_down",
+      "file": "lull_mauler_walk_down",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_lull_mauler",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "lull_mauler",
+      "anim": "idle_down",
+      "file": "lull_mauler_idle_down",
+      "poses": 0,
+      "scale": "c45_lull_mauler",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ],
+  "params": {
+   "min_gap": 1
+  }
+ },
+ "lull_mauler_walk_up_v3": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "lull_mauler",
+      "anim": "walk_up",
+      "file": "lull_mauler_walk_up",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_lull_mauler",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "lull_mauler",
+      "anim": "idle_up",
+      "file": "lull_mauler_idle_up",
+      "poses": 0,
+      "scale": "c45_lull_mauler",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ],
+  "params": {
+   "min_gap": 1
+  }
+ },
+ "slag_chunk_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "mauler_slag_chunk",
+      "anim": "idle",
+      "file": "mauler_slag_chunk_idle",
+      "poses": 0,
+      "scale": "c45_mauler_slag_chunk",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "hushed_colossus_body_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "hushed_colossus",
+      "anim": "asleep",
+      "file": "hushed_colossus_asleep",
+      "poses": 0,
+      "scale": "c45_hushed_colossus",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "hushed_colossus",
+      "anim": "idle",
+      "file": "hushed_colossus_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "c45_hushed_colossus",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "hushed_colossus",
+      "anim": "wake_2",
+      "file": "hushed_colossus_wake_2",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "c45_hushed_colossus",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "hushed_colossus",
+      "anim": "wake_3",
+      "file": "hushed_colossus_wake_3",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "c45_hushed_colossus",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "colossus_shard_v1": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 1,
+   "outputs": [
+    {
+     "kind": "colossus_shard",
+     "anim": "fall",
+     "file": "colossus_shard_fall",
+     "poses": 0,
+     "scale": "c45_colossus_shard",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  },
+  {
+   "poses": 3,
+   "outputs": [
+    {
+     "kind": "colossus_shard",
+     "anim": "idle",
+     "file": "colossus_shard_idle",
+     "poses": 0,
+     "scale": "c45_colossus_shard",
+     "fps": 1,
+     "loop": true
+    },
+    {
+     "kind": "colossus_shard",
+     "anim": "lying_b",
+     "file": "colossus_shard_lying_b",
+     "poses": 1,
+     "scale": "c45_colossus_shard",
+     "fps": 1,
+     "loop": true
+    },
+    {
+     "kind": "colossus_shard",
+     "anim": "lying_c",
+     "file": "colossus_shard_lying_c",
+     "poses": 2,
+     "scale": "c45_colossus_shard",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  },
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "colossus_shard",
+     "anim": "crumble",
+     "file": "colossus_shard_crumble",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "c45_colossus_shard",
+     "fps": 8,
+     "loop": false
+    }
+   ]
+  }
+ ],
+ "params": {
+  "noise_area": 500,
+  "min_gap": 1
+ }
+},
+ "mirror_warden_walk_side_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "mirror_warden",
+      "anim": "walk_side",
+      "file": "mirror_warden_walk_side",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_mirror_warden",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "mirror_warden",
+      "anim": "idle_side",
+      "file": "mirror_warden_idle_side",
+      "poses": 0,
+      "scale": "c45_mirror_warden",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ],
+  "params": {
+   "min_gap": 1
+  }
+ },
+ "archivist_p1_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "archivist",
+      "anim": "idle",
+      "file": "archivist_idle",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_archivist",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "archivist",
+      "anim": "float",
+      "file": "archivist_float",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_archivist",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "archivist",
+      "anim": "cast",
+      "file": "archivist_cast",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "c45_archivist",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "archivist",
+      "anim": "blink",
+      "file": "archivist_blink",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "c45_archivist",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   }
+  ]
+ },
+ "archivist_p2_p3_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "archivist",
+      "anim": "copy",
+      "file": "archivist_copy",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "c45_archivist",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "archivist",
+      "anim": "stunned",
+      "file": "archivist_stunned",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "c45_archivist",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "archivist",
+      "anim": "page_break",
+      "file": "archivist_page_break",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "c45_archivist",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "archivist",
+      "anim": "last_page",
+      "file": "archivist_last_page",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "c45_archivist",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ],
+  "params": {
+   "band_floor": 0.9,
+   "min_gap_y": 1
+  }
+ },
+ "archivist_decoy_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "archivist_decoy",
+      "anim": "idle",
+      "file": "archivist_decoy_idle",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_archivist_decoy",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "archivist_decoy",
+      "anim": "float",
+      "file": "archivist_decoy_float",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_archivist_decoy",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "choir_warden_walk_side_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "choir_warden",
+      "anim": "walk_side",
+      "file": "choir_warden_walk_side",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_choir_warden",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "choir_warden",
+      "anim": "idle_side",
+      "file": "choir_warden_idle_side",
+      "poses": 0,
+      "scale": "c45_choir_warden",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "choir_warden_actions_down_v3": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "choir_warden",
+     "anim": "inhale_down",
+     "file": "choir_warden_inhale_down",
+     "poses": [
+      0,
+      2
+     ],
+     "scale": "c45_choir_warden",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "note_down",
+     "file": "choir_warden_note_down",
+     "poses": [
+      2,
+      4
+     ],
+     "scale": "c45_choir_warden",
+     "fps": 8,
+     "loop": true
+    }
+   ]
+  },
+  {
+   "poses": 1,
+   "outputs": [
+    {
+     "kind": "choir_warden",
+     "anim": "recover_down",
+     "file": "choir_warden_recover_down",
+     "poses": 0,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  }
+ ],
+ "params": {
+  "split": "components",
+  "noise_area": 500
+ }
+},
+ "item_heft_mitts_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "item_heft_mitts",
+      "anim": "idle",
+      "file": "item_heft_mitts_idle",
+      "poses": 0,
+      "scale": "c45_item_heft_mitts",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "item_heft_mitts",
+      "anim": "glint",
+      "file": "item_heft_mitts_glint",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "c45_item_heft_mitts",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "item_glow_jar_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "item_glow_jar",
+      "anim": "idle",
+      "file": "item_glow_jar_idle",
+      "poses": 0,
+      "scale": "c45_item_glow_jar",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 3,
+    "outputs": [
+     {
+      "kind": "item_glow_jar",
+      "anim": "glint",
+      "file": "item_glow_jar_glint",
+      "poses": [
+       0,
+       3
+      ],
+      "scale": "c45_item_glow_jar",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "fragment_c4_v1": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "fragment_c4",
+     "anim": "idle",
+     "file": "fragment_c4_idle",
+     "poses": 3,
+     "scale": "c45_fragment_c4",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  }
+ ],
+ "params": {
+  "chroma": false
+ }
+},
+ "fragment_c5_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "fragment_c5",
+      "anim": "idle",
+      "file": "fragment_c5_idle",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "c45_fragment_c5",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
  "hollow_captain_walk_down_v3": {
   "key": "magenta",
   "rows": [

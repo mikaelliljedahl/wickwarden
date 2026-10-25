@@ -1,4 +1,413 @@
 {
+  "lull_mauler": {
+    "cell": [
+      320,
+      320
+    ],
+    "anchor": [
+      160.0,
+      252.0
+    ],
+    "foot": 292,
+    "radius": 40.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_side": {
+        "file": "res://assets/sprites/lull_mauler_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/lull_mauler_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_down": {
+        "file": "res://assets/sprites/lull_mauler_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/lull_mauler_idle_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/lull_mauler_walk_up.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/lull_mauler_idle_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "mauler_slag_chunk": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      90
+    ],
+    "foot": 90,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/mauler_slag_chunk_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "hushed_colossus": {
+    "cell": [
+      640,
+      640
+    ],
+    "anchor": [
+      320.0,
+      510.0
+    ],
+    "foot": 600,
+    "radius": 90.0,
+    "mirror_side": false,
+    "animations": {
+      "asleep": {
+        "file": "res://assets/sprites/hushed_colossus_asleep.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/hushed_colossus_idle.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "wake_2": {
+        "file": "res://assets/sprites/hushed_colossus_wake_2.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "wake_3": {
+        "file": "res://assets/sprites/hushed_colossus_wake_3.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "colossus_shard": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      52.0
+    ],
+    "foot": 88,
+    "radius": 36.0,
+    "mirror_side": false,
+    "animations": {
+      "fall": {
+        "file": "res://assets/sprites/colossus_shard_fall.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/colossus_shard_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "lying_b": {
+        "file": "res://assets/sprites/colossus_shard_lying_b.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "lying_c": {
+        "file": "res://assets/sprites/colossus_shard_lying_c.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "crumble": {
+        "file": "res://assets/sprites/colossus_shard_crumble.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "mirror_warden": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      206.0
+    ],
+    "foot": 236,
+    "radius": 30.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_side": {
+        "file": "res://assets/sprites/mirror_warden_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/mirror_warden_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "archivist": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      128.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/archivist_idle.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "float": {
+        "file": "res://assets/sprites/archivist_float.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "cast": {
+        "file": "res://assets/sprites/archivist_cast.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      },
+      "blink": {
+        "file": "res://assets/sprites/archivist_blink.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      },
+      "copy": {
+        "file": "res://assets/sprites/archivist_copy.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      },
+      "stunned": {
+        "file": "res://assets/sprites/archivist_stunned.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "page_break": {
+        "file": "res://assets/sprites/archivist_page_break.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      },
+      "last_page": {
+        "file": "res://assets/sprites/archivist_last_page.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "archivist_decoy": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      128.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/archivist_decoy_idle.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "float": {
+        "file": "res://assets/sprites/archivist_decoy_float.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "choir_warden": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      206.0
+    ],
+    "foot": 236,
+    "radius": 30.0,
+    "mirror_side": true,
+    "animations": {
+      "walk_side": {
+        "file": "res://assets/sprites/choir_warden_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/choir_warden_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "inhale_down": {
+        "file": "res://assets/sprites/choir_warden_inhale_down.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "note_down": {
+        "file": "res://assets/sprites/choir_warden_note_down.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "recover_down": {
+        "file": "res://assets/sprites/choir_warden_recover_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "item_heft_mitts": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/item_heft_mitts_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "glint": {
+        "file": "res://assets/sprites/item_heft_mitts_glint.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "item_glow_jar": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/item_glow_jar_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "glint": {
+        "file": "res://assets/sprites/item_glow_jar_glint.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c4": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c4_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c5": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c5_idle.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
   "hollow_captain": {
     "cell": [
       256,
