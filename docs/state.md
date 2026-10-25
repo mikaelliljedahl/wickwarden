@@ -1,6 +1,6 @@
 # Current status
 
-Updated 2026-10-25 at 21:35 UTC. The verified runtime remains `16df5d1902a1e8fb6108aa117aa971cccefe44a7`; the latest published status-only commit is `f8d44c2ce36daaa35480fe999a9f217c771be84f`. This update records two owner screenshots and clarifies the C8 door in the player guide. No runtime or art files are changed.
+Updated 2026-10-25 at 21:37 UTC. The verified runtime remains `16df5d1902a1e8fb6108aa117aa971cccefe44a7`. The previous status checkpoint was `f8d44c2ce36daaa35480fe999a9f217c771be84f`; this docs-only follow-up records two owner screenshots and clarifies the C8 door in the player guide. The screenshot update is published to personal `origin/main`; no runtime or art files changed.
 
 **Final checkpoint gate:** logs are in `/tmp/wickwarden-urgent-final-16df5d1-logs/`. `make check` passed 133/133 Godot suites, clean lint and world-data checks; Python generator/compiler tests passed 172. `rooms-check` passed 221/221, `art-test` passed 22/22, and global ownership passed for 92 work packages and 53 batches (192 rooms, 33 pockets). The isolated run used Dummy audio from the first import. The verifier reported no timeouts, SIGSEGV, engine/script/parse errors, leaks, skips, or waivers. The detached gate worktree was removed after testing. These results apply to `16df5d1902a1e8fb6108aa117aa971cccefe44a7`.
 
