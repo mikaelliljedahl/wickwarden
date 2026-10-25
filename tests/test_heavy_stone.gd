@@ -15,6 +15,7 @@ var _hook_hits := 0
 
 func run() -> void:
 	await _groups_and_looks()
+	await _player_push_requires_mitts()
 	await _push_needs_hold_then_slides()
 	await _push_stops_at_wall()
 	await _three_steps_then_no_more()
@@ -58,6 +59,22 @@ func _groups_and_looks() -> void:
 	check_eq(stones.mode, 0, "the heavy stones scene is LIFT")
 	check(lift.get_node_or_null("Visual") != null, "a heavy stone has a Visual child")
 	check(boulder.get_node_or_null("Visual") != null, "a boulder has a Visual child")
+	for stone: Node2D in [lift, boulder]:
+		var visual := stone.get_node("Visual") as SpriteVisual
+		check(visual != null, "one-tile stone and boulder use painted art")
+		if visual != null:
+			check_eq(visual.kind, &"heavy_stone", "both use the accepted stone mapping")
+			check(visual.sprite_frames != null, "painted stone has frames")
+			check(
+				visual.sprite_frames.get_frame_texture(visual.animation, 0) != null,
+				"painted stone has a drawable texture"
+			)
+			check_eq(visual.scale, Vector2.ONE, "stone art is not stretched")
+		check_eq(
+			stone.get_node("Shape").shape.size,
+			Vector2(96, 96),
+			"painted stone retains its physical footprint"
+		)
 	check(Placeholder.has_kind(&"heavy_door"), "the heavy door look is registered")
 	await dispose(arena)
 
@@ -186,3 +203,36 @@ func _gone(node: Variant) -> bool:
 
 func _count_hook(_hurtbox: Hurtbox) -> void:
 	_hook_hits += 1
+
+
+func _player_push_requires_mitts() -> void:
+	reset_state()
+	var arena := make_arena()
+	var room_scene := load("res://scenes/world/rooms/ow_6_6.tscn") as PackedScene
+	check(room_scene != null, "ow_6_6 loads for actual PUSH regression")
+	if room_scene == null:
+		await dispose(arena)
+		return
+	var room := room_scene.instantiate()
+	arena.add_child(room)
+	var boulder: Variant = room.get_node("Props/HeavyBoulder1")
+	var start: Vector2 = boulder.global_position
+	var player := make_player(arena, start - Vector2(100, 0))
+	await frames(2)
+	Input.action_press(&"move_right")
+	await frames(65)
+	release_inputs()
+	check_near(boulder.global_position.x, start.x, 0.5, "walking without mitts cannot push")
+	check(not GameState.has_flag(&"moved_cave6door"), "no mitts means no moved flag")
+	GameState.acquire_item(&"heft_mitts")
+	GameState.set_active_item(&"heft_mitts")
+	player.facing = Vector2.RIGHT
+	check(player.use_item(), "actual mitts grab starts the PUSH interaction")
+	await frames(2)
+	Input.action_press(&"move_right")
+	await frames(60)
+	release_inputs()
+	check_near(boulder.global_position.x, start.x + STEP, 1.0, "actual mitts push slides one tile")
+	check(GameState.has_flag(&"moved_cave6door"), "actual mitts push sets the gate flag")
+	await frames(30)
+	await dispose(arena)

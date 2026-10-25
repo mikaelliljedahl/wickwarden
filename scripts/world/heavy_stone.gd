@@ -94,7 +94,13 @@ func _hit_radius() -> float:
 
 
 func _attach_visual() -> void:
-	SpriteVisual.attach(self, look, 0.0, size)
+	# The one-tile PUSH boulder shares the painted stone's one-tile footprint.
+	# Keep its own fallback for other footprints or when that art is unavailable.
+	var visual_kind := look
+	if look == &"heavy_boulder" and size == Vector2(96, 96):
+		if SpriteVisual.has_art(&"heavy_stone"):
+			visual_kind = &"heavy_stone"
+	SpriteVisual.attach(self, visual_kind, 0.0, size)
 
 
 func _can_lift() -> bool:
