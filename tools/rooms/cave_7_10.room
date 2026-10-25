@@ -1,0 +1,18 @@
+room cave_7_10
+terrain Nerve Antechamber: paired stone shoulders lead from the west hall to the southern lantern lock.
+floor_color 0.15 0.16 0.22
+grid
+####################
+#..................#
+#...###......###...#
+#..................#
+...................#
+...................#
+#..................#
+#...###......###...#
+#..................#
+#########..#########
+spawn Default 2,4
+enemy tallow_blob 7,3
+enemy tallow_blob 12,5
+opener boss_door @960,912 id=e210

@@ -1,0 +1,20 @@
+room cave_7_9
+terrain Cold Cell: paired stone cells frame the lockpick plinth and a broad eastern approach.
+floor_color 0.15 0.16 0.22
+grid
+####################
+#..................#
+#..###......###....#
+#..................#
+#...................
+#...................
+#..................#
+#..###......###....#
+#..................#
+####################
+spawn Default 16,4
+enemy hollow 7,3
+enemy hollow 10,6
+opener locked_door @1872,480 id=e208 scope=c7 size=192,96
+prop pedestal 4,4
+pickup big_key @432,454 id=bigkey_c7 scope=c7

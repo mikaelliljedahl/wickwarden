@@ -1,0 +1,20 @@
+room cave_7_11
+terrain Coward's Crown: five stone islands over the knight's pit, with the northern return island kept clear.
+floor_color 0.13 0.12 0.19
+grid
+#########..#########
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+spawn Default @960,192
+arena gloam_knight @0,0
+boss gloam_knight @960,480
+opener boss_door @960,48 id=e210
+pickup fragment @816,192 id=frag_c7 scope=c7 requires=boss_cave_7_11_defeated
+pickup wick_core @1104,192 id=wick_core_c7 requires=boss_cave_7_11_defeated
