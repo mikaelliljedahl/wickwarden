@@ -1,0 +1,19 @@
+room ow_11_6
+terrain Tide Cache: a bomb-scarred rock notch above the tidal clearing
+floor_color 0.20 0.23 0.24
+grid
+#########..#########
+#..................#
+#..rrr.rr..........#
+#..r....r..........#
+...................#
+...................#
+#..............rr..#
+#..ee...........r..#
+#...e..............#
+####################
+enemy husk_hound 13,6
+opener cracked_wall 6,2 id=e142
+door ow_11_6#cache Inside 6,2 blocker=e142
+spawn FromPocket 6,4
+spawn Default 9,5

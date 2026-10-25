@@ -1,0 +1,19 @@
+room ow_11_6#cache
+terrain Tide vault: a pale core above the salt-worn stone shelf
+floor_color 0.20 0.23 0.24
+grid
+####################
+#..................#
+#..rr..........rr..#
+#..r............r..#
+#..................#
+#..................#
+#..................#
+#..r............r..#
+#..................#
+####################
+prop pedestal 9,3
+pickup wick_core @912,358 id=wick_core_ow_11_6
+door ow_11_6 FromPocket 9,8
+spawn Inside 9,6
+spawn Default 9,6

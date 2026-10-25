@@ -1,0 +1,22 @@
+room ow_9_7
+terrain Counting Gate: paired stone piers guard the silent resonance mouth
+floor_color 0.20 0.23 0.24
+grid
+#########..#########
+#..................#
+#...rr.............#
+#....r.............#
+....................
+....................
+#..................#
+#...ee........ee...#
+#....e........e....#
+#########..#########
+enemy hollow 6,5
+enemy hollow 13,5
+prop wall @1200,192 size=192,192
+prop wall @1680,192 size=192,192
+opener resonance_door @1440,240 id=e253
+door cave_8_1 FromOverworld @1440,240 blocker=e253
+spawn FromCave 9,4
+spawn Default 9,6

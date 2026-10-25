@@ -1,0 +1,27 @@
+room ow_10_7#shop
+terrain Pilgrim stall: four wares between sheltering stone counters
+floor_color 0.20 0.23 0.24
+grid
+####################
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+prop wall 3,3 size=96,288
+prop wall 16,3 size=96,288
+prop pedestal 6,3
+prop pedestal 8,3
+prop pedestal 11,3
+prop pedestal 13,3
+shop S5 ember @624,358
+shop S5 pot_bundle @816,358 id=pot_bundle_s5
+shop S5 tallow_flask @1104,358
+shop S5 slug_bundle @1296,358 id=slug_bundle_s5
+door ow_10_7 FromPocket 9,8
+spawn Inside 9,6
+spawn Default 9,6
