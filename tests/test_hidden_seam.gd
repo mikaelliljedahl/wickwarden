@@ -410,7 +410,10 @@ func _c05_pair_if_delivered() -> void:
 	check(player.use_item(), "actual C05 acquired jar launches at e185")
 	await seconds(0.65)
 	check(source.is_shown and not source.is_revealed, "actual e185 first reveals temporarily")
-	check(not peer.is_shown, "actual temporary e185 discovery does not leak across rooms")
+	check(
+		not peer.is_revealed and not GameState.has_flag(&"revealed_e185"),
+		"actual direct e185 light does not prematurely reveal the peer permanently"
+	)
 	await seconds(1.2)
 	check(GameState.has_flag(&"revealed_e185"), "actual jar sets canonical permanent e185")
 	check(
