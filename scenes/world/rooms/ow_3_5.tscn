@@ -57,6 +57,7 @@ position = Vector2(912, 240)
 script = ExtResource("6")
 target_room = &"cave_3_1"
 target_spawn = &"FromOverworld"
+blocker_path = NodePath("../CrackedWall1")
 
 [node name="Reed1" type="StaticBody2D" parent="Props"]
 position = Vector2(432, 624)
