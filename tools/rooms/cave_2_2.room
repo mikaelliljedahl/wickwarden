@@ -1,0 +1,21 @@
+; The Briar Hollow — room 2
+room cave_2_2
+terrain Seed Hall: a thorn arch rises north; an east lock guards the fruiting hall.
+floor_color 0.125 0.155 0.105
+grid
+#########..#########
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#...#..........#...#
+#..................#
+####################
+opener thorn_hedge @960,48 id=e156
+opener locked_door @1872,480 id=e157 scope=c2 size=96,192
+enemy skitterwick 6,3
+enemy skitterwick 13,6
+enemy skitterwick 14,3
+spawn Default @960,528

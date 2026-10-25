@@ -1,0 +1,20 @@
+; The Briar Hollow — room 3
+room cave_2_3
+terrain Thorn Nook: the small key rests between two old root shelves.
+floor_color 0.125 0.155 0.105
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+#..................#
+#..................#
+#..#............#..#
+#..................#
+#..................#
+#########..#########
+opener thorn_hedge @960,912 id=e156
+pickup small_key 10,2 id=key_c2_1 scope=c2
+enemy bramble_snapper 6,4
+enemy bramble_snapper 13,5
+spawn Default @960,720

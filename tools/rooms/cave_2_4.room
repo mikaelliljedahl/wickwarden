@@ -1,0 +1,18 @@
+; The Briar Hollow — room 4
+room cave_2_4
+terrain Fruiting Hall: a broad root court gives the Thorn Warden room to bristle.
+floor_color 0.125 0.155 0.105
+grid
+####################
+#..................#
+#...##........##...#
+#..................#
+....................
+....................
+#..................#
+#...##........##...#
+#..................#
+####################
+opener locked_door @48,480 id=e157 scope=c2 size=96,192
+miniboss thorn_warden @960,480
+spawn Default @288,528

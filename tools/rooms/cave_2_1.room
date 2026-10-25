@@ -1,0 +1,21 @@
+; The Briar Hollow — room 1
+room cave_2_1
+terrain Rootmouth: root shelves frame the mouth and a clear east passage.
+floor_color 0.125 0.155 0.105
+grid
+####################
+#..................#
+#..##..............#
+#..................#
+#...................
+#...................
+#..................#
+#..............##..#
+#..................#
+####################
+enemy bramble_snapper 6,3
+enemy bramble_snapper 13,6
+enemy spitcap 14,2
+door ow_5_1 FromCave 5,7
+spawn Default 5,6
+spawn FromOverworld 5,6
