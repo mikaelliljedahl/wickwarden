@@ -15,7 +15,7 @@ grid
 opener locked_door @1872,480 id=e243 scope=c10
 opener boss_door @48,480 id=e245
 opener eye_portcullis @960,48 id=e244
-eye_switch 11,3 id=e244
+eye_switch 12,4 id=e244
 enemy watcher_eye 18,2
 enemy watcher_eye 1,7
 enemy watcher_eye 16,1

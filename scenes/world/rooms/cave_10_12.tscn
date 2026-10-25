@@ -68,7 +68,7 @@ eye_id = &"e244"
 size = Vector2(192, 96)
 
 [node name="EyeSwitch1" parent="Props" instance=ExtResource("5")]
-position = Vector2(1104, 336)
+position = Vector2(1200, 432)
 eye_id = &"e244"
 
 [node name="BossDoor1" parent="Props" instance=ExtResource("6")]
