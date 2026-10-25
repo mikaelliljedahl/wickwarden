@@ -43,3 +43,5 @@ B82 C4v1–3/C5v1 verified own-session hashes/unique; opened `/tmp/wickwarden-ar
 B82 C5v2/v3,C6v1–3,C7v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave17-review.jpg`; log `log_art_resume_17.md`. Five weak wall-like masonry from dominating wall reference; C6v1 decorative floor ok. Future ungenerated B82/B83 arena references changed to top-down `arena_c1_v3.png` (fenced prompts unchanged). Submitted C7v2/v3,C8v1–3,C9v1; six jobs.
 
 B82 C8v3/C9v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave19-review.jpg`; log `log_art_resume_19.md`. Both weak: C1 circular brick layout dominates intended regional subjects. C9v2/v3 submitted into freed slots before visual verdict, six jobs. C10 ungenerated refs removed to avoid reference-content copying; fenced prompts unchanged.
+
+B82 C7v2/v3,C8v1/v2 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave20-review.jpg`; log `log_art_resume_20.md`. Four weak C1 circular layout copied (C8v1 adds brass motifs). Submitted C10v1–3 without refs and intro01v1 with specified style ref; C9v2/v3pending, six jobs total.
