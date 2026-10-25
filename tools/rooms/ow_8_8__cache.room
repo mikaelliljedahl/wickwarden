@@ -1,0 +1,17 @@
+room ow_8_8#cache
+terrain Black Pier store: salt-worn cargo stones flanking the central aisle
+floor_color 0.21 0.24 0.25
+grid
+####################
+#..rrr........rrr..#
+#..rr..........rr..#
+#..................#
+#..................#
+#...rr........rr...#
+#..................#
+#..rr..........rr..#
+#..................#
+####################
+cache 10,3 id=cache_ow_8_8
+door ow_8_8 FromPocket 10,8
+spawn Inside 10,6

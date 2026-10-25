@@ -1,0 +1,19 @@
+room ow_9_8
+terrain Hush Garden: paired overgrown beds around a broad cross-path
+floor_color 0.21 0.24 0.25
+grid
+#########..#########
+#.tt..bb....bb..tt.#
+#.tt..b......b..tt.#
+#..................#
+....................
+....................
+#...rr........rr...#
+#...rb........br...#
+#......bb..bb......#
+####################
+enemy hollow 7,3
+enemy hollow 13,6
+enemy husk_hound 6,5
+enemy husk_hound 15,3
+spawn Default 10,5

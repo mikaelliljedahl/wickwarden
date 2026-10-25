@@ -1,0 +1,17 @@
+room ow_11_7#cache
+terrain Lantern crypt: twin stone shelves and a clear offering aisle
+floor_color 0.21 0.24 0.25
+grid
+####################
+#..rr..........rr..#
+#..rr..........rr..#
+#..................#
+#....r........r....#
+#..................#
+#..................#
+#..rr..........rr..#
+#..................#
+####################
+cache 10,3 id=cache_ow_11_7
+door ow_11_7 FromPocket 10,8
+spawn Inside 10,6
