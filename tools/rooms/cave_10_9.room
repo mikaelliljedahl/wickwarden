@@ -1,0 +1,23 @@
+room cave_10_9
+terrain Pit Rows: a west leap trench meets the broad suspended southern anchor span.
+floor_color 0.16 0.14 0.20
+grid
+####################
+#.#................#
+#.#................#
+#.#................#
+...................#
+...#####....########
+#.######....########
+#.######....########
+#.#................#
+#########..#########
+pit @240,480 size=96,192
+pit @960,624 size=384,288
+anchor_ring @1008,336
+anchor_ring @1008,888
+enemy skitterwick 5,2
+enemy skitterwick 9,3
+enemy skitterwick 14,2
+enemy husk_hound 16,3
+spawn Default 4,4

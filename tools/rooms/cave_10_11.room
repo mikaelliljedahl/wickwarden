@@ -1,0 +1,22 @@
+room cave_10_11
+terrain Key Vault: twin masonry shelves guard the central scoped key.
+floor_color 0.16 0.14 0.20
+grid
+####################
+#..................#
+#....##......##....#
+#....##......##....#
+....................
+....................
+#....##......##....#
+#....##......##....#
+#..................#
+####################
+opener locked_door @1872,480 id=e242 scope=c10
+opener locked_door @48,480 id=e243 scope=c10
+enemy hollow 8,2
+enemy hollow 11,7
+enemy husk_hound 15,3
+enemy husk_hound 4,6
+pickup small_key 10,3 id=key_c10_3 scope=c10
+spawn Default 16,4

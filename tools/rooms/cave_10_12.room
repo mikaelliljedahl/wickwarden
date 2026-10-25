@@ -1,0 +1,23 @@
+room cave_10_12
+terrain Eye Hall: three watching sentries overlook the final branching aisle.
+floor_color 0.16 0.14 0.20
+grid
+#########..#########
+#..................#
+#....##......##....#
+#....##......##....#
+....................
+....................
+#....##......##....#
+#....##......##....#
+#..................#
+####################
+opener locked_door @1872,480 id=e243 scope=c10
+opener boss_door @48,480 id=e245
+opener eye_portcullis @960,48 id=e244
+eye_switch 11,3 id=e244
+enemy watcher_eye 18,2
+enemy watcher_eye 1,7
+enemy watcher_eye 16,1
+pickup slug_bundle 15,5 id=slug_bundle_cave_10_12
+spawn Default 16,5
