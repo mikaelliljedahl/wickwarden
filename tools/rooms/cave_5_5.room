@@ -1,0 +1,21 @@
+; The Mirrored Archive
+room cave_5_5
+terrain Lantern Shelf: polished shelf bays frame a central reading aisle.
+floor_color 0.13 0.15 0.19
+grid
+#########..#########
+#..................#
+#..###........###..#
+#..................#
+#...................
+#...................
+#..................#
+#..###........###..#
+#..................#
+#########..#########
+enemy mirror_shade 5,4
+enemy mirror_shade 14,6
+prop pedestal 13,4
+pickup item glow_jar @1296,454
+opener hidden_seam @960,48 id=e185 size=192,96
+spawn Default @960,528

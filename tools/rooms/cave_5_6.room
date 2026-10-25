@@ -1,0 +1,20 @@
+; The Mirrored Archive
+room cave_5_6
+terrain Unlit Stacks: paired stone stacks flank the dark key aisle.
+floor_color 0.13 0.15 0.19
+grid
+####################
+#..................#
+#..####......####..#
+#..................#
+#..................#
+#..................#
+#..####......####..#
+#..................#
+#..................#
+#########..#########
+enemy mirror_shade 5,4
+enemy mirror_shade 14,4
+pickup small_key 10,2 id=key_c5_2 scope=c5
+opener hidden_seam @960,912 id=e185 size=192,96
+spawn Default @960,720
