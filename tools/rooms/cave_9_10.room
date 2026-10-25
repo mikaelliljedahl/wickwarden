@@ -1,0 +1,20 @@
+room cave_9_10
+terrain Lock Floor: an open brass workshop floor leaves the four lock plates and sweeping deadbolt legible.
+floor_color 0.23 0.20 0.16
+grid
+#########..#########
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+arena lock_warden @0,0
+boss lock_warden @960,600
+opener boss_door @960,48 id=e230
+spawn Default @960,192
+pickup fragment @960,480 id=frag_c9 scope=c9 requires=boss_cave_9_10_defeated
+pickup wick_core @1152,480 id=wick_core_c9 requires=boss_cave_9_10_defeated

@@ -1,0 +1,22 @@
+room cave_9_9
+terrain Lock Antechamber: paired workbench banks surround a quiet brass lock aisle and the chime vault.
+floor_color 0.23 0.20 0.16
+grid
+####################
+#..................#
+#..###........###..#
+#..................#
+#...................
+#...................
+#..###........###..#
+#..................#
+#..................#
+#########..#########
+enemy hollow 6,3
+enemy hollow 13,6
+opener locked_door @1872,480 id=e229 scope=c9
+opener boss_door @960,912 id=e230
+opener resonance_vault @960,240 id=e232
+door cave_9_9#vault Inside @960,240 blocker=e232
+spawn FromPocket @960,432
+spawn Default @1632,480

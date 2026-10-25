@@ -1,0 +1,19 @@
+room cave_9_9#vault
+terrain Corrow's reserve vault: paired stone shelves frame the last workshop supplies.
+floor_color 0.25 0.21 0.16
+grid
+####################
+#..................#
+#..###........###..#
+#..................#
+#..................#
+#..................#
+#..###........###..#
+#..................#
+#..................#
+####################
+cache @960,336 id=cache_cave_9_9
+pickup slug_bundle @1248,336 id=slug_bundle_cave_9_9
+door cave_9_9 FromPocket @960,816
+spawn Inside @960,624
+spawn Default @960,624
