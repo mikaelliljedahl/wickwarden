@@ -1,4 +1,5 @@
 extends TestCase
+# gdlint: disable=max-file-lines
 ## Shared checks of the world rooms against the graph (world-plan 5.7, code-contract 16.10): the
 ## base of tests/test_world_graph.gd and of the area tests of later work packages. Not a test: the
 ## name has no test_ prefix, so the runner does not discover it. A test extends it with
@@ -476,9 +477,11 @@ func _off_tile_centre(p: Vector2) -> bool:
 ## corridor (`gated_tiles`): such an opener is the gate of that exit, so it is not a wall of the walk.
 func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -> Dictionary:
 	var fixed: Array[Rect2] = []
+	var moth_solids: Array[Rect2] = []
 	var openable: Array[Rect2] = []
 	var water: Array[Rect2] = []
 	fixed.append_array(room.wall_rects())
+	moth_solids.append_array(room.wall_rects())
 	for node in props.get_children():
 		if _script_file(node) == "ward_plate.gd" and not node.get("blocker"):
 			continue
@@ -490,34 +493,44 @@ func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -
 			var zone_size: Vector2 = node.get("size")
 			var rect := Rect2((node as Node2D).position - zone_size * 0.5, zone_size)
 			fixed.append(rect)
+			moth_solids.append(rect)
 			water.append(rect)
 			continue
 		if _script_file(node) == "mooring.gd":
 			fixed.append(Rect2((node as Node2D).position - Vector2(16, 16), Vector2(32, 32)))
+			moth_solids.append(Rect2((node as Node2D).position - Vector2(16, 16), Vector2(32, 32)))
 			continue
 		if node is PickupBase or node is Area2D:
 			continue
 		if node is Brazier:
 			fixed.append(Rect2((node as Node2D).position - Vector2(32, 32), Vector2(64, 64)))
+			moth_solids.append(Rect2((node as Node2D).position - Vector2(32, 32), Vector2(64, 64)))
 		elif node is SolidBlock:
 			var block := node as SolidBlock
 			fixed.append(Rect2(block.position - block.size * 0.5, block.size))
+			moth_solids.append(Rect2(block.position - block.size * 0.5, block.size))
 		elif _is_wall_like(node):
 			var size: Vector2 = node.get("size")
 			var footprint := Rect2(-size * 0.5, size)
 			if _is_boss_door(node) and not _boss_door_matches_room(room, node):
 				fixed.append((node as Node2D).transform * footprint)
+				moth_solids.append((node as Node2D).transform * footprint)
 			else:
 				openable.append((node as Node2D).transform * footprint)
+				moth_solids.append((node as Node2D).transform * footprint)
 		elif node is StaticBody2D and node.get("size") is Vector2:
 			var block_size: Vector2 = node.get("size")
 			fixed.append(Rect2((node as Node2D).position - block_size * 0.5, block_size))
+			if _script_file(node) != "grate.gd":
+				moth_solids.append(Rect2((node as Node2D).position - block_size * 0.5, block_size))
 	for bush in bushes.get_children():
 		var bush_rect := Rect2((bush as Node2D).position - Vector2(34, 34), Vector2(68, 68))
 		if _is_graph_cut_bush(room, bush) and _overlaps(rect_tiles(bush_rect), gated_tiles):
 			openable.append(bush_rect)
+			moth_solids.append(bush_rect)
 		else:
 			fixed.append(bush_rect)
+			moth_solids.append(bush_rect)
 	var closed: Array[Rect2] = fixed.duplicate()
 	closed.append_array(openable)
 	var walls: Array[Rect2] = fixed.duplicate()
@@ -529,6 +542,8 @@ func _geometry(room: Node, props: Node, bushes: Node, gated_tiles: Dictionary) -
 	var spawn_tile := tile_of(_spawn_position(room))
 	return {
 		"water": blocked_tiles(water),
+		# Flight ignores pits and grates, retaining WORLD even where footprints overlap.
+		"moth_blocked": blocked_tiles(moth_solids),
 		"blocked": blocked,
 		"walk": walk,
 		"reach": flood([spawn_tile], walk),
@@ -606,12 +621,21 @@ func _check_layout(
 	for side in scene_exits:
 		if _has_raft_mooring(id, side):
 			continue
+		var side_reach := reach
+		for edge: Dictionary in gated_edges_of(id):
+			var other := String(edge["b"] if edge["a"] == id else edge["a"])
+			if (
+				edge["link"] == "step"
+				and edge.get("needs", []) == ["reel_line"]
+				and WorldData.grid(other) - WorldData.grid(id) == SIDE_STEP[side]
+			):
+				side_reach = _reel_reach(subject_room, geometry)
 		var tiles := exit_tiles(side)
 		for tile in tiles:
 			if walk.has(tile):
 				problems.append("%s: exit %s corridor blocked at tile %s" % [id, side, tile])
 		for tile in tiles:
-			if not reach.has(tile):
+			if not side_reach.has(tile):
 				problems.append("%s: exit %s is not reachable from the spawn" % [id, side])
 				break
 	for enemy in enemies.get_children():
@@ -620,6 +644,57 @@ func _check_layout(
 			continue
 		if blocked.has(tile):
 			problems.append("%s: %s starts on an obstacle" % [id, enemy.name])
+
+
+## Add only safe cardinal reel landings; pits remain blocked in every ordinary flood.
+func _reel_reach(room: Node, geometry: Dictionary) -> Dictionary:
+	var reached: Dictionary = geometry["reach"].duplicate()
+	var solids: Dictionary = geometry["moth_blocked"].duplicate()
+	var pits: Array[Rect2] = []
+	var rings: Array[Node2D] = []
+	for prop in room.get_node("Props").get_children():
+		if _script_file(prop) == "anchor_ring.gd":
+			rings.append(prop as Node2D)
+		elif _script_file(prop) in ["pit_zone.gd", "grate.gd"]:
+			var size: Vector2 = prop.get("size")
+			var rect := Rect2((prop as Node2D).position - size * 0.5, size)
+			if _script_file(prop) == "pit_zone.gd":
+				pits.append(rect.grow(Player.BODY_RADIUS))
+			else:
+				solids.merge(rect_tiles(rect))
+	while true:
+		var landings: Array[Vector2i] = []
+		for tile: Vector2i in reached:
+			var start := Vector2(tile) * TILE + Vector2.ONE * TILE * 0.5
+			for ring in rings:
+				var delta := ring.position - start
+				var distance := delta.length()
+				var limit: float = ring.get("max_range")
+				if (delta.x != 0 and delta.y != 0) or distance <= 72 or distance > 576:
+					continue
+				if limit > 0 and distance > limit:
+					continue
+				var landing := ring.position - delta.normalized() * 72
+				if (
+					not Rect2(Vector2.ZERO, Vector2(COLS, ROWS) * TILE).has_point(landing)
+					or geometry["blocked"].has(tile_of(landing))
+				):
+					continue
+				var safe := true
+				for pit in pits:
+					if pit.has_point(landing):
+						safe = false
+				for step in range(int(ceil(distance)) + 1):
+					if solids.has(tile_of(start + delta.normalized() * minf(step, distance))):
+						safe = false
+				if safe:
+					landings.append(tile_of(landing))
+		var expanded := reached.duplicate()
+		expanded.merge(flood(landings, geometry["walk"]))
+		if expanded.size() == reached.size():
+			return reached
+		reached = expanded
+	return reached
 
 
 func _script_file(node: Node) -> String:
@@ -664,9 +739,33 @@ func _check_crossings(
 			problems.append("%s: fen leech %s is outside water or shallows" % [id, enemy.name])
 
 
+func _is_entry_refill(room: Node, node: Node) -> bool:
+	if not node is PickupBase:
+		return false
+	var pickup := node as PickupBase
+	return (
+		String(room.get("room_id")) == "cave_9_4"
+		and pickup.get_parent() == room.get_node("Props")
+		and pickup.respawn_on_enter
+		and pickup.persistent_id == &""
+		and pickup.kind == &"pitch_pot_bundle"
+		and pickup.timeout == 0
+	)
+
+
 func _check_pickups(id: String, room: Node, geometry: Dictionary, problems: Array[String]) -> void:
 	var reach: Dictionary = geometry["reach"]
-	var nodes := descendants_of_class(room, PickupBase)
+	var nodes: Array[Node] = []
+	var refills := 0
+	for pickup in descendants_of_class(room, PickupBase):
+		if _is_entry_refill(room, pickup):
+			refills += 1
+			continue
+		if (pickup as PickupBase).respawn_on_enter:
+			problems.append("%s: invalid respawning refill %s" % [id, pickup.name])
+		nodes.append(pickup)
+	if id == "cave_9_4" and refills != 2:
+		problems.append("%s: requires exactly two explicit entry refills" % id)
 	var shop_items: Array[Node] = []
 	for node in descendants_of_class(room, Area2D):
 		var script: Script = node.get_script()
@@ -775,9 +874,7 @@ func _moth_pickup_valid(
 		if _script_file(prop) == "grate.gd":
 			var size: Vector2 = prop.get("size")
 			grates.merge(rect_tiles(Rect2((prop as Node2D).position - size * 0.5, size)))
-	var blocked: Dictionary = geometry["blocked"].duplicate()
-	for tile in grates:
-		blocked.erase(tile)
+	var blocked: Dictionary = geometry["moth_blocked"]
 	var starts: Array[Vector2i] = [geometry["spawn_tile"]]
 	for marker in room.get_node("Spawns").get_children():
 		starts.append(tile_of((marker as Node2D).position))

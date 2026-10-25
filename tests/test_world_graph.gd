@@ -20,6 +20,7 @@ func run() -> void:
 	_cut_screen_gate_regressions()
 	_boss_door_geometry_regressions()
 	_cave_validation_regressions()
+	_reel_and_refill_regressions()
 	_print_pending()
 	free_scenes()
 
@@ -100,12 +101,27 @@ func _persistent_ids_unique() -> void:
 		var root := scene_root(WorldData.scene_path(id))
 		if root == null:
 			continue
-		for node in descendants_of_class(root, PickupBase):
-			var pid := String((node as PickupBase).persistent_id)
-			if seen.has(pid):
-				check(false, "persistent_id %s is used by %s and %s" % [pid, seen[pid], id])
-			seen[pid] = id
+		for problem in _record_persistent_ids(id, root, seen):
+			check(false, problem)
 	check(seen.size() > 0, "the built scenes have persistent pickups")
+
+
+func _record_persistent_ids(id: String, root: Node, seen: Dictionary) -> Array[String]:
+	var problems: Array[String] = []
+	for node in descendants_of_class(root, PickupBase):
+		if _is_entry_refill(root, node):
+			continue
+		var pickup := node as PickupBase
+		var pid := String(pickup.persistent_id)
+		if pickup.respawn_on_enter:
+			problems.append("%s: invalid respawning refill %s" % [id, node.name])
+		if pid == "":
+			problems.append("%s: pickup %s has no persistent_id" % [id, node.name])
+		elif seen.has(pid):
+			problems.append("persistent_id %s is used by %s and %s" % [pid, seen[pid], id])
+		else:
+			seen[pid] = id
+	return problems
 
 
 ## Negative cases, built in memory from a real room: a blocked exit corridor and a missing exit.
@@ -312,6 +328,51 @@ func _cave_validation_regressions() -> void:
 			_moth_pickup_valid(fetch_room, pickup, geometry, problems),
 			"sealed main-room key has a clear moth launch across a grate"
 		)
+		var pit_scene := load("res://scripts/world/pit_zone.gd") as Script
+		check(pit_scene != null, "real pit script loads for moth regression")
+		if pit_scene != null:
+			var pit := pit_scene.new() as Node2D
+			pit.position = pickup.position
+			pit.set("size", Vector2(192, 96))
+			props.add_child(pit)
+			geometry = _geometry(fetch_room, props, fetch_room.get_node("Bushes"), {})
+			problems.clear()
+			check(geometry["blocked"].has(tile_of(pickup.position)), "pit stays blocked to Player")
+			check(
+				_moth_pickup_valid(fetch_room, pickup, geometry, problems),
+				"moth fetch crosses grate and flies over pit to key"
+			)
+			var wall := SolidBlock.new()
+			wall.position = pickup.position
+			wall.size = Vector2(192, 96)
+			props.add_child(wall)
+			geometry = _geometry(fetch_room, props, fetch_room.get_node("Bushes"), {})
+			problems.clear()
+			check(
+				not _moth_pickup_valid(fetch_room, pickup, geometry, problems),
+				"WORLD wall overlapping pit still denies moth fetch"
+			)
+			wall.position = grate.position
+			geometry = _geometry(fetch_room, props, fetch_room.get_node("Bushes"), {})
+			problems.clear()
+			check(
+				not _moth_pickup_valid(fetch_room, pickup, geometry, problems),
+				"WORLD wall overlapping grate still denies moth fetch"
+			)
+			props.remove_child(wall)
+			wall.free()
+			pit.position = Vector2(1008, 528)
+			pit.set("size", Vector2(192, 384))
+			fetch_room.get_node("Spawns/Default").position = Vector2(1008, 816)
+			geometry = _geometry(fetch_room, props, fetch_room.get_node("Bushes"), {})
+			problems.clear()
+			check(
+				not _moth_pickup_valid(fetch_room, pickup, geometry, problems),
+				"clear flight over pit beyond 420 px still denies moth fetch"
+			)
+			props.remove_child(pit)
+			pit.free()
+			fetch_room.get_node("Spawns/Default").position = Vector2(1008, 528)
 		grate.position.y = 720
 		geometry = _geometry(fetch_room, props, fetch_room.get_node("Bushes"), {})
 		problems.clear()
@@ -510,3 +571,108 @@ func _cut_screen_gate_regressions() -> void:
 		)
 		solid_room.free()
 		room.free()
+
+
+func _reel_and_refill_regressions() -> void:
+	for id in ["cave_9_6", "cave_9_7"]:
+		var room := _instance(id)
+		var props := room.get_node("Props")
+		var geometry := _geometry(room, props, room.get_node("Bushes"), {})
+		var side := "e" if id == "cave_9_6" else "w"
+		var exit_tile: Vector2i = exit_tiles(side)[0]
+		check(not geometry["reach"].has(exit_tile), "%s pit blocks ordinary walking" % id)
+		check(_reel_reach(room, geometry).has(exit_tile), "%s safe reel reaches exit bank" % id)
+		var rings: Array[Node2D] = []
+		for prop in props.get_children():
+			if _script_file(prop) == "anchor_ring.gd":
+				rings.append(prop as Node2D)
+				prop.set("max_range", 100.0)
+		check(
+			not _reel_reach(room, geometry).has(exit_tile),
+			"%s out-of-range ring does not waive pit" % id
+		)
+		for ring in rings:
+			ring.set("max_range", 0.0)
+		var target := rings[0]
+		for ring in rings:
+			if (ring.position.x > target.position.x) == (id == "cave_9_6"):
+				target = ring
+		var anchor_position := target.position
+		target.position.x = 2480 if id == "cave_9_6" else -560
+		check(
+			not _reel_reach(room, geometry).has(exit_tile),
+			"%s reel cannot exceed actual 576 px range" % id
+		)
+		target.position.x = 1392 if id == "cave_9_6" else 528
+		check(
+			not _reel_reach(room, geometry).has(exit_tile),
+			"%s reel refuses a landing in the pit" % id
+		)
+		target.position = anchor_position
+		var wall := SolidBlock.new()
+		wall.position = Vector2(1392, 480) if id == "cave_9_6" else Vector2(528, 480)
+		wall.size = Vector2(96, 192)
+		props.add_child(wall)
+		geometry = _geometry(room, props, room.get_node("Bushes"), {})
+		check(
+			not _reel_reach(room, geometry).has(exit_tile),
+			"%s WORLD overlapping pit blocks reel tip" % id
+		)
+		props.remove_child(wall)
+		wall.free()
+		for ring in rings:
+			props.remove_child(ring)
+			ring.free()
+		geometry = _geometry(room, props, room.get_node("Bushes"), {})
+		check(
+			not _reel_reach(room, geometry).has(exit_tile), "%s missing rings do not waive pit" % id
+		)
+		room.free()
+
+	var room := _instance("cave_9_4")
+	var seen := {}
+	check(_record_persistent_ids("cave_9_4", room, seen).is_empty(), "explicit refills need no id")
+	var refills: Array[PickupBase] = []
+	for pickup in descendants_of_class(room, PickupBase):
+		if _is_entry_refill(room, pickup):
+			refills.append(pickup as PickupBase)
+	check(refills.size() == 2, "C9.4 has exactly two marked entry refills")
+	if refills.size() == 2:
+		var refill := refills[0]
+		room.set("room_id", &"cave_9_5")
+		check(not _is_entry_refill(room, refill), "refill exemption is confined to authored room")
+		room.set("room_id", &"cave_9_4")
+		refill.respawn_on_enter = false
+		check(
+			_mentions(_record_persistent_ids("cave_9_4", room, {}), "no persistent_id"),
+			"unmarked empty-id pickup remains invalid"
+		)
+		var problems: Array[String] = []
+		var geometry := _geometry(room, room.get_node("Props"), room.get_node("Bushes"), {})
+		_check_pickups("cave_9_4", room, geometry, problems)
+		check(_mentions(problems, "exactly two"), "missing explicit refill is rejected")
+		refill.respawn_on_enter = true
+		refill.persistent_id = &"invalid_refill_id"
+		check(
+			_mentions(_record_persistent_ids("cave_9_4", room, {}), "invalid respawning refill"),
+			"marked refill must have empty id"
+		)
+		refill.respawn_on_enter = false
+		refill.persistent_id = &"duplicate_fixture"
+		refills[1].respawn_on_enter = false
+		refills[1].persistent_id = refill.persistent_id
+		check(
+			_mentions(_record_persistent_ids("cave_9_4", room, {}), "is used by"),
+			"ordinary persistent ids remain unique"
+		)
+		refill.respawn_on_enter = true
+		refill.persistent_id = &""
+		refill.kind = &"key"
+		check(not _is_entry_refill(room, refill), "progression key cannot masquerade as refill")
+		refill.kind = &"pitch_pot_bundle"
+		var nested := Node2D.new()
+		room.add_child(nested)
+		refill.owner = null
+		refill.reparent(nested)
+		check(not _is_entry_refill(room, refill), "refill must be directly in Props")
+	room.free()
