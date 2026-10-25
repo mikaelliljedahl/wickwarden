@@ -57,3 +57,5 @@ B84 intro02v1–3/intro03v1 verified own-session hashes/unique; opened `/tmp/wic
 B84 intro03v2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave25-review.jpg`; log `log_art_resume_25.md`. Both weak warm lantern-like monster lights instead of cold Hush glow. Submitted hookv2/v3 into slots, six jobs total.
 
 B84 intro04v1–3/05v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave26-review.jpg`; log `log_art_resume_26.md`. Tamsinv2weak passive near lamp; other3ok. Submitted intro06v1–3/endingAv1 with refs; six total withhookv2/v3pending.
+
+B84 hookv2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave27-review.jpg`; log `log_art_resume_27.md`. V2weak wall-mounted sconce, v3ok free hookpole. Submitted endingAv2/v3,six jobs total.
