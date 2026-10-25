@@ -19,6 +19,6 @@ enemy spitcap 14,2
 enemy spitcap 14,7
 pickup small_key 5,7 id=key_c2_2 scope=c2
 pickup slug_bundle 11,6 id=slug_bundle_cave_2_6
-eye_switch 15,4 id=e160
+eye_switch 15,3 id=e160
 opener eye_portcullis @1872,480 id=e160
 spawn Default @960,528

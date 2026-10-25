@@ -16,6 +16,6 @@ grid
 enemy bramble_snapper 12,6
 prop pedestal 15,2
 pickup big_key @1488,262 id=bigkey_c2 scope=c2
-eye_switch 4,4 id=e160
+eye_switch 4,3 id=e160
 opener eye_portcullis @48,480 id=e160
 spawn Default @960,528
