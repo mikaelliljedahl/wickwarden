@@ -1,0 +1,21 @@
+room cave_10_13
+terrain Bigkey Chamber: root and wax shelves frame the key; the south firing aisle stays open.
+floor_color 0.18 0.16 0.21
+grid
+####################
+#..................#
+#...###......###...#
+#..................#
+#..................#
+#..................#
+#...###......###...#
+#..................#
+#..................#
+#########..#########
+enemy husk_hound 6,4
+enemy husk_hound 13,4
+enemy brine_crab 12,2
+eye_switch 12,7 id=e244
+opener eye_portcullis @960,912 id=e244
+pickup big_key @960,358 id=bigkey_c10 scope=c10
+spawn Default 9,7

@@ -1,0 +1,19 @@
+room cave_10_14
+terrain The Ninth Lantern: an open floor beneath the three chains, with a clear east return aisle.
+floor_color 0.16 0.13 0.20
+grid
+####################
+#..................#
+#..................#
+#..................#
+#...................
+#...................
+#..................#
+#..................#
+#..................#
+####################
+arena the_unlit @0,0
+boss the_unlit @960,288
+opener boss_door @1872,480 id=e245
+ending_trigger @960,480
+spawn Default @1632,480
