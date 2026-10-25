@@ -14,7 +14,7 @@ grid
 ####################
 enemy hollow 7,3
 enemy hollow 12,6
-opener locked_door @48,480 id=e197 scope=c6 size=192,96
+opener locked_door @48,480 id=e197 scope=c6 size=96,192
 opener cracked_wall 10,1 id=e200
 door cave_6_9#crypt Inside 10,1 blocker=e200
 spawn FromPocket 10,3

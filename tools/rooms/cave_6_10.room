@@ -14,6 +14,6 @@ grid
 #########..#########
 enemy choirling 7,3
 enemy choirling 12,6
-opener heavy_door @1872,480 id=e198 size=192,96
+opener heavy_door @1772,480 id=e198 size=192,96
 opener boss_door @960,912 id=e199 size=192,96
 spawn Default @1632,480

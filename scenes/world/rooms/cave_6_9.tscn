@@ -74,6 +74,7 @@ position = Vector2(48, 480)
 script = ExtResource("6")
 door_id = &"e197"
 scope = &"c6"
+size = Vector2(96, 192)
 
 [node name="BigKey1" parent="Props" instance=ExtResource("7")]
 position = Vector2(1488, 480)
