@@ -6,6 +6,7 @@ extends TestCase
 
 
 func run() -> void:
+	await _entry_refills()
 	var world := await make_world()
 	await _streaming(world)
 	_start_argument()
@@ -527,3 +528,89 @@ func _hud(world: World) -> void:
 	GameState.damage(1)
 	await frames(3)
 	check(world.hud.canvas.is_visible_in_tree(), "the HUD redraws without errors")
+
+
+func _entry_refills() -> void:
+	reset_state()
+	var arena := make_arena()
+	var room := Room.new()
+	room.build_walls = false
+	var props := Node2D.new()
+	props.name = "Props"
+	room.add_child(props)
+	var scene := load("res://scenes/pickups/pitch_pot_bundle.tscn") as PackedScene
+	check(scene != null, "the real pot bundle scene loads for entry refills")
+	if scene == null:
+		room.free()
+		await dispose(arena)
+		return
+	for x in [400.0, 600.0]:
+		var refill := scene.instantiate() as PickupBase
+		refill.respawn_on_enter = true
+		refill.position = Vector2(x, 400)
+		props.add_child(refill)
+	var permanent := PickupBase.new()
+	permanent.persistent_id = &"entry_test_loot"
+	permanent.position = Vector2(800, 400)
+	props.add_child(permanent)
+	var door := Node2D.new()
+	props.add_child(door)
+	arena.add_child(room)
+	check_eq(props.get_child_count(), 2, "inactive room holds only permanent Props")
+	room.enter()
+	check_eq(props.get_child_count(), 4, "entry creates exactly two refills beside permanent Props")
+	var first := props.get_child(2) as PickupBase
+	room.enter()
+	check_eq(props.get_child_count(), 4, "repeated enter does not duplicate uncollected refills")
+	check(props.get_child(2) == first, "repeated enter preserves the live refill")
+	for child in props.get_children():
+		if child is PickupBase and child.respawn_on_enter:
+			var shapes := 0
+			for part in child.get_children():
+				if part is CollisionShape2D:
+					shapes += 1
+			check_eq(shapes, 1, "a ready template clone has exactly one collider")
+			check_eq(child.get_amount(), 4, "refills use the existing bundle amount")
+	room.leave()
+	room.leave()
+	check_eq(props.get_child_count(), 2, "leave clears only live refills and is repeatable")
+	var player := make_player(arena, Vector2(1200, 700))
+	for visit in range(2):
+		room.enter()
+		check_eq(props.get_child_count(), 4 - visit, "each visit restores exactly two bundles")
+		GameState.pitch_pots = 0
+		for point in [Vector2(400, 400), Vector2(600, 400)]:
+			player.place_at(point)
+			await frames(4)
+		check_eq(GameState.pitch_pots, 8, "real player collection grants both refills on every visit")
+		player.place_at(Vector2(800, 400))
+		await frames(4)
+		check_eq(GameState.currency, 1, "ordinary persistent loot is collected only once")
+		check(GameState.has_flag(&"picked_entry_test_loot"), "ordinary loot retains its picked flag")
+		check_eq(GameState.flags.size(), 1, "refills add no flags")
+		player.place_at(Vector2(1200, 700))
+		room.leave()
+		check_eq(props.get_child_count(), 1, "leave preserves the permanent door")
+		check(door.get_parent() == props, "the same permanent prop survives reentry")
+	room.enter()
+	GameState.pitch_pots = GameState.pot_max() - 1
+	player.place_at(Vector2(400, 400))
+	await frames(4)
+	check_eq(GameState.pitch_pots, GameState.pot_max(), "refill collection respects the existing cap")
+	room.leave()
+	SaveGame.enabled = true
+	check(SaveGame.save(), "collected refills can be saved through the normal slot API")
+	check(not FileAccess.file_exists(SaveGame.TEMP_PATH), "save leaves no temporary slot")
+	reset_state()
+	check(SaveGame.load_into_state(), "the refill visit save loads normally")
+	check_eq(GameState.pitch_pots, GameState.pot_max(), "save restores capped ammo")
+	check_eq(GameState.flags.size(), 1, "save contains only the ordinary loot flag")
+	room.enter()
+	check_eq(props.get_child_count(), 3, "save reload restores exactly two entry refills")
+	room.leave()
+	check(SaveGame.erase(), "test slot is removed from isolated user data")
+	SaveGame.enabled = false
+	reset_state()
+	room.enter()
+	check_eq(props.get_child_count(), 3, "state reset leaves exactly two fresh refills")
+	await dispose(arena)

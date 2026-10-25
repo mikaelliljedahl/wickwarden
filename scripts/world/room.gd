@@ -7,7 +7,8 @@ extends Node2D
 ##   Enemies  placed enemy instances. Snapshotted at _ready and re-spawned on every room entry.
 ##   Bushes   placed Bush instances. Same respawn behaviour as enemies.
 ##   Props    everything permanent: SolidBlock, Brazier, Gate, LockedDoor, RoomDoor, placed
-##            PickupBase (with persistent_id), explodable walls. Never respawned by the Room.
+##            PickupBase (with persistent_id), explodable walls. Only pickups explicitly marked
+##            respawn_on_enter are captured and refilled on entry.
 ##   Spawns   Marker2D children: named entry points (see get_spawn_position).
 ##
 ## Walls: a 96 px ring of StaticBody2D rectangles (layer WORLD) around the room, with a 192 px gap
@@ -31,6 +32,8 @@ const RESPAWN_CONTAINERS: Array[StringName] = [&"Enemies", &"Bushes"]
 
 var is_entered: bool = false
 var _templates: Dictionary = {}  # container name -> Array[Node]
+var _refill_templates: Array[PickupBase] = []
+var _live_refills: Array[PickupBase] = []
 var _wall_body: StaticBody2D
 # Kept as members: the canvas item references the meshes until the next redraw.
 var _border: BorderEdge
@@ -53,6 +56,11 @@ func _ready() -> void:
 			container.remove_child(child)
 			list.append(child)
 		_templates[container_name] = list
+	var props := get_node("Props")
+	for child in props.get_children():
+		if child is PickupBase and child.respawn_on_enter:
+			props.remove_child(child)
+			_refill_templates.append(child)
 	if build_walls:
 		_build_walls()
 	leave()
@@ -64,6 +72,10 @@ func _exit_tree() -> void:
 			if is_instance_valid(template) and not template.is_inside_tree():
 				template.free()
 	_templates.clear()
+	for template in _refill_templates:
+		if is_instance_valid(template):
+			template.free()
+	_refill_templates.clear()
 
 
 func _draw() -> void:
@@ -185,8 +197,14 @@ func is_drop_side(side: StringName) -> bool:
 # ---- Lifecycle -------------------------------------------------------------------------------
 
 
-## Makes the room visible and (re)spawns enemies and bushes. Does not change process_mode.
+## Shows the room, respawns enemies/bushes and restores explicit refills once per visit.
 func enter() -> void:
+	if not is_entered:
+		for template in _refill_templates:
+			var refill := template.duplicate() as PickupBase
+			refill.persistent_id = &""
+			get_node("Props").add_child(refill)
+			_live_refills.append(refill)
 	is_entered = true
 	visible = true
 	_clear_respawn_containers()
@@ -199,8 +217,14 @@ func enter() -> void:
 			container.add_child(node)
 
 
-## Removes live enemies and bushes and hides the room.
+## Removes live enemies, bushes and explicit refills, then hides the room.
 func leave() -> void:
+	for refill in _live_refills:
+		if is_instance_valid(refill):
+			if refill.get_parent() != null:
+				refill.get_parent().remove_child(refill)
+			refill.free()
+	_live_refills.clear()
 	is_entered = false
 	visible = false
 	_clear_respawn_containers()

@@ -7,6 +7,7 @@ const SPRITE_FIXTURE := "res://tests/fixtures/sprites_fixture/sprites.json"
 func run() -> void:
 	await _item_visuals()
 	await _fragment_visuals()
+	await _nonpersistent_refill()
 	await _effects()
 	await _timeout_and_blink()
 	await _carrier()
@@ -463,3 +464,21 @@ func _reward_scenes() -> void:
 		var next_flag := &"bigkey_c3" if kind == "big_key" else &"frag_c3"
 		check(GameState.has_flag(next_flag), "%s also collects with a preexisting flag" % kind)
 		await dispose(arena)
+
+
+func _nonpersistent_refill() -> void:
+	reset_state()
+	var arena := make_arena()
+	GameState.set_flag(&"picked_old_refill")
+	var refill := PickupBase.new()
+	refill.kind = &"pitch_pot_bundle"
+	refill.respawn_on_enter = true
+	refill.persistent_id = &"old_refill"
+	arena.add_child(refill)
+	await frames(2)
+	check(not refill.is_queued_for_deletion(), "explicit refills ignore an old picked flag")
+	GameState.set_flag(&"picked_old_refill", false)
+	check(refill.collect(), "explicit refill can be collected")
+	check(not GameState.has_flag(&"picked_old_refill"), "refill never writes a picked flag")
+	check_eq(GameState.pitch_pots, 4, "refill keeps the existing pot effect")
+	await dispose(arena)

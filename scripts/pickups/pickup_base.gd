@@ -36,6 +36,8 @@ const KINDS: Array[StringName] = [
 @export var timeout: float = 0.0
 ## Non-empty: persistent placed pickup, flag "picked_<id>".
 @export var persistent_id: StringName = &""
+## Explicit room-entry refill in Props. Never reads or writes a picked flag.
+@export var respawn_on_enter: bool = false
 ## Kind "item" only: the sub-item id granted (tether_moth, pitch_pot).
 @export var item_id: StringName = &""
 ## Key scope: "ow" or a cave "cN". Kind `key` spends in that scope; `big_key` and `fragment` name the cave.
@@ -69,14 +71,21 @@ func _init() -> void:
 
 func _ready() -> void:
 	add_to_group(&"pickups")
-	if persistent_id != &"" and GameState.has_flag(flag_name()):
+	if not respawn_on_enter and persistent_id != &"" and GameState.has_flag(flag_name()):
 		queue_free()
 		return
-	var shape := CircleShape2D.new()
-	shape.radius = PICKUP_RADIUS
-	var node := CollisionShape2D.new()
-	node.shape = shape
-	add_child(node)
+	# Room templates may already contain the collider created on their first ready.
+	var has_shape := false
+	for child in get_children():
+		if child is CollisionShape2D:
+			has_shape = true
+			break
+	if not has_shape:
+		var shape := CircleShape2D.new()
+		shape.radius = PICKUP_RADIUS
+		var node := CollisionShape2D.new()
+		node.shape = shape
+		add_child(node)
 	_register_kinds()
 	if get_node_or_null(Placeholder.VISUAL_NAME) == null:
 		var look := kind
@@ -176,7 +185,7 @@ func collect(collector: Node = null) -> bool:
 		return false
 	is_collected = true
 	_apply_effect(collector)
-	if persistent_id != &"":
+	if not respawn_on_enter and persistent_id != &"":
 		GameState.set_flag(flag_name())
 	collected.emit(kind)
 	Events.pickup_collected.emit(kind)
