@@ -25,3 +25,5 @@ B80 c8 v2 and c9 v2 generated, own-session SHA256 matched, unique source hashes,
 B80 c8 v1/v3 and c9 v1 verified by own-session SHA256, unique hashes; opened `/tmp/wickwarden-art-wave5-review.jpg`; log `log_art_resume_05.md`. c8 v3 weak (closed door); c8 v1/c9 v1 clear mouths with busy foliage/stone bases. Submitted c10 v3 and title menu panel v1/v2 into free slots; six image jobs total.
 
 B80 c9 v3, c10 v1–3 and title menu v1 verified by own-session SHA256/uniqueness; opened `/tmp/wickwarden-art-wave6-review.jpg`; log `log_art_resume_06.md`. c10 v2 weak (magenta gap at lower opening, oversize), other four ok. Five free slots refilled with title menu v3, dialog cards v1–3 and B81 death overlay v1; title menu v2 still pending.
+
+B80 title menu v2 verified own-session hash/unique; opened `/tmp/wickwarden-art-wave7-review.jpg`; blank parchment centre clear, no text; log `log_art_resume_07.md`. Freed slot refilled with B81 death overlay v2.
