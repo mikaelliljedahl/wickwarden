@@ -1,0 +1,21 @@
+; Tidewick Basin: the west maintenance quay reaches the basin's only raft dock.
+room cave_3_9
+terrain Flooded wax works: black water beneath a clear western maintenance quay.
+floor_color 0.12 0.20 0.22
+grid
+####################
+#..................#
+#..................#
+#..................#
+...................#
+...................#
+#..................#
+#..................#
+#..................#
+####################
+arena tidewick @0,0
+boss tidewick @1632,480
+opener boss_door @48,480 id=e170 size=192,96
+spawn Default @192,480
+pickup fragment @192,672 id=frag_c3 scope=c3 requires=boss_cave_3_9_defeated
+pickup wick_core @192,816 id=wick_core_c3 requires=boss_cave_3_9_defeated
