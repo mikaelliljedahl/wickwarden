@@ -45,7 +45,15 @@ func _ready() -> void:
 	_trigger.add_child(trigger_shape)
 	add_child(_trigger)
 	SpriteVisual.attach(self, &"boss_door", 0.0, size)
+	GameState.flag_changed.connect(_on_flag_changed)
 	if cave != &"" and GameState.has_flag(flag_name()):
+		_set_open(true)
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	# A paired door may be loaded in a room with processing disabled.
+	# Restore the canonical state without spending keys or replaying unlock effects.
+	if value and not is_open and cave != &"" and flag == flag_name():
 		_set_open(true)
 
 
