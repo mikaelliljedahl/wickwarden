@@ -1,0 +1,19 @@
+room cave_7_8
+terrain Falling Hall: paired ruined rail piers frame a broad crossing and the western key door.
+floor_color 0.17 0.18 0.23
+grid
+#########..#########
+#..................#
+#.....#......#.....#
+#.....#......#.....#
+....................
+....................
+#.....#......#.....#
+#.....#......#.....#
+#..................#
+####################
+enemy skitterwick 8,3
+enemy skitterwick 11,6
+enemy skitterwick 15,5
+opener locked_door @48,480 id=e208 scope=c7 size=96,192
+spawn Default @960,528

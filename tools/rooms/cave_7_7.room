@@ -1,0 +1,19 @@
+room cave_7_7
+terrain Bridge of Nerve: a broken bridge enters a quiet brass alcove; a safe eastern bank faces the gap.
+floor_color 0.17 0.18 0.23
+grid
+####################
+#................#.#
+#....##..........#.#
+#................#.#
+#...................
+#...................
+#................#.#
+#....##..........#.#
+#................#.#
+####################
+enemy skitterwick 9,3
+enemy skitterwick 9,6
+cache 5,4 id=cache_cave_7_7
+pit @1680,480 size=96,192
+spawn Default @1200,528

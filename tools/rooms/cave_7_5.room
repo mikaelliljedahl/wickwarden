@@ -1,0 +1,20 @@
+room cave_7_5
+terrain Boot Rack: a raised rack beneath broken fort rails; the northern bank frames the first leap.
+floor_color 0.17 0.18 0.23
+grid
+#########..#########
+#..................#
+#########..#########
+#..................#
+#...................
+#...................
+#..................#
+#..................#
+#..................#
+#########..#########
+enemy hollow 5,5
+enemy hollow 14,6
+prop pedestal 13,3
+pickup item skitter_boots @1296,358
+pit @960,240 size=192,96
+spawn Default @960,528

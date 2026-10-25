@@ -1,0 +1,20 @@
+room cave_7_6
+terrain Chasm Walk: an L-shaped ledge with safe outer banks and two narrow chasms.
+floor_color 0.17 0.18 0.23
+grid
+####################
+#.#................#
+#.#...........##...#
+#.#...........#....#
+...................#
+...................#
+#.#................#
+#########..#########
+#..................#
+#########..#########
+enemy duskmoth 6,2
+enemy duskmoth 15,5
+pickup small_key 12,3 id=key_c7_2 scope=c7
+pit @960,720 size=192,96
+pit @240,480 size=96,192
+spawn Default @960,528
