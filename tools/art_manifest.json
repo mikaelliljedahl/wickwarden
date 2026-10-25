@@ -2,6 +2,19 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+ "lockpick_pickup": {
+  "measure": "fit",
+  "value": [
+   78,
+   78
+  ],
+  "ref": [
+   {
+    "sheet": "lockpick_pickup_v1",
+    "row": 0
+   }
+  ]
+ },
   "player": {"measure": "body_height", "thin": 0.08, "value": 140, "ref": [{"sheet": "tamsin_walk", "row": 0}]},
   "player_walk_down": {
    "measure": "match",
@@ -66,6 +79,34 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+ "bigkey": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88,
+  "radius": 10,
+  "mirror_side": false
+ },
+ "big_key": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88,
+  "radius": 10,
+  "mirror_side": false
+ },
+ "hud_counter_big_key": {
+  "cell": [
+   64,
+   64
+  ],
+  "align": "center",
+  "mirror_side": false
+ },
   "player": {"cell": [192, 192], "foot": 176, "radius": 26, "mirror_side": true, "shadow": true},
   "hollow": {"cell": [192, 192], "foot": 176, "radius": 30, "mirror_side": true, "shadow": true},
   "spitcap": {"cell": [128, 128], "foot": 116, "radius": 30, "mirror_side": true, "shadow": true},
@@ -191,6 +232,83 @@
  }
  },
  "sheets": {
+ "lockpick_pickup_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "file": "lockpick_bigkey_idle",
+      "kind": "bigkey",
+      "anim": "idle",
+      "poses": 0,
+      "scale": "lockpick_pickup",
+      "fps": 1,
+      "loop": true
+     },
+     {
+      "file": "lockpick_bigkey_glint",
+      "kind": "bigkey",
+      "anim": "glint",
+      "poses": [
+       1,
+       4
+      ],
+      "scale": "lockpick_pickup",
+      "fps": 6,
+      "loop": true
+     },
+     {
+      "file": "lockpick_big_key_idle",
+      "kind": "big_key",
+      "anim": "idle",
+      "poses": 0,
+      "scale": "lockpick_pickup",
+      "fps": 1,
+      "loop": true
+     },
+     {
+      "file": "lockpick_big_key_glint",
+      "kind": "big_key",
+      "anim": "glint",
+      "poses": [
+       1,
+       4
+      ],
+      "scale": "lockpick_pickup",
+      "fps": 6,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "lockpick_hud_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "file": "lockpick_hud",
+      "kind": "hud_counter_big_key",
+      "anim": "idle",
+      "poses": 0,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        52,
+        52
+       ]
+      },
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
   "tamsin_walk": {
    "_comment": "Design and scale reference only (the old 6-pose sheet): no outputs. Scale groups player, player_walk_*, player_swing and player_states measure it.",
    "key": "green",
