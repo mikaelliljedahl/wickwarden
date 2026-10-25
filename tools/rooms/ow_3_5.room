@@ -1,0 +1,24 @@
+; Broad dry routes connect the shore approaches; vegetation stays at the margins.
+room ow_3_5
+terrain Sump Gate: stone sluice and a sealed cave mouth
+floor_color 0.16 0.22 0.20
+grid
+####################
+#.......#.#........#
+#.......#.#........#
+#.......#.#........#
+....................
+....................
+#...e..........e...#
+#..................#
+#..................#
+####################
+enemy hollow 12,4
+enemy fen_leech 5,7
+enemy fen_leech 15,7
+opener cracked_wall 9,2 id=e248
+door cave_3_1 FromOverworld 9,2
+spawn FromCave 9,3
+spawn Default 2,4
+shallows @528,720 size=288,192
+shallows @1488,720 size=288,192

@@ -1,0 +1,20 @@
+; Broad dry routes connect the shore approaches; vegetation stays at the margins.
+room ow_2_5
+terrain Sump Edge: brackish pools and a brittle rock crescent
+floor_color 0.16 0.22 0.20
+grid
+#########..#########
+#..rr..........ee..#
+#.r............e...#
+#......e...........#
+....................
+....................
+#...e..............#
+#..................#
+#.ee...............#
+#########..#########
+enemy fen_leech 5,2
+enemy fen_leech 14,7
+spawn Default 9,4
+shallows @576,288 size=384,192
+shallows @1392,720 size=384,192

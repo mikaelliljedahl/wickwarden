@@ -1,0 +1,22 @@
+; Broad dry routes connect the shore approaches; vegetation stays at the margins.
+room ow_4_4
+terrain Stranded Boat: a beached hull above the shore path
+floor_color 0.16 0.22 0.20
+grid
+#########..#########
+#..................#
+#...rrr............#
+#..r...r...........#
+#......rrr..........
+#...................
+#..................#
+#..................#
+#..................#
+#########..#########
+enemy fen_leech 4,6
+enemy fen_leech 12,7
+spawn Default 9,5
+shallows @432,624 size=288,192
+shallows @1200,720 size=288,192
+water @1680,480 size=480,768
+mooring @1392,432 id=e069_ow_4_4 target_room=ow_5_4 target_mooring=e069_ow_5_4 landing_offset=-56,0
