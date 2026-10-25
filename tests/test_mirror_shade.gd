@@ -25,7 +25,9 @@ func _test_decoy_art_and_fallback() -> void:
 	var source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(fixture))
 	var path := "user://mirror_shade_decoy_test.json"
 	var file := FileAccess.open(path, FileAccess.WRITE)
-	file.store_string(JSON.stringify({"mirror_shade_decoy": source["walker"]}))
+	file.store_string(
+		JSON.stringify({"mirror_shade": source["walker"], "mirror_shade_decoy": source["walker"]})
+	)
 	file.close()
 	for painted in [false, true]:
 		SpriteVisual.use_manifest(path if painted else fixture)
@@ -46,6 +48,26 @@ func _test_decoy_art_and_fallback() -> void:
 		)
 		if painted:
 			check((look as SpriteVisual).flip_h, "painted decoy follows left facing")
+			var body := enemy.visual as SpriteVisual
+			var reflection := look as SpriteVisual
+			await get_tree().process_frame
+			await get_tree().process_frame
+			check(body.is_playing(), "moving real shade plays its walk")
+			check(reflection.is_playing(), "moving reflection plays its walk")
+			check_eq(reflection.animation, body.animation, "reflection copies the body's animation")
+			check_eq(reflection.frame, body.frame, "reflection copies the body's walk frame")
+			check_near(
+				reflection.frame_progress,
+				body.frame_progress,
+				0.01,
+				"reflection copies walk progress without an independent motion clock"
+			)
+			enemy.move_speed = 0.0
+			await frames(3)
+			await get_tree().process_frame
+			check(not body.is_playing(), "stationary real shade holds its first walk frame")
+			check(not reflection.is_playing(), "stationary reflection holds its first walk frame")
+			check_eq(reflection.frame, 0, "reflection holds the same idle frame")
 		else:
 			check((look as Placeholder).facing.x < 0.0, "fallback follows left facing")
 		var light := Node2D.new()

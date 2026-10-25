@@ -72,8 +72,29 @@ func _enemy_ready() -> void:
 	_decoy.top_level = true
 	add_child(_decoy)
 	_decoy_look = SpriteVisual.attach(_decoy, DECOY_KIND)
+	if _decoy_look is SpriteVisual:
+		(_decoy_look as SpriteVisual).auto_motion = false
+	# Observe the body's presentation after SpriteVisual updates its motion animation.
+	process_priority = 1
 	_echo = _make_echo_hitbox()
 	add_child(_echo)
+
+
+## The reflection has no CharacterBody2D velocity to drive SpriteVisual's auto-motion.
+## Copy presentation only; gameplay continues to use the real actor's state.
+func _process(_delta: float) -> void:
+	if not visual is SpriteVisual or not _decoy_look is SpriteVisual:
+		return
+	var body := visual as SpriteVisual
+	var reflection := _decoy_look as SpriteVisual
+	if not reflection.sprite_frames.has_animation(body.animation):
+		return
+	if body.is_playing():
+		reflection.play(body.animation)
+	else:
+		reflection.animation = body.animation
+		reflection.pause()
+	reflection.set_frame_and_progress(body.frame, body.frame_progress)
 
 
 func _enemy_physics(delta: float) -> void:
