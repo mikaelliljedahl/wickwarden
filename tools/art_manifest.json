@@ -81,6 +81,84 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"ledge_drop": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 90,
+  "prop": true,
+  "rect_h": 48
+ },
+ "pocket_stall": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 96
+ },
+ "pocket_hut": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 96
+ },
+ "pocket_lighthouse": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 96
+ },
+ "pocket_grotto": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 96
+ },
+ "pocket_stairs": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 96
+ },
+ "pocket_plain": {
+  "cell": [
+   192,
+   192
+  ],
+  "align": "foot",
+  "foot": 186,
+  "prop": true,
+  "rect_h": 96
+ },
+ "pit_fill": {
+  "cell": [
+   384,
+   384
+  ],
+  "align": "center",
+  "texture": true
+ },
  "mooring": {"cell": [96, 160], "align": "foot", "foot": 154, "prop": true, "rect_h": 32},
  "eye_switch": {"cell": [128, 128], "align": "foot", "foot": 122, "prop": true, "rect_h": 56},
  "eye_switch_on": {"cell": [128, 128], "align": "foot", "foot": 122, "prop": true, "rect_h": 56},
@@ -253,6 +331,187 @@
  }
  },
  "sheets": {
+"ledge_drop_v3": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "ledge_drop",
+      "anim": "idle",
+      "file": "ledge_drop",
+      "poses": 0,
+      "fps": 1,
+      "loop": true,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        84,
+        84
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "pocket_stall_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "pocket_stall",
+      "anim": "idle",
+      "file": "pocket_stall",
+      "poses": 1,
+      "fps": 1,
+      "loop": true,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        180,
+        180
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "pocket_hut_door_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "pocket_hut",
+      "anim": "idle",
+      "file": "pocket_hut",
+      "poses": 1,
+      "fps": 1,
+      "loop": true,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        180,
+        180
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "pocket_lighthouse_door_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "pocket_lighthouse",
+      "anim": "idle",
+      "file": "pocket_lighthouse",
+      "poses": 1,
+      "fps": 1,
+      "loop": true,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        180,
+        180
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "pocket_grotto_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "pocket_grotto",
+      "anim": "idle",
+      "file": "pocket_grotto",
+      "poses": 1,
+      "fps": 1,
+      "loop": true,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        180,
+        180
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "pocket_stairs_down_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "pocket_stairs",
+      "anim": "idle",
+      "file": "pocket_stairs",
+      "poses": 1,
+      "fps": 1,
+      "loop": true,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        180,
+        180
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "pocket_plain_door_v1": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "pocket_plain",
+      "anim": "idle",
+      "file": "pocket_plain",
+      "poses": 1,
+      "fps": 1,
+      "loop": true,
+      "scale": {
+       "measure": "fit",
+       "value": [
+        180,
+        180
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "pit_fill_v1": {
+  "type": "texture",
+  "output": "pit_fill",
+  "size": 384,
+  "blend": 0.2
+ },
  "mooring_v1": {"key": "magenta", "rows": [{"poses": 3, "outputs": [{"kind": "mooring", "anim": "idle", "file": "mooring", "poses": 0, "fps": 1, "loop": true, "scale": {"measure": "fit", "value": [84, 148]}}]}]},
  "eye_switch_v3": {"key": "magenta", "rows": [{"poses": 4, "outputs": [{"kind": "eye_switch", "anim": "idle", "file": "eye_switch", "poses": 0, "fps": 1, "loop": true, "scale": "sweep_eye_switch"}, {"kind": "eye_switch_on", "anim": "idle", "file": "eye_switch_on", "poses": 3, "fps": 1, "loop": true, "scale": "sweep_eye_switch"}]}]},
  "eye_portcullis_v1": {"key": "magenta", "rows": [{"poses": 1, "outputs": [{"kind": "eye_portcullis", "anim": "idle", "file": "eye_portcullis", "poses": 0, "fps": 1, "loop": true, "scale": {"measure": "fit", "value": [180, 180]}}, {"kind": "ward_blocker", "anim": "idle", "file": "ward_blocker", "poses": 0, "fps": 1, "loop": true, "scale": {"measure": "fit", "value": [180, 180]}}]}, {"poses": 4, "skip": true, "outputs": []}, {"poses": 1, "skip": true, "outputs": []}]},
