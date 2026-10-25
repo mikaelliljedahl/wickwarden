@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+; The Colossus needs an open floor. No retreat barrier or persistent rewards live here.
+[node name="ColossusFloor" type="Node2D"]
+
+[node name="Visual" type="Node2D" parent="."]
