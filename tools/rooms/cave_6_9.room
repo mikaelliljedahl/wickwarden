@@ -1,0 +1,22 @@
+room cave_6_9
+terrain Hollow Crypt: paired burial shelves frame a broken northern niche.
+floor_color 0.18 0.16 0.22
+grid
+####################
+#..................#
+#..###........###..#
+#..###........###..#
+...................#
+...................#
+#..###........###..#
+#..###........###..#
+#..................#
+####################
+enemy hollow 7,3
+enemy hollow 12,6
+opener locked_door @48,480 id=e197 scope=c6 size=192,96
+opener cracked_wall 10,1 id=e200
+door cave_6_9#crypt Inside 10,1 blocker=e200
+spawn FromPocket 10,3
+spawn Default @288,480
+pickup big_key @1488,480 id=bigkey_c6 scope=c6

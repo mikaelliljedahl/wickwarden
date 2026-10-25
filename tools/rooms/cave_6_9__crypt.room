@@ -1,0 +1,18 @@
+room cave_6_9#crypt
+terrain Crypt: twin stone tombs flank the hidden core.
+floor_color 0.18 0.16 0.22
+grid
+####################
+#..................#
+#..###........###..#
+#..###........###..#
+#..................#
+#..................#
+#..rr..........rr..#
+#..................#
+#..................#
+####################
+pickup wick_core @960,336 id=wick_core_c6_hidden
+door cave_6_9 FromPocket @960,816
+spawn Inside @960,624
+spawn Default @960,624

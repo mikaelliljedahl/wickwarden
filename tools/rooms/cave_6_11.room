@@ -1,0 +1,20 @@
+room cave_6_11
+terrain Dirge Floor: an open singing floor, with clear approaches to all three voices.
+floor_color 0.18 0.16 0.22
+grid
+#########..#########
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+arena dirge_choir @0,0
+boss dirge_choir @960,480
+opener boss_door @960,48 id=e199 size=192,96
+spawn Default @960,240
+pickup fragment @720,432 id=frag_c6 scope=c6 requires=boss_cave_6_11_defeated
+pickup wick_core @1200,432 id=wick_core_c6 requires=boss_cave_6_11_defeated
