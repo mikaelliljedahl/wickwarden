@@ -11,6 +11,7 @@ const HELP_ROWS := [
 	["Ward", "Shift / L / RB  (hold)"],
 	["Change item", "Q / I / Y"],
 	["Item menu", "Tab / Select"],
+	["Equip selected item", "Enter / A  (in item menu)"],
 	["Pause", "Esc / Start"],
 ]
 const FONT_SIZE := 36

@@ -11,6 +11,7 @@ func run() -> void:
 	await _open_and_close()
 	await _selection()
 	await _equip()
+	await _gamepad()
 	await _pause_interplay()
 	await _status_draws()
 	get_tree().paused = false
@@ -93,6 +94,48 @@ func _equip() -> void:
 	check_eq(GameState.active_item, &"glow_jar", "the pause key closes without changing the item")
 	check(not menu.is_open, "the pause key closed the item menu")
 	await dispose(menu)
+
+
+## Physical controller events exercise Select, D-pad, stick and A through the InputMap.
+func _gamepad() -> void:
+	reset_state()
+	GameState.acquire_item(&"tether_moth")
+	GameState.acquire_item(&"glow_jar")
+	var menu = await _make_menu()
+	await _joy_button(JOY_BUTTON_BACK)
+	check(menu.is_open and get_tree().paused, "Select opens and pauses the item menu")
+	await _joy_button(JOY_BUTTON_DPAD_DOWN)
+	var stick := InputEventJoypadMotion.new()
+	stick.axis = JOY_AXIS_LEFT_X
+	stick.axis_value = 1.0
+	Input.parse_input_event(stick)
+	await frames(2)
+	stick = stick.duplicate()
+	stick.axis_value = 0.0
+	Input.parse_input_event(stick)
+	await frames(2)
+	check_eq(menu.selected_id(), &"glow_jar", "D-pad and left stick navigate the grid")
+	await _joy_button(JOY_BUTTON_A)
+	check_eq(GameState.active_item, &"glow_jar", "controller A equips the selected item")
+	check(not menu.is_open and not get_tree().paused, "controller equip resumes play")
+	await _joy_button(JOY_BUTTON_BACK)
+	await _joy_button(JOY_BUTTON_DPAD_RIGHT)
+	await _joy_button(JOY_BUTTON_BACK)
+	check_eq(GameState.active_item, &"glow_jar", "Select cancels without changing equipment")
+	check(not menu.is_open and not get_tree().paused, "controller cancel resumes play")
+	await dispose(menu)
+
+
+func _joy_button(button: JoyButton) -> void:
+	var event := InputEventJoypadButton.new()
+	event.button_index = button
+	event.pressed = true
+	Input.parse_input_event(event)
+	await frames(2)
+	event = event.duplicate()
+	event.pressed = false
+	Input.parse_input_event(event)
+	await frames(2)
 
 
 func _pause_interplay() -> void:
