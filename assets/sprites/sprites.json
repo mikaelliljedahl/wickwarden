@@ -258,13 +258,13 @@
     "centered": true,
     "animations": {
       "idle": {
-        "file": "res://assets/sprites/archivist_decoy_idle.png",
+        "file": "res://assets/sprites/archivist_idle.png",
         "frames": 4,
         "fps": 8.0,
         "loop": true
       },
       "float": {
-        "file": "res://assets/sprites/archivist_decoy_float.png",
+        "file": "res://assets/sprites/archivist_float.png",
         "frames": 4,
         "fps": 8.0,
         "loop": true
@@ -583,13 +583,13 @@
     "centered": true,
     "animations": {
       "idle": {
-        "file": "res://assets/sprites/briar_canopy_idle.png",
+        "file": "res://assets/sprites/briar_canopy_base_v4_idle.png",
         "frames": 2,
         "fps": 8.0,
         "loop": true
       },
       "eye_lost": {
-        "file": "res://assets/sprites/briar_canopy_eye_lost.png",
+        "file": "res://assets/sprites/briar_canopy_base_v4_eye_lost.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true

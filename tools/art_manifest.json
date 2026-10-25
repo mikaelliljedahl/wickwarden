@@ -1999,6 +1999,42 @@
  }
  },
  "sheets": {
+ "briar_mother_canopybase_v4_candidate_20261025": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "briar_canopy",
+      "anim": "idle",
+      "file": "briar_canopy_base_v4_idle",
+      "poses": [
+       0,
+       2
+      ],
+      "scale": "encounter_briar_canopy",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "briar_canopy",
+      "anim": "eye_lost",
+      "file": "briar_canopy_base_v4_eye_lost",
+      "poses": 0,
+      "scale": "encounter_briar_canopy",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
  "lull_mauler_walk_side_v1": {
   "key": "magenta",
   "rows": [
@@ -2297,73 +2333,97 @@
   }
  },
  "archivist_p1_v1": {
-  "key": "magenta",
-  "rows": [
-   {
-    "poses": 4,
-    "outputs": [
-     {
-      "kind": "archivist",
-      "anim": "idle",
-      "file": "archivist_idle",
-      "poses": [
-       0,
-       4
-      ],
-      "scale": "c45_archivist",
-      "fps": 8,
-      "loop": true
-     },
-     {
-      "kind": "archivist",
-      "anim": "float",
-      "file": "archivist_float",
-      "poses": [
-       0,
-       4
-      ],
-      "scale": "c45_archivist",
-      "fps": 8,
-      "loop": true
-     }
-    ]
-   },
-   {
-    "poses": 3,
-    "outputs": [
-     {
-      "kind": "archivist",
-      "anim": "cast",
-      "file": "archivist_cast",
-      "poses": [
-       0,
-       3
-      ],
-      "scale": "c45_archivist",
-      "fps": 8,
-      "loop": true
-     }
-    ]
-   },
-   {
-    "poses": 3,
-    "outputs": [
-     {
-      "kind": "archivist",
-      "anim": "blink",
-      "file": "archivist_blink",
-      "poses": [
-       0,
-       3
-      ],
-      "scale": "c45_archivist",
-      "fps": 8,
-      "loop": false
-     }
-    ]
-   }
-  ]
- },
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "archivist",
+     "anim": "idle",
+     "file": "archivist_idle",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "c45_archivist",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "archivist",
+     "anim": "float",
+     "file": "archivist_float",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "c45_archivist",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "archivist_decoy",
+     "anim": "idle",
+     "file": "archivist_idle",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "c45_archivist",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "archivist_decoy",
+     "anim": "float",
+     "file": "archivist_float",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "c45_archivist",
+     "fps": 8,
+     "loop": true
+    }
+   ]
+  },
+  {
+   "poses": 3,
+   "outputs": [
+    {
+     "kind": "archivist",
+     "anim": "cast",
+     "file": "archivist_cast",
+     "poses": [
+      0,
+      3
+     ],
+     "scale": "c45_archivist",
+     "fps": 8,
+     "loop": true
+    }
+   ]
+  },
+  {
+   "poses": 3,
+   "outputs": [
+    {
+     "kind": "archivist",
+     "anim": "blink",
+     "file": "archivist_blink",
+     "poses": [
+      0,
+      3
+     ],
+     "scale": "c45_archivist",
+     "fps": 8,
+     "loop": false
+    }
+   ]
+  }
+ ]
+},
  "archivist_p2_p3_v2": {
   "key": "magenta",
   "rows": [
@@ -2442,39 +2502,14 @@
   }
  },
  "archivist_decoy_v1": {
-  "key": "magenta",
-  "rows": [
-   {
-    "poses": 4,
-    "outputs": [
-     {
-      "kind": "archivist_decoy",
-      "anim": "idle",
-      "file": "archivist_decoy_idle",
-      "poses": [
-       0,
-       4
-      ],
-      "scale": "c45_archivist_decoy",
-      "fps": 8,
-      "loop": true
-     },
-     {
-      "kind": "archivist_decoy",
-      "anim": "float",
-      "file": "archivist_decoy_float",
-      "poses": [
-       0,
-       4
-      ],
-      "scale": "c45_archivist_decoy",
-      "fps": 8,
-      "loop": true
-     }
-    ]
-   }
-  ]
- },
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": []
+  }
+ ]
+},
  "choir_warden_walk_side_v1": {
   "key": "magenta",
   "rows": [
@@ -2967,41 +3002,18 @@
  }
 },
  "briar_mother_p1_v1": {
-  "key": "magenta",
-  "rows": [
-   {
-    "poses": 2,
-    "outputs": [
-     {
-      "kind": "briar_canopy",
-      "anim": "idle",
-      "file": "briar_canopy_idle",
-      "poses": [
-       0,
-       2
-      ],
-      "scale": "encounter_briar_canopy",
-      "fps": 8,
-      "loop": true
-     }
-    ]
-   },
-   {
-    "poses": 1,
-    "outputs": [
-     {
-      "kind": "briar_canopy",
-      "anim": "eye_lost",
-      "file": "briar_canopy_eye_lost",
-      "poses": 0,
-      "scale": "encounter_briar_canopy",
-      "fps": 1,
-      "loop": true
-     }
-    ]
-   }
-  ]
- },
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 2,
+   "outputs": []
+  },
+  {
+   "poses": 1,
+   "outputs": []
+  }
+ ]
+},
  "briar_bloom_p2_v1": {
   "key": "magenta",
   "rows": [
