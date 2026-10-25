@@ -37,3 +37,5 @@ B81 death v3, loading v1, dividers v2/v3 and arena c1 v1/v2 verified own-session
 B81 c1 v3,c2 v3,c3 v1/v2 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave12-review.jpg`; log `log_art_resume_12.md`. C3 weak upright pump (v2 also lantern); C1/C2 clear floor-only. Submitted c3 v3 plus B11 brick-ground v1–3 in freed slots; c2 v1/v2 still pending, six image jobs total.
 
 B81 now complete: c2 v1/v2 and c3 v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave13-review.jpg`; log `log_art_resume_13.md`. c2 v2 weak possible standing growth; C3v3 floor-level pump. All18 B81 variants present.
+
+B82 C4v1–3/C5v1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave16-review.jpg`; log `log_art_resume_16.md`. Foundry3 weak glowing slag despite cold subject; C5 radial floor clear. Submitted C5v3/C6v1–3/C7v1; C5v2 pending, six jobs total.
