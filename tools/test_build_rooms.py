@@ -433,15 +433,57 @@ class ScriptedOpeners(unittest.TestCase):
 
     def test_hidden_stairs_builds_a_persistent_target_door(self) -> None:
         text, errors = compile_text(
-            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_1 FromOverworld 5,5 id=e254"),
+            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_1 FromOverworld 5,5 id=ow_0_2_stairs"),
             self.hidden_stairs_world(),
             "ow_0_2.room",
         )
         self.assertEqual(errors, [])
         self.assertIn('path="res://scenes/world/hidden_stairs.tscn"', text or "")
-        self.assertIn('seam_id = &"e254"', text or "")
+        self.assertIn('seam_id = &"ow_0_2_stairs"', text or "")
         self.assertIn('door_target = &"cave_9_1"', text or "")
         self.assertIn('door_spawn = &"FromOverworld"', text or "")
+
+    def test_actual_ow_0_2_source_builds_with_its_historical_reveal_flag(self) -> None:
+        source = br.ROOMS_DIR / "ow_0_2.room"
+        text, errors = br.compile_room(source, real_world())
+        self.assertEqual(errors, [])
+        self.assertIsNotNone(text)
+        self.assertIn('path="res://scenes/world/hidden_stairs.tscn"', text or "")
+        self.assertIn('seam_id = &"ow_0_2_stairs"', text or "")
+        self.assertIn('door_target = &"cave_9_1"', text or "")
+        self.assertIn('door_spawn = &"FromOverworld"', text or "")
+        committed = (br.ROOT / "scenes/world/rooms/ow_0_2.tscn").read_text(encoding="utf-8")
+        self.assertEqual(text, committed)
+
+    def test_historical_stairs_id_is_limited_to_the_exact_e254_pair(self) -> None:
+        world = self.hidden_stairs_world()
+        world.edges[0]["id"] = "e253"
+        _, errors = compile_text(
+            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_1 FromOverworld 5,5 id=ow_0_2_stairs"),
+            world,
+            "ow_0_2.room",
+        )
+        self.assertTrue(any("hidden stairs edge e253 needs exactly one graph-linked hidden_stairs opener" in e
+                            for e in errors), errors)
+
+    def test_historical_stairs_id_does_not_bypass_partner_or_glow_gate_checks(self) -> None:
+        _, target_errors = compile_text(
+            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_2 FromOverworld 5,5 id=ow_0_2_stairs"),
+            self.hidden_stairs_world(),
+            "ow_0_2.room",
+        )
+        self.assertTrue(any("door to cave_9_2 is not a door of the graph for ow_0_2" in e
+                            for e in target_errors), target_errors)
+
+        world = self.hidden_stairs_world()
+        world.edges[0]["needs"] = ["tallow_sling"]
+        _, gate_errors = compile_text(
+            room_text("ow_0_2", ["e"], "hidden_stairs cave_9_1 FromOverworld 5,5 id=ow_0_2_stairs"),
+            world,
+            "ow_0_2.room",
+        )
+        self.assertTrue(any("hidden stairs edge e254 must be a two-way hidden glow_jar door" in e
+                            for e in gate_errors), gate_errors)
 
     def test_hidden_stairs_must_target_a_graph_door_partner(self) -> None:
         _, errors = compile_text(

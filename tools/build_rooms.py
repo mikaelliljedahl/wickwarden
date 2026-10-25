@@ -66,6 +66,8 @@ CUT_SCREEN_PROPS = {"reed cluster": "reed_cluster", "rush wall": "rush_wall",
                     "moss wall": "moss_wall", "dry vine screen": "dry_vine_screen"}
 RAFT_PROPS = ("mooring and water", "flooded passage")
 HIDDEN_STAIRS_SCENE = "res://scenes/world/hidden_stairs.tscn"
+# Preserve P08's saved reveal flag for its original R1 room; all other mouths use graph edge ids.
+HIDDEN_STAIRS_LEGACY_IDS = {("ow_0_2", "cave_9_1", "e254"): "ow_0_2_stairs"}
 ENDING_TRIGGER_SCENE = "res://scenes/world/ending_trigger.tscn"
 ITEM_PICKUP_SCENE = "res://scenes/pickups/item_pickup.tscn"
 PICKUP_SCENES = {
@@ -1758,8 +1760,9 @@ def check_hidden_stairs_pair(src: Source, rec: dict, other: str, edge: dict, wor
         return
     other_rec = world.room(other)
     if rec["scope"] == "ow" and other_rec is not None and re.fullmatch(r"c[1-9][0-9]*", other_rec["scope"]):
+        seam_id = HIDDEN_STAIRS_LEGACY_IDS.get((rec["id"], other, edge["id"]), edge["id"])
         stairs = [ent for ent, _ in plan.openers
-                  if ent.verb == "hidden_stairs" and ent.opts.get("id") == edge["id"]]
+                  if ent.verb == "hidden_stairs" and ent.opts.get("id") == seam_id]
         if len(stairs) != 1:
             errors.append(f"{prefix}: hidden stairs edge {edge['id']} needs exactly one graph-linked hidden_stairs opener")
         elif stairs[0].args != [other, "FromOverworld"]:
