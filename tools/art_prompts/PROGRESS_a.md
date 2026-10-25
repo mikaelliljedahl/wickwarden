@@ -69,3 +69,5 @@ B10grass-fenv2/v3,fen-gravelv1/v2 verified own-session hashes/unique; opened `/t
 B10ash-gravelv1/v3,fen-gravelv3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave42-review.jpg`; log `log_art_resume_42.md`. All3FAILEDwrongaspect/fade/bandposition. Submitted gravel-saltv2/v3,ash-saltv1/v2;six jobs total.
 
 B10six sources(ash-gravelv2,gravel-saltv1–3,ash-saltv1/v2)verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave43-review.jpg`; log `log_art_resume_43.md`. All6FAILEDwrongaspect/fade/subject. Submitted finalB10ash-saltv3+B11pathv1–3/shorev1/v2,six jobs total.
+
+B11pathv1/v2,shorev1/v2 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave45-review.jpg`; log `log_art_resume_45.md`. All4FAILEDwrongaspect; gaps,seams,addedrockbank/flecks. Submitted shorev3/cliffv1–3,six jobs total.
