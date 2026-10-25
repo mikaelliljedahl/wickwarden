@@ -61,14 +61,23 @@ func _init() -> void:
 
 
 func _boss_ready() -> void:
+	# Room templates duplicate runtime children. Only the new assembly paints the live fight;
+	# leave copied collision nodes untouched, but do not draw their stale origin-space bodies.
+	var copied_assembly := get_node_or_null("Serpent") as Node2D
+	if copied_assembly != null:
+		copied_assembly.visible = false
+	y_sort_enabled = true
 	collision_mask = 0
 	hurtbox.filter = func(_hit: Hitbox) -> bool: return false
 	contact_hitbox.knockback = 0.0
 	rng.randomize()
+	if visual is SpriteVisual:
+		visual.auto_motion = false
 	_build_path()
 	_assembly = Node2D.new()
 	_assembly.name = "Serpent"
 	_assembly.top_level = true
+	_assembly.y_sort_enabled = true
 	add_child(_assembly)
 	for i in range(SEGMENTS):
 		var segment := Node2D.new()
@@ -85,10 +94,29 @@ func _boss_ready() -> void:
 	tail_visual = SpriteVisual.attach(tail, &"tidewick_tail")
 	tail_light = _light(tail, Color(1.0, 0.6, 0.2), 160.0)
 	ripple = Node2D.new()
+	ripple.z_index = 1
 	_assembly.add_child(ripple)
 	Placeholder.attach(ripple, &"tidewick_ripple")
 	ripple_light = _light(ripple, Color(0.4, 0.7, 1.0), 130.0)
 	reset_fight()
+
+
+func _process(_delta: float) -> void:
+	var head := visual as SpriteVisual
+	if head != null:
+		var spitting := bolt_clock >= 2.5
+		var down := not spitting and velocity.y > absf(velocity.x)
+		head.set_facing(Vector2.DOWN if down else Vector2(signf(velocity.x), 0))
+		head.play_anim(&"spit_side" if spitting else (&"walk_down" if down else &"walk_side"))
+	for segment in followers:
+		if not is_instance_valid(segment):
+			continue
+		var body := segment.get_node_or_null("Visual") as SpriteVisual
+		if body != null:
+			body.play_anim(&"reverse" if travel_direction < 0.0 else &"idle")
+	var painted_tail := tail_visual as SpriteVisual
+	if painted_tail != null:
+		painted_tail.play_anim(&"exposed" if tail_exposed() else &"idle")
 
 
 func _build_path() -> void:
@@ -229,6 +257,7 @@ func _tick_bolt(delta: float) -> void:
 	bolt_clock += delta
 	if bolt_clock >= 2.5 and not is_instance_valid(_bolt_warning):
 		_bolt_warning = Node2D.new()
+		_bolt_warning.z_index = 1
 		add_child(_bolt_warning)
 		Placeholder.attach(_bolt_warning, &"tidewick_ripple")
 		add_hazard(_bolt_warning)
@@ -245,6 +274,7 @@ func _tick_wave(delta: float) -> void:
 	if wave_clock >= 6.0 and not is_instance_valid(wave_warning) and not is_instance_valid(wave):
 		wave_direction = Vector2.RIGHT if rng.randi_range(0, 1) == 0 else Vector2.DOWN
 		wave_warning = Node2D.new()
+		wave_warning.z_index = 1
 		get_parent().add_child(wave_warning)
 		wave_warning.global_position = arena_point(BASIN.get_center())
 		var dimensions := (

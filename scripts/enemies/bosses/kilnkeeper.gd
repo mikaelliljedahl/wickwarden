@@ -63,6 +63,30 @@ func _boss_ready() -> void:
 			_plate.z_index = 1
 			SpriteVisual.attach(_plate, &"wax_plate")
 	visual = SpriteVisual.attach(self, &"kilnkeeper", body_radius)
+	if visual is SpriteVisual:
+		visual.auto_motion = false
+
+
+func _process(_delta: float) -> void:
+	var painted := visual as SpriteVisual
+	if painted == null:
+		return
+	var pose := &"walk" if velocity.length() > 5.0 else &"idle"
+	if phase == 1 and attack == Attack.FAN_WARNING:
+		pose = &"slag_fan"
+	elif phase == 2:
+		if attack in [Attack.SPLASH_WARNING, Attack.SPLASH]:
+			pose = &"splash"
+		elif attack in [Attack.RUSH_WARNING, Attack.RUSH]:
+			pose = &"rush"
+	var direction := _aim if attack != Attack.WALK else facing_dir
+	# Only the published down/side strips exist; phase two has side art only.
+	var side := phase == 2 or absf(direction.x) >= absf(direction.y)
+	var suffix := "side" if side else "down"
+	if pose == &"slag_fan":
+		suffix = "down"
+	painted.set_facing(Vector2(signf(direction.x), 0) if suffix == "side" else Vector2.DOWN)
+	painted.play_anim(StringName("%s_%s" % [pose, suffix]))
 
 
 func _enter_phase(_number: int) -> void:
@@ -183,6 +207,7 @@ func _warn(next: Attack, duration: float, radius: float) -> void:
 	if scene == null:
 		return
 	var marker = scene.instantiate()
+	marker.z_index = 1
 	marker.radius = radius
 	marker.duration = duration
 	marker.color = Color(1, 0.5, 0.15)

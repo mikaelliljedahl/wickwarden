@@ -114,6 +114,9 @@ func _armour_and_fight() -> void:
 	check(not boss.drops_enabled, "boss does not duplicate placed rewards through drops")
 	await seconds(1.6)
 	check_eq(boss.hp, 24, "intro completes at full HP")
+	if SpriteVisual.has_art(&"kilnkeeper"):
+		check(boss.visual is SpriteVisual, "compiled boss retains the painted body factory")
+		check_eq(boss.visual.kind, &"kilnkeeper", "first phase uses the armoured painting")
 	for kind in [&"hook", &"flare", &"explosion", &"sling", &"thrown"]:
 		await _hit(arena, boss, kind, 4)
 	check_eq(boss.hp, 24, "all hard nonfire hits clink, including flare and pot")
@@ -135,6 +138,9 @@ func _armour_and_fight() -> void:
 	check(boss.hp <= 12, "phase 2 starts at 12 HP or below")
 	await seconds(1.3)
 	check(not boss.is_molten(), "phase change restores hard wax")
+	if SpriteVisual.has_art(&"kilnkeeper_p2"):
+		check_eq(boss.visual.kind, &"kilnkeeper_p2", "real phase transition selects cracked painting")
+		check_eq(boss.visual.scale, Vector2.ONE, "phase painting keeps the shared source scale")
 	check_eq(boss.melt_ticks, 0, "phase change clears melt count")
 	await _cast(player, boss)
 	for _i in range(150):

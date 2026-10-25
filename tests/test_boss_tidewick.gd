@@ -34,6 +34,18 @@ func _motion_and_exposure() -> void:
 	check(not boss.tail_exposed(), "intro tail closed")
 	await seconds(1.6)
 	check(boss.tail_exposed(), "tail surfaces at first fight cycle")
+	if SpriteVisual.has_art(&"tidewick_body"):
+		for segment in boss.followers:
+			check(segment.get_node("Visual") is SpriteVisual, "every serpent segment uses body art")
+		var painted_segments := 0
+		for look in boss.find_children("*", "AnimatedSprite2D", true, false):
+			if look is SpriteVisual and look.kind == &"tidewick_body" and look.is_visible_in_tree():
+				painted_segments += 1
+		check_eq(painted_segments, 7, "room template copies do not paint a second serpent")
+	if SpriteVisual.has_art(&"tidewick_tail"):
+		check(boss.tail_visual is SpriteVisual, "tail uses its dedicated painted factory")
+		boss._process(0.0)
+		check_eq(boss.tail_visual.animation, &"exposed", "vulnerable tail shows flame-up art")
 	var before: Vector2 = boss.global_position
 	await frames(1)
 	check_near(boss.global_position.distance_to(before), 200.0 / 60.0, 0.1, "constant arc speed200")

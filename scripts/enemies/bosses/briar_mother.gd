@@ -124,6 +124,28 @@ func _boss_ready() -> void:
 		_make_eyes()
 
 
+func _process(_delta: float) -> void:
+	var painted := visual as SpriteVisual
+	if painted != null:
+		if phase == 1:
+			painted.play_anim(&"eye_lost" if dead_eyes > 0 else &"idle")
+		else:
+			var sweeping := _sweep_left >= 3.0 - SWEEP_WARNING - SWEEP_ACTIVE
+			painted.play_anim(&"sweep" if sweeping else &"idle")
+	for eye in eyes:
+		if not is_instance_valid(eye):
+			continue
+		var look := eye.visual as SpriteVisual
+		if look == null:
+			continue
+		var spitting := false
+		for entry in _pending:
+			if entry.kind == &"spore" and entry.eye == eye:
+				spitting = true
+				break
+		look.play_anim(&"spore" if spitting else &"idle")
+
+
 func _bloom_open(_hit: Hitbox) -> bool:
 	return phase == 2
 
@@ -253,6 +275,7 @@ func _marker(at: Vector2, duration: float, band: bool = false) -> Node2D:
 	var marker := scene.instantiate() as Node2D
 	if marker == null:
 		return null
+	marker.z_index = 1
 	marker.set(&"duration", duration)
 	marker.set(&"shape", &"rect" if band else &"circle")
 	marker.set(&"size", Vector2(1920, 96))
