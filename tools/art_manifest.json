@@ -2,6 +2,23 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+ "wickling_body": {
+  "measure": "fit",
+  "value": [
+   84,
+   82
+  ],
+  "ref": [
+   {
+    "sheet": "wickling_v3",
+    "row": 0
+   },
+   {
+    "sheet": "wickling_v3",
+    "row": 1
+   }
+  ]
+ },
  "sweep_eye_switch": {"measure": "fit", "value": [116, 116], "ref": [{"sheet": "eye_switch_v3", "row": 0, "poses": [0, 1]}]},
  "sweep_watcher": {"measure": "fit", "value": [116, 116], "ref": [{"sheet": "watcher_eye_down_v1", "row": 0, "poses": [0, 1]}]},
  "lockpick_pickup": {
@@ -81,6 +98,17 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+ "wickling": {
+  "cell": [
+   96,
+   96
+  ],
+  "align": "foot",
+  "foot": 88,
+  "radius": 16,
+  "mirror_side": true,
+  "shadow": true
+ },
 "ledge_drop": {
   "cell": [
    96,
@@ -331,6 +359,37 @@
  }
  },
  "sheets": {
+ "wickling_v3": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "wickling",
+      "anim": "walk",
+      "file": "wickling_walk",
+      "scale": "wickling_body",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   },
+   {
+    "poses": 1,
+    "outputs": [
+     {
+      "kind": "wickling",
+      "anim": "idle",
+      "file": "wickling_idle",
+      "scale": "wickling_body",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
 "ledge_drop_v3": {
   "key": "magenta",
   "rows": [

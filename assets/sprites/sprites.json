@@ -1,4 +1,31 @@
 {
+  "wickling": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      72.0
+    ],
+    "foot": 88,
+    "radius": 16.0,
+    "mirror_side": true,
+    "animations": {
+      "walk": {
+        "file": "res://assets/sprites/wickling_walk.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle": {
+        "file": "res://assets/sprites/wickling_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "ledge_drop": {
     "cell": [
       96,
