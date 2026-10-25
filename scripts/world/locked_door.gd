@@ -1,8 +1,8 @@
 class_name LockedDoor
 extends StaticBody2D
-## A door that needs one small key of its own `scope` ("ow" or a cave "cN"). Touching it with a key
-## of that scope spends the key and opens it for good (flag "door_<id>" when `door_id` is set).
-## A key of another scope does not open it. Solid until open.
+## A scoped key lock. A cave Lockpick opens every key lock in its cave and is retained.
+## Otherwise one small key of the door's scope is spent. Overworld locks require overworld keys.
+## Opens persist through flag "door_<id>" when `door_id` is set. Solid until open.
 
 signal opened
 
@@ -53,9 +53,11 @@ func flag_name() -> StringName:
 	return StringName("door_%s" % door_id)
 
 
-## Spends a key of this door's scope and opens. Returns false if already open or no such key is held.
+## Prefers the retained cave Lockpick, otherwise spends one scoped small key.
 func try_unlock() -> bool:
-	if is_open or not GameState.use_key(scope):
+	if is_open:
+		return false
+	if not GameState.has_big_key(scope) and not GameState.use_key(scope):
 		return false
 	if door_id != &"":
 		GameState.set_flag(flag_name())
@@ -66,7 +68,7 @@ func try_unlock() -> bool:
 
 
 func _physics_process(_delta: float) -> void:
-	if is_open or GameState.keys_in(scope) <= 0:
+	if is_open:
 		return
 	if _trigger.has_overlapping_bodies():
 		try_unlock()

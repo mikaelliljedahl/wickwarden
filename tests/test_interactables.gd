@@ -8,6 +8,8 @@ func run() -> void:
 	await _brazier_and_gate()
 	await _locked_door()
 	await _locked_door_scope()
+	await _lockpick_contact()
+	await _lockpick_world_fixture()
 	await _visual_hints()
 
 
@@ -198,7 +200,9 @@ func _visual_hints() -> void:
 	check(gate.rune.visible, "the gate rune reacts when one brazier is lit")
 	var visual := gate.get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
 	await frames(2)
-	check(visual != null and absf(visual.position.x) > 0.0, "the gate shakes when one brazier is lit")
+	check(
+		visual != null and absf(visual.position.x) > 0.0, "the gate shakes when one brazier is lit"
+	)
 	await seconds(0.9)
 	check_near(gate.rune.energy, Gate.RUNE_HALF_ENERGY, 0.05, "the rune fades in to half strength")
 	check_near(visual.position.x, 0.0, 0.01, "the shake settles")
@@ -210,3 +214,119 @@ func _visual_hints() -> void:
 	check(gate.is_open, "both lit: the gate opens as before")
 	check(not gate.rune.visible, "the rune gives way once the gate is open")
 	await dispose(arena)
+
+
+func _lockpick_contact() -> void:
+	for scope: StringName in [&"c1", &"ow", &""]:
+		reset_state()
+		var arena := make_arena()
+		var player := make_player(arena, Vector2(500, 600))
+		var door := LockedDoor.new()
+		door.scope = scope
+		door.door_id = &"lockpick_contact"
+		door.position = Vector2(500, 400)
+		arena.add_child(door)
+		GameState.add_big_key(&"c2")
+		# Even malformed/non-cave flags must never act as Lockpicks.
+		GameState.set_flag(&"bigkey_ow")
+		GameState.set_flag(&"bigkey_")
+		Input.action_press(&"move_up")
+		await seconds(0.8)
+		release_inputs()
+		check(not door.is_open, "wrong cave/ow/absent scope rejects Lockpick: %s" % scope)
+		check(player.position.y > 400, "rejected Lockpick leaves physical collision")
+		if scope == &"c1":
+			var peer := LockedDoor.new()
+			peer.scope = scope
+			peer.door_id = door.door_id
+			peer.position = Vector2(1500, 400)
+			peer.process_mode = Node.PROCESS_MODE_DISABLED
+			arena.add_child(peer)
+			GameState.add_big_key(scope)
+			await frames(5)
+			check(door.is_open and peer.is_open, "zero-key contact opens loaded pair")
+			check_eq(GameState.keys_in(scope), 0, "Lockpick needs no small key")
+			check(GameState.has_big_key(scope), "Lockpick retained")
+			check(peer._shape.disabled, "disabled peer collision opens")
+			Input.action_press(&"move_up")
+			await seconds(0.6)
+			release_inputs()
+			check(player.position.y < 400, "actual movement crosses Lockpick-opened door")
+			GameState.add_key(2, scope)
+			var next := LockedDoor.new()
+			next.scope = scope
+			next.position = player.position - Vector2(0, 200)
+			arena.add_child(next)
+			Input.action_press(&"move_up")
+			await seconds(0.8)
+			release_inputs()
+			check(next.is_open, "held Lockpick opens next lock by contact")
+			check_eq(GameState.keys_in(scope), 2, "Lockpick preferred over small keys")
+			SaveGame.enabled = true
+			check(SaveGame.save(), "save Lockpick and opened flag using existing format")
+			await dispose(arena)
+			reset_state()
+			check(SaveGame.load_into_state(), "reload Lockpick and opened flag")
+			SaveGame.enabled = false
+			arena = make_arena()
+			var again := LockedDoor.new()
+			again.scope = scope
+			again.door_id = &"lockpick_contact"
+			arena.add_child(again)
+			await frames(2)
+			check(again.is_open and again._shape.disabled, "saved opening survives reentry")
+			check(GameState.has_big_key(scope), "retained Lockpick survives save reload")
+			check_eq(GameState.keys_in(scope), 2, "unspent small keys survive save reload")
+		await dispose(arena)
+
+
+## Labelled physical-pickup fixture, not an earned-route playthrough: collect the real C1
+## Lockpick, then start outside C1_4's ordinary lock with zero keys and walk both edges.
+func _lockpick_world_fixture() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var world := await make_world()
+	world.start_at(&"cave_1_7")
+	var player := world.player
+	player.set_hurtbox_enabled(self, false)
+	var room := world.get_room(&"cave_1_7")
+	var pick := room.get_node("Props/BigKey1") as PickupBase
+	player.place_at(pick.global_position + Vector2(0, 100))
+	Input.action_press(&"move_up")
+	await seconds(0.3)
+	release_inputs()
+	check(GameState.has_big_key(&"c1"), "fixture physically collects actual C1 Lockpick")
+	check(GameState.has_flag(&"picked_bigkey_c1"), "real pickup persistence flag")
+	world.start_at(&"cave_1_4")
+	room = world.get_room(&"cave_1_4")
+	player.place_at(room.global_position + Vector2(1650, 480))
+	check_eq(GameState.keys_in(&"c1"), 0, "C1_4 checkpoint fixture has zero C1 keys")
+	check(not GameState.has_flag(&"door_e151"), "ordinary e151 starts unopened")
+	await _lockpick_cross(world, &"cave_1_6")
+	check(GameState.has_flag(&"door_e151"), "contact opens canonical ordinary e151")
+	await _lockpick_capture("ordinary")
+	await _lockpick_cross(world, &"cave_1_8")
+	check(GameState.has_flag(&"door_boss_c1"), "contact opens canonical boss e152")
+	await _lockpick_capture("boss")
+	check(GameState.has_big_key(&"c1"), "both real locks retain C1 Lockpick")
+	check_eq(GameState.keys_in(&"c1"), 0, "both real locks need no C1 small keys")
+	await dispose(world)
+
+
+func _lockpick_cross(world: World, target: StringName) -> void:
+	Input.action_press(&"move_right")
+	for step in range(500):
+		await frames(1)
+		if world.get_current_room_id() == target:
+			break
+	release_inputs()
+	await seconds(0.4)
+	check_eq(world.get_current_room_id(), target, "physical Lockpick crossing to %s" % target)
+
+
+func _lockpick_capture(label: String) -> void:
+	if not OS.get_cmdline_user_args().has("--lockpick-visuals"):
+		return
+	await RenderingServer.frame_post_draw
+	var path := "/tmp/lockpick-checkpoint-%s.png" % label
+	check_eq(get_viewport().get_texture().get_image().save_png(path), OK, "capture " + label)
