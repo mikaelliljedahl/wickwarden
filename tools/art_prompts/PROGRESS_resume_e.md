@@ -7,3 +7,5 @@ B47motesv2/v3+sparklev1/v2 verified own-session hashes/unique; opened `/tmp/wick
 B47savev1/healv1/v2/sparklev3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave34-review.jpg`; log `log_art_resume_34.md`. All4weak stray sparks/elaborate swirls/insufficient fade. Savev2/v3submitted plus2optional backdrop jobs; six total withhealv3/titlev1pending.
 
 B47healv3 verified own-session hash/unique; opened `/tmp/wickwarden-art-wave35-review.jpg`; weak flame-like/bright cores. Log `log_art_resume_35.md`. Freed slot filled optional ninth-doorv3,six image jobs total.
+
+B47savev2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave36-review.jpg`; log `log_art_resume_36.md`; bothok. Ready twelve B47variants complete; six8-frame variants deferred pending scale concern review.
