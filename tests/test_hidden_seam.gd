@@ -20,6 +20,9 @@ func run() -> void:
 	await _other_hits_do_nothing()
 	await _stairs_get_a_door_once_shown()
 	_scenes_have_their_look()
+	await _real_jar_pair()
+	await _hook_pair()
+	await _c05_pair_if_delivered()
 
 
 ## Builds a seam of `scene_path` with a seam id, in the arena at `at`.
@@ -245,3 +248,221 @@ func _scenes_have_their_look() -> void:
 		check(seam.get(&"size") == Vector2(192, 96), "%s fills a 192 x 96 px gap" % scene_path)
 		check(seam.get(&"hook_tap") == (scene_path == TAP), "%s tap flag is right" % scene_path)
 		seam.free()
+
+
+func _real_jar_pair() -> void:
+	reset_state()
+	var arena := make_arena()
+	var source = _make_seam(arena, SEAM, &"jar_pair", AT)
+	var peer = _make_seam(arena, SEAM, &"jar_pair", Vector2(1600, 400))
+	peer.process_mode = Node.PROCESS_MODE_DISABLED
+	peer.door_target = &"cave_7_1"
+	peer.door_spawn = &"FromOverworld"
+	var unrelated = _make_seam(arena, SEAM, &"other_pair", Vector2(1800, 400))
+	var anonymous = _make_seam(arena, SEAM, &"", Vector2(2000, 400))
+	var door := RoomDoor.new()
+	door.position = Vector2(1600, 520)
+	door.blocker_path = NodePath("../" + String(peer.name))
+	arena.add_child(door)
+	var player := make_player(arena, Vector2(400, 650))
+	player.facing = Vector2.UP
+	GameState.acquire_item(&"glow_jar")
+	GameState.set_active_item(&"glow_jar")
+	await frames(2)
+	GameState.flag_changed.emit(&"revealed_jar_pair", false)
+	GameState.set_flag(&"revealed_unrelated")
+	GameState.set_flag(&"revealed_")
+	check(not source.is_shown and not peer.is_shown, "false/unrelated flags leave pair concealed")
+	check(not anonymous.is_revealed, "empty seam id ignores anonymous reveal flag")
+	check(player.use_item(), "real jar launches for temporary discovery")
+	await seconds(0.65)
+	check(source.is_shown and not source.is_revealed, "real jar first shows source temporarily")
+	check(not GameState.has_flag(&"revealed_jar_pair"), "temporary discovery publishes no flag")
+	check(not peer.is_shown and not _body_disabled(peer), "temporary discovery never leaks to peer")
+	check(not door._gate_is_open(), "temporary source discovery leaves peer entrance blocked")
+	for item in get_tree().get_nodes_in_group(ItemBase.group_name(&"glow_jar")):
+		item.queue_free()
+	await seconds(0.4)
+	check(
+		not source.is_shown and not source.is_revealed, "interrupted real light hides source again"
+	)
+	check(not peer.is_shown, "interrupted discovery leaves disabled peer hidden")
+	check(peer.get_node_or_null("Door") == null, "temporary discovery creates no remote door")
+	var publications := {"count": 0}
+	var on_flag := func(flag: StringName, value: bool) -> void:
+		if value and flag == &"revealed_jar_pair":
+			publications["count"] += 1
+	GameState.flag_changed.connect(on_flag)
+	check(player.use_item(), "second real jar launches after interrupted light")
+	await seconds(1.7)
+	check(
+		source.is_revealed and peer.is_revealed,
+		"real continuous jar permanently reveals loaded pair"
+	)
+	check(peer.is_shown and _body_disabled(peer), "disabled peer shows and clears child WORLD body")
+	check(_visual_shown(peer), "permanent peer visual is shown")
+	var peer_door := peer.get_node_or_null("Door") as RoomDoor
+	check(peer_door != null, "permanent remote restore creates configured RoomDoor")
+	if peer_door != null:
+		check(peer_door._gate_is_open(), "restored child RoomDoor sees disabled seam body")
+	check(not peer.is_in_group(&"revealable"), "permanent peer leaves revealable group")
+	check(door._gate_is_open(), "permanent peer enables linked RoomDoor readiness")
+	check(not unrelated.is_revealed and not unrelated.is_shown, "unrelated seam id stays secret")
+	check_eq(publications["count"], 1, "peer restore republishes no canonical flag")
+	check_eq(
+		get_tree().get_nodes_in_group(ItemBase.group_name(&"glow_jar")).size(),
+		1,
+		"peer restore spawns no extra jar"
+	)
+	GameState.flag_changed.disconnect(on_flag)
+	for seam in [source, peer]:
+		player.place_at(seam.global_position + Vector2(0, 130))
+		Input.action_press(&"move_up")
+		await seconds(1.0)
+		release_inputs()
+		check(
+			player.global_position.y < seam.global_position.y - 70,
+			"real player physically traverses permanently revealed source/peer"
+		)
+	GameState.flag_changed.emit(&"revealed_jar_pair", false)
+	peer.hide_again()
+	await seconds(0.3)
+	check(
+		peer.is_shown and peer.is_revealed,
+		"false notification and hide cannot reclose permanent peer"
+	)
+	var callback := Callable(peer, "_on_flag_changed")
+	check(
+		GameState.flag_changed.is_connected(callback),
+		"permanent peer subscribes to canonical state"
+	)
+	peer.free()
+	check(
+		not GameState.flag_changed.is_connected(callback), "freed peer subscription cleans itself"
+	)
+	GameState.flag_changed.emit(&"revealed_jar_pair", true)
+	await dispose(arena)
+
+
+func _hook_pair() -> void:
+	reset_state()
+	var arena := make_arena()
+	var source = _make_seam(arena, TAP, &"hook_pair", AT)
+	var peer = _make_seam(arena, TAP, &"hook_pair", Vector2(1600, 400))
+	peer.process_mode = Node.PROCESS_MODE_DISABLED
+	var player := make_player(arena, AT + Vector2(0, 100))
+	player.facing = Vector2.UP
+	await frames(2)
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	await frames(4)
+	check(
+		source.is_revealed and peer.is_revealed,
+		"real hook tap permanently reveals paired tap walls"
+	)
+	check(GameState.has_flag(&"revealed_hook_pair"), "hook tap is canonical permanent reveal")
+	check(_body_disabled(peer), "hook peer child blocker clears while processing disabled")
+	check(not peer.get_node("Hurtbox").enabled, "permanent hook peer no longer accepts taps")
+	await dispose(arena)
+
+
+func _c05_pair_if_delivered() -> void:
+	var ids := ["cave_5_5", "cave_5_6"]
+	for id in ids:
+		if not ResourceLoader.exists(WorldData.scene_path(id)):
+			print("PENDING C05 real pair traversal: missing " + id + " scene")
+			return
+	reset_state()
+	SaveGame.enabled = false
+	var world := await make_world()
+	world.start_at(&"cave_5_5")
+	var source_room := world.get_room(&"cave_5_5")
+	var peer_room := world.get_room(&"cave_5_6")
+	var source = _e185_seam(source_room)
+	var peer = _e185_seam(peer_room)
+	check(source != null and peer != null, "actual e185 seam exports exist at both endpoints")
+	if source == null or peer == null:
+		await dispose(world)
+		return
+	check(not peer_room.can_process(), "actual C05 peer is preloaded disabled")
+	for room in [source_room, peer_room]:
+		for enemy in room.get_enemies():
+			enemy.drops_enabled = false
+			enemy.kill()
+	var player := world.player
+	player.set_hurtbox_enabled(self, false)
+	for node in source_room.get_node("Props").get_children():
+		if node is PickupBase and node.item_id == &"glow_jar":
+			player.place_at(node.global_position + Vector2(0, 46))
+	await frames(4)
+	check(GameState.has_item(&"glow_jar"), "actual C05 pedestal grants glow jar")
+	player.place_at(source_room.global_position + Vector2(960, 240))
+	Input.action_press(&"move_up")
+	await seconds(0.8)
+	release_inputs()
+	check(
+		player.global_position.y - source_room.global_position.y > 100,
+		"unrevealed actual C05 seam blocks real player"
+	)
+	GameState.set_active_item(&"glow_jar")
+	player.facing = Vector2.UP
+	check(player.use_item(), "actual C05 acquired jar launches at e185")
+	await seconds(0.65)
+	check(source.is_shown and not source.is_revealed, "actual e185 first reveals temporarily")
+	check(not peer.is_shown, "actual temporary e185 discovery does not leak across rooms")
+	await seconds(1.2)
+	check(GameState.has_flag(&"revealed_e185"), "actual jar sets canonical permanent e185")
+	check(
+		peer.is_revealed and _body_disabled(peer), "disabled actual peer restores permanent state"
+	)
+	await _cross_c05(world, &"move_up", &"cave_5_6")
+	Input.action_press(&"move_up")
+	await seconds(0.6)
+	release_inputs()
+	check(
+		player.global_position.y - peer_room.global_position.y < 800,
+		"real player traverses cleared peer seam after room slide"
+	)
+	await _cross_c05(world, &"move_down", &"cave_5_5")
+	source_room = world.get_room(&"cave_5_5")
+	Input.action_press(&"move_down")
+	await seconds(0.6)
+	release_inputs()
+	check(
+		player.global_position.y - source_room.global_position.y > 150,
+		"real return traverses cleared source seam"
+	)
+	await dispose(world)
+	var reloaded := (load(WorldData.scene_path("cave_5_6")) as PackedScene).instantiate() as Room
+	add_child(reloaded)
+	await frames(2)
+	var restored = _e185_seam(reloaded)
+	check(
+		restored.is_revealed and _body_disabled(restored),
+		"actual C05 reentry restores permanent seam"
+	)
+	check(
+		not restored.is_in_group(&"revealable"), "persisted peer remains outside revealable group"
+	)
+	await dispose(reloaded)
+
+
+func _e185_seam(room: Room) -> Node2D:
+	for node in room.get_node("Props").get_children():
+		var script: Script = node.get_script()
+		if script != null and script.resource_path == "res://scripts/world/hidden_seam.gd":
+			if node.seam_id == &"e185":
+				return node
+	return null
+
+
+func _cross_c05(world: World, action: StringName, target: StringName) -> void:
+	Input.action_press(action)
+	for tick in range(240):
+		await frames(1)
+		if world.get_current_room_id() == target:
+			break
+	release_inputs()
+	await seconds(0.5)
+	check_eq(world.get_current_room_id(), target, "actual physical e185 room slide")

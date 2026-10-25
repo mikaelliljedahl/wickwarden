@@ -64,16 +64,22 @@ func _ready() -> void:
 	if hook_tap:
 		_build_hurtbox()
 	SpriteVisual.attach(self, look, 0.0, size)
+	GameState.flag_changed.connect(_on_flag_changed)
 	if preview_revealed:
-		is_revealed = true
-		_set_open(true)
+		_restore_revealed()
 		return
 	if seam_id != &"" and GameState.has_flag(flag_name()):
-		is_revealed = true
-		_set_open(true)
+		_restore_revealed()
 		return
 	add_to_group(&"revealable")
 	_set_open(false)
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	# Temporary light stays local. Only the permanent canonical flag opens a peer,
+	# including one in a preloaded room with processing disabled.
+	if value and not is_revealed and seam_id != &"" and flag == flag_name():
+		_restore_revealed()
 
 
 func _physics_process(delta: float) -> void:
@@ -119,15 +125,20 @@ func _on_hurt(_hitbox: Hitbox) -> void:
 func _unseal() -> void:
 	if is_revealed:
 		return
+	_restore_revealed()
+	if seam_id != &"":
+		GameState.set_flag(flag_name())
+	Audio.play_sfx(&"gate_open", global_position)
+
+
+## Restore permanent state without publishing it or replaying source reveal effects.
+func _restore_revealed() -> void:
 	is_revealed = true
 	_lit_left = 0.0
 	_exposure = 0.0
 	remove_from_group(&"revealable")
 	if _hurtbox != null:
 		_hurtbox.enabled = false
-	if seam_id != &"":
-		GameState.set_flag(flag_name())
-	Audio.play_sfx(&"gate_open", global_position)
 	_set_open(true)
 
 
