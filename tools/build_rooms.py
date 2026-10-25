@@ -1843,7 +1843,8 @@ def emit(src: Source, rec: dict, plan: Plan) -> str:
         gate.props.append(("braziers", f"Array[NodePath]([{paths}])"))
     for door, blocker in plan.door_links:
         door.props = [(key, value) for key, value in door.props if key != "blocker_path"]
-        door.props.append(("blocker_path", f'NodePath("../{blocker.name}")'))
+        path = relative_node_path(door, blocker)
+        door.props.append(("blocker_path", f'NodePath("{path}")'))
     containers = [Node(name, ".", "Node2D") for name in ("Enemies", "Bushes", "Props", "Spawns")]
     for container in containers:
         container.props = [("y_sort_enabled", "true")]
@@ -1868,6 +1869,21 @@ def emit(src: Source, rec: dict, plan: Plan) -> str:
 
 def root_name(room_id: str) -> str:
     return "".join(part.capitalize() for part in re.split(r"[_#]", room_id))
+
+
+def relative_node_path(source: Node, target: Node) -> str:
+    """Return a NodePath from one emitted node to another, across their real parents."""
+    def components(parent: str) -> list[str]:
+        return [] if parent in ("", ".") else parent.split("/")
+
+    source_path = components(source.parent) + [source.name]
+    target_path = components(target.parent) + [target.name]
+    shared = 0
+    while (shared < min(len(source_path), len(target_path))
+           and source_path[shared] == target_path[shared]):
+        shared += 1
+    path = [".."] * (len(source_path) - shared) + target_path[shared:]
+    return "/".join(path) or "."
 
 
 def node_header(node: Node, ext: Ext, root: bool = False) -> str:

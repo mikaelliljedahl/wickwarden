@@ -37,6 +37,49 @@ def node_list(text: str) -> list[str]:
     return out
 
 
+def emitted_nodes(text: str) -> dict[tuple[str, ...], dict[str, object]]:
+    """Read emitted node parents, instance resources and properties for path-resolution checks."""
+    ext = {ident: path for _, path, ident in re.findall(r'\[ext_resource type="(\w+)" path="([^"]+)" id="(\d+)"\]', text)}
+    nodes: dict[tuple[str, ...], dict[str, object]] = {}
+    root: tuple[str, ...] = ()
+    current: dict[str, object] | None = None
+    for line in text.splitlines():
+        if line.startswith('[node name='):
+            name_match = re.search(r'\[node name="([^"]+)"', line)
+            assert name_match is not None, line
+            parent_match = re.search(r' parent="([^"]+)"', line)
+            instance_match = re.search(r' instance=ExtResource\("(\d+)"\)', line)
+            name = name_match.group(1)
+            if parent_match is None:
+                root = (name,)
+                path = root
+            else:
+                parent = parent_match.group(1)
+                path = root + (() if parent == "." else tuple(parent.split("/"))) + (name,)
+            current = {
+                "parent": parent_match.group(1) if parent_match else "",
+                "scene": ext.get(instance_match.group(1)) if instance_match else None,
+                "properties": [],
+            }
+            nodes[path] = current
+        elif current is not None and " = " in line:
+            current["properties"].append(line.strip())
+    return nodes
+
+
+def resolve_emitted_path(start: tuple[str, ...], path: str,
+                         nodes: dict[tuple[str, ...], dict[str, object]]) -> tuple[str, ...]:
+    """Resolve a generated relative NodePath against the parsed emitted hierarchy."""
+    current = start
+    for segment in path.split("/"):
+        if segment == "..":
+            current = current[:-1]
+        elif segment not in ("", "."):
+            current += (segment,)
+        assert current in nodes, f"{path!r} from {start!r} does not resolve at {current!r}"
+    return current
+
+
 def real_world() -> br.World:
     world = json.loads(br.WORLD_FILE.read_text(encoding="utf-8"))
     prices = json.loads(br.SHOP_PRICES_FILE.read_text(encoding="utf-8"))
@@ -780,8 +823,42 @@ class DoorBlockerLinks(unittest.TestCase):
                 with self.subTest(kind=kind, offset=offset):
                     text, errors = self.compile(kind, prop, offset=offset)
                     self.assertEqual(errors, [])
-                    self.assertIn(f'blocker_path = NodePath("../{name}")', text)
+                    expected_path = f"../../Bushes/{name}" if kind == "cut_screen" else f"../{name}"
+                    self.assertIn(f'blocker_path = NodePath("{expected_path}")', text)
                     self.assertNotIn('requires_flag', text)
+
+    def test_actual_cut_screen_doors_resolve_across_room_containers(self):
+        world = real_world()
+        for room_id in ("ow_1_5", "ow_7_3"):
+            with self.subTest(room=room_id):
+                source = (br.ROOT / "tools" / "rooms" / f"{room_id}.room").read_text(encoding="utf-8")
+                text, errors = compile_text(source, world, f"{room_id}.room")
+                self.assertEqual(errors, [])
+                assert text is not None
+                nodes = emitted_nodes(text)
+                doors = [(path, node, prop) for path, node in nodes.items()
+                         for prop in node["properties"]
+                         if prop.startswith("blocker_path = NodePath(")]
+                self.assertEqual(len(doors), 1)
+                door_path, door, blocker_prop = doors[0]
+                blocker_match = re.fullmatch(r'blocker_path = NodePath\("([^"]+)"\)', blocker_prop)
+                self.assertIsNotNone(blocker_match, blocker_prop)
+                self.assertEqual(door["parent"], "Props")
+                target_path = resolve_emitted_path(door_path, blocker_match.group(1), nodes)
+                blocker = nodes[target_path]
+                self.assertEqual(blocker["parent"], "Bushes")
+                self.assertEqual(blocker["scene"], "res://scenes/world/reed_cluster.tscn")
+                self.assertEqual(blocker_match.group(1), "../../Bushes/ReedCluster1")
+
+        # The resolved target is a real Bush. RoomDoor keeps the mouth closed while its Bush is
+        # solid, then opens when hook-cutting sets is_cut and frees that blocker.
+        door_script = (br.ROOT / "scripts/world/room_door.gd").read_text(encoding="utf-8")
+        bush_script = (br.ROOT / "scripts/world/bush.gd").read_text(encoding="utf-8")
+        self.assertIn("if blocker is Bush:", door_script)
+        self.assertIn("if not blocker.is_cut:", door_script)
+        self.assertIn('if hitbox.kind == &"hook"', bush_script)
+        self.assertIn("is_cut = true", bush_script)
+        self.assertIn("queue_free()", bush_script)
 
     def test_ambiguous_offset_requires_explicit_compiler_id(self):
         extra = "opener thorn_door 17,6 id=other"

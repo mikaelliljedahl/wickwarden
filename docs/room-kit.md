@@ -179,7 +179,7 @@ Cave gate sizes default to 192 x 96. East/west step gates swap width and height;
 
 Room-level small keys with graph `needs=["tether_moth"]` use the permanent-grate check too: the key must be sealed from walking, with a clear straight moth launch across a grate within 420 px from the default spawn, every authored spawn and every graph exit entry. Both wick-core and fragment `after_boss` rewards require their own pickup node’s exact boss flag.
 
-Gated mouth doors bind `blocker_path` to the actual opener node. Use `blocker=<opener id>` to select an offset blocker explicitly; otherwise the matching graph edge id, colocated opener or unique matching kind is selected. The three opener kinds above take only `id` and `size`; their scenes supply interaction modes. A custom persistent id such as `cave6door` is supported.
+Gated mouth doors bind `blocker_path` to the actual opener node, with a relative path that follows the emitted node parents (for example, a `Props` door linked to a `Bushes` cut screen). Use `blocker=<opener id>` to select an offset blocker explicitly; otherwise the matching graph edge id, colocated opener or unique matching kind is selected. The three opener kinds above take only `id` and `size`; their scenes supply interaction modes. A custom persistent id such as `cave6door` is supported.
 
 ### Reel corridors
 
