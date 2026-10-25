@@ -1,0 +1,87 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/bosses/kilnkeeper_arena.tscn" id="2"]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/bosses/kilnkeeper.tscn" id="3"]
+
+[ext_resource type="PackedScene" path="res://scenes/items/flame.tscn" id="4"]
+
+[sub_resource type="Animation" id="Demo"]
+resource_name = "demonstration"
+length = 12.0
+tracks/0/type = "method"
+tracks/0/path = NodePath("Props/FlameOne")
+tracks/0/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{"method": &"launch", "args": [Vector2(1150, 480), Vector2(1, 0)]}]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("Props/FlameTwo")
+tracks/1/keys = {
+"times": PackedFloat32Array(7),
+"transitions": PackedFloat32Array(1),
+"values": [{"method": &"launch", "args": [Vector2(700, 480), Vector2(1, 0)]}]
+}
+
+tracks/2/type = "value"
+tracks/2/path = NodePath("Props/FlameOne:visible")
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2), "transitions": PackedFloat32Array(1, 1),
+"update": 1, "values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Props/FlameTwo:visible")
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 7), "transitions": PackedFloat32Array(1, 1),
+"update": 1, "values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="Library"]
+_data = {&"demonstration": SubResource("Demo")}
+
+[sub_resource type="Gradient" id="InspectionGradient"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="InspectionTexture"]
+gradient = SubResource("InspectionGradient")
+width = 1920
+height = 960
+
+[node name="GalleryB01" type="Node2D"]
+script = ExtResource("1")
+room_id = &"fixture"
+exits = Array[StringName]([&"w"])
+dark = true
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Kilnkeeper" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(1488, 480)
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="Arena" parent="Props" instance=ExtResource("2")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Default" type="Marker2D" parent="Spawns"]
+position = Vector2(192, 480)
+
+[node name="FlameOne" parent="Props" instance=ExtResource("4")]
+position = Vector2(1150, 480)
+visible = false
+
+[node name="FlameTwo" parent="Props" instance=ExtResource("4")]
+position = Vector2(700, 480)
+visible = false
+
+[node name="Demonstration" type="AnimationPlayer" parent="."]
+libraries = {&"": SubResource("Library")}
+autoplay = "demonstration"
+callback_mode_process = 0
+
+[node name="InspectionLight" type="PointLight2D" parent="."]
+position = Vector2(960, 480)
+texture = SubResource("InspectionTexture")
