@@ -8,7 +8,7 @@ Updated 2026-10-25 at 20:37 UTC from actual local `HEAD` `c5f109b9a634f996a76d1a
 
 The current Mirror Shade manifest uses three source keys (`mirror_shade_walk_down_v1`, `mirror_shade_walk_up_v1`, `mirror_shade_walk_side_v3`): three four-pose walk strips produce six unique output strips (three walk and three first-frame idle), shared by the real actor and decoy. The referenced `c0b735` prefix does not resolve locally; the actual current map commit is `c5f109b`. An untracked candidate, `tools/source_art/mirror_shade_clean_walk_candidate_20261025a.png`, has SHA-256 `3baad0dbd0a30f56ac854d6ec8f87fa4fdf7598cd2b6cdac5ee95292fab02e1c` and a raw layout of three directional strips × four poses. It is not in the manifest and has no acceptance/provenance commit; do not count it as shipped art.
 
-**Current open work:** P09 remains a two-path code WIP, waiting for the low-fence B production map. The C1/overworld consumer accepts the existing B source at 104×51 because its waist projection is clear despite the 64 px target; raw B source hash `d463…` is accepted without a binding exception. Do not mark the grate complete until the production hash and actor proof arrive. Mirror raw mapping and the hidden-seam user rectangle remain in progress. A separate Luna walkthrough writer (job `bb7301`) is working on the all-ten guide and README link, started at 20:26 UTC with a 35–40 minute estimate; no completion report is recorded here. Do not infer that either deliverable exists.
+**Current open work:** P09 remains a two-path code WIP, waiting for the low-fence B production map. The C1/overworld consumer accepts the existing B source at 104×51 because its waist projection is clear despite the 64 px target; raw B source hash `d463…` is accepted without a binding exception. Do not mark the grate complete until the production hash and actor proof arrive. Mirror raw mapping and the hidden-seam user rectangle remain in progress. The all-ten source-checked walkthrough and README link landed in `d83944f`; the guide says it is a recommended route, not a recorded full playthrough, so Q3 remains open.
 
 ## World build and functional acceptance
 
@@ -35,7 +35,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The current local `HEAD` is `c5f109b9a634f996a76d1a0b4da67881f5abc2a9`; `origin/main` remains at published `1eebc1e`. Current HEAD and its later art/runtime commits are not globally gated. Preserve the 77 staged foreign paths (fingerprint above) and all dirty/untracked work. The latest all-ten walkthrough and README link are being prepared by another writer (job `bb7301`); this docs update does not modify either deliverable. For the next checkpoint, wait for the relevant writers, choose one exact committed SHA, then run the full gates and source/runtime hash audit at that SHA before any push. Human balance and visual feel, continuous human playthrough (Q3), Q5 review, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
+The code/art base reviewed for this status is `c5f109b9a634f996a76d1a0b4da67881f5abc2a9`; docs-only status and walkthrough commits sit on that base, while `origin/main` remains at published `1eebc1e`. No code/art commit after `1eebc1e` is globally gated. Preserve the 77 staged foreign paths (fingerprint above) and all dirty/untracked work. The walkthrough and README link landed in `d83944f`; this status update does not modify either file. For the next checkpoint, wait for relevant runtime/art writers, choose one exact committed SHA, then run the full gates and source/runtime hash audit at that SHA before any push. Human balance and visual feel, continuous human playthrough (Q3), Q5 review, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
@@ -164,7 +164,7 @@ Not covered: the hook has no hit detection against rocks or walls, so there is n
 
 ## Next steps
 
-1. Let current runtime, art and walkthrough writers finish; preserve unrelated staged and dirty work.
+1. Let current runtime and art writers finish; preserve unrelated staged and dirty work.
 2. Select one exact committed SHA and run the full global gates plus source/runtime hash audit with graphics on Dummy audio. Keep results tied to that SHA; do not push the current unverified HEAD.
 3. Complete Q3 full earned-route playthrough, Q5 visual review, Q6 soak/economy, Q7 weakness coverage, Q8 performance/memory, and Q9/Z release work.
 4. Finish runtime art presentation and human visual approval. Source image production is closed, but the game is not fully art-complete.
