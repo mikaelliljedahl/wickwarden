@@ -54,12 +54,6 @@ size = Vector2(96, 288)
 kind = &"wall"
 
 [node name="Wall4" type="StaticBody2D" parent="Props"]
-position = Vector2(432, 624)
-script = ExtResource("4")
-size = Vector2(96, 96)
-kind = &"wall"
-
-[node name="Wall5" type="StaticBody2D" parent="Props"]
 position = Vector2(1488, 720)
 script = ExtResource("4")
 size = Vector2(288, 96)
