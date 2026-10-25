@@ -65,6 +65,7 @@ func launch(origin: Vector2, dir: Vector2) -> void:
 	_rolling = true
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
 	if visual != null:
+		visual.rotation = _dir.angle()
 		visual.play_anim(&"roll")
 	_stand_left = STAND_TIME
 	global_position = origin + _dir * SPAWN_AHEAD
@@ -123,6 +124,7 @@ func _roll(delta: float) -> void:
 		_rolling = false
 		var visual := get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
 		if visual != null:
+			visual.rotation = 0.0
 			visual.play_anim(&"stand")
 
 

@@ -34,6 +34,13 @@ func _ready() -> void:
 		)
 	var look := SpriteVisual.attach(self, &"reed_raft")
 	look.position = BOARD_OFFSET
+	var painted := look as SpriteVisual
+	if painted != null:
+		# Sort the deck just before its rider. Compensate in the sprite offset so
+		# every painted pixel keeps BOARD_OFFSET; the raft/player transforms stay unchanged.
+		y_sort_enabled = true
+		look.position.y = -1.0
+		painted.offset += BOARD_OFFSET - look.position
 
 
 func _exit_tree() -> void:
