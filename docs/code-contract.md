@@ -440,7 +440,9 @@ entity only and is the one permitted edit in a core file. Step 2 replaces `Visua
 - `Room.register_template(container, node)` adds an enemy/bush template at runtime (tests).
 - Props: `SolidBlock` (`size`, `kind`), `Brazier` (`brazier_id`, lit by `hook`/`flare` hitboxes, signal
   `lit_changed`), `Gate` (`gate_id`, `braziers: Array[NodePath]` relative to the gate), `LockedDoor`
-  (`door_id`, touching with a key spends it), `Bush`, `RoomDoor` (`target_room`, `target_spawn`; put the
+  (`door_id`, `scope`; a matching small key opens it and is spent, unless the cave's retained Lockpick
+  is held; that same-cave Lockpick opens every ordinary key-locked door without spending small keys;
+  there is no Lockpick exception for `ow`), `Bush`, `RoomDoor` (`target_room`, `target_spawn`; put the
   target spawn marker outside the target door's trigger), `PickupBase` placed with `persistent_id` (and
   `item_id` for kind `item`; pedestal = a `SolidBlock` of kind `pedestal`).
 - `CrackedWall` (WP6, `scenes/world/cracked_wall.tscn`) is placed in `Props` with `wall_id` (and a `size`).
@@ -667,11 +669,11 @@ Flags are `GameState` flags and survive room changes and saves (section 16.9). E
 |---|---|---|
 | `picked_<persistent_id>`, `door_<door_id>`, `gate_<gate_id>`, `brazier_<brazier_id>`, `cracked_<wall_id>` | existing | core (section 5) |
 | `mouth_c1` .. `mouth_c10` | the mouth room of cave N is entered for the first time; the warp list (T06) reads them | World |
-| `bigkey_c1` .. `bigkey_c10` | the big key of cave N is collected (kind `big_key`) | F4 |
+| `bigkey_c1` .. `bigkey_c10` | the cave's Lockpick (internal kind `big_key`) is collected; it opens that cave's ordinary `LockedDoor`s and boss door without being spent | F4 |
 | `frag_c1` .. `frag_c9` | the fragment of cave N is collected (kind `fragment`). C10 gives none. | F4 |
 | `boss_<cave room id>_defeated` | the boss of that cave room dies (for example `boss_cave_10_14_defeated`) | M0 and the boss WPs |
 | `mini_<room_id>` | a miniboss dies; it does not respawn | miniboss WPs (monster file section 3) |
-| `door_boss_<cave>` | the BossDoor opens with `bigkey_cN` | P10 |
+| `door_boss_<cave>` | the BossDoor opens with that cave's retained Lockpick (`bigkey_cN`) | P10 |
 | `door_ninth` | the Ninth Door opens with `frag_c1` .. `frag_c9` | P11 |
 | `pot_bag_1`, `pot_bag_2` | a pot bag is collected; `pot_max()` rises by 4 (14, then 18) | F5 |
 | `shop_<id>` | a one-time shop stock item is sold | F9 |
@@ -688,8 +690,11 @@ Flags are `GameState` flags and survive room changes and saves (section 16.9). E
 
 - **Scoped keys** (decision 3). A key's scope is `ow` or a cave `cN`. `keys_in(scope)`, `add_key(n, scope)`, `use_key(scope)`.
   A key spends only in its own scope. `LockedDoor` and `PickupBase` take `scope` (default `ow`); the scene states it,
-  and the graph test checks it against the graph.
-- **Big keys and fragments** are flag-backed: `has_big_key(cave)` reads `bigkey_cN`; `add_fragment(cave)` sets `frag_cN`.
+  and the graph test checks it against the graph. Before its cave's Lockpick is collected, a matching small key
+  opens a cave `LockedDoor` and is spent. Afterward that Lockpick opens every ordinary key-locked door in that cave
+  without spending held small keys. Lockpicks do not open overworld doors or doors in another cave.
+- **Lockpicks (`big_key`) and fragments** are flag-backed: `has_big_key(cave)` reads `bigkey_cN`; this retained
+  cave capability opens its boss door and ordinary `LockedDoor`s in that cave. `add_fragment(cave)` sets `frag_cN`.
 - **Wallet**: `WALLET_CAP = 999` (decision 7). `spend_currency(n) -> bool` spends only when there is enough.
 - **Pitch pot limit**: `pot_max()` = 10 plus 4 per pot bag flag (10, 14, 18; decision 4). `PITCH_POT_MAX` stays as the base.
 - **Sling ammo** (decision 9): `slugs`, `slug_max()` = 30; 12 on the first pickup of the sling; `slug_bundle` +6;

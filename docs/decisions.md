@@ -77,3 +77,7 @@ These decisions are binding. The project owner made them on 2026-10-24.
 ## Owner combat decision (2026-10-25)
 
 46. Briar Mother phase 1 spore bolt telegraph is 0.5 s. The shot cadence of 2.0 s and the 0.4 s firing acceleration per dead eye remain unchanged.
+
+## Owner key decision (2026-10-25, 21:03 UTC)
+
+47. A cave's Lockpick is a passive, retained key for every key-locked door in that cave, including ordinary small-key doors and the boss door. It is never consumed and needs no new control or equipment selection. Before collecting that cave's Lockpick, an ordinary `LockedDoor` still needs one small key of the same scope and consumes it. Once the Lockpick is held, it opens that cave's ordinary key-locked doors without spending held small keys. A cave's Lockpick does not open another cave's doors or overworld doors; overworld doors still require overworld keys. Elemental and barrier puzzles (including thorn, eye, heavy-door, and resonance gates) are unchanged and cannot be opened with a key or Lockpick. This supersedes decision 45 only on mechanics; the player-facing name, art, internal `big_key` / `bigkey_cN` identifiers, flags, scope, and save format stay unchanged.

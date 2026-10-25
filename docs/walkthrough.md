@@ -44,8 +44,8 @@ Use the item menu to equip any tool you have found. Q/I or Y cycles the active i
 
 | If you see… | Do this |
 |---|---|
-| Brass keyhole door | Walk into it with one small key for that cave (or for the overworld, if it is an overworld door). It consumes the key and stays open. |
-| A large cave boss door | Walk into it with that cave’s Lockpick. It opens and keeps the Lockpick. The Lockpick does not open ordinary keyhole doors. |
+| Brass keyhole door | Before you find that cave’s Lockpick, walk into it with one small key of the same scope; the door consumes the key and stays open. After you find the cave’s Lockpick, it opens that cave’s ordinary keyhole doors without spending small keys. Overworld doors still need an overworld key. |
+| A large cave boss door | Walk into it with that cave’s Lockpick. It opens and keeps the Lockpick, which also opens ordinary keyhole doors in that cave. |
 | The Ninth Door at the end of the overworld | Hold all nine fragments from C1–C9, then walk into the door. |
 | A permanent grate with a pickup behind it | Send the Tether Moth through the bars to bring the pickup back. The grate itself never opens. |
 | Thorns | Cinder Wick burns a path through. Its short-lived flame is local; it does not light a whole dark room. |
@@ -58,7 +58,7 @@ Use the item menu to equip any tool you have found. Q/I or Y cycles the active i
 | An anchor ring over a gap | Aim the Reel Line at the ring to pull yourself across. It does not create a bridge across an arbitrary pit. |
 | An eye switch | Shoot it with the Tallow Sling. Hook swings do not activate it, and each switch costs one slug. |
 
-Small keys stay where they are found: the overworld key is separate from C1, and a C4 key opens only C4 locks. A Lockpick from a cave opens only that cave’s boss door and is not spent. For example, the key from C1’s Grated Store opens the ordinary lock on the way to Kiln Row (edge e151); the Lockpick from Ash Closet opens the Kilnkeeper’s boss door (edge e152).
+Small keys stay within their scope: the overworld key is separate from C1, and a C4 key cannot open another cave’s locks. Before you find a cave’s Lockpick, use its small keys on ordinary locked doors; once you have that Lockpick, it opens both ordinary keyhole doors and the boss door in the same cave without being spent. It does not open locks in another cave or the overworld. In C1, collect the key behind the Grated Store grate, then the Lockpick in Ash Closet; because you have the Lockpick before reaching the ordinary door e151, it opens that door and preserves the small key. The same Lockpick opens the Kilnkeeper’s boss door (e152).
 
 The Tallow Sling starts with 12 slugs, holds at most 30, and each slug bundle adds 6. The HUD shows the current count; check it before spending shots on optional switches. The main route has bundles in C2’s Overgrown Walk, C8’s Scale Room, and C10’s Eye Hall; shops S3–S5 also sell bundles.
 
@@ -86,8 +86,8 @@ This order collects each cave’s tool before the next route needs it. C9’s hi
 1. From Cellar Hub (cave_1), go west to Spent Wicks (cave_1_2), then north to Grated Store (cave_1_3). Send the Moth through the permanent grate to fetch the C1 small key. Return south to Spent Wicks and east to Cellar Hub.
 2. Go east into Kiln Hall (cave_1_4). Light both braziers with the Hook; this opens the north passage. Go north to Wax Stair (cave_1_5).
 3. Defeat the Hollow Captain before taking the Cinder Wick from the pedestal. Its raised guard blocks hits from the front; circle behind it or use the Moth to stun it, then hook it. After its shield bash, it is briefly open from the front.
-4. From Wax Stair go east to Ash Closet (cave_1_7) and collect the C1 Lockpick. Return west, then south to Kiln Hall.
-5. Go east from Kiln Hall through the C1 key door into Kiln Row (cave_1_6); this spends the small key from the Grated Store. Go east through the boss door with the Lockpick (e152) to Kilnkeeper’s Floor (cave_1_8).
+4. From Wax Stair go east to Ash Closet (cave_1_7) and collect the C1 Lockpick. It opens C1’s ordinary keyhole doors as well as its boss door, without spending keys. Return west, then south to Kiln Hall.
+5. Go east from Kiln Hall through the C1 key door into Kiln Row (cave_1_6); the Lockpick opens it, so the small key from the Grated Store is kept. Go east through the boss door with the same Lockpick (e152) to Kilnkeeper’s Floor (cave_1_8).
 6. **Kilnkeeper:** hard wax ignores the Hook and ordinary weapons. Aim the Cinder Wick flame at it until the shell melts, then hook it during the molten window. Ward blocks its slag fans. Step clear of the charge and stay outside the close-range wax splash.
 
 **Reward and return:** Take the Fragment of Warmth and wick core. Walk west from the arena through Kiln Row and Kiln Hall to Cellar Hub, then use the cave exit at the south side of the hub to return to Crossroads.
@@ -102,7 +102,7 @@ This order collects each cave’s tool before the next route needs it. C9’s hi
 1. From Rootmouth (cave_2_1) go east to Seed Hall (cave_2_2). Burn the north thorn wall and enter Thorn Nook (cave_2_3); take the C2 key, then return south.
 2. Spend that key on the east door into Fruiting Hall (cave_2_4). Defeat the Thorn Warden before the Sling. The Moth can stun it; the Wick burns its thorn body, and Ward blocks the ring of needles. Continue east to Pale Garden (cave_2_5) and take the Tallow Sling.
 3. Go north to Overgrown Walk (cave_2_6). Take the second C2 key and the slug bundle. Shoot the eye switch on the east side to open Eye Loft (cave_2_7); take the C2 Lockpick, then return west and south to Pale Garden.
-4. Go south from Pale Garden through the second C2 key door to Hanging Antechamber (cave_2_8). Walk east through the boss door with the Lockpick into Briar Mother’s Crown (cave_2_9).
+4. Go south from Pale Garden through the second C2 key door to Hanging Antechamber (cave_2_8); the Lockpick opens it without spending the second small key. Walk east through the boss door with the Lockpick into Briar Mother’s Crown (cave_2_9).
 5. **Briar Mother:** the three eyes can only be hit by Sling shots while lowered; each takes four slugs. Keep Ward facing the spore bolts. Hook, flare, or fire can destroy falling seeds before they burst. Once all three eyes are gone, attack the bloom with the Hook while avoiding its sweeping thorn rows.
 
 **Reward and return:** Take the Fragment of Growth and wick core. Go west to Hanging Antechamber, north to Pale Garden, west to Fruiting Hall, west to Seed Hall, then west to Rootmouth and out through Briar Mouth.
@@ -194,7 +194,7 @@ This order collects each cave’s tool before the next route needs it. C9’s hi
 1. From Tally Hall (cave_8_1) go east to Scale Room (cave_8_2). Collect the slug bundle and shoot the north eye switch. Enter Weighing Loft (cave_8_3), take the first C8 key, and return south.
 2. Spend it on the east door to Ledger Hall (cave_8_4). Defeat the Abacus Brute before taking the Reel Line. Its front rail blocks Hook hits: break the rail with a charged Hook flare or a Pitch Pot, then hook the Brute. Ward does not block its chain whirl. Go east to Coin Press (cave_8_5) and take the Reel Line.
 3. Reel to the north anchor ring from Coin Press to Anchor Gallery (cave_8_6); take the second key. Leap east across the pit to Gilded Walk (cave_8_7) and take the C8 Lockpick. Return west by Boots to Anchor Gallery, reel south to Coin Press, then go south to Strongroom Hall (cave_8_8).
-4. Spend the second key on the east door to Locked Till (cave_8_9); take the third C8 key. Go south to Counting Floor (cave_8_10) and west through the third key door to Auditor’s Gate (cave_8_11). Go west through the boss door to Hoard Floor (cave_8_12).
+4. Use the Lockpick to open the east key door to Locked Till (cave_8_9) without spending the second key; take the third C8 key. Go south to Counting Floor (cave_8_10), then west through the next key door to Auditor’s Gate (cave_8_11), again keeping your small keys because the Lockpick opens it. Go west through the boss door to Hoard Floor (cave_8_12).
 5. **Coinwyrm:** reel off its coin plates while its head is reared. When all plates are gone, hook the bare head before it burrows. Ward blocks the coin volleys; sidestep the tail sweep.
 
 **Reward and return:** Take the Fragment of Trade and wick core. Go east to Auditor’s Gate, east to Counting Floor, north to Locked Till, west to Strongroom Hall, north to Coin Press, west to Ledger Hall, west to Scale Room, and west to Tally Hall; exit to Counting Gate.
@@ -210,7 +210,7 @@ This order collects each cave’s tool before the next route needs it. C9’s hi
 2. Spend it on the east door into Corrow’s Workbench (cave_9_4). Defeat the Wick Automaton before crossing the flooded passage. Its flame jet is blocked by Ward; the Moth stuns it and opens the back vent, or you can hook the vent after a jet. Pick up the two Pitch Pot bundles at the workbench if you need ammunition.
 3. Ride east from the workbench to Flooded Cellar (cave_9_5). Leap north across the pit to Pit Landing (cave_9_6); take the second C9 key. Return south.
 4. Leap north again to Pit Landing, then reel east across the anchor gap to Anchor Shaft (cave_9_7); take the C9 Lockpick. Reel back west, leap south to Flooded Cellar, and use the Mitts to lift the heavy stone on its south exit, then throw it aside to open the passage.
-5. Enter Heavy Door Hall (cave_9_8), then go west through the second C9 key door to Lock Antechamber (cave_9_9). Go south through the boss door with the Lockpick to Lock Floor (cave_9_10).
+5. Enter Heavy Door Hall (cave_9_8), then go west through the second C9 key door to Lock Antechamber (cave_9_9); the Lockpick opens it without spending the second small key. Go south through the boss door with the Lockpick to Lock Floor (cave_9_10).
 6. **Lock Warden:** shoot each lid eye with the Sling to open it, then place a Pitch Pot against the exposed plate. Each broken plate drops a two-pot bundle. Once all four plates are gone, hit the keyhole while it opens. Ward blocks the key volleys; leap over the deadbolt sweep with the Boots.
 
 **Reward and return:** Take Corrow’s Last Wick (the ninth fragment) and a wick core. Go north from Lock Floor to the antechamber, east to Heavy Door Hall, north to Flooded Cellar, raft west through the workbench and Letters Hall, then west to Hidden Stair and the Stump.

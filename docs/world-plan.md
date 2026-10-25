@@ -78,11 +78,11 @@ Every border between two adjacent cells is in exactly one of these states:
 | Type | Meaning | Capability that opens it | Visual cue (no text) | World prop |
 |---|---|---|---|---|
 | `item` | A prop that only one tool clears. The prop says which tool (table in section 2.3). | the tool named in `needs` | the prop itself: thorn hedge, eye on a portcullis, mooring post, heavy stone, pit, anchor ring, resonance stone, grate | new props (section 2.3) |
-| `key` | A locked door. | one small key of the scope (consumed) | brass keyhole door | existing `LockedDoor`, plus a key scope |
+| `key` | A locked door. | one small key of the scope (consumed); for a cave door, that cave's retained Lockpick also opens it without spending a small key. Overworld doors still need an overworld key. | brass keyhole door | existing `LockedDoor`, plus a key scope |
 | `bomb` | A cracked wall or brittle rocks. | `pitch_pot` | cracked stone pattern, dust | existing `CrackedWall` |
 | `cut` | A screen of bushes, reeds, moss or vines. | `hook` (the swing cuts it) | leaf cluster | existing `Bush` |
 | `brazier` | A gate that opens when its braziers are lit. | `hook` (the swing lights them) | unlit embers that pulse | existing `Brazier` and `Gate` |
-| `boss` | A boss door. | the big key of the cave; the mouth of C10 needs the nine lantern fragments | large door with a lantern-shaped lock (sockets for the fragments at C10) | new `BossDoor` |
+| `boss` | A boss door. | the cave's retained Lockpick (internal big-key capability); the mouth of C10 needs the nine lantern fragments | large door with a lantern-shaped lock (sockets for the fragments at C10) | new `BossDoor` |
 | `oneway` | A ledge drop, or a shortcut door that opens from one side. | none; the way back must exist with what the player holds anyway (rule R5) | a ledge edge with a shadow | new `World` support |
 | `hidden` | An opening that is not visible. | the capability that reveals it: `glow_jar` (light shows seams and stairs) or `hook` (a tap on a hollow wall) | a faint seam or scuff that the named capability makes clear | new `HiddenSeam` |
 
@@ -115,10 +115,12 @@ capabilities of earlier unlock rounds (section 5.2). The checker proves it.
 hurt by it.** So the tool matters, and a player who walks in without it still finds a fair first
 half.
 
-**R4. Small keys are scoped.** A key opens doors of its own scope only (`ow`, `c1` .. `c10`). In
-every scope the number of keys equals the number of doors, and the doors are nested (a later door
-is only reachable through an earlier one), or each key is reachable without any door of the scope.
-So no order of spending can strand the player. The checker explores every spending order.
+**R4. Small keys are scoped.** A small key opens doors of its own scope only (`ow`, `c1` .. `c10`).
+A cave's retained Lockpick also opens every key-locked door in that cave, but opens no other cave's
+or overworld door (Owner Decision 47). In every scope the number of keys equals the number of doors,
+and the doors are nested (a later door is only reachable through an earlier one), or each key is
+reachable without any door of the scope. So no order of spending can strand the player. The checker
+explores every spending order using the scoped small-key route.
 
 **R5. One-way edges are never traps.** After a one-way edge the player can walk back with the
 capabilities he must hold anyway to have been at the upper side.
@@ -912,7 +914,10 @@ nodes; some need a capability to take (a key behind a grate needs the moth), and
 boss room needs the boss weakness tools.
 
 A play state is the set of capabilities held and the set of key doors opened. Capabilities never
-disappear. Opened doors stay open. Only small keys are consumed.
+disappear. Opened doors stay open. Only small keys are consumed. The graph keeps its existing
+small-key route model; at runtime, Owner Decision 47 additionally lets a cave's Lockpick open that
+cave's ordinary key doors without spending small keys. This runtime alternative does not change the
+world-graph schema or the graph's scoped-key checks.
 
 ### 5.2 Unlock rounds: the topological order
 
@@ -1096,9 +1101,10 @@ One JSON object. Nodes, edges and pickups are one object per line so that diffs 
 
 Conventions:
 
-- An edge is passable when every capability in `needs` is held. A `key` edge also needs one key of
-  its scope, spent once. A `dir: "a>b"` edge is one-way. `boss` edges name `bigkey:cN`; the mouth of
-  C10 names `frag:c1` .. `frag:c9`.
+- An edge is passable when every capability in `needs` is held. The graph models a `key` edge as
+  needing one key of its scope, spent once; runtime cave Lockpick behavior is the additional
+  alternative in Owner Decision 47. A `dir: "a>b"` edge is one-way. `boss` edges name `bigkey:cN`;
+  the mouth of C10 names `frag:c1` .. `frag:c9`.
 - A pickup with `after_boss` needs the `needs` of the boss in its room. A pickup with `needs`
   (a key behind a grate needs `tether_moth`) needs them as well.
 - `early` marks the one pickup the order check allows before its cave is finished (the alcove key).
