@@ -1,0 +1,22 @@
+room cave_8_2
+terrain Scale Room: twin weighing counters leave clear cross aisles and a north sling lane.
+floor_color 0.21 0.18 0.12
+grid
+#########..#########
+#..................#
+#...###......###...#
+#..................#
+....................
+....................
+#..................#
+#...###......###...#
+#..................#
+####################
+enemy hollow 6,4
+enemy hollow 13,5
+enemy hollow 15,6
+eye_switch 12,2 id=e212
+opener eye_portcullis @960,48 id=e212
+opener locked_door @1872,480 id=e213 scope=c8 size=96,192
+pickup slug_bundle 7,6 id=slug_bundle_cave_8_2
+spawn Default 3,4

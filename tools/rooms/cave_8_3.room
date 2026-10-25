@@ -1,0 +1,20 @@
+room cave_8_3
+terrain Weighing Loft: paired balance plinths flank the key and the open south firing aisle.
+floor_color 0.21 0.18 0.12
+grid
+####################
+#..................#
+#...###......###...#
+#..................#
+#..................#
+#..................#
+#...###......###...#
+#..................#
+#..................#
+#########..#########
+enemy wickling 6,4
+enemy wickling 13,4
+eye_switch 12,7 id=e212
+opener eye_portcullis @960,912 id=e212
+pickup small_key 10,3 id=key_c8_1 scope=c8
+spawn Default 9,7

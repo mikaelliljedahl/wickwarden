@@ -1,0 +1,21 @@
+room cave_8_1
+terrain Tally Hall: paired tally counters frame the resonance vestibule and east aisle.
+floor_color 0.21 0.18 0.12
+grid
+####################
+#..................#
+#...####....####...#
+#..................#
+#...................
+#...................
+#..................#
+#...####....####...#
+#..................#
+####################
+enemy brine_crab 7,4
+enemy brine_crab 14,6
+enemy duskmoth 12,3
+opener resonance_door @336,432 id=e253
+door ow_9_7 FromCave @336,432 blocker=e253
+spawn FromOverworld 3,6
+spawn Default 3,6

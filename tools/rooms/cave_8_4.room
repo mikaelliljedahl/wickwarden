@@ -1,0 +1,17 @@
+room cave_8_4
+terrain Ledger Hall: corner ledger stacks surround a broad rail-breaking and hook fighting floor.
+floor_color 0.21 0.18 0.12
+grid
+####################
+#..................#
+#..##..........##..#
+#..................#
+....................
+....................
+#..................#
+#..##..........##..#
+#..................#
+####################
+opener locked_door @48,480 id=e213 scope=c8 size=96,192
+miniboss abacus_brute 10,4
+spawn Default 3,5
