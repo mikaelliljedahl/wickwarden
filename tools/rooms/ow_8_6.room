@@ -3,16 +3,16 @@ terrain Ravine Bridge: broken stone shoulders at the eastern leap
 floor_color 0.23 0.23 0.21
 grid
 #########..#########
-#..rr.........rr...#
-#..rr.........rr...#
+#..rr.........rr.###
+#..rr.........rr.###
 #................###
 ....................
 ....................
 #................###
-#..rr.........rr...#
-#..rr.........rr...#
+#..rr.........rr.###
+#..rr.........rr.###
 ####################
 enemy watcher_eye 4,3
 enemy watcher_eye 14,6
-pit @1776,480 size=96,192 look=ravine
+pit @1680,480 size=96,192 look=ravine
 spawn Default 9,4

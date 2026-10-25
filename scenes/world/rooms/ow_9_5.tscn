@@ -31,6 +31,18 @@ y_sort_enabled = true
 [node name="Props" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="Wall1" type="StaticBody2D" parent="Props"]
+position = Vector2(480, 720)
+script = ExtResource("4")
+size = Vector2(768, 96)
+kind = &"wall"
+
+[node name="Wall2" type="StaticBody2D" parent="Props"]
+position = Vector2(1440, 720)
+script = ExtResource("4")
+size = Vector2(768, 96)
+kind = &"wall"
+
 [node name="Rock1" type="StaticBody2D" parent="Props"]
 position = Vector2(336, 144)
 script = ExtResource("4")
@@ -62,31 +74,31 @@ size = Vector2(96, 96)
 kind = &"rock"
 
 [node name="Rock6" type="StaticBody2D" parent="Props"]
-position = Vector2(336, 720)
+position = Vector2(336, 624)
 script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"rock"
 
 [node name="Rock7" type="StaticBody2D" parent="Props"]
-position = Vector2(432, 720)
+position = Vector2(432, 624)
 script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"rock"
 
 [node name="Rock8" type="StaticBody2D" parent="Props"]
-position = Vector2(1488, 720)
+position = Vector2(1488, 624)
 script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"rock"
 
 [node name="Rock9" type="StaticBody2D" parent="Props"]
-position = Vector2(1584, 720)
+position = Vector2(1584, 624)
 script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"rock"
 
 [node name="Pit1" parent="Props" instance=ExtResource("5")]
-position = Vector2(960, 816)
+position = Vector2(960, 720)
 size = Vector2(192, 96)
 look = &"ravine"
 

@@ -31,15 +31,15 @@ y_sort_enabled = true
 y_sort_enabled = true
 
 [node name="Wall1" type="StaticBody2D" parent="Props"]
-position = Vector2(1728, 336)
+position = Vector2(1728, 240)
 script = ExtResource("3")
-size = Vector2(192, 96)
+size = Vector2(192, 288)
 kind = &"wall"
 
 [node name="Wall2" type="StaticBody2D" parent="Props"]
-position = Vector2(1728, 624)
+position = Vector2(1728, 720)
 script = ExtResource("3")
-size = Vector2(192, 96)
+size = Vector2(192, 288)
 kind = &"wall"
 
 [node name="Rock1" type="StaticBody2D" parent="Props"]
@@ -91,7 +91,7 @@ size = Vector2(96, 96)
 kind = &"rock"
 
 [node name="Pit1" parent="Props" instance=ExtResource("4")]
-position = Vector2(1776, 480)
+position = Vector2(1680, 480)
 size = Vector2(96, 192)
 look = &"ravine"
 
