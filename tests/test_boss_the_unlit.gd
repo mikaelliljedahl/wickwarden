@@ -15,6 +15,7 @@ func run() -> void:
 		capture_viewport.size = Vector2i(1920, 1080)
 		capture_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 		add_child(capture_viewport)
+	await _room_clone_lifecycle()
 	await _orbit_and_reset()
 	await _full_physical_fight()
 	await _hazards_and_ward()
@@ -345,3 +346,125 @@ func _scheduled_attacks() -> void:
 	await frames(3)
 	check(boss._hazards.is_empty(), "reset forgets all phases hazards")
 	await dispose(room)
+
+
+func _room_clone_lifecycle() -> void:
+	for grid in [Vector2i.ZERO, Vector2i(3, 4)]:
+		reset_state()
+		var packed := load(GALLERY) as PackedScene
+		check(packed != null, "clone gallery loads")
+		var room := packed.instantiate() as Room
+		room.grid = grid
+		if captures:
+			capture_viewport.add_child(room)
+		else:
+			add_child(room)
+		var origin := Vector2(grid) * WorldConst.ROOM_SIZE
+		var death_listeners := Events.player_died.get_connections().size()
+		for visit in range(3):
+			room.enter()
+			await frames(3)
+			var boss = room.get_node("Enemies/TheUnlit")
+			var hearts := 0
+			var lamps := 0
+			for child in boss.get_children():
+				if child.get_script() == boss.HeartGlow:
+					hearts += 1
+					check_eq(
+						child.global_position,
+						origin + Vector2(960, 288),
+						"canonical heart position"
+					)
+					check_eq(child.name, &"HeartGlow", "canonical heart name")
+				if child.has_signal(&"reeled"):
+					lamps += 1
+			check_eq(hearts, 1, "clone has exactly one canonical heart")
+			check_eq(lamps, 1, "clone has exactly one canonical lantern")
+			var targets := 0
+			var active_targets := 0
+			var reel_hurtboxes := 0
+			for target in get_tree().get_nodes_in_group(&"reelable"):
+				if room.is_ancestor_of(target):
+					targets += 1
+					check_eq(
+						target.global_position,
+						origin + Vector2(960, 288),
+						"translated canonical target position"
+					)
+					check_eq(
+						target.reeled.get_connections().size(), 1, "one canonical reel listener"
+					)
+			for hurt in get_tree().get_nodes_in_group(&"hurtboxes"):
+				if room.is_ancestor_of(hurt) and hurt.get_parent().is_in_group(&"reelable"):
+					active_targets += int(hurt.enabled)
+					reel_hurtboxes += 1
+					check_eq(
+						hurt.global_position,
+						origin + Vector2(960, 288),
+						"canonical reel hurtbox position"
+					)
+			check_eq(targets, 1, "one public reel target per visit")
+			check_eq(reel_hurtboxes, 1, "one actual reel hurtbox per visit")
+			check_eq(active_targets, 0, "P1 has no enabled reel hurtbox")
+			# The true reel tip must never hit a ghost at the template origin.
+			var tip_scene := load("res://scenes/items/reel_tip.tscn") as PackedScene
+			check(tip_scene != null, "actual reel tip loads for target probe")
+			var tip = tip_scene.instantiate()
+			room.add_child(tip)
+			var probe_origin := Node2D.new()
+			room.add_child(probe_origin)
+			probe_origin.global_position = Vector2(960, 400)
+			tip.launch(probe_origin, Vector2.UP)
+			var landed: Array[Hurtbox] = []
+			tip.hit_landed.connect(func(hurt: Hurtbox): landed.append(hurt))
+			await seconds(0.3)
+			check(landed.is_empty(), "real tip cannot hit stale enabled origin target")
+			await dispose(tip)
+			await dispose(probe_origin)
+			if captures and visit == 0:
+				var camera := Camera2D.new()
+				capture_viewport.add_child(camera)
+				camera.position = origin + Vector2(960, 540)
+				await _capture(
+					"clone-p1-clean" if grid == Vector2i.ZERO else "clone-translated-clean"
+				)
+				await dispose(camera)
+			room.leave()
+			await frames(3)
+			var remaining := 0
+			for target in get_tree().get_nodes_in_group(&"reelable"):
+				remaining += int(room.is_ancestor_of(target))
+			check_eq(remaining, 0, "leave removes all public reel targets")
+			check_eq(
+				Events.player_died.get_connections().size(),
+				death_listeners,
+				"leave restores death listeners"
+			)
+
+		# Retired clones still traverse the real Room template path.
+		GameState.set_flag(&"boss_cave_10_14_defeated")
+		for visit in range(3):
+			room.enter()
+			await frames(3)
+			var retired = room.get_node("Enemies/TheUnlit")
+			check(retired.is_dead and not retired.visible, "cloned actor retires on saved flag")
+			var retired_helpers := 0
+			for child in retired.get_children():
+				retired_helpers += int(
+					child.get_script() == retired.HeartGlow or child.has_signal(&"reeled")
+				)
+			check_eq(retired_helpers, 0, "retired clone contains no generated helpers")
+			if captures and grid == Vector2i.ZERO and visit == 0:
+				await _capture("clone-retired-clean")
+			for target in get_tree().get_nodes_in_group(&"reelable"):
+				check(
+					not room.is_ancestor_of(target), "retired clone exposes no public reel target"
+				)
+			room.leave()
+			await frames(3)
+			check_eq(
+				Events.player_died.get_connections().size(),
+				death_listeners,
+				"retired leave restores death listeners"
+			)
+		await dispose(room)

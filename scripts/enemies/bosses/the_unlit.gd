@@ -14,6 +14,7 @@ var angles: Array[float] = []
 var gaze: Array[float] = []
 var gaze_tell: Array[float] = []
 var lantern: Node2D
+var _reel_script: GDScript
 var _heart_glow: Node2D
 var exposed_left := 0.0
 var pull_damage := 0
@@ -67,6 +68,20 @@ func _init() -> void:
 	visual_kind = &"unlit_p1_mass"
 
 
+func _enter_tree() -> void:
+	# Room templates duplicate children made by an earlier _ready(). Remove only
+	# this actor's generated helper types before their _ready() can register
+	# cloned reel targets. Retired actors take this path too, before BossBase
+	# skips _boss_ready() on the saved defeat flag.
+	_reel_script = load("res://scripts/world/reelable.gd") as GDScript
+	for child in get_children():
+		if child is HeartGlow or (_reel_script != null and child.get_script() == _reel_script):
+			remove_child(child)
+			child.free()
+	lantern = null
+	_heart_glow = null
+
+
 func _boss_ready() -> void:
 	contact_hitbox.get_child(0).shape.radius = 120.0
 	_heart_glow = HeartGlow.new()
@@ -75,7 +90,7 @@ func _boss_ready() -> void:
 	_heart_glow.visible = false
 	add_child(_heart_glow)
 	_phase_origin = global_position - MASS
-	var script := load("res://scripts/world/reelable.gd") as GDScript
+	var script := _reel_script
 	if script != null:
 		lantern = script.new() as Node2D
 		lantern.name = "NinthLantern"
