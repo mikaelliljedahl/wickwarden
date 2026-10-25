@@ -9,13 +9,19 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-Verified checkpoint snapshot: `baffec96f976940cd585ce38dbc590a39f088a91` (full gates run in detached `/tmp/wickwarden-verify-baffec96`). At that commit, the room inventory is **138 scenes: 88 overworld, 24 pockets and 26 cave rooms** (8 C01, 9 C02, 9 C03) with **137 `.room` sources**. Historical `cave_1` is hand-authored. The snapshot includes C03 lead acceptance (`f12afca`), R5 ward-pocket return spawn correction (`7405e80`, two files), R5 route tests (`baffec96`) and R6 route tests (`dc097c3`), plus the stated raft, Ninth Door, paired-mouth, P06 and paired-boots dependencies. Every required SHA is an ancestor of this tested snapshot.
+Current local snapshot (2026-10-25, committed HEAD `f05c7ea27aec21b7181d3c119dc64ab78ade679c`): **159 scenes = 88 overworld + 25 pockets + 46 cave rooms**, with **158 `.room` sources**. The cave scenes are C01 8, C02 9, C03 9, C04 10 and C05 10; `cave_1` remains hand-authored. Counts use committed files only and exclude active/untracked outputs. The last globally validated and pushed runtime remains `baffec96f976940cd585ce38dbc590a39f088a91` (personal origin/main record `0f66f8f`). All code/art commits after that remain untested as a global snapshot and unpushed.
 
-Detached gate results: `make check` passed **105/105 Godot suites**, gdlint, generated world-data check and **142 Python tests**; `make rooms-check` checked **137/137** sources; `make art-test` passed **20 tests**; global ownership passed (**92 WPs / 53 batches**, 192 graph rooms and 33 pockets, no wave 1–5 ownership overlap). Logs: `/tmp/wick-check-baffec96.log`, `/tmp/wick-rooms-baffec96.log`, `/tmp/wick-art-baffec96.log`, `/tmp/wick-ownership-baffec96.log`. The isolated checkout used its own project import cache and user-data home, and forced `--audio-driver Dummy` for Godot. Its tracked diff remained empty after checks.
+New committed mechanics and presentation: source mapper `02fded4` maps 26 keys; world factory `270c234`; boss-state adapters `ae7944c` and canonical Serpent `0eeeb9f` avoid duplicate colliders and clear the rider. B06 Dirge Choir `844a04f`; B07 Gloam Knight `f39ab1e`, dive recovery `451cf69` and public fall-damage API `81a9af4`; MB4 Pale Squire/Abacus Brute `6ccb3cf`; MB5 encounters `635e489`; B08 Coinwyrm `f05c7ea`. Tidewick art ordering/rider is in `0eeeb9f`. F6 cave-gate aliases `c27a8ec`, cut-screen regrowth `038395b`, and P08 paired reveal `f2b7e41` are committed. F6 support `f386a2b` remains the base for the current NodePath dependency.
 
-Push outcome: validated code snapshot `baffec96f976940cd585ce38dbc590a39f088a91` plus docs gate record `b2f475dfd11d105c06ab989b0fcae36d7ff6a46c` was pushed to personal origin/main at 2026-10-25 18:08:27 UTC. The remote hash was queried and exactly matched `b2f475d`. The code commit is the direct parent of the docs record. The push used the installed GitHub CLI with the personal-account token and a command-local credential helper; repository credential settings were unchanged. This follow-up records the push and will be pushed as a fast-forward child. Later art/adapter work is not part of this snapshot. Missing C04–C10 content remains future work. Art is incomplete: new cave/miniboss/boss placeholders, terrain and pickup/shop mappings remain. C02's independent functional GO (`6bb45ad`) records controls and art limits; C03 acceptance is included in the passing suite. Human balance/feel approval is not claimed. Preserve the known P2 invisible collider tails and capture cleanup warnings until a worker verifies a fix.
+C04 room batches are delivered in `dd1f0cd`, `616a17d`, `02e788c`, `e4c1090` and `16aa8c9`; C05 batches in `b41c01f`, `01ee1a4`, `f0dbc2f`, `9cc2e45` and `d4c07f7`. Encounter/reward art was published in `824c596`. C04 and C05 lead acceptance tests are still active. Eleven generated C04 regrowth outputs are held until the F6 door-relative `NodePath` fix covers two older overworld doors; do not call this path or the overall branch green.
 
-Checkpoint push procedure: push only this documentation commit, whose parent is the tested code SHA above, and verify exact origin/main equality. Do not push a later local implementation HEAD. Active art mapping and boss/world adapter work may continue outside the tested snapshot.
+Active queue and next priorities: land the F6 relative-path fix and C04/C05 lead tests, then choose a coherent SHA for the next detached stable gate. C06.a/b/c and C07.a/b/c are assigned in parallel, with no corresponding rooms in the committed tree yet. B08 Coinwyrm, B09 Lock Warden, B10 The Unlit and MB5 implementation/review remain active. Art batch C45 (next 12 keys) is active; boss/world adapters inspect keys while the mapper audits and integrates existing sources. Some render cleanup has landed, but bodies/placeholders and terrain, pickup/shop visuals remain incomplete. Do not claim all art done.
+
+Design notes to preserve during review: B10's implementation keeps the literal 330 orbit around `(960, 288)`, including the upper arc leaving the room. This is an implementation note only; no normative number changed and no owner decision is implied. B07 keeps the literal dive toward the player and hit-table recovery. Boots remain a mobility/progression requirement; strict combat necessity is not proven. Do not convert that into a new owner decision.
+
+The previous C02 functional GO (`6bb45ad`) carries its stated controls and art limits. The passing `baffec96` gate does not cover these later commits. No tests, global gates, or push were run for this status refresh. Graphics checks remain silent with `--audio-driver Dummy`; preserve all 77 foreign staged paths and unrelated art/provenance/import/UID changes. Commit only these two living documents.
+
+The previous verified personal-origin push is `0f66f8f9b902a01a8e58fd6a77facd3ebab899c1`, with tested runtime parent `baffec96f976940cd585ce38dbc590a39f088a91`. Current HEAD is later and has not had a global gate or push. Do not treat the historical verification results below as coverage of current code. After C04/C05 lead tests and the F6 regrowth-path fix land, choose a coherent committed snapshot for detached validation. Preserve 77 foreign staged paths; this operator owns only state and handoff.
 
 ### All-ten item-menu icon integration
 
@@ -34,12 +40,12 @@ Checkpoint push procedure: push only this documentation commit, whose parent is 
 | 2 Brackwater R1 | Room batches landed | Assembled area/route acceptance landed in `1d91efb` and `4e635c0`. |
 | 2 Thornwood R2 | R2.a–d room batches landed | Regional acceptance landed in `5c6462f`. |
 | 2 Tallowfen/Mirrormere R4 | R4.a–f room batches landed | Regional acceptance landed in `82ae92b`. |
-| 2 Gravelight R5 | Room batches and lead acceptance passed at the tested snapshot | Lead tests `baffec96`; ward-pocket return spawn `7405e80`. |
-| 2 Cinderflats R3, Hushmarch R6 | Room batches and lead acceptance passed at the tested snapshot | Cinderflats `9d19ed2`; Hushmarch lead tests `dc097c3`. |
-| 3 caves C01–C10, ending E1 | C01–C03 room content and lead acceptance landed | C03 lead tests `f12afca`; C02 functional GO `6bb45ad`; C04–C10 and E1 remain. |
+| 2 Gravelight R5 | Room batches and lead acceptance passed at tested snapshot | `baffec96`; spawn fix `7405e80`. Newer tree unverified. |
+| 2 Cinderflats R3, Hushmarch R6 | Room batches and lead acceptance passed at tested snapshot | `9d19ed2`, `dc097c3`; newer tree unverified. |
+| 3 caves C01–C10, ending E1 | C01–C03 accepted; C04/C05 room batches delivered | C04/C05 lead acceptance active; 11 regrowth outputs await F6 relative-NodePath fix; C06/C07 batches assigned; C08–C10 and E1 remain. |
 | 4 QA, 5 release | Not delivered | Full wave 2 is not complete. |
 
-Tested committed inventory at `baffec96`: **138 scenes (88 overworld, 24 pockets, 26 cave rooms)** and **137 `.room` sources**. Historical `cave_1` is hand-authored.
+Current committed inventory at `f05c7ea`: **159 scenes (88 overworld, 25 pockets, 46 cave rooms)** and **158 `.room` sources**. Historical `cave_1` is hand-authored. This is an inventory, not a validation claim.
 
 ### Resolved at this checkpoint
 
@@ -54,20 +60,20 @@ Workers captured and opened their room/runtime images under `/tmp`. Integration 
 
 ### Remaining work and owner decisions
 
-1. Finish remaining wave-2 regions/batches, region area/route tests, minibosses and bosses, after the committed C01 pilot, alongside later wave 3. Preserve hidden entrances and tool requirements; do not make every cave entrance obvious.
+1. Finish C04/C05 lead acceptance and repair the F6 door-relative `NodePath` for the two older overworld doors before releasing the held eleven regrowth outputs. Preserve hidden entrances and tool requirements; do not make every cave entrance obvious.
 2. Free-steering raft and Tidewick real-raft behavior landed (`3466f30`, `72899cd`, `5e78e1f`). Human playthrough/feel approval remains open.
 3. Binding conflict: `ow_1_5#cache` is separate in graph/runtime but described in place in world-plan table 7.1.1. Owner decision required before normative edits. Exit corridor depth wording versus compiler `EXIT_DEPTH=3` also remains open.
 4. Sling damage is settled by decision 43: **1**, despite stale interface tables saying 2; do not reopen the settled number. Watcher-eye stun length and mirror-shade decoy remain owner questions.
-5. Presentation gaps remain: bridge/boardwalk art, bush-cluster cut-screen look, stone steps/cracked-wall nook and standing lamp. Art sheet quality/culling, manifest integration and in-play approval are pending.
+5. C06/C07 room batches are assigned in parallel. B09/B10 and MB5 review remain active. Art batch C45 (12 keys) is active; body placeholders, terrain and pickup/shop presentation remain. Some renderer cleanup fixes landed, but this is not complete art integration.
 6. Untracked UID files and the untracked room-batch brief predate this checkpoint or import; they are not silently committed by integration.
 
 ### Art checkpoint
 
-Source production is closed at final FX `d2fe1a5` and provenance checkpoint `2fa8c69`. The current art mapper first audits existing source sheets, then runtime mapping integration is released; boss/world adapters inspect keys. Runtime mappings and visual acceptance are incomplete. New-content placeholders remain; terrain, creatures, pickups and shop visuals need scoped inventory and mapping work. Inherited staged source deletions/replacements and shared provenance dirt remain protected.
+Source production is closed at final FX `d2fe1a5` and provenance checkpoint `2fa8c69`. Mapper `02fded4` integrates 26 keys; the next C45 batch of 12 keys is active. Boss/world adapters inspect keys. C04/C05 encounter/reward art is in `824c596`; body placeholders, terrain and pickup/shop visuals remain. Some renderer cleanup fixes landed. Visual mapping and acceptance remain incomplete. Inherited staged source deletions/replacements and shared provenance dirt remain protected.
 
 ### Next checkpoint procedure
 
-The isolated gate is valid only for `baffec96`. Any newer runtime commit needs a new exact-snapshot gate before a later push. Commit only state/handoff with explicit paths, use the personal-account push command below without printing credentials, verify local HEAD against origin, then record the push outcome in a follow-up docs commit and push it. Every push's handoff names the actual pre-push checkpoint, never an impossible self-reference.
+The isolated gate is valid only for `baffec96`. HEAD `f05c7ea` is unverified. The next stable gate should follow C04/C05 lead acceptance and the F6 regrowth relative-path fix. Commit only state/handoff with explicit paths, use the personal-account push command below without printing credentials, verify local HEAD against origin, then record the push outcome in a follow-up docs commit and push it. Every push's handoff names the actual pre-push checkpoint, never an impossible self-reference.
 
 ---
 
@@ -134,7 +140,7 @@ Other checkers (not in `make check`):
 
 The lead (you) delegates and does as little as possible. Each WP is done by one agent. The lead delegates verification to an integration worker.
 
-**Model rule (owner takeover, 2026-10-25):** all coding is delegated through ATF to Codex **GPT-6.1 Sol at low effort**. The root lead only orchestrates; workers execute verification and edits. This replaces the earlier Haiku/Sonnet workflow. Model labels in the binding WP plan remain historical assignments; do not edit normative documents to match this workflow instruction.
+**Model rule (owner update, 2026-10-25):** use Codex **Luna xhigh** for mechanical tasks to save budget. The root lead orchestrates; workers execute implementation and checks. Model labels in the binding WP plan remain historical assignments; do not edit normative documents to match this workflow instruction.
 
 **Per-WP flow:**
 
@@ -189,7 +195,7 @@ Output: `OK P01: n file(s) inside Owns` or `STRAY <path>` with exit 1. Other mod
 
 ## 4. How to start agents
 
-Use AgentTeamForge with the Codex backend, **GPT-6.1 Sol**, **low effort**, and the repo working directory. Read the available ATF tool schema for exact model identifiers and fields. Do not start Claude/Haiku jobs: that quota is exhausted. Parallel jobs need disjoint owned paths. The root lead coordinates; delegated workers run shell commands and make changes.
+Use AgentTeamForge with the Codex backend and the repo working directory. For mechanical tasks, use **Luna xhigh** per the owner. Read the current ATF tool schema for exact model identifiers and fields. Parallel jobs need disjoint owned paths. The root lead coordinates; delegated workers run shell commands and make changes.
 
 Agents need self-contained briefs, including the current shared-tree and push restrictions.
 
@@ -310,7 +316,7 @@ Staged files: check `git diff --cached --stat` before any commit. Commit with ex
 2. **Read the binding rules.** `decisions.md`, `code-contract.md` section 1 and section 16, `world-work-packages.md` sections 3, 4, 5 and 13. Skim `world-plan.md` and `monsters-bosses-tools.md` only where a WP names them.
 3. **Delegate the gate check.** Have the integration worker run `make check` and `python3 tools/check_ownership.py --global`. Both must be green. If not, the first WP is a fix, not new content.
 4. **Continue from the checkpoint.** Read current work and remaining batches above. Foundation and wave 1 are delivered; choose remaining wave 2 work with satisfied dependencies and disjoint ownership. Source production is closed; runtime art integration continues separately.
-5. **Start ATF workers.** Use Codex GPT-6.1 Sol low for coding, with the brief of section 4. Parallel only with disjoint files. The root lead only orchestrates; delegate shell checks and document work too.
+5. **Start ATF workers.** Use Codex Luna xhigh for mechanical work, with the brief of section 4. Parallel only with disjoint files. The root lead only orchestrates; delegate shell checks and document work too.
 6. **Delegate verification of each result.** `git show --stat <hash>`, `python3 tools/check_ownership.py <WP>` with the stdin list, `make check` on HEAD. Fix or send back. Update `docs/state.md` when a WP lands.
 7. **Art, when the wave needs it.** Pick the next batch from `docs/art-inventory.md` section 4 whose prompts exist (or write them with the README rules). Run the Codex recipe (section 5). Verify SHA-256, log, provenance, commit only art paths. Stop all jobs after the wave.
 8. **Push and update.** The integration worker waits for the lead’s instruction while this shared tree is active. Under the continuous push authorization: `make check` green, push with the command of section 7, update the status section of this file with the date and new HEAD, commit that, and report to the owner in Swedish, short.
