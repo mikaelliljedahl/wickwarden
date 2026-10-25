@@ -1,0 +1,84 @@
+extends Node2D
+## Held tool cues only. Reads the registered presentation definition, never gameplay state.
+## The item retains control of visibility and lifetime. No body, icon, shadow or collision.
+
+const SEGMENTS := 48
+const BANDS := 8
+
+var _shape: String = "arc"
+var _radius: float = 28.0
+var _colour: Color = Color.WHITE
+var _facing: Vector2 = Vector2.DOWN
+var _elapsed: float = 0.0
+
+
+static func attach(parent: Node, kind: StringName, facing: Vector2) -> Node2D:
+	var script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	if script == null:
+		return null
+	var visual := script.new() as Node2D
+	var definition := Placeholder.definition_of(kind)
+	visual.name = Placeholder.VISUAL_NAME
+	visual.set(&"_shape", String(definition.get("shape", "arc")))
+	visual.set(&"_radius", float(definition.get("radius", 28.0)))
+	visual.set(&"_colour", definition.get("color", Color.WHITE))
+	visual.call(&"set_facing", facing)
+	var old := parent.get_node_or_null(Placeholder.VISUAL_NAME)
+	if old != null:
+		parent.remove_child(old)
+		old.free()
+	parent.add_child(visual)
+	return visual
+
+
+func _ready() -> void:
+	var blend := CanvasItemMaterial.new()
+	blend.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	material = blend
+
+
+func set_facing(direction: Vector2) -> void:
+	if direction != Vector2.ZERO:
+		_facing = direction.normalized()
+	queue_redraw()
+
+
+func _process(delta: float) -> void:
+	if not visible:
+		return
+	_elapsed += delta
+	queue_redraw()
+
+
+func _draw() -> void:
+	# Nested bands feather both radial edges; vertex alpha feathers the arc ends.
+	var span := deg_to_rad(110.0) if _shape == "arc" else TAU
+	var start := _facing.angle() - span * 0.5
+	var breath := 0.9 + 0.1 * sin(_elapsed * 5.0)
+	for band in range(BANDS):
+		var t := float(band) / float(BANDS)
+		var inner := _radius * lerpf(0.62, 0.79, t)
+		var outer := _radius * lerpf(1.0, 0.83, t)
+		for segment in range(SEGMENTS):
+			var u := float(segment) / SEGMENTS
+			var v := float(segment + 1) / SEGMENTS
+			var a := start + span * u
+			var b := start + span * v
+			var edge_a := sin(PI * u) if _shape == "arc" else 1.0
+			var edge_b := sin(PI * v) if _shape == "arc" else 1.0
+			var alpha := _colour.a * 0.055 * breath
+			var ca := Color(_colour, alpha * edge_a)
+			var cb := Color(_colour, alpha * edge_b)
+			draw_polygon(
+				PackedVector2Array(
+					[_point(a, outer), _point(b, outer), _point(b, inner), _point(a, inner)]
+				),
+				PackedColorArray([ca, cb, cb, ca])
+			)
+
+
+func _point(angle: float, reach: float) -> Vector2:
+	var direction := Vector2.from_angle(angle)
+	if _shape == "diamond":
+		direction /= absf(direction.x) + absf(direction.y)
+	return direction * reach

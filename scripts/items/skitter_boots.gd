@@ -26,7 +26,9 @@ func _ready() -> void:
 		Placeholder.register_kind(
 			&"skitter_boots", {"shape": "ring", "color": Color(0.7, 0.9, 1.0, 0.6), "radius": 24.0}
 		)
-	SpriteVisual.attach(self, &"skitter_boots")
+	var cue_script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	if cue_script != null:
+		cue_script.call(&"attach", self, &"skitter_boots", facing)
 
 
 ## Refuses while another boots node is in the tree (a leap or its cooldown), while the player is in a motion

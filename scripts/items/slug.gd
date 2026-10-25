@@ -36,7 +36,7 @@ func _ready() -> void:
 	add_to_group(&"sling_slugs")
 	add_circle(RADIUS)
 	_register_kinds()
-	Placeholder.attach(self, &"slug", RADIUS)
+	SpriteVisual.attach(self, &"slug", RADIUS)
 	hit_landed.connect(_on_hit_landed)
 	if fly_dir != Vector2.ZERO:
 		launch(fly_dir)
@@ -45,6 +45,9 @@ func _ready() -> void:
 ## Starts the flight along `dir` (cardinal in play; zero means right).
 func launch(dir: Vector2) -> void:
 	_dir = dir.normalized() if dir != Vector2.ZERO else Vector2.RIGHT
+	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
+	if visual != null:
+		visual.rotation = _dir.angle()
 	knockback_direction = _dir
 	_travelled = 0.0
 	_spent = false

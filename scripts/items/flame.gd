@@ -51,7 +51,7 @@ func _ready() -> void:
 	add_to_group(&"cinder_flames")
 	add_circle(RADIUS)
 	_register_kinds()
-	Placeholder.attach(self, &"flame", RADIUS)
+	SpriteVisual.attach(self, &"flame", RADIUS)
 	# A placed flame launches on the first physics frame: the physics space must hold the bodies around it.
 	_placed_pending = place_dir != Vector2.ZERO
 
@@ -63,6 +63,9 @@ func launch(origin: Vector2, dir: Vector2) -> void:
 	_reach = _reach_from(origin, _dir)
 	_distance = SPAWN_AHEAD
 	_rolling = true
+	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
+	if visual != null:
+		visual.play_anim(&"roll")
 	_stand_left = STAND_TIME
 	global_position = origin + _dir * SPAWN_AHEAD
 	_tick_left = TICK_INTERVAL
@@ -118,10 +121,17 @@ func _roll(delta: float) -> void:
 	global_position = _origin + _dir * _distance
 	if _distance >= _reach:
 		_rolling = false
+		var visual := get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
+		if visual != null:
+			visual.play_anim(&"stand")
 
 
 func _stand(delta: float) -> void:
 	_stand_left -= delta
+	if _stand_left < FADE_TIME and _stand_left + delta >= FADE_TIME:
+		var painted := get_node_or_null(Placeholder.VISUAL_NAME) as SpriteVisual
+		if painted != null:
+			painted.play_anim(&"fade")
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as CanvasItem
 	if visual != null and _stand_left < FADE_TIME:
 		visual.modulate.a = clampf(_stand_left / FADE_TIME, 0.0, 1.0)

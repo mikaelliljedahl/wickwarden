@@ -52,7 +52,7 @@ func _ready() -> void:
 	add_to_group(&"reel_tips")
 	add_circle(RADIUS)
 	_register_kinds()
-	Placeholder.attach(self, &"reel_tip", RADIUS)
+	SpriteVisual.attach(self, &"reel_tip", RADIUS)
 	hit_landed.connect(_on_hit_landed)
 	_placed_pending = place_dir != Vector2.ZERO
 
@@ -107,6 +107,10 @@ func _begin(origin_node: Node2D, origin_pos: Vector2, dir: Vector2) -> void:
 	_origin_node = origin_node
 	_origin_pos = origin_pos
 	_dir = dir.normalized() if dir != Vector2.ZERO else Vector2.RIGHT
+	# The source hook points northeast, with its rope trailing southwest.
+	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
+	if visual != null:
+		visual.rotation = _dir.angle() + PI * 0.25
 	_travelled = 0.0
 	_state = State.OUT
 	global_position = origin_pos

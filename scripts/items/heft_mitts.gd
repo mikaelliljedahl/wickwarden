@@ -43,7 +43,9 @@ func _ready() -> void:
 		Placeholder.register_kind(
 			&"heft_mitts", {"shape": "arc", "color": Color(0.7, 0.55, 0.3, 0.7), "radius": 28.0}
 		)
-	SpriteVisual.attach(self, &"heft_mitts")
+	var cue_script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	if cue_script != null:
+		cue_script.call(&"attach", self, &"heft_mitts", facing)
 	_grab = Hitbox.new()
 	_grab.name = "GrabHitbox"
 	_grab.kind = &"grab"

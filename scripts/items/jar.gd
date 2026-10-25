@@ -38,7 +38,11 @@ var _revealed: Dictionary = {}
 
 func _ready() -> void:
 	register_look()
-	SpriteVisual.attach(self, &"glow_jar", JAR_RADIUS)
+	if not Placeholder.has_kind(&"jar_thrown"):
+		Placeholder.register_kind(&"jar_thrown", Placeholder.definition_of(&"glow_jar"), true)
+	if not Placeholder.has_kind(&"jar_lit"):
+		Placeholder.register_kind(&"jar_lit", Placeholder.definition_of(&"glow_jar"), true)
+	SpriteVisual.attach(self, &"jar_thrown")
 	_light = PointLight2D.new()
 	_light.name = "Glow"
 	_light.texture = LightTexture.make()
@@ -108,9 +112,8 @@ func _land() -> void:
 	_flying = false
 	_lit = true
 	_glow_elapsed = 0.0
-	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
-	if visual != null:
-		visual.position = Vector2.ZERO
+	var visual := SpriteVisual.attach(self, &"jar_lit")
+	visual.position = Vector2.ZERO
 	add_to_group(&"glow_light")
 	_light.enabled = true
 	_light.energy = glow_energy()

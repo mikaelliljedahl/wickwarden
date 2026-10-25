@@ -32,7 +32,9 @@ func _init() -> void:
 
 func _ready() -> void:
 	_register_kind()
-	SpriteVisual.attach(self, &"lantern_chime")
+	var cue_script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	if cue_script != null:
+		cue_script.call(&"attach", self, &"lantern_chime", facing)
 
 
 func activate() -> bool:

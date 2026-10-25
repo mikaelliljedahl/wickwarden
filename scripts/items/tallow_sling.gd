@@ -23,7 +23,9 @@ func _ready() -> void:
 		Placeholder.register_kind(
 			&"tallow_sling", {"shape": "arc", "color": Color(0.85, 0.65, 0.35, 0.7), "radius": 28.0}
 		)
-	SpriteVisual.attach(self, &"tallow_sling")
+	var cue_script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	if cue_script != null:
+		cue_script.call(&"attach", self, &"tallow_sling", facing)
 
 
 ## Refuses while a slug is on screen or with no slugs left. The limit is checked first, and the slug

@@ -115,6 +115,11 @@ func _make_shape_node() -> CollisionShape2D:
 
 ## A capsule stands upright by default; turn it so its long axis follows the flight direction.
 func _orient_shapes() -> void:
+	# The painted beam points down; only its look turns, never the projectile root.
+	if visual_kind == &"beam_bolt":
+		var visual := get_node_or_null(Placeholder.VISUAL_NAME) as Node2D
+		if visual != null:
+			visual.rotation = direction.angle() - PI * 0.5
 	if not shape_capsule:
 		return
 	for node in _shape_nodes:

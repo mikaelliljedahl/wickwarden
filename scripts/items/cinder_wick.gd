@@ -21,7 +21,9 @@ func _ready() -> void:
 		Placeholder.register_kind(
 			&"cinder_wick", {"shape": "arc", "color": Color(1.0, 0.6, 0.25, 0.7), "radius": 28.0}
 		)
-	SpriteVisual.attach(self, &"cinder_wick")
+	var cue_script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	if cue_script != null:
+		cue_script.call(&"attach", self, &"cinder_wick", facing)
 
 
 ## Refuses while a flame of this item is alive (this node counts as the first). Nothing is spent.
