@@ -101,7 +101,7 @@ such). A hollow must stand on a tile centre; the compiler checks it whatever the
 | `opener cracked_wall <pos> id=<id>` | `cracked_wall.tscn` (96 x 96), `wall_id` = id |
 | `opener locked_door <pos> id=<id> [scope=<s>] [size=<w>,<h>]` | a `LockedDoor` (192 x 96 by default), `door_id` = id, scope = the room's scope unless given |
 | `opener thorn_hedge <pos> id=<id> [size=<w>,<h>]` | `thorn_hedge.tscn` (192 x 96 by default), `burn_id` = id; the flag is `burned_<id>`. It must stand in a graph exit corridor and rotates to fit an east or west gap. |
-| `opener cut_screen <pos> look=<name>` | a cuttable Bush scene; `name` is `reed_cluster`, `rush_wall` or `moss_wall`. Each line is one screen tile; place one per tile to cover a two-tile exit gap. Bush screens regrow on room entry and take no id. |
+| `opener cut_screen <pos> look=<name>` | a cuttable Bush scene; `name` is `reed_cluster`, `rush_wall`, `moss_wall` or `dry_vine_screen`. Each line is one screen tile; place one per tile to cover a two-tile exit gap. Bush screens regrow on room entry and take no id. |
 | `hidden_stairs <target room> <spawn> <pos> id=<id>` | `hidden_stairs.tscn` (192 x 96); the reveal flag is `revealed_<id>`, and the revealed door targets the given room and spawn |
 | `door <target room> <spawn> <pos> [blocker=<opener id>]` | a `RoomDoor` trigger (96 x 96) that warps to `target room` at marker `spawn` |
 | `spawn <name> <pos>` | a `Marker2D` in `Spawns`. `Default` is the spawn of the room. |
@@ -197,3 +197,5 @@ Audit of remaining R3.b/c/d, R5.d and R6.a/b/c gate props: heavy stones, anchor-
 `opener cut_screen <pos> look=moss_wall` instances the existing cuttable `moss_wall.tscn` Bush variant (e164). As with reed screens, author one screen per tile to seal a two-tile corridor; cutting opens the tile and the screen regrows on room entry.
 
 Graph raft props `flooded passage` (including e167/e168) and `mooring and water` use the same mooring-target and corridor checks. A flooded exit needs its authored paired-lane mooring and water that denies walking through the exit; its landing must remain clear. Only an adjacent graph step edge with one of these two props receives the raft corridor exception. Unrelated water in an ordinary corridor does not receive that exception.
+
+The `dry_vine_screen` look uses the existing `Bush` scene and hook-cut behavior (e182). Match each screen look to the graph cut prop at that exit; the compiler rejects a mismatched look for graph props it recognizes.

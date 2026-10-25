@@ -60,7 +60,10 @@ CUT_SCREEN_SCENES = {
     "reed_cluster": "res://scenes/world/reed_cluster.tscn",
     "rush_wall": "res://scenes/world/rush_wall.tscn",
     "moss_wall": "res://scenes/world/moss_wall.tscn",
+    "dry_vine_screen": "res://scenes/world/dry_vine_screen.tscn",
 }
+CUT_SCREEN_PROPS = {"reed cluster": "reed_cluster", "rush wall": "rush_wall",
+                    "moss wall": "moss_wall", "dry vine screen": "dry_vine_screen"}
 RAFT_PROPS = ("mooring and water", "flooded passage")
 HIDDEN_STAIRS_SCENE = "res://scenes/world/hidden_stairs.tscn"
 ITEM_PICKUP_SCENE = "res://scenes/pickups/item_pickup.tscn"
@@ -1033,8 +1036,21 @@ def dispatch_opener(ent: Entity, key: tuple, src: Source, plan: Plan, world: Wor
             return False
         look = ent.opts.get("look", "")
         if look not in CUT_SCREEN_SCENES:
-            errors.append(f"{where_}: opener cut_screen needs look=reed_cluster, rush_wall or moss_wall")
+            errors.append(f"{where_}: opener cut_screen needs look=reed_cluster, rush_wall, moss_wall or dry_vine_screen")
             return False
+        side = corridor_side(ent.tile, world.room(src.room_id)["exits"])
+        edge = next((e for e in world.edges if side is not None
+                     and e.get("prop") in CUT_SCREEN_PROPS
+                     and e["link"] == "step"
+                     and src.room_id in (e["a"], e["b"])
+                     and edge_side(world, src.room_id, e["b"] if e["a"] == src.room_id else e["a"]) == side), None)
+        if edge is not None:
+            if edge.get("gate") != "cut" or edge.get("needs") != ["hook"]:
+                errors.append(f"{where_}: cut_screen graph requirements must be cut by hook")
+                return False
+            if CUT_SCREEN_PROPS[edge["prop"]] != look:
+                errors.append(f"{where_}: cut_screen look must match graph prop {edge['prop']}")
+                return False
         size = OPENER_SIZE[kind]
         tiles = tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
         plan.openers.append((ent, tiles))
@@ -1358,10 +1374,29 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
             reverse = reel_reach(plan, flood(gap, plan.static | closed), closed)
             if spawn_tile not in reverse:
                 errors.append(f"{where(path, grid_line)}: reel exit {side} needs a return anchor pull")
+    cut_sides = set()
+    for edge in world.edges:
+        if (edge.get("gate") != "cut" or edge.get("prop") not in CUT_SCREEN_PROPS
+                or rec["id"] not in (edge["a"], edge["b"])):
+            continue
+        other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+        side = edge_side(world, rec["id"], other)
+        if side is None:
+            continue
+        screens = [i for i, (ent, _) in enumerate(plan.openers)
+                   if ent.args == ["cut_screen"] and ent.tile in exit_corridor(side)]
+        if not screens:
+            errors.append(f"{where(path, grid_line)}: cut exit {side} needs a screen in its corridor")
+            continue
+        cut_sides.add(side)
+        if any(t in reach for t in GAP_TILES[side]):
+            errors.append(f"{where(path, grid_line)}: cut exit {side} is walkable while its screen is intact")
+        if not any(t in closed_flood(plan, spawn_tile, index) for t in GAP_TILES[side] for index in screens):
+            errors.append(f"{where(path, grid_line)}: cut exit {side} stays blocked after a screen is cut")
     open_sides = []
     for side in rec["exits"]:
         corridor = exit_corridor(side)
-        if side in raft_sides or side in pit_sides or side in reel_sides:
+        if side in raft_sides or side in pit_sides or side in reel_sides or side in cut_sides:
             continue
         if any(tile in plan.static for tile in corridor):
             blocked = next(tile for tile in corridor if tile in plan.static)

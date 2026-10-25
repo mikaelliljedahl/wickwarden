@@ -378,7 +378,7 @@ class ScriptedOpeners(unittest.TestCase):
             world,
             "ow_1_2.room",
         )
-        self.assertTrue(any("opener cut_screen needs look=reed_cluster, rush_wall or moss_wall" in e for e in errors), errors)
+        self.assertTrue(any("opener cut_screen needs look=reed_cluster, rush_wall, moss_wall or dry_vine_screen" in e for e in errors), errors)
 
     def hidden_stairs_world(self) -> br.World:
         return world_of(
@@ -1098,6 +1098,59 @@ class CisternCompilerGaps(unittest.TestCase):
         scene = (br.ROOT / 'scenes/world/moss_wall.tscn').read_text()
         self.assertIn('scripts/world/bush.gd', scene)
         self.assertIn('variant = &"moss_wall"', scene)
+
+
+class DryVineScreen(unittest.TestCase):
+    def test_actual_e182_screen_uses_hook_cuttable_runtime_scene_and_keeps_approach(self):
+        edge = dict(next(e for e in real_world().edges if e["id"] == "e182"))
+        graph = real_world()
+        for host, other, side, row in [(edge["a"], edge["b"], "n", 1),
+                                       (edge["b"], edge["a"], "s", 8)]:
+            world = world_of([room_record(host, [side], grid=tuple(graph.room(host)["grid"])),
+                              room_record(other, [], grid=tuple(graph.room(other)["grid"]))], edges=[edge])
+            default = "@1632,528" if host == edge["a"] else "@960,720"
+            source = room_text(host, [side],
+                               f"spawn Default {default}\n"
+                               f"opener cut_screen 9,{row} look=dry_vine_screen\n"
+                               f"opener cut_screen 10,{row} look=dry_vine_screen")
+            text, errors = compile_text(source, world, host + ".room")
+            self.assertEqual(errors, [])
+            self.assertIn('res://scenes/world/dry_vine_screen.tscn', text)
+            self.assertIn('[node name="DryVineScreen1"', text)
+            self.assertEqual(text.count('instance=ExtResource('), 2)
+            with tempfile.TemporaryDirectory() as tmp:
+                path = Path(tmp) / (host + ".room")
+                path.write_text(source)
+                errors = []
+                src = br.parse_source(path, errors)
+                plan = br.build_plan(src, world, errors)
+                self.assertEqual(errors, [])
+                # Three tiles of clear approach remain behind the two screen tiles.
+                spawn = br.tile_of(*br.ROOM_CENTRE_PX)
+                self.assertFalse(set(br.GAP_TILES[side]) & br.closed_flood(plan, spawn, None))
+                self.assertTrue(set(br.GAP_TILES[side]) & br.closed_flood(plan, spawn, 0))
+                for col in (9, 10):
+                    self.assertTrue(any((col, depth) not in plan.static
+                                        for depth in range(1, br.EXIT_DEPTH + 1)))
+        # A graph cut exit cannot compile as an open walk-through with no authored screen.
+        _, errors = compile_text(room_text(edge["a"], ["n"], "spawn Default @1632,528"),
+                                 world_of([room_record(edge["a"], ["n"], grid=tuple(graph.room(edge["a"])["grid"])),
+                                           room_record(edge["b"], ["s"], grid=tuple(graph.room(edge["b"])["grid"]))],
+                                          edges=[edge]), edge["a"] + ".room")
+        self.assertTrue(any("cut exit n needs a screen" in e for e in errors), errors)
+        # The same edge cannot silently receive a visually similar but semantically wrong screen.
+        a, b = edge["a"], edge["b"]
+        world = world_of([room_record(a, ["n"], grid=tuple(graph.room(a)["grid"])),
+                          room_record(b, ["s"], grid=tuple(graph.room(b)["grid"]))], edges=[edge])
+        _, errors = compile_text(room_text(a, ["n"],
+            "spawn Default @1632,528\nopener cut_screen 9,1 look=moss_wall\nopener cut_screen 10,1 look=moss_wall"), world, a + ".room")
+        self.assertTrue(any("look must match graph prop dry vine screen" in e for e in errors), errors)
+        scene = (br.ROOT / "scenes/world/dry_vine_screen.tscn").read_text()
+        script = (br.ROOT / "scripts/world/bush.gd").read_text()
+        self.assertIn("scripts/world/bush.gd", scene)
+        self.assertIn('variant = &"dry_vine_screen"', scene)
+        self.assertIn('"dry_vine_screen"', script)
+        self.assertIn('hitbox.kind == &"hook"', script)
 
 
 class CavePilot(unittest.TestCase):
