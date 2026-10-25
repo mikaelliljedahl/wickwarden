@@ -21,3 +21,5 @@ Wave rule: at most 6 Codex jobs at the same time, one image per job, model `chea
 ## Resumed Codex production, 2026-10-25
 
 B80 c8 v2 and c9 v2 generated, own-session SHA256 matched, unique source hashes, opened `/tmp/wickwarden-art-wave4-review.jpg`. c8 v2 weak (oversize relative to prompt); c9 v2 ok with small plant sprig. Log: `log_art_resume_04.md`. Other c8/c9 and c10 variants in flight; no existing outputs regenerated. Provenance append rows under `/tmp/wickwarden-art-provenance-additions.md`; shared provenance unchanged.
+
+B80 c8 v1/v3 and c9 v1 verified by own-session SHA256, unique hashes; opened `/tmp/wickwarden-art-wave5-review.jpg`; log `log_art_resume_05.md`. c8 v3 weak (closed door); c8 v1/c9 v1 clear mouths with busy foliage/stone bases. Submitted c10 v3 and title menu panel v1/v2 into free slots; six image jobs total.
