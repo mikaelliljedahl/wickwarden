@@ -632,6 +632,80 @@ class EndingTriggerEntity(unittest.TestCase):
         self.assertTrue(any("takes only a position" in error for error in argument_errors), argument_errors)
 
 
+class C09EntryRefills(unittest.TestCase):
+    ROOM = "cave_9_4"
+
+    def world(self, room_id: str = ROOM, pickups: list[dict] | None = None) -> br.World:
+        actual = real_world().room(room_id)
+        record = dict(room_record(room_id, actual["exits"], grid=actual["grid"]), scope=actual["scope"])
+        return world_of([record], pickups=pickups)
+
+    def compile(self, entities: list[str], room_id: str = ROOM, pickups: list[dict] | None = None):
+        world = self.world(room_id, pickups)
+        exits = world.room(room_id)["exits"]
+        return compile_text(room_text(room_id, exits, "\n".join(entities)), world, room_id + ".room")
+
+    def two_refills(self) -> list[str]:
+        return ["refill pot_bundle @384,480", "refill pot_bundle @576,480"]
+
+    def test_c09_4_emits_two_existing_refill_scenes_with_empty_persistent_ids(self) -> None:
+        text, errors = self.compile(self.two_refills())
+        self.assertEqual(errors, [])
+        nodes = emitted_nodes(text or "")
+        refills = [node for node in nodes.values()
+                   if node["scene"] == "res://scenes/pickups/pitch_pot_bundle.tscn"]
+        self.assertEqual(len(refills), 2)
+        self.assertEqual({tuple(node["properties"]) for node in refills}, {
+            ("position = Vector2(384, 480)", 'persistent_id = &""', "respawn_on_enter = true"),
+            ("position = Vector2(576, 480)", 'persistent_id = &""', "respawn_on_enter = true"),
+        })
+        self.assertTrue(all(node["parent"] == "Props" for node in refills))
+        self.assertTrue(all("amount =" not in prop and "requires_flag" not in prop and "scope =" not in prop
+                            for node in refills for prop in node["properties"]))
+        scene = (br.ROOT / "scenes/pickups/pitch_pot_bundle.tscn").read_text(encoding="utf-8")
+        self.assertIn('path="res://scripts/pickups/pickup_base.gd"', scene)
+        self.assertIn('kind = &"pitch_pot_bundle"', scene)
+        pickup_base = (br.ROOT / "scripts/pickups/pickup_base.gd").read_text(encoding="utf-8")
+        self.assertIn('@export var persistent_id: StringName = &""', pickup_base)
+        self.assertIn('@export var respawn_on_enter: bool = false', pickup_base)
+        room_script = (br.ROOT / "scripts/world/room.gd").read_text(encoding="utf-8")
+        self.assertIn("child is PickupBase and child.respawn_on_enter", room_script)
+        self.assertIn('refill.persistent_id = &""', room_script)
+        self.assertIn('get_node("Props").add_child(refill)', room_script)
+
+    def test_refills_do_not_replace_or_weaken_exact_graph_pickup_checks(self) -> None:
+        graph_pickup = {"id": "workbench_key", "kind": "small_key", "node": self.ROOM, "scope": "c9"}
+        entities = self.two_refills() + ["pickup small_key 8,5 id=workbench_key"]
+        text, errors = self.compile(entities, pickups=[graph_pickup])
+        self.assertEqual(errors, [])
+        nodes = emitted_nodes(text or "")
+        self.assertEqual(sum(node["scene"] == "res://scenes/pickups/pitch_pot_bundle.tscn"
+                             for node in nodes.values()), 2)
+        _, missing_errors = self.compile(self.two_refills(), pickups=[graph_pickup])
+        self.assertTrue(any("graph pickup workbench_key (small_key) is not placed" in error
+                            for error in missing_errors), missing_errors)
+        _, extra_errors = self.compile(entities + ["pickup small_key 9,5 id=not_in_graph"], pickups=[graph_pickup])
+        self.assertTrue(any("pickup not_in_graph is not in the graph" in error for error in extra_errors), extra_errors)
+
+    def test_only_two_distinct_c09_4_pot_bundle_refills_are_allowed(self) -> None:
+        for entities in ([], self.two_refills()[:1], self.two_refills() + ["refill pot_bundle 8,5"]):
+            with self.subTest(entities=entities):
+                _, errors = self.compile(entities)
+                self.assertTrue(any("exactly two refill pot_bundle" in error for error in errors), errors)
+        _, duplicate_errors = self.compile(["refill pot_bundle @384,480", "refill pot_bundle @384,480"])
+        self.assertTrue(any("distinct positions" in error for error in duplicate_errors), duplicate_errors)
+
+    def test_refill_rejects_other_rooms_kinds_and_persistent_options(self) -> None:
+        _, room_errors = self.compile(self.two_refills(), room_id="cave_9_5")
+        self.assertTrue(any("only valid in cave_9_4" in error for error in room_errors), room_errors)
+        _, kind_errors = self.compile(["refill brass_coin @384,480", self.two_refills()[1]])
+        self.assertTrue(any("only supports pot_bundle" in error for error in kind_errors), kind_errors)
+        for option in ("id=fake", "persistent_id=fake", "requires=boss_defeated", "scope=c9", "amount=999"):
+            with self.subTest(option=option):
+                _, errors = self.compile([f"refill pot_bundle @384,480 {option}", self.two_refills()[1]])
+                self.assertTrue(any("takes no option" in error for error in errors), errors)
+
+
 class Geometry(unittest.TestCase):
     def test_merge_is_row_major_and_greedy(self) -> None:
         grid = ["." * 20 for _ in range(10)]

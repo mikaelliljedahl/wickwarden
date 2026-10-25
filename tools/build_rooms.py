@@ -175,6 +175,7 @@ ENTITY_OPTS = {
     "door": ("blocker",),
     "hidden_stairs": ("id",),
     "ending_trigger": (),
+    "refill": (),
     "spawn": (),
     "shop": ("id",),
     "cache": ("id",),
@@ -754,6 +755,8 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
         node.props = [("position", vec2(*ent.pos))]
         plan.singles.append((key, node))
         return True
+    if ent.verb == "refill":
+        return dispatch_refill(ent, key, src, plan, errors)
     if ent.verb == "shop":
         return dispatch_shop(ent, key, src, plan, errors)
     if ent.verb == "cache":
@@ -1213,6 +1216,26 @@ def dispatch_hidden_stairs(ent: Entity, key: tuple, src: Source, plan: Plan, err
     return True
 
 
+def dispatch_refill(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
+    """Place one explicit entry refill without adding a persistent graph pickup."""
+    where_ = where(src.path, ent.line)
+    if src.room_id != "cave_9_4":
+        errors.append(f"{where_}: refill is only valid in cave_9_4")
+        return False
+    if ent.args != ["pot_bundle"]:
+        errors.append(f"{where_}: refill only supports pot_bundle")
+        return False
+    node = Node("", "Props", None, Res("PackedScene", PICKUP_SCENES["pot_bundle"]))
+    node.base = PICKUP_NODE_NAME["pot_bundle"]
+    node.props = [
+        ("position", vec2(*ent.pos)),
+        ("persistent_id", sname("")),
+        ("respawn_on_enter", "true"),
+    ]
+    plan.singles.append((key, node))
+    return True
+
+
 def dispatch_pickup(ent: Entity, key: tuple, src: Source, plan: Plan, world: World, errors: list[str]) -> bool:
     where_ = where(src.path, ent.line)
     if ent.verb != "pickup" or not ent.args:
@@ -1535,6 +1558,7 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
         if not accessible:
             errors.append(f"{where(path, control.line)}: {control.verb} is unreachable with blockers closed")
     check_enemies(src, rec, plan, errors)
+    check_refills(src, rec, errors)
     check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors)
     check_shops(src, rec, world, plan, reach, errors)
     check_doors(src, rec, world, plan, errors)
@@ -1588,6 +1612,17 @@ def moth_fetchable(plan, target, reach) -> bool:
 def moth_pocket(rec, world) -> bool:
     return rec["pocket"] and any(e["prop"] == "grated alcove" and
         rec["id"] in (e["a"], e["b"]) and "tether_moth" in e.get("needs", []) for e in world.edges)
+
+
+def check_refills(src: Source, rec: dict, errors: list[str]) -> None:
+    """Corrow's Workbench has exactly two distinct entry-refill pot bundles."""
+    if rec["id"] != "cave_9_4":
+        return
+    refills = [ent for ent in src.entities if ent.verb == "refill"]
+    if len(refills) != 2:
+        errors.append(f"{where(src.path, 1)}: cave_9_4 needs exactly two refill pot_bundle placements")
+    elif len({ent.pos for ent in refills}) != 2:
+        errors.append(f"{where(src.path, refills[1].line)}: cave_9_4 refill bundles need distinct positions")
 
 
 def check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors) -> None:
