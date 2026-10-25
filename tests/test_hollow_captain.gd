@@ -5,6 +5,7 @@ const SCENE := "res://scenes/enemies/minibosses/hollow_captain.tscn"
 
 func run() -> void:
 	await _guard_and_bash()
+	await _real_hook_guard()
 	await _real_moth_hit()
 	await _stun_and_persistence()
 
@@ -79,7 +80,7 @@ func _stun_and_persistence() -> void:
 	await frames(182)
 	enemy.stun(2.0)
 	check(enemy.is_stunned(), "stun works again after immunity")
-	enemy._stun_time = 0.0
+	await frames(92)
 	enemy.apply_damage(99, enemy.global_position, 0.0)
 	check(GameState.has_flag(&"mini_mb1_test"), "death persists under mini room flag")
 	check(not enemy.is_arena_locked(), "miniboss never locks arena")
@@ -118,12 +119,69 @@ func _hit(enemy: EnemyBase, kind: StringName, origin: Vector2, amount: int = 2) 
 func _real_moth_hit() -> void:
 	reset_state()
 	var arena := make_arena()
-	var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+	var enemy = make_enemy(arena, SCENE, Vector2(850, 480))
+	var player := make_player(arena, Vector2(600, 480))
 	await frames(2)
-	var moth := make_hitbox(arena, enemy.global_position, Layers.Team.PLAYER, 0, 40.0)
-	moth.kind = &"stun"
-	moth.stun_time = 2.0
-	await frames(3)
-	check(enemy.is_stunned(), "real moth hitbox stuns through hurtbox")
-	check(enemy._stun_time <= 1.5, "real moth stun clamped")
+	enemy.set_facing_dir(Vector2.LEFT)
+	GameState.acquire_item(&"tether_moth")
+	player.facing = Vector2.RIGHT
+	check(player.use_item(), "Player creates and activates the real tether moth")
+	var moths := get_tree().get_nodes_in_group(ItemBase.group_name(&"tether_moth"))
+	check_eq(moths.size(), 1, "one real tether moth instance")
+	if moths.size() != 1:
+		await dispose(arena)
+		return
+	var moth := moths[0] as Node2D
+	var launch := moth.global_position
+	var travelled := 0.0
+	var stun_events := [0]
+	enemy.stunned.connect(func(_time: float) -> void: stun_events[0] += 1)
+	for i in range(40):
+		await frames(1)
+		if is_instance_valid(moth):
+			travelled = maxf(travelled, moth.global_position.distance_to(launch))
+		if enemy.is_stunned():
+			break
+	check(travelled > 100.0, "activated moth travels from player to enemy")
+	check_eq(stun_events[0], 1, "travelling real moth triggers enemy stun")
+	check(enemy.is_stunned(), "real moth collision reaches miniboss hurtbox")
+	check(enemy._stun_time <= 1.5, "real moth stun clamped to 1.5 seconds")
+	check_eq(enemy.hp, enemy.max_hp, "moth inflicts no damage")
+	player.place_at(enemy.global_position + Vector2(-90, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, enemy.max_hp - 2, "real player hook deals two after real moth stun")
+	check(enemy.is_stunned(), "reset regression starts while still moth-stunned")
+	check(enemy.is_knocked_back(), "real hook supplies knockback before reset")
+	enemy.reset_fight()
+	check(not enemy.is_stunned(), "reset_fight clears real moth stun immediately")
+	check(not enemy.is_knocked_back(), "reset_fight clears real hook knockback immediately")
+	check(enemy.can_be_hurt(), "reset_fight clears hit invulnerability immediately")
+	check_eq(enemy.hp, enemy.max_hp, "reset restores health")
+	player.place_at(Vector2(200, 480))
+	await frames(2)
+	check(not enemy.is_in_intro(), "reset miniboss immediately resumes its fight")
+	check(enemy.velocity.length() > 0.0, "reset miniboss moves without waiting out old stun")
 	await dispose(arena)
+
+
+func _real_hook_guard() -> void:
+	for front in [true, false]:
+		reset_state()
+		var arena := make_arena()
+		var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+		var offset := Vector2(90, 0) if front else Vector2(0, -90)
+		var player := make_player(arena, enemy.global_position + offset)
+		await frames(2)
+		enemy.set_facing_dir(Vector2.RIGHT)
+		player.facing = -offset.normalized()
+		var blocks := [0]
+		enemy.guard_blocked.connect(func(_hitbox: Hitbox) -> void: blocks[0] += 1)
+		Input.action_press(&"attack")
+		await frames(8)
+		Input.action_release(&"attack")
+		check_eq(enemy.hp, 12 if front else 10, "real hook front blocked / side damages")
+		check_eq(blocks[0], 1 if front else 0, "real swing collision applies guard direction")
+		await dispose(arena)
