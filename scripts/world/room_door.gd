@@ -64,14 +64,16 @@ func _uses_building_door() -> bool:
 func entrance_kind() -> StringName:
 	if get_parent().get("look") == &"hidden_stairs":
 		return &"pocket_stairs"
-	if _in_dark_room():
-		return &"cave_exit"
 	var host: Node = get_parent()
 	while host != null and not host is Room:
 		host = host.get_parent()
 	if host is Room and "#" in String(host.room_id):
 		return &"pocket_plain"
-	return POCKET_LOOKS.get(String(target_room), &"cave_mouth")
+	if "#" in String(target_room) and not WorldData.scene_path(String(target_room)).is_empty():
+		return POCKET_LOOKS.get(String(target_room), &"pocket_plain")
+	if _in_dark_room():
+		return &"cave_exit"
+	return &"cave_mouth"
 
 
 ## True when the nearest Room above this door is dark (the cave side).

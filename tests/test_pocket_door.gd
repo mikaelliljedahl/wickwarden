@@ -22,6 +22,7 @@ func run() -> void:
 	world = await make_world()
 	player = world.player
 	await _built_entrance_looks()
+	await _cave_pocket_looks()
 	_variants_have_their_look()
 	await _same_scene_both_sides()
 	await _enter_and_leave()
@@ -204,3 +205,25 @@ func _built_entrance_looks() -> void:
 				)
 		await dispose(room)
 	check_eq(count, 27, "all 26 built entrances and the cave exit audited")
+
+
+## Standalone indoor pockets use plain portals on both sides, even in dark caves.
+func _cave_pocket_looks() -> void:
+	for id in ["cave_9_2", "cave_9_2#cell", "cave_9_9", "cave_9_9#vault"]:
+		var packed := load(WorldData.scene_path(id)) as PackedScene
+		check(packed != null, "%s actual pocket scene loads" % id)
+		if packed == null:
+			continue
+		var room := packed.instantiate() as Room
+		add_child(room)
+		var count := 0
+		for door in room.get_node("Props").get_children():
+			if not door is RoomDoor:
+				continue
+			count += 1
+			check_eq(door.entrance_kind(), &"pocket_plain", "%s indoor portal is plain" % id)
+			check_eq(door.get_node("Visual").get("kind"), &"pocket_plain", "%s published plain art" % id)
+			room.dark = true
+			check_eq(door.entrance_kind(), &"pocket_plain", "%s pocket wins over cave darkness" % id)
+		check_eq(count, 1, "%s actual pocket door audited" % id)
+		await dispose(room)
