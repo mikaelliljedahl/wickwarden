@@ -1,0 +1,24 @@
+room ow_7_2
+terrain Fallen Mast: shore wreck
+floor_color 0.20 0.26 0.21
+grid
+#########..#########
+#..............rrr.#
+#..ee..........r.r.#
+#.............b..r.#
+...............rrr.#
+...................#
+#..................#
+#..e............tt.#
+#..................#
+#########..#########
+enemy hollow 12,6
+enemy bramble_snapper 6,2
+water @48,480 size=96,192
+mooring @144,480 id=e044 target_room=ow_6_2 target_mooring=e044 landing_offset=56,0
+water @960,912 size=192,96
+mooring @960,816 id=e046 target_room=ow_7_3 target_mooring=e046 landing_offset=0,-56
+opener cracked_wall 15,3 id=e128
+door ow_7_2#bag Inside 15,3
+spawn Default 10,3
+spawn FromPocket 14,4

@@ -1,0 +1,18 @@
+room ow_7_2#bag
+terrain Wreck hold: hidden pot bag
+floor_color 0.20 0.21 0.17
+grid
+####################
+#..................#
+#..rr..........rr..#
+#..................#
+#..................#
+#..................#
+#..................#
+#..r............r..#
+#..................#
+####################
+pickup pot_bag 10,3 id=pot_bag_1
+door ow_7_2 FromPocket 10,7
+spawn Default 10,6
+spawn Inside 10,6

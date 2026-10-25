@@ -1,0 +1,21 @@
+room ow_5_2
+terrain Mossy Landing: moss, dock posts
+floor_color 0.18 0.27 0.20
+grid
+####################
+#.tt..t............#
+#.t............ee..#
+#..................#
+....................
+....................
+#..................#
+#..rr...........e..#
+#..............e...#
+#########..#########
+enemy duskmoth 6,3
+enemy duskmoth 13,6
+water @1872,480 size=96,192
+mooring @1776,480 id=e042 target_room=ow_6_2 target_mooring=e042 landing_offset=-56,0
+water @960,912 size=192,96
+mooring @960,816 id=e043 target_room=ow_5_3 target_mooring=e043 landing_offset=0,-56
+spawn Default 5,5
