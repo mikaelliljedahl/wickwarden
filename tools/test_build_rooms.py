@@ -782,7 +782,11 @@ class CavePilot(unittest.TestCase):
         self.assertIn('path="res://scenes/bosses/kilnkeeper_arena.tscn"', text)
         self.assertIn('[node name="Arena1" parent="Props"', text)
         self.assertIn("position = Vector2(0, 0)", text)
-        _, errors = compile_text(source, self.encounter_world(), "cave_1_8.room")
+        original = Path.is_file
+        arena_path = br.ROOT / "scenes/bosses/kilnkeeper_arena.tscn"
+        with patch.object(Path, "is_file", lambda p: False if p == arena_path else original(p)):
+            missing_text, errors = compile_text(source, self.encounter_world(), "cave_1_8.room")
+        self.assertIsNone(missing_text)
         self.assertTrue(any("kilnkeeper_arena.tscn does not exist" in e for e in errors))
 
     def test_wrong_duplicate_and_malformed_arena_fail(self):
