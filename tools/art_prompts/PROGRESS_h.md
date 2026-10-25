@@ -65,3 +65,5 @@ B84 intro06v1–3/endingAv1 verified own-session hashes/unique; opened `/tmp/wic
 B84 endingAv2/v3 complete (all18B84present); B85 endingBv1/v3 and creditsv1 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave29-review.jpg`; log `log_art_resume_29.md`. Creditsweak added Tamsin/busy village; endings4ok. Submitted title_splashv1–3/creditsv2/v3,six total withendingBv2pending.
 
 B85 endingBv2 verified own-session hash/unique; opened `/tmp/wickwarden-art-wave30-review.jpg`; ok dawn coast/extinguished lantern. Log `log_art_resume_30.md`; all ending variants present. Freed slot filled B47rekindle_motesv1; six image jobs total.
+
+B83titlev2/v3 and B85creditsv2/v3 verified own-session hashes/unique; opened `/tmp/wickwarden-art-wave31-review.jpg`; log `log_art_resume_31.md`. Titles2ok; creditsv3weak added Tamsin; creditsv2FAILED four repeated Tamsins. Failed retained for cull. B85six ready images complete, memories27deferred. Four B47jobs submitted into slots; six image jobs total.
