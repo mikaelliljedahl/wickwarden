@@ -578,6 +578,12 @@ class Crossings(unittest.TestCase):
         _, errors = compile_text(room_text("ow_6_5", ["w"], "ledge w 1,4"), world, "ow_6_5.room")
         self.assertTrue(any("outgoing graph one-way" in e for e in errors), errors)
 
+    def test_door_validation_with_shallows_does_not_read_enemy_state(self):
+        source = SHOP_FIXTURE.read_text(encoding="utf-8") + "\nshallows 3,3 size=96,96\n"
+        text, errors = compile_text(source, real_world(), "ow_1_2__shop.room")
+        self.assertEqual(errors, [])
+        self.assertIn('target_room = &"ow_1_2"', text)
+
     def test_bad_sizes_and_offsets_rejected(self):
         for entity in ["water 5,5 size=-1,96", "shallows 5,5 size=0,96",
                        "mooring 5,5 id=x target_room=ow_6_5 target_mooring=y landing_offset=no"]:
