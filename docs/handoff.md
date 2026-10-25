@@ -9,17 +9,13 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-Status as of 2026-10-25, committed HEAD `54b187b`. The authored world inventory is **138 scenes: 88/88 overworld rooms, 24 pockets and 26 cave rooms** (8 C01, 9 C02, 9 C03), with **137 `.room` sources**; historical `cave_1` is hand-authored. All overworld room batches have landed. Region lead acceptance for R3/R5/R6 remains active, so room delivery does not mean region validation is complete. The latest verified personal origin/main remains `04dc651`; commits after it have not received a new global stable gate or push.
+Verified checkpoint snapshot: `baffec96f976940cd585ce38dbc590a39f088a91` (full gates run in detached `/tmp/wickwarden-verify-baffec96`). At that commit, the room inventory is **138 scenes: 88 overworld, 24 pockets and 26 cave rooms** (8 C01, 9 C02, 9 C03) with **137 `.room` sources**. Historical `cave_1` is hand-authored. The snapshot includes C03 lead acceptance (`f12afca`), R5 ward-pocket return spawn correction (`7405e80`, two files), R5 route tests (`baffec96`) and R6 route tests (`dc097c3`), plus the stated raft, Ninth Door, paired-mouth, P06 and paired-boots dependencies. Every required SHA is an ancestor of this tested snapshot.
 
-Delivered since the previous checkpoint: C03 room sources/scenes are committed; its full lead acceptance is still underway. C02 has independent functional GO (`6bb45ad`) with controls and art limits noted in that review. B03 Tidewick real-raft work is committed through `5e78e1f`; free-steering raft API `3466f30` and Reel pit behavior `53055cf` are in. B04 Hushed Colossus (`2fb0b23`) and B05 Archivist (`4199175`) encounters landed. MB3 Mirror and Choir Wardens are in current HEAD (`54b187b`); its review/integration is active. F6 flooded-room support `f386a2b`, P13 paired-mouth state `c29aa7e`, and F3 Ninth Door validation `60d5509` landed. P06 peer synchronization `a186cd1` is committed; a paired-stone follow-up remains active.
+Detached gate results: `make check` passed **105/105 Godot suites**, gdlint, generated world-data check and **142 Python tests**; `make rooms-check` checked **137/137** sources; `make art-test` passed **20 tests**; global ownership passed (**92 WPs / 53 batches**, 192 graph rooms and 33 pockets, no wave 1–5 ownership overlap). Logs: `/tmp/wick-check-baffec96.log`, `/tmp/wick-rooms-baffec96.log`, `/tmp/wick-art-baffec96.log`, `/tmp/wick-ownership-baffec96.log`. The isolated checkout used its own project import cache and user-data home, and forced `--audio-driver Dummy` for Godot. Its tracked diff remained empty after checks.
 
-Region room batches are all delivered. Correct Cinderflats batch references: R3.a `4814c93`, R3.b `1752b9f`, R3.c `a8e33d0`, R3.d `6b98cb2`; Gravelight R5.d is `a66be5a`. R3, R5 and R6 lead tests remain active. The paired-boots layout fix is active for `ow_9_6`, `ow_9_5` and `ow_8_6`.
+The latest verified personal origin/main before this checkpoint was `04dc651`; the tested code SHA and this docs follow-up are being pushed as a fast-forward checkpoint. Later art/adapter work is not part of this snapshot. Missing C04–C10 content remains future work. Art is incomplete: new cave/miniboss/boss placeholders, terrain and pickup/shop mappings remain. C02's independent functional GO (`6bb45ad`) records controls and art limits; C03 acceptance is included in the passing suite. Human balance/feel approval is not claimed. Preserve the known P2 invisible collider tails and capture cleanup warnings until a worker verifies a fix.
 
-Current queue: finish R3/R5/R6 lead acceptance, C03 lead acceptance, MB3 review, P06 paired-stone follow-up, paired-boots room layout, and active art mapping. The art mapper is auditing existing source sheets before runtime mapping integration is released; boss/world adapters are inspecting the keys. Placeholder art remains across newly delivered content. Track terrain, pickup/shop and creature/body fallback gaps by audited scope; do not call all art complete. Earlier QA's zero-fallback result applied only to its original placed-entity set.
-
-Testing remains temporarily silent: graphical Godot runs must use `--audio-driver Dummy`; active streams are muted and the browser stays untouched. No broad gate or push was run in this docs update. Preserve 77 foreign staged paths and all unrelated art/provenance/import/UID changes. Only these living docs are owned here.
-
-Previous verified push: `04dc6511573b8670971c532534270db13ffc7e3a` on personal origin/main. All later local implementation commits remain unverified globally and unpushed. This docs-only inventory makes no test, art-completion or release claim.
+Checkpoint push procedure: push only this documentation commit, whose parent is the tested code SHA above, and verify exact origin/main equality. Do not push a later local implementation HEAD. Active art mapping and boss/world adapter work may continue outside the tested snapshot.
 
 ### All-ten item-menu icon integration
 
@@ -38,12 +34,12 @@ Previous verified push: `04dc6511573b8670971c532534270db13ffc7e3a` on personal o
 | 2 Brackwater R1 | Room batches landed | Assembled area/route acceptance landed in `1d91efb` and `4e635c0`. |
 | 2 Thornwood R2 | R2.a–d room batches landed | Regional acceptance landed in `5c6462f`. |
 | 2 Tallowfen/Mirrormere R4 | R4.a–f room batches landed | Regional acceptance landed in `82ae92b`. |
-| 2 Gravelight R5 | All room batches landed | R5.d `a66be5a`; lead acceptance active. |
-| 2 Cinderflats R3, Hushmarch R6 | All room batches landed | R3.a `4814c93`, R3.b `1752b9f`, R3.c `a8e33d0`, R3.d `6b98cb2`; R3/R6 lead acceptance active. |
-| 3 caves C01–C10, ending E1 | C01–C03 room content landed | C02 independent functional GO `6bb45ad`; C03 lead acceptance active; C04–C10 and E1 remain. |
+| 2 Gravelight R5 | Room batches and lead acceptance passed at the tested snapshot | Lead tests `baffec96`; ward-pocket return spawn `7405e80`. |
+| 2 Cinderflats R3, Hushmarch R6 | Room batches and lead acceptance passed at the tested snapshot | Cinderflats `9d19ed2`; Hushmarch lead tests `dc097c3`. |
+| 3 caves C01–C10, ending E1 | C01–C03 room content and lead acceptance landed | C03 lead tests `f12afca`; C02 functional GO `6bb45ad`; C04–C10 and E1 remain. |
 | 4 QA, 5 release | Not delivered | Full wave 2 is not complete. |
 
-Current committed inventory at `54b187b`: **138 scenes (88 overworld, 24 pockets, 26 cave rooms)** and **137 `.room` sources**. Historical `cave_1` is hand-authored.
+Tested committed inventory at `baffec96`: **138 scenes (88 overworld, 24 pockets, 26 cave rooms)** and **137 `.room` sources**. Historical `cave_1` is hand-authored.
 
 ### Resolved at this checkpoint
 
@@ -71,7 +67,7 @@ Source production is closed at final FX `d2fe1a5` and provenance checkpoint `2fa
 
 ### Next checkpoint procedure
 
-The last global stable gate predates current local implementation. Do not reuse it to certify HEAD `54b187b`; wait for active writers and lead acceptance, then take a fresh root-authorized gate. Commit only state/handoff with explicit paths, use the personal-account push command below without printing credentials, verify local HEAD against origin, then record the push outcome in a follow-up docs commit and push it. Every push's handoff names the actual pre-push checkpoint, never an impossible self-reference.
+The isolated gate is valid only for `baffec96`. Any newer runtime commit needs a new exact-snapshot gate before a later push. Commit only state/handoff with explicit paths, use the personal-account push command below without printing credentials, verify local HEAD against origin, then record the push outcome in a follow-up docs commit and push it. Every push's handoff names the actual pre-push checkpoint, never an impossible self-reference.
 
 ---
 
