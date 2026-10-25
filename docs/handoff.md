@@ -9,73 +9,15 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-Observed code snapshot (2026-10-25, committed HEAD `b905d4d4006f1c4bfeac86499b09f2cbbc30e784`): **222/222 scene targets are committed**. The graph contains 192 rooms (88 overworld and 104 cave rooms) plus 33 pockets; three pockets are in-place and 30 have separate scenes. There are 221 `.room` sources because `cave_1` is hand-authored. No target scene is missing at this HEAD. The last globally validated and pushed runtime remains `baffec96f976940cd585ce38dbc590a39f088a91`; the personal `origin/main` record is `0f66f8f9b902a01a8e58fd6a77facd3ebab899c1`. Later code/art commits are unverified as one global snapshot and unpushed. This status refresh ran no tests or gates and made no push.
+Snapshot observed 2026-10-25 at committed HEAD `26ddbd091ed909478d3a04605f14347d4843aaad`. All 222/222 graph scene targets are present: 88 overworld, 104 cave, and 30 separate pocket scenes; three of 33 pockets are in-place. The 221 `.room` sources exclude hand-authored `cave_1`. The last globally validated/pushed runtime remains `baffec96f976940cd585ce38dbc590a39f088a91`, with personal `origin/main` recorded at `0f66f8f9b902a01a8e58fd6a77facd3ebab899c1`. Current HEAD is later and has no global validation or push claim.
 
-**Region and cave acceptance:** C04 has a functional GO report. C05 has a final functional GO after regenerated scenes `e6c8b12` and pocket blocker rebind `1829791`. All C06 rooms and pocket scenes are committed; full regional push/bidirectional acceptance remains pending. C08's twelve rooms are built. C09 and C10 outputs now complete the 222-scene inventory, while regional route/composition acceptance is still finishing. C07 scenes are present; its full lead acceptance remains in progress after an ownership-path conflict. E1 ending flow is implemented in `5728847`; paintings/choice sprites landed in `b66ddd3`, and `b905d4d` removes duplicate stands beneath the painted ending lanterns. The full earned-route playthrough has not passed.
+**World and acceptance:** Q2 strict completeness/layout passed at `c2a5924`; F3's complete graph run passed 1,136 checks at `92786ea`. The old C07 moth-pit and C09 reel/refill validator flags were false positives, not content defects. A separate B07 streamed fall defect was fixed in `5f69076`, and its real-entry/death-reset/re-entry checks passed. C06–C10 lead-test commits are present: C06 `081518e` (166 headless/193 render checks), C07 `32e0ab8` (route PASS), C08 `d5e65ad` (150 render checks), C09 `5cd96d9` (40 area/227 route/243 render checks), and C10 `1af39cc` (53 area/243 route/258 render checks). P06 fix `4e9d1a4` passes 138 four-direction checks. One older C09 OPEN down-throw label has an independent recheck under job `816d3c`, currently marked needs_reconciliation; no result or confirmed reachability defect is available. E1 flow/branches and ending visuals are committed, but the full continuous earned-route playthrough remains open.
 
-Recent encounter cleanup includes Briar/Archivist copy fairness `710c798`, Archivist helper cleanup `d85b759`, Lock Warden clone rebuild `e19ba3c`, and Unlit helper cleanup `e6957bf`. Q7 exposed a Bramble Snapper/Heft Mitts mismatch in `4606df5`; `b4449ed` applies the immunity fix, but Q7 has not been rerun after it. Earlier B06/B07, MB4/MB5, B08–B10, F6 cave/door support and mapper `02fded4` are committed. This does not imply all encounter, art or regional acceptance is complete.
+**QA and captures:** Q1 and Q2 pass; Q7 reports 582 passing checks after `b4449ed`, while complete weakness coverage for all 20 encounters is still pending. The full still-capture baseline landed in `d3cf9a5`: all 222 rooms/pockets rendered from source `c2a5924` into 16 labelled sheets with 480×270 thumbnails. It is an initial fallback-preserving visual baseline, not human approval or a full playthrough. Three route-fixture regressions were corrected in `7d8741f`, and the affected suites passed. The Archivist intermittent native SIGSEGV is confirmed; its instrumented localization/fix remains open and blocks global release. Do not waive it as flaky.
 
-**Integration queue:** Q1 scene-graph solver is committed in `c7bb5bf` and its report passes on the complete 222-scene snapshot. Q2 completeness/layout review is running. A reported combined gate before `b4449ed` had 11 failing suites out of 129, including four cave_9 content defects under Q2; that report said `world-check`, `rooms-check` and global lint passed. The cave_9 defects still need scoped triage. C09's two earlier route reports were separately reproduced as F3 reachability false positives; eight real-Player checks passed. Q4 capture tooling landed in `4a43792`; three real captures and byte-identical repeats passed, but capture/review of all 222 targets remains outstanding. Q2/Q4 in the binding WP table still says 218 scenes/images, while the graph now requires 222; report this discrepancy and leave the plan untouched. Q7's `4606df5` result was 580/582 before `b4449ed` fixed Bramble Snapper immunity to Heft Mitts throws. Rerun Q7 before claiming the matrix green. C07–C10 functional lead tests are in flight. B07 streamed-pit return and F3 moth-over-pit checks, pocket-terrain mapping, overworld composition review and encounter-lifecycle review are also active. Q3 playthrough, Q5 visual review, Q6 soak/economy, Q8 performance/memory and Q9 final QA docs remain open.
+**Art and presentation:** Source image production closed at final FX `d2fe1a5` and provenance `2fa8c69`. Mapper `02fded4` integrates 26 keys; native-alpha cutter `62a82aa` passes with 227 old PNGs byte-identical. Ten menu icons and equipped HUD icons are integrated; the equipped-label fit is `9664e50`. Runtime art is not complete: body/transient-tool fallbacks, terrain and pickup/shop presentation, mapping/render cleanup, and human visual review remain. B01 plate/pillar integration and cave-source interface reviews are active; mouth candidates A–C were rejected for halo/alpha spill. The user’s UI Chime clip was last reported in progress.
 
-**Art and release:** source production is closed at final FX `d2fe1a5` and provenance `2fa8c69`; the mapper integrates 26 keys. Runtime art still has body/transient-tool placeholders, terrain and pickup/shop presentation, mapping/render cleanup and human visual review. No all-art-done claim. Human feel/balance review, full playthrough, full-room review, performance/memory measurement, Z1 fix rounds, tuning and Z3 release/export checks remain outstanding.
-
-Design notes to preserve during review: B10's implementation keeps the literal 330 orbit around `(960, 288)`, including the upper arc leaving the room. This is an implementation note only; no normative number changed and no owner decision is implied. B07 keeps the literal dive toward the player and hit-table recovery. Boots remain a mobility/progression requirement; strict combat necessity is not proven. Do not convert that into a new owner decision.
-
-The previous C02 functional GO (`6bb45ad`) carries its stated controls and art limits. The passing `baffec96` gate does not cover later commits. No `.room` source or compiled room scene was dirty at this inspection, and a worker-reported combined run said `rooms-check` passed before the latest Q1/Q4/Q7 and ending-presentation commits. No stale room outputs are currently identified; the complete exact-SHA gates remain pending. The shared index showed 77 staged paths during final inspection; preserve all staged and unstaged art, provenance, import, UID and implementation work. Graphics checks use `--audio-driver Dummy`. Commit only these two living documents.
-
-The previous verified personal-origin push is `0f66f8f9b902a01a8e58fd6a77facd3ebab899c1`, with tested runtime parent `baffec96f976940cd585ce38dbc590a39f088a91`. Current observed code HEAD `b905d4d` is later and has no global green gate or push. Do not treat historical verification as coverage of current code. Before the next push, select one exact committed snapshot after active writers finish, run the exact-SHA gates, and push only that validated runtime SHA. Record its test results and actual remote hash in a docs-only follow-up.
-
-### All-ten item-menu icon integration
-
-- **Landed:** pipeline `b2e516c` publishes `icon_tether_moth`, `icon_pitch_pot`, `icon_cinder_wick`, `icon_tallow_sling`, `icon_reed_raft`, `icon_heft_mitts`, `icon_glow_jar`, `icon_lantern_chime`, `icon_skitter_boots`, `icon_reel_line` as 128x128 `idle` frames at `assets/sprites/icon_<id>.png`. Existing object sprites are unchanged. Selection/proof/deterministic regeneration evidence: [tool-icon-selection.md](../tools/source_art/tool-icon-selection.md). Pipeline worker `job_01a1739ff3b572b09e40ad5f76ef905f` under coordinator `job_01a1739f19307a5fa41dd847babdb336` selected already-generated B17/B18 variants; no new icon generation was needed.
-- **Menu:** `43552ec` prefers the exact dedicated runtime kind, falls back to object-id art and then geometry. All ten found tools are painted; unfound items remain silhouettes. No player tool-use sheet is used. Equipped HUD icons were later added by `d72aec1`.
-- **Visual proof opened:** `/tmp/wickwarden-menu-dev-art.png` shows all ten distinct painted tools, a readable equipped label and selection frame. `/tmp/wickwarden-menu-new-art.png` shows all ten dark question-mark silhouettes. Temporary harness `/tmp/wickwarden-menu-capture.gd` instantiates the actual World with new-game/dev state; capture logs have existing exit cleanup warnings (8 ObjectDB instances / 4 resources), with no draw or script errors. Full-size images stay out of git.
-- **Current gates:** `make check` passed all 70 Godot suites, lint, generated world-data check and 96 Python tests; `make rooms-check` passed 66/66; global ownership passed 92 WPs / 53 room batches. Logs: `/tmp/wickwarden-menu-final-check.log`, `/tmp/wickwarden-menu-final-rooms.log`, `/tmp/wickwarden-menu-final-ownership.log`. Explicit F10 ownership and diff checks passed. All-ten art, unfound states, object fallback and absent-art fallback are tested.
-- **Checked revision:** code checkpoint `43552ec`; later commits through `f33ab9b` contain source art, logs, selection verification, progress and these status documents only. Verify later commits and tracked runtime/code dirt before pushing; unrelated ongoing generation need not finish. `make import` left ten untracked icon `.png.import` files, which remain outside owned commits along with inherited UID files. Preexisting staged source deletions, untracked replacements and shared provenance edits remain protected.
-
-### Wave status
-
-| Wave | State | Notes |
-|---|---|---|
-| 0 foundation | Delivered | F0–F14, G1, D1–D3; subsequent compiler/API fixes integrated. |
-| 1 props, tools, regular monsters | Delivered with deviation | Free-steering raft combat/rider API landed in `3466f30`. P15 runtime watcher regression and pocket entry pass. |
-| 2 Brackwater R1 | Room batches landed | Assembled area/route acceptance landed in `1d91efb` and `4e635c0`. |
-| 2 Thornwood R2 | R2.a–d room batches landed | Regional acceptance landed in `5c6462f`. |
-| 2 Tallowfen/Mirrormere R4 | R4.a–f room batches landed | Regional acceptance landed in `82ae92b`. |
-| 2 Gravelight R5 | Room batches and lead acceptance passed at tested snapshot | `baffec96`; spawn fix `7405e80`. Newer tree unverified. |
-| 2 Cinderflats R3, Hushmarch R6 | Room batches and lead acceptance passed at tested snapshot | `9d19ed2`, `dc097c3`; newer tree unverified. |
-| 3 caves C01–C10, ending E1 | All 222 scene targets are present; E1 flow is implemented | C04/C05 functional GO reports. C06 area-level push acceptance and C07–C10 regional route/composition acceptance remain open. E1 has no full earned-route playthrough yet. |
-| 4 QA, 5 release | In progress | Q1 is committed and its solver report passes. Q2 has four cave_9 content defects in a reported 11/129 failing combined gate. Q4 tooling is committed, with three captures reported. Q7 fix `b4449ed` awaits matrix rerun. Q3/Q5/Q6/Q8/Q9 and Z1–Z3 remain open. |
-
-### Resolved at this checkpoint
-
-- Shared Thorn Gate flag (`9de34d5`, source consistency `e0363f9`); paired lake moorings, water gates and leech shallows (`96c9afb`, `0636747`); ledge landing and compiler directional ledges.
-- Compiler linked door blockers, permanent grate fetch validation and concealed entrances (`f237631`, `7007af0`, `de6d667`). Eight scene metadata refreshes `e7bc25d` through `8cd0621` and strict raft waiver removal `90c7c0a` are coherent; `rooms-check` is green.
-- R2.c eye-switch portcullis, thorn hut and permanent grated key challenge (`ed60cf3`); spawn/source cleanup (`e0363f9`). Earlier live-tree `ow_3_5` graph failure no longer reproduces in the integrated graph suite.
-- Orchard/hedgerow layout review (`1fb01dc`), title viewport activation (`e10700f`), watcher projectiles counted by ward plate (`ce8b07b`, `8e70395`: three actual blocks and pocket entry), wickling synchronization (`7798025`, worker reported 64 deterministic seeds).
-
-### Visual evidence
-
-Workers captured and opened their room/runtime images under `/tmp`. Integration additionally opened `/tmp/r2c_eyegate_final.png` (clear central approach, eye placeholder and east portcullis opening), `/tmp/ward-runtime-open.png` (ward active and unobstructed stone pocket doorway), and `/tmp/wickwarden-migration-ow_7_3.png` (pond banks, reed islands, mooring placeholders and water exit lanes). Placeholder props remain visibly simple; screenshots do not replace mechanical gate tests. Additional worker-reviewed evidence: `/tmp/ow_4_0-repaired-occlusion-probe.png` shows the player fully visible at tile 10,6; `/tmp/ow_2_4-after.png` shows the dry tile 8/9 lane; `/tmp/gated-ow_7_3.png` and `/tmp/gated-ow_1_5.png` retain the player outside closed secret gates; `/tmp/f10-new-menu.png` and `/tmp/f10-dev-glow-equipped.png` cover item-menu use. Other worker captures include `/tmp/r2c_grate_closed.png`, `/tmp/r2c_grate_fetched.png`, `/tmp/r2c_hermit_final.png`, `/tmp/r2c_lane_final.png`, `/tmp/f13-new-world.png`, `/tmp/f13-continue-world.png`, `/tmp/ow_4_0-after.png`, `/tmp/ow_2_4-after.png`, `/tmp/r5a-final-ow_8_5.png` and `/tmp/wickwarden-priority-ow_6_3.png`.
-
-### Remaining work and owner decisions
-
-1. Finish Q2 completeness/layout and triage its four cave_9 content defects; complete C06 regional push acceptance and C07–C10 route/composition acceptance. C09's two earlier route reports were F3 false positives, not confirmed blocked routes.
-2. Rerun Q7 after `b4449ed` changed Bramble Snapper immunity to match matrix row 5.9; do not claim the matrix green until the rerun passes.
-3. Complete Q3 earned-route playthrough, Q4 captures for all 222 scene targets, Q5 visual review, Q6 soak/economy, Q7 full matrix and Q8 performance/memory checks. Q2/Q4's binding count of 218 conflicts with the current graph target of 222; raise it without editing the plan locally.
-4. Free-steering raft and Tidewick real-raft behavior landed (`3466f30`, `72899cd`, `5e78e1f`); human playthrough/feel and balance approval remain open. The hook swing and walk-cycle timing also need owner play review.
-5. Finish body/transient-tool art, terrain and pickup/shop presentation, mapping/render cleanup and human visual review. Source production is closed; runtime art acceptance is not.
-6. Binding conflicts still needing owner direction: `ow_1_5#cache` placement and exit corridor depth versus `EXIT_DEPTH=3`. Sling damage is settled by decision 43: **1**. Watcher-eye stun and mirror-shade decoy remain owner questions.
-
-### Art checkpoint
-
-Source production is closed at final FX `d2fe1a5` and provenance checkpoint `2fa8c69`. Mapper `02fded4` integrates 26 keys; C04/C05 encounter/reward art is in `824c596`. Runtime presentation still has body/transient-tool placeholders, terrain and pickup/shop gaps, remaining mapping/render cleanup and visual review. Inherited staged source deletions/replacements, provenance edits and import/UID changes remain protected.
-
-### Next checkpoint procedure
-
-The isolated gate is valid only for `baffec96`. The observed `b905d4d` inventory is not a globally green runtime snapshot. The next checkpoint needs one exact committed SHA after active writers land, `make check`, `make rooms-check`, `make art-test`, global ownership and source/runtime consistency checks. Triage Q2's four cave_9 content defects and rerun Q7 after the snapper immunity fix. Push only that validated SHA under standing authorization; do not include later unverified runtime commits. Record the tested SHA and actual remote hash in a docs-only follow-up. Never include credentials in output.
-
----
+**Shared state and next gate:** The staged index has 77 foreign paths (fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); preserve them and all other foreign edits. The user's live game stream is unmuted (`10880`, PID `205916`); agent tests/graphics stay silent via `--audio-driver Dummy`. After active runtime/art writers finish and the C09 job reaches a reconciled result, choose an exact committed SHA and run `make check`, `make rooms-check`, `make art-test`, `python3 tools/check_ownership.py --global`, and source/runtime hash audit on that same SHA. Record results before any authorized push. The next push must not include later unverified runtime commits. Balance/visual feel, Q3 continuous playthrough, Q5 review, Q6 soak/economy, Q7 full weakness coverage, Q8 performance/memory and Q9/Z release checks remain open. The binding Q2/Q4 count of 218 still conflicts with the graph's 222; report it, do not change normative plans locally.
 
 ## 1. What the project is
 
@@ -84,14 +26,10 @@ The isolated gate is valid only for `baffec96`. The observed `b905d4d` inventory
 - Player: **Tamsin**. Tools: lamp hook, charge flare, ward, sub-items. Enemies: the **Hush**.
 - Art is **hi-fi painterly GPT Image** (generated through Codex). Never an 8-bit or 16-bit look. No pixel art, no outlines on every shape, no text in images.
 - **Step 1** (dev world, 7 rooms) and **step 2** (art pass) are done.
-- **The world build** (the full game: 192 rooms including caves, 33 pockets, 10 caves, 10 bosses, 5 miniboss pairs, 8 tools) is being built now, by work packages (WPs).
+- **The world build** (192 rooms including caves, 33 pockets, 10 caves, 10 bosses, 5 miniboss pairs, 8 tools) has all 222 graph scene targets committed. Regional acceptance, QA, runtime art and release work remain in progress by work package (WP).
 - **Repo:** `/home/mikael/code/github/wickwarden`. Remote `origin` is `https://github.com/mikaelliljedahl/wickwarden.git`.
 - **Account:** the repo is **private** on the **personal** account `mikaelliljedahl`, not the Auxality account. Do not use the Auxality account for this repo.
-- **Push command** (delegated integration worker only, on lead instruction under owner authorization, see section 7):
-
-  ```
-  GH_TOKEN=$(gh auth token --user mikaelliljedahl) git push origin main
-  ```
+- **Pushes** require explicit integration assignment under the owner's standing authorization (see section 7). Use the installed `gh` binary as a command-local Git credential helper for the personal account. Do not persist credential configuration or print/store tokens; never use the Auxality account.
 
 - **No AI attribution** in commits, PRs, code or docs. No `Co-authored-by` lines, no "generated with" lines.
 
@@ -129,7 +67,7 @@ Commands (from `Makefile`):
 | `make art` / `make art-test` | cut `tools/source_art/` sheets into `assets/sprites/` / test the cut tool |
 | `make audio` | synthesise sounds (`tools/make_audio.py`) |
 | `make rooms`, `make rooms-check` | Wired to `tools/build_rooms.py`; compile only explicitly owned room ids during concurrent work. |
-| `make capture-all` | Capture tooling is present and being exercised; complete coverage of the 222 targets and all review sheets remain pending. |
+| `make capture-all` | Full 222-target still-capture baseline is committed at `d3cf9a5` in 16 area sheets; human visual review remains pending. |
 | `make playthrough` | Full earned-route shards and acceptance remain pending (Q3). |
 
 Other checkers (not in `make check`):
@@ -294,7 +232,7 @@ REPORT (your final message, max 15 lines):
 
 ## 6. Current working tree (other agents)
 
-At this status refresh, the shared index showed 77 staged paths and active implementation changes outside this worker's ownership. Q1 and Q4 are committed; C07–C10 lead tests, Q2 triage and art/review work continue in parallel. Do not add, reset, stash, clean or rewrite any shared changes. Commit living status with the explicit paths `docs/state.md` and `docs/handoff.md` only. Recheck the index before and after that commit; leave every other staged and unstaged change untouched.
+The runtime snapshot described in this update is `26ddbd0`; the full 222-target capture baseline is committed. The shared index still has 77 foreign staged paths (fingerprint recorded in Status above), plus foreign unstaged and untracked art, provenance, import, UID and implementation files. Leave them untouched. Current work includes cave/B01 art reviews, pocket-terrain mapping, encounter-lifecycle and overworld-composition reviews. The C09 recheck job is in needs_reconciliation and has no confirmed result. Commit only `docs/state.md` and `docs/handoff.md`, with explicit paths; no broad staging, reset, stash, clean, or history rewrite.
 
 ## 7. Owner preferences (for the orchestrating lead)
 
