@@ -32,7 +32,15 @@ func _ready() -> void:
 	_shape.shape = rect
 	add_child(_shape)
 	SpriteVisual.attach(self, variant, 0.0, size)
+	GameState.flag_changed.connect(_on_flag_changed)
 	if wall_id != &"" and GameState.has_flag(flag_name()):
+		_open(false)
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	# The paired mouth may already be loaded with processing disabled.
+	# Restore collision/presentation only; never replay the blast or its sound.
+	if value and not is_open and wall_id != &"" and flag == flag_name():
 		_open(false)
 
 
