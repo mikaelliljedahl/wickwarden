@@ -1,0 +1,21 @@
+room cave_9_4
+terrain Corrow's Workbench: paired supply benches frame an open brass-tender floor and flooded east landing.
+floor_color 0.23 0.20 0.14
+grid
+####################
+#..................#
+#...###......###...#
+#..................#
+....................
+....................
+#..................#
+#...###......###...#
+#..................#
+####################
+opener locked_door @48,480 id=e224 scope=c9
+water @1872,480 size=96,192
+mooring @1776,480 id=e225 target_room=cave_9_5 target_mooring=e225 landing_offset=-56,0
+refill pot_bundle @528,358
+refill pot_bundle @1392,358
+miniboss wick_automaton @960,480
+spawn Default @288,528
