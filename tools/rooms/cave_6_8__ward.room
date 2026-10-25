@@ -1,0 +1,18 @@
+room cave_6_8#ward
+terrain Quiet Hall ward vault: paired stone benches surround the brass offering.
+floor_color 0.18 0.16 0.22
+grid
+####################
+#..................#
+#...###......###...#
+#..................#
+#..................#
+#..................#
+#..................#
+#...###......###...#
+#..................#
+####################
+cache 13,4 id=cache_cave_6_8_ward
+door cave_6_8 FromPocket 9,7
+spawn Inside 9,6
+spawn Default 9,6

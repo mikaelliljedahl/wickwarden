@@ -1,0 +1,23 @@
+room cave_6_7
+terrain Organ Loft: clustered organ foundations leave a broad central aisle to the scoped key stand.
+floor_color 0.18 0.16 0.22
+grid
+####################
+#..................#
+#......##.....##...#
+#..................#
+...................#
+...................#
+#..................#
+#......##.....##...#
+#..................#
+####################
+enemy choirling 8,3
+enemy choirling 13,5
+enemy choirling 16,6
+opener hidden_seam @144,480 id=e195 size=96,192
+prop rock 3,2
+prop rock 3,7
+prop pedestal 16,3
+pickup small_key @1584,358 id=key_c6_2 scope=c6
+spawn Default 5,5

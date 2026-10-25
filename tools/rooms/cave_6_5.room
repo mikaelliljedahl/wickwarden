@@ -1,0 +1,21 @@
+room cave_6_5
+terrain Bell Room: paired choir stalls frame the bell stand and northern resonance threshold.
+floor_color 0.18 0.16 0.22
+grid
+#########..#########
+#..................#
+#..##..........##..#
+#..................#
+...................#
+...................#
+#..................#
+#..##..........##..#
+#..................#
+#########..#########
+enemy hollow 6,3
+enemy choirling 14,3
+enemy choirling 14,6
+prop pedestal 12,4
+pickup item lantern_chime @1200,454
+opener resonance_stone @960,144 id=e194
+spawn Default 8,5

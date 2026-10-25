@@ -1,0 +1,22 @@
+room cave_6_6
+terrain Resonance Hall: broken stone choir benches and a narrow eastern seam between paired rocks.
+floor_color 0.18 0.16 0.22
+grid
+####################
+#..................#
+#..###......###....#
+#..................#
+#...................
+#...................
+#..................#
+#..###.............#
+#..................#
+#########..#########
+enemy spitcap 5,4
+enemy spitcap 13,6
+enemy choirling 14,3
+opener resonance_stone @960,816 id=e194
+opener hidden_seam @1776,480 id=e195 size=96,192
+prop rock 16,2
+prop rock 16,7
+spawn Default 10,5
