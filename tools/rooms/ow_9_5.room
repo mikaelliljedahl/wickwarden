@@ -1,0 +1,17 @@
+room ow_9_5
+terrain Ravine Edge: exposed southern rim with a wide approach and flanking scree
+floor_color 0.25 0.25 0.23
+grid
+#########..#########
+#..rr..........rr..#
+#...............r..#
+#..................#
+...................#
+...................#
+#..................#
+#..rr..........rr..#
+#..................#
+#########..#########
+enemy hollow 13,4
+enemy watcher_eye 17,3
+spawn Default 7,4

@@ -1,0 +1,18 @@
+room ow_8_5#ward
+terrain Stair Terrace ward vault: an optional stone chamber
+floor_color 0.25 0.25 0.23
+grid
+####################
+#..................#
+#...##........##...#
+#..................#
+#..................#
+#..................#
+#..................#
+#...##........##...#
+#..................#
+####################
+cache 13,4 id=cache_ow_8_5_ward
+door ow_8_5 FromPocket 9,7
+spawn Inside 9,6
+spawn Default 9,6

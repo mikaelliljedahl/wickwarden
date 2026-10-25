@@ -1,0 +1,17 @@
+room ow_9_4
+terrain Boulder Gate: paired boulder shoulders frame the north pass
+floor_color 0.25 0.25 0.23
+grid
+#########..#########
+#.....rr....rr.....#
+#.....r......r.....#
+#..................#
+...................#
+...................#
+#...............rr.#
+#..................#
+#..rr..............#
+#########..#########
+enemy watcher_eye 17,3
+enemy watcher_eye 17,7
+spawn Default 7,5

@@ -1,0 +1,20 @@
+room ow_8_5
+terrain Stair Terrace: three broken stone terraces beside an open central stairway
+floor_color 0.25 0.25 0.23
+grid
+#########..#########
+#..................#
+#..###.............#
+#..##..............#
+#...................
+#...................
+#..###.............#
+#.............###..#
+#..................#
+#########..#########
+enemy skitterwick 7,3
+enemy skitterwick 13,6
+enemy watcher_eye 17,2
+door ow_8_5#ward Inside 4,4
+spawn FromPocket 6,4
+spawn Default 10,5
