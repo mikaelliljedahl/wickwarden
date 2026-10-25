@@ -16,6 +16,8 @@ func run() -> void:
 	await _telegraph_snap_rest_cycle()
 	await _cone_and_locked_aim()
 	await _moth_and_hook_do_not_move_it()
+	await _mitts_throw_has_no_effect()
+	await _sling_and_chime()
 	await _fire_burns_then_dies()
 
 
@@ -194,4 +196,75 @@ func _fire_burns_then_dies() -> void:
 	await frames(20)
 	check(not is_instance_valid(enemy) or enemy.is_dead, "the snapper dies when the burn ends")
 	check(is_instance_valid(player), "Tamsin is untouched by the burn")
+	await dispose(arena)
+
+
+func _mitts_throw_has_no_effect() -> void:
+	for target in ["bramble_snapper", "hollow"]:
+		reset_state()
+		var arena := make_arena()
+		var player := make_player(arena, Vector2(300, 500))
+		var scene := load("res://scenes/world/liftable_rock.tscn") as PackedScene
+		check(scene != null, "real liftable rock scene loads")
+		if scene == null:
+			await dispose(arena)
+			return
+		var rock := scene.instantiate() as Node2D
+		rock.position = Vector2(372, 500)
+		arena.add_child(rock)
+		var enemy = make_enemy(arena, "res://scenes/enemies/%s.tscn" % target, Vector2(560, 500))
+		enemy.drops_enabled = false
+		enemy.move_speed = 0.0
+		var damage := [0]
+		var contacts := [0]
+		enemy.damaged.connect(func(amount: int) -> void: damage[0] += amount)
+		var hit := rock.get_node("ThrowHitbox") as Hitbox
+		check_eq(hit.kind, &"thrown", "actual rock damage identity is thrown")
+		check_eq(hit.damage, 3, "actual rock carries generic 3 damage")
+		hit.hit_landed.connect(
+			func(hurt: Hurtbox) -> void:
+				if hurt == enemy.hurtbox:
+					contacts[0] += 1
+		)
+		await frames(3)
+		# Hold the walking control on the same flight line as the rooted target.
+		if target == "hollow":
+			enemy.set_physics_process(false)
+			enemy.global_position = Vector2(560, 500)
+		GameState.acquire_item(&"heft_mitts")
+		GameState.set_active_item(&"heft_mitts")
+		player.facing = Vector2.RIGHT
+		check(player.use_item(), "%s: real mitts grab" % target)
+		await seconds(0.4)
+		check(rock.call(&"is_carried"), "%s: real rock carried" % target)
+		Input.action_press(&"use_item")
+		await frames(1)
+		release_inputs()
+		await seconds(0.9)
+		check_eq(contacts[0], 1, "%s: actual thrown rock reaches target once" % target)
+		if target == "bramble_snapper":
+			check_eq(damage[0], 0, "snapper takes no mitts damage")
+			check(is_instance_valid(enemy) and not enemy.is_dead, "snapper survives real throw")
+			if is_instance_valid(enemy):
+				check_eq(enemy.hp, 3, "snapper retains full hp")
+		else:
+			check_eq(damage[0], 3, "other enemy still takes generic rock damage")
+		await dispose(arena)
+
+
+func _sling_and_chime() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(arena, SCENE, SNAPPER_AT)
+	await frames(2)
+	var chime := make_hitbox(arena, SNAPPER_AT, Layers.Team.PLAYER, 0, 30.0)
+	chime.kind = &"chime"
+	await frames(2)
+	check_eq(enemy.hp, 3, "chime does no damage")
+	check(not enemy.is_stunned(), "chime does not stun snapper")
+	await dispose(chime)
+	var slug := make_hitbox(arena, SNAPPER_AT, Layers.Team.PLAYER, 1, 30.0)
+	slug.kind = &"sling"
+	await frames(2)
+	check_eq(enemy.hp, 2, "sling still damages snapper")
 	await dispose(arena)

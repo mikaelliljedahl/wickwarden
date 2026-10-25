@@ -115,6 +115,9 @@ func on_fire(_pos: Vector2) -> void:
 
 ## Fire hits do their damage through the burn; they never reach the hp directly.
 func _resolve_damage(hitbox: Hitbox, amount: int) -> int:
+	# Combat matrix 5.9: mitts have no effect on this rooted target.
+	if hitbox.kind == &"thrown":
+		return 0
 	if hitbox.kind == &"fire":
 		on_fire(hitbox.origin())
 		return 0
