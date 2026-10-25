@@ -5,10 +5,10 @@
 
 [ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/fen_leech.tscn" id="2"]
-[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/world/water_zone.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/world/mooring.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://scenes/world/reed_cluster.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/world/reed_cluster.tscn" id="3"]
+[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/water_zone.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/world/mooring.tscn" id="6"]
 [ext_resource type="Script" path="res://scripts/world/room_door.gd" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/world/shallow_zone.tscn" id="8"]
 
@@ -28,57 +28,60 @@ position = Vector2(816, 624)
 [node name="Bushes" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="ReedCluster1" parent="Bushes" instance=ExtResource("3")]
+position = Vector2(1200, 432)
+
 [node name="Props" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="Water1" type="StaticBody2D" parent="Props"]
 position = Vector2(1632, 192)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(384, 192)
 kind = &"water"
 
 [node name="Water2" type="StaticBody2D" parent="Props"]
 position = Vector2(1584, 624)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(480, 288)
 kind = &"water"
 
 [node name="Water3" type="StaticBody2D" parent="Props"]
 position = Vector2(1296, 672)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 192)
 kind = &"water"
 
 [node name="Water4" type="StaticBody2D" parent="Props"]
 position = Vector2(432, 768)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(480, 192)
 kind = &"water"
 
 [node name="Water5" type="StaticBody2D" parent="Props"]
 position = Vector2(1488, 816)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(288, 96)
 kind = &"water"
 
-[node name="WaterZone1" parent="Props" instance=ExtResource("4")]
+[node name="WaterZone1" parent="Props" instance=ExtResource("5")]
 position = Vector2(960, 48)
 deep = true
 size = Vector2(192, 96)
 
 [node name="Reed1" type="StaticBody2D" parent="Props"]
 position = Vector2(336, 144)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed2" type="StaticBody2D" parent="Props"]
 position = Vector2(720, 144)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
 
-[node name="Mooring1" parent="Props" instance=ExtResource("5")]
+[node name="Mooring1" parent="Props" instance=ExtResource("6")]
 position = Vector2(960, 144)
 mooring_id = &"e046"
 target_room = &"ow_7_2"
@@ -87,44 +90,41 @@ landing_offset = Vector2(0, 56)
 
 [node name="Reed3" type="StaticBody2D" parent="Props"]
 position = Vector2(624, 240)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed4" type="StaticBody2D" parent="Props"]
 position = Vector2(1200, 240)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed5" type="StaticBody2D" parent="Props"]
 position = Vector2(432, 432)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
-
-[node name="ReedCluster1" parent="Props" instance=ExtResource("6")]
-position = Vector2(1200, 432)
 
 [node name="Door1" type="Area2D" parent="Props"]
 position = Vector2(1200, 432)
 script = ExtResource("7")
 target_room = &"ow_7_3#grotto"
 target_spawn = &"Inside"
-blocker_path = NodePath("../ReedCluster1")
+blocker_path = NodePath("../../Bushes/ReedCluster1")
 
 [node name="Reed6" type="StaticBody2D" parent="Props"]
 position = Vector2(1392, 432)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
 
-[node name="WaterZone2" parent="Props" instance=ExtResource("4")]
+[node name="WaterZone2" parent="Props" instance=ExtResource("5")]
 position = Vector2(48, 480)
 deep = true
 size = Vector2(96, 192)
 
-[node name="Mooring2" parent="Props" instance=ExtResource("5")]
+[node name="Mooring2" parent="Props" instance=ExtResource("6")]
 position = Vector2(144, 480)
 mooring_id = &"e059"
 target_room = &"ow_6_3"
@@ -137,24 +137,24 @@ size = Vector2(192, 192)
 
 [node name="Reed7" type="StaticBody2D" parent="Props"]
 position = Vector2(720, 816)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed8" type="StaticBody2D" parent="Props"]
 position = Vector2(816, 816)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
 
-[node name="Mooring3" parent="Props" instance=ExtResource("5")]
+[node name="Mooring3" parent="Props" instance=ExtResource("6")]
 position = Vector2(960, 816)
 mooring_id = &"e061"
 target_room = &"ow_7_4"
 target_mooring = &"e061"
 landing_offset = Vector2(0, -56)
 
-[node name="WaterZone3" parent="Props" instance=ExtResource("4")]
+[node name="WaterZone3" parent="Props" instance=ExtResource("5")]
 position = Vector2(960, 912)
 deep = true
 size = Vector2(192, 96)

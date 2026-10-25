@@ -6,8 +6,8 @@
 [ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/skitterwick.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/tallow_blob.tscn" id="3"]
-[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/world/rush_wall.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/world/rush_wall.tscn" id="4"]
+[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="5"]
 
 [node name="Ow37" type="Node2D"]
 script = ExtResource("1")
@@ -31,102 +31,102 @@ position = Vector2(1296, 720)
 [node name="Bushes" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="RushWall1" parent="Bushes" instance=ExtResource("4")]
+position = Vector2(48, 432)
+
+[node name="RushWall2" parent="Bushes" instance=ExtResource("4")]
+position = Vector2(48, 528)
+
 [node name="Props" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="Water1" type="StaticBody2D" parent="Props"]
 position = Vector2(960, 192)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(192, 192)
 kind = &"water"
 
 [node name="Water2" type="StaticBody2D" parent="Props"]
 position = Vector2(864, 720)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(192, 96)
 kind = &"water"
 
 [node name="Water3" type="StaticBody2D" parent="Props"]
 position = Vector2(672, 816)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(192, 96)
 kind = &"water"
 
 [node name="Reed1" type="StaticBody2D" parent="Props"]
 position = Vector2(336, 144)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed2" type="StaticBody2D" parent="Props"]
 position = Vector2(1584, 144)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed3" type="StaticBody2D" parent="Props"]
 position = Vector2(240, 240)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed4" type="StaticBody2D" parent="Props"]
 position = Vector2(528, 336)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed5" type="StaticBody2D" parent="Props"]
 position = Vector2(624, 336)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed6" type="StaticBody2D" parent="Props"]
 position = Vector2(1584, 336)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
-[node name="RushWall1" parent="Props" instance=ExtResource("5")]
-position = Vector2(48, 432)
-
-[node name="RushWall2" parent="Props" instance=ExtResource("5")]
-position = Vector2(48, 528)
-
 [node name="Reed7" type="StaticBody2D" parent="Props"]
 position = Vector2(336, 624)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed8" type="StaticBody2D" parent="Props"]
 position = Vector2(1200, 624)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed9" type="StaticBody2D" parent="Props"]
 position = Vector2(1296, 624)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed10" type="StaticBody2D" parent="Props"]
 position = Vector2(1488, 720)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed11" type="StaticBody2D" parent="Props"]
 position = Vector2(144, 816)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed12" type="StaticBody2D" parent="Props"]
 position = Vector2(1296, 816)
-script = ExtResource("4")
+script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"reed"
 

@@ -5,8 +5,8 @@
 
 [ext_resource type="Script" path="res://scripts/world/room.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/fen_leech.tscn" id="2"]
-[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/world/rush_wall.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/rush_wall.tscn" id="3"]
+[ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/shallow_zone.tscn" id="5"]
 
 [node name="Ow27" type="Node2D"]
@@ -28,48 +28,48 @@ position = Vector2(1296, 624)
 [node name="Bushes" type="Node2D" parent="."]
 y_sort_enabled = true
 
+[node name="RushWall1" parent="Bushes" instance=ExtResource("3")]
+position = Vector2(1872, 432)
+
+[node name="RushWall2" parent="Bushes" instance=ExtResource("3")]
+position = Vector2(1872, 528)
+
 [node name="Props" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="Water1" type="StaticBody2D" parent="Props"]
 position = Vector2(288, 288)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(192, 192)
 kind = &"water"
 
 [node name="Water2" type="StaticBody2D" parent="Props"]
 position = Vector2(336, 720)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(288, 96)
 kind = &"water"
 
 [node name="Water3" type="StaticBody2D" parent="Props"]
 position = Vector2(1536, 720)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(384, 96)
 kind = &"water"
 
 [node name="Reed1" type="StaticBody2D" parent="Props"]
 position = Vector2(1680, 240)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
 
 [node name="Reed2" type="StaticBody2D" parent="Props"]
 position = Vector2(1776, 240)
-script = ExtResource("3")
+script = ExtResource("4")
 size = Vector2(96, 96)
 kind = &"reed"
-
-[node name="RushWall1" parent="Props" instance=ExtResource("4")]
-position = Vector2(1872, 432)
 
 [node name="ShallowZone1" parent="Props" instance=ExtResource("5")]
 position = Vector2(624, 528)
 size = Vector2(288, 192)
-
-[node name="RushWall2" parent="Props" instance=ExtResource("4")]
-position = Vector2(1872, 528)
 
 [node name="ShallowZone2" parent="Props" instance=ExtResource("5")]
 position = Vector2(1296, 624)
