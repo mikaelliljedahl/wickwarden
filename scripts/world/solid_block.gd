@@ -11,6 +11,8 @@ extends StaticBody2D
 
 @export var size: Vector2 = Vector2(96, 96)
 @export var kind: StringName = &"rock"
+## Presentation only; the solid rectangle and its origin stay fixed.
+@export var visual_offset: Vector2 = Vector2.ZERO
 
 ## Kinds painted by a terrain shader: the shader and its texture parameters (terrain textures).
 const TERRAIN := {
@@ -47,9 +49,11 @@ func _ready() -> void:
 	node.shape = shape
 	add_child(node)
 	if not TERRAIN.has(kind):
-		SpriteVisual.attach(self, kind, 0.0, size)
+		var visual := SpriteVisual.attach(self, kind, 0.0, size)
+		visual.position = visual_offset
 	elif not _attach_terrain():
-		Placeholder.attach(self, kind, 0.0, size)
+		var visual := Placeholder.attach(self, kind, 0.0, size)
+		visual.position = visual_offset
 
 
 ## The rectangle in the parent's space.

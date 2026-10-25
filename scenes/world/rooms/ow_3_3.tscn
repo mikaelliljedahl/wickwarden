@@ -62,6 +62,7 @@ position = Vector2(1392, 288)
 script = ExtResource("4")
 size = Vector2(192, 192)
 kind = &"hut"
+visual_offset = Vector2(-16, 84)
 
 [node name="Door1" type="Area2D" parent="Props"]
 position = Vector2(1392, 432)

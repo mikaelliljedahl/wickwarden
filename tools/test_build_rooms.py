@@ -258,6 +258,29 @@ class Scopes(unittest.TestCase):
 
 
 class PropKinds(unittest.TestCase):
+    def test_visual_offset_changes_only_presentation(self) -> None:
+        world = world_of([room_record("ow_5_5", [])])
+        source = room_text("ow_5_5", [], "prop hut 5,5 size=192,96")
+        original, errors = compile_text(source, world, "ow_5_5.room")
+        self.assertEqual(errors, [])
+        for value in ("-64,84", "0,0"):
+            result, errors = compile_text(source.rstrip() + f" visual_offset={value}\n", world, "ow_5_5.room")
+            self.assertEqual(errors, [])
+            expected = original
+            if value != "0,0":
+                expected = original.replace('kind = &"hut"', 'kind = &"hut"\nvisual_offset = Vector2(-64, 84)')
+            self.assertEqual(result, expected)
+            again, _ = compile_text(source.rstrip() + f" visual_offset={value}\n", world, "ow_5_5.room")
+            self.assertEqual(result, again)
+
+    def test_visual_offset_rejects_invalid_numbers(self) -> None:
+        world = world_of([room_record("ow_5_5", [])])
+        for value in ("1", "1,2,3", "nan,0", "0,inf", "a,b"):
+            result, errors = compile_text(room_text("ow_5_5", [], f"prop hut 5,5 visual_offset={value}"),
+                                          world, "ow_5_5.room")
+            self.assertIsNone(result)
+            self.assertTrue(any("visual_offset takes two finite" in e for e in errors), errors)
+
     def test_a_prop_with_its_own_script_is_refused(self) -> None:
         world = world_of([room_record("ow_5_5", [])])
         text = "\n".join(["room ow_5_5", "grid", *(["#" * 20] + ["#" + "." * 18 + "#"] * 8 + ["#" * 20]),

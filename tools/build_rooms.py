@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -131,7 +132,7 @@ ENTITY_OPTS = {
     "arena": (),
     "brazier": ("id",),
     "pickup": ("id", "requires", "scope"),
-    "prop": ("size",),
+    "prop": ("size", "visual_offset"),
     "opener": OPENER_OPTS,
     "door": ("blocker",),
     "hidden_stairs": ("id",),
@@ -651,6 +652,16 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
             ("size", vec2(*size)),
             ("kind", sname(ent.args[0])),
         ]
+        if "visual_offset" in ent.opts:
+            try:
+                offset = tuple(float(v) for v in ent.opts["visual_offset"].split(","))
+            except ValueError:
+                offset = ()
+            if len(offset) != 2 or not all(math.isfinite(v) for v in offset):
+                errors.append(f"{where_}: visual_offset takes two finite pixel numbers, visual_offset=<x>,<y>")
+                return False
+            if offset != (0.0, 0.0):
+                node.props.append(("visual_offset", vec2(*offset)))
         node.base = camel(ent.args[0])
         plan.static |= tiles_of_rect(ent.pos[0] - size[0] / 2, ent.pos[1] - size[1] / 2, size[0], size[1])
         plan.singles.append((key, node))

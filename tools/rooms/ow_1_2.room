@@ -18,7 +18,7 @@ grid
 enemy spitcap 6,2
 enemy tallow_blob 2,7
 enemy tallow_blob 13,8
-prop hut @1536,144 size=192,96
+prop hut @1536,144 size=192,96 visual_offset=-64,84
 door ow_1_2#shop Inside 15,2
 spawn FromPocket 15,3
 opener cut_screen 9,9 look=rush_wall
