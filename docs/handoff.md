@@ -9,7 +9,7 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-Updated 2026-10-25 21:23 UTC. Full-gated runtime `16df5d1902a1e8fb6108aa117aa971cccefe44a7` is the current tested checkpoint. It is a descendant of published `dd1ec581d2e80e1ba4a9baa433430a53b801ff15`; no later commits or runtime changes were present before this docs update. Publish this two-doc-only update as a fast-forward to personal `origin/main` and verify the exact remote SHA. Personal remote: https://github.com/mikaelliljedahl/wickwarden.git; use account `mikaelliljedahl` only.
+Updated 2026-10-25 21:25 UTC. Full-gated runtime `16df5d1902a1e8fb6108aa117aa971cccefe44a7` is the current tested checkpoint. It descends from published `dd1ec581d2e80e1ba4a9baa433430a53b801ff15`; no later runtime changes were present. At 21:24 UTC, status commit `d30148d` was pushed fast-forward to personal `origin/main`; `ls-remote` returned exact `d30148dffbe79d583d63651e96341a31dce4e42a`. This follow-up is docs-only and preserves the tested runtime. Personal remote: https://github.com/mikaelliljedahl/wickwarden.git; use account `mikaelliljedahl` only.
 
 **Final gate evidence:** isolated logs are in `/tmp/wickwarden-urgent-final-16df5d1-logs/`. `make check` passed 133/133 Godot suites, clean lint and world-data checks; Python generator/compiler tests passed 172. `rooms-check` passed 221/221, `art-test` 22/22, and global ownership passed for 92 WPs and 53 batches (192 rooms, 33 pockets). The first import and all graphics used Dummy audio. The verifier reported no timeout, SIGSEGV, engine/script/parse error, leak, skip or waiver. The detached test worktree was removed. These results apply to `16df5d1902a1e8fb6108aa117aa971cccefe44a7` only.
 
