@@ -56,9 +56,9 @@ kind = &"reed"
 
 [node name="Mooring1" parent="Props" instance=ExtResource("4")]
 position = Vector2(1392, 432)
-mooring_id = &"e086_ow_4_5"
+mooring_id = &"e086"
 target_room = &"ow_5_5"
-target_mooring = &"e086_ow_5_5"
+target_mooring = &"e086"
 landing_offset = Vector2(-56, 0)
 
 [node name="WaterZone1" parent="Props" instance=ExtResource("5")]

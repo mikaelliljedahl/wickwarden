@@ -16,5 +16,5 @@ grid
 enemy hollow 6,6
 spawn Default 9,3
 water @1680,480 size=480,768
-mooring @1392,432 id=e086_ow_4_5 target_room=ow_5_5 target_mooring=e086_ow_5_5 landing_offset=-56,0
+mooring @1392,432 id=e086 target_room=ow_5_5 target_mooring=e086 landing_offset=-56,0
 ledge s @960,888 size=288,48
