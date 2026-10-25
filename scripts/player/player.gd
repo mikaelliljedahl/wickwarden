@@ -61,7 +61,7 @@ var visual: Node2D
 var _swing_polygon: CollisionPolygon2D
 var _swing_visual: Node2D
 var _flare_visual: Node2D
-var _ward_visual: Placeholder
+var _ward_visual: Node2D
 var _state_time: float = 0.0
 var _hold_time: float = 0.0
 var _attack_prev: bool = false
@@ -104,7 +104,7 @@ func _ready() -> void:
 	visual = _make_player_visual()
 	_swing_visual = _make_swing_trail()
 	_flare_visual = _make_flare_ring()
-	_ward_visual = _make_arc_visual(&"ward", 64.0, WARD_ARC_DEG, "WardVisual")
+	_ward_visual = _make_ward_shield(64.0, WARD_ARC_DEG)
 
 	hurtbox = Hurtbox.new()
 	hurtbox.name = "Hurtbox"
@@ -726,6 +726,20 @@ func _make_flare_ring() -> Node2D:
 	ring.visible = false
 	add_child(ring)
 	return ring
+
+
+## Soft lamp light, with the same centre, reach and facing as the original ward arc.
+func _make_ward_shield(reach: float, degrees: float) -> Node2D:
+	var shield_script := load("res://scripts/art/ward_shield.gd") as GDScript
+	if shield_script == null:
+		return _make_arc_visual(&"ward", reach, degrees, "WardVisual")
+	var shield := shield_script.new() as Node2D
+	shield.name = "WardVisual"
+	shield.set(&"radius", reach)
+	shield.set(&"arc_degrees", degrees)
+	shield.visible = false
+	add_child(shield)
+	return shield
 
 
 func _make_arc_visual(
