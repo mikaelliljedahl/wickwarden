@@ -1,0 +1,19 @@
+room ow_5_5#cache
+terrain sandbar cache: drift stones and a dry reed hollow
+floor_color 0.20 0.22 0.18
+grid
+####################
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+#..................#
+####################
+prop rock 4,3
+prop rock 15,3
+cache 9,3 id=cache_ow_5_5
+door ow_5_5 FromPocket 9,8
+spawn Inside 9,6

@@ -1,0 +1,26 @@
+room ow_6_5
+terrain Broken Lighthouse: ruined keeper tower on a broad island
+floor_color 0.18 0.24 0.22
+grid
+#########..#########
+#..................#
+#..................#
+#............###...#
+...............#...#
+.............###...#
+#..................#
+#..................#
+#..................#
+#########..#########
+enemy hollow 6,5
+door ow_6_5#shop Inside 14,4
+spawn FromPocket 12,4
+spawn Default 9,5
+; Deep lake surrounds the central walkable island; each graph crossing has its own post.
+water @960,96 size=1920,192
+water @960,864 size=1920,192
+water @96,480 size=192,576
+water @1824,480 size=192,576
+mooring @960,240 id=e074 target_room=ow_6_4 target_mooring=e074 landing_offset=0,56
+mooring @240,480 id=e088 target_room=ow_5_5 target_mooring=e088 landing_offset=56,0
+mooring @960,720 id=e090 target_room=ow_6_6 target_mooring=e090 landing_offset=0,-56

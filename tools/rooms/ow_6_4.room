@@ -1,0 +1,27 @@
+room ow_6_4
+terrain Mirror Deep: open lake around a low stone island
+floor_color 0.18 0.24 0.22
+grid
+#########..#########
+#..................#
+#..................#
+#.............r....#
+....................
+....................
+#....r.............#
+#..................#
+#..................#
+#########..#########
+enemy duskmoth 6,3
+enemy duskmoth 13,4
+enemy duskmoth 11,6
+spawn Default 9,5
+; Deep lake surrounds the central walkable island; each graph crossing has its own post.
+water @960,96 size=1920,192
+water @960,864 size=1920,192
+water @96,480 size=192,576
+water @1824,480 size=192,576
+mooring @960,240 id=e060 target_room=ow_6_3 target_mooring=e060 landing_offset=0,56
+mooring @240,480 id=e071 target_room=ow_5_4 target_mooring=e071 landing_offset=56,0
+mooring @1680,480 id=e073 target_room=ow_7_4 target_mooring=e073 landing_offset=-56,0
+mooring @960,720 id=e074 target_room=ow_6_5 target_mooring=e074 landing_offset=0,-56
