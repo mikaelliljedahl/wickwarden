@@ -1,6 +1,6 @@
 # Wickwarden — state
 
-Status as of 2026-10-25, end of session 2 (see handoff.md status section for bugs and next steps). Read this first: it says what is done, what is running and what comes next.
+Status as of 2026-10-25, Codex takeover in progress (see handoff.md status section for bugs and next steps). Read this first: it says what is done, what is running and what comes next.
 It is updated when a step or a work package lands. The index of all documents is [README.md](README.md) in this folder.
 
 ## Where the project stands
@@ -10,11 +10,16 @@ It is updated when a step or a work package lands. The index of all documents is
 | Step 1: dev world | Done. Seven rooms, five monster types, tether moth, pitch pot, cracked wall, locked door, brazier gate, and the route test. Historical plan. | [dev-world-plan.md](dev-world-plan.md); details in "Step 1" below |
 | Step 2: art pass | Done. GPT Image art for every dev-world entity and room, cut by `make art`. The owner has not yet approved it in play. | [asset-contract.md](asset-contract.md), [art-provenance.md](art-provenance.md); details in "Step 2" below |
 | Planning of the full game | Done: world plan, work packages, monster/boss/tool spec, owner decisions, art inventory, intro script. | [world-plan.md](world-plan.md), [world-work-packages.md](world-work-packages.md), [monsters-bosses-tools.md](monsters-bosses-tools.md), [decisions.md](decisions.md), [art-inventory.md](art-inventory.md), [intro-script.md](intro-script.md) |
-| World build (waves 0 and 1 done; wave 2 in progress) | Wave 0 (foundation F0–F14, G1, D1–D3) done. Wave 1 done (P01–P15, T01–T08, M0–M5) with deviations: T03 raft is a fixed lane (free steering not built), player body has the WATER mask (F7b). Wave 2: Brackwater R1 rooms done; R2.a, R2.b, R4.a–R4.c, R5.b done; 32 of 88 overworld rooms built. Not started: R2.c, R2.d, R3, R4.d–f, R5.a/c/d, R6, minibosses, bosses, caves, ending, QA. Open bugs and next steps: [handoff.md](handoff.md) section Status. | [world-work-packages.md](world-work-packages.md) section 5, [code-contract.md](code-contract.md) section 16 |
+| World build (waves 0 and 1 done; wave 2 in progress) | Wave 0 (foundation F0–F14, G1, D1–D3) done. Wave 1 done (P01–P15, T01–T08, M0–M5) with deviations: T03 raft is a fixed lane (free steering not built), player body has the WATER mask (F7b). Wave 2: Brackwater R1 rooms done; R2.a, R2.b, R4.a–R4.c, R5.b done; 32 of 88 overworld rooms built. Active takeover batches: R2.c, R4.d, R5.a (not yet accepted as landed). Not started: R2.d, R3, R4.e/f, R5.c/d, R6, minibosses, bosses, caves, ending, QA. Open bugs and next steps: [handoff.md](handoff.md) section Status. | [world-work-packages.md](world-work-packages.md) section 5, [code-contract.md](code-contract.md) section 16 |
 | Art for the full game | Batches 1 to 3 done: 42 Tamsin sheet images, logged in `tools/source_art/log_b01.md` and `log_b02_b03.md`, not yet in the art manifest. Batches 4 to 86 in production. | [art-inventory.md](art-inventory.md) section 4; progress in `tools/art_prompts/PROGRESS.md` |
 
-At the last update `make check` was green on the committed tree (import, 25 headless test files, gdlint, world data
-checks). `make art-test` passes (the Python tests of the cut tool).
+Takeover baseline HEAD is `ebf58bb`. The lead reported `make check` and global ownership green immediately before dispatch; integrated checks are due after worker commits. The verifier independently confirmed global ownership green. Initial shared-tree snapshot: 77 staged paths, 148 untracked paths, 5 unstaged tracked paths. Preexisting art deletions and replacements must stay untouched.
+
+The owner replaced Haiku with ATF Codex **GPT-6.1 Sol low** for all coding; Claude quota is exhausted. The root lead only orchestrates. Delegated workers execute code, shell verification, status updates and explicitly instructed integration pushes. Seven active jobs cover compiler gates, priority room fixes, R2.c, R4.d, R5.a, existing room layout review and art production restart. Job ids and current handoff are in [handoff.md](handoff.md).
+
+The owner reports confusing dense-tree layouts in non-original rooms. Quality review is active; preserve the original six. Open spec conflicts remain listed in handoff; this takeover does not resolve them.
+
+Live-tree verifier check during concurrent edits: `make check` stopped at `test_world_graph` (1 of 69 suites failed; 1 of 829 graph checks): `ow_3_5` has a door to `cave_3_1`, which the graph does not link there. Reported to the lead for the active R4.d owner. Log: `/tmp/wickwarden-takeover-baseline-check.log`. This is not a clean committed-baseline result; rerun after workers finish.
 
 ## Step 1: the dev world (what runs today)
 
@@ -148,10 +153,9 @@ Not covered: the hook has no hit detection against rocks or walls, so there is n
 
 ## Next steps
 
-1. Land F2 (world runtime: data-driven rooms, streaming, shared hooks) and commit it; then F3 to F5 in the order of
-   [world-work-packages.md](world-work-packages.md) section 5.
-2. Art: the owner culls each batch before the next one starts (art-inventory section 4). Each kept image gets its
-   provenance row and its manifest entry.
-3. Play step 2 with `make run` and `make dev`; decide the swing width and whether the walk cycle needs a new sheet.
-4. Playtest balance on `make dev` and `make run`; tune only through the constants named in the code contract.
-5. The title screen, saves and the intro belong to the world build (F12 to F14), not to step 1.
+1. Collect the active takeover worker reports and verify their commits before marking work landed. Continue independent room work when a compiler dependency blocks a gate.
+2. Review opened `/tmp` captures for the dense-tree layout concern; preserve the original six rooms.
+3. On lead follow-up, run integrated `make check`, rooms checks and commit ownership review. Do not compile others' rooms or regenerate unchanged world data.
+4. Update landed status, then execute continuous push only when instructed by the lead. Resume image production through ATF, with image inspection, hashes, logs and provenance handled by the assigned art worker.
+5. Resolve the pocket placement and exit-depth conflicts with the owner; continue remaining wave 2 batches and region tests, then minibosses, bosses and caves.
+6. Play step 2 with `make run` and `make dev` to judge swing width, walk timing and balance. Tune only through agreed constants.

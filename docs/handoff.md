@@ -1,6 +1,6 @@
 # Wickwarden — orchestrator handoff
 
-Audience: a new orchestrator (a Claude Code session or a human) who takes over the build with no other context.
+Audience: a new orchestrator (an agent session or a human) who takes over the build with no other context.
 Language: English. The owner writes Swedish; see section 7 for how to talk to him.
 
 Read this file first, then [state.md](state.md). The rules for agents are in [../AGENTS.md](../AGENTS.md).
@@ -9,12 +9,31 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
-Last updated: 2026-10-25, end of session 2. Read this section, then [state.md](state.md).
+Last updated: 2026-10-25, Codex takeover in progress. Read this section, then [state.md](state.md).
 
-- **HEAD `12202f7` = `origin/main`. Nothing unpushed.** Code gate: `make check` GREEN at `d1787e2` (69 test files, gdlint clean, 72 Python tests). Later commits (`a1fa12d`, `12202f7`) are docs only.
-- **Working tree:** no uncommitted room or code files. The index has 77 staged entries from the art producers (deletions under `tools/source_art/` and `tools/art_prompts/`). They are NOT ours. Do not commit them without the owner's decision.
-- **Overworld rooms built: 32 of 88** (`.room` sources in `tools/rooms/`, compiled to `scenes/world/rooms/`). Five pockets have their own file. Caves (104 rooms), pockets in caves, bosses, minibosses, the ending and waves 3 to 5 are NOT started.
-- **ATF budget:** the Claude/Haiku quota ran out during session 2 (about 25 ATF jobs). Codex (`gpt-6-luna`) had about 10 % weekly left at the end. The next session should first check the quotas.
+- **Takeover baseline HEAD:** `ebf58bb`. The lead reported `make check` and ownership `--global` green immediately before dispatch. Integrated verification will run again after workers report their commits.
+- **Shared working tree:** initial verifier snapshot had 77 staged paths, 148 untracked paths and 5 unstaged tracked paths. Art deletions and untracked replacements predate this assignment. Leave them untouched; commit only explicit owned paths.
+- **Owner workflow replaces Haiku:** all coding uses AgentTeamForge Codex **GPT-6.1 Sol, low effort**. Claude quota is exhausted. The root lead only orchestrates; delegated workers execute shell verification, code, document updates and authorized pushes. Resume image production through ATF.
+- **Room quality:** the owner reports confusing dense-tree layouts in non-original rooms. A review is active; preserve the original six rooms. Captures must be saved under `/tmp` and opened before reporting visual findings.
+- **Push:** continuous push authorization remains, but this takeover snapshot must not be pushed while workers actively edit the tree. The integration worker pushes only when instructed by the lead after verification.
+
+Live-tree verifier check during concurrent edits: `make check` stopped at `test_world_graph` (1 of 69 suites failed; 1 of 829 graph checks): `ow_3_5` has a door to `cave_3_1`, which the graph does not link there. Reported to the lead for the active R4.d owner. Log: `/tmp/wickwarden-takeover-baseline-check.log`. This is not a clean committed-baseline result; rerun after workers finish.
+
+### Active takeover assignments
+
+These are launched assignments, not landed work. Workers must report commits and checks before status changes to done.
+
+| Assignment | ATF job |
+|---|---|
+| Compiler gate fixes | `job_01a173820cf1771a94d7e5c7eb18bd32` |
+| Priority room fixes | `job_01a173820d2e7321acdc70b5616dfe23` |
+| R2.c | `job_01a173820d5276dd90625cb93810348d` |
+| R4.d | `job_01a173820d7c777388c8a60e0e1c73db` |
+| R5.a | `job_01a173820e5675af8424b555a9d71a42` |
+| Existing room layout review | `job_01a173820e897747ba2082ffb7108908` |
+| Art production restart | `job_01a173820ec1786e8386bedaad3f4b23` |
+
+The integration verifier owns only `docs/state.md` and `docs/handoff.md` for status updates. It waits for a lead follow-up before integrated `make check`, rooms checks and commit ownership review.
 
 ### Wave status
 
@@ -23,9 +42,9 @@ Last updated: 2026-10-25, end of session 2. Read this section, then [state.md](s
 | 0 (foundation F0–F14, G1, D1–D3) | Done | F6b `db7ea39`, F6c `fdef2ff`, F7b `7131dc4` added after the wave. |
 | 1 (props P01–P15, tools T01–T08, monsters M0–M5) | Done with deviations | P15 `cb16dd3`, T04 `2df477a`, T06 `073f5ba`, T03 `5f42b99` (fixed lane, see bugs). |
 | 2 Brackwater R1 (pilot) | Rooms done | R1.a `d1787e2`, R1.b `bdc4e37`/`ed17c1c`/`77702bb`. Region lead test `tests/test_area_brackwater.gd` NOT written. |
-| 2 Thornwood R2 | Partly | R2.a `3f0c4ad`, R2.b `33f92c9`. NOT started: R2.c (`7_0`, `7_1` Eyegate, `3_2` +grate, `3_3` +hut), R2.d (`4_2` drop ledge, `5_2`, `7_2` +bag). |
-| 2 Tallowfen/Mirrormere R4 | Partly | R4.a `fa1f483`, R4.b `3892b3f`, R4.c `45664cb`. NOT started: R4.d, R4.e, R4.f. |
-| 2 Gravelight R5 | Partly | R5.b `ce2e387`. NOT started: R5.a, R5.c, R5.d. |
+| 2 Thornwood R2 | Partly | R2.a `3f0c4ad`, R2.b `33f92c9`. Active: R2.c (`7_0`, `7_1` Eyegate, `3_2` +grate, `3_3` +hut), R2.d not started (`4_2` drop ledge, `5_2`, `7_2` +bag). |
+| 2 Tallowfen/Mirrormere R4 | Partly | R4.a `fa1f483`, R4.b `3892b3f`, R4.c `45664cb`. R4.d active; R4.e and R4.f not started. |
+| 2 Gravelight R5 | Partly | R5.b `ce2e387`. R5.a active; R5.c and R5.d not started. |
 | 2 Hushmarch R6, Cinderflats R3 | Not started | R3 needs P12/P15/M2; R6 needs P07/P11. |
 | 2 minibosses MB1–MB5, bosses B01–B10 | Not started | M0 base exists. |
 | 3 caves C01–C10, ending E1 | Not started | |
@@ -70,15 +89,15 @@ Last updated: 2026-10-25, end of session 2. Read this section, then [state.md](s
 
 ### Next steps (in this order)
 
-1. Fix bugs 1 to 4 (small codex `low` WP for the compiler lines `mooring`, `shallows`, `ledge`; then Haiku recompiles the affected rooms). Remove the pending waiver for moorings in the same commit.
-2. Decide 5 and 12 with the owner (owner decisions, do not guess).
-3. Start the remaining wave 2 batches: R2.c, R2.d, R4.d, R4.e, R4.f, R5.a, R5.c, R5.d (Haiku room batches), then R3 and R6 (need P12, P15, M2, P07, P11 — all done).
-4. Region lead tests (bug 17).
-5. Minibosses and bosses (MB1–MB5, B01–B10), then caves (wave 3).
+1. Collect the seven active takeover reports above. Compiler and priority room workers coordinate gate dependencies; room workers continue independent work when a compiler feature blocks them.
+2. Review the dense-tree layout findings and opened captures. Preserve the original six; route fixes through each room's assigned owner.
+3. On lead follow-up, the integration verifier checks commit stats and explicit ownership, runs integrated `make check` and `make rooms-check` (or the compiler's check mode if the target remains a stub). Do not compile other workers' rooms.
+4. Resolve open spec conflicts 5 and 12 with the owner. Do not change binding documents locally.
+5. After verification, update landed status and push continuously only when the lead instructs the integration worker. Then assign remaining wave 2 batches, region tests, minibosses and bosses, followed by caves.
 
 ### Owner decisions open
 
-- ATF budget: which quota to spend first, and whether a new session should start with Codex (cheap) only.
+- Coding model is settled by the takeover instruction: ATF Codex GPT-6.1 Sol low. Claude quota is exhausted.
 - Bugs 5 and 12 above.
 - Art: approval of batches 1–3 in play; art producers still committing (batches up to 69).
 
@@ -95,7 +114,7 @@ Last updated: 2026-10-25, end of session 2. Read this section, then [state.md](s
 - **The world build** (the full game: 192 rooms including caves, 33 pockets, 10 caves, 10 bosses, 5 miniboss pairs, 8 tools) is being built now, by work packages (WPs).
 - **Repo:** `/home/mikael/code/github/wickwarden`. Remote `origin` is `https://github.com/mikaelliljedahl/wickwarden.git`.
 - **Account:** the repo is **private** on the **personal** account `mikaelliljedahl`, not the Auxality account. Do not use the Auxality account for this repo.
-- **Push command** (only the orchestrator pushes, only when the owner asks or when pushing continuously, see section 7):
+- **Push command** (delegated integration worker only, on lead instruction under owner authorization, see section 7):
 
   ```
   GH_TOKEN=$(gh auth token --user mikaelliljedahl) git push origin main
@@ -110,7 +129,7 @@ Index: [README.md](README.md). Where two documents differ, a binding document wi
 Read in this order:
 
 1. [state.md](state.md): where the project stands (may be stale; check section "Status" of this file and `git log`).
-2. [decisions.md](decisions.md) (**binding**): the owner's decisions of 2026-10-24, numbered 1–42.
+2. [decisions.md](decisions.md) (**binding**): the owner's decisions of 2026-10-24, numbered 1–44.
 3. [world-work-packages.md](world-work-packages.md) (**binding**): sections 3 (rules for every WP), 4 (interface contracts), 5 (wave 0), then the table of the wave you work on. Section 12 has the dependency graph, section 13 the rules for agents.
 4. [code-contract.md](code-contract.md) (**binding**): section 1 (rules), section 16 (world build contract: 16.1 scope, 16.2 rules for every world WP, 16.3 interfaces, 16.4 flags, 16.8 file layout).
 5. [world-plan.md](world-plan.md) (**binding**): the master plan (rooms, gates, caves, tools). Reference, large (117 KB). Read the section your WP names.
@@ -145,10 +164,9 @@ Other checkers (not in `make check`):
 
 ## 3. The orchestration workflow
 
-The lead (you) delegates and does as little as possible. Each WP is done by one agent. The lead then verifies.
+The lead (you) delegates and does as little as possible. Each WP is done by one agent. The lead delegates verification to an integration worker.
 
-**Model rule (owner's workflow):** every WP is done by **one Haiku agent at high effort**, in small steps.
-Note the conflict: `world-work-packages.md` names **Sonnet** for most foundation WPs (sections 5, 6–10). Default: use Haiku, as the owner asked. If a Haiku run fails twice on the same WP, use Sonnet for that WP and write it in the status. Do not change the plan document to match.
+**Model rule (owner takeover, 2026-10-25):** all coding is delegated through ATF to Codex **GPT-6.1 Sol at low effort**. The root lead only orchestrates; workers execute verification and edits. This replaces the earlier Haiku/Sonnet workflow. Model labels in the binding WP plan remain historical assignments; do not edit normative documents to match this workflow instruction.
 
 **Per-WP flow:**
 
@@ -156,7 +174,7 @@ Note the conflict: `world-work-packages.md` names **Sonnet** for most foundation
 2. Start one agent with the brief of section 4.
 3. The agent works in small steps. After each step it runs `make test T="<own suites>"`.
 4. The agent commits only its own paths (`git add <paths>`, never `git add -A`). It reports.
-5. The lead verifies:
+5. The integration worker verifies on the lead’s instruction:
    - `git log --oneline | head` shows the commit, and `git show --stat <hash>` shows only the WP's Owns files.
    - `python3 tools/check_ownership.py <WP>` with the file list on stdin (see below) prints OK.
    - `make check` is green on the new HEAD.
@@ -182,7 +200,7 @@ Output: `OK P01: n file(s) inside Owns` or `STRAY <path>` with exit 1. Other mod
 - Commit only your own paths: `git add <paths>`. Never `git add -A` or `git add .`.
 - Never `git reset`, `git stash`, `git checkout -- <file>`, `git clean` or force-push. Other agents' uncommitted work is in the tree.
 - If `git status` shows staged files that are not yours, commit with the paths: `git commit -m "<msg>" -- <your paths>`. Do not unstage others' files.
-- Do not push. Only the orchestrator pushes (section 7).
+- Do not push unless explicitly assigned integration push work by the lead (section 7).
 - Commit messages: short, imperative, no WP-internal jargon needed. No AI attribution.
 
 **Code rules (from `world-work-packages.md` section 3 and `code-contract.md` 16.2; AGENTS.md is the short form).**
@@ -203,13 +221,9 @@ Output: `OK P01: n file(s) inside Owns` or `STRAY <path>` with exit 1. Other mod
 
 ## 4. How to start agents
 
-Two ways. Use either. Both run the same brief.
+Use AgentTeamForge with the Codex backend, **GPT-6.1 Sol**, **low effort**, and the repo working directory. Read the available ATF tool schema for exact model identifiers and fields. Do not start Claude/Haiku jobs: that quota is exhausted. Parallel jobs need disjoint owned paths. The root lead coordinates; delegated workers run shell commands and make changes.
 
-**A. Claude Code Agent tool:** `model: haiku`, `effort: high`, `run_in_background: true`, working directory the repo.
-
-**B. AgentTeamForge `submit_job`:** `backend: "pi"`, `model: "anthropic/claude-haiku-5-5"`, `effort: "high"`, `cwd` the repo. This has a separate usage budget. Stop the job after it reports with `stop_agent(job_id)`.
-
-Use the tools' schemas (load them with `ToolSearch` if they are deferred). Agents cannot see this conversation: the brief must be self-contained.
+Agents need self-contained briefs, including the current shared-tree and push restrictions.
 
 **Brief template (fill the `<...>` parts):**
 
@@ -251,7 +265,7 @@ REPORT (your final message, max 15 lines):
 **Notes on the brief:**
 - Give the WP its exact `Owns` line. Do not give a longer file list than the plan.
 - Name the suites: `make test T="world"` works on a subset. Test file names map to `tests/test_<name>.gd`.
-- A WP's Haiku agent that fails twice on the same step: stop it, read its report, and split the WP into smaller WPs with the lead's Owns lists.
+- If a worker fails twice on the same step, read its report and split the task into smaller assignments with explicit owned paths.
 
 ## 5. Art pipeline
 
@@ -312,26 +326,26 @@ At writing, `git status` showed uncommitted work by others. Do not add it, reset
 
 Staged files: check `git diff --cached --stat` before any commit. Commit with explicit paths.
 
-## 7. Owner preferences (for an orchestrating Claude)
+## 7. Owner preferences (for the orchestrating lead)
 
 - The owner writes **Swedish**. Replies to him are in **Swedish**, short plain sentences, in the style of **ASD-STE100** (one idea per sentence, simple words, no idioms).
 - All **repo documents, code, comments, commit messages and PR texts are in English.**
 - The owner wants the lead to **delegate**. The lead does little work itself. Start agents; verify; report.
 - Do not ask needless questions. Decide small things yourself, note the choice in the status or in the doc, and go on. Ask only for decisions that the decisions document does not settle, or for pushes and irreversible actions the owner has not asked for.
 - **Push policy:** push only when asked, or when the owner says to push continuously. **Currently: push continuously.** After every push, update the "Status (update at every push)" section of this file (date and HEAD) and commit that change too.
-- Push command: `GH_TOKEN=$(gh auth token --user mikaelliljedahl) git push origin main`. Only the orchestrator pushes. Agents never push.
+- Push command: `GH_TOKEN=$(gh auth token --user mikaelliljedahl) git push origin main`. Only the delegated integration worker pushes when instructed by the lead.
 - No AI attribution in commits, PRs or docs.
 
 ## 8. Start here (checklist for the new orchestrator)
 
-1. **Orient.** Read this file, then [state.md](state.md). Run `git log --oneline | head -20`, `git status` and `git diff --cached --stat`. Note HEAD. Update the status section here if it is out of date.
+1. **Orient.** Read this file, then [state.md](state.md). Delegate shell inspection: `git log --oneline | head -20`, `git status` and `git diff --cached --stat`. Note HEAD. Update the status section here if it is out of date.
 2. **Read the binding rules.** `decisions.md`, `code-contract.md` section 1 and section 16, `world-work-packages.md` sections 3, 4, 5 and 13. Skim `world-plan.md` and `monsters-bosses-tools.md` only where a WP names them.
-3. **Check the gate.** Run `make check` and `python3 tools/check_ownership.py --global`. Both must be green. If not, the first WP is a fix, not new content.
-4. **Choose the next WPs.** Now: **F12** and **F9** (Depends done), then F13 and F14 in order. Wave 1 may start (gate F0–F7 met); the wave-1 WPs need only the Depends in their rows. Use the dependency column of the WP table; never start a WP before its `Depends` are on `main`.
-5. **Start agents.** One Haiku agent per WP (section 3, model rule), with the brief of section 4. Parallel only with disjoint files. Keep the number of agents you run within your usage budget.
-6. **Verify each result.** `git show --stat <hash>`, `python3 tools/check_ownership.py <WP>` with the stdin list, `make check` on HEAD. Fix or send back. Update `docs/state.md` when a WP lands.
+3. **Delegate the gate check.** Have the integration worker run `make check` and `python3 tools/check_ownership.py --global`. Both must be green. If not, the first WP is a fix, not new content.
+4. **Continue active work.** Read the takeover assignments above before dispatching more jobs. Foundation and wave 1 are done. Finish active compiler fixes, room batches, layout review and art restart; then choose remaining wave 2 work from the dependency table.
+5. **Start ATF workers.** Use Codex GPT-6.1 Sol low for coding, with the brief of section 4. Parallel only with disjoint files. The root lead only orchestrates; delegate shell checks and document work too.
+6. **Delegate verification of each result.** `git show --stat <hash>`, `python3 tools/check_ownership.py <WP>` with the stdin list, `make check` on HEAD. Fix or send back. Update `docs/state.md` when a WP lands.
 7. **Art, when the wave needs it.** Pick the next batch from `docs/art-inventory.md` section 4 whose prompts exist (or write them with the README rules). Run the Codex recipe (section 5). Verify SHA-256, log, provenance, commit only art paths. Stop all jobs after the wave.
-8. **Push and update.** When the owner says push (or push continuously): `make check` green, push with the command of section 7, update the status section of this file with the date and new HEAD, commit that, and report to the owner in Swedish, short.
+8. **Push and update.** The integration worker waits for the lead’s instruction while this shared tree is active. Under the continuous push authorization: `make check` green, push with the command of section 7, update the status section of this file with the date and new HEAD, commit that, and report to the owner in Swedish, short.
 
 ---
 
@@ -350,5 +364,5 @@ Staged files: check `git diff --cached --stat` before any commit. Commit with ex
 - **Edge strips:** the image tool returns about 2.5:1 (for example 1983x793 or 2048x768) where docs/asset-contract.md asks for 4:1 (1536x384). The cut tool needs a rule for this before `edge_*` files can be cut: either crop and scale to the contract size, or order again. `edge_cave_floor_to_wall_v2` and `edge_cave_water_v2` failed (band too low, magenta above).
 - **Sizes:** every 1024x1024 request returned 1254x1254. The cut tool must scale with one factor. Sheets of 1536x1024 return as requested.
 - **Weak groups that need new prompts** (details in tools/art_prompts/PROGRESS_*.md and tools/source_art/log_bNN.md): brine crab front and rear views (side profile), choirling (too mossy; try `hush_skitterwick.png` as reference), mirror shade (coloured Tamsin instead of silhouette), many walk cycles that repeat poses 1=3 and 2=4, `wax_seal` (drips read as blood), `dry_vine_screen` and `bush_cluster` (cut would count wrong blobs), `pocket_plain_door` (too ornate), `pocket_lighthouse_door` (square base).
-- **Producers:** Claude-side producers a-h ran on the previous lead's account. b (12-19) and d (28-35) finished. Check PROGRESS_a, _c, _e, _f, _g, _h for the rest. Producers e (36-47) and g (60-71) were still working when the lead stopped. Restart missing ranges as pi Haiku producers (see the art section above).
+- **Producers:** Claude-side producers a-h ran on the previous lead's account. b (12-19) and d (28-35) finished. Check PROGRESS_a, _c, _e, _f, _g, _h for the rest. Producers e (36-47) and g (60-71) were still working when the lead stopped. Resume missing ranges through ATF under the current takeover workflow (see the art section above).
 - Build agents choose the best variant (v1-v3) when they use an image; the owner does not cull.
