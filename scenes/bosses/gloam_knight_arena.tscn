@@ -1,0 +1,44 @@
+[gd_scene format=3]
+[node name="GloamKnightArena" type="Node2D"]
+
+[node name="Pit0" type="Marker2D" parent="."]
+position = Vector2(384.0, 192.0)
+metadata/pit_size = Vector2(576, 192)
+
+[node name="Pit1" type="Marker2D" parent="."]
+position = Vector2(1536.0, 192.0)
+metadata/pit_size = Vector2(576, 192)
+
+[node name="Pit2" type="Marker2D" parent="."]
+position = Vector2(960.0, 336.0)
+metadata/pit_size = Vector2(768, 96)
+
+[node name="Pit3" type="Marker2D" parent="."]
+position = Vector2(624.0, 624.0)
+metadata/pit_size = Vector2(96, 480)
+
+[node name="Pit4" type="Marker2D" parent="."]
+position = Vector2(1296.0, 624.0)
+metadata/pit_size = Vector2(96, 480)
+
+[node name="Pit5" type="Marker2D" parent="."]
+position = Vector2(960.0, 624.0)
+metadata/pit_size = Vector2(576, 96)
+
+[node name="Pit6" type="Marker2D" parent="."]
+position = Vector2(336.0, 768.0)
+metadata/pit_size = Vector2(480, 192)
+
+[node name="Pit7" type="Marker2D" parent="."]
+position = Vector2(1584.0, 768.0)
+metadata/pit_size = Vector2(480, 192)
+
+[node name="Pit8" type="Marker2D" parent="."]
+position = Vector2(336.0, 480.0)
+metadata/pit_size = Vector2(480, 384)
+metadata/side_island = true
+
+[node name="Pit9" type="Marker2D" parent="."]
+position = Vector2(1584.0, 480.0)
+metadata/pit_size = Vector2(480, 384)
+metadata/side_island = true
