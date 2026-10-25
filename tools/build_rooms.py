@@ -288,6 +288,8 @@ class World:
                 "kind": p["kind"],
                 "node": p["node"],
                 "after_boss": bool(p.get("after_boss")),
+                "scope": p.get("scope"),
+                "needs": list(p.get("needs", [])),
                 "shop": p.get("shop"),
                 "contents": graph_contents.get(p["id"], p.get("contents", "")),
             }
@@ -329,6 +331,8 @@ def item_as_pickup(key: str, record: dict) -> dict:
         "node": record["node"],
         "after_boss": bool(record.get("after_boss")),
         "shop": None,
+        "scope": key.split(":", 1)[1] if ":" in key else None,
+        "needs": list(record.get("needs", [])),
         "contents": "",
     }
 
@@ -674,7 +678,7 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
         return dispatch_shop(ent, key, src, plan, errors)
     if ent.verb == "cache":
         return dispatch_cache(ent, key, src, plan, world, errors)
-    return dispatch_pickup(ent, key, src, plan, errors)
+    return dispatch_pickup(ent, key, src, plan, world, errors)
 
 
 def edge_side(world: World, room_id: str, other: str) -> str | None:
@@ -1039,7 +1043,7 @@ def dispatch_hidden_stairs(ent: Entity, key: tuple, src: Source, plan: Plan, err
     return True
 
 
-def dispatch_pickup(ent: Entity, key: tuple, src: Source, plan: Plan, errors: list[str]) -> bool:
+def dispatch_pickup(ent: Entity, key: tuple, src: Source, plan: Plan, world: World, errors: list[str]) -> bool:
     where_ = where(src.path, ent.line)
     if ent.verb != "pickup" or not ent.args:
         errors.append(f"{where_}: unknown entity '{ent.verb}'")
@@ -1064,11 +1068,22 @@ def dispatch_pickup(ent: Entity, key: tuple, src: Source, plan: Plan, errors: li
     node.props = [("position", vec2(*ent.pos)), ("persistent_id", sname(persistent_id))]
     if kind == "item":
         node.props.append(("item_id", sname(ident)))
-    if "scope" in ent.opts and kind != "small_key":
-        errors.append(f"{where_}: only a small_key takes scope=")
+    if "scope" in ent.opts and kind not in ("small_key", "big_key", "fragment"):
+        errors.append(f"{where_}: only small_key, big_key and fragment take scope=")
         return False
-    if kind == "small_key":
-        scope = ent.opts.get("scope", src.scope)  # a key spends only in the scope of its room
+    if kind in ("small_key", "big_key", "fragment"):
+        record = world.pickup_record(ident)
+        expected_scope = (record or {}).get("scope") or src.scope
+        scope = ent.opts.get("scope", expected_scope)
+        if scope != expected_scope:
+            errors.append(f"{where_}: pickup {ident} scope {scope}, the graph says {expected_scope}")
+            return False
+        if kind in ("big_key", "fragment") and not re.fullmatch(r"c(?:[1-9]|10)", scope):
+            errors.append(f"{where_}: {kind} requires a graph cave scope")
+            return False
+        if kind == "fragment" and scope == "c10":
+            errors.append(f"{where_}: fragment requires cave c1 .. c9")
+            return False
         if scope != "ow":
             node.props.append(("scope", sname(scope)))
     if "requires" in ent.opts:
@@ -1270,9 +1285,11 @@ def check_pickups(src, rec, world, plan, spawn_tile, reach, open_sides, errors) 
         if ident not in graph:
             continue
         tile = ent.tile
-        if moth_pocket(rec, world):
+        if moth_pocket(rec, world) or (graph[ident]["kind"] == "small_key" and
+                                       "tether_moth" in graph[ident].get("needs", [])):
             # Every entry must remain outside the sealed key compartment.
             starts = [spawn_tile] + [t for _, t, _ in plan.spawns]
+            starts += [t for side in rec["exits"] for t in GAP_TILES[side]]
             for start in starts:
                 walk = flood([start], plan.static | set().union(*(t for _, t in plan.openers)))
                 if reaches(walk, tile):

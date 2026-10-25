@@ -874,5 +874,94 @@ class CavePilot(unittest.TestCase):
         self.assertEqual(errors, [])
 
 
+class CavePickupPrerequisites(unittest.TestCase):
+    def test_cave_capability_pickups_infer_scope_and_reject_wrong_override(self):
+        for kind, ident, capability in (("big_key", "bigkey_c1", "bigkey:c1"),
+                                         ("fragment", "frag_c1", "frag:c1")):
+            world = world_of([dict(room_record("cave_1_7", []), scope="c1")],
+                             items={capability: {"node": "cave_1_7"}})
+            for suffix in ("", " scope=c1"):
+                text, errors = compile_text(room_text("cave_1_7", [], f"pickup {kind} 5,5 id={ident}" + suffix),
+                                            world, "cave_1_7.room")
+                self.assertEqual(errors, [])
+                self.assertIn('scope = &"c1"', text)
+            for scope in ("ow", "c2", ""):
+                text, errors = compile_text(room_text("cave_1_7", [], f"pickup {kind} 5,5 id={ident} scope={scope}"),
+                                            world, "cave_1_7.room")
+                self.assertIsNone(text)
+                self.assertTrue(any("scope" in e for e in errors))
+
+    def test_missing_graph_cave_scope_is_rejected(self):
+        for kind in ("big_key", "fragment"):
+            world = world_of([room_record("ow_5_5", [])],
+                             pickups=[{"id": "bad_reward", "node": "ow_5_5", "kind": kind}])
+            text, errors = compile_text(room_text("ow_5_5", [], f"pickup {kind} 5,5 id=bad_reward"), world, "ow_5_5.room")
+            self.assertIsNone(text)
+            self.assertTrue(any("graph cave scope" in e for e in errors))
+
+    def test_legacy_alcove_key_retains_graph_overworld_scope(self):
+        world = real_world()
+        self.assertEqual(world.pickup_record("key_ow_1")["scope"], "ow")
+        source = br.Source(Path("cave_1.room"))
+        source.room_id, source.scope = "cave_1", "c1"
+        ent = br.Entity("pickup", 1, (960,480), ["small_key"], {"id": "key_ow_1"})
+        plan, errors = br.Plan(), []
+        self.assertTrue(br.dispatch_pickup(ent, (0,0,0), source, plan, world, errors))
+        props = dict(plan.singles[0][1].props)
+        self.assertEqual(props["persistent_id"], '&"cave_key"')
+        self.assertNotIn("scope", props)  # PickupBase's unchanged default is ow.
+        ent.opts["scope"] = "c1"
+        self.assertFalse(br.dispatch_pickup(ent, (0,0,0), source, br.Plan(), world, errors))
+
+    def moth_room(self, key="5,1", grate=True, bypass=False, wall=False, spawn="5,5", extra=""):
+        world = real_world()
+        grid = open_grid(["s"])
+        grid[3] = "#" * 20
+        if grate:
+            grid[3] = grid[3][:5] + ".." + grid[3][7:]
+        if bypass:
+            grid[3] = grid[3][:15] + "." + grid[3][16:]
+        if wall:
+            grid[2] = "#" * 20
+        lines = [f"spawn Default {spawn}", f"pickup small_key {key} id=key_c1_1",
+                 "enemy wickling 8,5", "enemy wickling 12,5", extra]
+        if grate:
+            lines.append("grate @576,336 size=192,96")
+        source = "\n".join(["room cave_1_3", "grid", *grid, *lines])
+        return source, world
+
+    def test_real_cave_1_3_room_key_is_sealed_and_moth_fetchable(self):
+        source = (FIXTURES / "cave_moth_key.room").read_text()
+        text, errors = compile_text(source, real_world(), "cave_1_3.room")
+        self.assertEqual(text, (FIXTURES / "expected_cave_moth_key.tscn").read_text())
+        self.assertEqual(errors, [])
+        self.assertIn('scope = &"c1"', text)
+        self.assertIn('persistent_id = &"key_c1_1"', text)
+
+    def test_room_key_walkable_far_blocked_or_wrong_entry_is_rejected(self):
+        for opts in ({"grate": False}, {"bypass": True}, {"key": "15,1"}, {"wall": True},
+                     {"spawn": "5,1"}, {"extra": "spawn FromOverworld 5,1"}):
+            with self.subTest(opts=opts):
+                source, world = self.moth_room(**opts)
+                text, errors = compile_text(source, world, "cave_1_3.room")
+                self.assertIsNone(text)
+                self.assertTrue(any("moth pickup" in e for e in errors), errors)
+
+    def test_room_key_wrong_explicit_scope_is_rejected(self):
+        source, world = self.moth_room()
+        text, errors = compile_text(source.replace("id=key_c1_1", "id=key_c1_1 scope=ow"), world, "cave_1_3.room")
+        self.assertIsNone(text)
+        self.assertTrue(any("graph says c1" in e for e in errors))
+
+    def test_room_key_checks_exit_entry_even_if_default_can_fetch(self):
+        source, world = self.moth_room()
+        world.rooms["cave_1_3"]["exits"].append("n")
+        rows = source.splitlines()
+        rows[2] = open_grid(["s", "n"])[0]
+        text, errors = compile_text("\n".join(rows), world, "cave_1_3.room")
+        self.assertIsNone(text)
+        self.assertTrue(any("moth pickup" in e for e in errors), errors)
+
+
 if __name__ == "__main__":
     unittest.main()

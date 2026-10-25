@@ -89,7 +89,7 @@ such). A hollow must stand on a tile centre; the compiler checks it whatever the
 | `opener boss_door <pos> id=<edge id> [size=<w>,<h>]` | `boss_door.tscn`, with its `cave` export taken from room scope; the graph edge must require that cave’s big key. |
 | `enemy <name> <pos>` | an instance of `scenes/enemies/<name>.tscn` in `Enemies`. Names are the graph names in lower case with spaces as `_` (`tallow_blob`); a `NEW:` prefix is dropped. |
 | `pickup item <tool id> <pos>` | `item_pickup.tscn` with `persistent_id` and `item_id` = the tool id |
-| `pickup <kind> <pos> id=<id> [requires=<flag>] [scope=<s>]` | the scene of the kind (table below); a `small_key` takes the room's scope unless `scope=` says otherwise (`scope=` is an error for other kinds) |
+| `pickup <kind> <pos> id=<id> [requires=<flag>] [scope=<s>]` | the scene of the kind (table below); `small_key`, `big_key` and `fragment` infer scope from the graph pickup/capability, falling back to room scope for a small key; an explicit `scope=` must match. The historical alcove key keeps graph scope `ow` |
 | `prop <kind> <pos> [size=<w>,<h>]` | a plain `SolidBlock` of a kind in `PROP_KINDS` (`hut`, `pedestal`, `sign_post`, `wall`, `water`, `rock`, `tree`, `reed`); size defaults to 96 x 96. Scripted props use their own entity lines below. |
 | `opener cracked_wall <pos> id=<id>` | `cracked_wall.tscn` (96 x 96), `wall_id` = id |
 | `opener locked_door <pos> id=<id> [scope=<s>] [size=<w>,<h>]` | a `LockedDoor` (192 x 96 by default), `door_id` = id, scope = the room's scope unless given |
@@ -166,3 +166,5 @@ becomes `cave_key`; `tether_moth` and `pitch_pot` keep their names. Pickups in o
 - Pickups with `after_boss` in the graph must carry the exact `requires=boss_<pickup node>_defeated`, including wick cores and fragments.
 
 Cave gate sizes default to 192 x 96. East/west step gates swap width and height; step gates must block their own graph corridor while closed and allow passage when opened. Brazier ids must be unique and gate references must resolve exactly once after output node sorting. Arena door locking remains outside the compiler. The historical `cave_1` remains handmade.
+
+Room-level small keys with graph `needs=["tether_moth"]` use the permanent-grate check too: the key must be sealed from walking, with a clear straight moth launch across a grate within 420 px from the default spawn, every authored spawn and every graph exit entry. Both wick-core and fragment `after_boss` rewards require their own pickup node’s exact boss flag.
