@@ -4,22 +4,22 @@ floor_color 0.18 0.16 0.22
 grid
 #########..#########
 #..................#
-#..###.............#
-#..#.#.............#
-...#.#..............
-...#.#..............
-#..###.............#
+#....###...........#
+#....#.#...........#
+.....#.#............
+.....#.#............
+#....#.#...........#
 #..................#
 #..................#
 ####################
 enemy tallow_blob 8,7
 enemy tallow_blob 15,7
 enemy choirling 14,2
-enemy choirling 14,6
-opener locked_door @1776,480 id=e197 scope=c6 size=96,192
-opener heavy_door @144,480 id=e198 size=96,192
+enemy choirling 16,2
+opener locked_door @1872,480 id=e197 scope=c6 size=96,192
+opener heavy_door @144,480 id=e198
 ward_plate 11,2 id=e258
-door cave_6_8#ward Inside 4,4 blocker=e258
-opener ward_blocker 4,5 id=e258 size=96,96
-spawn FromPocket 4,7
+door cave_6_8#ward Inside 6,4 blocker=e258
+opener ward_blocker 6,5 id=e258 size=96,96
+spawn FromPocket 6,7
 spawn Default 10,5
