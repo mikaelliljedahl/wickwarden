@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/pickups/pickup_base.gd" id="1"]
+
+[node name="BriarMotherArena" type="Node2D"]
+
+[node name="Mother" type="Marker2D" parent="."]
+position = Vector2(960, 192)
+
+[node name="Eye1" type="Marker2D" parent="."]
+position = Vector2(480, 480)
+
+[node name="Eye2" type="Marker2D" parent="."]
+position = Vector2(960, 576)
+
+[node name="Eye3" type="Marker2D" parent="."]
+position = Vector2(1440, 480)
+
+[node name="Fragment" type="Area2D" parent="."]
+position = Vector2(960, 480)
+script = ExtResource("1")
+kind = &"fragment"
+scope = &"c2"
+persistent_id = &"frag_c2"
+requires_flag = &"boss_cave_2_9_defeated"
+
+[node name="WickCore" type="Area2D" parent="."]
+position = Vector2(1152, 480)
+script = ExtResource("1")
+kind = &"wick_core"
+persistent_id = &"wick_core_c2"
+requires_flag = &"boss_cave_2_9_defeated"
