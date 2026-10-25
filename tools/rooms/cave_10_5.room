@@ -1,0 +1,25 @@
+room cave_10_5
+terrain Drowned Choir: a flooded western sluice feeds twin shallow choir pools.
+floor_color 0.13 0.16 0.18
+grid
+#########..#########
+#..................#
+#...##........##...#
+#..................#
+...................#
+...................#
+#..................#
+#...##........##...#
+#..................#
+#########..#########
+water @48,480 size=96,192
+mooring @144,480 id=e236 target_room=cave_10_4 target_mooring=e236 landing_offset=56,0
+opener hidden_seam @960,48 id=e237
+opener heavy_stone @960,912 id=e239
+shallows @528,432 size=384,192
+shallows @1392,624 size=384,192
+enemy fen_leech 5,4
+enemy fen_leech 14,6
+enemy choirling 8,3
+enemy choirling 12,6
+spawn Default @960,528

@@ -1,0 +1,21 @@
+room cave_10_7
+terrain Chime Landing: a clear key dais faces the resonant western arch.
+floor_color 0.13 0.16 0.18
+grid
+####################
+#..................#
+#.....##....##.....#
+#..................#
+...................#
+...................#
+#..................#
+#.....##....##.....#
+#..................#
+####################
+opener resonance_stone @48,480 id=e238
+enemy choirling 8,3
+enemy choirling 12,6
+enemy husk_hound 14,4
+prop pedestal 15,3
+pickup small_key @1488,358 id=key_c10_2 scope=c10
+spawn Default @336,528

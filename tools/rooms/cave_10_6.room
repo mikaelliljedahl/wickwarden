@@ -1,0 +1,20 @@
+room cave_10_6
+terrain Mirror Walk: three reflection bays frame an open central aisle.
+floor_color 0.13 0.16 0.18
+grid
+####################
+#..................#
+#...##........##...#
+#...#..........#...#
+#...................
+#...................
+#..................#
+#...##........##...#
+#..................#
+#########..#########
+opener hidden_seam @960,912 id=e237
+opener resonance_stone @1872,480 id=e238
+enemy mirror_shade 7,3
+enemy mirror_shade 12,4
+enemy mirror_shade 13,6
+spawn Default @960,528

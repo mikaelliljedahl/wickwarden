@@ -1,0 +1,20 @@
+room cave_10_8
+terrain Heavy Span: a narrow eastern break splits broad stone landing banks.
+floor_color 0.13 0.16 0.18
+grid
+#########..#########
+#................#.#
+#...##.......##..#.#
+#................#.#
+#...................
+#...................
+#................#.#
+#...##.......##..#.#
+#................#.#
+####################
+opener heavy_stone @960,48 id=e239
+pit @1680,480 size=96,192
+enemy hollow 6,4
+enemy hollow 12,6
+enemy husk_hound 10,3
+spawn Default @960,528
