@@ -50,7 +50,21 @@ func _ready() -> void:
 	add_child(hurtbox)
 	hurtbox.hurt.connect(_on_hurt)
 	SpriteVisual.attach(self, look, 0.0, size)
-	if resonance_id != &"" and GameState.has_flag(flag_name()):
+	if resonance_id != &"":
+		GameState.flag_changed.connect(_on_flag_changed)
+		if GameState.has_flag(flag_name()):
+			_set_awake(true)
+
+
+func _exit_tree() -> void:
+	if GameState.flag_changed.is_connected(_on_flag_changed):
+		GameState.flag_changed.disconnect(_on_flag_changed)
+
+
+func _on_flag_changed(flag: StringName, value: bool) -> void:
+	# A paired prop may already be loaded in a neighboring room whose processing is disabled.
+	# Applying the canonical flag here updates state only; it does not replay the chime effect.
+	if value and not is_awake and resonance_id != &"" and flag == flag_name():
 		_set_awake(true)
 
 
