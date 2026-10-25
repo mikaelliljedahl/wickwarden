@@ -125,6 +125,7 @@ IDENT_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 ENTITY_OPTS = {
     "eye_switch": ("id",),
     "ward_plate": ("id", "size", "blocks_required"),
+    "anchor_ring": ("look", "max_range"),
     "grate": ("size",),
     "pit": ("size", "look"),
     "water": ("size",),
@@ -527,12 +528,14 @@ class Plan:
         self.zones: list[tuple[Entity, tuple[float, float]]] = []
         self.water: set[tuple[int, int]] = set()
         self.moorings: list[Entity] = []
+        self.anchors: list[Entity] = []
         self.entity_nodes: dict[Entity, Node] = {}
         self.door_links: list[tuple[Node, Node]] = []
         self.drop_exits: list[str] = []
         self.controls: list[Entity] = []
         self.grates: set[tuple[int, int]] = set()
         self.pits: set[tuple[int, int]] = set()
+        self.pit_rects: list[tuple[Entity, tuple[float, float]]] = []
         self.braziers: dict[str, list[tuple[Entity, Node]]] = {}
         self.gate_links: list[tuple[Node, list[Node]]] = []
 
@@ -592,7 +595,7 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
     key = (ent.tile[1], ent.tile[0], seq)
     if ent.verb in ("eye_switch", "ward_plate", "grate", "pit"):
         return dispatch_scripted(ent, key, src, plan, errors)
-    if ent.verb in ("water", "shallows", "mooring", "ledge"):
+    if ent.verb in ("water", "shallows", "mooring", "ledge", "anchor_ring"):
         return dispatch_crossing(ent, key, src, plan, world, errors)
     if ent.verb == "brazier":
         ident = ent.opts.get("id", "")
@@ -716,11 +719,27 @@ def dispatch_crossing(ent, key, src, plan, world, errors) -> bool:
         return False
 
     verb = ent.verb
-    scene = {"water": "water_zone", "shallows": "shallow_zone", "mooring": "mooring", "ledge": "ledge"}[verb]
+    scene = {"water": "water_zone", "shallows": "shallow_zone", "mooring": "mooring", "ledge": "ledge", "anchor_ring": "anchor_ring"}[verb]
     node = Node("", "Props", None, Res("PackedScene", f"res://scenes/world/{scene}.tscn"))
     node.base = camel(scene)
     node.props = [("position", vec2(*ent.pos))]
-    if verb == "mooring":
+    if verb == "anchor_ring":
+        if not (0 <= ent.pos[0] < COLS * TILE and 0 <= ent.pos[1] < ROWS * TILE):
+            return fail("anchor_ring must stand inside the room")
+        if ent.args or ent.opts.get("look", "anchor_ring") not in ("anchor_ring", "anchor_pocket"):
+            return fail("anchor_ring takes optional look=anchor_ring or anchor_pocket and max_range=")
+        try:
+            distance = float(ent.opts.get("max_range", "0"))
+        except ValueError:
+            distance = -1
+        if not math.isfinite(distance) or distance < 0:
+            return fail("anchor_ring max_range must be a finite nonnegative pixel distance")
+        if "look" in ent.opts:
+            node.props.append(("look", sname(ent.opts["look"])))
+        if "max_range" in ent.opts:
+            node.props.append(("max_range", str(distance)))
+        plan.anchors.append(ent)
+    elif verb == "mooring":
         if ent.args or any(not IDENT_RE.fullmatch(ent.opts.get(k, "")) for k in ("id", "target_room", "target_mooring")):
             return fail("mooring takes id=, target_room= and target_mooring= identifiers")
         target = ent.opts["target_room"]
@@ -880,6 +899,7 @@ def dispatch_scripted(ent, key, src, plan, errors) -> bool:
         plan.grates |= tiles
     if kind == "pit":
         plan.pits |= tiles
+        plan.pit_rects.append((ent, size))
     plan.singles.append((key, node))
     return True
 
@@ -1146,6 +1166,85 @@ def ring_problems(src: Source, rec: dict, errors: list[str]) -> None:
                 errors.append(f"{where(src.path, src.grid_lines[row])}: ring tile ({col},{row}) must be '#'")
 
 
+def boots_reach(plan: Plan, starts: set[tuple[int, int]], closed: set[tuple[int, int]]) -> set[tuple[int, int]]:
+    """All safe 192 px cardinal leaps, including alternate routes around a reel chasm."""
+    blocked = plan.static | closed
+    solid = (plan.static - plan.pits) | closed
+    reached = set(starts)
+    while True:
+        landings = set()
+        for x, y in reached:
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                middle, end = (x + dx, y + dy), (x + 2 * dx, y + 2 * dy)
+                if (middle in plan.pits and middle not in solid and end not in blocked and
+                        0 <= end[0] < COLS and 0 <= end[1] < ROWS):
+                    landings.add(end)
+        expanded = reached | flood(landings, blocked)
+        if expanded == reached:
+            return reached
+        reached = expanded
+
+
+def reel_reach(plan: Plan, starts: set[tuple[int, int]], closed: set[tuple[int, int]]) -> set[tuple[int, int]]:
+    """Conservative cardinal tile-centre pulls using T08's actual range and stop distance.
+
+    Rings are targets, never removable blockers. A qualifying pit chasm is 288–480 px wide;
+    WORLD bodies stop the tip, and the 72 px stop point must be dry, safe floor.
+    """
+    blocked = plan.static | closed
+    solid = (plan.static - plan.pits - plan.water) | closed
+    reached = set(starts)
+    while True:
+        landings = set()
+        for start in reached:
+            sx, sy = centre_of(*start)
+            for anchor in plan.anchors:
+                ax, ay = anchor.pos
+                dx, dy = ax - sx, ay - sy
+                distance = abs(dx) + abs(dy)
+                limit = float(anchor.opts.get("max_range", "0")) or 576
+                if (dx != 0 and dy != 0) or not 72 < distance <= min(576, limit):
+                    continue
+                ux, uy = dx / distance, dy / distance
+                lx, ly = ax - ux * 72, ay - uy * 72
+                landing = tile_of(lx, ly)
+                if landing in blocked:
+                    continue
+                # Sample at one pixel to include off-centre authored targets and the stop point.
+                ray = [tile_of(sx + ux * step, sy + uy * step) for step in range(int(distance) + 1)]
+                if any(t in solid for t in ray):
+                    continue
+                spans = []
+                unsafe = False
+                for pit, (width, height) in plan.pit_rects:
+                    px, py = pit.pos
+                    # PitZone.holds grows the rectangle by Player.BODY_RADIUS (26 px).
+                    if abs(lx - px) <= width / 2 + 26 and abs(ly - py) <= height / 2 + 26:
+                        unsafe = True
+                    if dx == 0 and abs(sx - px) < width / 2:
+                        ends = ((py - height / 2 - sy) * uy, (py + height / 2 - sy) * uy)
+                    elif dy == 0 and abs(sy - py) < height / 2:
+                        ends = ((px - width / 2 - sx) * ux, (px + width / 2 - sx) * ux)
+                    else:
+                        continue
+                    lo, hi = sorted(ends)
+                    if hi > 0 and lo < distance:
+                        spans.append((max(0, lo), min(distance, hi)))
+                merged = []
+                for lo, hi in sorted(spans):
+                    if merged and lo <= merged[-1][1]:
+                        merged[-1] = (merged[-1][0], max(hi, merged[-1][1]))
+                    else:
+                        merged.append((lo, hi))
+                if unsafe or len(merged) != 1 or not 288 <= merged[0][1] - merged[0][0] <= 480:
+                    continue
+                landings.add(landing)
+        expanded = reached | flood(landings, blocked)
+        if expanded == reached:
+            return reached
+        reached = expanded
+
+
 def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[str]) -> None:
     grid_line = src.grid_lines[0]
     path = src.path
@@ -1200,10 +1299,38 @@ def check_room(src: Source, rec: dict, world: World, plan: Plan, errors: list[st
         after = flood(landings, plan.static | closed)
         if not any(t in after for t in GAP_TILES[side]):
             errors.append(f"{where(path, grid_line)}: pit exit {side} has no safe 192 px leap")
+    reel_sides = set()
+    for anchor in plan.anchors:
+        if anchor.tile in plan.static | closed:
+            errors.append(f"{where(path, anchor.line)}: anchor ring is on an obstacle")
+    for edge in world.edges:
+        if edge.get("prop") != "anchor ring" or rec["id"] not in (edge["a"], edge["b"]):
+            continue
+        if edge.get("gate") != "item" or edge.get("needs") != ["reel_line"] or edge.get("link") != "step":
+            errors.append(f"{where(path, grid_line)}: anchor ring gate needs a reel_line item step edge")
+            continue
+        other = edge["b"] if edge["a"] == rec["id"] else edge["a"]
+        side = edge_side(world, rec["id"], other)
+        if side is None:
+            errors.append(f"{where(path, grid_line)}: anchor ring gate has no adjacent exit")
+            continue
+        reel_sides.add(side)
+        gap = GAP_TILES[side]
+        if any(t in reach for t in gap):
+            errors.append(f"{where(path, grid_line)}: reel exit {side} is walkable on foot")
+        if any(t in boots_reach(plan, reach, closed) for t in gap):
+            errors.append(f"{where(path, grid_line)}: reel exit {side} is crossable with 192 px boots")
+        after = reel_reach(plan, reach, closed)
+        if not any(t in after for t in gap):
+            errors.append(f"{where(path, grid_line)}: reel exit {side} needs a clear 576 px anchor pull over a 288–480 px chasm with safe landing")
+        if edge.get("dir") == "both":
+            reverse = reel_reach(plan, flood(gap, plan.static | closed), closed)
+            if spawn_tile not in reverse:
+                errors.append(f"{where(path, grid_line)}: reel exit {side} needs a return anchor pull")
     open_sides = []
     for side in rec["exits"]:
         corridor = exit_corridor(side)
-        if side in raft_sides or side in pit_sides:
+        if side in raft_sides or side in pit_sides or side in reel_sides:
             continue
         if any(tile in plan.static for tile in corridor):
             blocked = next(tile for tile in corridor if tile in plan.static)

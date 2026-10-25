@@ -874,6 +874,71 @@ class MissingMouthOpeners(unittest.TestCase):
             self.assertTrue(any("walkable while closed" in e for e in errors), errors)
 
 
+class AnchorRingCrossings(unittest.TestCase):
+    def compile(self, host="ow_10_4", anchors=None, pit="pit @960,528 size=1728,288", extra="", gate_change=None):
+        edge = dict(next(e for e in real_world().edges if e["id"] == "e079"))
+        edge.update(gate_change or {})
+        rooms = [room_record("ow_10_4", ["n", "s"], grid=(10, 4)),
+                 room_record("ow_10_5", ["n", "s"], grid=(10, 5))]
+        world = world_of(rooms, edges=[edge])
+        if host == "ow_10_4":
+            spawn = "9,3"
+            anchors = anchors if anchors is not None else "anchor_ring 9,9\nanchor_ring 9,2"
+        else:
+            spawn, pit = "9,6", "pit @960,432 size=1728,288"
+            anchors = anchors if anchors is not None else "anchor_ring 9,0\nanchor_ring 9,7"
+        source = room_text(host, ["n", "s"], f"spawn Default {spawn}\n{pit}\n{anchors}\n{extra}")
+        return compile_text(source, world, host + ".room")
+
+    def test_actual_e079_both_rooms_have_real_ring_targets_and_pit(self):
+        for host in ("ow_10_4", "ow_10_5"):
+            with self.subTest(host=host):
+                text, errors = self.compile(host)
+                self.assertEqual(errors, [])
+                self.assertIn('res://scenes/world/anchor_ring.tscn', text)
+                self.assertIn('res://scenes/world/pit.tscn', text)
+                self.assertEqual(text.count('instance=ExtResource('), 3)
+                self.assertNotIn('blocker_path', text)
+                self.assertNotIn('requires_flag', text)
+                self.assertNotIn('gate_id', text)
+
+    def test_exports_and_invalid_options(self):
+        text, errors = self.compile(anchors="anchor_ring 9,9 look=anchor_pocket max_range=576\nanchor_ring 9,2")
+        self.assertEqual(errors, [])
+        self.assertIn('look = &"anchor_pocket"', text)
+        self.assertIn('max_range = 576.0', text)
+        for options in ("max_range=-1", "max_range=nan", "max_range=inf", "max_range=no",
+                        "look=rock", "id=e079", "size=96,96", "target_room=ow_10_5"):
+            self.assertTrue(self.compile(anchors=f"anchor_ring 9,9 {options}\nanchor_ring 9,2")[1], options)
+
+    def test_rejects_fake_gate_walking_boots_and_absent_return_route(self):
+        for options, message in [
+                (dict(pit=""), "walkable on foot"),
+                (dict(anchors=""), "clear 576 px"),
+                (dict(anchors="anchor_ring 9,9"), "return anchor"),
+                (dict(pit="pit @960,528 size=1728,96"), "crossable with 192 px boots"),
+                (dict(pit="pit @960,528 size=1536,288"), "walkable on foot")]:
+            with self.subTest(options=options):
+                _, errors = self.compile(**options)
+                self.assertTrue(any(message in e for e in errors), errors)
+
+    def test_chasm_width_is_measured_in_pixels_not_rounded_tiles(self):
+        for width in (287, 481):
+            _, errors = self.compile(pit=f"pit @960,528 size=1728,{width}")
+            self.assertTrue(any("288–480 px chasm" in e for e in errors), errors)
+
+    def test_rejects_blocked_ray_unsafe_landing_range_and_wrong_requirements(self):
+        for options in (dict(extra="prop wall 9,7"),
+                        dict(anchors="anchor_ring 9,6\nanchor_ring 9,2"),
+                        dict(anchors="anchor_ring 9,9 max_range=575\nanchor_ring 9,2"),
+                        dict(anchors="anchor_ring @912,1008\nanchor_ring 9,2"),
+                        dict(anchors="anchor_ring 9,5\nanchor_ring 9,2"),
+                        dict(gate_change={"needs": ["skitter_boots"]}),
+                        dict(gate_change={"gate": "hidden"})):
+            with self.subTest(options=options):
+                self.assertTrue(self.compile(**options)[1])
+
+
 class CavePilot(unittest.TestCase):
     def encounter_world(self, role="boss", name="Kilnkeeper"):
         record = room_record("cave_1_8", [])
