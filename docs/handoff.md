@@ -35,6 +35,8 @@ The Tidewick warning and Q7 gate cases followed in
 `faf963214f4a7bae92d04ca18e99dc5e6facc65a`, verified on `origin/main`.
 The Q7 wall and raft cases followed in `81a240e5193f077112b2600c096760d1842732e6`
 on `origin/main`.
+The Wick Automaton jet followed in `bb7c6f8cf0c72d4077a0eb3463de3cef8f1c863a`,
+verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -42,7 +44,22 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Wick Automaton jet, working tree (unpushed):** A new native-alpha painted jet
+**Q3 Dirge Choir victory, working tree (unpushed):** The continuous input route
+uses normal damage, two deliberate ordinary enemy deaths and respawns in C6,
+farming, the Chime, both keys and Lockpick to open the boss door and defeat
+Dirge Choir. It physically collects the fragment and core. The agent reports
+five isolated victories, all four shards and lint passing. Global seed
+`20261027` does not control Archivist's own randomization. The bot reads boss
+heads, timers, HP, projectiles, positions and flags, and C4/C5 internal state;
+later shards use fixtures and warps. The C5 and C6 minibosses remain alive;
+human play and other global seeds remain unverified. The physical reward walk
+now checks the C6 core flag false and maximum health 20 before pickup, then the
+flag true and both maximum health and health 22 half-hearts after pickup.
+`GameState.MAX_HEALTH_CAP` is 40 half-hearts; the audit found no gameplay bug.
+The agent reports all four isolated shards, a first-shard repeat and lint
+passing after this check.
+
+**Wick Automaton jet, committed in `bb7c6f8`:** A new native-alpha painted jet
 replaces the active geometric placeholder, with a clear outline for the
 unchanged 192×64 damage area and unchanged timing. The lead reviewed right and
 up orientations in the actual room; the agent also reviewed the tell and vent.
