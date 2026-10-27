@@ -1,6 +1,29 @@
 # Current status
 
-**Q7 gate audit and rush wall, 2026-10-27 (working tree, unpushed):** Every
+**Q3 C9 boss approach, 2026-10-27 (working tree, unpushed):** The continuous
+earned input route with normal damage obtains the Jar, Wick, first key, raft,
+boots, second key, Reel and Lockpick, passes the active miniboss and opens the
+boss door. After a deliberate ordinary boss death and respawn at `ow_0_2`, it
+returns with the Lockpick and reaches the boss with 25/26 half-hearts, 10 pots
+and 30 slugs. The boss is not defeated; unintegrated probes broke plates but
+died or retreated in phase two. The C5 physical-reward route was improved after
+a random failure. The agent reports four shards, a first-shard repeat and lint
+passing. These baseline runs used the original World before the fix; after C9
+entry integration, the lead also passed `make test T=playthrough_1` in the
+workspace with the pushed boots fix `ed79ed0`. Archivist's own RNG is uncontrolled,
+the C7 victory had a low margin, and other seeds, human play and a complete
+route remain unverified.
+
+**C9 resupply probe, 2026-10-27 (isolated):** With real World and input, a
+fixture starting at 0 pots and 0 slugs physically collected +4 pots and +6
+slugs after the intro, then collected them again after manual reset to zero and
+31 seconds. Four actual sling/pot eye-and-plate interactions passed; the probe
+reported 13/13 checks. Ammo pickups expire after 8 seconds and resupply is at
+30 seconds. Damage was disabled, two wicklings removed and tools fixture-granted;
+this is not an earned route, survival test, human play or phase-two victory.
+An initial attempt with living wicklings missed a shot; its cause is unknown.
+
+**Q7 gate audit and rush wall, 2026-10-27 (committed in `10738c7`):** Every
 world-graph gate family has a representative case, but the full correct/wrong
 tool matrix and its printed report are incomplete. Several negative cases do
 not prove actual hitbox overlap; the newer base-weapon and rush-Reel cases do.
@@ -1251,7 +1274,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `3b96eec2c6edc2d32b3a1b00f3643f8c034a81c4` on `origin/main`, including the 21 Q7 wrong-tool gate cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `10738c75441046f3fb315f75d2a17cf584fd3ea7` on `origin/main`, including the Q7 gate audit and rush-screen case described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

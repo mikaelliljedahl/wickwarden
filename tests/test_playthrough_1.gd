@@ -5,7 +5,7 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4 through C8 and collects their rewards.
+## The continuous route defeats C4 through C8, collects their rewards and reaches C9 boss.
 ## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through C8 victory: no repositioning, warps, enemy
+## Continuous opening through the C9 boss: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -1494,6 +1494,9 @@ func fight_archivist() -> void:
 	check(GameState.has_flag(&"boss_cave_5_10_defeated"), "walking defeats Archivist")
 	if GameState.has_flag(&"boss_cave_5_10_defeated") and not player.is_dead():
 		await seconds(2.0)
+		await walk_start_to(Vector2(960, 192))
+		await walk_start_to(Vector2(200, 192))
+		await walk_start_to(Vector2(200, 720))
 		await walk_start_to(Vector2(624, 720))
 		await walk_start_to(Vector2(1296, 720))
 		await frames(5)
@@ -2628,6 +2631,374 @@ func fight_coinwyrm() -> void:
 		check(GameState.has_flag(&"picked_wick_core_c8"), "walking collects C8 core")
 		check_eq(GameState.max_health, 26, "C8 core increases maximum health")
 		check_eq(GameState.health, 26, "C8 core restores health")
+		await walk_toward_c9()
+
+
+func walk_toward_c9() -> void:
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_8_11")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_8_10")
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"cave_8_9")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_8_8")
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"cave_8_5")
+	await walk_start_to(Vector2(200, 800))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_8_4")
+	await walk_start_to(Vector2(1700, 150))
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_8_2")
+	await walk_fast_to(Vector2(200, 480), true)
+	await walk_start_cross(&"move_left", &"cave_8_1")
+	await walk_start_to(Vector2(336, 432))
+	await seconds(1.0)
+	check_eq(world.get_current_room_id(), &"ow_9_7", "walking exits C8 after victory")
+	check(GameState.has_fragment(&"c8"), "walking retains C8 fragment")
+	print(
+		(
+			"C9 approach room=%s health=%d/%d"
+			% [world.get_current_room_id(), GameState.health, GameState.max_health]
+		)
+	)
+	await seconds(0.5)
+	for cycle in range(9):
+		if GameState.active_item == &"skitter_boots":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_9_6")
+	await walk_fast_to(Vector2(960, 336), true)
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_cross(&"move_up", &"ow_9_5")
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_9_4")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_9_3")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_9_2")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_9_1")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_8_1")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_7_1")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_6_1")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_5_1")
+	await walk_start_to(Vector2(240, 528))
+	await walk_start_cross(&"move_left", &"ow_4_1")
+	await walk_start_to(Vector2(960, 432))
+	await walk_start_to(Vector2(200, 432))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_3_1")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_3_0")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_2_0")
+	await walk_start_to(Vector2(1600, 528))
+	await walk_start_to(Vector2(240, 528))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_1_0")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_1_1")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_1_2")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_0_2")
+	await walk_start_to(Vector2(576, 650))
+	for cycle in range(9):
+		if GameState.active_item == &"glow_jar":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	check(GameState.has_flag(&"revealed_ow_0_2_stairs"), "earned jar reveals C9 stairs")
+	await walk_start_to(Vector2(576, 432))
+	await seconds(1.0)
+	check_eq(world.get_current_room_id(), &"cave_9_1", "walking enters C9 through real stairs")
+	check(not player.is_dead(), "walking enters C9 alive")
+	print(
+		(
+			"C9 entry room=%s health=%d/%d pots=%d"
+			% [
+				world.get_current_room_id(),
+				GameState.health,
+				GameState.max_health,
+				GameState.pitch_pots
+			]
+		)
+	)
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_9_2")
+	await walk_start_to(Vector2(960, 160))
+	for cycle in range(10):
+		if GameState.active_item == &"cinder_wick":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(3.0)
+	check(GameState.has_flag(&"burned_e223"), "walking burns C9 study wall")
+	await walk_start_cross(&"move_up", &"cave_9_3")
+	await walk_start_to(Vector2(912, 336))
+	await frames(5)
+	check_eq(GameState.keys_in(&"c9"), 1, "walking collects first C9 key")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_9_2")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_9_4")
+	check(GameState.has_flag(&"door_e224"), "walking opens first C9 lock")
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(1700, 150))
+	await walk_start_to(Vector2(1730, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"reed_raft":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	await walk_raft_cross(&"cave_9_5")
+	check(not player.is_dead(), "walking enters C9 cellar alive")
+	print(
+		(
+			"C9 cellar room=%s health=%d pots=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.pitch_pots]
+		)
+	)
+	await walk_start_to(Vector2(960, 336))
+	for cycle in range(10):
+		if GameState.active_item == &"skitter_boots":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_cross(&"move_up", &"cave_9_6")
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_to(Vector2(720, 240))
+	await frames(5)
+	check_eq(GameState.keys_in(&"c9"), 1, "walking collects second C9 key")
+	check(not player.is_dead(), "walking collects second C9 key alive")
+	print("C9 second key room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(1200, 432))
+	for cycle in range(10):
+		if GameState.active_item == &"reel_line":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	await walk_start_cross(&"move_right", &"cave_9_7")
+	await walk_start_to(Vector2(336, 432))
+	await seconds(0.5)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	await walk_start_to(Vector2(1584, 410))
+	await frames(5)
+	check(GameState.has_big_key(&"c9"), "walking collects C9 Lockpick")
+	check(not player.is_dead(), "walking collects C9 Lockpick alive")
+	print("C9 Lockpick room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(720, 432))
+	await seconds(0.5)
+	Input.action_press(&"move_left")
+	await frames(2)
+	Input.action_release(&"move_left")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	await walk_start_cross(&"move_left", &"cave_9_6")
+	await walk_start_to(Vector2(1584, 432))
+	await seconds(0.5)
+	Input.action_press(&"move_left")
+	await frames(2)
+	Input.action_release(&"move_left")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	await walk_start_to(Vector2(960, 624))
+	for cycle in range(10):
+		if GameState.active_item == &"skitter_boots":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_cross(&"move_down", &"cave_9_5")
+	await seconds(0.5)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_to(Vector2(960, 700))
+	for cycle in range(10):
+		if GameState.active_item == &"heft_mitts":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await frames(22)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.3)
+	check(GameState.has_flag(&"moved_e228"), "walking lifts C9 heavy stone")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_9_8")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_9_9")
+	check(GameState.has_flag(&"door_e229"), "walking opens second C9 lock")
+	await walk_start_to(Vector2(960, 800))
+	await walk_start_cross(&"move_down", &"cave_9_10")
+	check(GameState.has_flag(&"door_boss_c9"), "walking opens C9 boss door")
+	check(not player.is_dead(), "walking reaches Lock Warden alive")
+	print(
+		(
+			"C9 boss room=%s health=%d pots=%d slugs=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.pitch_pots, GameState.slugs]
+		)
+	)
+	for tick in range(5000):
+		await frames(1)
+		if player.is_dead():
+			break
+	check(player.is_dead(), "C9 boss hazards trigger ordinary respawn")
+	for tick in range(600):
+		await frames(1)
+		if not player.is_dead() and world.get_current_room_id() == &"ow_0_2":
+			break
+	check_eq(world.get_current_room_id(), &"ow_0_2", "C9 death returns to mouth")
+	check_eq(GameState.health, 26, "C9 respawn restores earned health")
+	check(GameState.has_big_key(&"c9"), "C9 Lockpick survives respawn")
+	await walk_start_to(Vector2(576, 432))
+	await seconds(1.0)
+	check_eq(world.get_current_room_id(), &"cave_9_1", "walking re-enters C9")
+	await walk_fast_to(Vector2(1680, 480), true)
+	await walk_start_cross(&"move_right", &"cave_9_2")
+	await walk_fast_to(Vector2(1680, 480), true)
+	await walk_start_cross(&"move_right", &"cave_9_4")
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(1700, 150))
+	await walk_start_to(Vector2(1730, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"reed_raft":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	await walk_raft_cross(&"cave_9_5")
+	await walk_start_to(Vector2(300, 528))
+	await walk_start_to(Vector2(960, 528))
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_9_8")
+	await walk_fast_to(Vector2(200, 480), true)
+	await walk_start_cross(&"move_left", &"cave_9_9")
+	await walk_start_to(Vector2(960, 800))
+	await walk_start_cross(&"move_down", &"cave_9_10")
+	check(not player.is_dead(), "walking returns to C9 boss alive")
+	print(
+		(
+			"C9 boss retry room=%s health=%d pots=%d slugs=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.pitch_pots, GameState.slugs]
+		)
+	)
 
 
 func farm_c4_antechamber() -> void:
