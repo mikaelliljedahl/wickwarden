@@ -41,6 +41,7 @@ func run() -> void:
 	for prop: String in ["reed_cluster", "rush_wall", "moss_wall", "dry_vine_screen", "bush_cluster"]:
 		for tool: StringName in [&"hook", &"tallow_sling", &"cinder_wick", &"pitch_pot"]:
 			await _cut_screen_pair(prop, tool)
+	await _cut_screen_flare_and_reel()
 	await _ward_plate_tools()
 	await _brazier_gate_tools()
 	await _scoped_key_gate()
@@ -278,6 +279,41 @@ func _cut_screen_pair(prop: String, tool: StringName) -> void:
 	check_eq(was_cut[0], cuts, "%s -> %s: actual cut result" % [tool, prop])
 	if not cuts:
 		check(is_instance_valid(target) and not target.is_cut, "%s remains solid" % prop)
+	await dispose(arena)
+
+
+func _cut_screen_flare_and_reel() -> void:
+	reset_state()
+	var arena := make_arena()
+	var screen := _prop(arena, "rush_wall", Vector2(500, 400)) as Bush
+	if screen == null:
+		await dispose(arena)
+		return
+	screen.drops_enabled = false
+	var cut := [false]
+	screen.cut.connect(func() -> void: cut[0] = true)
+	var player := make_player(arena, Vector2(300, 400))
+	await frames(3)
+	_equip(player, &"reel_line")
+	check(player.use_item(), "rush wall: actual reel launches")
+	var reel_contact := false
+	for i in range(90):
+		await frames(1)
+		reel_contact = reel_contact or _gate_weapon_overlaps(screen, &"reel")
+	check(reel_contact, "rush wall: actual reel hitbox overlaps screen")
+	check(not cut[0] and is_instance_valid(screen), "rush wall: reel does not cut")
+	check_near(player.global_position.x, 300, 1, "rush wall: reel does not pull player")
+	# Charge outside hook reach; move into flare range only after the initial swing.
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(60)
+	check(player.charge_ready, "rush wall: actual flare is charged")
+	check(not cut[0], "rush wall: distant initial hook did not cut")
+	player.global_position = Vector2(360, 400)
+	player.facing = Vector2.RIGHT
+	Input.action_release(&"attack")
+	await frames(10)
+	check(cut[0], "rush wall: actual charged flare cuts screen")
 	await dispose(arena)
 
 
