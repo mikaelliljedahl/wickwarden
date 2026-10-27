@@ -56,6 +56,38 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Q3 Coinwyrm victory, working tree (unpushed):** The continuous earned input
+route defeats C8's Coinwyrm with normal damage, using three keys, the Reel and
+boots and passing an active miniboss. The reported victory leaves 3/24
+half-hearts before physical fragment and core collection; the core raises
+maximum health from 24 to 26 and restores health to 26. The agent reports five
+victories, four isolated shards and lint passing. Global seed `20261027` does
+not control Archivist's own randomization. The bot reads boss plates, state,
+positions and projectiles as well as earlier internal state; the C7 victory had
+1/22 health and minibosses remain active. Human play, a complete route and other
+seeds remain unverified.
+
+**Z1 one-way softlock proposal, working tree (unpushed):** At a blocked edge, World
+ends external movement and places the player inside the wall plus body radius.
+The `e041`/`e087` softlock was reproduced before the fix. The agent reports 62
+checks after it with real input and natural landing, both edges and 3/15-frame
+controls, observing over 10 seconds, collision, normal damage and walking away;
+the fixture grants boots and removes enemies. Movement, boots, World and
+C7/C8/C9/Gravelight route tests, lint and visual captures are reported
+passing/reviewed by the agent. An independent reviewer identified a risk that
+the proposal could cancel raft or Reel movement at a closed edge and place the
+player unsafely near corners or obstacles. This is a review finding, not a
+reproduced actual route. The proposal is not accepted and is being reworked.
+
+**B10 heart pulse, working tree (unpushed):** A new native-alpha source supplies
+the painted phase-three heart pulse through the ordinary art pipeline; geometry,
+warning, speed and damage are unchanged. The lead reviewed radius 200; the
+agent reviewed 40, 200 and 360 and a phase-two regression. The agent reports
+isolated B10 and route tests, 22 art tests and lint passing. The source and
+prompt are recorded in `tools/source_art/unlit-heart-pulse-z1-log.md` and
+`docs/art-provenance.md`. Controlled frozen-ring captures do not establish human
+action play; human play remains open.
+
 **Q7 one-way transitions, committed in `ce9dc58`:** Real World cases for
 `e041` and `e087` walk down normally and check that boots cannot return from a
 controlled position 210 px into the lower room. Enemies are removed and damage
@@ -65,8 +97,8 @@ immediate upward boots use reproduced it 3/3 times on each edge, leaving the
 player airborne with collision and hurtbox disabled for over 10 seconds.
 Enemies were removed, damage active and tools supplied by fixture. Controls
 delayed by 3 or 15 physics frames worked. The prior uncertain observation is
-superseded; the cause remains a hypothesis and a separate Z1 fix agent is
-investigating. The committed controlled-position test does not cover this edge.
+superseded; the unaccepted Z1 proposal and its review are recorded above.
+The committed controlled-position test does not cover this edge.
 
 **Q3 Gloam Knight victory, committed in `3a36abb`:** The continuous input
 route with normal damage and ordinary respawns defeats the C7 boss and

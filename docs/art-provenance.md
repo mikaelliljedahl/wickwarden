@@ -1,5 +1,15 @@
 # Wickwarden — art provenance
 
+The Unlit heart-pulse source `tools/source_art/unlit_heart_pulse_z1.png` is a
+native-alpha image generated 2026-10-27. Its original output is
+`01a17f32-c2cf-7331-b7c3-8f87d6268b07/exec-04d26ae3-768d-4420-b626-fb7aeb7c6666.png`;
+source SHA-256 is `e3e5ce2805deed26c6f4b59677a19b93321d20b8f95131ff65ab2f33c78d116c`.
+The main `tools/art_manifest.json` and cutter produce the 1024×192
+`assets/sprites/unlit_heart_pulse_z1_idle.png` and its sprite entry; the PNG
+SHA-256 is `9c01cbec5f8bfafb8ac0be9efdeda67803699341f687fef8dd422e7ee918042a`.
+The prompt and review are in the [heart pulse log](../tools/source_art/unlit-heart-pulse-z1-log.md);
+the tool did not expose a model version.
+
 The Unlit wax-wave source `tools/source_art/unlit_wax_wave_z1.png` is a
 native-alpha image generated 2026-10-27. Its original output is
 `01a17f32-c2cf-7331-b7c3-8f87d6268b07/exec-6a19350b-8c93-4c5e-8ae5-a29ed9b71e79.png`;

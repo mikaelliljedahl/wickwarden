@@ -1406,6 +1406,7 @@
  "kinds": {
 "wick_automaton_jet_z1": {"cell": [192, 64], "align": "center", "anchor": [96, 32], "radius": 0},
 "fx_wisp_burst": {"cell": [384, 384], "align": "center", "anchor": [192.0, 192.0], "radius": 0},
+"unlit_heart_pulse_z1": {"cell": [1024, 192], "align": "center", "anchor": [512, 96], "radius": 0},
 "unlit_wax_wave_z1": {"cell": [1024, 192], "align": "center", "anchor": [512, 96], "radius": 0},
 "unlit_chain_lash_z1": {"cell": [96, 768], "align": "center", "anchor": [48, 384], "radius": 0},
 "briar_band_full_candidate": {"cell": [1920, 96], "align": "center", "anchor": [960, 48], "radius": 0},
@@ -2146,6 +2147,7 @@
  "sheets": {
 "wick_automaton_jet_z1": {"input_mode": "native_alpha", "rows": [{"poses": 1, "outputs": [{"kind": "wick_automaton_jet_z1", "anim": "idle", "file": "wick_automaton_jet_z1_idle", "scale": {"measure": "fit", "value": [192, 64]}, "fps": 1, "loop": true}]}]},
 "fx_wisp_burst_v1": {"key": "magenta", "rows": [{"poses": 5, "outputs": [{"kind": "fx_wisp_burst", "anim": "idle", "file": "fx_wisp_burst_idle", "scale": {"measure": "fit", "value": [350, 350]}, "fps": 12, "loop": false}]}], "params": {"det_floor": 0.1, "min_gap": 1, "speck_area": 30}},
+"unlit_heart_pulse_z1": {"input_mode": "native_alpha", "rows": [{"poses": 1, "outputs": [{"kind": "unlit_heart_pulse_z1", "anim": "idle", "file": "unlit_heart_pulse_z1_idle", "scale": {"measure": "fit", "value": [1020, 180]}, "fps": 1, "loop": true}]}]},
 "unlit_wax_wave_z1": {"input_mode": "native_alpha", "rows": [{"poses": 1, "outputs": [{"kind": "unlit_wax_wave_z1", "anim": "idle", "file": "unlit_wax_wave_z1_idle", "scale": {"measure": "fit", "value": [1020, 180]}, "fps": 1, "loop": true}]}]},
 "unlit_chain_lash_z1": {"input_mode": "native_alpha", "rows": [{"poses": 1, "outputs": [{"kind": "unlit_chain_lash_z1", "anim": "idle", "file": "unlit_chain_lash_z1_idle", "scale": {"measure": "fit", "value": [90, 730]}, "fps": 1, "loop": true}]}]},
 "briar_band_full_candidate": {"input_mode": "native_alpha", "rows": [{"poses": 1, "outputs": [{"kind": "briar_band_full_candidate", "anim": "idle", "file": "briar_band_full_candidate_idle", "scale": {"measure": "fit", "value": [1920, 96]}, "fps": 1, "loop": true}]}]},

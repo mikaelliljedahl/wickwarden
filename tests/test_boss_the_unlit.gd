@@ -473,7 +473,19 @@ func _scheduled_attacks() -> void:
 	check(pulse != null, "exposed heart emits3secondpulse")
 	if pulse != null:
 		check_near(pulse.reach, 400, 0.01, "pulse400reach")
-		check(pulse.get_node("Visual").get_script() == null, "heart pulse keeps its own look")
+		check_near(pulse.width, 48.0, 0.01, "heart pulse keeps 48 pixel width")
+		check_eq(pulse.damage, 3, "heart pulse keeps three damage")
+		check(pulse.blockable, "heart pulse remains wardable")
+		var look = pulse.get_node("Visual")
+		check(look.get_script() == boss.HeartPulseVisual, "pulse uses painted presentation")
+		var texture = look.art.effect.get_shader_parameter("wax") as Texture2D
+		check(texture != null, "pulse texture loads")
+		if texture != null:
+			check_eq(
+				texture.resource_path,
+				"res://assets/sprites/unlit_heart_pulse_z1_idle.png",
+				"pulse uses its own art"
+			)
 		check_near(pulse.speed, 400 / 0.6, 0.01, "pulse expands in0.6seconds")
 	boss.reset_fight()
 	await frames(3)

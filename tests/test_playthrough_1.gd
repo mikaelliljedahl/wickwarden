@@ -5,7 +5,7 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4 through C7 and collects their rewards.
+## The continuous route defeats C4 through C8 and collects their rewards.
 ## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through C7 victory: no repositioning, warps, enemy
+## Continuous opening through C8 victory: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -2239,6 +2239,395 @@ func fight_knight() -> void:
 		check(GameState.has_flag(&"picked_wick_core_c7"), "walking collects C7 core")
 		check_eq(GameState.max_health, 24, "C7 core increases maximum health")
 		check_eq(GameState.health, 24, "C7 core restores health")
+		await walk_toward_c8()
+
+
+func walk_toward_c8() -> void:
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"cave_7_10")
+	await walk_start_to(Vector2(960, 800))
+	await walk_start_to(Vector2(200, 800))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_7_8")
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"cave_7_5")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_7_4")
+	await walk_start_to(Vector2(200, 800))
+	await walk_start_to(Vector2(1700, 800))
+	await walk_start_to(Vector2(1700, 480))
+	await walk_start_cross(&"move_right", &"cave_7_2")
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_7_1")
+	await walk_start_to(Vector2(1488, 432))
+	await seconds(1.0)
+	check_eq(world.get_current_room_id(), &"ow_10_2", "walking exits C7 after victory")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_10_3")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"ow_9_3")
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_9_4")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_9_5")
+	await walk_start_to(Vector2(960, 624))
+	for cycle in range(8):
+		if GameState.active_item == &"skitter_boots":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_cross(&"move_down", &"ow_9_6")
+	await seconds(0.5)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_9_7")
+	await walk_start_to(Vector2(1440, 480))
+	for cycle in range(8):
+		if GameState.active_item == &"lantern_chime":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	check(GameState.has_flag(&"resonated_e253"), "earned chime opens C8 entrance")
+	await walk_start_to(Vector2(1440, 240))
+	await seconds(1.0)
+	check_eq(world.get_current_room_id(), &"cave_8_1", "walking enters C8 through real mouth")
+	check(not player.is_dead(), "walking reaches C8 alive")
+	print(
+		(
+			"C8 entry room=%s health=%d/%d pots=%d"
+			% [
+				world.get_current_room_id(),
+				GameState.health,
+				GameState.max_health,
+				GameState.pitch_pots
+			]
+		)
+	)
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_8_2")
+	await walk_start_to(Vector2(720, 624))
+	await frames(5)
+	check(GameState.has_flag(&"picked_slug_bundle_cave_8_2"), "walking collects C8 slug bundle")
+	await walk_start_to(Vector2(1200, 432))
+	for cycle in range(8):
+		if GameState.active_item == &"tallow_sling":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.4)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(0.8)
+	check(GameState.has_flag(&"eye_e212"), "walking opens C8 eye with earned sling")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"cave_8_3")
+	await walk_start_to(Vector2(1008, 336))
+	await frames(5)
+	check_eq(GameState.keys_in(&"c8"), 1, "walking collects first C8 key")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_8_2")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_8_4")
+	check(GameState.has_flag(&"door_e213"), "walking opens first C8 lock")
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(1700, 150))
+	await walk_start_to(Vector2(1700, 480))
+	await walk_start_cross(&"move_right", &"cave_8_5")
+	await walk_start_to(Vector2(1700, 800))
+	await walk_start_to(Vector2(624, 800))
+	await walk_start_to(Vector2(624, 790))
+	await frames(5)
+	check(GameState.has_item(&"reel_line"), "walking collects C8 reel line")
+	check(not player.is_dead(), "walking collects C8 reel line alive")
+	print("C8 reel room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(1008, 672))
+	for cycle in range(9):
+		if GameState.active_item == &"reel_line":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	await walk_start_cross(&"move_up", &"cave_8_6")
+	await walk_start_to(Vector2(1008, 768))
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	await walk_start_to(Vector2(816, 240))
+	await frames(5)
+	check_eq(GameState.keys_in(&"c8"), 1, "walking collects second C8 key")
+	check(not player.is_dead(), "walking collects second C8 key alive")
+	print("C8 second key room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(1584, 300))
+	await walk_start_to(Vector2(1584, 480))
+	for cycle in range(9):
+		if GameState.active_item == &"skitter_boots":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_cross(&"move_right", &"cave_8_7")
+	await seconds(0.5)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_fast_to(Vector2(1584, 410), true)
+	await frames(5)
+	check(GameState.has_big_key(&"c8"), "walking collects C8 Lockpick")
+	check(not player.is_dead(), "walking collects C8 Lockpick alive")
+	print("C8 Lockpick room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(352, 480))
+	await seconds(0.5)
+	Input.action_press(&"move_left")
+	await frames(2)
+	Input.action_release(&"move_left")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_cross(&"move_left", &"cave_8_6")
+	await seconds(0.5)
+	Input.action_press(&"move_left")
+	await frames(2)
+	Input.action_release(&"move_left")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.0)
+	await walk_start_to(Vector2(1584, 300))
+	await walk_start_to(Vector2(1008, 288))
+	for cycle in range(9):
+		if GameState.active_item == &"reel_line":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	await walk_start_cross(&"move_down", &"cave_8_5")
+	await walk_start_to(Vector2(1008, 192))
+	await seconds(0.5)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	await walk_start_cross(&"move_down", &"cave_8_8")
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_8_9")
+	check(GameState.has_flag(&"door_e218"), "walking opens C8 second lock")
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(912, 240))
+	await frames(5)
+	check(GameState.has_flag(&"picked_key_c8_3"), "walking collects third C8 key")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_8_10")
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_8_11")
+	check(GameState.has_flag(&"door_e220"), "walking opens C8 third lock")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_8_12")
+	check(GameState.has_flag(&"door_boss_c8"), "walking opens C8 boss door")
+	check(not player.is_dead(), "walking reaches Coinwyrm alive")
+	print(
+		(
+			"C8 boss room=%s health=%d pots=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.pitch_pots]
+		)
+	)
+	if world.get_current_room_id() == &"cave_8_12" and not player.is_dead():
+		await fight_coinwyrm()
+
+
+func fight_coinwyrm() -> void:
+	var boss = world.current_room.get_node("Enemies/Coinwyrm1")
+	var last_use := -200
+	var last_hp: int = boss.hp
+	var last_health := GameState.health
+	for tick in range(20000):
+		if (
+			player.is_dead()
+			or not is_instance_valid(boss)
+			or world.get_current_room_id() != &"cave_8_12"
+		):
+			break
+		if boss.is_dying() or boss.is_dead:
+			break
+		var motion := Vector2.ZERO
+		var fire := false
+		var strike := false
+		var pos: Vector2 = player.global_position
+		var local: Vector2 = pos - world.current_room.global_position
+		if boss.state == &"rear" and not boss.is_pausing():
+			if not boss.plates.is_empty():
+				if GameState.active_item != &"reel_line":
+					release_inputs()
+					Input.action_press(&"cycle_item")
+					await frames(2)
+					Input.action_release(&"cycle_item")
+					await frames(2)
+					continue
+				var plate: Node2D = boss.plates[0]
+				var target: Vector2 = (
+					plate.global_position
+					+ Vector2(
+						0,
+						(
+							-200
+							if plate.global_position.y - world.current_room.global_position.y > 280
+							else 200
+						)
+					)
+				)
+				var d: Vector2 = target - pos
+				if d.length() < 35 and tick - last_use > 85:
+					motion = (plate.global_position - pos).normalized()
+					fire = true
+				else:
+					motion = d.normalized()
+			else:
+				var d: Vector2 = boss.global_position - pos
+				if (
+					d.length() < 180
+					and d.length() > 110
+					and minf(absf(d.x), absf(d.y)) < 85
+					and tick - last_use > 28
+				):
+					motion = (
+						Vector2(signf(d.x), 0) if absf(d.x) > absf(d.y) else Vector2(0, signf(d.y))
+					)
+					strike = true
+				else:
+					motion = d.normalized() * clampf((d.length() - 150) / 60.0, -1.0, 1.0)
+		else:
+			var d: Vector2 = Vector2(960, 480) - local
+			motion = d.normalized() if d.length() > 100 else Vector2.ZERO
+		for shot in get_tree().get_nodes_in_group(&"projectiles"):
+			if shot is EnemyProjectile and is_instance_valid(shot):
+				var away: Vector2 = pos - shot.global_position
+				if away.length() < 120:
+					motion += away.normalized() * 3.0
+					fire = false
+					strike = false
+		if local.x < 180:
+			motion.x = maxf(motion.x, 1.0)
+		if local.x > 1740:
+			motion.x = minf(motion.x, -1.0)
+		if local.y < 150:
+			motion.y = maxf(motion.y, 1.0)
+		if local.y > 750:
+			motion.y = minf(motion.y, -1.0)
+		release_inputs()
+		if absf(motion.x) > 0.2:
+			Input.action_press(&"move_right" if motion.x > 0 else &"move_left")
+		if absf(motion.y) > 0.2:
+			Input.action_press(&"move_down" if motion.y > 0 else &"move_up")
+		if fire or strike:
+			await frames(2)
+			Input.action_press(&"use_item" if fire else &"attack")
+			last_use = tick
+		await frames(1)
+		if is_instance_valid(boss) and (boss.hp != last_hp or GameState.health != last_health):
+			print(
+				(
+					"COIN tick=%d hp=%d health=%d plates=%d state=%s"
+					% [tick, boss.hp, GameState.health, boss.plates.size(), boss.state]
+				)
+			)
+			last_hp = boss.hp
+			last_health = GameState.health
+	release_inputs()
+	print(
+		(
+			"COIN end health=%d defeated=%s room=%s"
+			% [
+				GameState.health,
+				GameState.has_flag(&"boss_cave_8_12_defeated"),
+				world.get_current_room_id()
+			]
+		)
+	)
+	check(GameState.has_flag(&"boss_cave_8_12_defeated"), "walking defeats Coinwyrm")
+	if GameState.has_flag(&"boss_cave_8_12_defeated") and not player.is_dead():
+		check_eq(GameState.max_health, 24, "C8 core starts from 24 half-hearts")
+		check(not GameState.has_flag(&"picked_wick_core_c8"), "C8 core waits for reward walk")
+		await seconds(2.0)
+		await walk_start_to(Vector2(912, 336))
+		await walk_start_to(Vector2(912, 624))
+		await frames(5)
+		check(GameState.has_fragment(&"c8"), "walking collects C8 fragment")
+		check(GameState.has_flag(&"picked_wick_core_c8"), "walking collects C8 core")
+		check_eq(GameState.max_health, 26, "C8 core increases maximum health")
+		check_eq(GameState.health, 26, "C8 core restores health")
 
 
 func farm_c4_antechamber() -> void:

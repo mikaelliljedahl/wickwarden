@@ -487,7 +487,13 @@ class Ring:
 		knockback = 640
 		super()
 		add_circle(reach + width / 2)
-		var look: Node2D = WaxWaveVisual.new() if width == 96.0 else Node2D.new()
+		var look: Node2D
+		if width == 96.0:
+			look = WaxWaveVisual.new()
+		elif width == 48.0:
+			look = HeartPulseVisual.new()
+		else:
+			look = Node2D.new()
 		look.name = "Visual"
 		add_child(look)
 		activate()
@@ -504,7 +510,7 @@ class Ring:
 			super(target)
 
 	func _draw() -> void:
-		if width != 96.0:
+		if width != 96.0 and width != 48.0:
 			draw_arc(Vector2.ZERO, maxf(1, radius), 0, TAU, 80, Color(0.85, 0.7, 0.4, 0.65), width)
 
 
@@ -531,6 +537,28 @@ class WaxWaveVisual:
 		if inner > 0:
 			draw_arc(Vector2.ZERO, inner, 0, TAU, 160, Color(1, 0.72, 0.32, 0.85), 3)
 		draw_arc(Vector2.ZERO, outer, 0, TAU, 160, Color(1, 0.72, 0.32, 0.85), 3)
+
+
+class HeartPulseVisual:
+	extends WaxWaveVisual
+
+	func _ready() -> void:
+		super()
+		var path := "res://assets/sprites/unlit_heart_pulse_z1_idle.png"
+		if ResourceLoader.exists(path):
+			art.effect.set_shader_parameter("wax", load(path) as Texture2D)
+			art.visible = true
+		else:
+			art.visible = false
+
+	func _draw() -> void:
+		var ring := get_parent() as Ring
+		var inner := maxf(0.0, ring.radius - ring.width / 2.0)
+		var outer := ring.radius + ring.width / 2.0
+		draw_arc(Vector2.ZERO, maxf(1.0, ring.radius), 0, TAU, 160, Color(0.32, 0.24, 0.55, 0.28), ring.width)
+		if inner > 0:
+			draw_arc(Vector2.ZERO, inner, 0, TAU, 160, Color(0.74, 0.7, 1.0, 0.9), 2)
+		draw_arc(Vector2.ZERO, outer, 0, TAU, 160, Color(0.74, 0.7, 1.0, 0.9), 2)
 
 
 class WaxWaveTexture:

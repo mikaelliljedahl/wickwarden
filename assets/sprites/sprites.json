@@ -39,6 +39,26 @@
       }
     }
   },
+  "unlit_heart_pulse_z1": {
+    "cell": [
+      1024,
+      192
+    ],
+    "anchor": [
+      512.0,
+      96.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_heart_pulse_z1_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "unlit_wax_wave_z1": {
     "cell": [
       1024,
