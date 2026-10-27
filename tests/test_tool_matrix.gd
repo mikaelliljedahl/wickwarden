@@ -33,6 +33,9 @@ func run() -> void:
 		await _wax_seal_pair(tool)
 	for tool: StringName in [&"tether_moth", &"reel_line"]:
 		await _grate_key_pair(tool)
+	for tool: StringName in [&"pitch_pot", &"tallow_sling", &"cinder_wick", &"flare"]:
+		await _cracked_wall_pair(tool)
+	await _mooring_water_gate()
 	for tool: StringName in [&"cinder_wick", &"tallow_sling", &"lantern_chime", &"tether_moth"]:
 		await _snapper_pair(tool)
 	for prop: String in ["anchor_ring", "anchor_pocket", "reelable"]:
@@ -191,6 +194,83 @@ func _grate_key_pair(tool: StringName) -> void:
 	await seconds(1.5)
 	check_eq(GameState.keys_in(&"ow"), 1 if tool == &"tether_moth" else 0, "%s -> grate: key" % tool)
 	check(is_instance_valid(grate), "%s -> grate: grate remains" % tool)
+	await dispose(arena)
+
+
+func _cracked_wall_pair(tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var wall := _gate(arena, ["cracked_wall", &"wall_id"], Vector2(644, 400))
+	if wall == null:
+		await dispose(arena)
+		return
+	var scene := load("res://scenes/world/cracked_wall.tscn") as PackedScene
+	check(scene != null, "distant cracked wall scene loads")
+	if scene == null:
+		await dispose(arena)
+		return
+	var far := scene.instantiate() as Node2D
+	far.set(&"wall_id", &"matrix_far")
+	far.position = Vector2(644, 600)
+	arena.add_child(far)
+	var player := make_player(arena, Vector2(504 if tool == &"flare" else 400, 400))
+	await frames(3)
+	player.facing = Vector2.RIGHT
+	if tool == &"flare":
+		Input.action_press(&"attack")
+		await frames(60)
+		Input.action_release(&"attack")
+	else:
+		_equip(player, tool)
+		if tool == &"pitch_pot":
+			GameState.add_pitch_pots(1)
+		check(player.use_item(), "%s -> cracked wall: actual activation" % tool)
+	await seconds(1.9)
+	var opens := tool == &"pitch_pot"
+	check_eq(wall.get(&"is_open"), opens, "%s -> cracked wall: result" % tool)
+	check_eq(GameState.has_flag(&"cracked_matrix"), opens, "%s -> cracked wall: flag" % tool)
+	check_eq((wall.get_node("Shape") as CollisionShape2D).disabled, opens, "wall collision")
+	check(not bool(far.get(&"is_open")), "%s -> distant wall remains closed" % tool)
+	check(not GameState.has_flag(&"cracked_matrix_far"), "distant wall has no flag")
+	await dispose(arena)
+
+
+func _mooring_water_gate() -> void:
+	reset_state()
+	var arena := make_arena()
+	var water := _prop(arena, "water_zone", Vector2(700, 500))
+	var dock := _prop(arena, "mooring", Vector2(368, 400))
+	if water == null or dock == null:
+		await dispose(arena)
+		return
+	water.set(&"size", Vector2(600, 600))
+	water.set(&"deep", true)
+	water.set(&"raft_free_steering", true)
+	var player := make_player(arena, dock.call(&"landing_position"))
+	await frames(3)
+	_equip(player, &"reed_raft")
+	player.place_at(Vector2(200, 800))
+	check(not player.use_item(), "raft refuses boarding away from mooring")
+	check(not player.is_on_raft(), "distant use starts no raft ride")
+	player.place_at(dock.call(&"landing_position"))
+	_equip(player, &"tallow_sling")
+	check(player.use_item(), "sling fires at the mooring")
+	await seconds(0.4)
+	check(not player.is_on_raft(), "sling does not board or open water passage")
+	_equip(player, &"reed_raft")
+	check(player.use_item(), "actual raft boards at the mooring")
+	await seconds(0.4)
+	check(player.is_on_raft(), "raft enters rider state")
+	check(player.hurtbox.enabled, "raft rider retains active hurtbox")
+	var start := player.global_position
+	Input.action_press(&"move_right")
+	await seconds(0.8)
+	release_inputs()
+	check(player.global_position.x > start.x + 100, "real raft crosses into water")
+	check(bool(water.call(&"contains_point", player.global_position)), "rider remains on water")
+	_equip(player, &"tallow_sling")
+	check(not player.use_item(), "sling cannot be used afloat away from dock")
+	check(player.is_on_raft(), "refused use keeps rider afloat")
 	await dispose(arena)
 
 

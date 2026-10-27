@@ -1,13 +1,22 @@
 # Current status
 
-**Tidewick phase-two warning, 2026-10-27 (working tree, unpushed):** Existing
+**Q7 wall and raft cases, 2026-10-27 (working tree, unpushed):** A real pitch
+pot opens a cracked wall and its flag and collision are checked; a distant wall
+and sling, Cinder Wick and flare attempts are rejected. A real raft requires a
+mooring and crosses deep water with player damage active; the sling cannot be
+used aboard. These are controlled arenas without enemies. The agent reports two
+isolated `tool_matrix` runs and lint passing; an initial fixture lacked ammo and
+was corrected. Other pairs, room transitions and visual or human verification
+remain open.
+
+**Tidewick phase-two warning, 2026-10-27 (committed in `faf9632`):** Existing
 painted ripple art and presentation light replace the barely visible Placeholder
 warning. Warning dimensions, timing, hit area, damage and gameplay are unchanged.
 The agent reports isolated `boss_tidewick` and `route_cave_3` tests and lint
 passing; the lead reviewed both orientations in dark-arena captures. Human
 play remains unverified.
 
-**Q7 gate cases, 2026-10-27 (working tree, unpushed):** Actual player tools
+**Q7 gate cases, 2026-10-27 (committed in `faf9632`):** Actual player tools
 exercise three seams opened by the Glow Jar, a hook-tap wall and a wax seal
 opened by charged flare, with wrong tools rejected. The Tether Moth retrieves a
 real key behind a grate; the Reel does not. The cases check flags, blockers and
@@ -1084,7 +1093,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `7332bc07df0937c060f52cb0bd30f842627a3130` on `origin/main`, including the Archivist victory and selected actual-tool cases for all 20 encounters described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `faf963214f4a7bae92d04ca18e99dc5e6facc65a` on `origin/main`, including the Tidewick warning and Q7 gate cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -31,6 +31,8 @@ The Unlit's painted wax wave and its tests followed in
 `6fc7bfba29725a5237512ef2d15fe5d879a1127e`, verified on `origin/main`.
 The Archivist victory and selected actual-tool cases for all 20 encounters
 followed in `7332bc07df0937c060f52cb0bd30f842627a3130` on `origin/main`.
+The Tidewick warning and Q7 gate cases followed in
+`faf963214f4a7bae92d04ca18e99dc5e6facc65a`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -38,14 +40,22 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Tidewick phase-two warning, working tree (unpushed):** Existing painted ripple
+**Q7 wall and raft cases, working tree (unpushed):** A real pitch pot opens a
+cracked wall with flag and collision checks; a distant wall and sling, Cinder
+Wick and flare attempts are rejected. A real raft requires a mooring and crosses
+deep water with player damage active; the sling cannot be used aboard. These are
+controlled arenas without enemies. The agent reports two isolated `tool_matrix`
+runs and lint passing; an initial fixture lacked ammo and was corrected. Other
+pairs, room transitions and visual or human verification remain open.
+
+**Tidewick phase-two warning, committed in `faf9632`:** Existing painted ripple
 art and presentation light replace the barely visible Placeholder warning.
 Warning dimensions, timing, hit area, damage and gameplay are unchanged. The
 agent reports isolated `boss_tidewick` and `route_cave_3` tests and lint passing;
 the lead reviewed both orientations in dark-arena captures. Human play remains
 unverified.
 
-**Q7 gate cases, working tree (unpushed):** Actual player tools exercise three
+**Q7 gate cases, committed in `faf9632`:** Actual player tools exercise three
 seams opened by the Glow Jar, a hook-tap wall and a wax seal opened by charged
 flare, with wrong tools rejected. The Tether Moth retrieves a real key behind a
 grate; the Reel does not. Flags, blockers and revisit behavior are checked in
