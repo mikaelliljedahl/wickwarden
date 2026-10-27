@@ -74,6 +74,8 @@ The isolated C10 probe and ending-choice conflict were documented in
 user response on the choice remains pending.
 The continuous earned route to C10 room 6 followed in
 `9bfe631f1e07f623cf8156395f060ab2e37a360a`, verified on `origin/main`.
+The test-runner import isolation followed in
+`ca183c1d5b6cd52a4ba84669243b018793d003b6`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -81,7 +83,19 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**F3 runner import isolation, working tree (unpushed):**
+**Q3 C10 room 10, working tree (unpushed):** The continuous input route defeats
+three Mirror Shades, uses the actual Chime, earns the second key, and after an
+ordinary enemy death and respawn retains a key. It uses raft, mitts, boots and
+Reel to reach `cave_10_10` with 14/28 half-hearts and one C10 key. Damage and
+enemies are active, Echo is bypassed alive, and no warps or manual state changes
+are used. Further attempts failed and were not integrated; key three, Lockpick,
+boss and ending remain open. The agent reports two full isolated first-shard
+runs, shards 2–4 and lint passing; the lead passed `TMPDIR=/tmp make test
+T=playthrough_1` locally with the new section. Archivist and Tidewick use
+unlogged independent RNG; earlier bot internal-state reads,
+C7's low margin and human-play limits remain.
+
+**F3 runner import isolation, committed in `ca183c1`:**
 `tools/run_godot_check.py` now creates its temporary root before `ensure_import`;
 Godot import receives a separate `isolated_env` under `import`, and each suite
 continues to use its own user directory. The agent reports isolated import and

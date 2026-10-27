@@ -5,7 +5,7 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4 through C9, collects their rewards and enters C10.
+## The continuous route defeats C4 through C9, collects their rewards and advances through C10.
 ## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through the C10 mirror hall: no repositioning, warps, enemy
+## Continuous opening through the C10 anchor drop: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -3456,6 +3456,198 @@ func walk_c10_approach() -> void:
 		(
 			"C10 mirror entry room=%s health=%d/%d slugs=%d"
 			% [world.get_current_room_id(), GameState.health, GameState.max_health, GameState.slugs]
+		)
+	)
+	await farm_c4_antechamber()
+	check(not player.is_dead(), "walking survives mirror shades")
+	print(
+		(
+			"C10 mirror farm health=%d enemies=%d"
+			% [GameState.health, world.current_room.get_enemies().size()]
+		)
+	)
+	await walk_start_to(Vector2(1680, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"lantern_chime":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1)
+	check(GameState.has_flag(&"resonated_e238"), "earned chime opens final key chamber")
+	await walk_start_cross(&"move_right", &"cave_10_7")
+	print("C10 key room health=%d" % GameState.health)
+	await walk_start_to(Vector2(1488, 432))
+	await walk_start_to(Vector2(1488, 405))
+	await frames(5)
+	check_eq(GameState.keys_in(&"c10"), 1, "walking collects second final key")
+	check(not player.is_dead(), "walking collects second final key alive")
+	print(
+		(
+			"C10 key two room=%s health=%d keys=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
+		)
+	)
+	await farm_c4_antechamber()
+	check(player.is_dead(), "final key chamber enemies trigger ordinary respawn")
+	for tick in range(600):
+		await frames(1)
+		if not player.is_dead() and world.get_current_room_id() == &"ow_10_8":
+			break
+	check_eq(world.get_current_room_id(), &"ow_10_8", "final cave death returns to Ninth Door")
+	check_eq(GameState.health, 28, "final cave respawn restores earned health")
+	check_eq(GameState.keys_in(&"c10"), 1, "second key survives ordinary respawn")
+	print(
+		(
+			"C10 respawn room=%s health=%d keys=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
+		)
+	)
+	await walk_start_to(Vector2(960, 720))
+	await walk_start_to(Vector2(1440, 720))
+	await walk_start_to(Vector2(1440, 528))
+	await seconds(1)
+	check_eq(world.get_current_room_id(), &"cave_10_1", "walking re-enters final cave")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_10_2")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_10_4")
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(1700, 150))
+	await walk_start_to(Vector2(1730, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"reed_raft":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	await walk_raft_cross(&"cave_10_5")
+	print("C10 return cellar health=%d" % GameState.health)
+	await walk_start_to(Vector2(300, 600))
+	await walk_start_to(Vector2(960, 600))
+	await walk_start_to(Vector2(960, 800))
+	for cycle in range(10):
+		if GameState.active_item == &"heft_mitts":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await frames(22)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1)
+	check(GameState.has_flag(&"moved_e239"), "walking lifts final heavy stone")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_10_8")
+	check(not player.is_dead(), "walking reaches heavy span alive")
+	print(
+		(
+			"C10 span room=%s health=%d keys=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
+		)
+	)
+	await walk_start_to(Vector2(1584, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"skitter_boots":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1)
+	await walk_start_cross(&"move_right", &"cave_10_9")
+	check(not player.is_dead(), "walking survives final pit leap")
+	print("C10 pit room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(120, 480))
+	await seconds(0.7)
+	print(
+		(
+			"C10 pit jump start pos=%s health=%d item=%s"
+			% [
+				player.global_position - world.current_room.global_position,
+				GameState.health,
+				GameState.active_item
+			]
+		)
+	)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1)
+	print(
+		(
+			"C10 pit jump end pos=%s health=%d"
+			% [player.global_position - world.current_room.global_position, GameState.health]
+		)
+	)
+	await walk_start_to(Vector2(336, 384))
+	await walk_start_to(Vector2(1008, 384))
+	for cycle in range(10):
+		if GameState.active_item == &"reel_line":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.6)
+	print(
+		(
+			"C10 reel start pos=%s health=%d item=%s"
+			% [
+				player.global_position - world.current_room.global_position,
+				GameState.health,
+				GameState.active_item
+			]
+		)
+	)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.5)
+	print(
+		(
+			"C10 reel end pos=%s health=%d"
+			% [player.global_position - world.current_room.global_position, GameState.health]
+		)
+	)
+	await walk_start_cross(&"move_down", &"cave_10_10")
+	check(not player.is_dead(), "walking reaches final anchor drop alive")
+	print(
+		(
+			"C10 anchor room=%s health=%d keys=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
 		)
 	)
 
