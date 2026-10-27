@@ -1,6 +1,19 @@
 # Current status
 
-**C10.c room-10 geometry, 2026-10-28 (working tree, unpushed):** Two floor
+**Q3 C10 boss entrance, 2026-10-28 (working tree, unpushed):** With the room-10
+fix `b5ba112` synced, the continuous earned input route physically spends key
+two at `e242`, collects key three and spends it at `e243`, collects a +6 slug
+bundle, uses the sling eye, earns the Lockpick and opens the boss door to the
+actual The Unlit in `cave_10_14`. Entry is 10/28 half-hearts, 10 pots and 24
+slugs. Enemies and damage are active, Echo is bypassed alive, no warp or manual
+state is used, and the route includes an earlier ordinary respawn. The agent
+reports two first-shard runs, shards 2–4 and lint passing; the lead passed
+`TMPDIR=/tmp make test T=playthrough_1` locally with the boss entrance.
+Global seed `20261027` does not control independent boss RNG; the bot reads boss
+ID, phase and HP and earlier enemy/projectile state. Human play, victory and a
+full ending remain open; E1 is unchanged and the user response remains pending.
+
+**C10.c room-10 geometry, 2026-10-28 (committed in `b5ba112`):** Two floor
 tiles were opened in `cave_10_10` and `make rooms` generated the scene. From
 the north bank, actual Reel input reaches `e242` and key three; a separate
 ward-cache case uses real watcher shots and ward, then returns by Reel. These
@@ -16,18 +29,18 @@ requires an actual living hound and then that same hound defeated. The agent
 reports the corrected test and lint passing; the full `make check` preceded this
 test-only correction. The north boundary without Reel and the return transition have not
 been dynamically tested; the fixture uses 40 HP and human play remains open.
-The earned Q3 route to key three is not yet complete.
+The later unpushed earned route to the boss entrance is recorded above.
 
 **C10 room-10 access investigation, 2026-10-28:** Two independent input and
 geometry probes found the `cave_10_10` landing at `(1008, 648)` separated from
 western `e242` by a pit and walls; the ward-cache entrance is also enclosed.
 This strongly suggests a level problem, but does not formally exclude every
 tool interaction. A `FromPocket` fixture placed on the other side can walk to
-`e242` and key three with damage and enemies active. C10.c is correcting the
-room according to the world plan; the proposed change is recorded above. The unpushed Q3 route repeatedly reaches the
-second Reel bank at 14/28 half-hearts, but has not reached key three. The lead
+`e242` and key three with damage and enemies active. C10.c's committed room
+correction is recorded above. The Q3 route repeatedly reaches the
+second Reel bank at 14/28 half-hearts in the earlier run. The lead
 passed `TMPDIR=/tmp make test T=playthrough_1` locally for this landing; the
-earned route to key three remains open.
+later unpushed continuation to key three is recorded above.
 
 **Q3 C10 room 10, 2026-10-28 (committed in `0ca0ee6`):** The continuous input
 route defeats three Mirror Shades, uses the actual Chime, earns the second key,
@@ -1409,7 +1422,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0ca0ee673fe195e2ab3f4d7cedb44080b0cdc20f` on `origin/main`, including the continuous C10 route to room 10 above. The Q3 `/tmp` guard and shared runner guard remain open. The third key and complete C10 route remain unverified; the user response on the ending-choice conflict remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `b5ba1124b771a0576228d105302eb20627753d53` on `origin/main`, including the room-10 geometry fix, corrected hound regression and Q3 Reel-bank route above. The Q3 `/tmp` guard and shared runner guard remain open. The earned route to the third key and complete C10 route remain unverified; the user response on the ending-choice conflict remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

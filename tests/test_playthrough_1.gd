@@ -5,7 +5,7 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4 through C9, collects their rewards and advances through C10.
+## The continuous route defeats C4 through C9, collects their rewards and reaches the C10 boss.
 ## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through the C10 anchor drop: no repositioning, warps, enemy
+## Continuous opening through the C10 boss entrance: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -3674,6 +3674,104 @@ func walk_c10_approach() -> void:
 				GameState.health,
 				GameState.max_health,
 				GameState.keys_in(&"c10")
+			]
+		)
+	)
+
+	await walk_start_to(Vector2(840, 640))
+	await walk_start_to(Vector2(720, 640))
+	await walk_start_to(Vector2(720, 520))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_10_11")
+	check(GameState.has_flag(&"door_e242"), "walking opens final second key door")
+	check_eq(GameState.keys_in(&"c10"), 0, "walking spends second final key")
+	print("C10 vault entry room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(1008, 432))
+	await walk_start_to(Vector2(1008, 336))
+	await frames(5)
+	check(GameState.has_flag(&"picked_key_c10_3"), "walking physically collects third final key")
+	check_eq(GameState.keys_in(&"c10"), 1, "walking holds third final key")
+	check(not player.is_dead(), "walking collects third final key alive")
+	print(
+		(
+			"C10 key3 room=%s health=%d keys=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
+		)
+	)
+
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_10_12")
+	check(GameState.has_flag(&"door_e243"), "walking opens final third key door")
+	check_eq(GameState.keys_in(&"c10"), 0, "walking spends third final key")
+	await walk_start_to(Vector2(1488, 528))
+	await frames(5)
+	check(
+		GameState.has_flag(&"picked_slug_bundle_cave_10_12"),
+		"walking collects final hall slug bundle"
+	)
+	print("C10 eye hall health=%d slugs=%d" % [GameState.health, GameState.slugs])
+	await walk_start_to(Vector2(1200, 528))
+	await walk_start_to(Vector2(1200, 600))
+	for cycle in range(10):
+		if GameState.active_item == &"tallow_sling":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	print(
+		(
+			"C10 eye fire pos=%s facing=%s"
+			% [player.global_position - world.current_room.global_position, player.facing]
+		)
+	)
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(0.8)
+	check(GameState.has_flag(&"eye_e244"), "earned sling opens final eye")
+	print("C10 eye shot health=%d slugs=%d" % [GameState.health, GameState.slugs])
+	await walk_start_to(Vector2(960, 480))
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"cave_10_13")
+	await walk_start_to(Vector2(960, 400))
+	await frames(5)
+	check(GameState.has_big_key(&"c10"), "walking physically collects final Lockpick")
+	check(not player.is_dead(), "walking collects final Lockpick alive")
+	print(
+		(
+			"C10 lockpick room=%s health=%d slugs=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.slugs]
+		)
+	)
+	check(GameState.has_flag(&"picked_bigkey_c10"), "final Lockpick pickup is physically collected")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_10_12")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_10_14")
+	check(GameState.has_flag(&"door_boss_c10"), "walking opens the final boss door")
+	check(not player.is_dead(), "walking reaches the Unlit alive")
+	var final_boss = world.current_room.get_node_or_null("Enemies/TheUnlit1")
+	check(final_boss != null, "actual Unlit boss is present")
+	if final_boss != null:
+		check_eq(final_boss.boss_id, &"the_unlit", "the actual Unlit awaits")
+		check_eq(final_boss.phase, 1, "final boss starts in phase one")
+		check_eq(final_boss.hp, 75, "final boss starts with full health")
+	check(not GameState.has_flag(&"boss_cave_10_14_defeated"), "final boss awaits real fight")
+	print(
+		(
+			"C10 boss entry room=%s health=%d/%d pots=%d slugs=%d boss=%s"
+			% [
+				world.get_current_room_id(),
+				GameState.health,
+				GameState.max_health,
+				GameState.pitch_pots,
+				GameState.slugs,
+				final_boss
 			]
 		)
 	)
