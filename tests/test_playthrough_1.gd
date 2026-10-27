@@ -5,8 +5,8 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4, collects its rewards and earns the C5 Lockpick.
-## Its C4 bot reads boss and hazard internals and uses physics queries to steer.
+## The continuous route defeats C4 and C5 and collects their rewards.
+## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through the C5 Lockpick: no repositioning, warps, enemy
+## Continuous opening through C5 victory: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -1324,6 +1324,182 @@ func walk_toward_c5() -> void:
 		check(GameState.has_big_key(&"c5"), "walking collects the C5 Lockpick")
 		check(not player.is_dead(), "walking collects the C5 Lockpick alive")
 		print("C5 lockpick room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+		await walk_to_archivist()
+
+
+func walk_to_archivist() -> void:
+	# Walk toward the vault enemies until ordinary damage triggers the checkpoint.
+	Input.action_press(&"move_right")
+	for tick in range(5000):
+		await frames(1)
+		if player.is_dead():
+			break
+	release_inputs()
+	check(player.is_dead(), "active vault enemies trigger ordinary respawn")
+	for tick in range(600):
+		await frames(1)
+		if not player.is_dead() and world.get_current_room_id() == &"ow_6_3":
+			break
+	check_eq(world.get_current_room_id(), &"ow_6_3", "vault death respawns at C5 mouth")
+	check_eq(GameState.health, 18, "vault respawn restores earned health")
+	check(GameState.has_big_key(&"c5"), "Lockpick persists through normal respawn")
+	await walk_start_to(Vector2(200, 700))
+	await walk_start_to(Vector2(300, 780))
+	await walk_start_to(Vector2(900, 780))
+	await walk_start_to(Vector2(960, 700))
+	await walk_start_to(Vector2(960, 432))
+	await walk_start_to(Vector2(816, 432))
+	await walk_start_to(Vector2(816, 336))
+	await seconds(1.0)
+	check_eq(world.get_current_room_id(), &"cave_5_1", "walking returns to C5")
+	await walk_fast_to(Vector2(960, 480), true)
+	await walk_fast_to(Vector2(200, 480), true)
+	await walk_start_cross(&"move_left", &"cave_5_2")
+	await walk_fast_to(Vector2(200, 480), true)
+	await walk_start_cross(&"move_left", &"cave_5_4")
+	await walk_start_to(Vector2(1550, 150))
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_5_5")
+	await walk_fast_to(Vector2(1700, 800), true)
+	await walk_fast_to(Vector2(960, 800), true)
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_5_7")
+	await walk_start_to(Vector2(960, 432))
+	await walk_start_to(Vector2(1680, 432))
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_5_9")
+	print("C5 ante health=%d" % GameState.health)
+	await walk_start_to(Vector2(200, 800))
+	await walk_start_to(Vector2(960, 800))
+	await walk_start_cross(&"move_down", &"cave_5_10")
+	check(GameState.has_flag(&"door_boss_c5"), "walking opens the C5 boss door")
+	check(not player.is_dead(), "walking reaches Archivist alive")
+	print("Archivist entry room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	if world.get_current_room_id() == &"cave_5_10" and not player.is_dead():
+		await fight_archivist()
+
+
+func fight_archivist() -> void:
+	var boss = world.current_room.get_node("Enemies/Archivist1")
+	var last_hp: int = boss.hp
+	var last_health := GameState.health
+	var attack_tick := -100
+	for tick in range(18000):
+		if (
+			player.is_dead()
+			or not is_instance_valid(boss)
+			or world.get_current_room_id() != &"cave_5_10"
+		):
+			break
+		if boss.is_dying() or boss.is_dead:
+			break
+		var delta: Vector2 = boss.global_position - player.global_position
+		var pos: Vector2 = player.global_position
+		var motion := Vector2.ZERO
+		var attack := false
+		var cast := false
+		if (
+			boss.copying
+			and not boss.jar_lit()
+			and get_tree().get_nodes_in_group(&"glow_light").is_empty()
+		):
+			if GameState.active_item != &"glow_jar":
+				release_inputs()
+				Input.action_press(&"cycle_item")
+				await frames(2)
+				Input.action_release(&"cycle_item")
+				await frames(2)
+				continue
+			if delta.length() < 470 and delta.length() > 140:
+				motion = (
+					Vector2(signf(delta.x), 0)
+					if absf(delta.x) > absf(delta.y)
+					else Vector2(0, signf(delta.y))
+				)
+				cast = true
+			else:
+				motion = delta.normalized() if delta.length() >= 470 else -delta.normalized()
+		elif not boss.is_in_intro() and not boss.is_pausing() and boss.hurtbox.enabled:
+			if (
+				delta.length() < 160
+				and minf(absf(delta.x), absf(delta.y)) < 80
+				and tick - attack_tick > 28
+			):
+				motion = (
+					Vector2(signf(delta.x), 0)
+					if absf(delta.x) > absf(delta.y)
+					else Vector2(0, signf(delta.y))
+				)
+				attack = true
+			else:
+				motion = delta.normalized() * clampf((delta.length() - 145) / 40.0, -2.0, 2.0)
+		else:
+			motion = -delta.normalized() if delta.length() < 260 else Vector2.ZERO
+		for shot in get_tree().get_nodes_in_group(&"projectiles"):
+			if not shot is EnemyProjectile or not is_instance_valid(shot):
+				continue
+			var away: Vector2 = pos - shot.global_position
+			if away.length() < 150:
+				motion += away.normalized() * 3.0
+				attack = false
+				cast = false
+		var local: Vector2 = pos - world.current_room.global_position
+		if local.x < 180:
+			motion.x = maxf(motion.x, 1.0)
+		if local.x > 1740:
+			motion.x = minf(motion.x, -1.0)
+		if local.y < 210:
+			motion.y = maxf(motion.y, 1.0)
+		if local.y > 760:
+			motion.y = minf(motion.y, -1.0)
+		release_inputs()
+		if absf(motion.x) > 0.2:
+			Input.action_press(&"move_right" if motion.x > 0 else &"move_left")
+		if absf(motion.y) > 0.2:
+			Input.action_press(&"move_down" if motion.y > 0 else &"move_up")
+		if cast or attack:
+			await frames(2)
+			Input.action_press(&"use_item" if cast else &"attack")
+			if attack:
+				attack_tick = tick
+		await frames(1)
+		if is_instance_valid(boss) and (boss.hp != last_hp or GameState.health != last_health):
+			print(
+				(
+					"ARCH tick=%d hp=%d health=%d phase=%d copying=%s lit=%s"
+					% [tick, boss.hp, GameState.health, boss.phase, boss.copying, boss.jar_lit()]
+				)
+			)
+			last_hp = boss.hp
+			last_health = GameState.health
+	release_inputs()
+	print(
+		(
+			"ARCH end dead=%s health=%d defeated=%s hp=%s player=%s boss=%s"
+			% [
+				player.is_dead(),
+				GameState.health,
+				GameState.has_flag(&"boss_cave_5_10_defeated"),
+				boss.hp if is_instance_valid(boss) else -1,
+				player.global_position - world.current_room.global_position,
+				(
+					boss.global_position - world.current_room.global_position
+					if is_instance_valid(boss)
+					else Vector2.ZERO
+				)
+			]
+		)
+	)
+	check(GameState.has_flag(&"boss_cave_5_10_defeated"), "walking defeats Archivist")
+	if GameState.has_flag(&"boss_cave_5_10_defeated") and not player.is_dead():
+		await seconds(2.0)
+		await walk_start_to(Vector2(624, 720))
+		await walk_start_to(Vector2(1296, 720))
+		await frames(5)
+		check(GameState.has_fragment(&"c5"), "walking collects C5 fragment")
+		check(GameState.has_flag(&"picked_wick_core_c5"), "walking collects C5 wick core")
+		check_eq(GameState.max_health, 20, "C5 core increases earned maximum health")
 
 
 func farm_c4_antechamber() -> void:

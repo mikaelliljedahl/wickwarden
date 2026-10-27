@@ -27,6 +27,8 @@ The C5 Lockpick route, Q7 extension and B10 chain art followed in
 `14a2217b1286193fa0db8c30d0508e753d6234ac`, verified on `origin/main`.
 The Q7 extension to 15 selected encounters followed in
 `ee9145abfc632da422d4f003acc68d7cdbca0e3e` on `origin/main`.
+The Unlit's painted wax wave and its tests followed in
+`6fc7bfba29725a5237512ef2d15fe5d879a1127e`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -34,13 +36,33 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**B10 wax wave, working tree (unpushed):** The phase-two active wave uses a
+**Q3 Archivist victory, working tree (unpushed):** The continuous input route
+defeats Archivist with normal damage, respawns after ordinary deaths and
+physically collects the C5 fragment and core, reaching a maximum of 20
+half-hearts. The agent reports six standalone victories, four isolated shards
+and lint passing. The global seed is `20261027`, but the boss's own
+randomization is uncontrolled. The bot identifies the real boss among copies
+through internal state and reads boss phase, health, projectiles and light.
+Later shards use fixtures and warps; the C5 miniboss remains alive. A complete
+human playthrough and other global seeds remain unverified.
+
+**Q7 selected encounter cases, working tree (unpushed):** `test_tool_matrix`
+now has at least one selected actual-tool case for each of the 20 encounters,
+adding Mirror Warden, Dirge Choir, Archivist, Tidewick and The Unlit. These use
+controlled arenas and positions: Mirror Warden's AI and refresh are frozen,
+Dirge Choir's song/timing is forced, Archivist's phase is reached by direct
+damage, and Tidewick uses a controlled raft position. Player damage is disabled
+in four of the five new cases. The agent reports three isolated `tool_matrix`
+runs and lint passing. Full phase, tool, survival and human coverage remains
+open; this is not complete Q7 acceptance.
+
+**B10 wax wave, committed in `6fc7bfb`:** The phase-two active wave uses a
 painted band cut through the ordinary manifest and wrapped by a shader, with
 inner and outer outlines. Damage, geometry and timing are unchanged. The lead
 reviewed controlled radius-340 and radius-650 captures; the agent also reviewed
 radius 50 and reports isolated boss and route tests, 22 art tests and lint
 passing. Source and prompt are recorded in `tools/source_art/unlit-wax-wave-z1-log.md`
-and `docs/art-provenance.md`. Human play remains unverified.
+and `docs/art-provenance.md`. Human action review remains open.
 
 **Q7 extension, committed in `ee9145a`:** Selected actual-tool cases now cover
 15 of 20 encounters, adding Lull Mauler, Gloam Knight and Hushed Colossus with

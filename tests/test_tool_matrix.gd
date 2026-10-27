@@ -1,4 +1,5 @@
 ## timeout=180
+# gdlint: disable=max-file-lines
 extends TestCase
 ## Q7 incremental integration coverage. Real player use, items and travelling hitboxes only.
 ## Controlled bare arenas and fixed initial positions; this is not a continuous playthrough.
@@ -53,6 +54,11 @@ func run() -> void:
 	await _mauler_slag_hook()
 	await _knight_boots()
 	await _colossus_shard()
+	await _mirror_braziers()
+	await _dirge_chime()
+	await _archivist_jar()
+	await _tidewick_raft()
+	await _unlit_eye_sling()
 
 
 func _gate(parent: Node, row: Array, at: Vector2) -> Node2D:
@@ -884,3 +890,174 @@ func _colossus_shard() -> void:
 	await frames(55)
 	check_eq(boss.hp, 42, "Colossus: real thrown shard deals six")
 	await dispose(arena)
+
+
+func _matrix_room(path: String) -> Room:
+	var scene := load(path) as PackedScene
+	check(scene != null, "encounter gallery loads: " + path)
+	if scene == null:
+		return null
+	var room := scene.instantiate() as Room
+	add_child(room)
+	room.enter()
+	return room
+
+
+func _mirror_braziers() -> void:
+	reset_state()
+	var arena := make_arena()
+	var braziers: Array[Brazier] = []
+	for i in range(4):
+		var brazier := Brazier.new()
+		brazier.position = Vector2(200 + (i % 2) * 1400, 200 + (i / 2) * 560)
+		brazier.brazier_id = StringName("matrix_mirror_%d" % i)
+		arena.add_child(brazier)
+		braziers.append(brazier)
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/mirror_warden.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(200, 290))
+	await frames(2)
+	# Frozen encounter and explicit refresh isolate the room's real brazier interactions.
+	enemy.set_physics_process(false)
+	for i in range(4):
+		player.place_at(braziers[i].global_position + Vector2(0, 90))
+		player.facing = Vector2.UP
+		await frames(3)
+		Input.action_press(&"attack")
+		await frames(8)
+		Input.action_release(&"attack")
+		await frames(20)
+		enemy._refresh_decoys()
+		check(braziers[i].lit, "Mirror Warden: actual hook lights brazier")
+		check_eq(enemy.lit_brazier_count(), i + 1, "Mirror Warden: counts lit braziers")
+		for decoy in enemy.decoys:
+			check_near(decoy.modulate.a, 1.0 - 0.25 * (i + 1), 0.001, "Mirror: decoy fades")
+	check(not enemy.decoys[0].visible and not enemy.decoys[1].visible, "Mirror: decoys gone")
+	await dispose(arena)
+
+
+func _dirge_chime() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(336, 480))
+	var boss = make_enemy(
+		arena, "res://scenes/enemies/bosses/dirge_choir.tscn", Vector2.ZERO
+	)
+	player.set_hurtbox_enabled(self, false)
+	await frames(95)
+	# Hold cadence and explicitly begin the warning to isolate the chime window.
+	boss.song_left = 100
+	var head = boss.heads[0]
+	head.cancel_song()
+	head.begin_song()
+	_equip(player, &"lantern_chime")
+	check(player.use_item(), "Dirge: actual chime rings during warning")
+	await frames(34)
+	check(head.open_left > 3, "Dirge: real chime opens singing head")
+	check_eq(head.song_age, -1.0, "Dirge: chime interrupts song")
+	player.place_at(head.global_position + Vector2(0, -100))
+	player.facing = Vector2.DOWN
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(head.hp, 10, "Dirge: actual hook deals two to open head")
+	await dispose(arena)
+
+
+func _archivist_jar() -> void:
+	reset_state()
+	var room := await _matrix_room("res://tests/fixtures/gallery/B05.tscn")
+	if room == null:
+		return
+	var boss = room.get_node("Enemies/Archivist")
+	var player := make_player(room, Vector2(960, 300))
+	player.set_hurtbox_enabled(self, false)
+	await seconds(1.6)
+	# Direct damage selects phase two; the jar and page-break hook are real actions.
+	boss.apply_damage(10, boss.global_position, 0)
+	await seconds(2.2)
+	check(boss.copying and boss.copies.size() == 3, "Archivist: phase-two copies active")
+	check(not boss.shadow.visible, "Archivist: shadow hidden before jar")
+	_equip(player, &"glow_jar")
+	player.place_at(Vector2(960, 192))
+	player.facing = Vector2.DOWN
+	check(player.use_item(), "Archivist: actual jar thrown")
+	await seconds(0.6)
+	check(boss.jar_lit() and boss.shadow.visible, "Archivist: real jar reveals shadow")
+	for copy in boss.copies:
+		check(copy.get_node_or_null("Shadow") == null, "Archivist: decoy has no shadow")
+	player.place_at(boss.global_position + Vector2(0, 108))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(10)
+	Input.action_release(&"attack")
+	check_eq(boss.hp, 16, "Archivist: actual hook page break deals four")
+	check(not boss.copying and boss.copies.is_empty(), "Archivist: page break removes copies")
+	await dispose(room)
+
+
+func _tidewick_raft() -> void:
+	reset_state()
+	var room := await _matrix_room("res://tests/fixtures/gallery/B03.tscn")
+	if room == null:
+		return
+	var boss = room.get_node("Enemies/Tidewick")
+	var dock = room.get_node("Props/Basin/Dock")
+	var player := make_player(room, dock.landing_position())
+	player.set_hurtbox_enabled(self, false)
+	_equip(player, &"reed_raft")
+	check(player.use_item(), "Tidewick: actual raft boards from dock")
+	await seconds(0.4)
+	check(player.is_on_raft(), "Tidewick: rider aboard")
+	Input.action_press(&"move_right")
+	await seconds(0.6)
+	release_inputs()
+	await seconds(0.5)
+	for i in range(360):
+		if boss.tail_exposed():
+			break
+		await frames(1)
+	check(boss.tail_exposed(), "Tidewick: natural tail exposure reached")
+	# Controlled public raft displacement tracks the moving tail during the swing.
+	for i in range(2):
+		player.push_raft(boss.tail.global_position + Vector2(0, 75) - player.global_position)
+		player.facing = Vector2.UP
+		await frames(1)
+	Input.action_press(&"attack")
+	for i in range(7):
+		player.push_raft(boss.tail.global_position + Vector2(0, 75) - player.global_position)
+		await frames(1)
+	Input.action_release(&"attack")
+	await frames(22)
+	check_eq(boss.hp, 22, "Tidewick: real raft rider hook damages exposed tail")
+	await dispose(room)
+
+
+func _unlit_eye_sling() -> void:
+	reset_state()
+	var room := await _matrix_room("res://tests/fixtures/gallery/B10.tscn")
+	if room == null:
+		return
+	var boss = room.get_node("Enemies/TheUnlit")
+	var player := make_player(room, Vector2(1632, 480))
+	player.set_hurtbox_enabled(self, false)
+	_equip(player, &"tallow_sling")
+	await seconds(1.6)
+	check_eq(boss.eyes.size(), 5, "Unlit: phase one has five eyes")
+	var eye = boss.eyes[0]
+	var attempts := 0
+	# Reposition near the naturally orbiting eye; no phase or HP override.
+	while is_instance_valid(eye) and not eye.is_dead and attempts < 12:
+		while is_instance_valid(eye) and eye.global_position.y < 180:
+			await frames(6)
+		if not is_instance_valid(eye):
+			break
+		player.place_at(eye.global_position + Vector2(0, 80))
+		player.facing = Vector2.UP
+		if player.use_item():
+			attempts += 1
+		await seconds(0.35)
+	check(not is_instance_valid(eye) or eye.is_dead, "Unlit: real slugs defeat moving eye")
+	check_eq(boss.parts().size(), 4, "Unlit: defeated eye leaves four living parts")
+	await dispose(room)
