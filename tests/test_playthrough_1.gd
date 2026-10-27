@@ -3650,6 +3650,33 @@ func walk_c10_approach() -> void:
 			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
 		)
 	)
+	await walk_start_to(Vector2(1008, 192))
+	await seconds(0.6)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.5)
+	var south: Vector2 = player.global_position - world.current_room.global_position
+	check(
+		south.distance_to(Vector2(1008, 648)) < 25, "earned reel lands on final anchor south bank"
+	)
+	check(not player.is_dead(), "walking reaches final anchor south bank alive")
+	check_eq(GameState.keys_in(&"c10"), 1, "second C10 key retained at final anchor")
+	print(
+		(
+			"C10 anchor south room=%s pos=%s health=%d/%d keys=%d"
+			% [
+				world.get_current_room_id(),
+				south,
+				GameState.health,
+				GameState.max_health,
+				GameState.keys_in(&"c10")
+			]
+		)
+	)
 
 
 func farm_c4_antechamber() -> void:

@@ -76,6 +76,8 @@ The continuous earned route to C10 room 6 followed in
 `9bfe631f1e07f623cf8156395f060ab2e37a360a`, verified on `origin/main`.
 The test-runner import isolation followed in
 `ca183c1d5b6cd52a4ba84669243b018793d003b6`, verified on `origin/main`.
+The continuous C10 route to room 10 followed in
+`0ca0ee673fe195e2ab3f4d7cedb44080b0cdc20f` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -83,7 +85,37 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 C10 room 10, working tree (unpushed):** The continuous input route defeats
+**C10.c room-10 geometry, working tree (unpushed):** Two floor tiles were opened
+in `cave_10_10` and `make rooms` generated the scene. From the north bank,
+actual Reel input reaches `e242` and key three; a separate ward-cache case uses
+real watcher shots and ward, then returns by Reel. These fixtures grant the
+loadout, start position and key and use 40 half-hearts, with damage and enemies
+active. The agent reports `rooms-check` 221, C10 area/route, the new test twice
+and lint passing. The lead passed the new test and `hidden_seam` and reviewed an
+actual-room capture. The lead's `TMPDIR=/tmp make check` passed the Godot suite
+including four shards, lint, world-data and 175 Python tests with the preceding
+version of the new tests. Independent review found no confirmed blockers or new
+shortcuts; `rooms-check` 221 and the 30-check test passed. The null-hound
+false-pass risk was corrected: the regression now requires an actual living
+hound and then that same hound defeated. The agent reports the corrected test
+and lint passing; the full `make check` preceded this test-only correction.
+The north boundary without
+Reel and the return transition have not been dynamically tested; the fixture uses
+40 HP and human play remains open. The earned Q3 route to key three is not yet
+complete.
+
+**C10 room-10 access investigation:** Two independent input and geometry probes
+found the `cave_10_10` landing at `(1008, 648)` separated from western `e242`
+by a pit and walls; the ward-cache entrance is also enclosed. This strongly
+suggests a level problem, but does not formally exclude every tool interaction.
+A `FromPocket` fixture placed on the other side can walk to `e242` and key three
+with damage and enemies active. C10.c's proposed correction is recorded above.
+The unpushed Q3 route repeatedly reaches the second Reel bank at
+14/28 half-hearts, but has not reached key three. The lead passed `TMPDIR=/tmp
+make test T=playthrough_1` locally for this landing; the earned route to key
+three remains open.
+
+**Q3 C10 room 10, committed in `0ca0ee6`:** The continuous input route defeats
 three Mirror Shades, uses the actual Chime, earns the second key, and after an
 ordinary enemy death and respawn retains a key. It uses raft, mitts, boots and
 Reel to reach `cave_10_10` with 14/28 half-hearts and one C10 key. Damage and

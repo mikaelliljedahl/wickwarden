@@ -52,9 +52,9 @@ size = Vector2(672, 192)
 kind = &"wall"
 
 [node name="Wall3" type="StaticBody2D" parent="Props"]
-position = Vector2(624, 624)
+position = Vector2(576, 624)
 script = ExtResource("4")
-size = Vector2(288, 96)
+size = Vector2(192, 96)
 kind = &"wall"
 
 [node name="Wall4" type="StaticBody2D" parent="Props"]
@@ -64,9 +64,9 @@ size = Vector2(96, 192)
 kind = &"wall"
 
 [node name="Wall5" type="StaticBody2D" parent="Props"]
-position = Vector2(720, 768)
+position = Vector2(720, 720)
 script = ExtResource("4")
-size = Vector2(96, 192)
+size = Vector2(96, 96)
 kind = &"wall"
 
 [node name="AnchorRing1" parent="Props" instance=ExtResource("5")]
