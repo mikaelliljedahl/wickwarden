@@ -41,6 +41,8 @@ The Dirge Choir victory and C6 core audit followed in
 `14b7836107ece10c61c1e6236e6371000314684a`, verified on `origin/main`.
 The Q7 vegetation, rocks and gate cases followed in
 `a53fc9d47010cf9bd85ff4b9933c5d093fd399f6`, verified on `origin/main`.
+The P08 seam presentation and Q7 raft passage and ravine cases followed in
+`8dbbabab106ef53b7077ad30142d83c895bdcdfa`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -48,7 +50,15 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 raft passage and ravine, working tree (unpushed):** A real World passage
+**Q7 locks and keys, working tree (unpushed):** Controlled arena cases physically
+collect placed pickups and exercise real scoped locks, a boss door and the Ninth
+Door. Wrong scope and sling are rejected; a matching C1 key is consumed, the
+Lockpick is retained, and the Ninth Door rejects eight fragments but opens with
+nine without consuming them. Player damage is active and there are no enemies.
+The agent reports two isolated matrix runs and lint passing. Other combinations,
+an actual world route, save/reload and human play remain open.
+
+**Q7 raft passage and ravine, committed in `8dbbaba`:** A real World passage
 across `e167` from `cave_3_5` to `cave_3_6` follows the actual moorings with
 the raft; the sling does not cross. In a separate real `ravine_leap` arena case
 the boots cross and the sling does not. Fixtures grant tools directly and remove
@@ -56,7 +66,7 @@ roamers at the source; damage remains active. These are not an earned
 playthrough. The agent reports two isolated matrix runs and lint passing. Other
 pairs and edges, visual and human verification remain open.
 
-**P08 seam presentation, working tree (unpushed):** At the real seams in
+**P08 seam presentation, committed in `8dbbaba`:** At the real seams in
 `ow_8_0` and `ow_11_7`, the Placeholder is hidden only when an explicitly
 linked RoomDoor has usable painted art. Standalone fallbacks and real seam art
 remain; collision, flags and timing are unchanged. The agent reports real-room

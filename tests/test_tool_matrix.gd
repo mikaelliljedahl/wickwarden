@@ -41,6 +41,9 @@ func run() -> void:
 			await _cut_screen_pair(prop, tool)
 	await _ward_plate_tools()
 	await _brazier_gate_tools()
+	await _scoped_key_gate()
+	await _boss_key_gate()
+	await _ninth_fragment_gate()
 	await _mooring_water_gate()
 	await _flooded_room_pair()
 	for tool: StringName in [&"skitter_boots", &"tallow_sling"]:
@@ -349,6 +352,115 @@ func _brazier_gate_tools() -> void:
 	await seconds(1.0)
 	check(second.lit and gate.is_open, "brazier gate: real fire lights second and opens gate")
 	check(GameState.has_flag(&"gate_matrix_braziers"), "brazier gate: completion persists")
+	await dispose(arena)
+
+
+func _collect_gate_pickup(arena: Node, player: Player, kind: StringName, scope: StringName) -> void:
+	# Place a real pickup by the player; inventory is gained through the collector collision.
+	var pickup := PickupBase.new()
+	pickup.kind = kind
+	pickup.scope = scope
+	pickup.position = Vector2(300, 600)
+	arena.add_child(pickup)
+	player.place_at(Vector2(300, 700))
+	Input.action_press(&"move_up")
+	await seconds(0.3)
+	release_inputs()
+	check(not is_instance_valid(pickup) or pickup.is_collected, "%s %s: physically collected" % [kind, scope])
+
+
+func _scoped_key_gate() -> void:
+	reset_state()
+	var arena := make_arena()
+	var door := LockedDoor.new()
+	door.door_id = &"matrix_scope"
+	door.scope = &"c1"
+	door.position = Vector2(500, 400)
+	arena.add_child(door)
+	var player := make_player(arena, Vector2(500, 600))
+	await frames(3)
+	_equip(player, &"tallow_sling")
+	player.facing = Vector2.UP
+	check(player.use_item(), "scoped lock: real sling fires")
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await seconds(0.7)
+	release_inputs()
+	check(not door.is_open, "scoped lock: sling and keyless contact leave door closed")
+	await _collect_gate_pickup(arena, player, &"key", &"ow")
+	player.place_at(Vector2(500, 470))
+	await frames(5)
+	check(not door.is_open, "scoped lock: actual overworld key cannot open cave door")
+	check_eq(GameState.keys_in(&"ow"), 1, "scoped lock: wrong key retained")
+	await _collect_gate_pickup(arena, player, &"key", &"c1")
+	player.place_at(Vector2(500, 470))
+	await frames(5)
+	check(door.is_open, "scoped lock: actual cave key opens on player contact")
+	check_eq(GameState.keys_in(&"c1"), 0, "scoped lock: matching key spent once")
+	check_eq(GameState.keys_in(&"ow"), 1, "scoped lock: wrong key still retained")
+	check(GameState.has_flag(&"door_matrix_scope"), "scoped lock: persistent flag")
+	await dispose(arena)
+
+
+func _boss_key_gate() -> void:
+	reset_state()
+	var arena := make_arena()
+	var scene := load("res://scenes/world/boss_door.tscn") as PackedScene
+	check(scene != null, "boss door scene loads")
+	if scene == null:
+		await dispose(arena)
+		return
+	var door := scene.instantiate() as Node2D
+	door.set(&"cave", &"c1")
+	door.position = Vector2(500, 400)
+	arena.add_child(door)
+	var player := make_player(arena, Vector2(500, 600))
+	await frames(3)
+	_equip(player, &"cinder_wick")
+	player.facing = Vector2.UP
+	check(player.use_item(), "boss door: real wick launches")
+	await seconds(0.8)
+	check(not bool(door.get(&"is_open")), "boss door: wick leaves it closed")
+	await _collect_gate_pickup(arena, player, &"key", &"c1")
+	player.place_at(Vector2(500, 470))
+	await frames(5)
+	check(not bool(door.get(&"is_open")), "boss door: actual small key does not open")
+	check_eq(GameState.keys_in(&"c1"), 1, "boss door: small key retained")
+	await _collect_gate_pickup(arena, player, &"big_key", &"c1")
+	player.place_at(Vector2(500, 470))
+	await frames(5)
+	check(bool(door.get(&"is_open")), "boss door: actual cave Lockpick opens on contact")
+	check(GameState.has_big_key(&"c1"), "boss door: Lockpick retained")
+	check(GameState.has_flag(&"door_boss_c1"), "boss door: canonical flag")
+	await dispose(arena)
+
+
+func _ninth_fragment_gate() -> void:
+	reset_state()
+	var arena := make_arena()
+	var door := _prop(arena, "ninth_door", Vector2(500, 400))
+	if door == null:
+		await dispose(arena)
+		return
+	var player := make_player(arena, Vector2(500, 600))
+	await frames(3)
+	_equip(player, &"tallow_sling")
+	player.facing = Vector2.UP
+	check(player.use_item(), "ninth door: real sling fires")
+	await seconds(0.5)
+	check(not bool(door.get(&"is_open")), "ninth door: sling cannot open")
+	for i in range(1, 9):
+		await _collect_gate_pickup(arena, player, &"fragment", StringName("c%d" % i))
+	player.place_at(Vector2(500, 470))
+	await frames(5)
+	check_eq(GameState.fragment_count(), 8, "ninth door: eight actual fragments collected")
+	check(not bool(door.get(&"is_open")), "ninth door: eight fragments leave it closed")
+	await _collect_gate_pickup(arena, player, &"fragment", &"c9")
+	player.place_at(Vector2(500, 470))
+	await frames(5)
+	check(bool(door.get(&"is_open")), "ninth door: nine actual fragments open on contact")
+	check_eq(GameState.fragment_count(), 9, "ninth door: fragments retained")
+	check(GameState.has_flag(&"door_ninth"), "ninth door: canonical flag")
 	await dispose(arena)
 
 
