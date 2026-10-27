@@ -5,7 +5,7 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4 through C8, collects their rewards and reaches C9 boss.
+## The continuous route defeats C4 through C8 and reaches the C9 boss second phase.
 ## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through the C9 boss: no repositioning, warps, enemy
+## Continuous opening through the C9 boss second phase: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -2999,6 +2999,74 @@ func walk_toward_c9() -> void:
 			% [world.get_current_room_id(), GameState.health, GameState.pitch_pots, GameState.slugs]
 		)
 	)
+
+	if world.get_current_room_id() == &"cave_9_10" and not player.is_dead():
+		await fight_lock_plates()
+
+
+func fight_lock_plates() -> void:
+	var boss = world.current_room.get_node("Enemies/LockWarden1")
+	await seconds(1.7)
+	for attempt in range(12):
+		if player.is_dead() or not is_instance_valid(boss) or boss.plates.is_empty():
+			break
+		var plate = boss.plates[0]
+		var eye: Vector2 = plate.eye.global_position - world.current_room.global_position
+		var side := -1.0 if eye.x < 960 else 1.0
+		await walk_start_to(eye + Vector2(side * 240, 0))
+		for cycle in range(12):
+			if GameState.active_item == &"tallow_sling":
+				break
+			Input.action_press(&"cycle_item")
+			await frames(2)
+			Input.action_release(&"cycle_item")
+			await frames(2)
+		await seconds(0.5)
+		Input.action_press(&"move_right" if side < 0 else &"move_left")
+		await frames(2)
+		Input.action_release(&"move_right" if side < 0 else &"move_left")
+		Input.action_press(&"use_item")
+		await frames(2)
+		Input.action_release(&"use_item")
+		await seconds(0.6)
+		if not is_instance_valid(plate) or plate.lid_left <= 0:
+			print("LOCK missed eye health=%d slugs=%d" % [GameState.health, GameState.slugs])
+			continue
+		for cycle in range(12):
+			if GameState.active_item == &"pitch_pot":
+				break
+			Input.action_press(&"cycle_item")
+			await frames(2)
+			Input.action_release(&"cycle_item")
+			await frames(2)
+		await seconds(0.3)
+		Input.action_press(&"move_right" if side < 0 else &"move_left")
+		await frames(2)
+		Input.action_release(&"move_right" if side < 0 else &"move_left")
+		Input.action_press(&"use_item")
+		await frames(2)
+		Input.action_release(&"use_item")
+		await walk_start_to(eye + Vector2(side * 400, 0))
+		await seconds(1.8)
+		if is_instance_valid(boss):
+			print(
+				(
+					"LOCK plates=%d health=%d pots=%d"
+					% [boss.plates.size(), GameState.health, GameState.pitch_pots]
+				)
+			)
+	if player.is_dead() or not is_instance_valid(boss):
+		check(false, "survives C9 plates")
+		return
+	check(boss.plates.is_empty(), "breaks C9 plates")
+	print(
+		(
+			"LOCK phase2 hp=%d health=%d pots=%d slugs=%d"
+			% [boss.hp, GameState.health, GameState.pitch_pots, GameState.slugs]
+		)
+	)
+	check_eq(boss.phase, 2, "walking reaches C9 phase two")
+	check_eq(boss.hp, 24, "four real plate breaks leave 24 boss HP")
 
 
 func farm_c4_antechamber() -> void:

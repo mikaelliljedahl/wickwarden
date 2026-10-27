@@ -58,6 +58,8 @@ The 21 Q7 wrong-tool gate cases followed in
 `3b96eec2c6edc2d32b3a1b00f3643f8c034a81c4`, verified on `origin/main`.
 The Q7 gate audit and rush-screen case followed in
 `10738c75441046f3fb315f75d2a17cf584fd3ea7` on `origin/main`.
+The earned C9 boss approach followed in `c3f759fb94cb7ba317a4c5329caa669e071344cc`,
+verified on `origin/main`; it does not establish a C9 victory.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -65,7 +67,18 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 C9 boss approach, working tree (unpushed):** The continuous earned input
+**Q3 C9 phase two, working tree (unpushed):** After an ordinary boss death,
+respawn and return, the continuous input route uses actual sling and pots to
+break all four plates with normal damage and living wicklings. It reaches phase
+two with boss HP 24 and player health 13/26; C9 victory and its core remain
+unverified. The agent reports five separate green runs, four shards and lint
+passing; the lead also passed `make test T=playthrough_1` in the workspace with
+the pushed boots fix after phase-two integration. The bot reads plates, eye
+positions, lid, phase, HP, player, item and flags. Earlier
+bosses also use internal reads; uncontrolled RNG, the C7 low margin, bypassed
+living minibosses, other seeds, human play and a complete route remain limits.
+
+**Q3 C9 boss approach, committed in `c3f759f`:** The continuous earned input
 route with normal damage obtains the Jar, Wick, first key, raft, boots, second
 key, Reel and Lockpick, passes the active miniboss and opens the boss door. After
 a deliberate ordinary boss death and respawn at `ow_0_2`, it returns with the
@@ -104,8 +117,9 @@ correct-tool positive cases existed previously. The agent reports two isolated
 matrix runs and lint passing. Other combinations, real-room and human
 verification remain open.
 
-**Fen Leech presentation:** The turning issue has no accepted solution yet; a
-new isolated normal raft sequence is under investigation.
+**Fen Leech presentation:** The latest prototype was rejected because it
+overlaps at 35 px in darkness. The actual raft sequence provides evidence, but
+no art solution has been accepted.
 
 **Q3 Coinwyrm victory, committed in `6f33c12`:** The continuous earned input
 route defeats C8's Coinwyrm with normal damage, using three keys, the Reel and
