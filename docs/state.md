@@ -1,6 +1,15 @@
 # Current status
 
-**Q3 Dirge Choir victory, 2026-10-27 (working tree, unpushed):** The continuous
+**Q7 vegetation, rocks and gates, 2026-10-27 (working tree, unpushed):**
+Actual hook and pot cut five vegetation screens while sling and Cinder Wick do
+not; a real pot opens brittle rocks while wrong tools are rejected. A ward plate
+requires two blocked zero-damage test spores, and a two-brazier gate uses the
+actual hook and Cinder Wick while rejecting the sling. These are controlled
+arenas without enemies, with player damage active and a controlled projectile
+fixture. The agent reports two isolated tests and lint passing. Other negative
+combinations, room traversal and full gameplay or human verification remain open.
+
+**Q3 Dirge Choir victory, 2026-10-27 (committed in `14b7836`):** The continuous
 input route uses normal damage, two deliberate ordinary enemy deaths and
 respawns in C6, farming, the Chime, both keys and Lockpick to open the boss door
 and defeat Dirge Choir. It physically collects the fragment and core. The
@@ -1117,7 +1126,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `bb7c6f8cf0c72d4077a0eb3463de3cef8f1c863a` on `origin/main`, including the Wick Automaton jet described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `14b7836107ece10c61c1e6236e6371000314684a` on `origin/main`, including the Dirge Choir victory and C6 core audit described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

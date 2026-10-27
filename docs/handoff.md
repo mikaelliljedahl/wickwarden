@@ -37,6 +37,8 @@ The Q7 wall and raft cases followed in `81a240e5193f077112b2600c096760d1842732e6
 on `origin/main`.
 The Wick Automaton jet followed in `bb7c6f8cf0c72d4077a0eb3463de3cef8f1c863a`,
 verified on `origin/main`.
+The Dirge Choir victory and C6 core audit followed in
+`14b7836107ece10c61c1e6236e6371000314684a`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -44,7 +46,16 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 Dirge Choir victory, working tree (unpushed):** The continuous input route
+**Q7 vegetation, rocks and gates, working tree (unpushed):** Actual hook and
+pot cut five vegetation screens while sling and Cinder Wick do not; a real pot
+opens brittle rocks while wrong tools are rejected. A ward plate requires two
+blocked zero-damage test spores, and a two-brazier gate uses the actual hook and
+Cinder Wick while rejecting the sling. These are controlled arenas without
+enemies, with player damage active and a controlled projectile fixture. The
+agent reports two isolated tests and lint passing. Other negative combinations,
+room traversal and full gameplay or human verification remain open.
+
+**Q3 Dirge Choir victory, committed in `14b7836`:** The continuous input route
 uses normal damage, two deliberate ordinary enemy deaths and respawns in C6,
 farming, the Chime, both keys and Lockpick to open the boss door and defeat
 Dirge Choir. It physically collects the fragment and core. The agent reports

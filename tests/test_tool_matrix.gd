@@ -34,7 +34,13 @@ func run() -> void:
 	for tool: StringName in [&"tether_moth", &"reel_line"]:
 		await _grate_key_pair(tool)
 	for tool: StringName in [&"pitch_pot", &"tallow_sling", &"cinder_wick", &"flare"]:
-		await _cracked_wall_pair(tool)
+		for prop: String in ["cracked_wall", "brittle_rocks"]:
+			await _cracked_wall_pair(tool, prop)
+	for prop: String in ["reed_cluster", "rush_wall", "moss_wall", "dry_vine_screen", "bush_cluster"]:
+		for tool: StringName in [&"hook", &"tallow_sling", &"cinder_wick", &"pitch_pot"]:
+			await _cut_screen_pair(prop, tool)
+	await _ward_plate_tools()
+	await _brazier_gate_tools()
 	await _mooring_water_gate()
 	for tool: StringName in [&"cinder_wick", &"tallow_sling", &"lantern_chime", &"tether_moth"]:
 		await _snapper_pair(tool)
@@ -197,14 +203,14 @@ func _grate_key_pair(tool: StringName) -> void:
 	await dispose(arena)
 
 
-func _cracked_wall_pair(tool: StringName) -> void:
+func _cracked_wall_pair(tool: StringName, prop: String) -> void:
 	reset_state()
 	var arena := make_arena()
-	var wall := _gate(arena, ["cracked_wall", &"wall_id"], Vector2(644, 400))
+	var wall := _gate(arena, [prop, &"wall_id"], Vector2(644, 400))
 	if wall == null:
 		await dispose(arena)
 		return
-	var scene := load("res://scenes/world/cracked_wall.tscn") as PackedScene
+	var scene := load("res://scenes/world/%s.tscn" % prop) as PackedScene
 	check(scene != null, "distant cracked wall scene loads")
 	if scene == null:
 		await dispose(arena)
@@ -232,6 +238,114 @@ func _cracked_wall_pair(tool: StringName) -> void:
 	check_eq((wall.get_node("Shape") as CollisionShape2D).disabled, opens, "wall collision")
 	check(not bool(far.get(&"is_open")), "%s -> distant wall remains closed" % tool)
 	check(not GameState.has_flag(&"cracked_matrix_far"), "distant wall has no flag")
+	await dispose(arena)
+
+
+func _cut_screen_pair(prop: String, tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var target := _prop(arena, prop, Vector2(500, 400)) as Bush
+	if target == null:
+		await dispose(arena)
+		return
+	target.drops_enabled = false
+	var was_cut := [false]
+	target.cut.connect(func() -> void: was_cut[0] = true)
+	var player := make_player(arena, Vector2(410 if tool == &"hook" else 300, 400))
+	await frames(3)
+	player.facing = Vector2.RIGHT
+	if tool == &"hook":
+		Input.action_press(&"attack")
+		await frames(8)
+		Input.action_release(&"attack")
+	else:
+		_equip(player, tool)
+		if tool == &"pitch_pot":
+			GameState.add_pitch_pots(1)
+		check(player.use_item(), "%s -> %s: actual activation" % [tool, prop])
+	await seconds(1.9)
+	var cuts := tool in [&"hook", &"pitch_pot"]
+	check_eq(was_cut[0], cuts, "%s -> %s: actual cut result" % [tool, prop])
+	if not cuts:
+		check(is_instance_valid(target) and not target.is_cut, "%s remains solid" % prop)
+	await dispose(arena)
+
+
+func _ward_plate_tools() -> void:
+	reset_state()
+	var arena := make_arena()
+	var scene := load("res://scenes/world/ward_plate.tscn") as PackedScene
+	check(scene != null, "ward plate scene loads")
+	if scene == null:
+		await dispose(arena)
+		return
+	var pad := scene.instantiate() as Node2D
+	pad.set(&"ward_id", &"matrix_ward")
+	pad.set(&"blocks_required", 2)
+	# Deterministic zero-damage spore post is a test-only fixture, not a runtime enemy.
+	pad.set(&"test_spore_post", true)
+	pad.position = Vector2(500, 400)
+	arena.add_child(pad)
+	var blocker := scene.instantiate() as Node2D
+	blocker.set(&"ward_id", &"matrix_ward")
+	blocker.set(&"blocker", true)
+	blocker.position = Vector2(900, 400)
+	arena.add_child(blocker)
+	var player := make_player(arena, Vector2(500, 400))
+	await frames(3)
+	_equip(player, &"tallow_sling")
+	player.facing = Vector2.UP
+	check(player.use_item(), "ward plate: actual sling fires while on pad")
+	await seconds(0.8)
+	check_eq(pad.get(&"blocks_absorbed"), 0, "ward plate: sling and unblocked spores do not count")
+	check(not bool(blocker.get(&"is_open")), "ward plate: wrong tool leaves blocker closed")
+	Input.action_press(&"ward")
+	await seconds(1.5)
+	check_eq(pad.get(&"blocks_absorbed"), 2, "ward plate: actual ward blocks two distinct spores")
+	check(bool(blocker.get(&"is_open")), "ward plate: real ward opens linked blocker")
+	check(GameState.has_flag(&"ward_matrix_ward"), "ward plate: opening persists")
+	Input.action_release(&"ward")
+	await dispose(arena)
+
+
+func _brazier_gate_tools() -> void:
+	reset_state()
+	var arena := make_arena()
+	var first := Brazier.new()
+	first.name = "B1"
+	first.brazier_id = &"matrix_b1"
+	first.position = Vector2(490, 400)
+	arena.add_child(first)
+	var second := Brazier.new()
+	second.name = "B2"
+	second.brazier_id = &"matrix_b2"
+	second.position = Vector2(900, 400)
+	arena.add_child(second)
+	var gate := Gate.new()
+	gate.gate_id = &"matrix_braziers"
+	gate.braziers = [NodePath("../B1"), NodePath("../B2")]
+	gate.position = Vector2(900, 800)
+	arena.add_child(gate)
+	var player := make_player(arena, Vector2(290, 400))
+	await frames(3)
+	_equip(player, &"tallow_sling")
+	check(player.use_item(), "brazier gate: actual sling fires")
+	await seconds(0.5)
+	check(not first.lit and not gate.is_open, "brazier gate: sling leaves it closed")
+	player.place_at(Vector2(400, 400))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check(first.lit, "brazier gate: actual hook lights first")
+	check(not gate.is_open, "brazier gate: one lit is insufficient")
+	await frames(20)
+	player.place_at(Vector2(700, 400))
+	_equip(player, &"cinder_wick")
+	check(player.use_item(), "brazier gate: actual cinder wick launches")
+	await seconds(1.0)
+	check(second.lit and gate.is_open, "brazier gate: real fire lights second and opens gate")
+	check(GameState.has_flag(&"gate_matrix_braziers"), "brazier gate: completion persists")
 	await dispose(arena)
 
 
