@@ -1,0 +1,28 @@
+Thornwood Q5 visual review draft — 2026-10-27
+
+Coverage: all 20 graph nodes: 15 overworld rooms and 5 standalone pockets. Personally inspected each corresponding 1920x1080 still in /tmp/wick-capture-20261027-current (16:43–16:45, fresh state, 30 physics frames), plus docs/screens/step3/contact-thornwood.png. Also inspected /tmp/wick-shops-final/ow_6_0#shop.png (17:29), and compared docs/state.md. No new capture or game/save modification. The sheet uses the older baseline. No still proves traversability, collision, combat readability or a human playthrough.
+
+Cross-cutting: the common grassy ground and perimeter dominate despite distinct graph terrain descriptions. Several listed landmarks are absent or visually ambiguous; these are presentation observations, not proven logic defects. Cracked walls, hidden pockets, gates, transitions, pickups, animation and enemy movement need action-state review.
+
+ow_3_0 Thorn Gate: west thorn barrier visible; trees/bushes and both Spitcaps visible. No distinct briar archway apparent; opening/burning and travel unreviewed.
+ow_4_0 Hedgerow: bushes in short pairs, trees and monsters visible; graph's hedge rows are not a strong visual motif. One enemy is close to the north edge; movement unreviewed.
+ow_5_0 Owl Clearing: moths, trees and rocks visible; no clear stumps in still. Exits untested.
+ow_6_0 Standing Stones: cracked wall at northeast reads; rocks surround it but no clear stone ring. Bombing and shop access unreviewed.
+ow_7_0 North Cliff: pot bundle visible behind upper stone wall; cliff/ledge height and how to reach bundle are visually unclear. Do not infer unreachable without play.
+ow_3_1 Thornpath: dense bushes and trees, two blobs; no recognizable mushroom ring. No obvious exit obstruction in still.
+ow_4_1 Fernhollow: cracked wall visible among rocks; no distinct ruined well or ferns. Bomb opening and cache transition unreviewed.
+ow_5_1 Briar Mouth: C2 mouth clearly visible; left briar enemy visually overlaps a bush. Check moving/occlusion in play.
+ow_6_1 Rootbridge: southern mooring and paired water areas visible; no distinct root bridge apparent. Upper-left Spitcap overlaps a bush visually. Boarding and return unreviewed.
+ow_7_1 Eyegate: eye switch and east portcullis visible, the latter partly clipped at image edge; connection between switch and distant gate may need play readability review. Activated/open state unreviewed.
+ow_3_2 Sunken Lane: lit pocket door and ruined pillars visible, but sunken lane/vines not apparent. Pocket entry and return unreviewed.
+ow_4_2 Drop Ledge: three small stone segments across south opening; one-way drop/height is not self-evident in the still. Test approach and landing.
+ow_5_2 Mossy Landing: south and east moorings visible; docks/moss not distinct. Boarding, transitions and the documented alternative e042 failed attempt remain to be reviewed in play; state reports an isolated successful crossing, not a confirmed original cause.
+ow_7_2 Fallen Mast: cracked wall and two moorings visible; no obvious wreck/mast. Bomb opening and boarding unreviewed.
+ow_3_3 Hermit's Rise: hut, thorn-sealed door and surrounding walls visible. Burn/open, entering and returning unreviewed; no distinct hill height.
+ow_4_1#cache: brass and pot bundle visible in grassy pocket; free-standing lit exit visible. Collection and return unreviewed.
+ow_6_0#shop: old still shows two priced pedestals in grass and no merchant; this is stale. Newer final still shows stone interior, merchant and counter; roots/individual burrow dressing remain sparse, consistent with state. New view is a still; earned stock, purchase and exit not independently played here (state reports automated purchase coverage).
+ow_7_2#bag: pot bag and free-standing exit visible; collection/return unreviewed.
+ow_3_3#hut: wick core pedestal and free-standing exit visible in grassy pocket; collection/return unreviewed.
+ow_3_2#grate: key visible behind low fence and exit visible; moth retrieval, player blocking and exit unreviewed visually here. State records separate P09 tests; this still does not reproduce them.
+
+Tests: none run; read-only review. No repository files, staging, or user saves touched. Lead should compare against any earlier Q5 delivery before integrating.

@@ -1,0 +1,36 @@
+Tallowfen Q5 visual review draft — 2026-10-27
+
+Coverage: all 28 graph nodes: 24 overworld rooms and 4 standalone pockets. Personally inspected each corresponding 1920x1080 still in /tmp/wick-capture-20261027-current (16:43–16:45, fresh state, 30 physics frames), plus docs/screens/step3/contact-tallowfen.png. Also inspected /tmp/wick-shops-final/ow_6_5#shop.png (17:29), and compared docs/state.md. No new capture or game/save modification. The contact sheet uses the older baseline. Still images do not establish traversability, collision, active hazards, or a human playthrough.
+
+Cross-cutting: most fen and lake rooms share grassy land, perimeter and small bounded water patches. In several lake-named rooms the broad central surface looks like walkable grass and water is confined to pools or perimeter; this weakens open-water/island/channel identity. This is a visual finding, not proof of water collision or raft malfunction. Several other named terrain features below are not identifiable. Transitions, cut/bomb states, mooring/raft use, enemy movement and pickups remain unreviewed. The later Fen Leech bubble prototypes in state were not integrated; action and motion readability remain open.
+
+ow_0_3 Cattail Corner: reeds, bushes and painted enemies visible; no obvious wall overlap in still.
+ow_1_3 Reed Gate: north reed barrier visible, pools and reeds visible; boardwalk start is not distinct. Cut/open and transition unreviewed.
+ow_0_4 Mudflat: pools, reeds, rocks and blobs visible; ground reads as grass rather than mudflat.
+ow_1_4 Boardwalk: pools and reeds visible; no identifiable boardwalk in still. Enemy at upper pool edge; motion unreviewed.
+ow_2_4 Drowned Orchard: trees and pools visible; one enemy close to pool boundary; no clear flooded orchard floor. Motion/collision unreviewed.
+ow_0_5 Peat Hollow: two ponds, reeds and enemies visible; ground reads grass rather than peat bog.
+ow_1_5 Wickfarm: ruin walls, vegetation and enemies visible; a reed-like clump occupies the ruin opening. The cut-bush cache opening and transition unreviewed.
+ow_2_5 Sump Edge: two ponds and reeds visible; no brittle-rock feature stands out; no enemy visible in this still. Check encounter and water states in motion.
+ow_3_5 Sump Gate: cracked wall is visible between pillars, but C3 mouth is concealed in fresh state; bombing and revealed mouth need review. Enemy stands close to right pillar; motion unreviewed.
+ow_1_6 Tallow Works: repeated rocks and blobs on grass; no recognizable rusted vats. Verify intended regional landmark.
+ow_2_6 Candle Sheds: two identical lit huts and enemies visible; they read as houses rather than sheds. Doors/interactions unreviewed.
+ow_2_7 Last Pier: east rush barrier visible, ponds on grass; no clear broken pier. Cut and east transition unreviewed.
+ow_4_3 Reed Shore North: reeds, pond and east mooring visible; north landing/drop transition unreviewed.
+ow_4_4 Stranded Boat: east mooring, water and rock arc visible; no identifiable beached boat. Boarding unreviewed.
+ow_4_5 Dockside Bluff: east mooring, south drop markers and water visible; drop height/direction not self-evident. Travel and landing unreviewed.
+ow_6_2 North Reach: four moorings and two pools visible; large grassy area reads as land rather than open water. Raft connections unreviewed.
+ow_5_3 Whispering Shallows: four moorings and three pools visible; grass dominates rather than continuous shallows. Boarding/crossing unreviewed.
+ow_6_3 Lantern Isle: C5 mouth and moorings visible amid pools; no distinct standing lamp. Grass fills much of scene, so island/water boundary needs review; cave entry untested.
+ow_7_3 Stone Islet: prominent reed cluster and moorings visible; grotto entrance is not obvious in fresh still. Reveal/cut and pocket transition unreviewed.
+ow_5_4 Drift Channel: four moorings and perimeter water visible around a broad rectangular grassy centre, reducing channel readability. Raft crossing unreviewed.
+ow_6_4 Mirror Deep: same broad grassy centre with perimeter water, moorings and moths; deep-water identity unclear. Crossing and enemy motion unreviewed.
+ow_7_4 East Landing: three moorings and pond visible; no distinct pier. East connection/boarding unreviewed.
+ow_5_5 South Swell: perimeter water and three moorings; large reed cluster amid rocks, presumably cache cover, but opening not evident. Cut and access unreviewed; central ground reads land.
+ow_6_5 Broken Lighthouse: lit shop door visibly surrounded by ruin wall; no distinct lighthouse silhouette. Door approach, entry and return unreviewed; no claim it is blocked.
+ow_1_5#cache: brass and exit visible amid rocks and wall fragments; collection/return unreviewed.
+ow_5_5#cache: flame-like pickup and free-standing exit visible on grass; collection/return unreviewed.
+ow_7_3#grotto: wick core and exit visible with pool and reeds; collection/return unreviewed.
+ow_6_5#shop: older still shows a pedestal on grass without merchant; stale. Newer final still shows stone interior, keeper and counter, with sparse chamber dressing. Earned stock, purchase and return not independently played here; state reports automated purchase coverage.
+
+Tests: none run; read-only review. No repository files, staging, or user saves touched. Lead should compare against any earlier Q5 delivery before integrating.

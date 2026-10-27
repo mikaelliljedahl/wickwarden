@@ -10,18 +10,22 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 ## Status (update at every push)
 
 **Working-tree handoff, 2026-10-27:** This snapshot supersedes the older
-checkpoint descriptions below where they describe current status. Following the
-owner's fetch, local `main` and `origin/main` matched at the start of push
-preparation. A separate index-based progress commit is being prepared, excluding
-the 77 previously staged paths. Other tracked and untracked work may change
-concurrently; preserve it and review the actual index, dependencies and remote
-before integration or push.
+checkpoint descriptions below where they describe current status. Progress
+checkpoint `aa6fc158087e4a5be21be22acf948f1f69c9cf8b` was pushed and verified
+on `origin/main`, excluding the 77 previously staged paths. The push used the
+already signed-in `mikaelliljedahl` account without a global account switch.
+Those 77 staged paths retain fingerprint
+`cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
+An old empty `index.lock` from 16:21 without an active holder was moved to
+`.git/index.lock.preserved-20261027` to sync the index; preserve that file.
+Other tracked and untracked work may change concurrently; preserve it and
+review the actual index, dependencies and remote before integration or push.
 
-The exact candidate passed `make check` in a clean isolated project snapshot:
-154 Godot suites, lint, world-data verification and 175 Python tests.
-`rooms-check` passed 221 and `art-test` passed 22. This evidence applies to that
-candidate; these latest documentation edits still need inclusion and
-verification. No tests were run for this documentation update.
+The isolated candidate before the final documentation-only adjustment passed
+`make check`: 154 Godot suites, lint, world-data verification and 175 Python
+tests. `rooms-check` passed 221, `art-test` passed 22 and
+`playthrough_route --check` passed. The final documentation adjustment passed
+diff-check. No game tests were run for this post-push documentation update.
 The fixed-seed input route reaches and hits the C4 boss after earning resources,
 but the recorded attempts did not win; later playthrough probes use controlled
 interventions. C4 victory, a complete uninterrupted or human game, and all

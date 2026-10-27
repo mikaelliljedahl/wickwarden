@@ -2,16 +2,23 @@
 
 **Push handoff snapshot, 2026-10-27:** The working tree contains ongoing code,
 art, test and documentation work, including staged changes and untracked files.
-After the owner's fetch, local `main` and `origin/main` matched at the start of
-push preparation. A separate index-based progress commit is being prepared,
-excluding the 77 previously staged paths. Its exact candidate passed `make check`
-in a clean isolated project snapshot: 154 Godot suites, lint, world-data check
-and 175 Python tests. `rooms-check` passed 221 and `art-test` passed 22. This
-evidence applies to that candidate; these latest documentation edits still
-need to be included and verified. No tests were run for this documentation edit.
+Progress checkpoint `aa6fc158087e4a5be21be22acf948f1f69c9cf8b` was pushed and
+verified on `origin/main`, excluding the 77 previously staged paths. The
+isolated candidate before the final documentation-only adjustment passed
+`make check`: 154 Godot suites, lint, world-data check and 175 Python tests;
+`rooms-check` passed 221, `art-test` passed 22 and `playthrough_route --check`
+passed. The final documentation adjustment passed diff-check. No game tests
+were run for this post-push documentation edit.
 The C4 boss has not been defeated in the earned route, a complete game has not
 been verified, and the removal or readability of every placeholder has not been
 verified. Still captures and controlled probes do not establish those claims.
+
+**Thornwood and Tallowfen visual reviews, 2026-10-27:** Q5 inspected stills for
+all 20 Thornwood and 28 Tallowfen graph nodes, plus contact sheets and newer
+shop stills. Reports are `docs/screens/step3/review-thornwood.txt` and
+`docs/screens/step3/review-tallowfen.txt`. Regional terrain and landmarks need
+presentation review; stills do not verify traversal, collision, active states
+or human play. The contact sheets and some shop stills use older baselines.
 
 **Gravelight and Hushmarch visual reviews, 2026-10-27 (working tree):** Q5
 inspected 34 existing full-size room/pocket captures and both contact sheets;
