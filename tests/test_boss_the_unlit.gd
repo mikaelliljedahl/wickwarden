@@ -417,6 +417,12 @@ func _scheduled_attacks() -> void:
 		check_near(wave.width, 96, 0.01, "wax96thickness")
 		check_near(wave.speed, 360, 0.01, "wax360speed")
 		check_near(wave.reach, 720, 0.01, "wax720reach")
+		var look = wave.get_node("Visual")
+		check(look.get_script() == boss.WaxWaveVisual, "wax wave uses the painted presentation")
+		check(
+			look.art.effect.get_shader_parameter("wax") != null,
+			"wax wave texture is loaded"
+		)
 	await seconds(7.5)
 	var drips := 0
 	for hazard in boss._hazards:
@@ -467,6 +473,7 @@ func _scheduled_attacks() -> void:
 	check(pulse != null, "exposed heart emits3secondpulse")
 	if pulse != null:
 		check_near(pulse.reach, 400, 0.01, "pulse400reach")
+		check(pulse.get_node("Visual").get_script() == null, "heart pulse keeps its own look")
 		check_near(pulse.speed, 400 / 0.6, 0.01, "pulse expands in0.6seconds")
 	boss.reset_fight()
 	await frames(3)

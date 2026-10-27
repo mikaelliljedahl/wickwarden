@@ -1,5 +1,15 @@
 # Wickwarden — art provenance
 
+The Unlit wax-wave source `tools/source_art/unlit_wax_wave_z1.png` is a
+native-alpha image generated 2026-10-27. Its original output is
+`01a17f32-c2cf-7331-b7c3-8f87d6268b07/exec-6a19350b-8c93-4c5e-8ae5-a29ed9b71e79.png`;
+source SHA-256 is `eb4c1bf74bb149e4605a7302945b762a831b49a5ee246720665b7ef789c81445`.
+The main `tools/art_manifest.json` and cutter produce the 1024×192
+`assets/sprites/unlit_wax_wave_z1_idle.png` and its generated sprite entry;
+the PNG SHA-256 is `6c9bfb386b1fef83bd62fad25584a9155f8c003ec449ca141a434227f91118e4`.
+The prompt and review are in the [wax wave log](../tools/source_art/unlit-wax-wave-z1-log.md);
+the tool did not expose a model version.
+
 The Unlit chain lash source `tools/source_art/unlit_chain_lash_z1.png` is a
 1024×1536 native-alpha image, generated 2026-10-27. Its original output is
 `01a17f32-c2cf-7331-b7c3-8f87d6268b07/exec-a26792a3-3e6d-408b-a610-33730c0706f2.png`;

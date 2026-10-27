@@ -487,8 +487,9 @@ class Ring:
 		knockback = 640
 		super()
 		add_circle(reach + width / 2)
-		add_child(Node2D.new())
-		get_child(get_child_count() - 1).name = "Visual"
+		var look: Node2D = WaxWaveVisual.new() if width == 96.0 else Node2D.new()
+		look.name = "Visual"
+		add_child(look)
 		activate()
 
 	func _physics_process(delta: float) -> void:
@@ -503,7 +504,72 @@ class Ring:
 			super(target)
 
 	func _draw() -> void:
-		draw_arc(Vector2.ZERO, maxf(1, radius), 0, TAU, 80, Color(0.85, 0.7, 0.4, 0.65), width)
+		if width != 96.0:
+			draw_arc(Vector2.ZERO, maxf(1, radius), 0, TAU, 80, Color(0.85, 0.7, 0.4, 0.65), width)
+
+
+class WaxWaveVisual:
+	extends Node2D
+	var art: WaxWaveTexture
+
+	func _ready() -> void:
+		var light := CanvasItemMaterial.new()
+		light.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = light
+		art = WaxWaveTexture.new()
+		add_child(art)
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+		art.queue_redraw()
+
+	func _draw() -> void:
+		var ring := get_parent() as Ring
+		var inner := maxf(0.0, ring.radius - ring.width / 2.0)
+		var outer := ring.radius + ring.width / 2.0
+		draw_arc(Vector2.ZERO, maxf(1.0, ring.radius), 0, TAU, 160, Color(0.65, 0.37, 0.12, 0.24), ring.width)
+		if inner > 0:
+			draw_arc(Vector2.ZERO, inner, 0, TAU, 160, Color(1, 0.72, 0.32, 0.85), 3)
+		draw_arc(Vector2.ZERO, outer, 0, TAU, 160, Color(1, 0.72, 0.32, 0.85), 3)
+
+
+class WaxWaveTexture:
+	extends Node2D
+	var effect: ShaderMaterial
+
+	func _ready() -> void:
+		var shader := Shader.new()
+		shader.code = """shader_type canvas_item;
+render_mode unshaded;
+uniform sampler2D wax : filter_linear, repeat_disable;
+uniform float radius;
+uniform float band_width;
+uniform float outer_radius;
+void fragment() {
+    vec2 p = (UV - vec2(0.5)) * (2.0 * outer_radius);
+    float d = length(p);
+    float v = (d - radius) / band_width + 0.5;
+    float u = atan(p.y, p.x) / 6.28318530718 + 0.5;
+    if (v < 0.0 || v > 1.0) { COLOR = vec4(0.0); }
+    else { COLOR = texture(wax, vec2(mix(0.005, 0.995, u), v)); }
+}
+"""
+		effect = ShaderMaterial.new()
+		effect.shader = shader
+		var path := "res://assets/sprites/unlit_wax_wave_z1_idle.png"
+		if ResourceLoader.exists(path):
+			effect.set_shader_parameter("wax", load(path) as Texture2D)
+		else:
+			visible = false
+		material = effect
+
+	func _draw() -> void:
+		var ring := get_parent().get_parent() as Ring
+		var outer := ring.radius + ring.width / 2.0
+		effect.set_shader_parameter("radius", ring.radius)
+		effect.set_shader_parameter("band_width", ring.width)
+		effect.set_shader_parameter("outer_radius", outer)
+		draw_rect(Rect2(Vector2(-outer, -outer), Vector2(2 * outer, 2 * outer)), Color.WHITE)
 
 
 class Hand:

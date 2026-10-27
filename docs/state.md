@@ -1,6 +1,15 @@
 # Current status
 
-**Q7 weakness extension, 2026-10-27 (working tree, unpushed):** Selected
+**B10 wax wave, 2026-10-27 (working tree, unpushed):** The phase-two active
+wave uses a painted band cut through the ordinary manifest and wrapped by a
+shader, with inner and outer outlines. Damage, geometry and timing are unchanged.
+The lead reviewed controlled radius-340 and radius-650 captures; the agent also
+reviewed radius 50 and reports isolated boss and route tests, 22 art tests and
+lint passing. The source and prompt are recorded in
+`tools/source_art/unlit-wax-wave-z1-log.md` and `docs/art-provenance.md`.
+Human play remains unverified.
+
+**Q7 weakness extension, 2026-10-27 (committed in `ee9145a`):** Selected
 actual-tool cases now cover 15 of 20 encounters, adding Lull Mauler, Gloam
 Knight and Hushed Colossus using the hook, boots and mitts. These are controlled
 fixtures: the Mauler's chunk is repositioned and its physics paused; player
@@ -35,8 +44,8 @@ The art is now in the main `tools/art_manifest.json` and generated
 `assets/sprites/sprites.json`; the separate Z1 manifest was removed. The agent
 reports unchanged previous sprite entries, a byte-identical PNG, 22 passing
 art tests, both focused tests and lint. Source and provenance are recorded in
-`tools/source_art/unlit-chain-lash-z1-log.md`. The wax wave
-still needs work; these captures do not establish human combat readability.
+`tools/source_art/unlit-chain-lash-z1-log.md`. The later wax-wave work is
+recorded above; these captures do not establish human combat readability.
 
 **Q7 weakness extension, 2026-10-27 (committed in `791cbc7`):**
 `test_tool_matrix` now covers selected weaknesses using actual tools for nine
@@ -55,7 +64,7 @@ does not establish that the 50 ms budget is met.
 
 **C10 action-state review, 2026-10-27:** Earlier isolated phase captures showed
 the active wax wave and chain lash as simple, dark geometric effects. The later
-chain-lash change is recorded above; the wax wave still needs work.
+chain-lash and wax-wave changes are recorded above.
 
 **Q3 Colossus victory, 2026-10-27 (committed in `d5a0c06`):** The continuous
 input route with seed `20261027` defeats Hushed Colossus with normal damage,
@@ -1039,7 +1048,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `14a2217b1286193fa0db8c30d0508e753d6234ac` on `origin/main`, including the C5 Lockpick route, Q7 extension and B10 chain art described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `ee9145abfc632da422d4f003acc68d7cdbca0e3e` on `origin/main`, including the Q7 extension to 15 selected encounter cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

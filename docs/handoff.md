@@ -25,6 +25,8 @@ The Q7 extension followed in `791cbc77c8910656690b10313532d59c0bcb3ea7`,
 verified on `origin/main`.
 The C5 Lockpick route, Q7 extension and B10 chain art followed in
 `14a2217b1286193fa0db8c30d0508e753d6234ac`, verified on `origin/main`.
+The Q7 extension to 15 selected encounters followed in
+`ee9145abfc632da422d4f003acc68d7cdbca0e3e` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -32,7 +34,15 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 extension, working tree (unpushed):** Selected actual-tool cases now cover
+**B10 wax wave, working tree (unpushed):** The phase-two active wave uses a
+painted band cut through the ordinary manifest and wrapped by a shader, with
+inner and outer outlines. Damage, geometry and timing are unchanged. The lead
+reviewed controlled radius-340 and radius-650 captures; the agent also reviewed
+radius 50 and reports isolated boss and route tests, 22 art tests and lint
+passing. Source and prompt are recorded in `tools/source_art/unlit-wax-wave-z1-log.md`
+and `docs/art-provenance.md`. Human play remains unverified.
+
+**Q7 extension, committed in `ee9145a`:** Selected actual-tool cases now cover
 15 of 20 encounters, adding Lull Mauler, Gloam Knight and Hushed Colossus with
 the hook, boots and mitts. The Mauler's chunk is repositioned and its physics
 paused; player damage is disabled for Gloam Knight and Colossus, whose movement
@@ -65,8 +75,8 @@ both passed, as did `playthrough_1`. The art is now in the main
 separate Z1 manifest was removed. The agent reports unchanged previous sprite
 entries, a byte-identical PNG, 22 passing art tests, both focused tests and lint.
 The source/provenance record is
-`tools/source_art/unlit-chain-lash-z1-log.md`. The wax wave still needs work;
-human combat readability remains unverified.
+`tools/source_art/unlit-chain-lash-z1-log.md`. The later wax-wave work is
+recorded above; human combat readability remains unverified.
 
 **Q7 extension, committed in `791cbc7`:** `test_tool_matrix` now exercises
 selected weaknesses using actual tools for nine of 20 encounters. The new
@@ -100,7 +110,7 @@ agent reports 15 checks in each of three runs and lint passing; Q8 remains open.
 
 **C10 action-state review:** Earlier isolated phase captures showed the active
 wax wave and chain lash as simple, dark geometric effects. The later chain-lash
-change is recorded above; the wax wave still needs work.
+and wax-wave changes are recorded above.
 
 The isolated candidate before the final documentation-only adjustment passed
 `make check`: 154 Godot suites, lint, world-data verification and 175 Python
