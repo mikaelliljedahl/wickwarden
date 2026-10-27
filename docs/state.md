@@ -1,6 +1,30 @@
 # Current status
 
-**Q3 hidden-core route, 2026-10-27 (working tree):** The fixed-seed continuous
+**Q7 and Q8 work, 2026-10-27 (working tree):** `test_tool_matrix` now exercises
+selected weaknesses with actual tools for six of the 20 encounters: Briar
+Mother, Corrow's Echo, Thorn Warden, Abacus Brute, Pale Squire and Coinwyrm.
+The agent reports isolated tests and lint passing. Coinwyrm's test disables the
+player's hurtbox; these selected cases do not complete Q7 or provide visual
+verification. A Q8 prototype repeats 300 warp transitions across four rooms;
+the 50 ms threshold is still under review, and Q8 is not complete.
+
+**Q3 and Q6 extensions, 2026-10-27 (working tree):** With seed `20261027`,
+`test_playthrough_1` also burns the hermit hut thorns with the earned Cinder
+Wick and collects its core. The continuous input route reaches 16/16 maximum
+half-hearts and has 16/16 and nine pots after the first real C4 boss hit.
+Enemies and damage remain normal; the bot reads internal state and uses no
+warps. The agent reports four isolated shards, a repeat and lint passing.
+Two separate, unintegrated normal-damage boss bots reduced the boss to 4 HP but
+died. They do not establish a C4 victory or a full or human playthrough.
+
+The Q6 economy test now exercises 100 stratified actual standard enemy deaths
+and pickup effects in each of two configurations, before and after acquiring
+the pot and sling. It overrides rolls and resets resources to measure potential
+yields without caps; it is not a random sample, a real playthrough economy or
+an assessment of balance over time. The agent reports three relevant isolated
+test suites and lint passing. These extensions remain in the working tree.
+
+**Q3 hidden-core route, 2026-10-27 (committed in `80792db`):** The fixed-seed continuous
 input route uses the earned raft to collect the actual hidden core in
 `cave_3_7`, reaches 14/14 maximum half-hearts after C3, and reaches C4 with
 11/14 half-hearts and eight pots after the first boss hit. Enemies and damage
@@ -19,6 +43,9 @@ the final documentation-only adjustment passed
 `rooms-check` passed 221, `art-test` passed 22 and `playthrough_route --check`
 passed. The final documentation adjustment passed diff-check. No game tests
 were run for this post-push documentation edit.
+The Q3 route followed in `80792dbe61db8817227160b47957d780692ae6a2`, verified
+on `origin/main`. The earlier full gate above applies to its earlier candidate,
+not automatically to this later checkpoint.
 The C4 boss has not been defeated in the earned route, a complete game has not
 been verified, and the removal or readability of every placeholder has not been
 verified. Still captures and controlled probes do not establish those claims.
@@ -883,7 +910,7 @@ passed the two matching suites. `make check` passed all 133 Godot suites, lint,
 the world-data check, and 172 Python tests. All pre-existing sprite manifest records remain unchanged.
 The complete playthrough and other missing artwork remain open.
 
-Updated 2026-10-25 at 21:43 UTC. The verified runtime remains `16df5d1902a1e8fb6108aa117aa971cccefe44a7`. This docs-only correction supersedes the Cave 5 screenshot attribution in `bdca18681f97d8ff13c554bb5e8b9cbc0a0f14d3`; it identifies the visible brown diamonds as missing `dry_vine_screen` art fallbacks in `cave_5_2`, not MirrorShade actors in `cave_5_5`. No runtime or art files changed.
+**Historical checkpoint, 2026-10-25 at 21:43 UTC:** The verified runtime then was `16df5d1902a1e8fb6108aa117aa971cccefe44a7`. This docs-only correction superseded the Cave 5 screenshot attribution in `bdca18681f97d8ff13c554bb5e8b9cbc0a0f14d3`; it identified the visible brown diamonds as missing `dry_vine_screen` art fallbacks in `cave_5_2`, not MirrorShade actors in `cave_5_5`. No runtime or art files changed in that correction. Later work mapped the vine art, as recorded above.
 
 **Final checkpoint gate:** logs are in `/tmp/wickwarden-urgent-final-16df5d1-logs/`. `make check` passed 133/133 Godot suites, clean lint and world-data checks; Python generator/compiler tests passed 172. `rooms-check` passed 221/221, `art-test` passed 22/22, and global ownership passed for 92 work packages and 53 batches (192 rooms, 33 pockets). The isolated run used Dummy audio from the first import. The verifier reported no timeouts, SIGSEGV, engine/script/parse errors, leaks, skips, or waivers. The detached gate worktree was removed after testing. These results apply to `16df5d1902a1e8fb6108aa117aa971cccefe44a7`.
 
@@ -893,7 +920,7 @@ M5 Mirror Shade alpha presentation is closed in `d28ec6d`/`c5f109b`: 71 shader p
 
 **Recent runtime and owner decisions:** decision 47 is implemented by `4fe3f33` and verified in cave route tests at `16df5d1`: each cave Lockpick passively opens every key-locked door in that cave, including the boss door, without consuming held small keys. Before pickup, ordinary locked doors still consume one same-cave small key. Other caves, overworld locks, and elemental/barrier puzzles are unchanged. Existing key retention is verified in C2 and C8. HUD fallback for the purple fragment now uses existing `fragment_c1` art (`fa37150`); its focused test coverage is 580.
 
-**Confirmed regression:** OW10_3 has a real reachability/presentation regression from room build `26dd1`: the decorative hut at `(720, 816)` cannot be reached from its south/front wall, and the functional shop door at `(1200, 288)` floats. The earlier route check followed an old portal and did not validate this route. Reproduction is recorded at `/tmp/ow103-regression-repro.log`; the user's live save was not changed. Next work needs RoomDoor building support/whitelisting, a reachable house or trigger, and a safe route from the pocket. OW10_7 has a similar item flagged for review. Neither issue is fixed. The user's new iframe-breathing-space audit `f05c40` is read-only and active; no value is selected yet. After pause, review ordinary enemy attack invulnerability frames first, while preserving the B07 pitfall exception.
+**Historical regression report, 2026-10-25:** OW10_3 had a reachability/presentation regression from room build `26dd1`: the decorative hut at `(720, 816)` could not be reached from its south/front wall, and the functional shop door at `(1200, 288)` floated. The earlier route check followed an old portal. Reproduction is recorded at `/tmp/ow103-regression-repro.log`; the user's live save was not changed. OW10_7 was flagged for review. The later Cooling Pools and Pilgrim Road shop work and its route checks are recorded above. The iframe-breathing-space audit `f05c40` was read-only; the proposed 0.9-second interval was not implemented.
 
 **Owner screenshot findings:** Screenshot 1, `/tmp/codex-clipboard-06b4f477-9ff0-4b22-8945-8209d5051da8.png`, is the Ninth Door in `ow_10_8` (The Ninth Door), actor `NinthDoor` / P11, graph gate `e255` to `cave_10_1`. The nine sockets are functional and reflect held C1–C9 fragments; this capture shows 1/9. The door opens on player contact once all nine are held, spends none, and persists `door_ninth`. The purple rectangular door body is the current `ninth_door` fallback placeholder because accepted sprite art for that kind is absent. This is a presentation backlog item, not a missing gate mechanic.
 
@@ -903,7 +930,7 @@ Screenshot 3, `/tmp/codex-clipboard-791a715c-b7d5-4006-937a-80f0189bb1ec.png`, m
 
 The proposed 0.9-second enemy recovery interval remains unimplemented and is not an approved balance change. Gloam Knight art remains open; this screenshot review does not close that art work.
 
-**Open work and preserved WIP:** B09 body/keyhole art remains on HOLD. Gloam Knight, Coinwyrm, Ninth Lantern and B01 mouth art remain open or on HOLD. Cue polish remains for Lull Mauler, Hushed Colossus, Dirge Choir, Wick Automaton, Corrow's Echo, Hollow Captain, Mirror Warden, Thorn Warden, The Unlit and shared markers. Human balance, Q3 continuous playthrough, Q5 per-room visual review, Q6 economy/soak, full Q7 weakness matrix, Q8 performance, and release remain open. The C1/C5 observation came from a read-only save; no user save was changed. Do not describe the former key behavior as unresolved: the current Lockpick rule is implemented and route-tested.
+**Historical open work and preserved WIP, 2026-10-25:** B09 body/keyhole art was on HOLD; Gloam Knight, Coinwyrm, Ninth Lantern and B01 mouth art were open or on HOLD. Cue polish and QA remained open. Later art integrations and Q5 still reviews are recorded above; their active states and human approval remain open. The C1/C5 observation came from a read-only save; no user save was changed. The current Lockpick rule is implemented and route-tested.
 
 The worktree has two unstaged tracked changes outside this task: `docs/art-provenance.md` removes 36 FX source rows, and producer-E `tools/art_prompts/PROGRESS_e.md` records batches 43–45 complete while 46–47 remain unstarted. Preserve both. The 77 foreign staged paths retain fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`; preserve the staged index, untracked art candidates, import metadata and UID files.
 
@@ -932,7 +959,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published runtime is `16df5d1902a1e8fb6108aa117aa971cccefe44a7` in the docs-bearing checkpoint `f8d44c2ce36daaa35480fe999a9f217c771be84f`. This screenshot and walkthrough update is docs-only and adds no runtime or art blobs. Preserve the 77 staged paths and all dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3. Human balance and visual feel, continuous human playthrough, Q5 per-room review, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `80792dbe61db8817227160b47957d780692ae6a2` on `origin/main`, including the Q3 hidden-core route described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
@@ -1053,7 +1080,7 @@ Not covered: the hook has no hit detection against rocks or walls, so there is n
 - The older C09 OPEN down-throw report has no reconciled result in the current record. The committed P06 change passes four-direction streamed-room checks; do not report a confirmed route failure unless the recheck reproduces one. C09's thorn wall, eye cell and ninth fragment art are mapped in `909800b`.
 - Q7's 582 checks pass after `b4449ed`, but the requested 20-encounter weakness coverage is incomplete.
 - The Archivist SIGSEGV fix landed in `6753dcf`, and two later global cohorts passed. No current SIGSEGV blocker is recorded.
-- Runtime art still has body/transient-tool fallbacks, terrain and pickup/shop gaps, remaining mapping/render cleanup, B09 body/keyhole HOLD, and rejected haloed B01 mouth candidates. Human review is open. P09's low-fence grate fix and actual-World real Moth/player-block/clone/fallback checks passed in `fd5e597`.
+- Runtime presentation, fallback coverage, terrain and action-state readability still need review; individual art changes since the older checkpoint are recorded above. Human review is open. P09's low-fence grate fix and actual-World real Moth/player-block/clone/fallback checks passed in `fd5e597`.
 - The Abacus Brute and Pale Squire actor-only cue pass is committed (`47db582`, `b3fcc83`); two focused suites and lint passed, and eight dark before/after captures await review. Broader cue cleanup remains open for Lull Mauler, Hushed Colossus, Dirge Choir, Wick Automaton, Corrow's Echo, Hollow Captain, Mirror Warden, Thorn Warden, The Unlit and shared markers.
 - M5 Mirror Shade alpha rendering is closed in `d28ec6d`/`c5f109b`, including the default production GPU proof.
 - The all-ten walkthrough and README link are committed in `d83944f`; route correction `bb0821b` passed independent review. This is a recommended guide, not a recorded full playthrough.
@@ -1061,8 +1088,7 @@ Not covered: the hook has no hit detection against rocks or walls, so there is n
 
 ## Next steps
 
-1. Publish the verified runtime `16df5d1902a1e8fb6108aa117aa971cccefe44a7` with this docs-only status update to personal `origin/main`; verify the remote SHA.
-2. Preserve the foreign staged index, provenance/progress WIP, and untracked art/import/UID work.
-3. Fix and verify OW10_3/OW10_7 house access and trigger placement; finish the read-only iframe audit before selecting balance values. The proposed 0.9-second recovery interval is not implemented.
-4. Complete Q3 full earned-route playthrough, Q5 per-room visual review, Q6 soak/economy, Q7 weakness coverage, Q8 performance/memory, human balance, and Q9/Z release work.
-5. Finish remaining runtime art and obtain human visual approval. Source image production is closed, but the game is not fully art-complete.
+1. Preserve the foreign staged index, the preserved lock file, and other agents' dirty and untracked work; verify the intended candidate and remote before a future push.
+2. Extend Q3 through C4 victory and a complete earned-route playthrough; verify other seeds and human play.
+3. Follow up Q5 still-review findings with action-state and human visual review. Complete Q6 soak/economy, Q7 weakness coverage, Q8 performance/memory, human balance, and Q9/Z release work.
+4. Finish and verify remaining runtime presentation and placeholders; do not claim all art or the full game complete without evidence.

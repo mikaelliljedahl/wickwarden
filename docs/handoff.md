@@ -15,6 +15,8 @@ checkpoint `aa6fc158087e4a5be21be22acf948f1f69c9cf8b` was pushed and verified
 on `origin/main`, excluding the 77 previously staged paths; documentation
 checkpoint `e3af885` followed it. The runtime push used the
 already signed-in `mikaelliljedahl` account without a global account switch.
+The Q3 route was subsequently committed and pushed as
+`80792dbe61db8817227160b47957d780692ae6a2`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -27,7 +29,30 @@ The isolated candidate before the final documentation-only adjustment passed
 tests. `rooms-check` passed 221, `art-test` passed 22 and
 `playthrough_route --check` passed. The final documentation adjustment passed
 diff-check. No game tests were run for this post-push documentation update.
-The working-tree Q3 fixed-seed continuous input route collects the actual hidden
+The latest working-tree Q3 extension uses seed `20261027` to burn the hermit
+hut thorns with the earned Cinder Wick and collect its core as well. The
+continuous input route reaches 16/16 maximum half-hearts and has 16/16 and nine
+pots after the first real C4 boss hit, with normal enemies and damage. The bot
+reads internal state and uses no warps. The agent reports four isolated shards,
+a repeat and lint passing. Two separate unintegrated normal-damage boss bots
+reached 4 boss HP but died; C4 victory remains unverified.
+
+The working-tree Q6 economy test exercises 100 stratified actual standard enemy
+deaths and pickup effects in each of two configurations, before and after the
+pot and sling. It overrides rolls and resets resources to measure potential
+yields without caps; it does not establish random outcomes, playthrough economy
+or balance over time. The agent reports three relevant isolated suites and lint
+passing. These Q3 and Q6 results are not a complete game or human playthrough.
+
+Working-tree `test_tool_matrix` now covers selected weaknesses using actual
+tools for six of 20 encounters: Briar Mother, Corrow's Echo, Thorn Warden,
+Abacus Brute, Pale Squire and Coinwyrm. The agent reports isolated tests and
+lint passing. The Coinwyrm test disables the player's hurtbox; this is neither
+complete Q7 coverage nor visual verification. A preliminary Q8 prototype repeats
+300 warp transitions across four rooms; the 50 ms threshold is still being
+reviewed, and Q8 remains open.
+
+The committed Q3 fixed-seed continuous input route collects the actual hidden
 core in `cave_3_7` using the earned raft, reaches 14/14 maximum half-hearts
 after C3, and reaches C4 with 11/14 half-hearts and eight pots after its first
 boss hit. Enemies and damage are normal; the bot reads internal state and uses

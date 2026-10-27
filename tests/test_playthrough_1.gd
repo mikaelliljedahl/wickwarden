@@ -3,7 +3,7 @@
 extends "res://tests/test_route_cave_2.gd"
 ## The opening walks through C1, defeats Kilnkeeper, collects its rewards and
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
-## collects the hidden C3 core and farms earned enemy drops using player input.
+## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
 ## The continuous route stops after the first C4 boss hit: it does not prove a C4 victory.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
@@ -538,6 +538,38 @@ func walk_toward_c3() -> void:
 	await walk_start_to(Vector2(960, 780))
 	await walk_start_cross(&"move_down", &"ow_3_2")
 	check(not player.is_dead(), "walking reaches Sunken Lane alive")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_3_3")
+	await walk_start_to(Vector2(1200, 600))
+	await walk_start_to(Vector2(1392, 550))
+	for cycle in range(5):
+		if GameState.active_item == &"cinder_wick":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(3.0)
+	check(GameState.has_flag(&"burned_e129"), "walking burns the hermit hut thorns")
+	await walk_start_to(Vector2(1392, 432))
+	await seconds(1.0)
+	check_eq(world.get_current_room_id(), &"ow_3_3#hut", "walking enters the hermit hut")
+	await walk_start_to(Vector2(912, 410))
+	await frames(5)
+	check(GameState.has_flag(&"picked_wick_core_ow_3_3"), "walking collects the hermit core")
+	check_eq(GameState.max_health, 12, "hermit core increases maximum health")
+	await walk_start_to(Vector2(912, 780))
+	await walk_start_to(Vector2(912, 816))
+	await seconds(1.0)
+	check_eq(world.get_current_room_id(), &"ow_3_3", "walking leaves the hermit hut")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_3_2")
 	await walk_start_to(Vector2(1250, 432))
 	await walk_start_to(Vector2(1488, 384))
 	await walk_start_to(Vector2(1488, 240))
@@ -715,7 +747,7 @@ func walk_c3_boss() -> void:
 	await walk_start_to(Vector2(1488, 240))
 	await frames(5)
 	check(GameState.has_flag(&"picked_wick_core_c3_hidden"), "walking collects the hidden C3 core")
-	check_eq(GameState.max_health, 12, "hidden core increases maximum health")
+	check_eq(GameState.max_health, 14, "hidden core increases maximum health")
 	await walk_start_to(Vector2(1200, 480))
 	await walk_start_to(Vector2(200, 480))
 	await walk_raft_cross(&"cave_3_6")
@@ -798,8 +830,8 @@ func walk_tidewick() -> void:
 	await walk_start_to(Vector2(192, 672))
 	await walk_start_to(Vector2(192, 816))
 	check(GameState.has_fragment(&"c3"), "walking collects the C3 fragment")
-	check_eq(GameState.max_health, 14, "walking collects the C3 wick core")
-	check_eq(GameState.health, 14, "C3 wick core restores health")
+	check_eq(GameState.max_health, 16, "walking collects the C3 wick core")
+	check_eq(GameState.health, 16, "C3 wick core restores health")
 	await walk_toward_c4()
 
 
@@ -836,6 +868,7 @@ func walk_toward_c4() -> void:
 	await walk_start_to(Vector2(960, 528))
 	await walk_start_to(Vector2(1600, 528))
 	await walk_start_to(Vector2(1720, 480))
+	await seconds(0.5)
 	await walk_raft_cross(&"ow_5_3")
 	await walk_start_to(Vector2(300, 600))
 	await walk_start_to(Vector2(960, 600))
@@ -891,6 +924,9 @@ func walk_toward_c4() -> void:
 	await seconds(1.0)
 	check_eq(world.get_current_room_id(), &"cave_4_1", "walking enters C4 through its real mouth")
 	check(not player.is_dead(), "walking enters C4 alive")
+	print("C4 entry health=%d pots=%d" % [GameState.health, GameState.pitch_pots])
+	# Let the entry encounter settle before crossing the forecourt.
+	await seconds(2.0)
 	await walk_c4_boss()
 	check(
 		GameState.has_fragment(&"c1") and GameState.has_fragment(&"c2") and GameState.has_fragment(&"c3"),
@@ -1020,7 +1056,7 @@ func walk_c4_boss() -> void:
 	await walk_start_to(Vector2(912, 336))
 	await frames(5)
 	check(GameState.has_flag(&"picked_cache_cave_4_7_pots"), "walking collects the cache pot bundle")
-	check_eq(GameState.pitch_pots, 9, "walking collects actual C4 cache resupply")
+	check_eq(GameState.pitch_pots, 10, "walking collects actual C4 cache resupply")
 	await walk_start_to(Vector2(912, 672))
 	await seconds(1.0)
 	check_eq(world.get_current_room_id(), &"cave_4_7", "walking exits the C4 cache")
@@ -1028,8 +1064,8 @@ func walk_c4_boss() -> void:
 	await walk_fast_to(Vector2(200, 480))
 	await walk_start_cross(&"move_left", &"cave_4_9")
 	await farm_c4_antechamber()
-	for repeat in range(10):
-		if GameState.health >= 11:
+	for repeat in range(20):
+		if GameState.health >= GameState.max_health:
 			break
 		await walk_start_to(Vector2(1200, 480))
 		await walk_start_to(Vector2(1700, 480))
@@ -1038,7 +1074,7 @@ func walk_c4_boss() -> void:
 		await walk_start_cross(&"move_left", &"cave_4_9")
 		print("FARM revisit=%d health=%d" % [repeat + 1, GameState.health])
 		await farm_c4_antechamber()
-	check(GameState.health >= 11, "earned C4 enemy drops restore health")
+	check(GameState.health >= 16, "earned C4 enemy drops restore full health")
 	await walk_fast_to(Vector2(960, 780), true)
 	await walk_start_cross(&"move_down", &"cave_4_10")
 	check(GameState.has_flag(&"door_boss_c4"), "walking opens the C4 boss door")
@@ -1067,8 +1103,8 @@ func walk_c4_boss() -> void:
 	check_eq(GameState.pitch_pots, initial_pots - 1, "walking spends an earned pot against C4 boss")
 	check_eq(boss.hp, initial_boss_hp - 2, "walking's actual pot damages the C4 boss")
 	check(not player.is_dead(), "walking survives the first C4 boss hit")
-	check(GameState.health >= 11, "walking retains health after the first C4 boss hit")
-	check_eq(GameState.pitch_pots, 8, "walking retains the earned C4 cache pots")
+	check(GameState.health >= 16, "walking retains full health after the first C4 boss hit")
+	check_eq(GameState.pitch_pots, 9, "walking retains the earned C4 cache pots")
 
 
 func farm_c4_antechamber() -> void:

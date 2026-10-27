@@ -67,6 +67,9 @@ func run() -> void:
 		print("Q6 budget ", area, ": ", counts[area])
 	check_eq(total, TOTAL, "world budget totals match section 6.1")
 	print("Q6 budget total: ", total)
+	await _death_drop_budget(false)
+	await _death_drop_budget(true)
+	reset_state()
 
 
 func _area_for(id: String) -> String:
@@ -74,3 +77,42 @@ func _area_for(id: String) -> String:
 	var area := String(node.get("region", ""))
 	check(EXPECTED.has(area), "%s belongs to a budget area" % id)
 	return area
+
+
+## Stratified rolls exercise actual enemy deaths and pickup effects, without relying on RNG luck.
+## Totals are potential yields: resetting each resource prevents wallet/ammo/health caps hiding drops.
+func _death_drop_budget(tools_found: bool) -> void:
+	reset_state()
+	if tools_found:
+		GameState.acquire_item(&"pitch_pot")
+		GameState.acquire_item(&"tallow_sling")
+	var arena := make_arena()
+	var counts := {&"ember": 0, &"brass_bit": 0, &"brass_coin": 0,
+		&"pitch_pot_bundle": 0, &"slug_bundle": 0}
+	var yields := [0, 0, 0, 0]  # half-hearts, brass, pots, slugs
+	for i in range(100):
+		var enemy := make_enemy(arena, "res://scenes/enemies/dummy_walker.tscn", Vector2.ZERO)
+		enemy.drop_roll_override = (float(i) + 0.5) / 100.0
+		check(enemy.apply_damage(enemy.hp, Vector2.LEFT), "sample enemy takes lethal damage")
+		var drops := arena.get_children().filter(
+			func(n: Node) -> bool: return n is PickupBase and not n.is_queued_for_deletion()
+		)
+		check(drops.size() <= 1, "standard death produces at most one pickup")
+		if drops.size() == 1:
+			var pickup := drops[0] as PickupBase
+			counts[pickup.kind] += 1
+			GameState.health = 1
+			GameState.currency = 0
+			GameState.pitch_pots = 0
+			GameState.slugs = 0
+			check(pickup.collect(), "death drop can be collected")
+			yields[0] += GameState.health - 1
+			yields[1] += GameState.currency
+			yields[2] += GameState.pitch_pots
+			yields[3] += GameState.slugs
+	var expected := [25, 35, 5, 10 if tools_found else 0, 8 if tools_found else 0]
+	check_eq(counts.values(), expected, "100 stratified deaths match the standard drop shares")
+	check_eq(yields, [50, 60, 40 if tools_found else 0, 48 if tools_found else 0],
+		"collected drops produce the expected potential resources")
+	print("Q6 100 standard deaths, tools found=", tools_found, ": ", counts, " yields ", yields)
+	await dispose(arena)

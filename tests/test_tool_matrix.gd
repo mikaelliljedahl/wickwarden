@@ -2,8 +2,7 @@
 extends TestCase
 ## Q7 incremental integration coverage. Real player use, items and travelling hitboxes only.
 ## Controlled bare arenas and fixed initial positions; this is not a continuous playthrough.
-## Pending: remaining tools/props, regular enemy matrix, all boss/miniboss weakness challenges,
-## all boss/miniboss challenges and full regular-enemy/ward/armour permutations remain pending.
+## Pending: remaining tools/props, encounter weaknesses and regular-enemy permutations.
 
 const TOOLS: Array[StringName] = [
 	&"cinder_wick", &"tallow_sling", &"lantern_chime", &"reel_line", &"tether_moth", &"glow_jar"
@@ -39,6 +38,12 @@ func run() -> void:
 		await _crab_slug(front)
 	for opened: bool in [false, true]:
 		await _watcher_slug(opened)
+	await _briar_eye_tools()
+	await _echo_chime()
+	await _thorn_moth_hook()
+	await _brute_pot()
+	await _squire_pit_moth()
+	await _coinwyrm_reel()
 
 
 func _gate(parent: Node, row: Array, at: Vector2) -> Node2D:
@@ -339,3 +344,208 @@ func _watcher_slug(opened: bool) -> void:
 	check_eq(GameState.slugs, 11, "watcher: shot costs one slug")
 	print("MATRIX sling -> watcher open=", opened, " HP=", eye.hp)
 	await dispose(arena)
+
+
+func _briar_eye_tools() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(480, 590))
+	var scene := load("res://scenes/enemies/bosses/briar_mother.tscn") as PackedScene
+	check(scene != null, "Briar Mother scene loads")
+	if scene == null:
+		await dispose(arena)
+		return
+	var boss = scene.instantiate()
+	boss.intro_time = 0.0
+	boss.position = Vector2(960, 192)
+	arena.add_child(boss)
+	await frames(4)
+	var eye: EnemyBase = boss.eyes[0]
+	player.place_at(eye.global_position + Vector2(0, 110))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(eye.hp, 4, "Briar lowered eye rejects actual hook")
+	await frames(20)
+	player.place_at(eye.global_position + Vector2(0, 110))
+	_equip(player, &"tallow_sling")
+	player.facing = Vector2.UP
+	check(player.use_item(), "Briar: actual sling fires")
+	await seconds(0.3)
+	check_eq(eye.hp, 3, "Briar lowered eye takes one actual slug")
+	check_eq(GameState.slugs, 11, "Briar: shot consumes one slug")
+	await dispose(arena)
+
+
+func _echo_chime() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/corrows_echo.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(940, 480))
+	for i in range(400):
+		if enemy.state == enemy.State.GLOW:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.GLOW, "Echo reaches natural flare glow")
+	player.place_at(enemy.global_position + Vector2(250, 0))
+	_equip(player, &"lantern_chime")
+	check(player.use_item(), "Echo: actual chime rings")
+	for i in range(35):
+		if enemy.is_stunned():
+			break
+		await frames(1)
+	check(enemy.is_stunned(), "Echo: travelling chime interrupts glow")
+	check_near(enemy._stun_time, 2.0, 0.05, "Echo: opening lasts two seconds")
+	player.place_at(enemy.global_position + Vector2(90, 0))
+	player.facing = Vector2.LEFT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 34, "Echo: actual hook deals two during opening")
+	await dispose(arena)
+
+
+func _thorn_moth_hook() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/thorn_warden.tscn", Vector2(850, 480)
+	)
+	var player := make_player(arena, Vector2(760, 480))
+	await frames(2)
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 15, "Thorn Warden: skirt reduces actual hook to one")
+	await frames(25)
+	player.place_at(enemy.global_position - Vector2(250, 0))
+	_equip(player, &"tether_moth")
+	check(player.use_item(), "Thorn Warden: actual moth launches")
+	for i in range(40):
+		if enemy.is_stunned():
+			break
+		await frames(1)
+	check(enemy.is_stunned(), "Thorn Warden: real moth retracts skirt")
+	check(enemy._stun_time <= 1.5, "Thorn Warden: moth stun is clamped")
+	player.place_at(enemy.global_position - Vector2(90, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 13, "Thorn Warden: actual hook deals two while stunned")
+	await dispose(arena)
+
+
+func _brute_pot() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/abacus_brute.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(1400, 480))
+	for i in range(300):
+		if enemy.state == enemy.State.TELEGRAPH:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.TELEGRAPH, "Brute reaches natural chain warning")
+	player.place_at(enemy.global_position + Vector2(200, 0))
+	_equip(player, &"pitch_pot")
+	player.facing = Vector2.LEFT
+	GameState.add_pitch_pots(1)
+	check(player.use_item(), "Brute: actual pot placed before spin")
+	player.place_at(enemy.global_position + Vector2(400, 0))
+	await frames(108)
+	check_eq(enemy.rail_hp, 0, "Brute: pot breaks rail during live spin")
+	check_eq(enemy.hp, 28, "Brute: rail absorbs blast")
+	check_eq(GameState.health, 6, "Brute: retreat avoids blast and spin")
+	for i in range(300):
+		if enemy.state == enemy.State.WALK:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.WALK, "Brute returns to walking")
+	player.place_at(enemy.global_position + Vector2(110, 0))
+	player.facing = Vector2.LEFT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 26, "Brute: actual front hook damages unguarded body")
+	await dispose(arena)
+
+
+func _squire_pit_moth() -> void:
+	reset_state()
+	var arena := make_arena()
+	var pit := _prop(arena, "pit", Vector2(960, 480))
+	if pit == null:
+		await dispose(arena)
+		return
+	pit.set(&"size", Vector2(96, 576))
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/pale_squire.tscn", Vector2(720, 480)
+	)
+	var player := make_player(arena, Vector2(1200, 480))
+	for i in range(300):
+		if enemy.state == enemy.State.LUNGE:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.LUNGE, "Squire reaches natural lunge")
+	_equip(player, &"tether_moth")
+	player.facing = Vector2.LEFT
+	check(player.use_item(), "Squire: actual moth launched from bank")
+	for i in range(60):
+		if enemy.state == enemy.State.FALLEN:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.FALLEN, "Squire falls after moth collision")
+	check(enemy._over_pit(enemy.global_position), "Squire falls over real pit")
+	check_eq(enemy.hp, 10, "Squire fall deals six")
+	check(not enemy.hurtbox.enabled, "fallen Squire cannot be hit")
+	for i in range(200):
+		if enemy.state == enemy.State.RECOVER:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.RECOVER, "Squire returns after fall")
+	check_eq(enemy.hp, 10, "Squire retains fall damage on return")
+	check_eq(GameState.health, 6, "Squire: player remains safe on bank")
+	await dispose(arena)
+
+
+func _coinwyrm_reel() -> void:
+	reset_state()
+	var scene := load("res://tests/fixtures/gallery/B08.tscn") as PackedScene
+	check(scene != null, "Coinwyrm gallery loads")
+	if scene == null:
+		return
+	var room := scene.instantiate() as Room
+	add_child(room)
+	room.enter()
+	var boss = room.get_node("Enemies/Coinwyrm")
+	var player := make_player(room, Vector2(1728, 480))
+	# Focus this fixture on tool collision rather than surviving simultaneous attacks.
+	player.set_hurtbox_enabled(self, false)
+	_equip(player, &"reel_line")
+	await seconds(2.5)
+	check_eq(boss.plates.size(), 3, "Coinwyrm naturally rears with three plates")
+	for expected in [2, 1, 0]:
+		if boss.plates.is_empty():
+			check(false, "Coinwyrm has a plate for the next shot")
+			break
+		var plate: Node2D = boss.plates[0]
+		player.place_at(plate.global_position + Vector2(0, 200))
+		player.facing = Vector2.UP
+		check(player.use_item(), "Coinwyrm: actual reel launches")
+		await seconds(1.4)
+		check_eq(boss.plates.size(), expected, "Coinwyrm: real reel removes one plate")
+	check(boss.bare, "Coinwyrm: third plate exposes head")
+	check_eq(GameState.currency, 15, "Coinwyrm: three actual plate rewards collected")
+	player.place_at(boss.global_position + Vector2(0, 108))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(10)
+	Input.action_release(&"attack")
+	check_eq(boss.hp, 34, "Coinwyrm: actual hook damages exposed head")
+	await dispose(room)
