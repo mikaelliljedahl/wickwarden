@@ -1,0 +1,64 @@
+C4 visual review — 2026-10-27, working-tree capture baseline
+
+Reviewed contact-c4.png and all eleven full-size images in
+/tmp/wick-capture-20261027-current/: cave_4_1 through cave_4_10 and
+cave_4_7#seal. The capture index reports 1920x1080, 30 physics frames, seed 1,
+fresh GameState, default spawn, no granted tools or flags; graph source hash
+0c5cf8c81ad865e57b289329794076fe4ed34d9e5b90595f1548ea2ae4791a74.
+These are controlled portraits, not an earned route or human playthrough. The
+contact sheet and full-size captures are the same baseline; later working-tree
+changes could make them stale. No new captures or game tests were run.
+
+Priority findings for triage:
+- REVIEW, lighting/readability: the north eye switch and gate in cave_4_2,
+  the small key in cave_4_3, Lull-Mauler in cave_4_4, mitts pedestal and heavy
+  stone in cave_4_5, key in cave_4_6, wax-seal door in cave_4_7, Lockpick in
+  cave_4_8 and boss door in cave_4_9 are dim from default spawn. Moving closer
+  may resolve this; these portraits do not establish a gameplay defect. Review
+  interactions and combat under normal movement and local light.
+- REVIEW, visual warnings: cave_4_1 shows a large geometric circular warning
+  around the lower cinder wisp. cinder_wisp.gd identifies the circle as its
+  wind-up telegraph, so it is not evidence of missing enemy art. The Lull-Mauler
+  and Hushed Colossus scripts also draw geometric attack markers, but their
+  active warnings are not shown in these portraits. Inspect timing, visibility
+  and hit-area alignment in actual combat before any art triage.
+- REVIEW, cave_4_3, cave_4_6 and cave_4_9: the south gate, heavy stone and boss
+  door respectively extend to the bottom edge in their stills. Check their open
+  and return transitions; edge placement alone does not prove blocked movement.
+- No unambiguous missing-art geometric fallback was identified in the visible
+  portions of these fresh-state portraits. Darkness and unobserved action states
+  limit that conclusion; it is not an all-art acceptance.
+
+Room-by-room, observed fresh state:
+cave_4_1 (Cold Forecourt): painted cave entrance, two Hollows, two glowing
+  cinder wisps and stone blocks visible. One wisp has a large circular wind-up
+  warning; attack and navigation require motion review.
+cave_4_2 (Slag Hall): three dim Skitterwicks, a Hollow, north gate, eye switch
+  and east locked door visible. Switch activation, unlocking and crossings not
+  reviewed.
+cave_4_3 (Eyed Cell): two bright wisps, dim small key, eye switch and closed
+  south gate visible. Gate reaches bottom edge; switch and collection states not
+  reviewed.
+cave_4_4 (Banked Furnace): painted but dim Lull-Mauler, west lock and stone
+  blocks visible. Attack tells, slag chunks, stun and defeat not reviewed.
+cave_4_5 (Anvil Row): two dim Hollows, distant mitts pedestal and heavy stone
+  at north edge visible. Mitt pickup, stone lift and passage not reviewed.
+cave_4_6 (Heavy Vault): two bright wisps, distant key/pedestal and painted heavy
+  stone at south edge visible. Stone movement, key pickup and return not reviewed.
+cave_4_7 (Quench Hall): two bright wisps, two dim Tallow blobs, recessed sealed
+  door and east lock visible. Wax melting, pocket entry and unlocking not reviewed.
+cave_4_7#seal: separate pocket portrait shows painted exit, cache and a dim slug
+  bundle. Opening the cache, collecting stock and returning not reviewed.
+cave_4_8 (Bellows Loft): west lock, two dim Skitterwicks and distant pedestal
+  visible; Lockpick cannot be clearly distinguished at this distance. Unlock,
+  pickup and return not reviewed.
+cave_4_9 (Sleeper's Antechamber): two dim Hollows, east opening and south boss
+  door visible. Boss door extends to bottom edge; opening and passage not reviewed.
+cave_4_10 (Colossus' Bed): painted seated Colossus and north boss door visible;
+  boss is partially illuminated at entry. Slam, shard fall, sweep, quake, later
+  phases, drops and exit remain unreviewed.
+
+A geometric warning or a door at a screen edge is not by itself a missing-art or
+collision defect. No conclusion about collision, balance, opened gates, transient
+states or all animation frames follows from these stills. Q5 owns this report;
+fixes require the applicable owner or an explicit Z1 ticket.

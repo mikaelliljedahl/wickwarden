@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/world/solid_block.gd" id="1"]
 
-[ext_resource type="Script" path="res://scripts/art/placeholder.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/art/sprite_visual.gd" id="4"]
 
 [node name="KilnkeeperArena" type="Node2D"]
 
@@ -33,7 +33,7 @@ kind = &"kiln_pillar"
 [node name="KilnMouth" type="Node2D" parent="."]
 position = Vector2(1824, 480)
 
-[node name="Visual" type="Node2D" parent="KilnMouth"]
+[node name="Visual" type="AnimatedSprite2D" parent="KilnMouth"]
 script = ExtResource("4")
 kind = &"kiln_mouth"
-size = Vector2(96, 192)
+size_override = Vector2(96, 192)

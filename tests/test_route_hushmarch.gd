@@ -308,9 +308,14 @@ func _pier() -> void:
 func _shop() -> void:
 	var room := await _enter(&"ow_10_7")
 	var door := _find(room, "room_door.gd") as RoomDoor
-	player.place_at(door.global_position)
+	check_eq(door.entrance_kind(), &"pocket_stall", "S5 entrance uses the stall art")
+	check(door.get_node("Visual") is SpriteVisual, "S5 stall has painted art")
+	player.place_at(door.global_position + Vector2(0, 192))
+	await _move(&"move_up", 30)
 	await frames(65)
-	check_eq(world.get_current_room_id(), &"ow_10_7#shop", "actual stall entrance reaches S5")
+	check_eq(world.get_current_room_id(), &"ow_10_7#shop", "walking north enters S5")
+	if world.get_current_room_id() != &"ow_10_7#shop":
+		return
 	room = world.get_room(&"ow_10_7#shop")
 	GameState.acquire_item(&"tallow_sling")  # Explicit future-cave loadout, not earned C02 progress.
 	var stock: Node2D
@@ -327,6 +332,15 @@ func _shop() -> void:
 		check_eq(GameState.currency, money - 10, "S5 charges configured price")
 		check(GameState.has_flag(&"shop_slug_bundle_s5"), "actual purchase persists")
 	await _return(&"ow_10_7")
+	await frames(40)
+	check_eq(world.get_current_room_id(), &"ow_10_7", "return marker avoids door bounce")
+	await _move(&"move_down", 25)
+	check_eq(world.get_current_room_id(), &"ow_10_7", "player can walk away from the stall")
+	await _move(&"move_up", 55)
+	await frames(65)
+	check_eq(world.get_current_room_id(), &"ow_10_7#shop", "player can walk back into S5")
+	if world.get_current_room_id() == &"ow_10_7#shop":
+		await _return(&"ow_10_7")
 
 
 func _save() -> void:

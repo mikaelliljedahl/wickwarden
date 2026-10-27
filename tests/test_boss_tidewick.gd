@@ -3,17 +3,25 @@ extends TestCase
 
 const SCENE := "res://scenes/enemies/bosses/tidewick.tscn"
 const GALLERY := "res://tests/fixtures/gallery/B03.tscn"
+const WORLD := "res://scenes/world/world.tscn"
 
 
 func run() -> void:
 	await _room_template_lifecycle()
 	await _motion_and_exposure()
+	await _bolt_warning_presentation()
 	await _phases_reset_and_rewards()
+	await _wave_visual_directions()
 	await _real_raft_combat()
 	await _real_undertow()
 	# Actual C3 basin coordinates exposed origin-relative hit-direction rounding.
 	await _real_undertow(Vector2i(20, 14))
 	await _real_ember_ward()
+	if OS.get_environment("WICK_B03_CAPTURE") == "1":
+		await _capture_real_ripple()
+		await _capture_real_bolt_warning()
+		await _capture_real_wave(Vector2.RIGHT, "right")
+		await _capture_real_wave(Vector2.DOWN, "down")
 
 
 func _assembly_check(boss: Node2D, room: Room) -> void:
@@ -134,14 +142,49 @@ func _motion_and_exposure() -> void:
 		check(bolts[0].hitbox.blockable, "ward blocks ember")
 	await seconds(1.2)
 	check(boss.ripple.visible, "next surfacing telegraphs0.8 seconds")
+	if SpriteVisual.has_art(&"tidewick_tail"):
+		var ripple_visual := boss.ripple.get_node("Visual") as SpriteVisual
+		check(ripple_visual != null, "tail warning uses painted ripple")
+		if ripple_visual != null:
+			check_eq(ripple_visual.kind, &"tidewick_tail", "warning uses the tail's own art")
+			check_eq(ripple_visual.animation, &"idle", "warning uses the submerged ripple")
 	await seconds(0.9)
 	check(boss.tail_exposed(), "tail resurfaces on5second cycle")
+	check(not boss.ripple.visible, "warning ends when the tail surfaces")
 	var hp: int = boss.hp
 	var hit := make_hitbox(room, boss.global_position, Layers.Team.PLAYER, 4, 65)
 	hit.kind = &"flare"
 	await frames(4)
 	check_eq(boss.hp, hp, "head immune to actual flare hitbox")
 	await dispose(hit)
+	await dispose(room)
+
+
+func _bolt_warning_presentation() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/Tidewick")
+	await seconds(3.95)
+	check(not is_instance_valid(boss._bolt_warning), "bolt warning not shown before 2.5s")
+	check(get_tree().get_nodes_in_group(&"projectiles").is_empty(), "bolt not fired early")
+	await seconds(0.1)
+	var warning: Node2D = boss._bolt_warning
+	check(is_instance_valid(warning), "bolt warning starts before the shot")
+	if is_instance_valid(warning) and SpriteVisual.has_art(&"tidewick_bolt_tell"):
+		var visual := warning.get_node_or_null("Visual") as SpriteVisual
+		check(visual != null and visual.kind == &"tidewick_bolt_tell", "warning uses ember art")
+		var lights := warning.find_children("*", "PointLight2D", false, false)
+		check_eq(lights.size(), 1, "warning has one presentation light")
+		if not lights.is_empty():
+			check(not lights[0].is_in_group(&"glow_light"), "warning light is not gameplay glow")
+		check_near(warning.global_position.distance_to(boss.global_position), 55.0, 0.1, "cue follows the head")
+	await seconds(0.5)
+	check(not is_instance_valid(warning), "warning is removed when the bolt fires")
+	var bolts := get_tree().get_nodes_in_group(&"projectiles")
+	check_eq(bolts.size(), 1, "one bolt fires at the end of the warning")
+	if not bolts.is_empty():
+		check_near(bolts[0].speed, 320.0, 0.01, "bolt retains its speed")
+		check_eq(bolts[0].damage, 2, "bolt retains its damage")
 	await dispose(room)
 
 
@@ -194,6 +237,28 @@ func _phases_reset_and_rewards() -> void:
 	await dispose(room)
 
 
+func _wave_visual_directions() -> void:
+	for direction in [Vector2.RIGHT, Vector2.DOWN]:
+		reset_state()
+		var room := _fixture()
+		var boss = room.get_node("Enemies/Tidewick")
+		await seconds(1.6)
+		boss.wave_direction = direction
+		boss._start_wave()
+		var collision := boss.wave.get_child(0) as CollisionShape2D
+		var rectangle := collision.shape as RectangleShape2D
+		var expected := Vector2(144, 768) if direction == Vector2.RIGHT else Vector2(1536, 144)
+		check_eq(rectangle.size, expected, "undertow retains its contracted hitbox")
+		if SpriteVisual.has_art(&"tidewick_wave_ripple"):
+			var visual: Node2D = boss.wave.get_node("Visual")
+			check_eq(visual.size, rectangle.size, "painted band marks the whole hitbox")
+			var lights := visual.find_children("*", "PointLight2D", true, false)
+			check_eq(lights.size(), 6 if direction == Vector2.RIGHT else 12, "band is lit end to end")
+			for light in lights:
+				check(not light.is_in_group(&"glow_light"), "wave lights are presentation only")
+		await dispose(room)
+
+
 func _capture(label: String) -> void:
 	if OS.get_environment("WICK_B03_CAPTURE") != "1":
 		return
@@ -204,6 +269,83 @@ func _capture(label: String) -> void:
 		OK,
 		"capture actual phase state"
 	)
+
+
+func _capture_real_ripple() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var packed := load(WORLD) as PackedScene
+	var world := packed.instantiate() as World
+	viewport.add_child(world)
+	world.start_at(&"cave_3_9")
+	var boss = world.current_room.get_node("Enemies/Tidewick1")
+	await seconds(5.8)
+	check(boss.ripple.visible, "real dark basin shows the tail warning")
+	await get_tree().process_frame
+	RenderingServer.force_draw()
+	check_eq(
+		viewport.get_texture().get_image().save_png("/tmp/b03-ripple-dark.png"),
+		OK,
+		"capture real dark basin warning"
+	)
+	await dispose(viewport)
+
+
+func _capture_real_bolt_warning() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var packed := load(WORLD) as PackedScene
+	var world := packed.instantiate() as World
+	viewport.add_child(world)
+	world.start_at(&"cave_3_9")
+	var boss = world.current_room.get_node("Enemies/Tidewick1")
+	await seconds(4.2)
+	check(is_instance_valid(boss._bolt_warning), "real dark basin shows the bolt warning")
+	await get_tree().process_frame
+	RenderingServer.force_draw()
+	check_eq(
+		viewport.get_texture().get_image().save_png("/tmp/b03-bolt-warning-dark.png"),
+		OK,
+		"capture real dark basin bolt warning"
+	)
+	await dispose(viewport)
+
+
+func _capture_real_wave(direction: Vector2, label: String) -> void:
+	# Controlled direction and phase in the real dark room, with the real moving hitbox.
+	reset_state()
+	SaveGame.enabled = false
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var packed := load(WORLD) as PackedScene
+	var world := packed.instantiate() as World
+	viewport.add_child(world)
+	world.start_at(&"cave_3_9")
+	var boss = world.current_room.get_node("Enemies/Tidewick1")
+	await seconds(1.6)
+	boss.apply_damage(14, boss.global_position, 0)
+	await seconds(1.3)
+	boss.wave_direction = direction
+	boss._start_wave()
+	await seconds(1.1)
+	await get_tree().process_frame
+	RenderingServer.force_draw()
+	check_eq(
+		viewport.get_texture().get_image().save_png("/tmp/b03-wave-" + label + "-dark.png"),
+		OK,
+		"capture real dark basin undertow"
+	)
+	await dispose(viewport)
 
 
 func _board(room: Room) -> Player:

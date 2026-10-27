@@ -1,5 +1,6 @@
 room ow_6_5#shop
 terrain keeper trade: ruined lighthouse chamber
+stone_interior
 floor_color 0.20 0.22 0.18
 grid
 ####################
@@ -12,6 +13,8 @@ grid
 #..................#
 #..................#
 ####################
+decor npc_keeper @820,250
+prop shop_counter @700,300 size=192,72
 prop wall 5,3 size=96,192
 prop wall 14,3 size=96,192
 prop pedestal 9,3

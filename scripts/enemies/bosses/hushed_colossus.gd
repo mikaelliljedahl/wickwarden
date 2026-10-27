@@ -13,6 +13,7 @@ var combo_count := 0
 var shards: Array[Node2D] = []
 var _home := Vector2.ZERO
 var _origin := Vector2.ZERO
+var _arena_light: PointLight2D
 
 
 class Shard:
@@ -34,6 +35,32 @@ class Shard:
 
 class FloorVisual:
 	extends Node2D
+	var sweep_light: PointLight2D
+
+	func _ready() -> void:
+		if get_parent().kind == &"sweep":
+			# The attack sets the band orientation immediately after it enters the tree.
+			call_deferred(&"_make_sweep_light")
+
+	func _make_sweep_light() -> void:
+		var attack: Node2D = get_parent()
+		var gradient := Gradient.new()
+		gradient.set_color(0, Color.WHITE)
+		gradient.set_color(1, Color.WHITE)
+		var texture := GradientTexture2D.new()
+		texture.width = int(attack.band_size.x)
+		texture.height = int(attack.band_size.y)
+		texture.gradient = gradient
+		sweep_light = PointLight2D.new()
+		sweep_light.name = "SweepWarningLight"
+		sweep_light.texture = texture
+		sweep_light.color = Color(1.0, 0.72, 0.3)
+		sweep_light.energy = 0.8
+		add_child(sweep_light)
+
+	func _process(_delta: float) -> void:
+		if is_instance_valid(sweep_light):
+			sweep_light.visible = not get_parent().fired
 
 	func _draw() -> void:
 		var attack: Node2D = get_parent()
@@ -41,6 +68,11 @@ class FloorVisual:
 		match attack.kind:
 			&"sweep":
 				draw_rect(Rect2(-attack.band_size * 0.5, attack.band_size), color)
+				if not attack.fired:
+					draw_rect(
+						Rect2(-attack.band_size * 0.5, attack.band_size),
+						Color(1.0, 0.8, 0.4, 0.9), false, 4.0
+					)
 			&"quake":
 				for row in range(1, 9):
 					for col in range(1, 19):
@@ -166,10 +198,56 @@ static func _register_looks() -> void:
 func _boss_ready() -> void:
 	_home = position
 	_origin = global_position - Vector2(960, 640)
+	Events.room_entered.connect(_on_room_entered)
+	_make_arena_light()
+
+
+func _on_room_entered(room_id: StringName) -> void:
+	if room_id == arena_id and not is_defeated() and not is_dead:
+		_make_arena_light()
+	else:
+		_clear_arena_light()
+
+
+func _make_arena_light() -> void:
+	if is_instance_valid(_arena_light):
+		return
+	var gradient := Gradient.new()
+	gradient.set_color(0, Color.WHITE)
+	gradient.set_color(1, Color.WHITE)
+	var texture := GradientTexture2D.new()
+	texture.width = 1920
+	texture.height = 960
+	texture.gradient = gradient
+	_arena_light = PointLight2D.new()
+	_arena_light.name = "ArenaPresentationLight"
+	_arena_light.texture = texture
+	_arena_light.color = Color(1.0, 0.9, 0.76)
+	_arena_light.energy = 0.75
+	add_child(_arena_light)
+	_arena_light.top_level = true
+	_arena_light.global_position = _origin + Vector2(960, 480)
+
+
+func _clear_arena_light() -> void:
+	if is_instance_valid(_arena_light):
+		_arena_light.queue_free()
+		_arena_light = null
 
 
 func arena_point(local: Vector2) -> Vector2:
 	return _origin + local
+
+
+## The band starts at the arena edge on the Colossus's side and crosses to the opposite edge.
+static func _sweep_points(horizontal: bool, boss_at: Vector2) -> Array:
+	if horizontal:
+		return [Vector2(960, 816), Vector2(960, 144)] if boss_at.y >= 480 else [
+			Vector2(960, 144), Vector2(960, 816)
+		]
+	return [Vector2(1776, 480), Vector2(144, 480)] if boss_at.x >= 960 else [
+		Vector2(144, 480), Vector2(1776, 480)
+	]
 
 
 func _enter_phase(_number: int) -> void:
@@ -186,6 +264,7 @@ func _enter_phase(_number: int) -> void:
 
 
 func _boss_physics(delta: float) -> void:
+	_make_arena_light()
 	velocity = direction_to_player() * move_speed
 	slam_left -= delta
 	shard_left -= delta
@@ -207,14 +286,11 @@ func _boss_physics(delta: float) -> void:
 		if sweep_left <= 0.0:
 			sweep_left += 5.0
 			var horizontal := randi() % 2 == 0
-			var local := Vector2(960, clampf(position.y, 144, 816))
-			if not horizontal:
-				local = Vector2(clampf(position.x, 144, 1776), 480)
-			var attack := start_attack(&"sweep", arena_point(local), 0.8, 0.5)
+			var points := _sweep_points(horizontal, position)
+			var attack := start_attack(&"sweep", arena_point(points[0]), 0.8, 0.5)
 			attack.band_size = Vector2(1728, 96) if horizontal else Vector2(96, 768)
-			attack.sweep_from = arena_point(Vector2(960, 144) if horizontal else Vector2(144, 480))
-			attack.sweep_to = arena_point(Vector2(960, 816) if horizontal else Vector2(1776, 480))
-			attack.global_position = attack.sweep_from
+			attack.sweep_from = arena_point(points[0])
+			attack.sweep_to = arena_point(points[1])
 	if phase == 3:
 		quake_left -= delta
 		if quake_left <= 0.0:
@@ -277,6 +353,7 @@ func _resolve_damage(hit: Hitbox, _amount: int) -> int:
 func reset_fight() -> void:
 	if is_defeated():
 		return
+	_clear_arena_light()
 	super.reset_fight()
 	if not is_dead and not is_defeated():
 		position = _home
@@ -290,11 +367,15 @@ func _on_hurt(hit: Hitbox) -> void:
 
 
 func _on_death() -> void:
+	_clear_arena_light()
 	super._on_death()
 	spawn_pickup(&"ember", ARENA_CENTRE + Vector2(-96, 0), true)
 	spawn_pickup(&"ember", ARENA_CENTRE + Vector2(96, 0), true)
 
 
 func _exit_tree() -> void:
+	_clear_arena_light()
+	if Events.room_entered.is_connected(_on_room_entered):
+		Events.room_entered.disconnect(_on_room_entered)
 	clear_hazards()
 	super._exit_tree()

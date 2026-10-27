@@ -1,0 +1,61 @@
+Hushmarch — Q5 visual review, 2026-10-27
+
+Inspected contact-hushmarch.png and all 16 full-size images in
+/tmp/wick-capture-20261027-current: 12 graph rooms and four pockets. The
+sheet labels each once. Index: 1920x1080, seed 1, 30 physics frames, fresh
+GameState, default spawn, no granted items or flags. These controlled stills
+are not proof of current rendering, reachability or human play. No new captures
+or game tests were run. Combat, transitions, revealed/opened gates and later
+states remain unreviewed unless stated otherwise.
+
+Common finding: grass, mossy boulders and hedge borders dominate this supposed
+dead shore. Salt flats, wrecks, quay and rusted lanterns are not readily
+recognizable; the planned region identity is weak in these stills. Ravine
+and reel gaps are hard-edged dark rectangles. No still proves a blocked route.
+State records a later S2–S6 shopkeeper/counter ticket; the S5 pocket image
+predates it. The recorded painted Ninth Door and S5 entrance are already
+visible in this baseline; partial-fragment and open states are not shown.
+
+ow_10_5 Anchor Beach: two crabs and near ring visible; far ring is partly
+  cropped by the HUD/top edge, across a wide rectangular dark gap. Beach is
+  not visually apparent. Reel crossing and landing unreviewed.
+ow_11_5 Salt Flats: two hounds and boulders visible; ground reads as grass,
+  not salt. Charge, collision and south exit unreviewed.
+ow_9_6 Ravine Landing: north and west gaps visible as dark rectangles in
+  masonry, with Hollow near north wall and hound on floor. Both arrivals and
+  leaps unreviewed; still does not establish clipping.
+ow_10_6 Wreck Row: two crabs and moth visible; reeds and rocks but no clear
+  wrecks. Enemy movement and four exits unreviewed.
+ow_11_6 Tide Cache: cracked wall among rocks and one hound visible; no tidal
+  cave or water is apparent. Bomb, entry and resulting state unreviewed.
+ow_11_6#cache: glowing core on pedestal and return door visible; pickup and
+  return unreviewed.
+ow_8_7 Cold Quay: two hounds and a U-shaped masonry wall visible; no obvious
+  quay or water. Movement around the wall and exits unreviewed.
+ow_9_7 Counting Gate: circular resonance door visible between wall fragments,
+  two Hollows on floor. Chime, opening and C8 transition unreviewed.
+ow_10_7 Pilgrim Road: painted stall, hound and two crabs visible; road and
+  lanterns are not apparent. Stall entry and enemy movement unreviewed here;
+  state separately records a real-player S5 entry, purchase and return test.
+ow_10_7#shop: four pedestals, two visible goods/prices and return door; no
+  shopkeeper or counter in this older image. Compare later shop ticket before
+  triage. Purchase and return unreviewed in this still.
+ow_11_7 Lantern Graveyard: two hounds, Hollow and ruin visible; rusted
+  lanterns are not apparent. Hidden seam is not visible in fresh state, as
+  expected for a hidden prop; glow reveal and entry unreviewed.
+ow_11_7#cache: small round reward icon and door visible; contents are not
+  legible from image alone. Collection and return unreviewed.
+ow_8_8 Black Pier: two ring structures, pocket doorway and three hounds visible;
+  a large dark rectangular gap separates doorway from player. Pier character
+  is not apparent. Reel crossing, entry and return unreviewed.
+ow_8_8#cache: pot bundle and return door visible; brass contents cannot be
+  confirmed visually. Collection and return unreviewed.
+ow_9_8 Hush Garden: two Hollows and two hounds among bright trees, flowers and
+  rocks. This reads as a lively garden rather than forgotten shore; combat and
+  movement through vegetation unreviewed.
+ow_10_8 The Ninth Door: large painted door and nine dark sockets visible; one
+  hound overlaps its lower edge. Player is absent in this sampled frame and HUD
+  shows lost health, so inspect entry/combat visibility in motion. State records
+  a separately inspected five-fragment capture and tests of opening; neither is
+  demonstrated by this still. Nine-fragment opening and C10 transition remain
+  visually unreviewed in this review.

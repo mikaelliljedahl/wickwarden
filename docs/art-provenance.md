@@ -1,5 +1,18 @@
 # Wickwarden — art provenance
 
+The C1 kiln-mouth source `b01_kiln_mouth_candidate_20261027d.png` and its
+generation prompt, original output and review are recorded in
+`tools/source_art/b01-kiln-mouth-20261027-log.md`.
+Kilnkeeper's slag flight and impact now use the previously recorded
+`proj_slag_ball_v2.png` source from `tools/source_art/log_b48.md`.
+Archivist's projectile uses the previously recorded `proj_ink_bolt_v1.png`;
+its splatter uses `fx_ink_splatter_v3.png`, byte-identical to native output
+`01a16fd1-72ff-7f01-83d6-f42e9fc3924e/exec-4e151ff4-bfe0-4000-aaf9-fb00d55e7fa0.png`
+(SHA-256 `c24be6fb9ea70908b6ba71887f4064cff99258516a0c252a0b46619923835182`).
+The exact splatter prompt is not recorded.
+The later C2 full-width thorn band is documented in
+`tools/source_art/briar-band-20261027-log.md`.
+
 This is a work inventory, not a legal certificate. All raster art in this repository is original to
 Wickwarden. It was generated with GPT Image (the native image generation tool of the Codex CLI)
 from the project's own written prompts in [art-brief.md](art-brief.md), then cut by
@@ -1215,24 +1228,6 @@ GPT Image terrain textures below; they add no other image.
 | `choir_warden_actions_side_v1.png` | 1536×1024 | `01a16fba-799a-71b0-a954-1482feedd65a` | `exec-7ec1a6be-711b-43af-b143-3571e297d64f` | `b3c9cbdfef33e74b` | `log_b58.md` |
 | `choir_warden_actions_side_v2.png` | 1536×1024 | `01a16fbe-3de8-7921-afd1-c3ad78d4ecbf` | `exec-a5358146-5963-458e-957d-d83ced6f6714` | `b18ce228c4202b72` | `log_b58.md` |
 | `choir_warden_actions_side_v3.png` | 1536×1024 | `01a16fbe-3e18-7001-bc34-d1ab1db8e44c` | `exec-6848c4a6-56cd-45c6-867d-94a3047b9ee9` | `86d5235259bc4585` | `log_b58.md` |
-| `fx_hit_spark_v1.png` | 1536×1024 | `01a16fb7-3a06-7f72-91c9-a3942e1426cf` | `exec-fa20cfec-674f-4810-96fa-5843ac048647` | `09799645f3923118` | `log_b44.md` |
-| `fx_hit_spark_v2.png` | 1536×1024 | `01a16fb6-e318-76e3-ab68-fd13e3d77ed6` | `exec-c69b53de-a989-4967-b79d-2ad74207a145` | `9d4e7ee7d18d1e7d` | `log_b44.md` |
-| `fx_hit_spark_v3.png` | 1536×1024 | `01a16fb7-4002-7040-9cfe-2d8059a95d56` | `exec-11169d0b-7579-41b9-a2ba-21fccd22a226` | `264e9c23775e6966` | `log_b44.md` |
-| `fx_enemy_poof_v1.png` | 1536×1024 | `01a16fb6-e2f2-7920-af01-78509751f7e6` | `exec-dac7aaef-9430-4c14-be95-0f149075244c` | `78e7844dd0032201` | `log_b44.md` |
-| `fx_enemy_poof_v2.png` | 1536×1024 | `01a16fb7-4be8-7fe3-845a-2dcf24a3ddd1` | `exec-17a04d52-8cc3-4c56-814b-cf34a3fe99d1` | `f9fa2ae6bc0afcfb` | `log_b44.md` |
-| `fx_enemy_poof_v3.png` | 1536×1024 | `01a16fb6-e3cd-73c3-a405-3227539e149a` | `exec-187b754a-f33a-4ff9-9935-492a0e628906` | `534eb7efe8e14f59` | `log_b44.md` |
-| `fx_water_splash_v1.png` | 1536×1024 | `01a16fbb-21d3-7a42-92d4-59be73bb5d9d` | `exec-6ecc5306-f769-4fa7-badc-3e42130f4a35` | `63fb56ce38fc1afa` | `log_b44.md` |
-| `fx_water_splash_v2.png` | 1536×1024 | `01a16fbb-22c9-7282-83e9-70d5eb2f330a` | `exec-2aafa0b8-bd74-42aa-a925-479493a395fe` | `65b5526a92316737` | `log_b44.md` |
-| `fx_water_splash_v3.png` | 1536×1024 | `01a16fbb-23e0-7ab1-bdfa-852afcc98341` | `exec-bde4b69e-4149-44aa-a506-1cf061198503` | `b1ae9dfc86f22875` | `log_b44.md` |
-| `fx_water_ripple_v1.png` | 1536×1024 | `01a16fbb-2208-7a93-af29-0ab231d4fd29` | `exec-2a8ac076-ebe4-4959-ae58-bf7a32db5f17` | `fc5a1c3cfc56b378` | `log_b44.md` |
-| `fx_water_ripple_v2.png` | 1536×1024 | `01a16fbb-226b-7851-ac44-5baa7173cdc9` | `exec-602d89bb-cf6e-4fe2-8f5b-716f5ff63ee4` | `2946f832e46073bd` | `log_b44.md` |
-| `fx_water_ripple_v3.png` | 1536×1024 | `01a16fbb-2272-7fa3-8e5c-1d6de09f3206` | `exec-2927f24f-90e9-480d-b622-24cc23da8401` | `c338faca5ea1b86f` | `log_b44.md` |
-| `fx_raft_wake_v1.png` | 1536×1024 | `01a16fbf-5f54-74a1-ab94-4129624bcd93` | `exec-831d88ed-acb6-481f-9838-db4fc25d6658` | `bc449ecede4cc501` | `log_b44.md` |
-| `fx_raft_wake_v2.png` | 1536×1024 | `01a16fbf-5e66-71b2-a274-56fa844db9d8` | `exec-40deb2c4-271c-42d4-b50a-471ac5421a08` | `f9c832fbfbcde3cc` | `log_b44.md` |
-| `fx_raft_wake_v3.png` | 1536×1024 | `01a16fbf-5f84-75a3-b563-b45bf58a9864` | `exec-e43d12b3-5478-4e46-b5f6-150ecb221f5f` | `57372a0fb8888de4` | `log_b44.md` |
-| `fx_wisp_burst_v1.png` | 1536×1024 | `01a16fbf-5f31-7040-8021-2cfd0207362f` | `exec-d512c656-e52b-4e46-9c6f-1920b173b033` | `e186704da89ee20a` | `log_b44.md` |
-| `fx_wisp_burst_v2.png` | 1536×1024 | `01a16fbf-5ec7-7f33-a6ad-780175377bf6` | `exec-57ae31c2-bf16-4a28-bf4c-7986dff4c0f0` | `6be8e11f790b13a0` | `log_b44.md` |
-| `fx_wisp_burst_v3.png` | 1536×1024 | `01a16fbf-5f9a-72b1-bd7e-ea048258f6f2` | `exec-e10b00da-120e-4a71-9837-caa055e042ae` | `5961c341c7d05e41` | `log_b44.md` |
 | `pale_squire_walk_side_v1.png` | 1536×1024 | `01a16fbe-6bf1-7e60-9fde-84bf90ee2f01` | `exec-39a4e801-6e61-4dfa-9b6a-1e6ee010f53f` | `0152c147ab1b2534` | `log_b59.md` |
 | `pale_squire_walk_side_v2.png` | 1536×1024 | `01a16fbe-6c5a-7050-ac9d-6c610c1cdb17` | `exec-8f944593-9276-4b65-9840-a15326fd4ebf` | `e612ce02ca45a715` | `log_b59.md` |
 | `pale_squire_walk_side_v3.png` | 1536×1024 | `01a16fbe-6e19-74a1-9d63-84f36fbdc26c` | `exec-8c221095-9daa-4157-ba6f-4db1a97a3da2` | `e7a7d8bc22e4ccb0` | `log_b59.md` |
@@ -1248,24 +1243,6 @@ GPT Image terrain textures below; they add no other image.
 | `pale_squire_actions_side_v1.png` | 1536×1024 | `01a16fc6-faa8-7303-afaf-6de518f4a56a` | `exec-ba9dc447-0809-4698-9a5a-a2913ad71492` | `6558879662bee4ac` | `log_b59.md` |
 | `pale_squire_actions_side_v2.png` | 1536×1024 | `01a16fc6-fa4a-7570-85b2-b17982313bdd` | `exec-ad033800-1b39-4327-b732-c8e332785757` | `4bcef3c6596d3165` | `log_b59.md` |
 | `pale_squire_actions_side_v3.png` | 1536×1024 | `01a16fc6-fb54-7951-8403-7f6b88f36e7f` | `exec-92a14018-5a55-4101-864e-42ac3e8613da` | `fb680e0ca0b28525` | `log_b59.md` |
-| `fx_chime_ring_v1.png` | 1536×1024 | `01a16fc4-35e0-7172-a82b-36d3270cf7ad` | `exec-8bf9cb8a-05aa-4253-882f-8849d7368834` | `a1aad76fec4313cf` | `log_b45.md` |
-| `fx_chime_ring_v2.png` | 1536×1024 | `01a16fc4-36d3-7972-96a4-cc2f76937978` | `exec-880a75f7-97bf-44df-b7a4-7c9670fe5799` | `5c7f977d5637ad04` | `log_b45.md` |
-| `fx_chime_ring_v3.png` | 1536×1024 | `01a16fc4-35cc-7e63-bdb2-08a301a96a96` | `exec-447fcd53-6b3f-4bb4-bfaa-13f2aa77915a` | `67df95c2a8910991` | `log_b45.md` |
-| `fx_warp_out_v1.png` | 1536×1024 | `01a16fc4-3617-7b12-81f8-fe5c67a88733` | `exec-ab7e341a-4a7c-4b57-b646-d0bc05b33808` | `aeb4c92df7b91d4f` | `log_b45.md` |
-| `fx_warp_out_v2.png` | 1536×1024 | `01a16fc4-34f7-7c80-bc99-9b557d7e7075` | `exec-a99b69d4-f374-4a95-8a2e-b6407f8a8ae5` | `2d03dbebe6156e46` | `log_b45.md` |
-| `fx_warp_out_v3.png` | 1536×1024 | `01a16fc4-3796-70e0-9277-b1b90ec8a754` | `exec-c0ac8b68-e6db-47ee-bcf7-ddd39ecbf6e8` | `e680b97fd7a178d0` | `log_b45.md` |
-| `fx_warp_in_v1.png` | 1536×1024 | `01a16fc8-7a7b-7d00-909e-49707057fb80` | `exec-945c7d0c-7afe-491e-8122-0d07c1f77d52` | `ca440382b7f8f3a9` | `log_b45.md` |
-| `fx_warp_in_v2.png` | 1536×1024 | `01a16fc8-79ee-7520-bca2-7c1d77e21c80` | `exec-c7e30e47-ef96-4c25-bda9-ec3811b23906` | `47b0ad341d488b3f` | `log_b45.md` |
-| `fx_warp_in_v3.png` | 1536×1024 | `01a16fc8-7a11-7ce3-8b15-cc0f6df818c2` | `exec-fb01effc-b38a-4427-b897-519f2485cfa5` | `460ea4817a2a2d93` | `log_b45.md` |
-| `fx_glow_burst_v1.png` | 1536×1024 | `01a16fc8-79ab-7a01-84ad-942cd6cdeee0` | `exec-a07acc77-4379-4fd2-b5d6-9bc892b76b2e` | `343cda22711c6bfc` | `log_b45.md` |
-| `fx_glow_burst_v2.png` | 1536×1024 | `01a16fc8-7910-7440-80a3-bbe39d5912bc` | `exec-46867ad6-7d56-46f8-8df0-54dbc6551f83` | `55e88773c8066c76` | `log_b45.md` |
-| `fx_glow_burst_v3.png` | 1536×1024 | `01a16fc8-79c4-7e60-9254-df0682ffb750` | `exec-e594e8e8-34ba-4b62-9cc3-078f5c286b61` | `04009925061d38b7` | `log_b45.md` |
-| `fx_leap_dust_v1.png` | 1536×1024 | `01a16fcc-bc7c-7f62-8654-4fc7bb37450e` | `exec-b0084b5b-b115-4cd7-b949-78d3d1fd6163` | `b805eb8137c4b0bf` | `log_b45.md` |
-| `fx_leap_dust_v2.png` | 1536×1024 | `01a16fcc-bd7f-7803-b586-e32420113f41` | `exec-f26763f2-365c-4c73-b402-1dcc5674f4fc` | `c5f050843291884d` | `log_b45.md` |
-| `fx_leap_dust_v3.png` | 1536×1024 | `01a16fcc-bd91-7c50-a108-1356a99b8b9e` | `exec-a84543ed-9314-4e32-a65a-4816fd0c461b` | `b31a4a38cd695591` | `log_b45.md` |
-| `fx_reel_hit_v1.png` | 1536×1024 | `01a16fcc-bbe5-7db3-99aa-cd5c733e32bf` | `exec-b149d9fc-f0f8-4822-b34b-a3714832a1e4` | `b638f56a6f2e7b8f` | `log_b45.md` |
-| `fx_reel_hit_v2.png` | 1536×1024 | `01a16fcc-bb78-70b1-9641-ebe12af4ce1a` | `exec-ab4526b4-45e5-48d8-9bbc-6b3f8cd803d3` | `7f521d2d53203143` | `log_b45.md` |
-| `fx_reel_hit_v3.png` | 1536×1024 | `01a16fcc-bb2b-7052-a694-b88c91c4359b` | `exec-363bc419-bd05-4d2b-855d-d3deb642e85c` | `d9ad88e003c66f06` | `log_b45.md` |
 | `lock_warden_body_closed_open_v1.png` | 1536×1024 | `01a16f7b-c439-7cf2-9d66-99639e6acc63` | `exec-66f7ba8c-b25f-4d43-a2ae-19ca577ec37b` | `a9ac2daf3bc29306` | `log_b69.md` |
 | `lock_warden_body_closed_open_v2.png` | 1536×1024 | `01a16f7d-91fe-7b30-b6a5-d403eef5c063` | `exec-a0031696-6143-446a-aa52-0e61c41035ad` | `4c1335400d482b61` | `log_b69.md` |
 | `lock_warden_body_closed_open_v3.png` | 1536×1024 | `01a16fcb-3cbc-7c31-85a9-66e124c99ded` | `exec-aadd9fb0-bb9c-4452-8837-b0f8d6ce28f8` | `b13d963bdfd27bb4` | `log_b69.md` |
@@ -1476,3 +1453,12 @@ the width of the hook swing in particular, in play.
 
 | `lockpick_pickup_v1.png` | 1536x1024 | `01a173b6-dd52-7ea2-9a1e-db4817496668` | `exec-106cc047-cad6-4702-a1a7-f26f2e262f7f.png` | `f887f6dc0a5e0e47` | `lockpick-art-log.md` |
 | `lockpick_hud_v1.png` | 1254x1254 | `01a173b6-dd52-7ea2-9a1e-db4817496668` | `exec-d61727d7-86a1-4fe0-95e6-084527a44566.png` | `43c9c5575dea7cb6` | `lockpick-art-log.md` |
+
+| `ninth_door_candidate_20261027a.png` | 1536x1024 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-d3824c63-222b-4a76-9b42-27863088dd13.png` | `11f3678961ccf547` | `ninth-door-20261027-log.md` |
+| `ninth_lantern_candidate_20261027c.png` | 1312x1199 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-3c06ca27-e363-4c82-b030-d6435c8f3a83.png` | `edb5a731dd9551c5` | `ninth-lantern-20261027-log.md` |
+| `unlit_heart_candidate_20261027a.png` | 1374x1145 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-7188709a-b5a4-4d14-9f33-78405d2d516a.png` | `905f7bad2f58999e` | `unlit-heart-20261027-log.md` |
+| `unlit_shell_candidate_20261027a.png` | 1312x1199 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-ea2a7d48-ace1-43cb-ba42-7dfac7e59234.png` | `86081462aa97f697` | `unlit-shell-20261027-log.md` |
+| `unlit_eye_candidate_20261027a.png` | 1536x1024 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-a6729212-7cb0-417a-b4f3-a7c809e1ef41.png` | `648ced4173136555` | `unlit-eye-20261027-log.md` |
+| `lock_warden_body_candidate_20261027a.png` | 1374x1145 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-f66d3146-8159-4f17-a069-ffa5183bffd2.png` | `491e702a9a3b18f3` | `lock-warden-body-20261027-log.md` |
+| `lock_deadbolt_candidate_20261027a.png` | 1024x1536 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-757270e0-38c3-43e4-a0b6-25849f034ac4.png` | `5f4ae12284446237` | `lock-deadbolt-20261027-log.md` |
+| `coinwyrm_bare_head_candidate_20261027a.png` | 1312x1199 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-f3cfc8f3-cb11-4706-be6d-3737ddb1c63f.png` | `5a140f5a294686a7` | `coinwyrm-bare-head-20261027-log.md` |

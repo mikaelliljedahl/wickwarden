@@ -7,6 +7,7 @@ const WISP := "res://scenes/enemies/cinder_wisp.tscn"
 
 
 func run() -> void:
+	await _burst_visual_lifetime()
 	await _stats_and_light()
 	await _drifts_toward_tamsin()
 	await _fire_does_nothing()
@@ -167,4 +168,33 @@ func _stun_cancels_the_windup() -> void:
 	await seconds(1.8)
 	check(not is_instance_valid(wisp), "after the stun the wisp winds up again and bursts")
 	check_eq(GameState.health, before - 2, "the second burst deals 2 half-hearts")
+	await dispose(arena)
+
+
+func _burst_visual_lifetime() -> void:
+	reset_state()
+	var arena := make_arena()
+	var ring := (load("res://scripts/enemies/flame_ring.gd") as Script).new() as Hitbox
+	arena.add_child(ring)
+	ring.global_position = Vector2(420, 310)
+	await frames(2)
+	check_eq(ring.damage, 2, "painted burst retains damage")
+	check(ring.blockable and not ring.block_destroys_carrier, "ward behavior stays unchanged")
+	var shape: CollisionShape2D
+	for child in ring.get_children():
+		if child is CollisionShape2D:
+			shape = child
+	check(shape != null and shape.shape is CircleShape2D, "burst has circular collision")
+	if shape != null and shape.shape is CircleShape2D:
+		check_near((shape.shape as CircleShape2D).radius, 150.0, 0.01, "burst radius stays 150")
+	check(ring.get_node_or_null("Visual") != null, "full radius marker remains")
+	var art := arena.get_node_or_null("Puff") as SpriteVisual
+	check(art != null, "painted burst is separate")
+	if art != null:
+		check_eq(art.global_position, ring.global_position, "art follows the assigned burst position")
+	await seconds(0.25)
+	check(not is_instance_valid(ring), "hitbox expires after 0.2 seconds")
+	check(arena.get_node_or_null("Puff") is SpriteVisual, "animation outlives hitbox")
+	await seconds(0.3)
+	check(arena.get_node_or_null("Puff") == null, "painted burst cleans itself up")
 	await dispose(arena)

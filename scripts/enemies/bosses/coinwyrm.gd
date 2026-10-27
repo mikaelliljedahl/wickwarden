@@ -15,13 +15,58 @@ var rear_age := 0.0
 var _home := Vector2.ZERO
 
 
+class PlateCue:
+	extends Node2D
+	var crown := false
+
+	func _draw() -> void:
+		# A cool rim separates the removable gold from the head's permanent scales.
+		var color := Color(0.48, 0.95, 0.91, 0.95)
+		draw_arc(Vector2.ZERO, 31.0, 0.0, TAU, 40, Color(0.03, 0.17, 0.18, 0.9), 6.0)
+		draw_arc(Vector2.ZERO, 31.0, 0.0, TAU, 40, color, 2.5)
+		if crown:
+			var points := PackedVector2Array(
+				[Vector2(-12, -31), Vector2(-7, -41), Vector2(0, -35), Vector2(7, -41), Vector2(12, -31)]
+			)
+			draw_polyline(points, color, 3.0, true)
+
+
 class Strike:
 	extends Node2D
 	var box: Hitbox
 	var life := 0.12
+	var tail := false
+	var facing := Vector2.RIGHT
+
+	class TailVisual:
+		extends Node2D
+
+		func _draw() -> void:
+			draw_rect(Rect2(-864, -48, 1728, 96), Color(1.0, 0.64, 0.15, 0.32))
+			draw_rect(Rect2(-864, -48, 1728, 96), Color(1.0, 0.82, 0.35, 0.9), false, 4.0)
+
+	class BiteVisual:
+		extends Node2D
+		var facing := Vector2.RIGHT
+
+		func _draw() -> void:
+			var points := PackedVector2Array([Vector2.ZERO])
+			for i in range(25):
+				points.append(facing.rotated(-PI / 2 + PI * i / 24.0) * 150)
+			draw_colored_polygon(points, Color(1.0, 0.64, 0.15, 0.32))
+			points.append(Vector2.ZERO)
+			draw_polyline(points, Color(1.0, 0.82, 0.35, 0.9), 4.0)
 
 	func _ready() -> void:
-		Placeholder.attach(self, &"coinwyrm_strike", 10)
+		if tail:
+			var visual := TailVisual.new()
+			visual.name = "Visual"
+			add_child(visual)
+		else:
+			var visual := BiteVisual.new()
+			visual.name = "Visual"
+			visual.facing = facing
+			add_child(visual)
 		add_child(box)
 		box.activate()
 
@@ -54,10 +99,23 @@ func _init() -> void:
 			{"shape": "circle", "color": Color(1, 0.65, 0.1, 0.4), "radius": 10},
 			true
 		)
+	if not Placeholder.has_kind(&"coinwyrm_coin"):
+		Placeholder.register_kind(
+			&"coinwyrm_coin", {"shape": "circle", "color": Color(0.8, 0.65, 0.25), "radius": 12}
+		)
 
 
 func _boss_ready() -> void:
 	_home = global_position
+	# Presentation-only illumination follows the visible head in the dark arena.
+	if not has_node("HeadLight"):
+		var light := PointLight2D.new()
+		light.name = "HeadLight"
+		light.texture = LightTexture.make()
+		light.texture_scale = LightTexture.scale_for(180.0)
+		light.color = Color(1.0, 0.75, 0.4)
+		light.energy = 0.8
+		add_child(light)
 
 
 func _enter_phase(_number: int) -> void:
@@ -78,6 +136,7 @@ func _boss_physics(delta: float) -> void:
 			_choose_heap()
 			state = &"quiver"
 			state_left = 0.9
+			_set_heap_animation(global_position, &"quiver")
 			_marker(global_position, &"circle", 0.9, 90, Vector2.ZERO, Vector2.RIGHT)
 		return
 	if state == &"quiver":
@@ -116,6 +175,7 @@ func _choose_heap() -> void:
 
 
 func _rear() -> void:
+	_set_heap_animation(global_position, &"burst")
 	state = &"rear"
 	state_left = 6.0 if phase == 1 else 5.0
 	rear_age = 0
@@ -150,6 +210,22 @@ func _grow_plate() -> void:
 		plate.reeled.connect(_plate_pulled.bind(plate))
 		add_child(plate)
 		plate.position = OFFSETS[slot]
+		var kind := &"coinwyrm_crown" if slot == 3 else &"coinwyrm_plate"
+		if SpriteVisual.has_art(kind):
+			var painted := SpriteVisual.attach(plate, kind, 26.0) as SpriteVisual
+			if painted != null and slot == 1:
+				painted.flip_h = true
+		var cue := PlateCue.new()
+		cue.name = "PlateCue"
+		cue.crown = slot == 3
+		plate.add_child(cue)
+		var light := PointLight2D.new()
+		light.name = "PlateLight"
+		light.texture = LightTexture.make()
+		light.texture_scale = LightTexture.scale_for(80.0)
+		light.color = Color(0.48, 0.95, 0.91)
+		light.energy = 0.65
+		plate.add_child(light)
 		plates.append(plate)
 		return
 
@@ -169,6 +245,7 @@ func _plate_pulled(_hit: Hitbox, plate: Node2D) -> void:
 
 
 func _begin_burrow(delay: float) -> void:
+	_clear_heap_cues()
 	_clear_plates()
 	state = &"burrow"
 	state_left = delay
@@ -176,6 +253,57 @@ func _begin_burrow(delay: float) -> void:
 	visible = false
 	hurtbox.enabled = false
 	set_contact_enabled(false)
+
+
+func _heap_visuals() -> Array[SpriteVisual]:
+	var result: Array[SpriteVisual] = []
+	var room := _room()
+	if room == null:
+		return result
+	var props := room.get_node_or_null("Props")
+	if props == null:
+		return result
+	for arena in props.get_children():
+		for index in range(HEAPS.size()):
+			var visual := arena.get_node_or_null("Heap%d/Visual" % index) as SpriteVisual
+			if visual != null:
+				result.append(visual)
+	return result
+
+
+func _set_heap_animation(at: Vector2, animation: StringName) -> void:
+	for visual in _heap_visuals():
+		if visual.global_position.distance_to(at) > 1.0:
+			continue
+		visual.play_anim(animation)
+		if visual.get_node_or_null("CueLight") == null:
+			var light := PointLight2D.new()
+			light.name = "CueLight"
+			light.texture = LightTexture.make()
+			light.texture_scale = LightTexture.scale_for(130.0)
+			light.color = Color(1.0, 0.72, 0.3)
+			light.energy = 1.0
+			visual.add_child(light)
+		if animation == &"burst":
+			var finished := _finish_heap_cue.bind(visual)
+			if not visual.animation_finished.is_connected(finished):
+				visual.animation_finished.connect(finished, CONNECT_ONE_SHOT)
+
+
+func _finish_heap_cue(visual: SpriteVisual) -> void:
+	if is_instance_valid(visual):
+		var finished := _finish_heap_cue.bind(visual)
+		if visual.animation_finished.is_connected(finished):
+			visual.animation_finished.disconnect(finished)
+		visual.play_anim(&"idle")
+		var light := visual.get_node_or_null("CueLight")
+		if light != null:
+			light.queue_free()
+
+
+func _clear_heap_cues() -> void:
+	for visual in _heap_visuals():
+		_finish_heap_cue(visual)
 
 
 func _clear_plates() -> void:
@@ -193,11 +321,28 @@ func _volley() -> void:
 		var bolt := EnemyProjectile.new()
 		bolt.speed = 280 if phase == 1 else 260
 		bolt.damage = 2
-		bolt.visual_kind = &"brass_bit"
+		bolt.visual_kind = &"coinwyrm_coin"
 		bolt.blockable_by_ward = true
 		get_parent().add_child(bolt)
+		# Presentation only: coins must remain visible outside the lamp in the dark arena.
+		var light := PointLight2D.new()
+		light.name = "CoinLight"
+		light.texture = LightTexture.make()
+		light.texture_scale = LightTexture.scale_for(80.0)
+		light.color = Color(1.0, 0.72, 0.3)
+		light.energy = 0.9
+		bolt.add_child(light)
 		bolt.launch(global_position, direction.rotated(angle))
+		bolt.destroyed.connect(_coin_impact.bind(bolt))
 		add_hazard(bolt)
+
+
+func _coin_impact(reason: StringName, bolt: EnemyProjectile) -> void:
+	if reason not in [&"hit", &"wall", &"ward"] or not is_instance_valid(bolt):
+		return
+	var effect := SpriteVisual.spawn_effect(get_parent(), &"coinwyrm_coin", bolt.global_position)
+	if effect is SpriteVisual:
+		effect.play_anim(&"impact")
 
 
 func _marker(
@@ -230,25 +375,55 @@ func _bite() -> void:
 	var at := global_position
 	var marker := _marker(at, &"cone", 0.5, 150, Vector2.ZERO, direction)
 	if marker != null:
+		_light_bite(marker, direction)
 		marker.finished.connect(_strike.bind(at, direction, false))
+
+
+func _light_bite(parent: Node2D, direction: Vector2) -> void:
+	var light := PointLight2D.new()
+	light.texture = LightTexture.make()
+	light.texture_scale = LightTexture.scale_for(210.0)
+	light.color = Color(1.0, 0.72, 0.3)
+	light.energy = 0.8
+	light.position = direction * 60.0
+	parent.add_child(light)
 
 
 func _tail() -> void:
 	for heap in HEAPS:
-		var at := arena_point(heap)
-		if at.distance_to(global_position) < 10:
+		var origin := arena_point(heap)
+		if origin.distance_to(global_position) < 10:
 			continue
+		var at := origin
 		at.x = arena_point(ARENA_CENTRE).x
 		var marker := _marker(at, &"rect", 0.7, 0, Vector2(1728, 96), Vector2.RIGHT)
 		if marker != null:
-			marker.finished.connect(_strike.bind(at, Vector2.RIGHT, true))
+			_light_tail_band(marker)
+			if SpriteVisual.has_art(&"coinwyrm_tail"):
+				var visual := SpriteVisual.attach(marker, &"coinwyrm_tail") as SpriteVisual
+				visual.position = origin - at
+				visual.play_anim(&"tell")
+			marker.finished.connect(_strike.bind(at, Vector2.RIGHT, true, origin))
 		return
 
 
-func _strike(at: Vector2, direction: Vector2, tail: bool) -> void:
+func _light_tail_band(parent: Node2D) -> void:
+	for x in range(-768, 769, 256):
+		var light := PointLight2D.new()
+		light.texture = LightTexture.make()
+		light.texture_scale = LightTexture.scale_for(180.0)
+		light.color = Color(1.0, 0.72, 0.3)
+		light.energy = 0.7
+		light.position.x = x
+		parent.add_child(light)
+
+
+func _strike(at: Vector2, direction: Vector2, tail: bool, origin := Vector2.INF) -> void:
 	if is_dying() or is_dead or is_pausing() or state != &"rear":
 		return
 	var strike := Strike.new()
+	strike.tail = tail
+	strike.facing = direction
 	var box := Hitbox.new()
 	box.team = Layers.Team.ENEMY
 	box.damage = 3 if tail else 4
@@ -270,7 +445,34 @@ func _strike(at: Vector2, direction: Vector2, tail: bool) -> void:
 	strike.box = box
 	get_parent().add_child(strike)
 	strike.global_position = at
+	if tail:
+		_light_tail_band(strike)
+		if SpriteVisual.has_art(&"coinwyrm_tail"):
+			var holder := Node2D.new()
+			get_parent().add_child(holder)
+			holder.global_position = origin
+			add_hazard(holder)
+			var effect := SpriteVisual.attach(holder, &"coinwyrm_tail") as SpriteVisual
+			effect.animation_finished.connect(_tail_animation_finished.bind(effect))
+			effect.play_anim(&"sweep")
+			var light := PointLight2D.new()
+			light.texture = LightTexture.make()
+			light.texture_scale = LightTexture.scale_for(150.0)
+			light.color = Color(1.0, 0.72, 0.3)
+			light.energy = 0.8
+			holder.add_child(light)
+	else:
+		_light_bite(strike, direction)
 	add_hazard(strike)
+
+
+func _tail_animation_finished(effect: SpriteVisual) -> void:
+	if not is_instance_valid(effect):
+		return
+	if effect.animation == &"sweep":
+		effect.play_anim(&"burrow")
+	else:
+		effect.get_parent().queue_free()
 
 
 func _on_hurt(hit: Hitbox) -> void:

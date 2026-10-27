@@ -1,0 +1,66 @@
+C1 visual review — 2026-10-27, working-tree capture baseline
+
+Reviewed contact-c1.png and all nine full-size images in
+/tmp/wick-capture-20261027-current/: cave_1, cave_1_2 through cave_1_8,
+and cave_1_6#crack. The capture index reports 1920x1080, 30 physics frames,
+seed 1, fresh GameState, default spawn, no granted tools or flags; graph source
+hash 0c5cf8c81ad865e57b289329794076fe4ed34d9e5b90595f1548ea2ae4791a74.
+These are controlled portraits, not an earned route or human playthrough. The
+contact sheet and full-size captures are the same baseline; later working-tree
+changes could make them stale. No new captures or game tests were run.
+
+Priority findings for triage:
+- OPEN, B01: cave_1_8's east kiln mouth is a dark, flat rectangular geometric
+  placeholder, visible at the right edge of the full-size portrait. The actual
+  arena scene declares Visual as Placeholder kind kiln_mouth. Status records
+  rejected candidate images because of halo/alpha spill; see state.md and
+  tools/source_art/b01_kiln_mouth_candidate_v20261025{a,b,c}.png. Inspect a
+  lit, active fight before accepting replacement art.
+- REVIEW, lighting/readability: normal dark-room captures leave distant foes,
+  exits and rewards extremely dim. In particular, the C1 key behind the grate,
+  the Cinder Wick pedestal, the Lockpick pedestal and the boss are hard to read
+  from their default spawn positions. The lamp is local and moving closer may
+  resolve this; these stills do not establish a defect in actual play. Review
+  approaches, attack warnings and gate state transitions with the player nearby.
+- REVIEW, cave_1_5: the closed south gate is rendered below the room floor,
+  with much of its arch near or beyond the bottom of the screen. Inspect the
+  transition from cave_1_4 and open/return states; this portrait alone does not
+  establish a collision or reachability defect.
+
+Room-by-room, observed fresh state:
+cave_1 (Cellar Hub): south cave mouth, two unlit braziers, closed alcove gate,
+  rock obstacles and three dim Hollows visible; no obvious geometric fallback.
+  The alcove key and east/west approaches are dark at this position.
+cave_1#alcove: in-place pocket, included in cave_1 portrait; its closed gate
+  and a very dim key beyond it are visible. Lit-brazier/open-gate and collection
+  states not reviewed.
+cave_1_2 (Spent Wicks): stone blocks, rocks, two moth silhouettes and two dim
+  ground enemies visible; north/east openings are dark. No clear placeholder.
+cave_1_3 (Grated Store): low fence across the alcove is painted; the small key
+  behind it is barely visible above the fence. Two enemies are dim. Moth fetch
+  and player-blocking behavior cannot be judged from the still.
+cave_1_4 (Kiln Hall): paired unlit braziers, closed north gate and east lock
+  are visible, though gate and lock are at dark screen edges. Two Hollows and
+  a Spitcap are dim. Lit, open and unlocked states not reviewed.
+cave_1_5 (Wax Stair): Hollow Captain, two unlit braziers, south gate and distant
+  pedestal visible. Captain and Cinder Wick are very dim; gate extends down to
+  screen edge. Captain action, victory and pickup states not reviewed.
+cave_1_6 (Kiln Row): painted cracked north wall, west lock, east boss door,
+  two dim Hollows and a lit-by-lamp Tallow blob visible. Wall opening and door
+  transitions not reviewed; no obvious geometric fallback in this portrait.
+cave_1_6#crack: standalone pocket portrait shows painted south exit, rocks and
+  dim cache. Cache interaction and return through the revealed doorway not
+  reviewed; no obvious geometric fallback.
+cave_1_7 (Ash Closet): two dim Skitterwicks, rocks and a distant pedestal are
+  visible; the Lockpick is not distinguishable from this position. Approach and
+  pickup state not reviewed.
+cave_1_8 (Kilnkeeper's Floor): entrance door, four dark pillars, very dim painted
+  Kilnkeeper and rectangular kiln-mouth fallback visible. Portrait is during
+  initial entry, not an active phase or victory. Boss warnings, armour melt,
+  phase two, rewards and exit require separate action-state visual review.
+
+A dark region or a door at a screen edge is not by itself proof of an impassable
+route. No conclusion about full-room collision, gameplay balance, saved state,
+opened gates, transient effects, or all animation frames follows from these stills.
+Q5 owns this report; any fix should be assigned through the applicable owner or
+an explicit Z1 ticket rather than made during review.

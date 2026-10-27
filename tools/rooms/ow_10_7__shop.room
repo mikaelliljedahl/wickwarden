@@ -12,6 +12,8 @@ grid
 #..................#
 #..................#
 ####################
+decor npc_pilgrim @1080,250
+prop shop_counter @960,300 size=192,72
 prop wall 3,3 size=96,288
 prop wall 16,3 size=96,288
 prop pedestal 6,3

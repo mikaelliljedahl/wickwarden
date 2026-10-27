@@ -78,6 +78,7 @@ func _world_plate_capture() -> void:
 	# Optional graphics proof runs only in an isolated project with the reviewed real mapping.
 	reset_state()
 	check(SpriteVisual.has_art(&"lock_plate"), "World proof requires real plate mapping")
+	check(SpriteVisual.has_art(&"lock_warden"), "World proof requires real body mapping")
 	var viewport := SubViewport.new()
 	viewport.size = Vector2i(1920, 1080)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
@@ -88,6 +89,7 @@ func _world_plate_capture() -> void:
 	world.start_at(&"cave_9_10")
 	var room := world.get_room(&"cave_9_10")
 	var boss = room.get_node("Enemies/LockWarden1")
+	check(boss.get_node("Visual") is SpriteVisual, "World boss uses painted body")
 	var player := world.player
 	player.set_hurtbox_enabled(self, false)
 	GameState.acquire_item(&"pitch_pot")
@@ -124,9 +126,29 @@ func _world_plate_capture() -> void:
 		check_eq(boss.plates.size(), 3 - i, "World pot removes exactly one target")
 	check_eq(boss.phase, 2, "World four real targets unlock core phase")
 	check_eq(boss.hp, 24, "World painted targets preserve core health")
-	check(boss.has_node("KeyholeVisual"), "unaccepted keyhole keeps procedural visual")
+	check(boss.has_node("KeyholeVisual"), "keyhole state overlay remains present")
 	await seconds(0.7)
 	await _capture_world_plate(viewport, "plates-removed")
+	boss._open_core()
+	await _capture_world_plate(viewport, "core-open")
+	await seconds(2.0)
+	boss._deadbolt()
+	await seconds(0.6)
+	var has_deadbolt := false
+	for hazard in boss._hazards:
+		if is_instance_valid(hazard) and hazard.get_script() == boss.get_script().Deadbolt:
+			has_deadbolt = true
+	check(has_deadbolt, "actual C9 capture contains a live deadbolt")
+	await _capture_world_plate(viewport, "deadbolt")
+	boss._volley()
+	await seconds(0.35)
+	var key_count := 0
+	for hazard in boss._hazards:
+		if is_instance_valid(hazard) and hazard is EnemyProjectile:
+			if hazard.visual_kind == &"lock_key_volley":
+				key_count += 1
+	check(key_count > 0, "actual C9 capture contains painted keys")
+	await _capture_world_plate(viewport, "key-volley")
 	await dispose(viewport)
 
 
@@ -221,6 +243,25 @@ func _attacks_and_reset() -> void:
 		check_near(key.speed, 260, 0.01, "key speed")
 		check_eq(key.damage, 2, "key damage")
 		check(key.hitbox.blockable, "ward blocks keys")
+		check_eq(key.visual_kind, &"lock_key_volley", "volley uses key art")
+		if SpriteVisual.has_art(&"lock_key_volley"):
+			var visual := key.get_node("Visual") as SpriteVisual
+			check(visual != null, "key has painted visual")
+			if visual != null:
+				check_near(
+					visual.rotation,
+					key.direction.angle() - deg_to_rad(20.0),
+					0.01,
+					"key faces flight"
+				)
+	if not keys.is_empty() and SpriteVisual.has_art(&"lock_key_volley"):
+		keys[0].destroy(&"wall")
+		var effect := boss.get_parent().get_node_or_null("Puff") as SpriteVisual
+		check(effect != null, "wall collision creates painted key impact")
+		if effect != null:
+			check_eq(effect.animation, &"impact", "collision plays impact frames")
+		await seconds(0.6)
+		check(not is_instance_valid(effect), "key impact cleans itself up")
 	# Controlled timer fixture isolates the actual deadbolt geometry and player physics.
 	boss.clear_hazards()
 	boss.bolt_left = 0
@@ -230,6 +271,19 @@ func _attacks_and_reset() -> void:
 	GameState.full_heal()
 	await seconds(1.9)
 	check_eq(GameState.health, 40, "192px slot is safe")
+	var bolt: Node2D
+	for hazard in boss._hazards:
+		if is_instance_valid(hazard) and hazard.get_script() == boss.get_script().Deadbolt:
+			bolt = hazard
+	check(bolt != null, "sweep creates a live deadbolt")
+	if bolt != null and SpriteVisual.has_art(&"lock_deadbolt"):
+		var segments := bolt.get_node("Visual").get_children()
+		check_eq(segments.size(), 2, "painted sweep has two segments")
+		if segments.size() == 2:
+			check_eq(segments[0].position.y, 240.0, "upper art aligns with hitbox")
+			check_eq(segments[1].position.y, 720.0, "lower art aligns with hitbox")
+			check(segments[0].get_node("Visual") is SpriteVisual, "upper sweep uses art")
+			check(segments[1].get_node("Visual") is SpriteVisual, "lower sweep uses art")
 	await _capture(room, "deadbolt")
 	player.place_at(Vector2(600, 288))
 	await seconds(1.1)

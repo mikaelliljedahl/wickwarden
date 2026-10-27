@@ -16,6 +16,9 @@ const WORLD_SCENE := "res://scenes/world/world.tscn"
 
 
 func run() -> void:
+	if "--pause-flow-probe" in OS.get_cmdline_user_args():
+		await _pause_flow_probe()
+		return
 	_clean()
 	await _menu_list()
 	await _keys_reach_the_menu_list()
@@ -32,6 +35,7 @@ func run() -> void:
 	await _quit()
 	await _title_music()
 	_intro_flag_and_launch_arguments()
+	_launch_return_processes()
 	_clean()
 	SaveGame.enabled = false
 	SaveGame.launch_mode = SaveGame.MODE_DEV
@@ -315,6 +319,62 @@ func _intro_flag_and_launch_arguments() -> void:
 		not script.skips_title(PackedStringArray(["--test=res://tests/test_title.gd"])),
 		"the test argument does not skip the title"
 	)
+
+
+## Run with real launch arguments in child processes. The runner provides an isolated user://;
+## children inherit that environment and the --test flag disables saving.
+func _launch_return_processes() -> void:
+	for argument in ["--dev-mode", "--start-room=ow_1_1:Default"]:
+		var output: Array = []
+		var args := PackedStringArray([
+			"--headless", "--path", ProjectSettings.globalize_path("res://"),
+			"res://tests/runner.tscn", "--", "--test=res://tests/test_title.gd",
+			"--pause-flow-probe", argument,
+		])
+		var result := OS.execute(OS.get_executable_path(), args, output, true)
+		check_eq(result, 0, "%s initial launch and actual return: %s" % [argument, output])
+		check("ERROR:" not in str(output), "%s has no engine or script errors" % argument)
+		check("ObjectDB instances leaked" not in str(output), "%s leaks no objects" % argument)
+
+
+func _pause_flow_probe() -> void:
+	var tree := get_tree()
+	var runner := tree.current_scene
+	var scene := load(TITLE_SCENE) as PackedScene
+	var initial = scene.instantiate()
+	tree.root.add_child(initial)
+	tree.current_scene = initial
+	await frames(10)
+	var world := tree.current_scene
+	check(world != null and world.scene_file_path == WORLD_SCENE, "arguments autostart the world")
+	if world == null or world.scene_file_path != WORLD_SCENE:
+		tree.current_scene = runner
+		return
+	if "--dev-mode" in OS.get_cmdline_user_args():
+		check(GameState.has_item(&"reel_line"), "dev autostart grants the dev loadout")
+	else:
+		check_eq(world.get_current_room_id(), &"ow_1_1", "autostart uses the requested room")
+	var pause = world.get_node("PauseMenu")
+	pause.set_open(true)
+	pause._activate(1)
+	await frames(10)
+	var title = tree.current_scene
+	check(title != null and title.scene_file_path == TITLE_SCENE, "return remains on the title")
+	check(not tree.paused, "return unpauses the tree")
+	if title != null and title.scene_file_path == TITLE_SCENE:
+		check(title.menu() != null, "the returned title presents its menu")
+	check(not tree.root.has_meta(&"pause_return_to_title"), "return marker is consumed")
+	# A later normal title creation must still honour the original launch arguments.
+	var later = scene.instantiate()
+	later.dry_run = true
+	tree.root.add_child(later)
+	await frames(3)
+	check_eq(later.last_scene, WORLD_SCENE, "the return marker does not suppress later autostart")
+	later.queue_free()
+	tree.current_scene = runner
+	if title != null:
+		title.queue_free()
+	await frames(3)
 
 
 # ---- Helpers ----------------------------------------------------------------------------------

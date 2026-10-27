@@ -1,0 +1,72 @@
+C9 visual review — 2026-10-27
+
+Reviewed contact-c9.png and all 12 full-size images in
+/tmp/wick-capture-20261027-current: cave_9_1 through cave_9_10 and the
+cave_9_2#cell and cave_9_9#vault pockets. The sheet labels all 12 once.
+The index records 1920x1080, 30 physics frames, seed 1, fresh GameState,
+Default spawn, no granted items or flags; C9 captures are not dark. They are
+controlled stills, not an earned route or human playthrough. No new captures
+or game tests were run. Current room sources and Lock Warden code were read
+alongside docs/state.md; the captured images are not proof of current rendering.
+
+Triage: C9's rooms repeatedly use the same mossy stone shelf blocks and dark
+rock floor. In these stills the intended letters, murals and workshop character
+are not visually apparent; the plan describes a workshop with letters and
+murals. Distinguishing decorative shelves from solid obstacles and reading small
+keys and the big key at a glance merit a moving-play review. Rectangular pits
+have sharp, dark borders; check their edges and anchor crossings in motion.
+There is no basis here for claiming a blocked route or failed interaction.
+
+cave_9_1 (Hidden Stair): return mouth and both Hollows are visible. Player's
+  feet visually meet the lower-left shelf at spawn; check movement and depth
+  ordering there. Entrance and return transitions are not shown.
+cave_9_2 (Letters Hall): thorn wall, east lock, eye cell and switch are visible;
+  the switch's closed eye is small relative to the gate and its relationship
+  to the cell is not obvious from this still. A Hollow overlaps the upper-right
+  shelf visually. Check approach, shot, opening and transition in motion.
+cave_9_2#cell (Eye Cell): cache and exit are visible; cache is a small round
+  icon, not readily identifiable as contents at this distance. Opening,
+  collection and return are unreviewed.
+cave_9_3 (Wax Study): key and two Wicklings are visible, though the small key
+  blends into the brown floor at a glance. Thorn wall and key collection are
+  shown only in the closed/uncollected state.
+cave_9_4 (Corrow's Workbench): automaton, two pot refills, lock and mooring
+  are visible. The water and mooring are cropped at the right edge; boarding,
+  crossing, miniboss tells, attacks and refill use need moving review. The
+  repeated stone shelves read more like masonry than workbenches.
+cave_9_5 (Flooded Cellar): water, mooring, heavy stone, pit and two blobs are
+  visible. Shallows overlap the lower-left shelf visually; the dark rectangular
+  pit at the north opening looks distinct from the water but its edge and
+  crossing need motion review. Submerged leeches and their attacks, lifting,
+  rafting and transitions are not shown.
+cave_9_6 (Pit Landing): key, Skitterwicks and both anchor rings are visible.
+  Key is small against the floor; the large pit's sharp rectangular boundary and
+  the narrow connection to the stone wall merit review while aiming and
+  crossing. Ring interaction and return are not shown.
+cave_9_7 (Anchor Shaft): rings and pit are visible. The big key on the distant
+  pedestal is hard to distinguish from the pedestal's gold detail; one
+  Wickling overlaps the player in this damage frame. Review pickup, crossing,
+  enemy motion and damage feedback in play.
+cave_9_8 (Heavy Door Hall): heavy stone, west lock, Hollows and Wickling are
+  visible. The north stone sits within the doorway and the lower Hollow's
+  sprite meets the shelf; inspect lifting, movement and depth ordering rather
+  than infer collision from the image. Unlock and transitions are unshown.
+cave_9_9 (Lock Antechamber): circular resonance vault and both doors are visible;
+  the south boss door is cropped at the screen edge. Its opening, chime
+  interaction, vault transition and approaching enemies are unreviewed.
+cave_9_9#vault (Reserve Vault): cache and slug bundle are visible; the cache's
+  flame-like highlight partly obscures its shape. Opening, supplies collection
+  and return are unreviewed.
+cave_9_10 (Lock Floor): the capture and sheet show a flat ochre rectangle with
+  two circles: a conspicuous geometric boss placeholder in those images. This
+  observation is stale for the normal current art path: state records a painted
+  still body with four plate targets and a later painted deadbolt and key volley;
+  lock_warden.gd attaches those art kinds and retains geometric fallbacks when
+  art is unavailable. The body remains a still. No current render was made in
+  this review; inspect actual current closed/open plates, keyhole, projectile,
+  sweep warning and active sweep, phase change, rewards and return in motion.
+
+These images show only one sampled state per room. Opening gates, item use,
+closer approaches, combat tells and later states remain visually unverified by
+this review. The pit and shelf observations concern appearance, not a collision
+or reachability verdict. Q5 records findings; fixes belong to their owners or Z1.

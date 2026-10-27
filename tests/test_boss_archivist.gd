@@ -7,6 +7,7 @@ const SCENE := "res://scenes/enemies/bosses/archivist.tscn"
 func run() -> void:
 	await _shadow_lifecycle()
 	await _copy_challenge()
+	await _effects()
 	await _attacks_and_reset()
 	await _ward()
 	await _physical_finish()
@@ -161,6 +162,36 @@ func _copy_challenge() -> void:
 	check(boss.copies.is_empty(), "reset clears copies")
 	check(boss.is_in_intro(), "reset intro restored")
 	await dispose(room)
+
+
+func _effects() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = make_enemy(arena, SCENE, Vector2(960, 480))
+	await seconds(1.6)
+	boss._bolt(Vector2(800, 480), Vector2.RIGHT, 300)
+	var bolt := get_tree().get_nodes_in_group(&"projectiles")[0] as EnemyProjectile
+	var bolt_visual := bolt.get_node_or_null("Visual") as SpriteVisual
+	check(bolt_visual != null, "ink bolt uses painted sprite")
+	if bolt_visual != null:
+		check_eq(bolt_visual.sprite_frames.get_frame_count(&"idle"), 2, "ink bolt animates")
+		check_near(bolt_visual.rotation, -deg_to_rad(20.0), 0.001, "ink points in flight direction")
+	var bolt_light := bolt.get_node_or_null("InkLight") as PointLight2D
+	check(bolt_light != null and not bolt_light.is_in_group(&"glow_light"), "bolt light cannot reveal boss")
+	boss.spatter(Vector2(600, 480))
+	var burst := arena.get_child(arena.get_child_count() - 1) as Node2D
+	var burst_visual := burst.get_node_or_null("Visual") as SpriteVisual
+	check(burst_visual != null, "spatter uses painted sprite")
+	check(burst.get_node_or_null("InkLight") != null, "spatter has presentation light")
+	check(not burst.get_node("InkLight").is_in_group(&"glow_light"), "spatter cannot reveal boss")
+	var box := burst.get("box") as Hitbox
+	check_eq(box.damage, 2, "spatter retains damage")
+	check(not box.blockable, "spatter remains unblockable")
+	var shape := box.get_child(0) as CollisionShape2D
+	check_near((shape.shape as CircleShape2D).radius, 100.0, 0.001, "spatter radius unchanged")
+	await frames(4)
+	check(not is_instance_valid(burst), "spatter clears after three physics frames")
+	await dispose(arena)
 
 
 func _attacks_and_reset() -> void:

@@ -13,6 +13,7 @@ func run() -> void:
 	await _equip()
 	await _gamepad()
 	await _pause_interplay()
+	await _pause_choices()
 	await _status_draws()
 	await _item_art()
 	get_tree().paused = false
@@ -160,6 +161,44 @@ func _pause_interplay() -> void:
 	check(not get_tree().paused, "the tree runs after the pause menu closed")
 	await dispose(pause_menu)
 	await dispose(item_menu)
+
+
+func _pause_choices() -> void:
+	reset_state()
+	var menu = await _make_pause()
+	menu.dry_run = true
+	await _tap(&"pause")
+	check_eq(menu._selected, 0, "pause defaults to Resume")
+	await _tap(&"move_right")
+	check_eq(menu._selected, 1, "movement selects Back to title")
+	await _tap(&"confirm")
+	check_eq(menu.last_scene, "res://scenes/ui/title.tscn", "confirm requests the title")
+	check(get_tree().paused, "test transition leaves the paused tree intact")
+	menu.last_scene = ""
+	await _joy_button(JOY_BUTTON_DPAD_LEFT)
+	await _joy_button(JOY_BUTTON_A)
+	check(not menu.is_open and not get_tree().paused, "controller resumes play")
+	await _tap(&"pause")
+	menu._buttons[1].pressed.emit()
+	check_eq(menu.last_scene, "res://scenes/ui/title.tscn", "mouse button activates title")
+	menu.set_open(false)
+	# The test runner isolates user://; exercise a real save and its deferred update.
+	SaveGame.enabled = true
+	SaveGame.launch_mode = SaveGame.MODE_NEW
+	GameState.mark_visited(&"ow_0_0")
+	GameState.add_currency(17)
+	SaveGame.request_save()
+	menu.set_open(true)
+	menu._activate(1)
+	check(SaveGame.has_save(), "return flushes a pending autosave")
+	GameState.reset()
+	check(SaveGame.load_into_state(), "the returned-to-title save loads")
+	check_eq(GameState.currency, 17, "the save contains the latest run state")
+	SaveGame.erase()
+	SaveGame.enabled = false
+	SaveGame.launch_mode = SaveGame.MODE_DEV
+	menu.set_open(false)
+	await dispose(menu)
 
 
 ## Draws the screen in the states that matter: nothing found, a few found, a cave with a big key and

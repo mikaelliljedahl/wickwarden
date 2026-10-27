@@ -1,0 +1,66 @@
+C10 visual review — 2026-10-27
+
+Reviewed contact-c10.png and all fifteen full-size images in
+/tmp/wick-capture-20261027-current: cave_10_1 through cave_10_14 and
+cave_10_10#ward. The sheet labels each once. The index records 1920x1080,
+30 physics frames, seed 1, fresh state, default spawn, no granted items or
+flags and dark rooms. These are controlled stills, not an earned route or human
+playthrough. Current room sources, The Unlit script and state were checked;
+no new captures or game tests were run.
+
+Triage: distant keys, enemies, gates, pits and anchors are frequently very dim
+at the captured positions. Pit and water boundaries in rooms 5 and 8–10 need
+closer moving review, especially where masonry meets their edges. Several
+sprites visually meet walls or the player; a still cannot establish collision,
+blocked routes or depth-order faults. The repeated stone masonry offers little
+visual differentiation of the named rooms in these views.
+
+cave_10_1 (Ninth Stair): return mouth is visible; one hound overlaps the player
+  visually at spawn and another is dim. Check contact, motion and transitions.
+cave_10_2 (Root Hall): the near hound is lit; distant hound, Hollow, north thorn
+  barrier and east lock are dark. Check burning, unlocking and enemy approach.
+cave_10_3 (Wax Gardens): south thorn barrier is clear; key and hounds are very
+  faint, one Wickling is nearer the light. Check burn, pickup and return.
+cave_10_4 (Hollow Gate): Corrow's Echo and east mooring are extremely dark from
+  the west spawn. Review miniboss tells, combat, boarding and transition.
+cave_10_5 (Drowned Choir): water areas, left mooring and south heavy stone are
+  dark; two Choirlings are partly visible. Leeches and hidden seam cannot be
+  assessed here. Review rafting, lifting, reveal, water edges and combat.
+cave_10_6 (Mirror Walk): the shades are barely distinguishable and the east
+  resonance prop is cut by the screen edge. Review jar reveal, chime and
+  transitions from closer positions.
+cave_10_7 (Chime Landing): enemies and far pedestal are dim; the key is hard
+  to identify and the west resonance prop is partly cropped. Review chime,
+  key collection, enemy motion and return.
+cave_10_8 (Heavy Span): near hound and Hollow are lit; the other Hollow, north
+  heavy stone and east pit are dark. Check lifting, leap and pit boundary.
+cave_10_9 (Pit Rows): player appears at the top edge of a masonry block; pits,
+  anchors and distant hound and Skitterwicks are dim. Check depth ordering and
+  actual footing, leap and reel crossing in motion.
+cave_10_10 (Anchor Drop): near anchor and ward plate are lit; far ring, lock,
+  eyes and hound are dark. The pit is visible at its near edge. Check reel
+  crossing, ward access, enemy attacks and opening the west door.
+cave_10_10#ward (Ward pocket): entry door is lit; the round cache to the north
+  is very faint and its contents are not identifiable. Ward entry, opening,
+  collecting the cache and return are unreviewed.
+cave_10_11 (Key Vault): the near hound overlaps the player visually; the other
+  hound meets the lower-left block and the key and Hollows are faint. Check
+  movement/depth, pickup and both locks in play.
+cave_10_12 (Eye Hall): slug bundle is lit; eye switch, north grate, boss door
+  and watcher eyes are dark at a distance. Review shot, gate opening, projectiles
+  and both doors, including the boss transition.
+cave_10_13 (Bigkey Chamber): south grate is visible, but big key and enemies
+  are barely readable in the distance. Review approach, pickup and return.
+cave_10_14 (The Ninth Lantern): the central phase-one mass is very dark, with
+  three long lines toward the north; the entry door is lit. The still predates
+  later presentation: current the_unlit.gd selects painted shell and heart,
+  separate lantern and eye art; state records local eye lights and that the
+  contracted eye orbit crosses the north wall and HUD. No current render was
+  made here. Review eye visibility/reachability at that boundary, gaze tells,
+  hands, phase transitions, shell and heart exposure, lantern/reel interaction,
+  all attacks, ending choice and return in active human play. Shell/heart/eyes
+  are recorded stills and several animations remain open.
+
+Opening, revealing, item use, crossings, active combat, ending and transitions
+are explicitly unreviewed by these stills. Darkness limits missing-art conclusions;
+Q5 records observations for owner/Z1 triage rather than making fixes.

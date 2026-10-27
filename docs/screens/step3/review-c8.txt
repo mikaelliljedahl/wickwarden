@@ -1,0 +1,57 @@
+C8 visual review — 2026-10-27
+
+Reviewed contact-c8.png and all twelve full-size cave_8_1 through cave_8_12
+images in /tmp/wick-capture-20261027-current; the sheet labels each once.
+The graph and capture inventory have no separate C8 pocket. The index records
+1920x1080, 30 physics frames, seed 1, fresh state, default spawn, no granted
+items or flags and dark rooms. These are controlled stills, not an earned route
+or human playthrough. Current room sources, Coinwyrm script and state were
+checked; no new captures or game tests were run.
+
+Triage: small keys and distant locks, enemies and anchor rings are dim at these
+spawn positions. The pit rectangles in rooms 5–7 have very low contrast with
+the surrounding dark floor; check edges, aiming and landing while moving with
+the lamp. The repeated stone masonry does not strongly convey a counting house
+in these stills. No collision, interaction or path blockage can be inferred.
+
+cave_8_1 (Tally Hall): resonance return door is visible near the player;
+  two crabs and moth are dark, and the lower crab visually meets a masonry
+  block. Check movement and depth ordering, chime and both transitions.
+cave_8_2 (Scale Room): a Hollow is lit beside the player; the north barred
+  door, eye switch, east lock, two other Hollows and supply bundle are dim.
+  Review eye shot, opening and unlock from closer positions.
+cave_8_3 (Weighing Loft): south grate is clear, but the key, two Wicklings
+  and eye switch are faint. Check pickup, enemy approach and return.
+cave_8_4 (Ledger Hall): Abacus Brute is very dark at the far side although
+  part of its bright cue is visible. Check warning, movement, attacks and the
+  eastward exit in actual play.
+cave_8_5 (Coin Press): nearby anchor is lit; the Reel Line on its left pedestal,
+  far anchor, Hollows and central pit are dark. Inspect pickup, aim, crossing
+  and pit boundary from both sides.
+cave_8_6 (Anchor Gallery): nearby ring, key and one Wickling are visible;
+  the other ring and pit are very dark, as is the second Wickling. Review
+  collection, reel crossing and the east boots leap.
+cave_8_7 (Gilded Walk): crabs and big-key pedestal are dark; the key is hard
+  to distinguish and the west pit is faint. Check leap, pickup and return.
+cave_8_8 (Strongroom Hall): one blob is lit, the other blob and crabs are dim;
+  the lower-left crab visually meets the wall. East lock is at the edge. Check
+  enemy motion around masonry and unlock; the still does not prove overlap.
+cave_8_9 (Locked Till): small key and Hollows are faint against the floor;
+  the west lock is partly at the edge. Check collection and transition.
+cave_8_10 (Counting Floor): one Wickling is lit near spawn, two and the west
+  lock are dim. Check movement between blocks and unlocking.
+cave_8_11 (Auditor's Gate): east lock is lit, west boss door and two crabs are
+  dark. Review boss-door opening and the crossing under normal play.
+cave_8_12 (Hoard Floor): the still shows dark geometric heap ellipses and a
+  round boss placeholder. This baseline is stale: state and coinwyrm.gd record
+  painted heap cues, bare head and reelable plates, lit plate outlines, coin
+  projectiles and tail art, plus illuminated bite and sweep sectors. Head and
+  plates remain stills. No current render was made here. Review heap tells,
+  plate removal, crown, bare head, bite, volley, tail tell/strike/burrow,
+  phase change, rewards and return in active human play. State records that the
+  owner defeated the boss after learning Reel Line; tool discoverability remains
+  open, despite the newer target cues.
+
+The sheet and stills do not show active item use, falls, combat or door
+transitions. Those states and near-field readability are explicitly unreviewed
+here; Q5 records observations for owner/Z1 triage rather than making fixes.

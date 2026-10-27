@@ -168,6 +168,14 @@ func _real_jet_and_ward() -> void:
 			check_eq(jet.damage, 1, "water jet damage1")
 			check_eq(jet.speed, 200.0, "water jet speed200")
 			check(jet.hitbox.blockable, "water jet ward blockable")
+			var visual := jet.get_node_or_null("Visual") as SpriteVisual
+			check(visual != null, "water jet uses painted sprite")
+			if visual != null:
+				check_eq(visual.sprite_frames.get_frame_count(&"idle"), 2, "jet flight has two frames")
+				check_near(visual.rotation, jet.direction.angle(), 0.001, "jet follows flight direction")
+			var light := jet.get_node_or_null("WaterJetLight") as PointLight2D
+			check(light != null and not light.is_in_group(&"glow_light"), "jet light is presentation only")
+			check_near(jet.radius, 12.0, 0.001, "water jet collision radius unchanged")
 			await _capture("lurker-jet")
 			await frames(120)
 			check(not is_instance_valid(jet), "real jet consumed on ward or hit")

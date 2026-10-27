@@ -166,7 +166,7 @@ func _enter_and_leave() -> void:
 	await frames(2)
 
 
-## Audit the 26 built overworld/pocket entrances, plus the historical cave exit.
+## Audit the built overworld/pocket entrances, plus the historical cave exit.
 func _built_entrance_looks() -> void:
 	var count := 0
 	for pocket_id in RoomDoor.POCKET_LOOKS:
@@ -204,7 +204,7 @@ func _built_entrance_looks() -> void:
 					"%s preserves the real cave entrance" % id
 				)
 		await dispose(room)
-	check_eq(count, 27, "all 26 built entrances and the cave exit audited")
+	check_eq(count, 31, "all 30 built entrances and the cave exit audited")
 
 
 ## Standalone indoor pockets use plain portals on both sides, even in dark caves.

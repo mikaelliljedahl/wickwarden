@@ -1,5 +1,6 @@
 room ow_5_7#shop
 terrain Stone mason: four wares on a cut-stone counter
+stone_interior
 floor_color 0.23 0.23 0.21
 grid
 ####################
@@ -12,6 +13,8 @@ grid
 #..................#
 #..................#
 ####################
+decor npc_mason @1080,250
+prop shop_counter @960,300 size=192,72
 prop wall 3,3 size=96,288
 prop wall 16,3 size=96,288
 prop pedestal 6,3

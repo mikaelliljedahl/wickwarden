@@ -182,6 +182,14 @@ class PocketDarkness(unittest.TestCase):
 
 
 class RoundTrip(unittest.TestCase):
+    def test_stone_interior_is_explicit_and_validated(self):
+        source = FIXTURE_ROOM.read_text(encoding="utf-8")
+        text, errors = compile_text(source.replace("grid\n", "stone_interior\ngrid\n", 1), real_world())
+        self.assertEqual(errors, [])
+        self.assertIn("stone_interior = true", text)
+        _, errors = compile_text(source.replace("grid\n", "stone_interior yes\ngrid\n", 1), real_world())
+        self.assertTrue(any("stone_interior takes no arguments" in error for error in errors))
+
     def test_ow_0_1_matches_the_hand_made_scene(self) -> None:
         text, errors = compile_text(FIXTURE_ROOM.read_text(encoding="utf-8"), real_world())
         self.assertEqual(errors, [])
@@ -347,6 +355,21 @@ class Scopes(unittest.TestCase):
 
 
 class PropKinds(unittest.TestCase):
+    def test_shopkeeper_is_decorative_and_counter_is_solid(self) -> None:
+        world = world_of([room_record("ow_5_5", [])])
+        text = room_text("ow_5_5", [], "decor npc_tilly 9,2\nprop shop_counter 9,3 size=192,72")
+        result, errors = compile_text(text, world, "ow_5_5.room")
+        self.assertEqual(errors, [])
+        self.assertIn('path="res://scripts/world/shop_decoration.gd"', result or "")
+        self.assertIn('kind = &"npc_tilly"', result or "")
+        self.assertIn('kind = &"shop_counter"', result or "")
+        self.assertIn('size = Vector2(192, 72)', result or "")
+
+    def test_unknown_decor_is_rejected(self) -> None:
+        world = world_of([room_record("ow_5_5", [])])
+        _, errors = compile_text(room_text("ow_5_5", [], "decor unknown 9,2"), world, "ow_5_5.room")
+        self.assertTrue(any("decor kind must be" in e for e in errors), errors)
+
     def test_visual_offset_changes_only_presentation(self) -> None:
         world = world_of([room_record("ow_5_5", [])])
         source = room_text("ow_5_5", [], "prop hut 5,5 size=192,96")

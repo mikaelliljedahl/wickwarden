@@ -153,7 +153,8 @@ OPENER_OPTS = ("id", "size", "scope", "look", "braziers")
 PROP_SIZE = (96, 96)
 # Solid kinds a `prop` line may place: plain SolidBlocks in the hand-made scenes. A prop with its own script
 # (burnable, gate, eye switch, ...) needs its own entity kind here first, so it cannot compile as a plain block.
-PROP_KINDS = ("hut", "pedestal", "sign_post", "wall", "water", "rock", "tree", "reed")
+PROP_KINDS = ("hut", "pedestal", "sign_post", "wall", "water", "rock", "tree", "reed", "shop_counter")
+DECOR_KINDS = ("npc_tilly", "npc_peddler", "npc_ashwife", "npc_mason", "npc_pilgrim", "npc_keeper")
 POS_RE = re.compile(r"^(@)?(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)$")
 IDENT_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 ENTITY_OPTS = {
@@ -173,6 +174,7 @@ ENTITY_OPTS = {
     "brazier": ("id",),
     "pickup": ("id", "requires", "scope"),
     "prop": ("size", "visual_offset"),
+    "decor": (),
     "opener": OPENER_OPTS,
     "door": ("blocker",),
     "hidden_stairs": ("id",),
@@ -414,6 +416,7 @@ class Source:
         self.room_line = 1
         self.floor: tuple[float, float, float] | None = None
         self.terrain: str | None = None
+        self.stone_interior = False
         self.grid: list[str] = []
         self.grid_lines: list[int] = []
         self.entities: list[Entity] = []
@@ -473,6 +476,11 @@ def parse_source(path: Path, errors: list[str]) -> Source | None:
                 errors.append(f"{where(path, lineno)}: floor_color takes three values from 0 to 1")
         elif verb == "terrain":
             src.terrain = body[len("terrain") :].strip()
+        elif verb == "stone_interior":
+            if len(tokens) != 1:
+                errors.append(f"{where(path, lineno)}: stone_interior takes no arguments")
+            else:
+                src.stone_interior = True
         elif not src.grid:
             errors.append(f"{where(path, lineno)}: '{verb}' comes before the grid block")
         else:
@@ -692,6 +700,17 @@ def dispatch(ent: Entity, seq: int, src: Source, plan: Plan, world: World, error
         node = Node(ent.args[0], "Spawns", "Marker2D")
         node.props = [("position", vec2(*ent.pos))]
         plan.spawns.append((ent.args[0], ent.tile, node))
+        return True
+    if ent.verb == "decor":
+        if len(ent.args) != 1 or ent.args[0] not in DECOR_KINDS:
+            errors.append(f"{where_}: decor kind must be one of {', '.join(DECOR_KINDS)}")
+            return False
+        node = Node("", "Props", "Node2D")
+        node.base = camel(ent.args[0])
+        node.props = [("position", vec2(*ent.pos)),
+                      ("script", Res("Script", "res://scripts/world/shop_decoration.gd")),
+                      ("kind", sname(ent.args[0]))]
+        plan.singles.append((key, node))
         return True
     if ent.verb == "prop":
         if len(ent.args) != 1 or ent.args[0] not in PROP_KINDS:
@@ -2037,6 +2056,8 @@ def emit(src: Source, rec: dict, plan: Plan) -> str:
         root.props.append(("drop_exits", f"Array[StringName]([{drops}])"))
     if rec["dark"]:
         root.props.append(("dark", "true"))
+    if src.stone_interior:
+        root.props.append(("stone_interior", "true"))
     if src.floor is not None:
         r, g, b = src.floor
         root.props.append(("floor_color", f"Color({num(r)}, {num(g)}, {num(b)}, 1)"))

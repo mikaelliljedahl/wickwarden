@@ -58,8 +58,6 @@ rooms:
 rooms-check:
 	python3 tools/build_rooms.py --check
 
-# The next two targets need tools that later work packages add. Until then they fail with a message.
-
 # Temporary project override starts minimized before any window is mapped. All
 # user data is isolated; no real slot/settings are read or written. CAPTURE_ARGS
 # accepts --rooms=id,id, --frames=N, --out=path and --list. Timeout is a hard bound.
@@ -83,5 +81,5 @@ capture-all:
 	raise SystemExit(result.returncode or int(any(line.startswith(("ERROR:", "SCRIPT ERROR:")) for line in result.stderr.splitlines())))'
 
 playthrough:
-	@echo "make playthrough: not built yet (tests/test_playthrough_*.gd and tools/playthrough_route.py come with WP Q3)"
-	@exit 1
+	python3 tools/playthrough_route.py --check
+	GODOT=$(GODOT) python3 tools/run_godot_check.py --verbose playthrough_

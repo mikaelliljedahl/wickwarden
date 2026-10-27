@@ -7,10 +7,14 @@ const ARENA := "res://scenes/bosses/briar_mother_arena.tscn"
 
 func run() -> void:
 	await _intro_and_cycle()
+	await _eye_presentation()
 	await _spore_warning_and_ward()
+	await _freed_eye_during_warning()
 	await _real_cinder_and_hook()
 	await _real_sling_fight()
 	await _seeds_and_sweep()
+	await _band_cleanup_and_fallback()
+	await _seed_burst_presentation()
 	await _resupply_and_reset()
 	await _scenes()
 
@@ -56,6 +60,36 @@ func _intro_and_cycle() -> void:
 	await dispose(arena)
 
 
+func _eye_presentation() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = _boss(arena)
+	await frames(4)
+	var eyes: Array = boss.eyes.duplicate()
+	for eye in eyes:
+		var light := eye.get_node_or_null("EyeLight") as PointLight2D
+		check(light != null, "each eye owns its presentation light")
+		if light != null:
+			check(not light.is_in_group(&"glow_light"), "eye light is not gameplay glow")
+			check_eq(light.is_visible_in_tree(), eye.visible, "light follows eye visibility")
+	await seconds(3.2)
+	var raised: EnemyBase = eyes[1]
+	var raised_light := raised.get_node("EyeLight") as PointLight2D
+	check(not raised.visible and not raised_light.is_visible_in_tree(), "raised eye casts no light")
+	var lowered: EnemyBase = eyes[0]
+	var dead_light := lowered.get_node("EyeLight") as PointLight2D
+	check(lowered.visible and dead_light.is_visible_in_tree(), "lowered eye remains lit")
+	lowered.apply_damage(4, lowered.global_position, 0)
+	await frames(3)
+	check(not is_instance_valid(dead_light), "defeated eye removes its light")
+	boss.reset_fight()
+	await frames(4)
+	check_eq(boss.parts().size(), 3, "reset recreates the three eyes")
+	for eye in boss.parts():
+		check(eye.get_node_or_null("EyeLight") != null, "reset eye has its own light")
+	await dispose(arena)
+
+
 func _spore_warning_and_ward() -> void:
 	reset_state()
 	var arena := make_arena()
@@ -93,6 +127,39 @@ func _spore_warning_and_ward() -> void:
 	target.apply_damage(4, target.global_position, 0)
 	check_near(boss.spore_interval(), 1.2, 0.001, "two dead eyes speed shots by 0.8")
 	check_near(boss.seed_interval(), 3.0, 0.001, "two dead eyes speed seeds by 1.0")
+	await dispose(arena)
+
+
+func _freed_eye_during_warning() -> void:
+	reset_state()
+	var arena := make_arena()
+	make_player(arena, Vector2(192, 800))
+	var boss = _boss(arena)
+	await seconds(1.3)
+	# Queue a real seed warning first, so a later stale spore entry must not starve it.
+	boss.warn_seed()
+	var eye: EnemyBase = null
+	for tick in range(30):
+		await frames(1)
+		for entry: Dictionary in boss._pending:
+			if entry.kind == &"spore":
+				eye = entry.eye
+		if eye != null:
+			break
+	check(eye != null, "an eye naturally begins a spore warning")
+	if eye != null:
+		var hit := make_hitbox(arena, eye.global_position, Layers.Team.PLAYER, 4, 40)
+		hit.kind = &"sling"
+		await frames(3)
+		check(not is_instance_valid(eye), "sling destroys the warned eye before the shot")
+		await dispose(hit)
+	await seconds(1.0)
+	check_eq(boss.seeds.size(), 1, "earlier pending seed still lands after the eye is freed")
+	var stale := 0
+	for entry: Dictionary in boss._pending:
+		if entry.kind == &"spore" and not is_instance_valid(entry.eye):
+			stale += 1
+	check_eq(stale, 0, "removed eye leaves no stale spore warning")
 	await dispose(arena)
 
 
@@ -258,16 +325,156 @@ func _seeds_and_sweep() -> void:
 	check_eq(_shots(arena).size(), 0, "phase change clears spores")
 	await seconds(1.3)
 	boss._warn_sweep()
+	var warnings: Array[Node2D] = []
+	for child in arena.get_children():
+		if child.get_script() != null and child.get_script().resource_path == "res://scripts/enemies/telegraph.gd":
+			if child.shape == &"rect":
+				warnings.append(child)
+	check_eq(warnings.size(), 3, "sweep warns all three bands")
+	for warning in warnings:
+		check_eq(warning.size, Vector2(1920, 96), "warning matches the full sweep band")
+		check(_has_sweep_lights(warning), "warning lights the full band without gameplay glow")
 	await seconds(0.6)
 	check_eq(_areas(arena).size(), 0, "sweep warning is harmless for 0.7 s")
 	await seconds(0.15)
 	check_eq(_areas(arena).size(), 3, "sweep activates three horizontal bands")
+	var band_art: Array[Node2D] = []
+	for child in arena.get_children():
+		var picture := child.get_node_or_null("Visual") as SpriteVisual
+		if picture != null and picture.kind == &"briar_band_full_candidate":
+			band_art.append(child)
+	check_eq(band_art.size(), 3, "each sweep has one full-width painted strip")
+	for holder in band_art:
+		var art := holder.get_node_or_null("Visual") as SpriteVisual
+		check(art != null and art.kind == &"briar_band_full_candidate", "band uses the cut art")
+		if art != null:
+			check_eq(art.sprite_frames.get_frame_texture(&"idle", 0).get_size(), Vector2(1920, 96), "one full-width cell")
 	for area in _areas(arena):
 		check(not area.box.blockable, "ward cannot block thorn sweep")
 		check_eq(area.box.damage, 2, "sweep damage is two half-hearts")
+		check_eq(area.box.get_child(0).shape.size, Vector2(1920, 96), "sweep hitbox is unchanged")
+		check(_has_sweep_lights(area), "active sweep remains lit without gameplay glow")
 	await seconds(0.3)
 	check_eq(_areas(arena).size(), 0, "sweep bands end after 0.3 s")
+	for holder in band_art:
+		check(not is_instance_valid(holder), "painted band ends with the damaging area")
+	for warning in warnings:
+		check(not is_instance_valid(warning), "warning and its lights are removed after the tell")
 	await dispose(arena)
+
+
+func _band_cleanup_and_fallback() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = _boss(arena)
+	await frames(4)
+	boss._area(Vector2(960, 480), true)
+	var holders := _band_holders(arena)
+	check_eq(holders.size(), 1, "active sweep owns a painted holder")
+	boss.reset_fight()
+	await frames(3)
+	check(not is_instance_valid(holders[0]), "reset removes the painted holder")
+	check(_areas(arena).is_empty(), "reset removes the sweep hitbox")
+	boss._area(Vector2(960, 480), true)
+	holders = _band_holders(arena)
+	check_eq(holders.size(), 1, "phase test starts with a painted holder")
+	boss._start_phase(2)
+	await frames(3)
+	check(not is_instance_valid(holders[0]), "phase change removes the painted holder")
+	check(_areas(arena).is_empty(), "phase change removes the sweep hitbox")
+	await dispose(arena)
+
+	SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
+	arena = make_arena()
+	boss = _boss(arena)
+	await frames(4)
+	boss._area(Vector2(960, 480), true)
+	var areas := _areas(arena)
+	check_eq(areas.size(), 1, "missing band art retains the attack")
+	if not areas.is_empty():
+		check(areas[0].get_node_or_null("Visual") is Placeholder, "missing art keeps fallback")
+		check(_has_sweep_lights(areas[0]), "missing art keeps the full-band light")
+		check_eq(areas[0].box.get_child(0).shape.size, Vector2(1920, 96), "fallback hitbox unchanged")
+	check(_band_holders(arena).is_empty(), "missing art creates no painted holder")
+	await seconds(0.4)
+	check(_areas(arena).is_empty(), "fallback attack ends normally")
+	await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+
+	reset_state()
+	SaveGame.enabled = false
+	var world := (load("res://scenes/world/world.tscn") as PackedScene).instantiate() as World
+	add_child(world)
+	await frames(3)
+	world.start_at(&"cave_2_9")
+	var room := world.current_room
+	var mother = room.get_node("Enemies/BriarMother1")
+	mother._area(room.global_position + Vector2(960, 480), true)
+	holders = _band_holders(room)
+	check_eq(holders.size(), 1, "real room owns the band presentation")
+	world.start_at(&"cave_2_8")
+	await frames(4)
+	check(not is_instance_valid(holders[0]), "leaving the room removes the band presentation")
+	await dispose(world)
+
+
+func _band_holders(parent: Node) -> Array[Node2D]:
+	var holders: Array[Node2D] = []
+	for child in parent.get_children():
+		var picture := child.get_node_or_null("Visual") as SpriteVisual
+		if picture != null and picture.kind == &"briar_band_full_candidate":
+			holders.append(child)
+	return holders
+
+
+func _seed_burst_presentation() -> void:
+	reset_state()
+	var arena := make_arena()
+	make_player(arena, Vector2(600, 500))
+	var boss = _boss(arena)
+	await frames(4)
+	boss._shot_left = [100.0, 100.0, 100.0] as Array[float]
+	boss._seed_left = 100.0
+	var seed: EnemyBase = boss.plant_seed(Vector2(500, 500))
+	var health := GameState.health
+	await seconds(2.9)
+	check(is_instance_valid(seed) and _areas(arena).is_empty(), "seed waits three seconds to burst")
+	await seconds(0.15)
+	var areas := _areas(arena)
+	check_eq(areas.size(), 1, "natural seed burst creates one damaging area")
+	if not areas.is_empty():
+		var area: Node2D = areas[0]
+		check(area.box.active and not area.box.blockable, "burst stays active and unblockable")
+		check_eq(area.box.damage, 2, "burst still deals two half-hearts")
+		check_eq(area.box.get_child(0).shape.radius, 120.0, "burst radius remains 120 pixels")
+	check_eq(GameState.health, health - 2, "real player inside burst radius takes damage")
+	check_eq(boss.snappers.size(), 1, "natural burst still spawns a snapper")
+	var holder := arena.get_node_or_null("SeedBurstEffect") as Node2D
+	check(holder != null, "burst has a separate visual effect")
+	if holder != null:
+		var visual := holder.get_node_or_null("Visual") as SpriteVisual
+		check(visual != null and visual.animation == &"burst", "painted seed burst plays")
+		var light := holder.get_node_or_null("BurstLight") as PointLight2D
+		check(light != null and not light.is_in_group(&"glow_light"), "burst light is presentation only")
+	await seconds(0.3)
+	check(_areas(arena).is_empty(), "burst hitbox and radius cue end after 0.3 seconds")
+	check(is_instance_valid(holder), "painted animation finishes independently of damage")
+	await seconds(0.3)
+	check(not is_instance_valid(holder), "painted effect and light are cleaned up")
+	await dispose(arena)
+	SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
+	arena = make_arena()
+	boss = _boss(arena)
+	await frames(4)
+	boss.burst_seed(Vector2(500, 500))
+	areas = _areas(arena)
+	check_eq(areas.size(), 1, "missing art retains the burst hitbox")
+	if not areas.is_empty():
+		check(areas[0].get_node_or_null("Visual") is Placeholder, "missing art retains fallback cue")
+	await seconds(0.4)
+	check(arena.get_node_or_null("SeedBurstEffect") == null, "fallback light is cleaned up")
+	await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _resupply_and_reset() -> void:
@@ -345,6 +552,13 @@ func _scenes() -> void:
 		await frames(3)
 		check_eq(room.get_enemies().size(), 1, "bloom phase leaves no template eyes behind")
 		await dispose(room)
+
+
+func _has_sweep_lights(parent: Node2D) -> bool:
+	var light := parent.get_node_or_null("SweepLight") as PointLight2D
+	if light == null or light.is_in_group(&"glow_light") or not light.enabled:
+		return false
+	return light.position == Vector2.ZERO and light.texture.get_size() == Vector2(1920, 96)
 
 
 func _pickups(arena: Node, kind: StringName) -> Array[PickupBase]:

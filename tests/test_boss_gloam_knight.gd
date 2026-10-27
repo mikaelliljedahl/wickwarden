@@ -7,6 +7,7 @@ const SCENE := "res://scenes/enemies/bosses/gloam_knight.tscn"
 func run() -> void:
 	await _geometry_and_boots()
 	await _dive_and_phases()
+	await _warning_light()
 	await _ward_and_slash()
 	await _real_dodge()
 	await _fall_api()
@@ -43,7 +44,9 @@ func _geometry_and_boots() -> void:
 				if pit.process_mode != Node.PROCESS_MODE_DISABLED and pit.holds(point):
 					held = true
 			check_eq(held, boss.island_at(point) == -1, "exact island/pit tile complement")
-	await frames(3)
+	await seconds(1.7)  # The intro pauses boss physics before facing can update.
+	check(boss.visual is SpriteVisual, "knight uses painted body")
+	check_eq(boss.visual.animation, &"idle_up", "knight faces player across the pit")
 	player.place_at(Vector2(960, 240))
 	player.facing = Vector2.DOWN
 	Input.action_press(&"attack")
@@ -151,6 +154,30 @@ func _dive_and_phases() -> void:
 	room.get_node("Enemies").add_child(retired)
 	check(retired.is_dead and not retired.visible, "persistent boss stays dead")
 	check(retired.death_drops.is_empty(), "no persistent rewards embedded")
+	await dispose(room)
+
+
+func _warning_light() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/GloamKnight")
+	var player := make_player(room, Vector2(960, 192))
+	player.set_hurtbox_enabled(self, false)
+	await seconds(1.7)
+	boss.lance_left = 0.0
+	await frames(2)
+	check_eq(boss.mode, &"lance", "real lance enters its warning")
+	var marker: Node2D
+	for hazard in boss._hazards:
+		if is_instance_valid(hazard) and hazard.has_method("progress"):
+			marker = hazard
+	check(marker != null, "lance creates its normal warning")
+	if marker != null:
+		var light := marker.get_node_or_null("WarningLight") as PointLight2D
+		check(light != null and light.enabled, "warning illuminates the distant knight")
+		check(light == null or not light.is_in_group(&"glow_light"), "warning is not a glow jar")
+		await seconds(0.6)
+		check(not is_instance_valid(marker), "warning and its light expire together")
 	await dispose(room)
 
 

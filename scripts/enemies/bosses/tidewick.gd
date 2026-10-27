@@ -39,6 +39,16 @@ var _bolt_warning: Node2D
 var _leech_pending := false
 
 
+class UndertowVisual:
+	extends Node2D
+	var size := Vector2.ZERO
+
+	func _draw() -> void:
+		# The outline marks the full damaging band between the painted ripples.
+		draw_rect(Rect2(-size * 0.5, size), Color(0.12, 0.55, 0.72, 0.25))
+		draw_rect(Rect2(-size * 0.5, size), Color(0.46, 0.83, 0.95, 0.85), false, 3.0)
+
+
 func _init() -> void:
 	boss_id = &"tidewick"
 	arena_id = &"cave_3_9"
@@ -112,7 +122,12 @@ func _boss_ready() -> void:
 	ripple = Node2D.new()
 	ripple.z_index = 1
 	_assembly.add_child(ripple)
-	Placeholder.attach(ripple, &"tidewick_ripple")
+	if SpriteVisual.has_art(&"tidewick_tail"):
+		var ripple_visual := SpriteVisual.attach(ripple, &"tidewick_tail") as SpriteVisual
+		ripple_visual.auto_motion = false
+		ripple_visual.play_anim(&"idle")
+	else:
+		Placeholder.attach(ripple, &"tidewick_ripple")
 	ripple_light = _light(ripple, Color(0.4, 0.7, 1.0), 130.0)
 	reset_fight()
 
@@ -280,8 +295,14 @@ func _tick_bolt(delta: float) -> void:
 		_bolt_warning = Node2D.new()
 		_bolt_warning.z_index = 1
 		add_child(_bolt_warning)
-		Placeholder.attach(_bolt_warning, &"tidewick_ripple")
+		if SpriteVisual.has_art(&"tidewick_bolt_tell"):
+			SpriteVisual.attach(_bolt_warning, &"tidewick_bolt_tell")
+			_light(_bolt_warning, Color(1.0, 0.55, 0.22), 140.0)
+		else:
+			Placeholder.attach(_bolt_warning, &"tidewick_ripple")
 		add_hazard(_bolt_warning)
+	if is_instance_valid(_bolt_warning):
+		_bolt_warning.position.x = signf(velocity.x) * 55.0
 	if bolt_clock >= 3.0:
 		bolt_clock -= 3.0
 		if is_instance_valid(_bolt_warning):
@@ -351,9 +372,30 @@ func _start_wave() -> void:
 	# The band carries riders downstream even when they straddle its centre.
 	wave.knockback_direction = wave_direction
 	wave.active = true
-	Placeholder.attach(wave, &"tidewick_wave", 0.0, rect.size)
+	_attach_wave_visual(wave, rect.size)
 	add_hazard(wave)
 	wave_age = 0.0
+
+
+func _attach_wave_visual(parent: Node2D, size: Vector2) -> void:
+	if not SpriteVisual.has_art(&"tidewick_wave_ripple"):
+		Placeholder.attach(parent, &"tidewick_wave", 0.0, size)
+		return
+	var visual := UndertowVisual.new()
+	visual.name = "Visual"
+	visual.size = size
+	parent.add_child(visual)
+	var vertical := size.y > size.x
+	var length := size.y if vertical else size.x
+	var count := int(length / 128.0)
+	for i in range(count):
+		var holder := Node2D.new()
+		var offset := -length * 0.5 + (i + 0.5) * 128.0
+		holder.position = Vector2(0, offset) if vertical else Vector2(offset, 0)
+		visual.add_child(holder)
+		SpriteVisual.attach(holder, &"tidewick_wave_ripple")
+		var light := _light(holder, Color(0.55, 0.8, 1.0), 160.0)
+		light.energy = 0.7
 
 
 func _push_wave_rider(delta: float) -> void:

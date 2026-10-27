@@ -1,0 +1,59 @@
+Gravelight Heights — Q5 visual review, 2026-10-27
+
+Inspected contact-gravelight.png and all 18 full-size images in
+/tmp/wick-capture-20261027-current: 15 graph rooms and three pockets. The
+sheet labels each once. Index: 1920x1080, seed 1, 30 physics frames, fresh
+GameState, default spawn, no granted items or flags. These are controlled
+stills, not proof of current rendering, reachability or human play. No new
+captures or game tests were run. Opening, movement, combat, transitions and
+later states remain unreviewed unless stated otherwise.
+
+Common finding: most rooms use green grass, mossy rocks and hedge borders;
+planned stone terraces, stairs, quarry and sea cliffs are not readily
+recognizable as distinct terrain. Ravines are dark straight-edged rectangles.
+These observations do not establish a blocked route or collision error.
+Newer state records a later S2–S6 shopkeeper/counter ticket; the S4 pocket
+still here shows no shopkeeper or counter, so do not treat that absence as a
+current regression without a fresh capture.
+
+ow_8_4 Landing Cliffs: water and west mooring visible with two Hollows; the
+  cliff setting reads as grass and boulders. Raft boarding/transition unreviewed.
+ow_9_4 Boulder Gate: two eyes visible; the northern heavy stone is partly
+  hidden by the HUD/top edge. Moving it and the northern transition unreviewed.
+ow_8_5 Stair Terrace: ward plate, eye, two Skitterwicks and barred door visible;
+  plate and door are far apart, so their relationship needs an action review.
+  No stone stairs are apparent. Eye beam, ward and opening unreviewed.
+ow_8_5#ward: return doorway, wall fragments and small glowing reward visible;
+  doorway visually covers the player's lower body at spawn. Pickup and return
+  unreviewed; a still does not show whether this affects movement.
+ow_9_5 Ravine Edge: south gap visible between long walls; its hard rectangular
+  edge reads more like a dark tile than a ravine. Leap and landing unreviewed.
+ow_4_6 Cliff Foot: two Skitterwicks and rocks visible; no obvious cliff or
+  drop cue at the northern edge. Actual one-way arrival unreviewed.
+ow_5_6 Watchers' Steps: three eyes and north mooring visible among rocks and
+  water; steps are not apparent. Eye beams, raft and traversal unreviewed.
+ow_6_6 Choir Steps: heavy stone and surrounding wall dominate C6 mouth; no
+  distinct entrance is visible behind the stone in the still. Mooring and eye
+  are visible. Lift, revealed mouth and entry unreviewed.
+ow_7_6 Gravelight Terrace: two Spitcaps and Hollow visible; upper-left Spitcap
+  meets a boulder visually. Check movement and depth order near it. Terrace
+  levels are not apparent; exits in motion unreviewed.
+ow_8_6 Ravine Bridge: two eyes and east dark gap visible; gap is a sharp
+  rectangle between wall sections rather than a broken bridge. Leap unreviewed.
+ow_3_7 Fen Pass: rush barrier at west edge is cropped; two Skitterwicks and
+  blob visible. Cutting and crossing unreviewed.
+ow_4_7 Quarry: two Hollows among many boulders; lower-right Hollow meets a
+  rock cluster. Check movement/depth order. Quarry features are not distinct.
+ow_5_7 Statuary: shop doorway, two eyes and Hollow visible; carved statues are
+  not apparent beyond the eyes. Shop entry and eye action unreviewed.
+ow_5_7#shop: four pedestals, two visible goods/prices and exit; no shopkeeper
+  or counter in this older still. Compare the later shop ticket before triage;
+  stock interaction, purchase and return unreviewed here.
+ow_7_7 Windcut: two Spitcaps and Hollow visible; grass and boulders do not
+  read as a wind-cut cliff. Enemy movement and north transition unreviewed.
+ow_4_8 South Cliff: cracked wall visible in ruin with two Hollows; the sea
+  cliff is not apparent. Bombed state and pocket entry unreviewed.
+ow_4_8#cache: glowing core on pedestal and return doorway visible. Collection
+  and return unreviewed.
+ow_5_8 Lowest Stair: three Skitterwicks and rocks visible; stairs and tide
+  marks are not apparent. Combat and exits unreviewed.

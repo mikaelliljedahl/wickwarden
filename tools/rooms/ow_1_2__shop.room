@@ -13,6 +13,8 @@ grid
 #..................#
 #..................#
 ####################
+decor npc_tilly @1080,340
+prop shop_counter @960,384 size=192,72
 prop pedestal 5,3
 prop pedestal 14,3
 shop S1 ember @528,358

@@ -63,13 +63,6 @@ script = ExtResource("5")
 size = Vector2(96, 96)
 kind = &"rock"
 
-[node name="Hut1" type="StaticBody2D" parent="Props"]
-position = Vector2(1488, 288)
-script = ExtResource("5")
-size = Vector2(192, 192)
-kind = &"hut"
-visual_offset = Vector2(-16, 84)
-
 [node name="Door1" type="Area2D" parent="Props"]
 position = Vector2(1488, 432)
 script = ExtResource("6")

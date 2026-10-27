@@ -1,0 +1,54 @@
+C5 visual review — 2026-10-27
+
+Reviewed contact-c5.png and all ten full-size cave_5_1 through cave_5_10
+images in /tmp/wick-capture-20261027-current; the sheet labels each once.
+The graph and capture inventory have no separate C5 pocket. The index records
+1920x1080, 30 physics frames, seed 1, fresh state, default spawn, no granted
+items or flags and dark rooms. These are controlled stills, not an earned route
+or human playthrough. Current room sources, boss script and state were checked;
+no new captures or game tests were run.
+
+Triage: beyond the lamp, keys, pedestals, enemies and doors are often very dim.
+The repeated mossy masonry reads as cave walls rather than archive shelves or
+mirrors in these images; closer moving views should assess the intended setting.
+The former state entry describing brown diamond dry-vine fallbacks is historical:
+the current manifest and sprite mapping contain dry_vine_screen, and the
+captured screens are painted. This review does not establish current runtime
+rendering, interaction failure or a blocked path.
+
+cave_5_1 (Still Foyer): the return mouth is clear beside the player; the moth
+  and shelf blocks are faint and the shades cannot be confidently identified at
+  this distance. Check enemy approach and entrance/return in motion.
+cave_5_2 (Hall of Faces): the north vine screens and west locked door are very
+  dark from the east spawn; one Hollow is near the player, the other distant.
+  Check screen recognition, cutting, shade visibility and door opening nearby.
+cave_5_3 (Dust Reading Room): painted vine screens are clear at the south
+  entrance; the small key and two Wicklings are barely visible farther north.
+  Cutting, pickup and return are unreviewed.
+cave_5_4 (Index Hall): four braziers and the east lock frame three very dark
+  armored figures. Distinguishing the Mirror Warden from its images and reading
+  its tells and attacks in motion needs review; unlocking is not shown.
+cave_5_5 (Lantern Shelf): the pedestal to the right is dark and the Glow Jar
+  is hard to identify; the shades and hidden north seam are not clear at this
+  spawn. Inspect pickup, jar reveal and seam crossing at close range.
+cave_5_6 (Unlit Stacks): the northern small key is extremely faint and the
+  shades are not identifiable in the still. Check collection and revealed seam
+  return with the lamp and jar.
+cave_5_7 (Reflecting Hall): the west lock and three blobs are dim; two blobs
+  visually meet the lower masonry blocks. Check moving depth and passage, not
+  collision from the still, and review unlocking.
+cave_5_8 (Vault of Names): the distant pedestal and big key are difficult to
+  distinguish; two Hollows and east lock are faint. Review approach, pickup and
+  return through the door.
+cave_5_9 (Archivist's Antechamber): the south boss door is dim and partly cut
+  by the lower screen edge; the shades are not discernible at this spawn.
+  Check opening and transition, and shade motion.
+cave_5_10 (The Last Page): the Archivist and six pedestals are very dark away
+  from the entry lamp. Current archivist.gd attaches painted ink bolt and
+  spatter with local lights, and state records later controlled captures; this
+  still does not show or validate them. Review blink warning, decoys, ink flight
+  and spatter, reveal, damage, phase changes, rewards and return in active play.
+
+All cuts, reveals, interactions, transitions and combat action states above are
+explicitly unreviewed by these stills. Darkness limits missing-art conclusions;
+Q5 records observations for owner/Z1 triage rather than making fixes.

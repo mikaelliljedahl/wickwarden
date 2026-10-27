@@ -1,0 +1,66 @@
+C7 visual review — 2026-10-27
+
+Reviewed contact-c7.png and all 11 full-size images cave_7_1 through
+cave_7_11 in /tmp/wick-capture-20261027-current. The graph, room sources and
+capture index list no C7 pocket scenes. The contact sheet labels all 11; its
+dark thumbnails are less useful than the full-size images for inspection.
+The index records 1920x1080, 30 physics frames, seed 1, fresh GameState,
+Default spawn, no granted items or flags, and dark=true for every C7 target.
+Graph source hash: 0c5cf8c81ad865e57b289329794076fe4ed34d9e5b90595f1548ea2ae4791a74.
+These are controlled stills, not an earned route or human playthrough. No new
+captures or game tests were run.
+
+Triage: pits in rooms 2–7 and especially the boss arena have very low contrast
+against the surrounding unlit floor in the captured positions. Their edges and
+the safe islands need review while moving with the lamp and using the boots;
+these stills do not prove a fall or blocked path. The small keys, boots, big key
+and distant enemies are likewise dim at default spawn. The Pale Squire and
+Gloam Knight attack states need motion review in normal dark play.
+
+Current room sources, arena and combat scripts were compared with the stills.
+The current Pale Squire script draws unshaded lunge cues. The current Gloam
+Knight script lights its warning marker and uses directional body presentation;
+docs/state.md records painted first-pose stills and that warning-light change,
+with phase-two, attack and dive animation still open. The arena portrait shows
+neither those active warnings nor later phases. Do not treat older status entries
+or this still as proof that the current warning light or body art is absent.
+Code/assets can change after capture; no current render is established here.
+
+Room observations at the captured fresh state:
+cave_7_1 (Sunless Stair): painted return mouth is lit; both Hollows and the
+  west approach are dim. Entry and return transitions are not shown.
+cave_7_2 (Pit Gallery): two pits, two moths, two Skitterwicks and west locked
+  door are faint away from the lamp. Pit recognition and unlocking need review
+  from closer positions.
+cave_7_3 (Narrow Ledge): key over the north pit, grate and two Spitcaps are
+  barely visible from the south spawn. Moth retrieval, grate and pit readability
+  need review at the ledge.
+cave_7_4 (Warden Landing): Pale Squire is clearly lit near the player; the
+  central chasm and east lock are dark. Lunge tell, pit fall, recovery and
+  crossing around the chasm are not shown.
+cave_7_5 (Boot Rack): the boots on their pedestal and two Hollows are dim; the
+  northern pit is a dark rectangle. Pickup and first leap are unreviewed.
+cave_7_6 (Chasm Walk): south and west pits have faint edges; the small key and
+  moths are dim. Approaching and collecting the key and both leap transitions
+  need review.
+cave_7_7 (Bridge of Nerve): cache, two Skitterwicks and east pit are dim at
+  spawn. Leap, cache opening and return are unreviewed.
+cave_7_8 (Falling Hall): one nearby Skitterwick is visible, two farther ones
+  and the west lock are dark. Unlock and movement through the piers are unseen.
+cave_7_9 (Cold Cell): east lock is near the lamp; two Hollows and big-key
+  pedestal at the far left are dim, with the key hard to distinguish. Pickup
+  and return are unreviewed.
+cave_7_10 (Nerve Antechamber): two blobs and the south boss door are dim; the
+  door extends to the screen edge. Opening and both transition directions are
+  unreviewed.
+cave_7_11 (Coward's Crown): the painted Knight is very dark across the first
+  pit. Island boundaries are difficult to distinguish away from the entry
+  light. Warning light, attacks, leaps, collapsing islands, later phases,
+  rewards and return require active human visual review.
+
+The rectangular pit appearance is visible in these stills; assess its edges
+and visual fit in motion before deciding on an art change. No unambiguous
+missing-art fallback was identified in the visible portions. Darkness and
+unseen states limit that conclusion. Neither a still nor a door at the screen
+edge establishes collision, path blockage, balance or successful interaction.
+Q5 records findings; fixes belong to the relevant owner or a Z1 ticket.

@@ -15,6 +15,92 @@ func run() -> void:
 	await _pot_bundle_unlock_and_sold_out()
 	await _slug_bundle_unlock_and_full_refusal()
 	await _scene_and_visual()
+	await _tilly_shop_walk()
+	await _all_shopkeepers()
+	await _other_shops_walk()
+
+
+func _other_shops_walk() -> void:
+	var entries := {
+		&"ow_6_0#shop": [528.0, 8],
+		&"ow_10_3#shop": [528.0, 40],
+		&"ow_5_7#shop": [624.0, 8],
+		&"ow_10_7#shop": [624.0, 6],
+		&"ow_6_5#shop": [912.0, 50]
+	}
+	for id in entries:
+		reset_state()
+		SaveGame.enabled = false
+		var world := await make_world()
+		world.start_at(id, &"Inside")
+		await frames(3)
+		GameState.damage(2)
+		GameState.add_currency(100)
+		var distance: float = 912.0 - entries[id][0]
+		if distance > 0:
+			Input.action_press(&"move_left")
+			await seconds(distance / Player.WALK_SPEED)
+			Input.action_release(&"move_left")
+		Input.action_press(&"move_up")
+		await seconds(1.0)
+		Input.action_release(&"move_up")
+		check_eq(GameState.health, 6, "%s walking to stock heals" % id)
+		check_eq(GameState.currency, 100 - entries[id][1], "%s charges correct price" % id)
+		await dispose(world)
+
+
+func _all_shopkeepers() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var world := await make_world()
+	var shops := {
+		&"ow_1_2#shop": "NpcTilly1",
+		&"ow_6_0#shop": "NpcPeddler1",
+		&"ow_10_3#shop": "NpcAshwife1",
+		&"ow_5_7#shop": "NpcMason1",
+		&"ow_10_7#shop": "NpcPilgrim1",
+		&"ow_6_5#shop": "NpcKeeper1"
+	}
+	for id in shops:
+		world.start_at(id, &"Inside")
+		await frames(2)
+		var merchant := world.current_room.get_node_or_null("Props/" + shops[id])
+		check(merchant != null, "%s has its shopkeeper" % id)
+		if merchant != null:
+			check(merchant.get_node_or_null("Visual") is SpriteVisual, "%s has painted art" % id)
+		var counter := world.current_room.get_node_or_null("Props/ShopCounter1") as SolidBlock
+		check(
+			counter != null and counter.get_node_or_null("Visual") is SpriteVisual,
+			"%s has a painted counter" % id
+		)
+		var stone: bool = id in [&"ow_6_0#shop", &"ow_5_7#shop", &"ow_6_5#shop"]
+		check_eq(
+			world.current_room._uses_cave_terrain(), stone, "%s uses its authored surface" % id
+		)
+	await dispose(world)
+
+
+func _tilly_shop_walk() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var world := await make_world()
+	world.start_at(&"ow_1_2#shop", &"Inside")
+	var room := world.current_room
+	var merchant := room.get_node_or_null("Props/NpcTilly1")
+	var counter := room.get_node_or_null("Props/ShopCounter1") as SolidBlock
+	check(merchant != null and merchant.get_node_or_null("Visual") is SpriteVisual, "Tilly has art")
+	check(counter != null and counter.get_node_or_null("Visual") is SpriteVisual, "counter has art")
+	GameState.damage(2)
+	GameState.add_currency(8)
+	Input.action_press(&"move_left")
+	await seconds(1.05)
+	Input.action_release(&"move_left")
+	Input.action_press(&"move_up")
+	await seconds(1.0)
+	Input.action_release(&"move_up")
+	check_eq(GameState.health, 6, "walking from the S1 entry still buys the ember")
+	check_eq(GameState.currency, 0, "walking purchase charges S1 price")
+	await dispose(world)
 
 
 func _prices() -> void:

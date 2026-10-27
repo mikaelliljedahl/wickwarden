@@ -34,6 +34,7 @@ content goes into the host room's file, and the compiler refuses a file for it.
 room ow_0_1                       ; required; must equal the file's room id
 terrain Reedpond: pond, reeds     ; optional text, copied into the scene as a comment
 floor_color 0.16 0.25 0.25        ; optional r g b from 0 to 1; without it Room keeps its default
+stone_interior                    ; optional: use stone floor and border without changing graph scope
 grid
 #########..#########              ; exactly 10 rows of exactly 20 characters, no comments inside
 #...ee..............#
@@ -91,7 +92,8 @@ such). A hollow must stand on a tile centre; the compiler checks it whatever the
 | `pickup item <tool id> <pos>` | `item_pickup.tscn` with `persistent_id` and `item_id` = the tool id |
 | `pickup <kind> <pos> id=<id> [requires=<flag>] [scope=<s>]` | the scene of the kind (table below); `small_key`, `big_key` and `fragment` infer scope from the graph pickup/capability, falling back to room scope for a small key; an explicit `scope=` must match. The historical alcove key keeps graph scope `ow` |
 | `refill pot_bundle <pos>` | Only in `cave_9_4`: the existing `pitch_pot_bundle.tscn`, with `respawn_on_enter = true` and empty `persistent_id`. Exactly two distinct refill positions are required; these do not count as graph pickups or set picked flags |
-| `prop <kind> <pos> [size=<w>,<h>]` | a plain `SolidBlock` of a kind in `PROP_KINDS` (`hut`, `pedestal`, `sign_post`, `wall`, `water`, `rock`, `tree`, `reed`); size defaults to 96 x 96. Scripted props use their own entity lines below. |
+| `prop <kind> <pos> [size=<w>,<h>]` | a plain `SolidBlock` of a kind in `PROP_KINDS` (`hut`, `pedestal`, `sign_post`, `wall`, `water`, `rock`, `tree`, `reed`, `shop_counter`); size defaults to 96 x 96. Scripted props use their own entity lines below. |
+| `decor <kind> <pos>` | Non-interactive shopkeeper visual without collision (`npc_tilly`, `npc_peddler`, `npc_ashwife`, `npc_mason`, `npc_pilgrim`, `npc_keeper`); use a separate counter prop for the solid footprint. |
 | `anchor_ring <pos> [look=<kind>] [max_range=<pixels>]` | the real `anchor_ring.tscn` target, with optional `look` (`anchor_ring` or `anchor_pocket`) and finite nonnegative `max_range` (0 = no ring-specific limit; the reel still stops at 576 px). The ring is non-solid and does not open or hold state. |
 | `opener resonance_door <pos> id=<id> [size=<w>,<h>]` | `resonance_door.tscn`, `resonance_id` = id, 192 x 96 by default. Only the lantern chime wakes the physical block; the persistent flag is `resonated_<id>`. Pair with the cave-mouth `door`. |
 | `opener resonance_stone <pos> id=<edge id> [size=<w>,<h>]` | `resonance_stone.tscn`, `resonance_id` = the graph edge id, 192 x 96 by default. Only a chime wakes and disables its real WORLD body. Pair with a step edge whose prop is `resonance stone` and needs exactly `lantern_chime`. |

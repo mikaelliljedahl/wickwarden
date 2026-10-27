@@ -2184,9 +2184,9 @@
     },
     "Z1": {
       "wave": 5,
-      "owns": [],
-      "note": "Owns are set per ticket; the ticket writes its own entry before the stray check.",
-      "per_ticket": true
+      "owns": ["scripts/world/room_door.gd"],
+      "note": "Shop entrances ticket: select the cart and stall presentations for their existing room doors.",
+      "per_ticket": false
     },
     "Z2": {
       "wave": 5,

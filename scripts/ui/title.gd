@@ -4,7 +4,8 @@ extends Control
 ## New game over an existing save asks once (Yes/No) before it erases the slot (`pause` answers No).
 ## New game sets SaveGame.launch_mode `new` and always goes to the intro (F14, decision 44); the intro
 ## then goes to world.tscn. Continue sets `continue` and goes to world.tscn. Quit quits.
-## `--dev-mode` and `--start-room` skip the title (World starts in launch mode `dev`).
+## `--dev-mode` and `--start-room` skip the title on launch (World starts in mode `dev`).
+## An explicit return from the pause menu shows the title even with those arguments.
 ##
 ## Story text only: no button help here (the pause menu has it). The music is the overworld loop.
 ## Placeholder art: assets/art/title_splash.png and title_logo.png are used when they exist; until
@@ -12,6 +13,7 @@ extends Control
 ##
 ## Tests set `dry_run`: the choice is recorded in `last_action` and `last_scene` and no scene changes.
 
+const RETURN_TO_TITLE_META := &"pause_return_to_title"
 const WORLD_SCENE := "res://scenes/world/world.tscn"
 const INTRO_SCENE := "res://scenes/ui/intro.tscn"
 const SETTINGS_PATH := "user://settings.json"
@@ -51,7 +53,10 @@ var _leaving: bool = false
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	resized.connect(queue_redraw)
-	if skips_title(OS.get_cmdline_user_args()):
+	var returning := get_tree().root.has_meta(RETURN_TO_TITLE_META)
+	if returning:
+		get_tree().root.remove_meta(RETURN_TO_TITLE_META)
+	if not returning and skips_title(OS.get_cmdline_user_args()):
 		SaveGame.launch_mode = SaveGame.MODE_DEV
 		call_deferred("_leave", &"dev", WORLD_SCENE)
 		return

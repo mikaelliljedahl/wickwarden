@@ -1,0 +1,22 @@
+Brackwater visual review — 2026-10-27 working tree
+
+Reviewed the nine full-size fresh-state captures in /tmp/wick-capture-20261027-current
+and contact-brackwater.png. Captures are 1920x1080 after 30 physics frames;
+they do not exercise transitions, attacks, bought stock or revealed secrets.
+No claim of human balance or complete playability is made.
+
+ow_0_0: Start hut, sign, exits and two painted enemies visible; no obvious geometric fallback in this still.
+ow_1_0: Painted enemies and rock/bush arrangement visible; no obvious geometric fallback in this still.
+ow_2_0: Cracked cache wall and core visible; an enemy's cape overlaps the upper ruin visually. Check movement in play.
+ow_0_1: Moth pedestal and pond visible; no obvious geometric fallback in this still.
+ow_1_1: C1 mouth visible in rocks; no obvious geometric fallback in this still.
+ow_2_1: Locked door and pitch-pot pedestal visible; no obvious geometric fallback in this still.
+ow_0_2: The sealed C9 entrance is not shown in this fresh state; inspect again under the glow jar.
+ow_1_2: Shop hut and cuttable south barrier visible; inspect shop entrance and return in play.
+ow_1_2#shop: OPEN: room is bare grass with two pedestals and an exit; no Tilly, counter or stall dressing is visible. Pot stock is hidden before acquiring pitch pots as designed. Add shopkeeper and setting, and review stock and exit under earned state.
+  Z1 S1 dressing ticket owns tools/build_rooms.py, tools/test_build_rooms.py, docs/room-kit.md, scripts/world/shop_decoration.gd, tools/rooms/ow_1_2__shop.room, scenes/world/rooms/ow_1_2__shop.tscn, tests/test_shop.gd and the art pipeline's manifest and generated sprite entries for npc_tilly and shop_counter. Preserve shop stock and exit behavior.
+  Follow-up: Tilly and a solid counter are now present; /tmp/wick-tilly-s1-v3/ow_1_2#shop.png was inspected. The merchant is decorative and stands beside the counter. The existing contact sheet predates this change. Earned-state stock and return behavior pass automated tests; fuller dressing and human review remain open.
+ow_2_0#cache: In-place pocket, visible inside ow_2_0; crack opening and core collection need their own action-state review.
+ow_2_1#closet: In-place pocket, visible inside ow_2_1; unlocked state needs its own action-state review.
+
+Capture index source hash 0c5cf8c81ad865e57b289329794076fe4ed34d9e5b90595f1548ea2ae4791a74.

@@ -5,19 +5,16 @@ extends StaticBody2D
 ## while all nine are held. Nothing is spent: the fragments stay. The opening sets the flag `door_ninth`,
 ## so the door starts open on every later visit and after a reload. Solid until open.
 ##
-## Visual: the Placeholder kind `ninth_door`; each socket is a child `Socket_cN` drawn with the kind
-## `ninth_socket` (dark) or `ninth_socket_lit`. The kinds are registered here, so no content work package
-## edits Placeholder.KINDS. The sockets hide with the door.
+## Visual: the painted door has nine dark sockets. The Socket_cN lights show held fragments.
+## The lights hide with the door.
 
 signal opened
 
 const OPEN_FLAG := &"door_ninth"
 const DOOR_KIND := &"ninth_door"
-const SOCKET_KIND := &"ninth_socket"
-const SOCKET_LIT_KIND := &"ninth_socket_lit"
-const SOCKET_RADIUS := 7.0
+const SOCKET_RADIUS := 9.0
 const SOCKET_SPACING := 20.0
-const SOCKET_ROW_Y := -18.0
+const SOCKET_ROW_Y := -74.0
 
 ## Footprint in px (centred on the origin). The default is the width of a room gap.
 @export var size: Vector2 = Vector2(192, 96)
@@ -25,7 +22,7 @@ const SOCKET_ROW_Y := -18.0
 var is_open: bool = false
 var _shape: CollisionShape2D
 var _trigger: Area2D
-var _sockets: Array[Placeholder] = []
+var _sockets: Array[Sprite2D] = []
 
 
 func _init() -> void:
@@ -91,11 +88,14 @@ func try_open() -> bool:
 
 func _add_sockets() -> void:
 	var count := GameState.FRAGMENT_CAVES
+	var glow := LightTexture.make()
 	for index in count:
-		var socket := Placeholder.new()
+		var socket := Sprite2D.new()
 		socket.name = "Socket_%s" % _cave_at(index)
-		socket.kind = SOCKET_KIND
-		socket.radius = SOCKET_RADIUS
+		socket.texture = glow
+		socket.scale = Vector2.ONE * LightTexture.scale_for(SOCKET_RADIUS)
+		socket.modulate = Color(1.0, 0.65, 0.12, 1.0)
+		socket.z_index = 1
 		socket.position = Vector2(
 			(float(index) - float(count - 1) * 0.5) * SOCKET_SPACING, SOCKET_ROW_Y
 		)
@@ -106,8 +106,7 @@ func _add_sockets() -> void:
 
 func _refresh_sockets() -> void:
 	for index in _sockets.size():
-		var lit := GameState.has_fragment(_cave_at(index))
-		_sockets[index].set_kind(SOCKET_LIT_KIND if lit else SOCKET_KIND)
+		_sockets[index].visible = not is_open and GameState.has_fragment(_cave_at(index))
 
 
 ## Socket `index` (0 to 8) belongs to cave index + 1: c1 .. c9.
@@ -125,8 +124,7 @@ func _set_open(value: bool) -> void:
 	var visual := get_node_or_null(Placeholder.VISUAL_NAME) as CanvasItem
 	if visual != null:
 		visual.visible = not value
-	for socket in _sockets:
-		socket.visible = not value
+	_refresh_sockets()
 
 
 static func _register_kinds() -> void:
@@ -134,17 +132,5 @@ static func _register_kinds() -> void:
 		Placeholder.register_kind(
 			DOOR_KIND,
 			{"shape": "rect", "color": Color(0.26, 0.24, 0.3), "size": Vector2(192, 96)},
-			true
-		)
-	if not Placeholder.has_kind(SOCKET_KIND):
-		Placeholder.register_kind(
-			SOCKET_KIND,
-			{"shape": "circle", "color": Color(0.1, 0.1, 0.14), "radius": SOCKET_RADIUS},
-			true
-		)
-	if not Placeholder.has_kind(SOCKET_LIT_KIND):
-		Placeholder.register_kind(
-			SOCKET_LIT_KIND,
-			{"shape": "circle", "color": Color(1.0, 0.9, 0.55), "radius": SOCKET_RADIUS},
 			true
 		)

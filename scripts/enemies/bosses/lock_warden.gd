@@ -91,6 +91,16 @@ class KeyholeVisual:
 
 	func _draw() -> void:
 		var boss = get_parent()
+		if SpriteVisual.has_art(&"lock_warden"):
+			if boss.open_left > 0:
+				draw_circle(Vector2(0, -5), 7, Color(1, 0.8, 0.25))
+				draw_colored_polygon(
+					PackedVector2Array(
+						[Vector2(-4, -2), Vector2(4, -2), Vector2(7, 13), Vector2(-7, 13)]
+					),
+					Color(1, 0.8, 0.25)
+				)
+			return
 		draw_circle(
 			Vector2.ZERO, 28, Color(1, 0.85, 0.3) if boss.open_left > 0 else Color(0.08, 0.06, 0.03)
 		)
@@ -98,13 +108,20 @@ class KeyholeVisual:
 
 class Deadbolt:
 	extends Node2D
+	const SEGMENTS := [Vector2(96, 384), Vector2(576, 864)]
 	var speed := 300.0
 
 	func _ready() -> void:
 		var visual := Node2D.new()
 		visual.name = "Visual"
 		add_child(visual)
-		for segment in [Vector2(96, 384), Vector2(576, 864)]:
+		for segment in SEGMENTS:
+			if SpriteVisual.has_art(&"lock_deadbolt"):
+				var holder := Node2D.new()
+				holder.position.y = (segment.x + segment.y) / 2
+				visual.add_child(holder)
+				var painted := SpriteVisual.attach(holder, &"lock_deadbolt")
+				painted.scale.x = 32.0 / 23.0
 			var box := Hitbox.new()
 			box.team = Layers.Team.ENEMY
 			box.damage = 4
@@ -126,6 +143,8 @@ class Deadbolt:
 		queue_redraw()
 
 	func _draw() -> void:
+		if SpriteVisual.has_art(&"lock_deadbolt"):
+			return
 		draw_rect(Rect2(-16, 96, 32, 288), Color(0.9, 0.55, 0.15))
 		draw_rect(Rect2(-16, 576, 32, 288), Color(0.9, 0.55, 0.15))
 
@@ -152,6 +171,10 @@ func _init() -> void:
 					"size": Vector2(288, 240) if kind == &"lock_warden" else Vector2(60, 60)
 				}
 			)
+	if not Placeholder.has_kind(&"lock_key_volley"):
+		Placeholder.register_kind(
+			&"lock_key_volley", {"shape": "circle", "color": Color(0.8, 0.65, 0.25), "radius": 12.0}
+		)
 
 
 func _ready() -> void:
@@ -280,10 +303,24 @@ func _volley() -> void:
 		key.speed = 260
 		key.damage = 2
 		key.blockable_by_ward = true
-		key.visual_kind = &"brass_bit"
+		key.visual_kind = &"lock_key_volley"
 		get_parent().add_child(key)
 		key.launch(global_position, Vector2.RIGHT.rotated(TAU * i / count))
+		var visual := key.get_node_or_null("Visual") as Node2D
+		if visual is SpriteVisual:
+			# The painted key's tip points about 20 degrees clockwise from the x axis.
+			visual.rotation = key.direction.angle() - deg_to_rad(20.0)
+		key.destroyed.connect(_key_impact.bind(key))
 		add_hazard(key)
+
+
+func _key_impact(reason: StringName, key: EnemyProjectile) -> void:
+	if reason not in [&"hit", &"wall", &"ward"] or not is_instance_valid(key):
+		return
+	var effect := SpriteVisual.spawn_effect(get_parent(), &"lock_key_volley", key.global_position)
+	if effect is SpriteVisual:
+		effect.rotation = key.direction.angle() - deg_to_rad(20.0)
+		effect.play_anim(&"impact")
 
 
 func _deadbolt() -> void:

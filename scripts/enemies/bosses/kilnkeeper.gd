@@ -261,6 +261,18 @@ func _tick_attack(delta: float) -> void:
 				shot.launch(
 					global_position, _aim.rotated(deg_to_rad((index - (count - 1) * 0.5) * 20.0))
 				)
+				var look := shot.get_node_or_null("Visual") as Node2D
+				if look is SpriteVisual:
+					# The painted ball travels roughly 20 degrees clockwise from the x axis.
+					look.rotation = shot.direction.angle() - deg_to_rad(20.0)
+				var light := PointLight2D.new()
+				light.name = "SlagLight"
+				light.texture = LightTexture.make()
+				light.texture_scale = LightTexture.scale_for(80.0)
+				light.color = Color(1.0, 0.5, 0.2)
+				light.energy = 0.7
+				shot.add_child(light)
+				shot.destroyed.connect(_slag_impact.bind(shot))
 				add_hazard(shot)
 			attack = Attack.WALK
 		Attack.RUSH_WARNING:
@@ -287,3 +299,11 @@ func _on_death() -> void:
 	super()
 	spawn_pickup(&"ember", ARENA_CENTRE, true)
 	spawn_pickup(&"ember", ARENA_CENTRE + Vector2(DROP_SPREAD, 0), true)
+
+
+func _slag_impact(reason: StringName, shot: EnemyProjectile) -> void:
+	if reason not in [&"hit", &"wall", &"ward"] or not is_instance_valid(shot):
+		return
+	var effect := SpriteVisual.spawn_effect(get_parent(), &"kiln_slag", shot.global_position)
+	if effect is SpriteVisual:
+		effect.play_anim(&"impact")

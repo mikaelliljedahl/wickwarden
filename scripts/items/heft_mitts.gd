@@ -90,6 +90,9 @@ func _physics_process(delta: float) -> void:
 			if _left <= 0.0:
 				_enter_lockout(NOTHING_TIME - GRAB_TIME)
 		Phase.LIFT:
+			if not _carrying():
+				_end()
+				return
 			_left -= delta
 			if _left <= 0.0:
 				_phase = Phase.CARRY
@@ -117,7 +120,9 @@ func _on_grab_hit(hurtbox: Hurtbox) -> void:
 	if _phase != Phase.GRAB:
 		return
 	var prop := hurtbox.get_parent() as Node2D
-	if prop == null or not (prop.is_in_group(&"liftable") or prop.is_in_group(&"heavy")):
+	if prop == null or prop.is_queued_for_deletion():
+		return
+	if not (prop.is_in_group(&"liftable") or prop.is_in_group(&"heavy")):
 		return
 	_grab.deactivate()
 	_prop = prop
@@ -168,7 +173,11 @@ func _on_hurt_taken(_amount: int) -> void:
 
 
 func _carrying() -> bool:
-	return is_instance_valid(_prop) and bool(_prop.call(&"is_carried"))
+	return (
+		is_instance_valid(_prop)
+		and not _prop.is_queued_for_deletion()
+		and bool(_prop.call(&"is_carried"))
+	)
 
 
 func _carry_scale() -> float:

@@ -98,14 +98,19 @@ func _world_presentation() -> void:
 	boss.hp = 60
 	boss._start_phase(2)
 	await seconds(1.7)
-	check(not SpriteVisual.has_art(&"unlit_p2_shell"), "shell remains HOLD fallback")
-	await _capture("world-c10-p2-fallback")
+	check(SpriteVisual.has_art(&"unlit_p2_shell"), "shell has painted art")
+	check(boss.visual is SpriteVisual, "World P2 selects the painted shell")
+	check_eq(boss.visual.offset, Vector2(-256, -350), "shell foot and body anchor preserved")
+	await _capture("world-c10-p2-shell")
 	boss.hp = 24
 	boss._start_phase(3)
 	await seconds(1.7)
 	check(is_instance_valid(boss.lantern), "World P3 keeps canonical lantern")
 	check(boss.lantern.hurtbox.enabled, "World P3 exposes actual reel target")
-	check(boss.lantern.get_node("Visual").visible, "P3 preserves lantern target fallback")
+	check(boss.lantern.get_node("Visual").visible, "P3 shows the lantern target")
+	check(boss.lantern.get_node("Visual") is SpriteVisual, "P3 lantern uses painted art")
+	check(boss.visual is SpriteVisual, "P3 heart uses painted art")
+	check(not boss._heart_glow.visible, "painted heart replaces the geometric fallback")
 	await _capture("world-c10-p3-fallback")
 	GameState.set_flag(&"boss_cave_10_14_defeated")
 	world.start_at(&"cave_10_13")
@@ -165,6 +170,8 @@ func _orbit_and_reset() -> void:
 	check_eq(boss.eyes.size(), 5, "five actual eye parts")
 	for eye in boss.eyes:
 		check_eq(eye.hp, 3, "eye3HP")
+		check(eye.visual is SpriteVisual, "eye uses painted art")
+		check(eye.get_node_or_null("EyeLight") is PointLight2D, "eye is visible in the dark")
 		check_eq(eye.room_rect, Rect2(), "eye not body confined")
 		check_near(eye.global_position.distance_to(Vector2(960, 288)), 330, 0.1, "literal330orbit")
 	var eye = boss.eyes[0]
@@ -363,7 +370,9 @@ func _scheduled_attacks() -> void:
 	await seconds(1.6)
 	await seconds(2.95)
 	check(boss.gaze_tell[0] > 0, "gaze has half second tell before first shot")
+	check_near(boss.eyes[0].get_node("EyeLight").energy, 1.3, 0.01, "eye brightens for tell")
 	await seconds(0.55)
+	check_near(boss.eyes[0].get_node("EyeLight").energy, 0.65, 0.01, "eye dims after tell")
 	var gaze_bolts := 0
 	for projectile in get_tree().get_nodes_in_group(&"projectiles"):
 		if projectile.speed == 320:

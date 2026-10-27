@@ -31,6 +31,8 @@ const POCKET_LOOKS := {
 	"ow_7_2#bag": &"pocket_grotto",
 	"ow_7_3#grotto": &"pocket_grotto",
 	"ow_8_5#ward": &"pocket_stairs",
+	"ow_10_3#shop": &"pocket_cart",
+	"ow_10_7#shop": &"pocket_stall",
 }
 
 var _blockers: Array[WeakRef] = []

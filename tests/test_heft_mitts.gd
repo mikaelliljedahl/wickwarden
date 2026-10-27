@@ -22,6 +22,7 @@ var _landed_count := 0
 
 func run() -> void:
 	await _scene_and_registry()
+	await _vanishing_shards_release_mitts()
 	await _lift_roots_then_carries_slower_than_walking()
 	await _carry_blocks_hook_and_items()
 	await _ward_puts_down()
@@ -65,6 +66,48 @@ func _on_shattered(_at: Vector2) -> void:
 
 func _gone(node: Variant) -> bool:
 	return not is_instance_valid(node) or node.is_queued_for_deletion()
+
+
+## A shard can be queued by its expiry before the grab callback, or disappear during LIFT.
+## Both paths use the real hitbox, shard and mitts cycle; the signals control the race timing.
+func _vanishing_shards_release_mitts() -> void:
+	for queued_before_grab in [true, false]:
+		reset_state()
+		var arena := make_arena()
+		var player := make_player(arena, START)
+		_give_mitts(player)
+		var boss_scene := load("res://scenes/enemies/bosses/hushed_colossus.tscn") as PackedScene
+		check(boss_scene != null, "Colossus scene loads for real shard")
+		if boss_scene == null:
+			await dispose(arena)
+			return
+		var boss = boss_scene.instantiate()
+		boss.position = Vector2(1500, 800)
+		arena.add_child(boss)
+		boss.land_shard(START + AHEAD)
+		var shard = boss.shards.back()
+		var hurtbox := shard.get_node("Hurtbox") as Hurtbox
+		var seen := {"lifted": false}
+		shard.lifted.connect(func(_by: Node2D) -> void: seen["lifted"] = true)
+		if queued_before_grab:
+			hurtbox.hurt.connect(func(_hit: Hitbox) -> void: shard.queue_free())
+		else:
+			shard.lifted.connect(func(_by: Node2D) -> void: shard.queue_free())
+		await frames(2)
+		check(player.use_item(), "real mitts start the shard grab")
+		await frames(2)
+		check(not is_instance_valid(shard), "shard is freed during the real grab cycle")
+		check_eq(seen["lifted"], not queued_before_grab, "queued shard is rejected; live shard lifts")
+		await seconds(0.4)
+		check(_mitts().is_empty(), "mitts end safely when the shard vanishes")
+		check(not player.actions_locked(), "actions are restored after the shard vanishes")
+		Input.action_press(&"move_right")
+		await frames(10)
+		check_near(player.velocity.x, WALK_SPEED, 0.5, "walking speed is restored")
+		release_inputs()
+		check(player.use_item(), "mitts can be used again after the race")
+		await seconds(0.3)
+		await dispose(arena)
 
 
 func _scene_and_registry() -> void:

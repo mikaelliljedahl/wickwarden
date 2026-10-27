@@ -15,8 +15,7 @@ grid
 enemy tallow_blob 6,6
 enemy tallow_blob 13,4
 enemy cinder_wisp 4,4
-; Cart shelter sits apart from the shop mouth, below the cooling basin.
-prop hut @720,816 size=192,96
+; The shop entrance is the cart itself, in the clearing between the cooling pools.
 door ow_10_3#shop Inside @1200,288
 spawn FromPocket @1200,432
 spawn Default 10,5

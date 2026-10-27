@@ -71,7 +71,8 @@ class Spatter:
 	var box: Hitbox
 
 	func _ready() -> void:
-		Placeholder.attach(self, &"archivist_spatter", 100.0)
+		SpriteVisual.attach(self, &"archivist_spatter", 100.0)
+		add_child(ink_light(145.0))
 		box = Hitbox.new()
 		box.team = Layers.Team.ENEMY
 		box.damage = 2
@@ -86,6 +87,17 @@ class Spatter:
 		if ticks >= 3:
 			box.deactivate()
 			queue_free()
+
+
+	static func ink_light(radius: float) -> PointLight2D:
+		# Presentation only: this light does not participate in jar detection.
+		var light := PointLight2D.new()
+		light.name = "InkLight"
+		light.texture = LightTexture.make()
+		light.texture_scale = LightTexture.scale_for(radius)
+		light.color = Color(0.8, 0.72, 1.0)
+		light.energy = 1.2
+		return light
 
 
 func _init() -> void:
@@ -291,10 +303,15 @@ func _bolt(at: Vector2, direction: Vector2, speed: float) -> void:
 	var bolt := EnemyProjectile.new()
 	bolt.speed = speed
 	bolt.damage = 2
-	bolt.visual_kind = &"archivist_spatter"
+	bolt.visual_kind = &"archivist_ink_bolt"
 	bolt.blockable_by_ward = true
 	get_parent().add_child(bolt)
 	bolt.launch(at, direction)
+	var look := bolt.get_node_or_null("Visual") as Node2D
+	if look is SpriteVisual:
+		# The painted drop travels about 20 degrees clockwise from the x axis.
+		look.rotation = bolt.direction.angle() - deg_to_rad(20.0)
+	bolt.add_child(Spatter.ink_light(100.0))
 	add_hazard(bolt)
 
 

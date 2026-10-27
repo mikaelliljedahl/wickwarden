@@ -1,0 +1,88 @@
+Cinderflats visual review — 2026-10-27
+
+Reviewed contact-cinderflats.png and all 20 full-size images in
+/tmp/wick-capture-20261027-current: the graph's 14 rooms and six pockets.
+The sheet labels each once. The index records controlled 1920x1080 stills,
+30 physics frames, seed 1, fresh GameState, default spawn and no granted items
+or flags. This is not a human playthrough or a current-render guarantee. No
+new captures or game tests were run. Findings describe the sampled images;
+opening, movement, collisions and readability in action need separate review.
+
+Triage: The common ground, boundary, rocks and flowers appear green and mossy
+throughout these captures. Ash dunes, slag roads, burnt fields, cold furnace,
+fused glass and cliffs are not readily distinguished as such; this differs
+visually from the region descriptions in the plan. The large ravines in
+ow_8_2 and ow_10_4 are dark, straight-edged rectangles. Review their edges and
+crossings in motion. A still does not establish a blocked route.
+
+ow_8_0 (Ash Rim): two wisps and the upper-left stone arch are visible. The
+  arch opening looks like ordinary ground; a hook-tap wall or its cue is not
+  apparent at this scale. Inspect the cue, tap, reveal and entry from close up.
+ow_8_0#cache: return door and small round cache icon are visible; the icon's
+  contents are not apparent from the still. Collection and return unreviewed.
+ow_9_0 (Smoke Terrace): two Hollows and red wax seal on the door are clear.
+  The ruin reads as a doorway rather than a vent terrace. Charged flare,
+  opened seal and pocket transition unreviewed.
+ow_9_0#cache: round cache icon between two masonry strips and exit are visible;
+  opening, collection and return unreviewed.
+ow_10_0 (Cinder Crown): a Hollow and two wisps sit among an arc of rocks;
+  one wisp visually meets the lower rock cluster. The crater rim reads as
+  scattered mossy boulders. Check enemy movement and depth ordering there.
+ow_8_1 (Portcullis Court): west grate, eye pillar, two Skitterwicks and Hollow
+  are visible. The grate is cropped by the screen edge; the pillar is distant
+  from it, so their relationship merits a moving approach and shot review.
+  Opening and transitions are unshown.
+ow_9_1 (Slag Road): three wisps, barred pocket door and ward plate are visible.
+  The plate's symbol is small and its relationship to the door is not obvious
+  in the still. Inspect burst, ward timing, opening and entry in play.
+ow_9_1#ward: exit and round cache icon are visible in a grass-and-rock clearing;
+  cache opening, collection and return unreviewed.
+ow_10_1 (Kiln Fields): locked door, its padlock and two Hollows are visible.
+  Door stands between fragmented walls; the setting does not clearly read as
+  a kiln or burnt fields. Unlock, entry and return unreviewed.
+ow_10_1#hut: pot bag is visible on a pedestal and return door below; the room
+  reads as an outdoor grass clearing rather than a hut interior. Pickup and
+  return unreviewed.
+ow_11_1 (Ember Shore): two moths and a wisp are visible, with rocks along the
+  east side. The east cliff is not visually apparent as a drop in this still;
+  enemy movement and edge behavior need review.
+ow_8_2 (Ash Bridge): two Skitterwicks stand on the central ground strip between
+  two long dark rectangular pits. The strip does not visibly read as a burnt
+  bridge; check pit edges, crossing and enemy movement in motion.
+ow_9_2 (Sleeping Furnace): cave mouth, Hollow and two wisps are visible. The
+  mouth is set in mossy masonry; a cold furnace is not readily apparent. Entry,
+  return and enemy interactions unreviewed.
+ow_10_2 (Glassed Court): two Hollows and broken masonry are visible, but the
+  ground looks like the same grassy surface rather than fused glass. Hidden
+  stairs are not visible in this fresh state; glow-jar reveal and C7 entry are
+  unreviewed, so absence here is not evidence of a missing gate.
+ow_11_2 (Slag Cache): three wisps and a visibly cracked wall among the east
+  rocks are present. Check approach and bomb reveal through the adjacent rock
+  cluster; neither passage nor a collision fault can be established here.
+ow_11_2#cache: glowing pickup on a pedestal and return door are visible; the
+  glow partly covers the pickup silhouette. Collection and return unreviewed.
+ow_9_3 (Heavy Pass): two Skitterwicks and the large stone at the south opening
+  are visible; the bottom of the stone is clipped at the screen edge. Lifting
+  and passage into Gravelight need review in motion.
+ow_10_3 (Cooling Pools): cart, two pools, two blobs and wisp are visible. The
+  pools look like still ponds rather than steaming pools; interaction at the
+  cart is unshown. State says the painted cart replaced the former inaccessible
+  hut/floating door and the real entrance and return were tested; this still
+  does not independently verify that route.
+ow_10_3#shop: in this older image three pedestals and one priced item appear
+  outdoors with no merchant or counter. This finding is stale: newer state says
+  S3 has a shopkeeper and painted counter, visually inspected and tested for a
+  purchase; an awning remains dressing work. Current rendering and other stock
+  and purchase states were not inspected in this review.
+ow_10_4 (Anchor Ledge): a broad rectangular dark gap divides the screen; the
+  southern ring is clear, while the player overlaps and partly conceals the
+  northern anchor at spawn beside a Hollow. Inspect ring visibility, aim,
+  crossing, landing and transition under normal movement.
+
+Newer state records painted Cinder Wisp burst frames with an outline for the
+full damage area, inspected in controlled outdoor and cave captures. These
+initial stills do not show the active burst; current warning, burst, ward and
+human combat readability remain unreviewed here. Gate changes, pickups, shop
+interactions, all returns, enemy action states and the visual continuity of
+room transitions likewise remain open. Q5 records observations for triage;
+no fix or claim of failed reachability is made here.

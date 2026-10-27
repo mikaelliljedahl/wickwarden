@@ -195,6 +195,9 @@ func island_at(point: Vector2) -> int:
 
 
 func _boss_physics(delta: float) -> void:
+	# Facing is presentation only; aim remains fixed throughout an attack.
+	if mode == &"ready" and visual.has_method("set_facing"):
+		visual.call("set_facing", direction_to_player())
 	dive_left -= delta
 	lance_left -= delta
 	mode_left -= delta
@@ -318,6 +321,15 @@ func _warning(at: Vector2, duration: float, shape: StringName, radius: float) ->
 	marker.arc_deg = 120
 	marker.facing = aim
 	marker.duration = duration
+	# The arena is dark: briefly light the warning and the knight, without
+	# joining glow_light (which is reserved for the jar's gameplay effects).
+	var light := PointLight2D.new()
+	light.name = "WarningLight"
+	light.texture = LightTexture.make()
+	light.texture_scale = LightTexture.scale_for(radius + 70.0)
+	light.color = Color(0.85, 0.65, 1.0)
+	light.energy = 0.8
+	marker.add_child(light)
 	get_parent().add_child(marker)
 	marker.global_position = at
 	marker.start()

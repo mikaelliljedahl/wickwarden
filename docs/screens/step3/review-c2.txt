@@ -1,0 +1,65 @@
+C2 visual review — 2026-10-27, working-tree capture baseline
+
+Reviewed contact-c2.png and all nine full-size images in
+/tmp/wick-capture-20261027-current/: cave_2_1 through cave_2_9. The capture
+index reports 1920x1080, 30 physics frames, seed 1, fresh GameState, default
+spawn, no granted tools or flags; graph source hash
+0c5cf8c81ad865e57b289329794076fe4ed34d9e5b90595f1548ea2ae4791a74.
+These are controlled portraits, not an earned route or human playthrough. The
+contact sheet and full-size captures are the same baseline; later working-tree
+changes could make them stale. No new captures or game tests were run.
+
+Priority findings for triage:
+- REVIEW, lighting/readability: at default spawn the thorn wall and locked door
+  in cave_2_2, key in cave_2_3, Thorn Warden in cave_2_4, sling pedestal in
+  cave_2_5, eye switch and key in cave_2_6, Lockpick pedestal in cave_2_7, and
+  Briar Mother and seed-eyes in cave_2_9 are very dim or hard to distinguish.
+  The lamp is local and approaching may resolve this; the portraits do not prove
+  a gameplay defect. Review approaches, target visibility and attack warnings.
+- REVIEW, cave_2_5 and cave_2_3: the south locked door and thorn wall respectively
+  extend to the bottom screen edge in these portraits. Confirm that their open
+  and return transitions read clearly from both sides; this does not establish
+  a blocked exit or faulty collision.
+- REVIEW, C2 visual identity: the portraits show largely stone-block room
+  surfaces and pillars, while world-plan describes a root cave, seed halls and
+  thorn canopy. The thorn enemies, wall and boss do add vegetation. Assess the
+  area as a whole against the planned visual theme in normal play; this is an
+  art-direction question, not a proven missing asset.
+- No unambiguous geometric placeholder was identified in the visible portions
+  of these nine fresh-state portraits. Darkness and unobserved states limit that
+  conclusion; it is not an all-art acceptance.
+
+Room-by-room, observed fresh state:
+cave_2_1 (Rootmouth): painted cave mouth, stone blocks, two bramble snappers
+  and a Spitcap silhouette. Enemies and east approach are dim away from the
+  player. No obvious geometric fallback in the visible area.
+cave_2_2 (Seed Hall): north thorn wall, east locked door, three Skitterwicks and
+  stone blocks appear very dim. Painted blocker silhouettes are present; burn,
+  unlock and passage states not reviewed.
+cave_2_3 (Thorn Nook): south thorn wall, two dim bramble snappers and a very dim
+  small key above the player are visible. Wall reaches bottom screen edge. Burn,
+  key pickup and return states not reviewed.
+cave_2_4 (Fruiting Hall): west lock and Thorn Warden in centre are visible;
+  warden is extremely dark from the west spawn. East approach and warden attack,
+  stun and defeat states need a closer action-state review.
+cave_2_5 (Pale Garden): two dim moths, a bramble snapper, distant pedestal and
+  south locked door are visible. Sling is not distinguishable at this distance;
+  door extends to screen edge. Pickup, unlocked and transition states not reviewed.
+cave_2_6 (Overgrown Walk): two Tallow blobs, two dim Spitcaps, small key, slug
+  bundle, eye switch and east portcullis are visible. The switch and gate are
+  dark; shooting the eye and the open crossing were not reviewed.
+cave_2_7 (Eye Loft): west portcullis, eye switch, bramble snapper and pedestal
+  are visible. Lockpick cannot be distinguished from the distant pedestal in
+  this still. Switch activation, open return and pickup not reviewed.
+cave_2_8 (Hanging Antechamber): two Skitterwicks, north locked door and east boss
+  door are visible but dim; no clear geometric fallback. Door opening and both
+  transitions not reviewed.
+cave_2_9 (Briar Mother's Crown): painted canopy/mother, three painted seed-eye
+  shapes and west door visible; boss and eyes are extremely dark from entry.
+  This is initial entry, not an active fight: eye tells, raised/lowered states,
+  projectiles, phase-two bloom/sweep, rewards and exit remain unreviewed.
+
+A dark region or a blocker at a screen edge is not by itself proof of an
+impassable route. No conclusion about collision, gameplay balance, opened gates,
+transient effects or all animation frames follows from these stills. Q5 owns
+this report; fixes require the applicable owner or an explicit Z1 ticket.

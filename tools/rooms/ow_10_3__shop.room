@@ -12,6 +12,8 @@ grid
 #..bb..........bb..#
 #..................#
 ####################
+decor npc_ashwife @820,250
+prop shop_counter @700,300 size=192,72
 prop pedestal 5,3
 prop pedestal 9,3
 prop pedestal 14,3

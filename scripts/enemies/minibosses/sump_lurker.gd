@@ -185,6 +185,16 @@ func _fire_jet() -> void:
 	projectile.room_rect = room_rect
 	get_parent().add_child(projectile)
 	projectile.launch(global_position, direction_to_player())
+	var look := projectile.get_node_or_null("Visual") as Node2D
+	if look is SpriteVisual:
+		look.rotation = projectile.direction.angle()
+	var light := PointLight2D.new()
+	light.name = "WaterJetLight"
+	light.texture = LightTexture.make()
+	light.texture_scale = LightTexture.scale_for(90.0)
+	light.color = Color(0.55, 0.8, 1.0)
+	light.energy = 1.0
+	projectile.add_child(light)
 	add_hazard(projectile)
 
 

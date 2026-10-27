@@ -1,0 +1,61 @@
+C6 visual review — 2026-10-27
+
+Reviewed contact-c6.png and all 13 full-size C6 images in
+/tmp/wick-capture-20261027-current: cave_6_1 through cave_6_11, and
+cave_6_8#ward and cave_6_9#crypt. The index records 1920x1080, 30 physics
+frames, seed 1, fresh GameState, Default spawn, no granted items or flags; all
+13 are dark. Graph source hash: 0c5cf8c81ad865e57b289329794076fe4ed34d9e5b90595f1548ea2ae4791a74.
+These are controlled stills, not an earned route or human playthrough. No new
+captures or game tests were run. The contact sheet contains the same 13 IDs;
+its thumbnails are too dark to assess much beyond composition.
+
+Triage: distant enemies, gates, pickups and the boss heads are difficult to
+read in these stills outside the player's lamp. Review them while approaching
+with normal light, especially the chime, keys, ward plate and boss encounter.
+This is an observed contrast limitation at the captured positions, not proof
+that those objects are unreadable when approached. The C6 room sources were
+compared with the images to identify objects and gates. Current choirling,
+Choir Warden and Dirge Choir scripts contain attack cues, including drawn
+geometry; their active presentation cannot be assessed from these stills.
+The current boss script assigns distinct painted head art and animations; the
+still is not evidence that the latest combat states lack them. Code and assets
+may have changed since capture, so the images are not a current render proof.
+
+Room observations, at the captured fresh state:
+cave_6_1 (Echo Steps): lit boulder and nearby stone visible; distant moth and
+  two choirlings are very dim. Boulder movement and entrance transition unseen.
+cave_6_2 (Nave): three dim Hollows, east locked door and north cracked arch
+  barely distinguishable. Bombing, unlocking and transitions unseen.
+cave_6_3 (Cracked Loft): two dim choirlings and a barely visible small key at
+  the north; the south cracked arch reaches the bottom edge. Key collection and
+  return through the opened arch need review.
+cave_6_4 (Singing Hall): west lock and painted Choir Warden visible, but the
+  Warden is almost lost in darkness at entry. Note, recovery and defeat unseen.
+cave_6_5 (Bell Room): north resonance stone, pedestal/chime and enemies are dim
+  beyond the lamp. Pickup and resonance activation need closer review.
+cave_6_6 (Resonance Hall): south resonance stone and enemies are dim; the
+  eastern hidden seam cannot be assessed here. Jar reveal and crossing unseen.
+cave_6_7 (Organ Loft): distant key pedestal and choirlings are dim; a choirling
+  visually overlaps the lower-right stone silhouette in the still. Its movement
+  and whether that overlap persists need review; this is not a collision finding.
+cave_6_8 (Quiet Hall): the ward plate, chapel gate, east lock, west heavy door
+  and enemies are faint at this position. Ward activation, pocket entry, heavy
+  door push and unlocking need closer review.
+cave_6_8#ward: exit is brightly lit, but the cache to the right is barely
+  visible. Cache interaction, reward and return transition unseen.
+cave_6_9 (Hollow Crypt): west lock is lit; Hollows, north cracked niche and big
+  key at right are very dim. Bombing, pickup and pocket transition unseen.
+cave_6_9#crypt: lit exit, faint central wick core and flanking rocks visible.
+  Collection and return transition unseen.
+cave_6_10 (Choir Antechamber): east heavy door is lit; choirlings and south
+  boss door are dim. The south door reaches the screen edge; push, unlock and
+  both crossings need review.
+cave_6_11 (Dirge Floor): three painted heads are distinguishable but very dark
+  from the north spawn. Singing, attack areas, chime response, later phases,
+  rewards and exit are not covered; inspect actual combat with local light.
+
+No unambiguous missing-art fallback was identified in the visible portions of
+these portraits. Darkness and missing action states limit that conclusion.
+Still images and edge placement do not establish blocked routes, collision,
+balance, animation quality or successful interactions. Q5 records findings;
+fixes belong to the relevant owner or a Z1 ticket.

@@ -344,6 +344,22 @@ func _attacks_and_reset() -> void:
 		check_eq(shot.damage, 2, "slag deals two half hearts")
 		check_near(shot.speed, 300, 0.01, "slag speed is 300")
 		check(shot.hitbox.blockable, "ward blocks slag")
+		var visual := shot.get_node_or_null("Visual") as SpriteVisual
+		check(visual != null, "slag uses painted sprite")
+		if visual != null:
+			check_eq(visual.sprite_frames.get_frame_count(&"idle"), 2, "slag flight animates")
+			check_near(visual.rotation, shot.direction.angle() - deg_to_rad(20.0), 0.001, "slag points along flight")
+		check(shot.get_node_or_null("SlagLight") is PointLight2D, "slag has presentation light")
+	if not shots.is_empty():
+		var shot = shots[0]
+		shot.destroy(&"wall")
+		var impact := arena.get_node_or_null("Puff") as SpriteVisual
+		check(impact != null, "wall impact shows painted slag effect")
+		if impact != null:
+			check_eq(impact.animation, &"impact", "impact uses impact animation")
+			check_eq(impact.sprite_frames.get_frame_count(&"impact"), 3, "impact has three frames")
+			await seconds(0.6)
+			check(not is_instance_valid(impact), "impact cleans itself up")
 	await seconds(4.5)
 	for _i in range(150):
 		if boss.attack == boss.Attack.RECOVER:
@@ -374,6 +390,13 @@ func _arena_scene() -> void:
 	viewer.set_hurtbox_enabled(self, false)
 	await frames(2)
 	var props := room.get_node("Props/Arena")
+	var mouth := props.get_node("KilnMouth/Visual")
+	check(mouth is SpriteVisual, "kiln mouth uses its painted sprite visual")
+	if mouth is SpriteVisual:
+		check(mouth.sprite_frames != null, "kiln mouth has sprite frames")
+		if mouth.sprite_frames != null:
+			check(mouth.sprite_frames.has_animation(&"idle"), "kiln mouth has idle art")
+			check(mouth.sprite_frames.get_frame_count(&"idle") > 0, "kiln mouth art is populated")
 	for index in range(4):
 		var pillar := props.get_node("Pillar%d" % index) as SolidBlock
 		check_eq(pillar.size, Vector2(96, 96), "solid pillar is one tile")

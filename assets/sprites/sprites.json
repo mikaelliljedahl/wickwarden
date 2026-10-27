@@ -1,4 +1,84 @@
 {
+  "fx_wisp_burst": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fx_wisp_burst_idle.png",
+        "frames": 5,
+        "fps": 12.0,
+        "loop": false
+      }
+    }
+  },
+  "briar_band_full_candidate": {
+    "cell": [
+      1920,
+      96
+    ],
+    "anchor": [
+      960.0,
+      48.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/briar_band_full_candidate_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "tidewick_wave_ripple": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      64.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tidewick_wave_ripple_idle.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "tidewick_bolt_tell": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      64.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tidewick_bolt_tell_idle.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
   "grate_fence_bay": {
     "cell": [
       128,
@@ -162,6 +242,325 @@
       }
     }
   },
+  "lock_warden": {
+    "cell": [
+      512,
+      512
+    ],
+    "anchor": [
+      256.0,
+      256.0
+    ],
+    "radius": 120.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/lock_warden_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "lock_deadbolt": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "radius": 16.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/lock_deadbolt_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "lock_key_volley": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/lock_key_volley_fly.png",
+        "frames": 2,
+        "fps": 6.0,
+        "loop": true
+      },
+      "impact": {
+        "file": "res://assets/sprites/lock_key_volley_impact.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "kiln_slag": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/kiln_slag_fly.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "impact": {
+        "file": "res://assets/sprites/kiln_slag_impact.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "archivist_ink_bolt": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/archivist_ink_bolt_fly.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "archivist_spatter": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      96.0
+    ],
+    "radius": 100.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/archivist_spatter_burst.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "sump_water_jet": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/sump_water_jet_fly.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
+  "coinwyrm_coin": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/coinwyrm_coin_fly.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "impact": {
+        "file": "res://assets/sprites/coinwyrm_coin_impact.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "coin_heap": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      96.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/coin_heap_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "quiver": {
+        "file": "res://assets/sprites/coin_heap_quiver.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": true
+      },
+      "burst": {
+        "file": "res://assets/sprites/coin_heap_burst.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "coinwyrm_plate": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      96.0
+    ],
+    "radius": 26.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/coinwyrm_plate_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "coinwyrm_crown": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      96.0
+    ],
+    "radius": 26.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/coinwyrm_crown_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "coinwyrm": {
+    "cell": [
+      512,
+      512
+    ],
+    "anchor": [
+      256.0,
+      256.0
+    ],
+    "radius": 70.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/coinwyrm_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "coinwyrm_tail": {
+    "cell": [
+      384,
+      256
+    ],
+    "anchor": [
+      192.0,
+      128.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/coinwyrm_tail_tell.png",
+        "frames": 2,
+        "fps": 4.0,
+        "loop": true
+      },
+      "tell": {
+        "file": "res://assets/sprites/coinwyrm_tail_tell.png",
+        "frames": 2,
+        "fps": 4.0,
+        "loop": true
+      },
+      "sweep": {
+        "file": "res://assets/sprites/coinwyrm_tail_sweep.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": false
+      },
+      "burrow": {
+        "file": "res://assets/sprites/coinwyrm_tail_burrow.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
   "thorn_wall": {
     "cell": [
       192,
@@ -220,6 +619,66 @@
     "animations": {
       "idle": {
         "file": "res://assets/sprites/fragment_c9_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c6": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c6_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c7": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c7_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "fragment_c8": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      88.0
+    ],
+    "foot": 88,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fragment_c8_idle.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true
@@ -412,6 +871,271 @@
         "file": "res://assets/sprites/unlit_p1_mass_idle.png",
         "frames": 2,
         "fps": 6.0,
+        "loop": true
+      }
+    }
+  },
+  "npc_tilly": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      148.0
+    ],
+    "foot": 176,
+    "radius": 28.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/npc_tilly_idle.png",
+        "frames": 4,
+        "fps": 3.0,
+        "loop": true
+      }
+    }
+  },
+  "npc_peddler": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      148.0
+    ],
+    "foot": 176,
+    "radius": 28.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/npc_peddler_idle.png",
+        "frames": 4,
+        "fps": 3.0,
+        "loop": true
+      }
+    }
+  },
+  "npc_ashwife": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      148.0
+    ],
+    "foot": 176,
+    "radius": 28.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/npc_ashwife_idle.png",
+        "frames": 4,
+        "fps": 3.0,
+        "loop": true
+      }
+    }
+  },
+  "npc_mason": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      148.0
+    ],
+    "foot": 176,
+    "radius": 28.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/npc_mason_idle.png",
+        "frames": 4,
+        "fps": 3.0,
+        "loop": true
+      }
+    }
+  },
+  "npc_pilgrim": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      148.0
+    ],
+    "foot": 176,
+    "radius": 28.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/npc_pilgrim_idle.png",
+        "frames": 4,
+        "fps": 3.0,
+        "loop": true
+      }
+    }
+  },
+  "npc_keeper": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      148.0
+    ],
+    "foot": 176,
+    "radius": 28.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/npc_keeper_idle.png",
+        "frames": 4,
+        "fps": 3.0,
+        "loop": true
+      }
+    }
+  },
+  "shop_counter": {
+    "cell": [
+      384,
+      192
+    ],
+    "anchor": [
+      192.0,
+      176
+    ],
+    "foot": 176,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 72,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/shop_counter_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "unlit_eye": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      64.0
+    ],
+    "radius": 32.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_eye_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "gloam_knight": {
+    "cell": [
+      320,
+      320
+    ],
+    "anchor": [
+      160.0,
+      248.0
+    ],
+    "foot": 292,
+    "radius": 44.0,
+    "mirror_side": true,
+    "animations": {
+      "idle_down": {
+        "file": "res://assets/sprites/gloam_knight_idle_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "idle_side": {
+        "file": "res://assets/sprites/gloam_knight_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/gloam_knight_idle_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "unlit_p2_shell": {
+    "cell": [
+      512,
+      512
+    ],
+    "anchor": [
+      256.0,
+      350.0
+    ],
+    "foot": 470,
+    "radius": 120.0,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_p2_shell_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "unlit_p3_heart": {
+    "cell": [
+      512,
+      512
+    ],
+    "anchor": [
+      256.0,
+      256.0
+    ],
+    "radius": 120.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_p3_heart_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "ninth_lantern": {
+    "cell": [
+      384,
+      384
+    ],
+    "anchor": [
+      192.0,
+      192.0
+    ],
+    "radius": 110.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/ninth_lantern_idle.png",
+        "frames": 1,
+        "fps": 1.0,
         "loop": true
       }
     }
@@ -946,6 +1670,28 @@
     "animations": {
       "idle": {
         "file": "res://assets/sprites/b01_kiln_pillar_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "kiln_mouth": {
+    "cell": [
+      96,
+      192
+    ],
+    "anchor": [
+      48.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 192,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/b01_kiln_mouth_idle.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true
@@ -2477,6 +3223,28 @@
       }
     }
   },
+  "pocket_cart": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      186
+    ],
+    "foot": 186,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/pocket_cart.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "pocket_stall": {
     "cell": [
       192,
@@ -2618,8 +3386,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/pit_fill.png",
@@ -3024,6 +3793,50 @@
     "animations": {
       "idle": {
         "file": "res://assets/sprites/rush_wall.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "dry_vine_screen": {
+    "cell": [
+      192,
+      192
+    ],
+    "anchor": [
+      96.0,
+      176
+    ],
+    "foot": 176,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 80,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/dry_vine_screen.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
+  "ninth_door": {
+    "cell": [
+      576,
+      480
+    ],
+    "anchor": [
+      288.0,
+      442
+    ],
+    "foot": 442,
+    "mirror_side": false,
+    "prop": true,
+    "rect_h": 96,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/ninth_door.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true
@@ -4109,8 +4922,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/ground_grass.png",
@@ -4129,8 +4943,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/ground_cave.png",
@@ -4149,8 +4964,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/wall_hedge.png",
@@ -4169,8 +4985,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/wall_cave.png",
@@ -4189,8 +5006,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/wall_ruin.png",
@@ -4209,8 +5027,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/water.png",
@@ -4229,8 +5048,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/pond_bank.png",
@@ -4249,8 +5069,9 @@
       192.0,
       192.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "texture": true,
+    "centered": true,
     "animations": {
       "idle": {
         "file": "res://assets/sprites/wall_ruin_face.png",

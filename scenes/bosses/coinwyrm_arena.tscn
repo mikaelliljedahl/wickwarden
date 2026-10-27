@@ -36,21 +36,25 @@ kind = &"rock"
 position = Vector2(1344, 768)
 [node name="Heap0" type="Node2D" parent="."]
 position = Vector2(288, 288)
-[node name="Visual" type="Polygon2D" parent="Heap0"]
-color = Color(0.38, 0.25, 0.08, 1)
-polygon = PackedVector2Array(78.00, 0.00, 75.34, 10.87, 67.55, 21.00, 55.15, 29.70, 39.00, 36.37, 20.19, 40.57, 0.00, 42.00, -20.19, 40.57, -39.00, 36.37, -55.15, 29.70, -67.55, 21.00, -75.34, 10.87, -78.00, 0.00, -75.34, -10.87, -67.55, -21.00, -55.15, -29.70, -39.00, -36.37, -20.19, -40.57, -0.00, -42.00, 20.19, -40.57, 39.00, -36.37, 55.15, -29.70, 67.55, -21.00, 75.34, -10.87)
+[node name="Visual" type="AnimatedSprite2D" parent="Heap0"]
+script = ExtResource("1")
+kind = &"coin_heap"
+auto_motion = false
 [node name="Heap1" type="Node2D" parent="."]
 position = Vector2(288, 672)
-[node name="Visual" type="Polygon2D" parent="Heap1"]
-color = Color(0.38, 0.25, 0.08, 1)
-polygon = PackedVector2Array(78.00, 0.00, 75.34, 10.87, 67.55, 21.00, 55.15, 29.70, 39.00, 36.37, 20.19, 40.57, 0.00, 42.00, -20.19, 40.57, -39.00, 36.37, -55.15, 29.70, -67.55, 21.00, -75.34, 10.87, -78.00, 0.00, -75.34, -10.87, -67.55, -21.00, -55.15, -29.70, -39.00, -36.37, -20.19, -40.57, -0.00, -42.00, 20.19, -40.57, 39.00, -36.37, 55.15, -29.70, 67.55, -21.00, 75.34, -10.87)
+[node name="Visual" type="AnimatedSprite2D" parent="Heap1"]
+script = ExtResource("1")
+kind = &"coin_heap"
+auto_motion = false
 [node name="Heap2" type="Node2D" parent="."]
 position = Vector2(1056, 480)
-[node name="Visual" type="Polygon2D" parent="Heap2"]
-color = Color(0.38, 0.25, 0.08, 1)
-polygon = PackedVector2Array(78.00, 0.00, 75.34, 10.87, 67.55, 21.00, 55.15, 29.70, 39.00, 36.37, 20.19, 40.57, 0.00, 42.00, -20.19, 40.57, -39.00, 36.37, -55.15, 29.70, -67.55, 21.00, -75.34, 10.87, -78.00, 0.00, -75.34, -10.87, -67.55, -21.00, -55.15, -29.70, -39.00, -36.37, -20.19, -40.57, -0.00, -42.00, 20.19, -40.57, 39.00, -36.37, 55.15, -29.70, 67.55, -21.00, 75.34, -10.87)
+[node name="Visual" type="AnimatedSprite2D" parent="Heap2"]
+script = ExtResource("1")
+kind = &"coin_heap"
+auto_motion = false
 [node name="Heap3" type="Node2D" parent="."]
 position = Vector2(1536, 672)
-[node name="Visual" type="Polygon2D" parent="Heap3"]
-color = Color(0.38, 0.25, 0.08, 1)
-polygon = PackedVector2Array(78.00, 0.00, 75.34, 10.87, 67.55, 21.00, 55.15, 29.70, 39.00, 36.37, 20.19, 40.57, 0.00, 42.00, -20.19, 40.57, -39.00, 36.37, -55.15, 29.70, -67.55, 21.00, -75.34, 10.87, -78.00, 0.00, -75.34, -10.87, -67.55, -21.00, -55.15, -29.70, -39.00, -36.37, -20.19, -40.57, -0.00, -42.00, 20.19, -40.57, 39.00, -36.37, 55.15, -29.70, 67.55, -21.00, 75.34, -10.87)
+[node name="Visual" type="AnimatedSprite2D" parent="Heap3"]
+script = ExtResource("1")
+kind = &"coin_heap"
+auto_motion = false

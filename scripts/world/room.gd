@@ -26,6 +26,8 @@ extends Node2D
 ## Dark rooms are lit only by the lamp (World turns the CanvasModulate on).
 @export var dark: bool = false
 @export var floor_color: Color = Color(0.17, 0.21, 0.17)
+## Stone interiors in overworld pockets keep their overworld scope and travel rules.
+@export var stone_interior: bool = false
 @export var build_walls: bool = true
 
 const RESPAWN_CONTAINERS: Array[StringName] = [&"Enemies", &"Bushes"]
@@ -122,9 +124,9 @@ func _draw() -> void:
 	draw_mesh(edge.lip_mesh, null)
 
 
-## Terrain follows cave scope, including pockets. Darkness controls lighting independently.
+## Cave scope or an authored stone interior selects stone; darkness is independent.
 func _uses_cave_terrain() -> bool:
-	return WorldData.scope_of(room_id).begins_with("c")
+	return stone_interior or WorldData.scope_of(room_id).begins_with("c")
 
 
 ## Deterministic per room: the same border every frame and every visit.

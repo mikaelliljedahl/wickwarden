@@ -120,7 +120,7 @@ func _item_visuals() -> void:
 func _fragment_visuals() -> void:
 	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 	var arena := make_arena()
-	for cave in [&"c1", &"c2", &"c3"]:
+	for cave in [&"c1", &"c2", &"c3", &"c4", &"c5", &"c6", &"c7", &"c8", &"c9"]:
 		var pickup := PickupBase.new()
 		pickup.kind = &"fragment"
 		pickup.scope = cave

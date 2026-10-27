@@ -32,8 +32,8 @@ func _shape_disabled(door: Variant) -> bool:
 func _lit_sockets(door: Variant) -> int:
 	var lit := 0
 	for number in range(1, GameState.FRAGMENT_CAVES + 1):
-		var socket := door.get_node_or_null("Socket_c%d" % number) as Placeholder
-		if socket != null and socket.kind == &"ninth_socket_lit":
+		var socket := door.get_node_or_null("Socket_c%d" % number) as Sprite2D
+		if socket != null and socket.visible:
 			lit += 1
 	return lit
 
@@ -52,11 +52,15 @@ func _scene_has_nine_sockets() -> void:
 		door.get_node_or_null(Placeholder.VISUAL_NAME) != null, "the ninth door has a Visual child"
 	)
 	check(Placeholder.has_kind(&"ninth_door"), "the door registers its placeholder kind")
+	check(door.get_node("Visual") is SpriteVisual, "the door has its painted sprite")
 	for number in range(1, GameState.FRAGMENT_CAVES + 1):
 		check(door.get_node_or_null("Socket_c%d" % number) != null, "socket %d exists" % number)
 	check(door.get_node_or_null("Socket_c10") == null, "there is no socket for C10")
 	check_eq(_lit_sockets(door), 0, "no socket is lit without fragments")
-	check(not door.is_open, "a door without fragments starts shut")
+	GameState.add_fragment(&"c3")
+	check(door.get_node("Socket_c3").visible, "the third fragment lights the third socket")
+	check(not door.get_node("Socket_c1").visible, "other sockets stay dark")
+	check(not door.is_open, "a door with one fragment stays shut")
 	check(not (door.get_node("Shape") as CollisionShape2D).disabled, "a shut door has collision")
 	await dispose(arena)
 
@@ -93,13 +97,14 @@ func _nine_open_and_are_kept() -> void:
 	reset_state()
 	_give_fragments(8)
 	var arena := make_arena()
-	var player := make_player(arena, PLAYER_AT)
+	var player := make_player(arena, PLAYER_AT - Vector2(0, 200))
 	var door: Variant = _make(arena, DOOR_AT)
 	await frames(2)
 	GameState.add_fragment(&"c9")
 	await frames(2)
 	check_eq(_lit_sockets(door), 9, "a fragment taken in the tree lights its socket at once")
 	check(door.can_open(), "nine fragments open the door")
+	player.place_at(PLAYER_AT)
 	await frames(4)
 	check(door.is_open, "touching it with nine fragments opens it")
 	check(_shape_disabled(door), "an open door has no collision")

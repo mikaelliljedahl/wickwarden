@@ -122,7 +122,7 @@ func _enter_phase(number: int) -> void:
 	var looks: Array[StringName] = [&"unlit_p1_mass", &"unlit_p2_shell", &"unlit_p3_heart"]
 	visual = SpriteVisual.attach(self, looks[number - 1], body_radius)
 	visual.modulate = Color(1.0, 0.85, 0.55) if number == 2 else Color.WHITE
-	_heart_glow.visible = number == 3
+	_heart_glow.visible = number == 3 and not SpriteVisual.has_art(&"unlit_p3_heart")
 	set_contact_enabled(number != 3)
 	if is_instance_valid(lantern):
 		lantern.global_position = _phase_origin + LANTERN
@@ -149,6 +149,13 @@ func _spawn_eyes() -> void:
 			continue
 		var angle := TAU * i / EYES
 		adopt_part(eye, _phase_origin + MASS + Vector2.from_angle(angle) * ORBIT)
+		var light := PointLight2D.new()
+		light.name = "EyeLight"
+		light.texture = LightTexture.make()
+		light.texture_scale = LightTexture.scale_for(100.0)
+		light.color = Color(0.35, 0.8, 0.85)
+		light.energy = 0.65
+		eye.add_child(light)
 		eye.room_rect = Rect2()
 		eyes.append(eye)
 		angles.append(angle)
@@ -180,7 +187,7 @@ func _boss_physics(delta: float) -> void:
 			_tick_heart(delta)
 			_heart_glow.exposed = exposed_left > 0
 			_heart_glow.queue_redraw()
-			visual.modulate = Color(1.0, 0.6, 0.3) if exposed_left > 0 else Color(0.6, 0.6, 0.7)
+			visual.modulate = Color(1.2, 1.0, 0.7) if exposed_left > 0 else Color(0.35, 0.35, 0.55)
 	queue_redraw()
 
 
@@ -204,6 +211,9 @@ func _tick_eyes(delta: float) -> void:
 			if gaze[i] <= 0.0:
 				gaze_tell[i] = 0.5
 				_marker(eye.global_position, 0.5, 44.0)
+		var light := eye.get_node_or_null("EyeLight") as PointLight2D
+		if light != null:
+			light.energy = 1.3 if gaze_tell[i] > 0.0 else 0.65
 	if alive <= 3 and not _hounds_entered:
 		_hounds_entered = true
 		_spawn_minions("husk_hound", 2, true)

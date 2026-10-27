@@ -1,0 +1,279 @@
+{
+  "source_sha256": "0c5cf8c81ad865e57b289329794076fe4ed34d9e5b90595f1548ea2ae4791a74",
+  "start": "ow_0_0",
+  "goal": "cave_10_14",
+  "base_capabilities": [
+    "flare",
+    "hook",
+    "ward"
+  ],
+  "objectives": [
+    {
+      "round": 1,
+      "capability": "bigkey:c1",
+      "node": "cave_1_7",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 1,
+      "capability": "cinder_wick",
+      "node": "cave_1_5",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 1,
+      "capability": "pitch_pot",
+      "node": "ow_2_1#closet",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 1,
+      "capability": "tether_moth",
+      "node": "ow_0_1",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 2,
+      "capability": "frag:c1",
+      "node": "cave_1_8",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Kilnkeeper",
+        "design": "A furnace-bellied Hush made of old kiln wax. Its wax armour melts under the cinder wick; then the hook finishes it.",
+        "needs": [
+          "cinder_wick"
+        ]
+      }
+    },
+    {
+      "round": 2,
+      "capability": "reed_raft",
+      "node": "cave_3_5",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 2,
+      "capability": "tallow_sling",
+      "node": "cave_2_5",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 3,
+      "capability": "bigkey:c2",
+      "node": "cave_2_7",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 3,
+      "capability": "bigkey:c3",
+      "node": "cave_3_6",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 3,
+      "capability": "glow_jar",
+      "node": "cave_5_5",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 3,
+      "capability": "heft_mitts",
+      "node": "cave_4_5",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 4,
+      "capability": "bigkey:c4",
+      "node": "cave_4_8",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 4,
+      "capability": "bigkey:c5",
+      "node": "cave_5_8",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 4,
+      "capability": "frag:c2",
+      "node": "cave_2_9",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Briar Mother",
+        "design": "Hangs in the canopy and lowers three seed-eyes. Only the sling reaches the eyes.",
+        "needs": [
+          "tallow_sling"
+        ]
+      }
+    },
+    {
+      "round": 4,
+      "capability": "frag:c3",
+      "node": "cave_3_9",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Tidewick",
+        "design": "A wick-serpent that circles a flooded basin. Fought from the raft; strike the glowing tail.",
+        "needs": [
+          "reed_raft"
+        ]
+      }
+    },
+    {
+      "round": 4,
+      "capability": "lantern_chime",
+      "node": "cave_6_5",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 4,
+      "capability": "skitter_boots",
+      "node": "cave_7_5",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 5,
+      "capability": "bigkey:c6",
+      "node": "cave_6_9",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 5,
+      "capability": "bigkey:c7",
+      "node": "cave_7_9",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 5,
+      "capability": "frag:c4",
+      "node": "cave_4_10",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Hushed Colossus",
+        "design": "A sleeping wax giant that wakes in phases. Lift and throw the stone shards that fall from the ceiling.",
+        "needs": [
+          "heft_mitts"
+        ]
+      }
+    },
+    {
+      "round": 5,
+      "capability": "frag:c5",
+      "node": "cave_5_10",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Archivist",
+        "design": "Splits into mirror copies. Only the real one casts a shadow under the glow jar.",
+        "needs": [
+          "glow_jar"
+        ]
+      }
+    },
+    {
+      "round": 5,
+      "capability": "reel_line",
+      "node": "cave_8_5",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 6,
+      "capability": "bigkey:c8",
+      "node": "cave_8_7",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 6,
+      "capability": "bigkey:c9",
+      "node": "cave_9_7",
+      "needs": [],
+      "after_boss": false
+    },
+    {
+      "round": 6,
+      "capability": "frag:c6",
+      "node": "cave_6_11",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Dirge Choir",
+        "design": "Three singing heads. Answer each with the chime to stun it, then strike.",
+        "needs": [
+          "lantern_chime"
+        ]
+      }
+    },
+    {
+      "round": 6,
+      "capability": "frag:c7",
+      "node": "cave_7_11",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Gloam Knight",
+        "design": "Fights on a pit-ringed floor and dives between islands. Follow with the boots.",
+        "needs": [
+          "skitter_boots"
+        ]
+      }
+    },
+    {
+      "round": 7,
+      "capability": "frag:c8",
+      "node": "cave_8_12",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Coinwyrm",
+        "design": "A hoard-serpent behind coin plates. The reel line pulls the plates off; then the hook.",
+        "needs": [
+          "reel_line"
+        ]
+      }
+    },
+    {
+      "round": 7,
+      "capability": "frag:c9",
+      "node": "cave_9_10",
+      "needs": [],
+      "after_boss": true,
+      "boss": {
+        "name": "Lock Warden",
+        "design": "A great brass lock. The sling opens its eyes and the pot breaks the plates.",
+        "needs": [
+          "pitch_pot",
+          "tallow_sling"
+        ]
+      }
+    },
+    {
+      "round": 8,
+      "capability": "bigkey:c10",
+      "node": "cave_10_13",
+      "needs": [],
+      "after_boss": false
+    }
+  ]
+}

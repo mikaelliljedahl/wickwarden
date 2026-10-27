@@ -9,6 +9,30 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
+**Working-tree handoff, 2026-10-27:** This snapshot supersedes the older
+checkpoint descriptions below where they describe current status. Following the
+owner's fetch, local `main` and `origin/main` matched at the start of push
+preparation. A separate index-based progress commit is being prepared, excluding
+the 77 previously staged paths. Other tracked and untracked work may change
+concurrently; preserve it and review the actual index, dependencies and remote
+before integration or push.
+
+The exact candidate passed `make check` in a clean isolated project snapshot:
+154 Godot suites, lint, world-data verification and 175 Python tests.
+`rooms-check` passed 221 and `art-test` passed 22. This evidence applies to that
+candidate; these latest documentation edits still need inclusion and
+verification. No tests were run for this documentation update.
+The fixed-seed input route reaches and hits the C4 boss after earning resources,
+but the recorded attempts did not win; later playthrough probes use controlled
+interventions. C4 victory, a complete uninterrupted or human game, and all
+placeholder removal and action-state readability remain unverified. Room
+captures are controlled stills, with some reviews based on older captures.
+Recheck the relevant tests and visual evidence against the final integration
+state, keeping saves isolated, before reporting or pushing it.
+
+The following entries retain historical evidence and observations; their older
+open-work and git descriptions are not a current inventory.
+
 Updated 2026-10-25 21:43 UTC. Full-gated runtime `16df5d1902a1e8fb6108aa117aa971cccefe44a7` remains the current tested checkpoint. This docs-only correction supersedes the mistaken Cave 5 screenshot attribution in `bdca18681f97d8ff13c554bb5e8b9cbc0a0f14d3` and records the missing `dry_vine_screen` art fallback in `cave_5_2`. No runtime or art files changed. Personal remote: https://github.com/mikaelliljedahl/wickwarden.git; use account `mikaelliljedahl` only.
 
 **Final gate evidence:** isolated logs are in `/tmp/wickwarden-urgent-final-16df5d1-logs/`. `make check` passed 133/133 Godot suites, clean lint and world-data checks; Python generator/compiler tests passed 172. `rooms-check` passed 221/221, `art-test` 22/22, and global ownership passed for 92 WPs and 53 batches (192 rooms, 33 pockets). The first import and all graphics used Dummy audio. The verifier reported no timeout, SIGSEGV, engine/script/parse error, leak, skip or waiver. The detached test worktree was removed. These results apply to `16df5d1902a1e8fb6108aa117aa971cccefe44a7` only.

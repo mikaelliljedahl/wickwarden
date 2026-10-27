@@ -9,12 +9,86 @@ var arena: Node2D
 
 
 func run() -> void:
+	await _arena_presentation_light()
+	await _sweep_sides()
+	await _sweep_warning_light()
 	await _armour_and_intro()
 	await _attack_physics()
 	await _damage_and_expiration()
 	await _actual_mitts_in_every_phase()
 	await _reset_and_retirement()
 	await _gallery()
+
+
+func _arena_presentation_light() -> void:
+	await _setup()
+	var light := boss.get_node_or_null("ArenaPresentationLight") as PointLight2D
+	check(light != null, "live boss illuminates the arena")
+	if light != null:
+		check(not light.is_in_group(&"glow_light"), "arena light does not affect gameplay")
+		check_eq(light.texture.get_width(), 1920, "light covers the room width")
+		check_eq(light.texture.get_height(), 960, "light covers the room height")
+		var centre := light.global_position
+		boss.position += Vector2(300, -200)
+		check_eq(light.global_position, centre, "arena light stays fixed as the boss moves")
+	boss.reset_fight()
+	await frames(2)
+	check(not is_instance_valid(light), "reset removes the old arena light")
+	await frames(95)
+	light = boss.get_node_or_null("ArenaPresentationLight") as PointLight2D
+	check(light != null, "new fight restores arena light")
+	boss.set_physics_process(false)
+	Events.room_entered.emit(&"cave_4_9")
+	await frames(1)
+	check(not is_instance_valid(light), "room change removes light even if room remains loaded")
+	Events.room_entered.emit(&"cave_4_10")
+	await frames(1)
+	light = boss.get_node_or_null("ArenaPresentationLight") as PointLight2D
+	check(light != null, "returning to the arena restores light")
+	await dispose(arena)
+	check(not is_instance_valid(light), "leaving the room removes the arena light")
+
+
+func _sweep_warning_light() -> void:
+	await _setup()
+	for size in [Vector2(1728, 96), Vector2(96, 768)]:
+		var attack = boss.start_attack(&"sweep", Vector2(960, 480), 0.8, 0.5)
+		attack.band_size = size
+		attack.sweep_from = Vector2(960, 480)
+		attack.sweep_to = Vector2(960, 600)
+		await frames(3)
+		var light := attack.get_node_or_null("Visual/SweepWarningLight") as PointLight2D
+		check(light != null, "each sweep orientation has a warning light")
+		if light != null:
+			check(light.visible, "warning light is on before impact")
+			check(not light.is_in_group(&"glow_light"), "presentation light does not reveal gameplay")
+			check_eq(light.texture.get_width(), int(size.x), "light matches warning width")
+			check_eq(light.texture.get_height(), int(size.y), "light matches warning height")
+		check_eq(attack.warning, 0.8, "warning duration remains 0.8 s")
+		check_eq(attack.active_time, 0.5, "sweep duration remains 0.5 s")
+		await frames(48)
+		check(attack.fired, "sweep fires at the existing warning duration")
+		if light != null:
+			check(not light.visible, "presentation light turns off after the warning")
+		check_eq(attack.box.damage, 3, "sweep damage remains three")
+		var collision := attack.box.get_child(0) as CollisionShape2D
+		check_eq((collision.shape as RectangleShape2D).size, size, "sweep hitbox is unchanged")
+		await dispose(attack)
+	await dispose(arena)
+
+
+func _sweep_sides() -> void:
+	await _setup()
+	for example in [
+		[true, Vector2(960, 300), Vector2(960, 144), Vector2(960, 816)],
+		[true, Vector2(960, 640), Vector2(960, 816), Vector2(960, 144)],
+		[false, Vector2(400, 480), Vector2(144, 480), Vector2(1776, 480)],
+		[false, Vector2(1400, 480), Vector2(1776, 480), Vector2(144, 480)],
+	]:
+		var points: Array = boss._sweep_points(example[0], example[1])
+		check_eq(points[0], example[2], "sweep warning starts on the boss side")
+		check_eq(points[1], example[3], "sweep travels to the opposite side")
+	await dispose(arena)
 
 
 func _setup() -> void:
@@ -110,6 +184,11 @@ func _attack_physics() -> void:
 			sweep = hazard
 	check(sweep != null, "phase two naturally schedules arm sweep")
 	if sweep != null:
+		var expected: Array = boss._sweep_points(
+			sweep.band_size.x > sweep.band_size.y, boss.position
+		)
+		check_eq(sweep.global_position, boss.arena_point(expected[0]), "warning starts on boss side")
+		check_eq(sweep.sweep_to, boss.arena_point(expected[1]), "sweep ends across the arena")
 		await frames(maxi(1, int(ceil((sweep.warning - sweep.age) * FPS)) + 2))
 		check(is_instance_valid(sweep), "sweep survives through its active window")
 		if is_instance_valid(sweep):

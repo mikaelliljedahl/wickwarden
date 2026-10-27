@@ -393,9 +393,13 @@ func reel_border() -> void:
 func shop() -> void:
 	var room := await _enter(&"ow_10_3")
 	var door := _find(room, "room_door.gd") as RoomDoor
-	player.place_at(door.global_position)
-	await seconds(1)
-	check_eq(world.get_current_room_id(), &"ow_10_3#shop", "actual cart door enters S3")
+	check_eq(door.entrance_kind(), &"pocket_cart", "S3 entrance uses the cart art")
+	check(door.get_node("Visual") is SpriteVisual, "S3 cart has painted art")
+	player.place_at(door.global_position + Vector2(0, 144))
+	await walk(&"move_up", 1.2)
+	check_eq(world.get_current_room_id(), &"ow_10_3#shop", "walking north enters the cart")
+	if world.get_current_room_id() != &"ow_10_3#shop":
+		return
 	room = world.get_room(&"ow_10_3#shop")
 	GameState.add_currency(150)
 	var stock: Node2D
@@ -408,6 +412,14 @@ func shop() -> void:
 	check_eq(GameState.slugs, mini(slugs + 6, 30), "actual S3 slug stock replenishes sling")
 	check(GameState.has_flag(&"shop_slug_bundle_s3"), "one-time S3 stock persists")
 	await pocket_return(&"ow_10_3")
+	room = world.get_room(&"ow_10_3")
+	await walk(&"move_down", 0.8)
+	check_eq(world.get_current_room_id(), &"ow_10_3", "player can walk away from the cart")
+	await walk(&"move_up", 1.4)
+	await seconds(1)
+	check_eq(world.get_current_room_id(), &"ow_10_3#shop", "player can walk back into the cart")
+	if world.get_current_room_id() == &"ow_10_3#shop":
+		await pocket_return(&"ow_10_3")
 
 
 func persistence() -> void:

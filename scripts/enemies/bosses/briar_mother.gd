@@ -81,14 +81,42 @@ class ThornArea:
 		else:
 			box.add_circle(BURST_RADIUS)
 		add_child(box)
-		Placeholder.attach(self, &"briar_band" if band else &"briar_burst")
+		if band:
+			light_band(self)
+			if not SpriteVisual.has_art(&"briar_band_full_candidate"):
+				Placeholder.attach(self, &"briar_band")
+		else:
+			z_index = 1
 		box.activate()
+
+	func _draw() -> void:
+		if band:
+			draw_rect(Rect2(-960, -48, 1920, 96), Color(1.0, 0.55, 0.3, 0.8), false, 2.0)
+		else:
+			# The painted seed is smaller than the damage circle; keep its edge explicit.
+			draw_arc(Vector2.ZERO, BURST_RADIUS, 0.0, TAU, 64, Color(1.0, 0.65, 0.3, 0.9), 4.0)
 
 	func _physics_process(delta: float) -> void:
 		life -= delta
 		if life <= 0.0:
 			box.deactivate()
 			queue_free()
+
+	static func light_band(parent: Node2D) -> void:
+		# Presentation only: illuminate the complete warning and strike in the dark arena.
+		var gradient := Gradient.new()
+		gradient.set_color(0, Color.WHITE)
+		gradient.set_color(1, Color.WHITE)
+		var texture := GradientTexture2D.new()
+		texture.width = 1920
+		texture.height = 96
+		texture.gradient = gradient
+		var light := PointLight2D.new()
+		light.name = "SweepLight"
+		light.texture = texture
+		light.color = Color(1.0, 0.72, 0.3)
+		light.energy = 0.7
+		parent.add_child(light)
 
 
 func _init() -> void:
@@ -161,6 +189,14 @@ func _make_eyes() -> void:
 		if eye == null:
 			continue
 		eye.invulnerable = true
+		# A child light follows the eye and inherits its raised/hidden state and lifetime.
+		var light := PointLight2D.new()
+		light.name = "EyeLight"
+		light.texture = LightTexture.make()
+		light.texture_scale = LightTexture.scale_for(110.0)
+		light.color = Color(1.0, 0.67, 0.42)
+		light.energy = 0.65
+		eye.add_child(light)
 		eyes.append(eye)
 		adopt_part(eye, arena_point(point))
 
@@ -282,6 +318,8 @@ func _marker(at: Vector2, duration: float, band: bool = false) -> Node2D:
 	marker.set(&"radius", BURST_RADIUS if duration == SEED_WARNING else 26.0)
 	get_parent().add_child(marker)
 	marker.global_position = at
+	if band:
+		ThornArea.light_band(marker)
 	marker.call(&"start")
 	add_hazard(marker)
 	return marker
@@ -313,8 +351,11 @@ func _tick_pending(delta: float) -> void:
 		_pending[i]["left"] -= delta
 		var entry := _pending[i]
 		if entry["kind"] == &"spore":
+			if not is_instance_valid(entry["eye"]):
+				_pending.remove_at(i)
+				continue
 			var eye: EnemyBase = entry["eye"]
-			if is_instance_valid(eye) and is_instance_valid(entry["marker"]):
+			if is_instance_valid(entry["marker"]):
 				entry["marker"].global_position = eye.global_position
 		if entry["left"] > 0.0:
 			continue
@@ -373,6 +414,49 @@ func _area(at: Vector2, band: bool) -> void:
 	get_parent().add_child(area)
 	area.global_position = at
 	add_hazard(area)
+	if band and SpriteVisual.has_art(&"briar_band_full_candidate"):
+		var root: Node2D = _room()
+		if root == null:
+			root = get_parent() as Node2D
+		var holder := Node2D.new()
+		holder.name = "BandArtHolder"
+		root.add_child(holder)
+		root.move_child(holder, 0)
+		holder.global_position = Vector2(at.x, root.global_position.y)
+		var picture := SpriteVisual.attach(holder, &"briar_band_full_candidate")
+		picture.position.y = at.y - root.global_position.y
+		area.tree_exiting.connect(holder.queue_free, CONNECT_ONE_SHOT)
+		add_hazard(holder)
+	if not band:
+		_burst_visual(at, area)
+
+
+func _burst_visual(at: Vector2, area: Node2D) -> void:
+	var holder := Node2D.new()
+	holder.name = "SeedBurstEffect"
+	holder.z_index = 2
+	get_parent().add_child(holder)
+	holder.global_position = at
+	add_hazard(holder)
+	var light := PointLight2D.new()
+	light.name = "BurstLight"
+	light.texture = LightTexture.make()
+	light.texture_scale = LightTexture.scale_for(260.0)
+	light.color = Color(1.0, 0.72, 0.3)
+	light.energy = 1.2
+	holder.add_child(light)
+	var effect: SpriteVisual
+	if SpriteVisual.has_art(&"briar_seed"):
+		effect = SpriteVisual.attach(holder, &"briar_seed") as SpriteVisual
+	if effect == null or not effect.sprite_frames.has_animation(&"burst"):
+		# The fallback cue and its light live for the same 0.3 s as the hitbox.
+		if effect != null:
+			effect.queue_free()
+		Placeholder.attach(area, &"briar_burst")
+		area.tree_exiting.connect(holder.queue_free, CONNECT_ONE_SHOT)
+		return
+	effect.play_anim(&"burst")
+	effect.animation_finished.connect(holder.queue_free, CONNECT_ONE_SHOT)
 
 
 static func _register_briar_kinds() -> void:

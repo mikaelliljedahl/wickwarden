@@ -8,8 +8,14 @@ func run() -> void:
 	await _challenge()
 	await _windows_and_anchor()
 	await _attacks()
+	await _coin_presentation()
 	await _physical_finish()
 	await _finish()
+	if "--coin-captures" in OS.get_cmdline_user_args():
+		await _crown_capture()
+		await _plate_world_capture()
+		await _tail_world_capture()
+		await _bite_world_capture()
 
 
 func _fixture() -> Room:
@@ -42,21 +48,58 @@ func _challenge() -> void:
 	check_eq(boss.state, &"quiver", "0.9s heap tell")
 	check(not boss.hurtbox.enabled, "submerged head untargetable")
 	check(boss.global_position.distance_to(player.global_position) >= 288, "heap keeps distance")
-	await seconds(1)
+	var heaps: Array[SpriteVisual] = boss._heap_visuals()
+	check_eq(heaps.size(), 4, "arena has four painted heaps")
+	var active_heap: SpriteVisual
+	for heap in heaps:
+		if heap.global_position.distance_to(boss.global_position) < 1:
+			active_heap = heap
+	check(active_heap != null, "selected heap exists")
+	if active_heap != null:
+		check_eq(active_heap.animation, &"quiver", "selected heap warns before rearing")
+		var light := active_heap.get_node_or_null("CueLight") as PointLight2D
+		check(
+			light != null and not light.is_in_group(&"glow_light"),
+			"heap cue light is presentation only"
+		)
+	await seconds(0.9)
+	if active_heap != null:
+		check_eq(active_heap.animation, &"burst", "selected heap bursts when boss rears")
 	check_eq(boss.plates.size(), 3, "three reelable plates")
+	check(boss.get_node("Visual") is SpriteVisual, "head uses painted art")
+	var head_light := boss.get_node_or_null("HeadLight") as PointLight2D
+	check(
+		head_light != null and not head_light.is_in_group(&"glow_light"),
+		"head light is presentation only"
+	)
+	for part in boss.plates:
+		check(part.get_node("Visual") is SpriteVisual, "plate uses painted art")
+		check(part.get_node_or_null("PlateCue") != null, "each plate has a readable rim")
+		var plate_light := part.get_node_or_null("PlateLight") as PointLight2D
+		check(
+			plate_light != null and not plate_light.is_in_group(&"glow_light"),
+			"plate light is presentation only"
+		)
+		check_eq(
+			part.position, boss.OFFSETS[part.get_meta("slot")], "painted plate keeps hitbox offset"
+		)
+	await _capture(room, "plated")
 	var hit := make_hitbox(room, boss.global_position, Layers.Team.PLAYER, 4, 100)
 	hit.kind = &"hook"
 	await frames(4)
 	check_eq(boss.hp, 36, "hook cannot bypass armour")
 	await dispose(hit)
 	var plate = boss.plates[1]
+	var removed_cue: WeakRef = weakref(plate.get_node("PlateCue"))
 	await _reel(player, plate)
 	check_eq(boss.plates.size(), 2, "real tip removes one plate")
+	check(removed_cue.get_ref() == null, "the removed plate's rim leaves with it")
 	check_eq(GameState.currency, 5, "five bits drop and collect at feet")
 	await _reel(player, boss.plates[0])
 	await _reel(player, boss.plates[0])
 	check(boss.bare, "third real reel exposes head")
 	check_eq(boss.plates.size(), 0, "no plates remain")
+	await _capture(room, "bare")
 	var left: float = boss.state_left
 	await seconds(0.5)
 	check(boss.bare and boss.state_left < left, "bare window persists")
@@ -73,6 +116,209 @@ func _challenge() -> void:
 	check(boss.is_in_intro(), "reset intro")
 	check(boss.plates.is_empty(), "reset clears plates")
 	check(not boss.is_arena_locked(), "retreat stays open")
+	await dispose(room)
+
+
+func _capture(room: Room, label: String) -> void:
+	if not "--coin-captures" in OS.get_cmdline_user_args():
+		return
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 960)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	room.reparent(viewport, false)
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var path := "/tmp/wickwarden-b08-%s.png" % label
+	check_eq(viewport.get_texture().get_image().save_png(path), OK, "fight capture saves")
+	room.reparent(self, false)
+	await dispose(viewport)
+
+
+func _crown_capture() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/Coinwyrm")
+	await seconds(2.6)
+	boss.apply_damage(16, boss.global_position, 0)
+	await seconds(2.2)
+	check_eq(boss.plates.size(), 4, "crown capture has all four targets")
+	await _capture(room, "crown")
+	await dispose(room)
+
+
+func _plate_world_capture() -> void:
+	# Controlled presentation states in the real dark room; combat is tested separately.
+	reset_state()
+	SaveGame.enabled = false
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var world := _world_scene().instantiate() as World
+	viewport.add_child(world)
+	world.start_at(&"cave_8_12")
+	world.player.set_hurtbox_enabled(self, false)
+	var boss = world.current_room.get_node("Enemies/Coinwyrm1")
+	await seconds(2.6)
+	await _save_world_plate_capture(viewport, "plates-dark")
+	boss.apply_damage(16, boss.global_position, 0)
+	await seconds(2.2)
+	check_eq(boss.plates.size(), 4, "dark capture has four plates")
+	await _save_world_plate_capture(viewport, "crown-dark")
+	for part in boss.plates.duplicate():
+		if part.get_meta("slot") != 3:
+			boss._plate_pulled(null, part)
+	await frames(2)
+	check_eq(boss.plates.size(), 1, "dark capture isolates the crown")
+	await _save_world_plate_capture(viewport, "crown-only-dark")
+	boss._plate_pulled(null, boss.plates[0])
+	await frames(2)
+	await _save_world_plate_capture(viewport, "bare-dark")
+	await dispose(viewport)
+
+
+func _save_world_plate_capture(viewport: SubViewport, label: String) -> void:
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	check_eq(
+		viewport.get_texture().get_image().save_png("/tmp/wickwarden-b08-%s.png" % label),
+		OK,
+		"dark plate capture saves"
+	)
+
+
+func _tail_world_capture() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var scene := _world_scene()
+	var world := scene.instantiate() as World
+	viewport.add_child(world)
+	world.start_at(&"cave_8_12")
+	world.player.set_hurtbox_enabled(self, false)
+	var boss = world.current_room.get_node("Enemies/Coinwyrm1")
+	await seconds(2.6)
+	boss.apply_damage(16, boss.global_position, 0)
+	await seconds(2.2)
+	check_eq(boss.phase, 2, "tail capture reaches phase two")
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	check_eq(
+		viewport.get_texture().get_image().save_png("/tmp/wickwarden-b08-tail-tell.png"),
+		OK,
+		"tail tell capture saves"
+	)
+	var sweep: Node2D
+	for _i in range(60):
+		await frames(1)
+		for hazard in boss._hazards:
+			if is_instance_valid(hazard) and hazard.get_script() == boss.get_script().Strike:
+				if hazard.tail:
+					sweep = hazard
+		if sweep != null:
+			break
+	check(sweep != null, "tail sweep is active for capture")
+	var tail_effect: SpriteVisual
+	for hazard in boss._hazards:
+		if is_instance_valid(hazard):
+			var visual := hazard.get_node_or_null("Visual") as SpriteVisual
+			if visual != null and visual.kind == &"coinwyrm_tail":
+				tail_effect = visual
+	check(tail_effect != null and tail_effect.animation == &"sweep", "tail plays sweep")
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	check_eq(
+		viewport.get_texture().get_image().save_png("/tmp/wickwarden-b08-tail-sweep.png"),
+		OK,
+		"tail sweep capture saves"
+	)
+	await seconds(0.55)
+	check(
+		is_instance_valid(tail_effect) and tail_effect.animation == &"burrow",
+		"tail plays burrow after sweep"
+	)
+	await seconds(0.5)
+	check(not is_instance_valid(tail_effect), "tail effect frees after burrowing")
+	await dispose(viewport)
+
+
+func _bite_world_capture() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var scene := _world_scene()
+	var world := scene.instantiate() as World
+	viewport.add_child(world)
+	world.start_at(&"cave_8_12")
+	world.player.set_hurtbox_enabled(self, false)
+	var boss = world.current_room.get_node("Enemies/Coinwyrm1")
+	await seconds(2.6)
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	check_eq(
+		viewport.get_texture().get_image().save_png("/tmp/wickwarden-b08-bite-tell.png"),
+		OK,
+		"bite tell capture saves"
+	)
+	var bite: Node2D
+	for _i in range(60):
+		await frames(1)
+		for hazard in boss._hazards:
+			if is_instance_valid(hazard) and hazard.get_script() == boss.get_script().Strike:
+				if not hazard.tail:
+					bite = hazard
+		if bite != null:
+			break
+	check(bite != null, "bite strike is active for capture")
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	check_eq(
+		viewport.get_texture().get_image().save_png("/tmp/wickwarden-b08-bite-hit.png"),
+		OK,
+		"bite strike capture saves"
+	)
+	await dispose(viewport)
+
+
+func _world_scene() -> PackedScene:
+	return load("res://scenes/world/world.tscn") as PackedScene
+
+
+func _coin_presentation() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/Coinwyrm")
+	await seconds(2.6)
+	boss._volley()
+	var bolts := get_tree().get_nodes_in_group(&"projectiles")
+	check_eq(bolts.size(), 5, "coin presentation keeps five projectiles")
+	for bolt in bolts:
+		check_eq(bolt.visual_kind, &"coinwyrm_coin", "hostile coin has its own art")
+		var light := bolt.get_node_or_null("CoinLight") as PointLight2D
+		check(
+			light != null and not light.is_in_group(&"glow_light"),
+			"coin light is presentation only"
+		)
+		if SpriteVisual.has_art(&"coinwyrm_coin"):
+			check(bolt.get_node("Visual") is SpriteVisual, "coin is painted")
+	if not bolts.is_empty() and SpriteVisual.has_art(&"coinwyrm_coin"):
+		bolts[0].destroy(&"wall")
+		var effect := boss.get_parent().get_node_or_null("Puff") as SpriteVisual
+		check(effect != null, "coin impact has painted effect")
+		if effect != null:
+			check_eq(effect.animation, &"impact", "coin impact plays impact frames")
+		await seconds(0.6)
+		check(not is_instance_valid(effect), "coin impact is freed")
+		for heap in boss._heap_visuals():
+			check_eq(heap.animation, &"idle", "heap returns to idle after burst")
+			check(heap.get_node_or_null("CueLight") == null, "heap cue light is removed")
 	await dispose(room)
 
 
@@ -101,6 +347,24 @@ func _attacks() -> void:
 	check_eq(boss.phase, 2, "20 HP phase two")
 	await seconds(2.2)
 	check_eq(boss.plates.size(), 4, "phase two crown plate")
+	var tail_marker: Node2D
+	for hazard in boss._hazards:
+		if is_instance_valid(hazard):
+			var painted := hazard.get_node_or_null("Visual") as SpriteVisual
+			if painted != null and painted.kind == &"coinwyrm_tail":
+				tail_marker = hazard
+	check(tail_marker != null, "tail tell has painted sprite")
+	if tail_marker != null:
+		var light_count := 0
+		for child in tail_marker.get_children():
+			if child is PointLight2D and not child.is_in_group(&"glow_light"):
+				light_count += 1
+		check_eq(light_count, 7, "tail band is lit without jar gameplay lights")
+	for part in boss.plates:
+		if part.get_meta("slot") == 3:
+			var crown := part.get_node("Visual") as SpriteVisual
+			check(crown != null and crown.kind == &"coinwyrm_crown", "phase two crown is separate")
+			check(part.get_node("PlateCue").crown, "crown has a distinct rim")
 	player.place_at(Vector2(900, 288))
 	GameState.max_health = 40
 	GameState.full_heal()

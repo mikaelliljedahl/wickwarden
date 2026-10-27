@@ -15,7 +15,7 @@ grid
 enemy brine_crab 7,6
 enemy brine_crab 12,6
 enemy husk_hound 7,3
-prop hut @1488,288 size=192,192 visual_offset=-16,84
+; The stall itself marks the shop entrance.
 door ow_10_7#shop Inside 15,4
 spawn FromPocket 15,6
 spawn Default 9,4

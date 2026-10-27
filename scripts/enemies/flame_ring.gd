@@ -27,6 +27,12 @@ func _ready() -> void:
 	add_circle(RADIUS)
 	_register_kinds()
 	Placeholder.attach(self, &"flame_ring", RADIUS)
+	var light := PointLight2D.new()
+	light.texture = LightTexture.make()
+	light.texture_scale = LightTexture.scale_for(RADIUS * 2.0)
+	light.color = Color(1.0, 0.65, 0.3)
+	add_child(light)
+	_spawn_art.call_deferred()
 	blocked.connect(deactivate)
 	activate()
 
@@ -46,3 +52,8 @@ static func _register_kinds() -> void:
 			{"shape": "ring", "color": Color(1.0, 0.5, 0.15, 0.8), "radius": RADIUS},
 			true
 		)
+
+
+func _spawn_art() -> void:
+	if get_parent() != null:
+		SpriteVisual.spawn_effect(get_parent(), &"fx_wisp_burst", global_position)
