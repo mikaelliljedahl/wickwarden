@@ -7,11 +7,16 @@ const WORLD := "res://scenes/world/world.tscn"
 
 
 func run() -> void:
+	if OS.get_environment("WICK_B03_WARNING_CAPTURE") == "1":
+		await _capture_real_wave_warning(Vector2.RIGHT, "right")
+		await _capture_real_wave_warning(Vector2.DOWN, "down")
+		return
 	await _room_template_lifecycle()
 	await _motion_and_exposure()
 	await _bolt_warning_presentation()
 	await _phases_reset_and_rewards()
 	await _wave_visual_directions()
+	await _wave_warning_directions()
 	await _real_raft_combat()
 	await _real_undertow()
 	# Actual C3 basin coordinates exposed origin-relative hit-direction rounding.
@@ -259,6 +264,39 @@ func _wave_visual_directions() -> void:
 		await dispose(room)
 
 
+func _wave_warning_directions() -> void:
+	for direction in [Vector2.RIGHT, Vector2.DOWN]:
+		reset_state()
+		var room := _fixture()
+		var boss = room.get_node("Enemies/Tidewick")
+		await seconds(1.6)
+		boss.apply_damage(14, boss.global_position, 0)
+		await seconds(1.3)
+		var seed_value := 0
+		while true:
+			boss.rng.seed = seed_value
+			if (boss.rng.randi_range(0, 1) == 0) == (direction == Vector2.RIGHT):
+				break
+			seed_value += 1
+		boss.rng.seed = seed_value
+		boss.wave_clock = 5.99
+		boss._tick_wave(0.02)
+		check_eq(boss.wave_direction, direction, "warning selects controlled direction")
+		check(is_instance_valid(boss.wave_warning), "warning starts at six seconds")
+		check(not is_instance_valid(boss.wave), "warning precedes wave")
+		var expected := Vector2(144, 768) if direction == Vector2.RIGHT else Vector2(1536, 144)
+		if SpriteVisual.has_art(&"tidewick_wave_ripple"):
+			var visual: Node2D = boss.wave_warning.get_node("Visual")
+			check_eq(visual.size, expected, "warning retains its full band dimensions")
+			var ripples := visual.find_children("*", "AnimatedSprite2D", true, false)
+			check_eq(ripples.size(), 6 if direction == Vector2.RIGHT else 12, "painted ripples span warning")
+		boss._tick_wave(0.99)
+		await frames(1)
+		check(not is_instance_valid(boss.wave_warning), "warning ends when wave starts")
+		check(is_instance_valid(boss.wave), "wave starts at seven seconds")
+		await dispose(room)
+
+
 func _capture(label: String) -> void:
 	if OS.get_environment("WICK_B03_CAPTURE") != "1":
 		return
@@ -316,6 +354,36 @@ func _capture_real_bolt_warning() -> void:
 		OK,
 		"capture real dark basin bolt warning"
 	)
+	await dispose(viewport)
+
+
+func _capture_real_wave_warning(direction: Vector2, label: String) -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	var world := (load(WORLD) as PackedScene).instantiate() as World
+	viewport.add_child(world)
+	world.start_at(&"cave_3_9")
+	var boss = world.current_room.get_node("Enemies/Tidewick1")
+	await seconds(1.6)
+	boss.apply_damage(14, boss.global_position, 0)
+	await seconds(1.3)
+	var seed_value := 0
+	while true:
+		boss.rng.seed = seed_value
+		if (boss.rng.randi_range(0, 1) == 0) == (direction == Vector2.RIGHT):
+			break
+		seed_value += 1
+	boss.rng.seed = seed_value
+	boss._tick_wave(6.0)
+	check_eq(boss.wave_direction, direction, "controlled real-room warning direction")
+	await get_tree().process_frame
+	RenderingServer.force_draw()
+	check_eq(viewport.get_texture().get_image().save_png(
+		"/tmp/b03-warning-" + label + "-dark.png"), OK, "capture real dark warning")
 	await dispose(viewport)
 
 

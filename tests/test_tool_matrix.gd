@@ -24,6 +24,15 @@ func run() -> void:
 	for row: Array in GATES:
 		for tool: StringName in TOOLS:
 			await _gate_pair(row, tool)
+	for prop: String in ["hidden_seam", "hidden_stairs", "sealed_seam"]:
+		for tool: StringName in [&"tallow_sling", &"lantern_chime", &"glow_jar"]:
+			await _seam_pair(prop, tool)
+	for tool: StringName in [&"tallow_sling", &"cinder_wick", &"hook"]:
+		await _tap_wall_pair(tool)
+	for tool: StringName in [&"hook", &"tallow_sling", &"cinder_wick", &"flare"]:
+		await _wax_seal_pair(tool)
+	for tool: StringName in [&"tether_moth", &"reel_line"]:
+		await _grate_key_pair(tool)
 	for tool: StringName in [&"cinder_wick", &"tallow_sling", &"lantern_chime", &"tether_moth"]:
 		await _snapper_pair(tool)
 	for prop: String in ["anchor_ring", "anchor_pocket", "reelable"]:
@@ -72,6 +81,117 @@ func _gate(parent: Node, row: Array, at: Vector2) -> Node2D:
 	parent.add_child(gate)
 	gate.global_position = at
 	return gate
+
+
+func _seam_pair(prop: String, tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var seam := _gate(arena, [prop, &"seam_id"], Vector2(400, 400))
+	if seam == null:
+		await dispose(arena)
+		return
+	var player := make_player(arena, Vector2(400, 650))
+	await frames(3)
+	_equip(player, tool)
+	player.facing = Vector2.UP
+	check(player.use_item(), "%s -> %s: real activation" % [tool, prop])
+	await seconds(1.8)
+	var opens := tool == &"glow_jar"
+	check_eq(seam.get(&"is_revealed"), opens, "%s -> %s: permanent result" % [tool, prop])
+	check_eq(GameState.has_flag(&"revealed_matrix"), opens, "%s -> %s: flag" % [tool, prop])
+	check_eq(
+		(seam.get_node("Body/Shape") as CollisionShape2D).disabled,
+		opens,
+		"%s -> %s: blocker" % [tool, prop]
+	)
+	await dispose(arena)
+	# Recreate the real scene using the same in-memory persistent flag.
+	arena = make_arena()
+	seam = _gate(arena, [prop, &"seam_id"], Vector2(400, 400))
+	await frames(3)
+	if seam != null:
+		check_eq(seam.get(&"is_revealed"), opens, "%s -> %s: revisit" % [tool, prop])
+	await dispose(arena)
+
+
+func _tap_wall_pair(tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var seam := _gate(arena, ["hook_tap_wall", &"seam_id"], Vector2(400, 400))
+	if seam == null:
+		await dispose(arena)
+		return
+	var player := make_player(arena, Vector2(400, 500 if tool == &"hook" else 650))
+	await frames(3)
+	player.facing = Vector2.UP
+	if tool == &"hook":
+		Input.action_press(&"attack")
+		await frames(8)
+		Input.action_release(&"attack")
+	else:
+		_equip(player, tool)
+		player.facing = Vector2.UP
+		check(player.use_item(), "%s -> hook wall: real activation" % tool)
+	await seconds(1.0)
+	var opens := tool == &"hook"
+	check_eq(seam.get(&"is_revealed"), opens, "%s -> hook wall: result" % tool)
+	check_eq(GameState.has_flag(&"revealed_matrix"), opens, "%s -> hook wall: flag" % tool)
+	check_eq(
+		(seam.get_node("Body/Shape") as CollisionShape2D).disabled,
+		opens,
+		"%s -> hook wall: blocker" % tool
+	)
+	await dispose(arena)
+
+
+func _wax_seal_pair(tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var seal := _gate(arena, ["wax_seal", &"seal_id"], Vector2(540, 500))
+	if seal == null:
+		await dispose(arena)
+		return
+	var player := make_player(arena, Vector2(400 if tool in [&"hook", &"flare"] else 300, 500))
+	await frames(3)
+	player.facing = Vector2.RIGHT
+	if tool in [&"hook", &"flare"]:
+		Input.action_press(&"attack")
+		await frames(60 if tool == &"flare" else 8)
+		Input.action_release(&"attack")
+	else:
+		_equip(player, tool)
+		check(player.use_item(), "%s -> wax seal: real activation" % tool)
+	await seconds(1.0)
+	var opens := tool == &"flare"
+	check_eq(seal.get(&"is_open"), opens, "%s -> wax seal: result" % tool)
+	check_eq(GameState.has_flag(&"melted_matrix"), opens, "%s -> wax seal: flag" % tool)
+	check_eq(
+		(seal.get_node("Shape") as CollisionShape2D).disabled,
+		opens,
+		"%s -> wax seal: blocker" % tool
+	)
+	await dispose(arena)
+
+
+func _grate_key_pair(tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(600, 600))
+	var grate := _prop(arena, "grate", Vector2(600, 400))
+	var key := PickupBase.spawn(&"key", arena, Vector2(600, 260), false)
+	if grate == null or key == null:
+		await dispose(arena)
+		return
+	await frames(3)
+	_equip(player, tool)
+	player.facing = Vector2.UP
+	check(player.use_item(), "%s -> grate: actual activation" % tool)
+	await seconds(0.4)
+	check_eq(key.is_carried(), tool == &"tether_moth", "%s -> grate: key carried" % tool)
+	await seconds(1.5)
+	check_eq(GameState.keys_in(&"ow"), 1 if tool == &"tether_moth" else 0, "%s -> grate: key" % tool)
+	check(is_instance_valid(grate), "%s -> grate: grate remains" % tool)
+	await dispose(arena)
 
 
 func _gate_pair(row: Array, tool: StringName) -> void:

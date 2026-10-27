@@ -1,6 +1,21 @@
 # Current status
 
-**Q3 Archivist victory, 2026-10-27 (working tree, unpushed):** The continuous
+**Tidewick phase-two warning, 2026-10-27 (working tree, unpushed):** Existing
+painted ripple art and presentation light replace the barely visible Placeholder
+warning. Warning dimensions, timing, hit area, damage and gameplay are unchanged.
+The agent reports isolated `boss_tidewick` and `route_cave_3` tests and lint
+passing; the lead reviewed both orientations in dark-arena captures. Human
+play remains unverified.
+
+**Q7 gate cases, 2026-10-27 (working tree, unpushed):** Actual player tools
+exercise three seams opened by the Glow Jar, a hook-tap wall and a wax seal
+opened by charged flare, with wrong tools rejected. The Tether Moth retrieves a
+real key behind a grate; the Reel does not. The cases check flags, blockers and
+revisit behavior in set-up arenas without enemies. The agent reports two
+isolated tests and lint passing. Other gate/tool pairs, visual and human coverage
+remain open.
+
+**Q3 Archivist victory, 2026-10-27 (committed in `7332bc0`):** The continuous
 input route defeats Archivist with normal damage, respawns after ordinary
 deaths and physically collects the C5 fragment and core, reaching a maximum of
 20 half-hearts. The agent reports six standalone victories, four isolated
@@ -10,7 +25,7 @@ through internal state and reads boss phase, health, projectiles and light.
 Later shards use fixtures and warps; the C5 miniboss remains alive. A complete
 human playthrough and other global seeds remain unverified.
 
-**Q7 selected encounter cases, 2026-10-27 (working tree, unpushed):**
+**Q7 selected encounter cases, 2026-10-27 (committed in `7332bc0`):**
 `test_tool_matrix` now has at least one selected actual-tool case for each of
 the 20 encounters, adding Mirror Warden, Dirge Choir, Archivist, Tidewick and
 The Unlit. These use controlled arenas and positions: Mirror Warden's AI and
@@ -1069,7 +1084,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `6fc7bfba29725a5237512ef2d15fe5d879a1127e` on `origin/main`, including The Unlit's painted wax wave described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `7332bc07df0937c060f52cb0bd30f842627a3130` on `origin/main`, including the Archivist victory and selected actual-tool cases for all 20 encounters described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -29,6 +29,8 @@ The Q7 extension to 15 selected encounters followed in
 `ee9145abfc632da422d4f003acc68d7cdbca0e3e` on `origin/main`.
 The Unlit's painted wax wave and its tests followed in
 `6fc7bfba29725a5237512ef2d15fe5d879a1127e`, verified on `origin/main`.
+The Archivist victory and selected actual-tool cases for all 20 encounters
+followed in `7332bc07df0937c060f52cb0bd30f842627a3130` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -36,7 +38,21 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 Archivist victory, working tree (unpushed):** The continuous input route
+**Tidewick phase-two warning, working tree (unpushed):** Existing painted ripple
+art and presentation light replace the barely visible Placeholder warning.
+Warning dimensions, timing, hit area, damage and gameplay are unchanged. The
+agent reports isolated `boss_tidewick` and `route_cave_3` tests and lint passing;
+the lead reviewed both orientations in dark-arena captures. Human play remains
+unverified.
+
+**Q7 gate cases, working tree (unpushed):** Actual player tools exercise three
+seams opened by the Glow Jar, a hook-tap wall and a wax seal opened by charged
+flare, with wrong tools rejected. The Tether Moth retrieves a real key behind a
+grate; the Reel does not. Flags, blockers and revisit behavior are checked in
+set-up arenas without enemies. The agent reports two isolated tests and lint
+passing. Other gate/tool pairs, visual and human coverage remain open.
+
+**Q3 Archivist victory, committed in `7332bc0`:** The continuous input route
 defeats Archivist with normal damage, respawns after ordinary deaths and
 physically collects the C5 fragment and core, reaching a maximum of 20
 half-hearts. The agent reports six standalone victories, four isolated shards
@@ -46,7 +62,7 @@ through internal state and reads boss phase, health, projectiles and light.
 Later shards use fixtures and warps; the C5 miniboss remains alive. A complete
 human playthrough and other global seeds remain unverified.
 
-**Q7 selected encounter cases, working tree (unpushed):** `test_tool_matrix`
+**Q7 selected encounter cases, committed in `7332bc0`:** `test_tool_matrix`
 now has at least one selected actual-tool case for each of the 20 encounters,
 adding Mirror Warden, Dirge Choir, Archivist, Tidewick and The Unlit. These use
 controlled arenas and positions: Mirror Warden's AI and refresh are frozen,

@@ -324,8 +324,7 @@ func _tick_wave(delta: float) -> void:
 			if wave_direction == Vector2.RIGHT
 			else Vector2(BASIN.size.x, 144)
 		)
-		var look := Placeholder.attach(wave_warning, &"tidewick_wave", 0.0, dimensions)
-		look.modulate.a = 0.3
+		_attach_wave_visual(wave_warning, dimensions)
 		add_hazard(wave_warning)
 	if wave_clock >= 7.0:
 		wave_clock -= 7.0
