@@ -51,14 +51,26 @@ The Q7 one-way test and open landing observation followed in
 `ce9dc584bd69c95611d002c327cb74c7545213d4`, verified on `origin/main`.
 The confirmed one-way softlock was documented in `2c16eb3`; the Coinwyrm
 victory and B10 heart pulse followed in `6f33c122604c7b06faed35152b49963ccb068337`,
-verified on `origin/main`. The revised softlock fix is unpushed; independent
-review passed without blockers and the lead's full `make check` passed.
+verified on `origin/main`. The revised softlock fix followed in
+`ed79ed0eb3b9525bd13c8d8302da0b5a3141c891`, verified on `origin/main`;
+independent review passed without blockers and the lead's full `make check` passed.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 wrong-tool gate cases, working tree (unpushed):** Twenty-one cases use
+actual hook, charged flare and exploding pot against seven real thorn, eye and
+resonance gates. Actual hitbox overlap is checked, with no incorrect opening,
+flag or collision change. Arenas are controlled and player damage is normal;
+correct-tool positive cases existed previously. The agent reports two isolated
+matrix runs and lint passing. Other combinations, real-room and human
+verification remain open.
+
+**Fen Leech presentation:** The turning issue has no accepted solution yet; a
+new isolated normal raft sequence is under investigation.
 
 **Q3 Coinwyrm victory, committed in `6f33c12`:** The continuous earned input
 route defeats C8's Coinwyrm with normal damage, using three keys, the Reel and
@@ -72,7 +84,7 @@ positions and projectiles as well as earlier internal state; the C7 victory had
 1/22 health and minibosses remain active. Human play, a complete route and other
 seeds remain unverified.
 
-**Z1 revised one-way fix, working tree (unpushed):** Version 3 restores Player
+**Z1 revised one-way fix, committed in `ed79ed0`:** Version 3 restores Player
 and World byte-identically and places the boots-start overlap check in
 `scripts/items/skitter_boots.gd` (`_free_run`/`activate`) to preserve the generic
 Player contract. It rejects WORLD overlaps except leapable rails, including a
@@ -85,7 +97,7 @@ raft, Reel, tool matrix and C7–C10 routes. The query is a snapshot, not covera
 of all moving obstacles or angles; a rejected press requires a new press after
 clearing the overlap. The lead's full `make check` passed with the reworked fix:
 the Godot suite including all four playthrough shards, lint, world-data check
-and 175 Python tests.
+and 175 Python tests. Human real-time play remains unverified.
 
 **Z1 first proposal (not accepted):** At a blocked edge, World
 ends external movement and places the player inside the wall plus body radius.

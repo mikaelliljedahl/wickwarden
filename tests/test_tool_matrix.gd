@@ -24,6 +24,8 @@ func run() -> void:
 	for row: Array in GATES:
 		for tool: StringName in TOOLS:
 			await _gate_pair(row, tool)
+		for tool: StringName in [&"hook", &"flare", &"pitch_pot"]:
+			await _gate_base_weapon_pair(row, tool)
 	for prop: String in ["hidden_seam", "hidden_stairs", "sealed_seam"]:
 		for tool: StringName in [&"tallow_sling", &"lantern_chime", &"glow_jar"]:
 			await _seam_pair(prop, tool)
@@ -668,6 +670,61 @@ func _gate_pair(row: Array, tool: StringName) -> void:
 	if gate != null:
 		check_eq(bool(gate.get(row[3])), opens, label + ": revisit state")
 	await dispose(arena)
+
+
+func _gate_base_weapon_pair(row: Array, tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var gate := _gate(arena, row, Vector2(540, 500))
+	if gate == null:
+		await dispose(arena)
+		return
+	var start := Vector2(340, 500) if tool == &"pitch_pot" else Vector2(400, 500)
+	var player := make_player(arena, start)
+	await frames(3)
+	player.facing = Vector2.RIGHT
+	var label := "%s -> %s" % [tool, row[0]]
+	var contact := false
+	var kind := &"explosion" if tool == &"pitch_pot" else tool
+	var blasts := [0]
+	var on_blast := func(_pos: Vector2, _radius: float) -> void: blasts[0] += 1
+	Events.explosion.connect(on_blast)
+	if tool == &"pitch_pot":
+		_equip(player, &"pitch_pot")
+		GameState.add_pitch_pots(1)
+		check(player.use_item(), label + ": actual pot placed")
+	else:
+		Input.action_press(&"attack")
+		for i in range(60 if tool == &"flare" else 8):
+			await frames(1)
+			contact = contact or _gate_weapon_overlaps(gate, kind)
+		if tool == &"flare":
+			check(player.charge_ready, label + ": actual charge ready")
+		Input.action_release(&"attack")
+	for i in range(120):
+		await frames(1)
+		contact = contact or _gate_weapon_overlaps(gate, kind)
+	if tool == &"pitch_pot":
+		check_eq(blasts[0], 1, label + ": actual pot detonates")
+	Events.explosion.disconnect(on_blast)
+	check(contact, label + ": real hitbox overlaps gate hurtbox")
+	check(not bool(gate.get(row[3])), label + ": wrong weapon leaves gate closed")
+	check(not GameState.has_flag(StringName(String(row[4]) + "matrix")), label + ": no flag")
+	if row[0] != "eye_switch":
+		check(not (gate.get_node("Shape") as CollisionShape2D).disabled, label + ": blocker solid")
+	print("MATRIX ", label, " expected=false")
+	await dispose(arena)
+
+
+func _gate_weapon_overlaps(gate: Node, kind: StringName) -> bool:
+	var hurtbox := gate.get_node_or_null("Hurtbox") as Hurtbox
+	if hurtbox == null:
+		return false
+	for node in get_tree().get_nodes_in_group(&"hitboxes"):
+		if node is Hitbox and node.kind == kind and node.active:
+			if hurtbox in node.get_overlapping_areas():
+				return true
+	return false
 
 
 func _snapper_pair(tool: StringName) -> void:

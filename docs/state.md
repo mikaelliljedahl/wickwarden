@@ -1,5 +1,16 @@
 # Current status
 
+**Q7 wrong-tool gate cases, 2026-10-27 (working tree, unpushed):** Twenty-one
+cases use actual hook, charged flare and exploding pot against seven real thorn,
+eye and resonance gates. Actual hitbox overlap is checked, with no incorrect
+opening, flag or collision change. Arenas are controlled and player damage is
+normal; correct-tool positive cases existed previously. The agent reports two
+isolated matrix runs and lint passing. Other combinations, real-room and human
+verification remain open.
+
+**Fen Leech presentation:** The turning issue has no accepted solution yet; a
+new isolated normal raft sequence is under investigation.
+
 **Q3 Coinwyrm victory, 2026-10-27 (committed in `6f33c12`):** The continuous
 earned input route defeats C8's Coinwyrm with normal damage, using three keys,
 the Reel and boots and passing an active miniboss. The reported victory leaves
@@ -12,7 +23,7 @@ positions and projectiles as well as earlier internal state; the C7 victory had
 1/22 health and minibosses remain active. Human play, a complete route and other
 seeds remain unverified.
 
-**Z1 revised one-way fix, 2026-10-27 (working tree, unpushed):** Version 3
+**Z1 revised one-way fix, 2026-10-27 (committed in `ed79ed0`):** Version 3
 restores Player and World byte-identically and places the boots-start overlap
 check in `scripts/items/skitter_boots.gd` (`_free_run`/`activate`) to preserve
 the generic Player contract. It rejects WORLD overlaps except leapable rails,
@@ -25,7 +36,7 @@ boots, raft, Reel, tool matrix and C7–C10 routes. The query is a snapshot, not
 coverage of all moving obstacles or angles; a rejected press requires a new
 press after clearing the overlap. The lead's full `make check` passed with the
 reworked fix: the Godot suite including all four playthrough shards, lint,
-world-data check and 175 Python tests.
+world-data check and 175 Python tests. Human real-time play remains unverified.
 
 **Z1 first proposal, 2026-10-27 (not accepted):** At a blocked
 edge, World ends external movement and places the player inside the wall plus
@@ -1231,7 +1242,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `6f33c122604c7b06faed35152b49963ccb068337` on `origin/main`, including the Coinwyrm victory and B10 heart pulse described above. The revised one-way fix is unpushed; independent review passed without blockers and the lead's full `make check` passed. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `ed79ed0eb3b9525bd13c8d8302da0b5a3141c891` on `origin/main`, including the independently reviewed one-way boots fix and the full `make check` evidence described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
