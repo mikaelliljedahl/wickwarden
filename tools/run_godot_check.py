@@ -60,7 +60,7 @@ def class_cache_stale(cache: Path) -> bool:
     return False
 
 
-def ensure_import(godot: list[str], force: bool) -> bool:
+def ensure_import(godot: list[str], force: bool, scratch: Path) -> bool:
     cache = ROOT / ".godot" / "global_script_class_cache.cfg"
     if cache.exists() and not force and not class_cache_stale(cache):
         return True
@@ -68,6 +68,7 @@ def ensure_import(godot: list[str], force: bool) -> bool:
     done = subprocess.run(
         [*godot, "--headless", "--path", str(ROOT), "--editor", "--import", "--quit"],
         cwd=ROOT,
+        env=isolated_env(scratch / "import"),
         capture_output=True,
         text=True,
         check=False,
@@ -136,15 +137,15 @@ def main() -> int:
         print(f"no test file matches {args.filters}")
         return 1
     godot = shlex.split(args.godot)
-    if not ensure_import(godot, args.force_import):
-        print("FAIL  import")
-        return 1
-
     started = time.monotonic()
     failures: list[str] = []
     with tempfile.TemporaryDirectory(prefix="wickwarden-check-") as scratch:
+        scratch_path = Path(scratch).resolve()
+        if not ensure_import(godot, args.force_import, scratch_path):
+            print("FAIL  import")
+            return 1
         with ThreadPoolExecutor(max_workers=args.jobs) as pool:
-            jobs = [pool.submit(run_one, f, godot, Path(scratch).resolve()) for f in files]
+            jobs = [pool.submit(run_one, f, godot, scratch_path) for f in files]
             for job in jobs:
                 name, ok, seconds, output = job.result()
                 print(f"{'PASS' if ok else 'FAIL'}  {name:28} {seconds:5.1f}s", flush=True)

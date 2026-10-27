@@ -1,6 +1,16 @@
 # Current status
 
-**Q3 C10 approach, 2026-10-28 (working tree, unpushed):** The continuous
+**F3 runner import isolation, 2026-10-28 (working tree, unpushed):**
+`tools/run_godot_check.py` now creates its temporary root before `ensure_import`;
+Godot import receives a separate `isolated_env` under `import`, and each suite
+continues to use its own user directory. The agent reports isolated import and
+`save_game`, lint, and fake-home/mock tests under `/tmp`, `/var/tmp` and custom
+`TMPDIR` passing. The lead passed `TMPDIR=/tmp` with `--import save_game`. Q3's
+hard `/tmp` guard is unchanged; a shared runner guard and Q3 changes require WP
+owner coordination. This is not a complete solution or protection against
+malicious code.
+
+**Q3 C10 approach, 2026-10-28 (committed in `9bfe631`):** The continuous
 earned input route with normal damage wins C9, physically buys healing and slugs
 at S5 for 45 earned brass, passes the Ninth Door with nine fragments, then earns
 the Wick and first key, passes the living Echo, uses the raft and Jar and reaches
@@ -1358,7 +1368,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `79369cdcad32b78625b5dd30a520796a6b4dc58b` on `origin/main`, documenting the isolated C10 probe and ending-choice conflict above. The user response on the choice remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `9bfe631f1e07f623cf8156395f060ab2e37a360a` on `origin/main`, including the continuous earned route to C10 room 6 above. The second-key attempt and complete C10 route remain unverified; the user response on the ending-choice conflict remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

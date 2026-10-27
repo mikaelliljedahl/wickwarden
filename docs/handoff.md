@@ -72,6 +72,8 @@ The continuous earned-input Lock Warden victory followed in
 The isolated C10 probe and ending-choice conflict were documented in
 `79369cdcad32b78625b5dd30a520796a6b4dc58b`, verified on `origin/main`; the
 user response on the choice remains pending.
+The continuous earned route to C10 room 6 followed in
+`9bfe631f1e07f623cf8156395f060ab2e37a360a`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -79,7 +81,17 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 C10 approach, working tree (unpushed):** The continuous earned input route
+**F3 runner import isolation, working tree (unpushed):**
+`tools/run_godot_check.py` now creates its temporary root before `ensure_import`;
+Godot import receives a separate `isolated_env` under `import`, and each suite
+continues to use its own user directory. The agent reports isolated import and
+`save_game`, lint, and fake-home/mock tests under `/tmp`, `/var/tmp` and custom
+`TMPDIR` passing. The lead passed `TMPDIR=/tmp` with `--import save_game`. Q3's
+hard `/tmp` guard is unchanged; a shared runner guard and Q3 changes require WP
+owner coordination. This is not a complete solution or protection against
+malicious code.
+
+**Q3 C10 approach, committed in `9bfe631`:** The continuous earned input route
 with normal damage wins C9, physically buys healing and slugs at S5 for 45
 earned brass, passes the Ninth Door with nine fragments, then earns the Wick and
 first key, passes the living Echo, uses the raft and Jar and reaches `cave_10_6`
