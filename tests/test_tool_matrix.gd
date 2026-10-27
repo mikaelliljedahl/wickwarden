@@ -44,6 +44,9 @@ func run() -> void:
 	await _brute_pot()
 	await _squire_pit_moth()
 	await _coinwyrm_reel()
+	await _kiln_wick()
+	await _choir_warden_moth()
+	await _automaton_moth()
 
 
 func _gate(parent: Node, row: Array, at: Vector2) -> Node2D:
@@ -549,3 +552,106 @@ func _coinwyrm_reel() -> void:
 	Input.action_release(&"attack")
 	check_eq(boss.hp, 34, "Coinwyrm: actual hook damages exposed head")
 	await dispose(room)
+
+
+func _kiln_wick() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = make_enemy(
+		arena, "res://scenes/enemies/bosses/kilnkeeper.tscn", Vector2(800, 480)
+	)
+	boss.room_rect = Rect2(96, 96, 1728, 768)
+	var player := make_player(arena, Vector2(192, 192))
+	# This isolates armour and tool collisions from simultaneous boss attacks.
+	player.set_hurtbox_enabled(self, false)
+	await seconds(1.6)
+	player.place_at(boss.global_position - Vector2(140, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(6)
+	Input.action_release(&"attack")
+	check_eq(boss.hp, 24, "Kilnkeeper: real hook cannot damage hard armour")
+	await frames(22)
+	player.place_at(boss.global_position - Vector2(200, 0))
+	_equip(player, &"cinder_wick")
+	check(player.use_item(), "Kilnkeeper: actual cinder wick launches")
+	await seconds(0.7)
+	player.place_at(Vector2(192, 192))
+	for i in range(120):
+		if boss.is_molten():
+			break
+		await frames(1)
+	check(boss.is_molten(), "Kilnkeeper: attached flame melts armour")
+	check_eq(boss.melt_ticks, 3, "Kilnkeeper: phase one requires three flame ticks")
+	check_eq(boss.hp, 18, "Kilnkeeper: three real ticks each deal two")
+	await dispose(arena)
+
+
+func _choir_warden_moth() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/choir_warden.tscn", Vector2(600, 480)
+	)
+	var player := make_player(arena, Vector2(1700, 480))
+	for i in range(400):
+		if enemy.state == enemy.State.SING:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.SING, "Choir Warden reaches natural song")
+	player.place_at(enemy.global_position - Vector2(90, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 20, "Choir Warden: real hook cannot damage singing mouth")
+	await frames(20)
+	player.place_at(enemy.global_position - Vector2(240, 0))
+	_equip(player, &"tether_moth")
+	check(player.use_item(), "Choir Warden: actual moth launches during song")
+	for i in range(35):
+		if enemy.is_stunned():
+			break
+		await frames(1)
+	check(enemy.is_stunned(), "Choir Warden: real moth interrupts song")
+	check(not is_instance_valid(enemy._cone), "Choir Warden: interrupted cone disappears")
+	player.place_at(enemy.global_position - Vector2(90, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 18, "Choir Warden: real hook damages stunned mouth")
+	await dispose(arena)
+
+
+func _automaton_moth() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/wick_automaton.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(710, 480))
+	await frames(2)
+	# Freeze movement, retaining physics, real item flight and damage processing.
+	enemy.move_speed = 0
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 29, "Automaton: real hook deals one through plating")
+	await frames(40)
+	player.place_at(enemy.global_position - Vector2(240, 0))
+	_equip(player, &"tether_moth")
+	check(player.use_item(), "Automaton: actual moth launches")
+	for i in range(40):
+		if enemy.is_stunned():
+			break
+		await frames(1)
+	check(enemy.is_stunned(), "Automaton: real moth opens vent")
+	player.place_at(enemy.global_position - Vector2(90, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 27, "Automaton: real hook deals two during stun")
+	await dispose(arena)
