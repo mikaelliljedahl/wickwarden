@@ -47,6 +47,8 @@ The Q7 scoped-key, Lockpick and Ninth Door cases followed in
 `0801f43502015e8de47efe795083c766ac2fc231`, verified on `origin/main`.
 The Gloam Knight test victory and M0 guard spark followed in
 `3a36abb362921cbb611de24bc3b04d8cb15fb813`, verified on `origin/main`.
+The Q7 one-way test and open landing observation followed in
+`ce9dc584bd69c95611d002c327cb74c7545213d4`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -54,14 +56,17 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 one-way transitions, working tree (unpushed):** Real World cases for
+**Q7 one-way transitions, committed in `ce9dc58`:** Real World cases for
 `e041` and `e087` walk down normally and check that boots cannot return from a
 controlled position 210 px into the lower room. Enemies are removed and damage
 remains active. The agent reports two runs with isolated user data in the shared
-project and lint passing. A separate natural-arrival and immediate-jump
-observation reached y = lower-room origin − 8 while the room ID was lower; this
-is not yet a confirmed bug or escape. Investigation continues, and the accepted
-controlled-position test does not cover that edge case.
+project and lint passing. A separate natural-arrival probe confirmed a softlock:
+immediate upward boots use reproduced it 3/3 times on each edge, leaving the
+player airborne with collision and hurtbox disabled for over 10 seconds.
+Enemies were removed, damage active and tools supplied by fixture. Controls
+delayed by 3 or 15 physics frames worked. The prior uncertain observation is
+superseded; the cause remains a hypothesis and a separate Z1 fix agent is
+investigating. The committed controlled-position test does not cover this edge.
 
 **Q3 Gloam Knight victory, committed in `3a36abb`:** The continuous input
 route with normal damage and ordinary respawns defeats the C7 boss and
