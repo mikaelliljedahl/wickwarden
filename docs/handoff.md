@@ -39,6 +39,8 @@ The Wick Automaton jet followed in `bb7c6f8cf0c72d4077a0eb3463de3cef8f1c863a`,
 verified on `origin/main`.
 The Dirge Choir victory and C6 core audit followed in
 `14b7836107ece10c61c1e6236e6371000314684a`, verified on `origin/main`.
+The Q7 vegetation, rocks and gate cases followed in
+`a53fc9d47010cf9bd85ff4b9933c5d093fd399f6`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -46,7 +48,23 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 vegetation, rocks and gates, working tree (unpushed):** Actual hook and
+**Q7 raft passage and ravine, working tree (unpushed):** A real World passage
+across `e167` from `cave_3_5` to `cave_3_6` follows the actual moorings with
+the raft; the sling does not cross. In a separate real `ravine_leap` arena case
+the boots cross and the sling does not. Fixtures grant tools directly and remove
+roamers at the source; damage remains active. These are not an earned
+playthrough. The agent reports two isolated matrix runs and lint passing. Other
+pairs and edges, visual and human verification remain open.
+
+**P08 seam presentation, working tree (unpushed):** At the real seams in
+`ow_8_0` and `ow_11_7`, the Placeholder is hidden only when an explicitly
+linked RoomDoor has usable painted art. Standalone fallbacks and real seam art
+remain; collision, flags and timing are unchanged. The agent reports real-room
+reveal/re-entry and `gated_room_doors` tests and lint passing, and reviewed
+closed states. The lead reviewed open states in both actual rooms. No new art
+was added; human play remains unverified.
+
+**Q7 vegetation, rocks and gates, committed in `a53fc9d`:** Actual hook and
 pot cut five vegetation screens while sling and Cinder Wick do not; a real pot
 opens brittle rocks while wrong tools are rejected. A ward plate requires two
 blocked zero-damage test spores, and a two-brazier gate uses the actual hook and

@@ -42,6 +42,9 @@ func run() -> void:
 	await _ward_plate_tools()
 	await _brazier_gate_tools()
 	await _mooring_water_gate()
+	await _flooded_room_pair()
+	for tool: StringName in [&"skitter_boots", &"tallow_sling"]:
+		await _ravine_pair(tool)
 	for tool: StringName in [&"cinder_wick", &"tallow_sling", &"lantern_chime", &"tether_moth"]:
 		await _snapper_pair(tool)
 	for prop: String in ["anchor_ring", "anchor_pocket", "reelable"]:
@@ -385,6 +388,75 @@ func _mooring_water_gate() -> void:
 	_equip(player, &"tallow_sling")
 	check(not player.use_item(), "sling cannot be used afloat away from dock")
 	check(player.is_on_raft(), "refused use keeps rider afloat")
+	await dispose(arena)
+
+
+func _flooded_room_pair() -> void:
+	reset_state()
+	var world := await make_world()
+	world.start_at(&"cave_3_5")
+	await frames(3)
+	var room := world.get_room(&"cave_3_5")
+	var peer := world.get_room(&"cave_3_6")
+	var dock: Node2D
+	for node in room.get_node("Props").get_children():
+		if node.is_in_group(&"mooring") and node.get(&"mooring_id") == &"e167":
+			dock = node
+	check(dock != null and peer != null, "flooded e167: actual room pair and dock load")
+	if dock == null or peer == null:
+		await dispose(world)
+		return
+	# Remove roaming combatants to isolate the real gate and room transition.
+	for enemy in room.get_enemies():
+		enemy.queue_free()
+	var player := world.player
+	var destination: Node2D = dock.call(&"find_target")
+	check(destination != null, "flooded e167: real paired mooring resolves")
+	if destination == null:
+		await dispose(world)
+		return
+	var landing: Vector2 = destination.call(&"landing_position")
+	player.place_at(dock.call(&"landing_position"))
+	_equip(player, &"tallow_sling")
+	await frames(3)
+	check(player.use_item(), "flooded e167: actual sling fires at dock")
+	await seconds(0.5)
+	check_eq(world.get_current_room_id(), &"cave_3_5", "flooded e167: sling does not cross")
+	check(not player.is_external_motion(), "flooded e167: sling does not board")
+	_equip(player, &"reed_raft")
+	check(player.use_item(), "flooded e167: real raft boards at source")
+	await seconds(0.4)
+	check(player.is_external_motion(), "flooded e167: raft ride starts")
+	for i in range(600):
+		if world.get_current_room_id() == &"cave_3_6" and not player.is_external_motion():
+			break
+		await frames(1)
+	check_eq(world.get_current_room_id(), &"cave_3_6", "flooded e167: raft reaches peer room")
+	check(not player.is_external_motion(), "flooded e167: ride ends at paired dock")
+	check(player.global_position.distance_to(landing) < 10, "flooded e167: lands at peer marker")
+	await dispose(world)
+
+
+func _ravine_pair(tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var ravine := _prop(arena, "ravine_leap", Vector2(500, 444))
+	if ravine == null:
+		await dispose(arena)
+		return
+	var player := make_player(arena, Vector2(500, 348))
+	await frames(3)
+	_equip(player, tool)
+	player.facing = Vector2.DOWN
+	check(player.use_item(), "%s -> ravine: real activation" % tool)
+	var crossed := false
+	for i in range(80):
+		await frames(1)
+		if bool(ravine.call(&"holds", player.global_position)) and player.is_airborne():
+			crossed = true
+	check_eq(crossed, tool == &"skitter_boots", "%s -> ravine: airborne crossing" % tool)
+	check_near(player.global_position.y, 540 if crossed else 348, 1, "%s -> ravine: landing" % tool)
+	check_eq(GameState.health, 6, "%s -> ravine: no fall damage" % tool)
 	await dispose(arena)
 
 

@@ -22,6 +22,7 @@ func run() -> void:
 	_scenes_have_their_look()
 	await _real_jar_pair()
 	await _hook_pair()
+	await _painted_room_entrances()
 	await _c05_pair_if_delivered()
 
 
@@ -248,6 +249,53 @@ func _scenes_have_their_look() -> void:
 		check(seam.get(&"size") == Vector2(192, 96), "%s fills a 192 x 96 px gap" % scene_path)
 		check(seam.get(&"hook_tap") == (scene_path == TAP), "%s tap flag is right" % scene_path)
 		seam.free()
+
+
+func _painted_room_entrances() -> void:
+	for spec in [
+		["ow_8_0", "HookTapWall1", &"revealed_e131"],
+		["ow_11_7", "SealedSeam1", &"revealed_e144"],
+	]:
+		reset_state()
+		var room := (load(WorldData.scene_path(spec[0])) as PackedScene).instantiate() as Room
+		add_child(room)
+		room.enter()
+		var seam: Variant = room.get_node("Props/" + spec[1])
+		var door := room.get_node("Props/Door1") as RoomDoor
+		await frames(3)
+		check(not _visual_shown(seam) and not door.get_node("Visual").visible, "entrance concealed")
+		check(not _body_disabled(seam), "concealed entrance remains solid")
+		if spec[0] == "ow_8_0":
+			var hit := _make_hit(room, &"hook", seam.global_position)
+			await frames(3)
+			hit.deactivate()
+		else:
+			seam.reveal()
+			await frames(3)
+			check(not seam.is_revealed, "brief jar reveal is temporary")
+			check(not _visual_shown(seam), "temporary reveal suppresses rectangle")
+			check(door.get_node("Visual").visible, "temporary reveal shows painted entrance")
+			seam.hide_again()
+			await frames(3)
+			check(not door.get_node("Visual").visible, "interrupted reveal conceals entrance")
+			check(not _body_disabled(seam), "interrupted reveal restores blocker")
+			await _light(seam, 62)
+		await frames(3)
+		check(GameState.has_flag(spec[2]), "actual entrance publishes its reveal flag")
+		check(_body_disabled(seam) and door._gate_is_open(), "revealed entrance is passable")
+		check(not _visual_shown(seam), "revealed entrance suppresses fallback rectangle")
+		check(door.get_node("Visual").visible, "revealed entrance shows painted door")
+		await dispose(room)
+		var restored := (load(WorldData.scene_path(spec[0])) as PackedScene).instantiate() as Room
+		add_child(restored)
+		restored.enter()
+		await frames(3)
+		var restored_seam: Variant = restored.get_node("Props/" + spec[1])
+		var restored_door := restored.get_node("Props/Door1") as RoomDoor
+		check(restored_seam.is_revealed and _body_disabled(restored_seam), "reentry restores opening")
+		check(not _visual_shown(restored_seam), "reentry suppresses rectangle")
+		check(restored_door.get_node("Visual").visible, "reentry shows painted door")
+		await dispose(restored)
 
 
 func _real_jar_pair() -> void:

@@ -1,6 +1,22 @@
 # Current status
 
-**Q7 vegetation, rocks and gates, 2026-10-27 (working tree, unpushed):**
+**Q7 raft passage and ravine, 2026-10-27 (working tree, unpushed):** A real
+World passage across `e167` from `cave_3_5` to `cave_3_6` follows the actual
+moorings with the raft; the sling does not cross. In a separate real
+`ravine_leap` arena case the boots cross and the sling does not. Fixtures grant
+tools directly and remove roamers at the source; damage remains active. These
+are not an earned playthrough. The agent reports two isolated matrix runs and
+lint passing. Other pairs and edges, visual and human verification remain open.
+
+**P08 seam presentation, 2026-10-27 (working tree, unpushed):** At the real
+seams in `ow_8_0` and `ow_11_7`, the Placeholder is hidden only when an
+explicitly linked RoomDoor has usable painted art. Standalone fallbacks and real
+seam art remain; collision, flags and timing are unchanged. The agent reports
+real-room reveal/re-entry and `gated_room_doors` tests and lint passing, and
+reviewed closed states. The lead reviewed open states in both actual rooms. No
+new art was added; human play remains unverified.
+
+**Q7 vegetation, rocks and gates, 2026-10-27 (committed in `a53fc9d`):**
 Actual hook and pot cut five vegetation screens while sling and Cinder Wick do
 not; a real pot opens brittle rocks while wrong tools are rejected. A ward plate
 requires two blocked zero-damage test spores, and a two-brazier gate uses the
@@ -1126,7 +1142,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `14b7836107ece10c61c1e6236e6371000314684a` on `origin/main`, including the Dirge Choir victory and C6 core audit described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `a53fc9d47010cf9bd85ff4b9933c5d093fd399f6` on `origin/main`, including the Q7 vegetation, rocks and gate cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

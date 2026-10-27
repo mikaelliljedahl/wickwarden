@@ -153,13 +153,28 @@ func _set_open(open: bool) -> void:
 			and door_target != &""
 			and SpriteVisual.has_art(&"pocket_stairs")
 		)
-		visual.visible = open and not painted_stairs
+		visual.visible = open and not painted_stairs and not _painted_linked_door(visual)
 	# Deferred: a reveal can happen during a physics step (a hook hit), where shapes may not change.
 	_body_shape.set_deferred("disabled", open)
 	if open:
 		_show_door()
 	else:
 		_hide_door()
+
+
+## A linked room door supplies the revealed entrance; do not draw a missing-art rectangle behind it.
+## Keep real seam art and the fallback for standalone seams or doors without usable art.
+func _painted_linked_door(visual: CanvasItem) -> bool:
+	if not visual is Placeholder or get_parent() == null:
+		return false
+	for sibling in get_parent().get_children():
+		if sibling is RoomDoor and not sibling.blocker_path.is_empty():
+			if sibling.get_node_or_null(sibling.blocker_path) == self:
+				return (
+					not sibling._uses_building_door()
+					and SpriteVisual.has_art(sibling.entrance_kind())
+				)
+	return false
 
 
 ## The door exists only while the seam is shown: a RoomDoor polls its overlaps in physics, so a hidden one
