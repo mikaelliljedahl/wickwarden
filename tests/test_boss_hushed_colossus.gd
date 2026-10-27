@@ -12,12 +12,34 @@ func run() -> void:
 	await _arena_presentation_light()
 	await _sweep_sides()
 	await _sweep_warning_light()
+	await _quake_presentation()
 	await _armour_and_intro()
 	await _attack_physics()
 	await _damage_and_expiration()
 	await _actual_mitts_in_every_phase()
 	await _reset_and_retirement()
 	await _gallery()
+
+
+func _quake_presentation() -> void:
+	await _setup()
+	boss.set_physics_process(false)
+	player.hurtbox.enabled = false
+	for parity in [0, 1]:
+		var quake = boss.start_attack(&"quake", boss.arena_point(Vector2.ZERO), 1.2, 0.2)
+		quake.parity = parity
+		await frames(2)
+		check(quake.get_node("Visual").quake_texture != null, "painted quake art loads")
+		check(not quake.fired, "quake art starts in warning state")
+		await frames(72)
+		check(quake.fired, "quake switches to active state")
+		check_eq(quake.box.get_child_count(), 72, "quake retains 72 dangerous tiles")
+		for shape in quake.box.get_children():
+			var cell: Vector2 = (shape.position - Vector2(48, 48)) / 96.0
+			check_eq((int(cell.x) + int(cell.y)) % 2, parity, "hitbox matches marked parity")
+			check_eq(shape.shape.size, Vector2(96, 96), "marked tile retains full hitbox")
+		await dispose(quake)
+	await dispose(arena)
 
 
 func _arena_presentation_light() -> void:

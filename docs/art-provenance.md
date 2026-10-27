@@ -1,5 +1,14 @@
 # Wickwarden — art provenance
 
+The Colossus quake source `tools/source_art/colossus_quake_z1.png` is a
+native-alpha image generated 2026-10-27. Its original output is
+`01a17f8a-84c4-7c73-a2cf-e67783559d20/exec-30a02017-b502-4fc5-b868-53e97d5be32d.png`;
+source SHA-256 is `f67aa497aabcefea07eaf779bf148643c6e4928215a873cc2432ae07dbebe485`.
+The main manifest and cutter produce `assets/sprites/colossus_quake_z1_idle.png`,
+SHA-256 `1c4bd7f2b7d75516a6b0af62e44bf2e7240e967f842fb79b6602b2601a733de3`.
+The prompt and visual review are in the [quake log](../tools/source_art/colossus-quake-z1-log.md);
+the tool did not expose a model version.
+
 The Unlit heart-pulse source `tools/source_art/unlit_heart_pulse_z1.png` is a
 native-alpha image generated 2026-10-27. Its original output is
 `01a17f32-c2cf-7331-b7c3-8f87d6268b07/exec-04d26ae3-768d-4420-b626-fb7aeb7c6666.png`;

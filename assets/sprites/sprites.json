@@ -39,6 +39,26 @@
       }
     }
   },
+  "colossus_quake_z1": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/colossus_quake_z1_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "unlit_heart_pulse_z1": {
     "cell": [
       1024,

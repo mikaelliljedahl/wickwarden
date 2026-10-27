@@ -63,6 +63,8 @@ verified on `origin/main`; it does not establish a C9 victory.
 The continuous C9 plate phase followed in
 `44d0f0ea5dd5dc3892c580c3bc3d75db215ea20d`, verified on `origin/main`; it
 reaches phase two without establishing a boss victory.
+The isolated C9 phase-two survival attempts were documented in
+`196d4a6b7c31c223f8e7e22ce88f437fb021bacb`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -70,7 +72,22 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**C9 phase-two survival probes (isolated, unintegrated):** The continuous
+**B04 quake art, working tree (unpushed):** Native-alpha painted cracks cover
+dangerous 96×96 checkerboard tiles; outline and fill show the full hit rectangles
+and the active state is brighter. Timing, damage and arena light are unchanged.
+The lead reviewed warning and active captures in the actual arena with a forced
+hazard; the agent reviewed both parities and 72 tiles and reports boss and route
+tests and lint passing. Human action play remains open; the art agent maintains
+provenance separately.
+
+**C9 direct phase-two fixture (isolated):** With normal damage, three of three
+attempts used actual inputs, ward and six flares to win and physically collect
+fragment and core, raising maximum health from 26 to 28. Wicklings were initially
+alive, but phase was set directly and the player placed at 13/26; reported health
+before rewards was 3/26. The bot tracks the boss because of knockback. This is
+not a continuous earned-route victory.
+
+**C9 phase-two survival probes (isolated; documented in `196d4a6`):** The continuous
 earned route reaches phase two at 13/26 half-hearts with enemies and damage
 active. The best pot probe reduced boss HP from 24 to 16; the player was at
 5/26 after the second hit and then died. Sling, hook and flare variants also

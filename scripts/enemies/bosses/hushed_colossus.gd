@@ -36,8 +36,13 @@ class Shard:
 class FloorVisual:
 	extends Node2D
 	var sweep_light: PointLight2D
+	var quake_texture: Texture2D
 
 	func _ready() -> void:
+		if get_parent().kind == &"quake":
+			var path := "res://assets/sprites/colossus_quake_z1_idle.png"
+			if ResourceLoader.exists(path):
+				quake_texture = load(path) as Texture2D
 		if get_parent().kind == &"sweep":
 			# The attack sets the band orientation immediately after it enters the tree.
 			call_deferred(&"_make_sweep_light")
@@ -77,7 +82,16 @@ class FloorVisual:
 				for row in range(1, 9):
 					for col in range(1, 19):
 						if (row + col) % 2 == attack.parity:
-							draw_rect(Rect2(col * 96, row * 96, 96, 96), color)
+							if quake_texture != null:
+								var tile := Rect2(col * 96, row * 96, 96, 96)
+								draw_rect(tile, Color(0.95, 0.55, 0.2, 0.22 if not attack.fired else 0.4))
+								draw_rect(tile.grow(-1), Color(1.0, 0.75, 0.35, 0.65), false, 2.0)
+								draw_texture_rect(
+									quake_texture, tile, false,
+									Color(1, 1, 1, 1.0 if attack.fired else 0.75)
+								)
+							else:
+								draw_rect(Rect2(col * 96, row * 96, 96, 96), color)
 			&"ring":
 				draw_arc(Vector2.ZERO, attack.ring_radius(), 0, TAU, 64, color, 14.0)
 			_:
