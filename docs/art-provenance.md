@@ -1484,3 +1484,7 @@ the width of the hook swing in particular, in play.
 | `lock_warden_body_candidate_20261027a.png` | 1374x1145 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-f66d3146-8159-4f17-a069-ffa5183bffd2.png` | `491e702a9a3b18f3` | `lock-warden-body-20261027-log.md` |
 | `lock_deadbolt_candidate_20261027a.png` | 1024x1536 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-757270e0-38c3-43e4-a0b6-25849f034ac4.png` | `5f4ae12284446237` | `lock-deadbolt-20261027-log.md` |
 | `coinwyrm_bare_head_candidate_20261027a.png` | 1312x1199 | `01a17dc5-6801-7be1-b963-170ed1dc4e82` | `exec-f3cfc8f3-cb11-4706-be6d-3737ddb1c63f.png` | `5a140f5a294686a7` | `coinwyrm-bare-head-20261027-log.md` |
+
+| `wick_automaton_jet_z1.png` | 2172x724 | `01a17f48-f9dc-76f2-be17-1bf130213b6c` | `exec-72d7ce02-b238-4d73-9e79-fc30aaf7130a.png` | `d9c9d14c3413c9f0` | `wick-automaton-jet-z1-log.md` |
+
+The jet is cut through `tools/art_manifest.json` into the cutter-generated `assets/sprites/sprites.json`; reproduction details are in its log.

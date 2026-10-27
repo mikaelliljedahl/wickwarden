@@ -1,6 +1,15 @@
 # Current status
 
-**Q7 wall and raft cases, 2026-10-27 (working tree, unpushed):** A real pitch
+**Wick Automaton jet, 2026-10-27 (working tree, unpushed):** A new native-alpha
+painted jet replaces the active geometric placeholder, with a clear outline for
+the unchanged 192×64 damage area and unchanged timing. The lead reviewed right
+and up orientations in the actual room; the agent also reviewed the tell and
+vent. The ordinary cutter and manifest are used, with previous entries unchanged;
+the art agent updated provenance and `tools/source_art/wick-automaton-jet-z1-log.md`.
+The agent reports isolated `wick_automaton` and `route_cave_9` tests, 22 art
+tests and lint passing. Human play remains unverified.
+
+**Q7 wall and raft cases, 2026-10-27 (committed in `81a240e`):** A real pitch
 pot opens a cracked wall and its flag and collision are checked; a distant wall
 and sling, Cinder Wick and flare attempts are rejected. A real raft requires a
 mooring and crosses deep water with player damage active; the sling cannot be
@@ -1093,7 +1102,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `faf963214f4a7bae92d04ca18e99dc5e6facc65a` on `origin/main`, including the Tidewick warning and Q7 gate cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `81a240e5193f077112b2600c096760d1842732e6` on `origin/main`, including the Q7 wall and raft cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

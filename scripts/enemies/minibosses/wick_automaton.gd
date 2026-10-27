@@ -10,6 +10,7 @@ var _immunity := 0.0
 var _aim := Vector2.RIGHT
 var _jet: Hitbox
 var _pulse := 0.0
+var _fire_art: Texture2D = load("res://assets/sprites/wick_automaton_jet_z1_idle.png") as Texture2D
 
 
 func _init() -> void:
@@ -155,7 +156,15 @@ func _on_death() -> void:
 func _draw() -> void:
 	if is_dead or is_dying():
 		return
-	if state == State.TELL or state == State.JET:
+	if state == State.TELL:
 		draw_line(Vector2.ZERO, _aim * 192, Color(1, 0.45, 0.1, 0.5), 64.0)
+	elif state == State.JET:
+		draw_set_transform(Vector2.ZERO, _aim.angle())
+		draw_rect(Rect2(0, -32, 192, 64), Color(1, 0.5, 0.12, 0.8), false, 2.0)
+		if _fire_art != null:
+			draw_texture_rect(_fire_art, Rect2(0, -32, 192, 64), false)
+		else:
+			draw_rect(Rect2(0, -32, 192, 64), Color(1, 0.45, 0.1, 0.5))
+		draw_set_transform(Vector2.ZERO)
 	elif state == State.VENT or is_stunned():
 		draw_arc(Vector2.ZERO, 38, 0, TAU, 24, Color(1, 0.75, 0.25), 5)

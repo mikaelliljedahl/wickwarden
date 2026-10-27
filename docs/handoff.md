@@ -33,6 +33,8 @@ The Archivist victory and selected actual-tool cases for all 20 encounters
 followed in `7332bc07df0937c060f52cb0bd30f842627a3130` on `origin/main`.
 The Tidewick warning and Q7 gate cases followed in
 `faf963214f4a7bae92d04ca18e99dc5e6facc65a`, verified on `origin/main`.
+The Q7 wall and raft cases followed in `81a240e5193f077112b2600c096760d1842732e6`
+on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -40,7 +42,16 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 wall and raft cases, working tree (unpushed):** A real pitch pot opens a
+**Wick Automaton jet, working tree (unpushed):** A new native-alpha painted jet
+replaces the active geometric placeholder, with a clear outline for the
+unchanged 192×64 damage area and unchanged timing. The lead reviewed right and
+up orientations in the actual room; the agent also reviewed the tell and vent.
+The ordinary cutter and manifest are used, with previous entries unchanged; the
+art agent updated provenance and `tools/source_art/wick-automaton-jet-z1-log.md`.
+The agent reports isolated `wick_automaton` and `route_cave_9` tests, 22 art
+tests and lint passing. Human play remains unverified.
+
+**Q7 wall and raft cases, committed in `81a240e`:** A real pitch pot opens a
 cracked wall with flag and collision checks; a distant wall and sling, Cinder
 Wick and flare attempts are rejected. A real raft requires a mooring and crosses
 deep water with player damage active; the sling cannot be used aboard. These are

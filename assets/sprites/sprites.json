@@ -1,4 +1,24 @@
 {
+  "wick_automaton_jet_z1": {
+    "cell": [
+      192,
+      64
+    ],
+    "anchor": [
+      96.0,
+      32.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/wick_automaton_jet_z1_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      }
+    }
+  },
   "fx_wisp_burst": {
     "cell": [
       384,

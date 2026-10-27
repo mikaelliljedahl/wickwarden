@@ -98,6 +98,11 @@ func _jet() -> void:
 		await frames(40)
 		check_eq(enemy.state, enemy.State.JET, ".6s warning then jet")
 		check(is_instance_valid(enemy._jet), "real jet hitbox")
+		check(enemy._fire_art != null, "painted jet texture loads")
+		var jet_shape := enemy._jet.get_child(0) as CollisionShape2D
+		check_eq((jet_shape.shape as RectangleShape2D).size, Vector2(192, 64), "jet area unchanged")
+		check_eq(jet_shape.position, Vector2(96, 0), "jet starts at automaton")
+		check_eq(enemy._jet.damage, 1, "jet damage unchanged")
 		await _capture("automaton-jet")
 		await frames(44)
 		check_eq(enemy.state, enemy.State.VENT, ".8s jet then vent")
