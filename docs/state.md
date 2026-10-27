@@ -1,6 +1,15 @@
 # Current status
 
-**Q3 C9 phase two, 2026-10-27 (working tree, unpushed):** After an ordinary
+**C9 phase-two survival probes, 2026-10-27 (isolated, unintegrated):** The
+continuous earned route reaches phase two at 13/26 half-hearts with enemies
+and damage active. The best pot probe reduced boss HP from 24 to 16; the player
+was at 5/26 after the second hit and then died. Sling, hook and flare variants
+also died; none demonstrated victory or was integrated. The Q3 bot reads boss,
+plate, projectile and player state. Global seed `20261027` does not control or
+log Archivist's and Tidewick's own randomization. Another agent is analysing
+survival.
+
+**Q3 C9 phase two, 2026-10-27 (committed in `44d0f0e`):** After an ordinary
 boss death, respawn and return, the continuous input route uses actual sling and
 pots to break all four plates with normal damage and living wicklings. It reaches
 phase two with boss HP 24 and player health 13/26; C9 victory and its core remain
@@ -1286,7 +1295,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `c3f759fb94cb7ba317a4c5329caa669e071344cc` on `origin/main`, including the earned C9 boss approach described above; it does not establish a C9 victory. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `44d0f0ea5dd5dc3892c580c3bc3d75db215ea20d` on `origin/main`, including the continuous C9 plate phase and approach to phase two described above; it does not establish a C9 victory. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

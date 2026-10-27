@@ -60,6 +60,9 @@ The Q7 gate audit and rush-screen case followed in
 `10738c75441046f3fb315f75d2a17cf584fd3ea7` on `origin/main`.
 The earned C9 boss approach followed in `c3f759fb94cb7ba317a4c5329caa669e071344cc`,
 verified on `origin/main`; it does not establish a C9 victory.
+The continuous C9 plate phase followed in
+`44d0f0ea5dd5dc3892c580c3bc3d75db215ea20d`, verified on `origin/main`; it
+reaches phase two without establishing a boss victory.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -67,7 +70,16 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 C9 phase two, working tree (unpushed):** After an ordinary boss death,
+**C9 phase-two survival probes (isolated, unintegrated):** The continuous
+earned route reaches phase two at 13/26 half-hearts with enemies and damage
+active. The best pot probe reduced boss HP from 24 to 16; the player was at
+5/26 after the second hit and then died. Sling, hook and flare variants also
+died; none demonstrated victory or was integrated. The Q3 bot reads boss,
+plate, projectile and player state. Global seed `20261027` does not control or
+log Archivist's and Tidewick's own randomization. Another agent is analysing
+survival.
+
+**Q3 C9 phase two, committed in `44d0f0e`:** After an ordinary boss death,
 respawn and return, the continuous input route uses actual sling and pots to
 break all four plates with normal damage and living wicklings. It reaches phase
 two with boss HP 24 and player health 13/26; C9 victory and its core remain
