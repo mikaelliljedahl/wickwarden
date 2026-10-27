@@ -1,14 +1,37 @@
 # Current status
 
-**Q7 and Q8 work, 2026-10-27 (working tree):** `test_tool_matrix` now exercises
+**Working-tree verification, 2026-10-27:** The lead ran `make check` with the
+Q3 victory and Q8 probe present: 155 Godot test files, lint, world-data check
+and 175 Python tests passed. The CI timing budget was not enabled, so this run
+does not establish that the 50 ms budget is met.
+
+**Q3 Colossus victory, 2026-10-27 (working tree, unpushed):** The continuous
+input route with seed `20261027` defeats Hushed Colossus with normal damage,
+physically collects its fragment and core, and reaches 18/18 half-hearts. The
+bot reads internal state including boss phase, timers and hazards; later shards
+use fixtures and warps. The agent reports four isolated shards, a first-shard
+repeat and lint passing. A complete game, human play and other seeds remain
+unverified.
+
+**Q8 transition probe, 2026-10-27 (working tree, unpushed):** The test makes
+300 actual input-driven slides around a four-room loop, starting 35 pixels from
+each exit with damage disabled. A separate 300-warp sequence measures timing;
+node counts and static memory were stable and orphans were freed. Across three
+sequential runs the machine-dependent maxima ranged from 46.547 to 52.574 ms.
+The 50 ms gate is an explicit environment-variable setting for calibrated CI,
+not evidence that CI meets the budget. Cold-world loading, GPU, RSS and full
+continuous walking are not covered. The agent reports 15 checks in each of
+three runs and lint passing; Q8 remains open.
+
+**Q7 and Q8 work, 2026-10-27:** Committed `test_tool_matrix` exercises
 selected weaknesses with actual tools for six of the 20 encounters: Briar
 Mother, Corrow's Echo, Thorn Warden, Abacus Brute, Pale Squire and Coinwyrm.
 The agent reports isolated tests and lint passing. Coinwyrm's test disables the
 player's hurtbox; these selected cases do not complete Q7 or provide visual
-verification. A Q8 prototype repeats 300 warp transitions across four rooms;
+verification. A separate preliminary Q8 prototype repeats 300 warp transitions across four rooms;
 the 50 ms threshold is still under review, and Q8 is not complete.
 
-**Q3 and Q6 extensions, 2026-10-27 (working tree):** With seed `20261027`,
+**Q3 and Q6 extensions, 2026-10-27 (committed in `e8e4b4e`):** With seed `20261027`,
 `test_playthrough_1` also burns the hermit hut thorns with the earned Cinder
 Wick and collects its core. The continuous input route reaches 16/16 maximum
 half-hearts and has 16/16 and nine pots after the first real C4 boss hit.
@@ -22,7 +45,9 @@ and pickup effects in each of two configurations, before and after acquiring
 the pot and sling. It overrides rolls and resets resources to measure potential
 yields without caps; it is not a random sample, a real playthrough economy or
 an assessment of balance over time. The agent reports three relevant isolated
-test suites and lint passing. These extensions remain in the working tree.
+test suites and lint passing. These Q3, Q6 and Q7 extensions, their tests and
+documentation were pushed in `e8e4b4e6bce2eb5075e0e788a1fd5a1642ed427a` and
+verified on `origin/main`.
 
 **Q3 hidden-core route, 2026-10-27 (committed in `80792db`):** The fixed-seed continuous
 input route uses the earned raft to collect the actual hidden core in
@@ -30,7 +55,8 @@ input route uses the earned raft to collect the actual hidden core in
 11/14 half-hearts and eight pots after the first boss hit. Enemies and damage
 are normal; the bot reads internal state and uses no warps. The Q3 agent
 reports four isolated shards, a repeat and lint passing; the owner also ran
-`make test T=playthrough_1` successfully in the workspace. C4 victory, human
+`make test T=playthrough_1` successfully in the workspace. At that checkpoint
+C4 victory was open; the later working-tree victory is recorded above. Human
 and visual verification, other seeds and a complete game remain open.
 
 **Push handoff snapshot, 2026-10-27:** The working tree contains ongoing code,
@@ -43,11 +69,12 @@ the final documentation-only adjustment passed
 `rooms-check` passed 221, `art-test` passed 22 and `playthrough_route --check`
 passed. The final documentation adjustment passed diff-check. No game tests
 were run for this post-push documentation edit.
-The Q3 route followed in `80792dbe61db8817227160b47957d780692ae6a2`, verified
-on `origin/main`. The earlier full gate above applies to its earlier candidate,
-not automatically to this later checkpoint.
-The C4 boss has not been defeated in the earned route, a complete game has not
-been verified, and the removal or readability of every placeholder has not been
+The Q3 route followed in `80792dbe61db8817227160b47957d780692ae6a2`, and the
+Q3, Q6 and Q7 extensions in `e8e4b4e6bce2eb5075e0e788a1fd5a1642ed427a`,
+both verified on `origin/main`. The earlier full gate above applies to its
+earlier candidate, not automatically to these later checkpoints.
+At the pushed checkpoint C4 victory was not yet demonstrated. A complete game
+has not been verified, and the removal or readability of every placeholder has not been
 verified. Still captures and controlled probes do not establish those claims.
 
 **Thornwood and Tallowfen visual reviews, 2026-10-27:** Q5 inspected stills for
@@ -959,7 +986,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `80792dbe61db8817227160b47957d780692ae6a2` on `origin/main`, including the Q3 hidden-core route described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `e8e4b4e6bce2eb5075e0e788a1fd5a1642ed427a` on `origin/main`, including the Q3, Q6 and Q7 extensions described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
@@ -1089,6 +1116,6 @@ Not covered: the hook has no hit detection against rocks or walls, so there is n
 ## Next steps
 
 1. Preserve the foreign staged index, the preserved lock file, and other agents' dirty and untracked work; verify the intended candidate and remote before a future push.
-2. Extend Q3 through C4 victory and a complete earned-route playthrough; verify other seeds and human play.
+2. Extend the working-tree Q3 victory route into a complete earned-route playthrough; verify other seeds and human play.
 3. Follow up Q5 still-review findings with action-state and human visual review. Complete Q6 soak/economy, Q7 weakness coverage, Q8 performance/memory, human balance, and Q9/Z release work.
 4. Finish and verify remaining runtime presentation and placeholders; do not claim all art or the full game complete without evidence.

@@ -17,6 +17,8 @@ checkpoint `e3af885` followed it. The runtime push used the
 already signed-in `mikaelliljedahl` account without a global account switch.
 The Q3 route was subsequently committed and pushed as
 `80792dbe61db8817227160b47957d780692ae6a2`, verified on `origin/main`.
+The Q3, Q6 and Q7 extensions, tests and documentation followed in
+`e8e4b4e6bce2eb5075e0e788a1fd5a1642ed427a`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -24,33 +26,53 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+The lead ran `make check` with the Q3 victory and Q8 probe in the working tree:
+155 Godot test files, lint, world-data check and 175 Python tests passed. The
+CI timing budget was not enabled; this run does not establish that the 50 ms
+budget is met.
+
+**Latest Q3 result, working tree (unpushed):** The continuous input route with
+seed `20261027` defeats Hushed Colossus with normal damage, physically collects
+the fragment and core and reaches 18/18 half-hearts. The bot reads internal
+state including boss phase, timers and hazards; later shards use fixtures and
+warps. The agent reports four isolated shards, a first-shard repeat and lint
+passing. A full game, human play and other seeds remain unverified.
+
+**Latest Q8 result, working tree (unpushed):** The probe makes 300 actual
+input-driven slides in a four-room loop, starting 35 pixels from exits with
+damage disabled. A separate 300-warp sequence measures timing; nodes and static
+memory were stable and orphans freed. Three sequential runs had machine-dependent
+maxima from 46.547 to 52.574 ms. The 50 ms gate is explicitly enabled by an
+environment variable for calibrated CI, not proof that CI meets the budget.
+Cold-world loading, GPU, RSS and full continuous walking remain unmeasured. The
+agent reports 15 checks in each of three runs and lint passing; Q8 remains open.
+
 The isolated candidate before the final documentation-only adjustment passed
 `make check`: 154 Godot suites, lint, world-data verification and 175 Python
 tests. `rooms-check` passed 221, `art-test` passed 22 and
 `playthrough_route --check` passed. The final documentation adjustment passed
 diff-check. No game tests were run for this post-push documentation update.
-The latest working-tree Q3 extension uses seed `20261027` to burn the hermit
+The committed Q3 extension uses seed `20261027` to burn the hermit
 hut thorns with the earned Cinder Wick and collect its core as well. The
 continuous input route reaches 16/16 maximum half-hearts and has 16/16 and nine
 pots after the first real C4 boss hit, with normal enemies and damage. The bot
 reads internal state and uses no warps. The agent reports four isolated shards,
 a repeat and lint passing. Two separate unintegrated normal-damage boss bots
-reached 4 boss HP but died; C4 victory remains unverified.
+reached 4 boss HP but died; those earlier attempts did not establish victory.
 
-The working-tree Q6 economy test exercises 100 stratified actual standard enemy
+The committed Q6 economy test exercises 100 stratified actual standard enemy
 deaths and pickup effects in each of two configurations, before and after the
 pot and sling. It overrides rolls and resets resources to measure potential
 yields without caps; it does not establish random outcomes, playthrough economy
 or balance over time. The agent reports three relevant isolated suites and lint
 passing. These Q3 and Q6 results are not a complete game or human playthrough.
 
-Working-tree `test_tool_matrix` now covers selected weaknesses using actual
+Committed `test_tool_matrix` covers selected weaknesses using actual
 tools for six of 20 encounters: Briar Mother, Corrow's Echo, Thorn Warden,
 Abacus Brute, Pale Squire and Coinwyrm. The agent reports isolated tests and
 lint passing. The Coinwyrm test disables the player's hurtbox; this is neither
-complete Q7 coverage nor visual verification. A preliminary Q8 prototype repeats
-300 warp transitions across four rooms; the 50 ms threshold is still being
-reviewed, and Q8 remains open.
+complete Q7 coverage nor visual verification. The later Q8 probe and its
+limitations are recorded above.
 
 The committed Q3 fixed-seed continuous input route collects the actual hidden
 core in `cave_3_7` using the earned raft, reaches 14/14 maximum half-hearts
@@ -59,8 +81,9 @@ boss hit. Enemies and damage are normal; the bot reads internal state and uses
 no warps. The Q3 agent reports four isolated shards, a repeat and lint passing;
 the owner also passed `make test T=playthrough_1` in the workspace. This route
 has not won C4 or received human or visual verification; later playthrough probes
-use controlled interventions. C4 victory, a complete uninterrupted or human
-game, and all placeholder removal and action-state readability remain unverified. Room
+use controlled interventions. That earlier checkpoint did not win C4; the later
+working-tree victory is recorded above. A complete uninterrupted or human game,
+and all placeholder removal and action-state readability remain unverified. Room
 captures are controlled stills, with some reviews based on older captures.
 Recheck the relevant tests and visual evidence against the final integration
 state, keeping saves isolated, before reporting or pushing it.

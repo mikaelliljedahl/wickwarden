@@ -5,7 +5,8 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route stops after the first C4 boss hit: it does not prove a C4 victory.
+## The continuous route defeats C4 and collects its rewards with normal damage.
+## Its C4 bot reads boss and hazard internals and uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
 
@@ -191,7 +192,10 @@ func walking_boss() -> void:
 			Input.action_press(&"use_item")
 			last_cast = tick
 		else:
-			var motion := d.normalized().orthogonal() + d.normalized() * clampf((d.length() - 330.0) / 100.0, -1.5, 1.5)
+			var motion := (
+				d.normalized().orthogonal()
+				+ d.normalized() * clampf((d.length() - 330.0) / 100.0, -1.5, 1.5)
+			)
 			if absf(motion.x) > 0.3:
 				Input.action_press(&"move_right" if motion.x > 0 else &"move_left")
 			if absf(motion.y) > 0.3:
@@ -200,7 +204,9 @@ func walking_boss() -> void:
 	release_inputs()
 	check(not player.is_dead(), "walking boss fight finishes without death")
 	check(GameState.has_flag(&"boss_cave_1_8_defeated"), "walking bot defeats Kilnkeeper")
-	print("Walking boss victory health: %d/%d half-hearts" % [GameState.health, GameState.max_health])
+	print(
+		"Walking boss victory health: %d/%d half-hearts" % [GameState.health, GameState.max_health]
+	)
 	if player.is_dead() or not GameState.has_flag(&"boss_cave_1_8_defeated"):
 		return
 	await seconds(1.6)
@@ -275,8 +281,10 @@ func walk_toward_c2() -> void:
 	if world.get_current_room_id() == &"cave_2_1" and not player.is_dead():
 		await walk_c2_first_key()
 	print(
-		"Walking toward C2: room=%s health=%d/%d"
-		% [world.get_current_room_id(), GameState.health, GameState.max_health]
+		(
+			"Walking toward C2: room=%s health=%d/%d"
+			% [world.get_current_room_id(), GameState.health, GameState.max_health]
+		)
 	)
 
 
@@ -344,7 +352,10 @@ func walk_c2_warden() -> void:
 			Input.action_press(&"use_item")
 			last_cast = tick
 		else:
-			var motion := d.normalized().orthogonal() + d.normalized() * clampf((d.length() - 330.0) / 100.0, -1.5, 1.5)
+			var motion := (
+				d.normalized().orthogonal()
+				+ d.normalized() * clampf((d.length() - 330.0) / 100.0, -1.5, 1.5)
+			)
 			if absf(motion.x) > 0.3:
 				Input.action_press(&"move_right" if motion.x > 0 else &"move_left")
 			if absf(motion.y) > 0.3:
@@ -408,7 +419,9 @@ func walk_c2_warden() -> void:
 	await walk_start_cross(&"move_down", &"cave_2_5")
 	await walk_start_to(Vector2(960, 780))
 	await walk_start_cross(&"move_down", &"cave_2_8")
-	check_eq(GameState.keys_in(&"c2"), 1, "walking retains the C2 key when the Lockpick opens the lock")
+	check_eq(
+		GameState.keys_in(&"c2"), 1, "walking retains the C2 key when the Lockpick opens the lock"
+	)
 	await walk_start_to(Vector2(1680, 480))
 	await walk_start_cross(&"move_right", &"cave_2_9")
 	check(GameState.has_flag(&"door_boss_c2"), "walking opens the C2 boss door")
@@ -436,7 +449,11 @@ func walk_briar() -> void:
 			var t: float = rel.dot(projectile.direction) / projectile.speed
 			var nearest: Vector2 = rel - projectile.direction * rel.dot(projectile.direction)
 			if t > 0 and t < 0.3 and nearest.length() < 50:
-				evade += nearest.normalized() if nearest.length() > 0.1 else projectile.direction.orthogonal()
+				evade += (
+					nearest.normalized()
+					if nearest.length() > 0.1
+					else projectile.direction.orthogonal()
+				)
 		if evade != Vector2.ZERO:
 			if absf(evade.x) > 0.25:
 				Input.action_press(&"move_right" if evade.x > 0 else &"move_left")
@@ -472,8 +489,13 @@ func walk_briar() -> void:
 				if (
 					target == null
 					or eye.hp < target.hp
-					or (eye.hp == target.hp and eye.global_position.distance_to(player.global_position)
-						< target.global_position.distance_to(player.global_position))
+					or (
+						eye.hp == target.hp
+						and (
+							eye.global_position.distance_to(player.global_position)
+							< target.global_position.distance_to(player.global_position)
+						)
+					)
 				):
 					target = eye
 		if target == null:
@@ -574,7 +596,9 @@ func walk_toward_c3() -> void:
 	await walk_start_to(Vector2(1488, 384))
 	await walk_start_to(Vector2(1488, 240))
 	await seconds(1.0)
-	check_eq(world.get_current_room_id(), &"ow_3_2#grate", "walking enters the overworld key alcove")
+	check_eq(
+		world.get_current_room_id(), &"ow_3_2#grate", "walking enters the overworld key alcove"
+	)
 	await walk_start_to(Vector2(912, 432))
 	for cycle in range(3):
 		if GameState.active_item == &"tether_moth":
@@ -768,7 +792,10 @@ func walk_c3_boss() -> void:
 	check(GameState.has_flag(&"door_boss_c3"), "walking opens the C3 boss door")
 	check(not player.is_dead(), "walking reaches the C3 boss alive")
 	check(GameState.has_big_key(&"c3"), "walking retains the C3 Lockpick")
-	check(GameState.has_fragment(&"c1") and GameState.has_fragment(&"c2"), "walking retains both fragments")
+	check(
+		GameState.has_fragment(&"c1") and GameState.has_fragment(&"c2"),
+		"walking retains both fragments"
+	)
 	await walk_tidewick()
 
 
@@ -929,7 +956,11 @@ func walk_toward_c4() -> void:
 	await seconds(2.0)
 	await walk_c4_boss()
 	check(
-		GameState.has_fragment(&"c1") and GameState.has_fragment(&"c2") and GameState.has_fragment(&"c3"),
+		(
+			GameState.has_fragment(&"c1")
+			and GameState.has_fragment(&"c2")
+			and GameState.has_fragment(&"c3")
+		),
 		"walking retains all three fragments"
 	)
 	print("C4 approach: room=%s health=%d" % [world.get_current_room_id(), GameState.health])
@@ -1003,7 +1034,9 @@ func walk_c4_boss() -> void:
 	await frames(2)
 	Input.action_release(&"use_item")
 	await seconds(1.0)
-	check(GameState.has_flag(&"moved_e175"), "walking uses the earned mitts to remove the heavy stone")
+	check(
+		GameState.has_flag(&"moved_e175"), "walking uses the earned mitts to remove the heavy stone"
+	)
 	await walk_start_cross(&"move_up", &"cave_4_6")
 	await walk_start_to(Vector2(912, 400))
 	await walk_start_to(Vector2(912, 315))
@@ -1055,7 +1088,9 @@ func walk_c4_boss() -> void:
 	check_eq(world.get_current_room_id(), &"cave_4_7#seal", "walking enters the C4 cache")
 	await walk_start_to(Vector2(912, 336))
 	await frames(5)
-	check(GameState.has_flag(&"picked_cache_cave_4_7_pots"), "walking collects the cache pot bundle")
+	check(
+		GameState.has_flag(&"picked_cache_cave_4_7_pots"), "walking collects the cache pot bundle"
+	)
 	check_eq(GameState.pitch_pots, 10, "walking collects actual C4 cache resupply")
 	await walk_start_to(Vector2(912, 672))
 	await seconds(1.0)
@@ -1105,6 +1140,15 @@ func walk_c4_boss() -> void:
 	check(not player.is_dead(), "walking survives the first C4 boss hit")
 	check(GameState.health >= 16, "walking retains full health after the first C4 boss hit")
 	check_eq(GameState.pitch_pots, 9, "walking retains the earned C4 cache pots")
+	await fight_c4_probe(boss)
+	check(GameState.has_flag(&"boss_cave_4_10_defeated"), "C4 boss defeated")
+	if GameState.has_flag(&"boss_cave_4_10_defeated") and not player.is_dead():
+		await seconds(2.0)
+		await walk_start_to(Vector2(864, 480))
+		await walk_start_to(Vector2(1056, 480))
+		await frames(10)
+		check(GameState.has_fragment(&"c4"), "C4 fragment collected")
+		check(GameState.has_flag(&"picked_wick_core_c4"), "C4 wick core collected")
 
 
 func farm_c4_antechamber() -> void:
@@ -1190,6 +1234,293 @@ func farm_c4_antechamber() -> void:
 	)
 
 
+func fight_c4_probe(boss: Node2D) -> void:
+	for cycle in range(6):
+		if GameState.active_item == &"heft_mitts":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	var cooldown := 0
+	var last_hp: int = boss.hp
+	var last_health := GameState.health
+	var pot_cooldown := 0
+	var slam_ref: Node2D = null
+	var escape := Vector2.ZERO
+	var phase3_escape := Vector2.ZERO
+	for tick in range(18000):
+		if (
+			player.is_dead()
+			or not is_instance_valid(boss)
+			or world.get_current_room_id() != &"cave_4_10"
+		):
+			break
+		if boss.is_dead or boss.is_dying():
+			break
+		var pot_mode: bool = boss.phase >= 2 and GameState.pitch_pots > 0
+		var wanted: StringName = &"pitch_pot" if pot_mode else &"heft_mitts"
+		if GameState.active_item != wanted:
+			release_inputs()
+			Input.action_press(&"cycle_item")
+			await frames(2)
+			Input.action_release(&"cycle_item")
+			await frames(2)
+			continue
+		if pot_cooldown > 0:
+			pot_cooldown -= 1
+		var pos: Vector2 = player.global_position
+		var bp: Vector2 = boss.global_position
+		var delta: Vector2 = bp - pos
+		var carried: Node2D = null
+		var nearest: Node2D = null
+		var nearest_dist := 100000.0
+		for shard in boss.shards:
+			if not is_instance_valid(shard) or shard.is_queued_for_deletion():
+				continue
+			if shard.state == shard.State.CARRIED:
+				carried = shard
+			elif shard.state == shard.State.LYING:
+				var d: float = pos.distance_to(shard.global_position)
+				if d < nearest_dist and shard.global_position.distance_to(bp) > 240:
+					nearest = shard
+					nearest_dist = d
+		var motion := Vector2.ZERO
+		var use := false
+		if carried != null:
+			if boss.phase == 3 and boss.slam_left < 1.7:
+				motion = (
+					Vector2(signf(delta.x), 0)
+					if absf(delta.x) > absf(delta.y)
+					else Vector2(0, signf(delta.y))
+				)
+				use = true
+			elif (
+				delta.length() < 490
+				and delta.length() > 190
+				and minf(absf(delta.x), absf(delta.y)) < 55
+			):
+				motion = (
+					Vector2(signf(delta.x), 0)
+					if absf(delta.x) > absf(delta.y)
+					else Vector2(0, signf(delta.y))
+				)
+				use = true
+			else:
+				var aim := (
+					Vector2(bp.x, pos.y) if absf(delta.x) < absf(delta.y) else Vector2(pos.x, bp.y)
+				)
+				motion = (aim - pos).normalized()
+		elif nearest != null and delta.length() > 230:
+			var sd: Vector2 = nearest.global_position - pos
+			motion = sd.normalized()
+			if sd.length() < 110 and boss.slam_left > (0.0 if boss.phase == 3 else 1.8):
+				motion = (
+					Vector2(signf(sd.x), 0) if absf(sd.x) > absf(sd.y) else Vector2(0, signf(sd.y))
+				)
+				use = true
+		else:
+			motion = delta.normalized().rotated(-PI / 2)
+			if delta.length() < 380:
+				motion -= delta.normalized()
+		if pot_mode:
+			motion = (
+				delta.normalized().orthogonal()
+				- delta.normalized() * clampf((360.0 - delta.length()) / 100.0, -1.0, 2.0)
+			)
+			if pot_cooldown > 35:
+				motion = -delta.normalized()
+			use = false
+			if delta.length() < 340 and delta.length() > 235 and pot_cooldown == 0:
+				motion = (
+					Vector2(signf(delta.x), 0)
+					if absf(delta.x) > absf(delta.y)
+					else Vector2(0, signf(delta.y))
+				)
+				use = true
+		if delta.length() < 190:
+			motion += -delta.normalized() * 3.0
+			use = false
+		var slam_danger := false
+		for hazard in boss._hazards:
+			if not is_instance_valid(hazard) or hazard.is_queued_for_deletion():
+				continue
+			if not ("kind" in hazard):
+				continue
+			if hazard.kind in [&"slam", &"ring"]:
+				slam_danger = true
+			if hazard.kind == &"slam" and not hazard.fired:
+				if slam_ref != hazard:
+					slam_ref = hazard
+					escape = Vector2.ZERO
+					var score_best := -100000.0
+					for i in range(8):
+						var dir := Vector2.from_angle(TAU * i / 8.0)
+						var query := PhysicsRayQueryParameters2D.create(
+							pos, pos + dir * 420, Layers.WORLD
+						)
+						var hit := player.get_world_2d().direct_space_state.intersect_ray(query)
+						var clearance := 420.0 if hit.is_empty() else pos.distance_to(hit.position)
+						var predicted := (pos + dir * minf(clearance, 300)).distance_to(bp)
+						var score := clearance + minf(predicted, 300.0) * 0.6
+						if score > score_best:
+							score_best = score
+							escape = dir
+				motion = escape * 20.0
+				use = false
+			if hazard.kind == &"fall" and not hazard.fired:
+				var away: Vector2 = pos - hazard.global_position
+				var radius := 290.0 if hazard.kind == &"slam" else 130.0
+				if away.length() < radius:
+					motion = (
+						(away.normalized() if away.length() > 10 else motion.normalized()) * 10.0
+					)
+					use = false
+			if hazard.kind == &"ring":
+				var away: Vector2 = pos - hazard.global_position
+				if away.length() < 340:
+					motion = escape * 20.0
+					use = false
+			if hazard.kind == &"sweep" and hazard.age > 0.5:
+				use = false
+		var local: Vector2 = pos - world.current_room.global_position
+		if local.x < 260:
+			motion.x += (260 - local.x) / 25.0
+		if local.x > 1660:
+			motion.x -= (local.x - 1660) / 25.0
+		if local.y < 230:
+			motion.y += (230 - local.y) / 25.0
+		if local.y > 730:
+			motion.y -= (local.y - 730) / 25.0
+		if boss.phase == 3:
+			if boss.slam_left < 0.0 or boss.combo_count > 0 or slam_danger:
+				if phase3_escape != Vector2.ZERO:
+					var ahead := PhysicsRayQueryParameters2D.create(
+						pos, pos + phase3_escape * 120, Layers.WORLD
+					)
+					if not player.get_world_2d().direct_space_state.intersect_ray(ahead).is_empty():
+						phase3_escape = Vector2.ZERO
+				if phase3_escape == Vector2.ZERO:
+					var best_score := -INF
+					for direction in [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]:
+						var query := PhysicsRayQueryParameters2D.create(
+							pos, pos + direction * 700, Layers.WORLD
+						)
+						var hit := player.get_world_2d().direct_space_state.intersect_ray(query)
+						var clear := 700.0 if hit.is_empty() else pos.distance_to(hit.position)
+						var score := (
+							clear
+							+ minf((pos + direction * minf(clear, 300.0)).distance_to(bp), 350.0)
+						)
+						if score > best_score:
+							best_score = score
+							phase3_escape = direction
+				motion = phase3_escape * 20.0
+				use = false
+			else:
+				phase3_escape = Vector2.ZERO
+			for item in get_tree().get_nodes_in_group(&"items"):
+				if (
+					"item_id" in item
+					and item.item_id == &"pitch_pot"
+					and "_fuse" in item
+					and item._fuse < 0.7
+				):
+					var away: Vector2 = pos - item.global_position
+					if away.length() < 230:
+						motion = away.normalized() * 20.0
+						use = false
+		for quake in boss._hazards:
+			if (
+				not is_instance_valid(quake)
+				or not ("kind" in quake)
+				or quake.kind != &"quake"
+				or quake.fired
+			):
+				continue
+			var best_tile := Vector2.ZERO
+			var best_score := INF
+			for row in range(1, 9):
+				for col in range(1, 19):
+					if (row + col) % 2 == quake.parity:
+						continue
+					var tile := Vector2(col * 96 + 48, row * 96 + 48)
+					var dist := local.distance_to(tile)
+					if dist > 240:
+						continue
+					var risk := 0.0
+					for threat in boss._hazards:
+						if (
+							is_instance_valid(threat)
+							and "kind" in threat
+							and threat.kind in [&"slam", &"fall"]
+							and not threat.fired
+						):
+							var safe_dist := 200.0 if threat.kind == &"slam" else 120.0
+							if (
+								(world.current_room.global_position + tile).distance_to(
+									threat.global_position
+								)
+								< safe_dist
+							):
+								risk += 500.0
+					if (world.current_room.global_position + tile).distance_to(bp) < 180:
+						risk += 500.0
+					if dist + risk < best_score:
+						best_score = dist + risk
+						best_tile = tile
+			if best_score < INF:
+				motion = (
+					(best_tile - local).normalized() * 20.0 if best_score > 10 else Vector2.ZERO
+				)
+				use = false
+		release_inputs()
+		if absf(motion.x) > 0.25:
+			Input.action_press(&"move_right" if motion.x > 0 else &"move_left")
+		if absf(motion.y) > 0.25:
+			Input.action_press(&"move_down" if motion.y > 0 else &"move_up")
+		if cooldown > 0:
+			cooldown -= 1
+		if use and cooldown == 0:
+			await frames(2)
+			Input.action_press(&"use_item")
+			cooldown = 30
+			if pot_mode:
+				pot_cooldown = 70
+		await frames(1)
+		if not is_instance_valid(boss) or world.get_current_room_id() != &"cave_4_10":
+			break
+		if boss.hp != last_hp or GameState.health != last_health:
+			print(
+				(
+					"PROBE tick=%d boss=%d health=%d pos=%s carried=%s"
+					% [tick, boss.hp, GameState.health, local, carried != null]
+				)
+			)
+			for h in boss._hazards:
+				if is_instance_valid(h) and "kind" in h:
+					print(
+						(
+							"  hazard %s age %.2f distance %.1f"
+							% [h.kind, h.age, pos.distance_to(h.global_position)]
+						)
+					)
+			last_hp = boss.hp
+			last_health = GameState.health
+	release_inputs()
+	print(
+		(
+			"PROBE end boss=%s health=%d dead=%s room=%s"
+			% [
+				boss.hp if is_instance_valid(boss) else "unloaded",
+				GameState.health,
+				player.is_dead(),
+				world.get_current_room_id()
+			]
+		)
+	)
+
+
 func walk_fast_to(target: Vector2, avoid_enemies: bool = false) -> void:
 	var room := world.current_room
 	for tick in range(900):
@@ -1212,7 +1543,10 @@ func walk_fast_to(target: Vector2, avoid_enemies: bool = false) -> void:
 		await frames(1)
 	release_inputs()
 	check(
-		world.current_room != room or (target - (player.global_position - room.global_position)).length() < 18,
+		(
+			world.current_room != room
+			or (target - (player.global_position - room.global_position)).length() < 18
+		),
 		"fast walk reaches %s" % target
 	)
 
