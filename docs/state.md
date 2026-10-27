@@ -1,6 +1,15 @@
 # Current status
 
-**Q3 Gloam Knight victory, 2026-10-27 (working tree, unpushed):** The continuous
+**Q7 one-way transitions, 2026-10-27 (working tree, unpushed):** Real World
+cases for `e041` and `e087` walk down normally and check that boots cannot
+return from a controlled position 210 px into the lower room. Enemies are
+removed and damage remains active. The agent reports two runs with isolated
+user data in the shared project and lint passing. A separate natural-arrival
+and immediate-jump observation reached y = lower-room origin − 8 while the room
+ID was lower; this is not yet a confirmed bug or escape. Investigation continues,
+and the accepted controlled-position test does not cover that edge case.
+
+**Q3 Gloam Knight victory, 2026-10-27 (committed in `3a36abb`):** The continuous
 input route with normal damage and ordinary respawns defeats the C7 boss and
 physically collects its fragment and core; the core raises maximum health from
 22 to 24 half-hearts and restores health to 24. The C7 miniboss is bypassed and
@@ -12,7 +21,7 @@ controlled. The agent reports five C7 victories, four isolated shards and lint
 passing; a different variant died at C5. Other seeds, human balance and a full
 route remain unverified.
 
-**M0 guard spark, 2026-10-27 (working tree, unpushed):** The existing painted
+**M0 guard spark, 2026-10-27 (committed in `3a36abb`):** The existing painted
 `lock_key_volley` impact replaces `Placeholder.puff` on a blocked hit, lasting
 0.25 seconds with a fallback if art is unavailable. Position, guard behavior,
 damage and sound are unchanged; no new art was added. The agent reports isolated
@@ -1170,7 +1179,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0801f43502015e8de47efe795083c766ac2fc231` on `origin/main`, including the Q7 scoped-key, Lockpick and Ninth Door cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `3a36abb362921cbb611de24bc3b04d8cb15fb813` on `origin/main`, including the Gloam Knight test victory and guard spark described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -45,6 +45,8 @@ The P08 seam presentation and Q7 raft passage and ravine cases followed in
 `8dbbabab106ef53b7077ad30142d83c895bdcdfa`, verified on `origin/main`.
 The Q7 scoped-key, Lockpick and Ninth Door cases followed in
 `0801f43502015e8de47efe795083c766ac2fc231`, verified on `origin/main`.
+The Gloam Knight test victory and M0 guard spark followed in
+`3a36abb362921cbb611de24bc3b04d8cb15fb813`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -52,7 +54,16 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 Gloam Knight victory, working tree (unpushed):** The continuous input
+**Q7 one-way transitions, working tree (unpushed):** Real World cases for
+`e041` and `e087` walk down normally and check that boots cannot return from a
+controlled position 210 px into the lower room. Enemies are removed and damage
+remains active. The agent reports two runs with isolated user data in the shared
+project and lint passing. A separate natural-arrival and immediate-jump
+observation reached y = lower-room origin − 8 while the room ID was lower; this
+is not yet a confirmed bug or escape. Investigation continues, and the accepted
+controlled-position test does not cover that edge case.
+
+**Q3 Gloam Knight victory, committed in `3a36abb`:** The continuous input
 route with normal damage and ordinary respawns defeats the C7 boss and
 physically collects its fragment and core; the core raises maximum health from
 22 to 24 half-hearts and restores health to 24. The C7 miniboss is bypassed and
@@ -64,7 +75,7 @@ controlled. The agent reports five C7 victories, four isolated shards and lint
 passing; a different variant died at C5. Other seeds, human balance and a full
 route remain unverified.
 
-**M0 guard spark, working tree (unpushed):** The existing painted
+**M0 guard spark, committed in `3a36abb`:** The existing painted
 `lock_key_volley` impact replaces `Placeholder.puff` on a blocked hit, lasting
 0.25 seconds with a fallback if art is unavailable. Position, guard behavior,
 damage and sound are unchanged; no new art was added. The agent reports isolated

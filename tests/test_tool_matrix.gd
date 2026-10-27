@@ -46,6 +46,8 @@ func run() -> void:
 	await _ninth_fragment_gate()
 	await _mooring_water_gate()
 	await _flooded_room_pair()
+	for edge: Array in [[&"ow_4_2", &"ow_4_3"], [&"ow_4_5", &"ow_4_6"]]:
+		await _oneway_drop_pair(edge[0], edge[1])
 	for tool: StringName in [&"skitter_boots", &"tallow_sling"]:
 		await _ravine_pair(tool)
 	for tool: StringName in [&"cinder_wick", &"tallow_sling", &"lantern_chime", &"tether_moth"]:
@@ -546,6 +548,55 @@ func _flooded_room_pair() -> void:
 	check_eq(world.get_current_room_id(), &"cave_3_6", "flooded e167: raft reaches peer room")
 	check(not player.is_external_motion(), "flooded e167: ride ends at paired dock")
 	check(player.global_position.distance_to(landing) < 10, "flooded e167: lands at peer marker")
+	await dispose(world)
+
+
+func _oneway_drop_pair(upper: StringName, lower: StringName) -> void:
+	reset_state()
+	var world := await make_world()
+	world.start_at(upper)
+	await frames(3)
+	var room := world.get_room(upper)
+	var peer := world.get_room(lower)
+	check(room != null and peer != null, "%s: actual one-way room pair loads" % upper)
+	if room == null or peer == null:
+		await dispose(world)
+		return
+	# Clear roaming enemies in both real rooms to isolate traversal; player damage stays enabled.
+	for enemy in room.get_enemies() + peer.get_enemies():
+		enemy.queue_free()
+	var player := world.player
+	player.place_at(room.global_position + Vector2(960, 780))
+	await frames(3)
+	check(not GameState.has_item(&"skitter_boots"), "%s: no boots needed for drop" % upper)
+	Input.action_press(&"move_down")
+	for i in range(180):
+		if world.is_transitioning():
+			break
+		await frames(1)
+	release_inputs()
+	check(world.is_transitioning(), "%s: actual walking starts one-way drop" % upper)
+	for i in range(150):
+		if not world.is_transitioning():
+			break
+		await frames(1)
+	check_eq(world.get_current_room_id(), lower, "%s: actual drop reaches lower room" % upper)
+	# Start the reverse attempt inside the lower room rather than on its arrival boundary.
+	player.place_at(peer.global_position + Vector2(960, 210))
+	await frames(3)
+	var before := GameState.health
+	_equip(player, &"skitter_boots")
+	player.facing = Vector2.UP
+	check(player.use_item(), "%s: actual boots leap toward closed return" % lower)
+	await seconds(0.8)
+	check_eq(world.get_current_room_id(), lower, "%s: boots cannot reverse drop" % lower)
+	check(
+		player.global_position.y >= peer.global_position.y + WorldConst.WALL_THICKNESS,
+		"%s: lower room wall stops return y=%.1f origin=%.1f" % [
+			lower, player.global_position.y, peer.global_position.y
+		]
+	)
+	check_eq(GameState.health, before, "%s: wall-stopped leap causes no damage" % lower)
 	await dispose(world)
 
 
