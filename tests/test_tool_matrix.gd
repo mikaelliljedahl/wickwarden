@@ -47,6 +47,9 @@ func run() -> void:
 	await _kiln_wick()
 	await _choir_warden_moth()
 	await _automaton_moth()
+	await _lurker_moth()
+	await _captain_moth()
+	await _lock_plate_tools()
 
 
 func _gate(parent: Node, row: Array, at: Vector2) -> Node2D:
@@ -655,3 +658,116 @@ func _automaton_moth() -> void:
 	Input.action_release(&"attack")
 	check_eq(enemy.hp, 27, "Automaton: real hook deals two during stun")
 	await dispose(arena)
+
+
+func _lurker_moth() -> void:
+	reset_state()
+	var arena := make_arena()
+	var zone := _prop(arena, "shallow_zone", Vector2(900, 400))
+	if zone == null:
+		await dispose(arena)
+		return
+	zone.set(&"size", Vector2(600, 192))
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/sump_lurker.tscn", Vector2(900, 496)
+	)
+	var player := make_player(arena, Vector2(900, 760))
+	await frames(2)
+	# Hold each state to isolate actual item collision from the surface cycle.
+	enemy.set_physics_process(false)
+	enemy._enter(enemy.State.SUBMERGED, 0.0)
+	_equip(player, &"tether_moth")
+	player.facing = Vector2.UP
+	check(player.use_item(), "Lurker: actual moth launches at submerged target")
+	await frames(65)
+	check(not enemy.is_stunned(), "Lurker: submerged target ignores moth")
+	check_eq(enemy.hp, 16, "Lurker: submerged target takes no moth damage")
+	enemy._enter(enemy.State.SURFACED, 1.5)
+	enemy.hurtbox.invulnerable = false
+	player.place_at(Vector2(900, 760))
+	check(player.use_item(), "Lurker: actual moth launches at surfaced target")
+	await frames(19)
+	check(enemy.is_stunned(), "Lurker: real moth stuns surfaced target")
+	check_near(enemy._stun_time, 1.5, 0.02, "Lurker: moth stun clamped")
+	player.place_at(Vector2(900, 586))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 14, "Lurker: real hook damages surfaced target")
+	await dispose(arena)
+
+
+func _captain_moth() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/hollow_captain.tscn", Vector2(850, 480)
+	)
+	var player := make_player(arena, Vector2(760, 480))
+	await frames(2)
+	enemy.set_facing_dir(Vector2.LEFT)
+	player.facing = Vector2.RIGHT
+	var blocks := [0]
+	enemy.guard_blocked.connect(func(_hit: Hitbox) -> void: blocks[0] += 1)
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(blocks[0], 1, "Captain: actual front hook contacts guard")
+	check_eq(enemy.hp, 12, "Captain: front guard prevents hook damage")
+	await frames(25)
+	player.place_at(enemy.global_position - Vector2(250, 0))
+	_equip(player, &"tether_moth")
+	check(player.use_item(), "Captain: actual moth launches")
+	for i in range(40):
+		if enemy.is_stunned():
+			break
+		await frames(1)
+	check(enemy.is_stunned(), "Captain: actual moth stuns and drops guard")
+	player.place_at(enemy.global_position - Vector2(90, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 10, "Captain: real front hook damages stunned target")
+	await dispose(arena)
+
+
+func _lock_plate_tools() -> void:
+	reset_state()
+	var scene := load("res://tests/fixtures/gallery/B09.tscn") as PackedScene
+	check(scene != null, "Lock Warden gallery loads")
+	if scene == null:
+		return
+	var room := scene.instantiate() as Room
+	add_child(room)
+	room.enter()
+	var boss = room.get_node("Enemies/LockWarden")
+	var player := make_player(room, Vector2(300, 192))
+	# Isolate the plate interaction from concurrent attacks and wicklings.
+	player.set_hurtbox_enabled(self, false)
+	GameState.acquire_item(&"tallow_sling")
+	GameState.acquire_item(&"pitch_pot")
+	GameState.add_pitch_pots(2)
+	await seconds(1.6)
+	check_eq(boss.plates.size(), 4, "Lock Warden: four plates after intro")
+	var plate = boss.plates[0]
+	_equip(player, &"pitch_pot")
+	player.place_at(plate.global_position + Vector2(-192, 0))
+	check(player.use_item(), "Lock Warden: actual pot placed at closed plate")
+	player.place_at(Vector2(300, 192))
+	await seconds(1.9)
+	check_eq(boss.plates.size(), 4, "Lock Warden: closed plate survives real blast")
+	check_eq(plate.hp, 4, "Lock Warden: closed lid blocks pot damage")
+	_equip(player, &"tallow_sling")
+	player.place_at(plate.eye.global_position + Vector2(-240, 0))
+	check(player.use_item(), "Lock Warden: actual sling fires at eye")
+	await seconds(0.5)
+	check(plate.lid_left > 5, "Lock Warden: real slug opens lid")
+	_equip(player, &"pitch_pot")
+	player.place_at(plate.global_position + Vector2(-192, 0))
+	check(player.use_item(), "Lock Warden: actual pot placed at open plate")
+	player.place_at(Vector2(300, 192))
+	await seconds(1.9)
+	check_eq(boss.plates.size(), 3, "Lock Warden: real blast breaks open plate")
+	await dispose(room)

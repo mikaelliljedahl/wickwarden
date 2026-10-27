@@ -445,9 +445,15 @@ func _scheduled_attacks() -> void:
 		check(not lash.active, "chain lash0.8safe tell")
 		check(not lash.blockable, "chain lash bypasses ward")
 		check_near(lash.position.x, 576, 0.01, "lash starts at actual first post")
+		var shape := lash.get_child(0) as CollisionShape2D
+		check_eq((shape.shape as RectangleShape2D).size, Vector2(96, 768), "lash damage bounds")
+		var look = lash.get_node("Visual")
+		check(look.picture.texture != null, "lash uses the cut painted chain")
+		check(not look.picture.visible, "chain stays hidden during warning")
 	await seconds(0.8)
 	if is_instance_valid(lash):
 		check(lash.active, "chain lash activates aftertell")
+		check(lash.get_node("Visual").picture.visible, "chain appears during active lash")
 	GameState.acquire_item(&"reel_line")
 	GameState.set_active_item(&"reel_line")
 	player.place_at(Vector2(960, 720))

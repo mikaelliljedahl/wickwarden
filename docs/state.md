@@ -1,21 +1,52 @@
 # Current status
 
-**Q7 weakness extension, 2026-10-27 (working tree, unpushed):**
+**Q7 weakness extension, 2026-10-27 (working tree, unpushed):** Three more
+actual-tool cases cover selected weaknesses for Sump Lurker, Hollow Captain and
+Lock Warden, bringing coverage to 12 of 20 encounters. The tests use isolated
+arenas and repositioning; Sump Lurker uses controlled states with AI paused,
+Lock Warden disables player damage, and Hollow Captain keeps damage active.
+The agent reports two `tool_matrix` runs and lint passing. Full Q7 and visual
+verification remain open.
+
+**Q3 C5 Lockpick route, 2026-10-27 (working tree, unpushed):** After C4, the
+continuous input route uses normal damage, takes one deliberate ordinary death
+and respawn, crosses two raft connections and earns keys, the Glow Jar and C5
+Lockpick, with 2/18 half-hearts remaining. The C5 boss is not defeated. The
+bot reads internal state; later shards use fixtures and warps. Other seeds and
+human play are unverified. The agent reports all four isolated shards, a repeat
+and lint passing.
+
+**B10 chain lash, 2026-10-27 (working tree, unpushed):** The active lash uses
+new painted chain art with a separate warning outline; the damage area and
+timing are unchanged. The lead reviewed controlled phase captures, and the
+agent reports two focused isolated tests and lint passing.
+The lead's first local test lacked the imported texture; after `make import`,
+`boss_the_unlit` and `route_cave_10` both passed, as did `playthrough_1`.
+The art is now in the main `tools/art_manifest.json` and generated
+`assets/sprites/sprites.json`; the separate Z1 manifest was removed. The agent
+reports unchanged previous sprite entries, a byte-identical PNG, 22 passing
+art tests, both focused tests and lint. Source and provenance are recorded in
+`tools/source_art/unlit-chain-lash-z1-log.md`. The wax wave
+still needs work; these captures do not establish human combat readability.
+
+**Q7 weakness extension, 2026-10-27 (committed in `791cbc7`):**
 `test_tool_matrix` now covers selected weaknesses using actual tools for nine
 of 20 encounters, adding Kilnkeeper, Choir Warden and Wick Automaton to the six
 committed cases below. These use controlled arenas and repositioning: the
 Kilnkeeper case disables player damage, the Automaton has movement speed zero,
 and Choir Warden uses normal damage. The agent reports two isolated
-`tool_matrix` runs and lint passing. This is not full Q7 or visual verification.
+`tool_matrix` runs and lint passing; a subsequent local `tool_matrix` run also
+passed. The extension was pushed and verified on `origin/main` at
+`791cbc77c8910656690b10313532d59c0bcb3ea7`. This is not full Q7 or visual verification.
 
 **Checkpoint verification, 2026-10-27:** The lead ran `make check` with the
 Q3 victory and Q8 probe present: 155 Godot test files, lint, world-data check
 and 175 Python tests passed. The CI timing budget was not enabled, so this run
 does not establish that the 50 ms budget is met.
 
-**C10 action-state review, 2026-10-27:** Isolated phase captures confirmed that
-the active wax wave and chain lash are simple, dark geometric effects and need
-further work. The B10 agent is working on the chain lash.
+**C10 action-state review, 2026-10-27:** Earlier isolated phase captures showed
+the active wax wave and chain lash as simple, dark geometric effects. The later
+chain-lash change is recorded above; the wax wave still needs work.
 
 **Q3 Colossus victory, 2026-10-27 (committed in `d5a0c06`):** The continuous
 input route with seed `20261027` defeats Hushed Colossus with normal damage,
@@ -999,7 +1030,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `d5a0c067825d8b594d7dbb2576153afef088fd2e` on `origin/main`, including the Q3 victory and Q8 probe described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `791cbc77c8910656690b10313532d59c0bcb3ea7` on `origin/main`, including the Q7 extension described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

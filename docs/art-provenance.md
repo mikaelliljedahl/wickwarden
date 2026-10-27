@@ -1,5 +1,17 @@
 # Wickwarden — art provenance
 
+The Unlit chain lash source `tools/source_art/unlit_chain_lash_z1.png` is a
+1024×1536 native-alpha image, generated 2026-10-27. Its original output is
+`01a17f32-c2cf-7331-b7c3-8f87d6268b07/exec-a26792a3-3e6d-408b-a610-33730c0706f2.png`;
+source SHA-256 is `31b2e2b1b3461229eba9e0b2ad60cba9c76cb5599b45978ba2076a423af030b6`.
+The main cutter manifest `tools/art_manifest.json` produces the entry in
+`assets/sprites/sprites.json` and the 96×768
+`assets/sprites/unlit_chain_lash_z1_idle.png`, SHA-256
+`ba99a0ee452b6002e609870a77052087c3ea3e10b79180444e2098837c04fe95`.
+The prompt, output details and review are in the
+[chain lash log](../tools/source_art/unlit-chain-lash-z1-log.md); the tool did
+not expose a model version.
+
 The C1 kiln-mouth source `b01_kiln_mouth_candidate_20261027d.png` and its
 generation prompt, original output and review are recorded in
 `tools/source_art/b01-kiln-mouth-20261027-log.md`.

@@ -21,6 +21,8 @@ The Q3, Q6 and Q7 extensions, tests and documentation followed in
 `e8e4b4e6bce2eb5075e0e788a1fd5a1642ed427a`, verified on `origin/main`.
 The Colossus victory and Q8 probe followed in
 `d5a0c067825d8b594d7dbb2576153afef088fd2e`, verified on `origin/main`.
+The Q7 extension followed in `791cbc77c8910656690b10313532d59c0bcb3ea7`,
+verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -28,12 +30,41 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 extension, working tree (unpushed):** `test_tool_matrix` now exercises
+**Q7 extension, working tree (unpushed):** Three actual-tool cases add selected
+weaknesses for Sump Lurker, Hollow Captain and Lock Warden, bringing coverage to
+12 of 20 encounters. The tests use isolated arenas and repositioning; Sump
+Lurker uses controlled states with AI paused, Lock Warden disables player damage,
+and Hollow Captain keeps damage active. The agent reports two `tool_matrix`
+runs and lint passing. Full Q7 and visual verification remain open.
+
+**Q3 C5 Lockpick route, working tree (unpushed):** After C4, the continuous
+input route with normal damage takes one deliberate ordinary death and respawn,
+crosses two raft connections and earns keys, the Glow Jar and C5 Lockpick,
+with 2/18 half-hearts remaining. It does not defeat the C5 boss. The bot reads
+internal state and later shards use fixtures and warps; other seeds and human
+play remain unverified. The agent reports all four isolated shards, a repeat
+and lint passing.
+
+**B10 chain lash, working tree (unpushed):** New painted chain art replaces the
+active lash presentation, with a separate warning outline and unchanged damage
+area and timing. The lead reviewed controlled phase captures; the agent reports
+two focused isolated tests and lint passing. The lead's first local test lacked
+the imported texture; after `make import`, `boss_the_unlit` and `route_cave_10`
+both passed, as did `playthrough_1`. The art is now in the main
+`tools/art_manifest.json` and generated `assets/sprites/sprites.json`; the
+separate Z1 manifest was removed. The agent reports unchanged previous sprite
+entries, a byte-identical PNG, 22 passing art tests, both focused tests and lint.
+The source/provenance record is
+`tools/source_art/unlit-chain-lash-z1-log.md`. The wax wave still needs work;
+human combat readability remains unverified.
+
+**Q7 extension, committed in `791cbc7`:** `test_tool_matrix` now exercises
 selected weaknesses using actual tools for nine of 20 encounters. The new
 Kilnkeeper, Choir Warden and Wick Automaton cases use controlled arenas and
 repositioning; player damage is disabled for Kilnkeeper, Automaton movement
 speed is zero, and Choir Warden uses normal damage. The agent reports two
-isolated `tool_matrix` runs and lint passing. Full Q7 and visual verification
+isolated `tool_matrix` runs and lint passing; a subsequent local `tool_matrix`
+run also passed. Full Q7 and visual verification
 remain open; the earlier six committed cases are described below.
 
 The lead ran `make check` with the Q3 victory and Q8 probe in the working tree:
@@ -57,9 +88,9 @@ environment variable for calibrated CI, not proof that CI meets the budget.
 Cold-world loading, GPU, RSS and full continuous walking remain unmeasured. The
 agent reports 15 checks in each of three runs and lint passing; Q8 remains open.
 
-**C10 action-state review:** Isolated phase captures confirmed that the active
-wax wave and chain lash are simple, dark geometric effects and need further
-work. The B10 agent is working on the chain lash.
+**C10 action-state review:** Earlier isolated phase captures showed the active
+wax wave and chain lash as simple, dark geometric effects. The later chain-lash
+change is recorded above; the wax wave still needs work.
 
 The isolated candidate before the final documentation-only adjustment passed
 `make check`: 154 Godot suites, lint, world-data verification and 175 Python

@@ -576,7 +576,7 @@ class Band:
 		rectangle.size = Vector2(96, 768)
 		shape.shape = rectangle
 		add_child(shape)
-		var look := Node2D.new()
+		var look := BandPresentation.new()
 		look.name = "Visual"
 		add_child(look)
 
@@ -589,5 +589,31 @@ class Band:
 			queue_free()
 		queue_redraw()
 
+class BandPresentation:
+	extends Node2D
+	var picture: Sprite2D
+
+	func _ready() -> void:
+		var material := CanvasItemMaterial.new()
+		material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		self.material = material
+		picture = Sprite2D.new()
+		picture.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		picture.use_parent_material = true
+		var path := "res://assets/sprites/unlit_chain_lash_z1_idle.png"
+		if ResourceLoader.exists(path):
+			picture.texture = load(path) as Texture2D
+		add_child(picture)
+
+	func _process(_delta: float) -> void:
+		var band := get_parent() as Band
+		picture.visible = band.age >= 0.8
+		queue_redraw()
+
 	func _draw() -> void:
-		draw_rect(Rect2(-48, -384, 96, 768), Color(0.8, 0.65, 0.3, 0.25 if age < 0.8 else 0.9))
+		var band := get_parent() as Band
+		var active := band.age >= 0.8
+		var bounds := Rect2(-48, -384, 96, 768)
+		if not active or picture.texture == null:
+			draw_rect(bounds, Color(0.8, 0.56, 0.22, 0.12 if not active else 0.5))
+		draw_rect(bounds, Color(1.0, 0.76, 0.35, 0.9 if active else 0.65), false, 3.0)
