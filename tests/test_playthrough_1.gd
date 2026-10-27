@@ -5,7 +5,7 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4 through C9 and collects their rewards.
+## The continuous route defeats C4 through C9, collects their rewards and enters C10.
 ## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through C9 victory and rewards: no repositioning, warps, enemy
+## Continuous opening through the C10 mirror hall: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -3236,6 +3236,228 @@ func fight_lock_core(boss: Node2D) -> void:
 				]
 			)
 		)
+
+		await walk_c10_approach()
+
+
+func walk_c10_approach() -> void:
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"cave_9_9")
+	await walk_fast_to(Vector2(1680, 480), true)
+	await walk_start_cross(&"move_right", &"cave_9_8")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"cave_9_5")
+	await walk_start_to(Vector2(300, 528))
+	await walk_start_to(Vector2(200, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"reed_raft":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"move_left")
+	await frames(2)
+	Input.action_release(&"move_left")
+	await walk_raft_cross(&"cave_9_4")
+	await walk_start_to(Vector2(1700, 150))
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_9_2")
+	await walk_fast_to(Vector2(200, 480), true)
+	await walk_start_cross(&"move_left", &"cave_9_1")
+	await walk_start_to(Vector2(432, 432))
+	await seconds(1)
+	print(
+		(
+			"C10 exit C9 room=%s health=%d/%d slugs=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.max_health, GameState.slugs]
+		)
+	)
+	check_eq(world.get_current_room_id(), &"ow_0_2", "walking exits C9 with nine fragments")
+	await walk_start_to(Vector2(576, 740))
+	await walk_start_to(Vector2(1300, 740))
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"ow_1_2")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_1_1")
+	await walk_start_to(Vector2(960, 180))
+	await walk_start_cross(&"move_up", &"ow_1_0")
+	await walk_start_to(Vector2(960, 360))
+	await walk_start_to(Vector2(1680, 360))
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"ow_2_0")
+	await walk_start_to(Vector2(240, 528))
+	await walk_start_to(Vector2(1600, 528))
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"ow_3_0")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_3_1")
+	await walk_start_to(Vector2(1700, 480))
+	await walk_start_cross(&"move_right", &"ow_4_1")
+	await walk_start_to(Vector2(1700, 432))
+	await walk_start_to(Vector2(1700, 480))
+	await walk_start_cross(&"move_right", &"ow_5_1")
+	for next in [&"ow_6_1", &"ow_7_1", &"ow_8_1", &"ow_9_1"]:
+		await walk_start_to(Vector2(1680, 480))
+		await walk_start_cross(&"move_right", next)
+	for next in [&"ow_9_2", &"ow_9_3", &"ow_9_4", &"ow_9_5"]:
+		await walk_start_to(Vector2(960, 780))
+		await walk_start_cross(&"move_down", next)
+	await walk_start_to(Vector2(960, 624))
+	for cycle in range(10):
+		if GameState.active_item == &"skitter_boots":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1)
+	await walk_start_cross(&"move_down", &"ow_9_6")
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1)
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_9_7")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"ow_10_7")
+	print(
+		(
+			"C10 road room=%s health=%d slugs=%d money=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.slugs, GameState.currency]
+		)
+	)
+	check_eq(world.get_current_room_id(), &"ow_10_7", "walking reaches C10 road")
+	await walk_start_to(Vector2(1488, 432))
+	await seconds(1)
+	check_eq(world.get_current_room_id(), &"ow_10_7#shop", "walking enters S5 shop")
+	var before_money := GameState.currency
+	var before_slugs := GameState.slugs
+	await walk_start_to(Vector2(1104, 400))
+	await frames(5)
+	check_eq(GameState.health, GameState.max_health, "walk-up S5 flask fully heals")
+	await walk_start_to(Vector2(1296, 400))
+	await frames(5)
+	check(GameState.has_flag(&"shop_slug_bundle_s5"), "walk-up buys S5 slugs")
+	check_eq(GameState.slugs, before_slugs + 6, "S5 slug purchase supplies six")
+	check_eq(GameState.currency, before_money - 45, "S5 flask and slugs spend earned brass")
+	print(
+		(
+			"C10 shop health=%d/%d slugs=%d brass=%d"
+			% [GameState.health, GameState.max_health, GameState.slugs, GameState.currency]
+		)
+	)
+	await walk_start_to(Vector2(912, 816))
+	await seconds(1)
+	check_eq(world.get_current_room_id(), &"ow_10_7", "walking exits S5 shop")
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"ow_10_8")
+	await walk_start_to(Vector2(960, 720))
+	await walk_start_to(Vector2(1440, 720))
+	await walk_start_to(Vector2(1440, 528))
+	await seconds(1)
+	check(GameState.has_flag(&"door_ninth"), "nine fragments open Ninth Door by contact")
+	check_eq(GameState.fragment_count(), 9, "all nine fragments retained")
+	check_eq(world.get_current_room_id(), &"cave_10_1", "walking enters final cave")
+	print(
+		(
+			"C10 entry room=%s health=%d/%d slugs=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.max_health, GameState.slugs]
+		)
+	)
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_10_2")
+	await walk_start_to(Vector2(960, 180))
+	for cycle in range(10):
+		if GameState.active_item == &"cinder_wick":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(3)
+	check(GameState.has_flag(&"burned_e234"), "walking burns final garden thorn")
+	await walk_start_cross(&"move_up", &"cave_10_3")
+	await walk_start_to(Vector2(912, 336))
+	await frames(5)
+	check_eq(GameState.keys_in(&"c10"), 1, "walking collects first final key")
+	print(
+		(
+			"C10 garden room=%s health=%d keys=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
+		)
+	)
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_10_2")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_10_4")
+	check(GameState.has_flag(&"door_e235"), "walking opens first final key door")
+	print(
+		(
+			"C10 echo room=%s health=%d keys=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
+		)
+	)
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(1700, 150))
+	await walk_start_to(Vector2(1730, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"reed_raft":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	await walk_raft_cross(&"cave_10_5")
+	print("C10 raft health=%d" % GameState.health)
+	await walk_start_to(Vector2(300, 150))
+	await walk_start_to(Vector2(960, 150))
+	print("C10 seam approach health=%d" % GameState.health)
+	for cycle in range(10):
+		if GameState.active_item == &"glow_jar":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.5)
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.8)
+	check(GameState.has_flag(&"revealed_e237"), "earned jar reveals final seam")
+	await walk_start_to(Vector2(960, 150))
+	await walk_start_cross(&"move_up", &"cave_10_6")
+	check(not player.is_dead(), "walking reaches C10 mirror hall alive")
+	print(
+		(
+			"C10 mirror entry room=%s health=%d/%d slugs=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.max_health, GameState.slugs]
+		)
+	)
 
 
 func farm_c4_antechamber() -> void:

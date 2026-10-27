@@ -69,6 +69,9 @@ The B04 quake art followed in `8a0b157375f650e6e5fb59c7a264bfbc2a87db9d`,
 verified on `origin/main`.
 The continuous earned-input Lock Warden victory followed in
 `fc895af62dca947b7f2aa1d11d5f5010f6ea3a4d`, verified on `origin/main`.
+The isolated C10 probe and ending-choice conflict were documented in
+`79369cdcad32b78625b5dd30a520796a6b4dc58b`, verified on `origin/main`; the
+user response on the choice remains pending.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -76,14 +79,29 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**C10 final-boss probe, 2026-10-28 (isolated):** A 47-check probe uses actual
+**Q3 C10 approach, working tree (unpushed):** The continuous earned input route
+with normal damage wins C9, physically buys healing and slugs at S5 for 45
+earned brass, passes the Ninth Door with nine fragments, then earns the Wick and
+first key, passes the living Echo, uses the raft and Jar and reaches `cave_10_6`
+with 14/28 half-hearts and 19 slugs. C10 boss and ending are not verified. A
+second-key attempt died or became stuck and was not integrated. The agent
+reports two isolated first-shard runs, all four shards and lint passing; the
+`/dev/shm` scratch copy needed an isolated runner-path adjustment only in that
+copy. The lead's first workspace `make test T=playthrough_1` reached C10 room 6
+but failed the disk-roundtrip safety check: the `/tmp` user quota was full and
+tempfile fell back to `/var/tmp`. After removing the lead's own finished temporary
+verification copy, `TMPDIR=/tmp make test T=playthrough_1` passed with isolated
+user data; no real saves were touched. Earlier RNG, bot internal-state reads,
+bypassed minibosses and human-play limitations remain.
+
+**C10 final-boss probe, 2026-10-28 (isolated; documented in `79369cd`):** A 47-check probe uses actual
 World and final boss with normal damage, active hounds and wicklings, and sling,
 Wick, Reel and hook, winning with 3/28 half-hearts. It physically tests a socket
 and confirm flag with `dry_run=true`, so no actual scene transition occurs. The
 fixture grants tools, health and ammo and repositions beside targets; this is
 not an earned route or human proof.
 
-**E1 ending-choice conflict:** Binding `monsters-bosses-tools.md` §4.10 says
+**E1 ending-choice conflict (documented in `79369cd`):** Binding `monsters-bosses-tools.md` §4.10 says
 touching a choice selects it, while binding `world-work-packages.md` §8.2 E1
 says to walk to a pedestal and confirm. Decision 40 resolves file and flag names
 only. The current trigger requires confirm while touching; it is unchanged and
@@ -180,9 +198,12 @@ correct-tool positive cases existed previously. The agent reports two isolated
 matrix runs and lint passing. Other combinations, real-room and human
 verification remain open.
 
-**Fen Leech presentation:** The latest prototype was rejected because it
-overlaps at 35 px in darkness. The actual raft sequence provides evidence, but
-no art solution has been accepted.
+**Fen Leech presentation:** An earlier prototype was rejected because it
+overlaps at 35 px in darkness. A later unpublished paired-cluster prototype was
+also rejected: it sits behind the player but hides one cluster, has broad static
+duplication, and the actual raft route places part of it on land. Close real-raft,
+multiple-enemy and cleanup behavior were not verified. Neither candidate changed
+the repo; the placeholder remains and no art solution has been accepted.
 
 **Q3 Coinwyrm victory, committed in `6f33c12`:** The continuous earned input
 route defeats C8's Coinwyrm with normal damage, using three keys, the Reel and
