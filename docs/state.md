@@ -1,10 +1,20 @@
 # Current status
 
+**Q3 hidden-core route, 2026-10-27 (working tree):** The fixed-seed continuous
+input route uses the earned raft to collect the actual hidden core in
+`cave_3_7`, reaches 14/14 maximum half-hearts after C3, and reaches C4 with
+11/14 half-hearts and eight pots after the first boss hit. Enemies and damage
+are normal; the bot reads internal state and uses no warps. The Q3 agent
+reports four isolated shards, a repeat and lint passing; the owner also ran
+`make test T=playthrough_1` successfully in the workspace. C4 victory, human
+and visual verification, other seeds and a complete game remain open.
+
 **Push handoff snapshot, 2026-10-27:** The working tree contains ongoing code,
 art, test and documentation work, including staged changes and untracked files.
 Progress checkpoint `aa6fc158087e4a5be21be22acf948f1f69c9cf8b` was pushed and
 verified on `origin/main`, excluding the 77 previously staged paths. The
-isolated candidate before the final documentation-only adjustment passed
+subsequent documentation checkpoint is `e3af885`. The isolated candidate before
+the final documentation-only adjustment passed
 `make check`: 154 Godot suites, lint, world-data check and 175 Python tests;
 `rooms-check` passed 221, `art-test` passed 22 and `playthrough_route --check`
 passed. The final documentation adjustment passed diff-check. No game tests

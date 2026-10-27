@@ -12,7 +12,8 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 **Working-tree handoff, 2026-10-27:** This snapshot supersedes the older
 checkpoint descriptions below where they describe current status. Progress
 checkpoint `aa6fc158087e4a5be21be22acf948f1f69c9cf8b` was pushed and verified
-on `origin/main`, excluding the 77 previously staged paths. The push used the
+on `origin/main`, excluding the 77 previously staged paths; documentation
+checkpoint `e3af885` followed it. The runtime push used the
 already signed-in `mikaelliljedahl` account without a global account switch.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
@@ -26,10 +27,15 @@ The isolated candidate before the final documentation-only adjustment passed
 tests. `rooms-check` passed 221, `art-test` passed 22 and
 `playthrough_route --check` passed. The final documentation adjustment passed
 diff-check. No game tests were run for this post-push documentation update.
-The fixed-seed input route reaches and hits the C4 boss after earning resources,
-but the recorded attempts did not win; later playthrough probes use controlled
-interventions. C4 victory, a complete uninterrupted or human game, and all
-placeholder removal and action-state readability remain unverified. Room
+The working-tree Q3 fixed-seed continuous input route collects the actual hidden
+core in `cave_3_7` using the earned raft, reaches 14/14 maximum half-hearts
+after C3, and reaches C4 with 11/14 half-hearts and eight pots after its first
+boss hit. Enemies and damage are normal; the bot reads internal state and uses
+no warps. The Q3 agent reports four isolated shards, a repeat and lint passing;
+the owner also passed `make test T=playthrough_1` in the workspace. This route
+has not won C4 or received human or visual verification; later playthrough probes
+use controlled interventions. C4 victory, a complete uninterrupted or human
+game, and all placeholder removal and action-state readability remain unverified. Room
 captures are controlled stills, with some reviews based on older captures.
 Recheck the relevant tests and visual evidence against the final integration
 state, keeping saves isolated, before reporting or pushing it.
