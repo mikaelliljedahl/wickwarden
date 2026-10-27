@@ -1,6 +1,15 @@
 # Current status
 
-**Q7 weakness extension, 2026-10-27 (working tree, unpushed):** Three more
+**Q7 weakness extension, 2026-10-27 (working tree, unpushed):** Selected
+actual-tool cases now cover 15 of 20 encounters, adding Lull Mauler, Gloam
+Knight and Hushed Colossus using the hook, boots and mitts. These are controlled
+fixtures: the Mauler's chunk is repositioned and its physics paused; player
+damage is disabled for Gloam Knight and Colossus, whose movement and timers are
+paused and shard fall initiated. The agent reports two isolated `tool_matrix`
+runs and lint passing. These are not complete fights or human verification;
+full Q7 coverage remains open.
+
+**Q7 weakness extension, 2026-10-27 (committed in `14a2217`):** Three more
 actual-tool cases cover selected weaknesses for Sump Lurker, Hollow Captain and
 Lock Warden, bringing coverage to 12 of 20 encounters. The tests use isolated
 arenas and repositioning; Sump Lurker uses controlled states with AI paused,
@@ -8,7 +17,7 @@ Lock Warden disables player damage, and Hollow Captain keeps damage active.
 The agent reports two `tool_matrix` runs and lint passing. Full Q7 and visual
 verification remain open.
 
-**Q3 C5 Lockpick route, 2026-10-27 (working tree, unpushed):** After C4, the
+**Q3 C5 Lockpick route, 2026-10-27 (committed in `14a2217`):** After C4, the
 continuous input route uses normal damage, takes one deliberate ordinary death
 and respawn, crosses two raft connections and earns keys, the Glow Jar and C5
 Lockpick, with 2/18 half-hearts remaining. The C5 boss is not defeated. The
@@ -16,7 +25,7 @@ bot reads internal state; later shards use fixtures and warps. Other seeds and
 human play are unverified. The agent reports all four isolated shards, a repeat
 and lint passing.
 
-**B10 chain lash, 2026-10-27 (working tree, unpushed):** The active lash uses
+**B10 chain lash, 2026-10-27 (committed in `14a2217`):** The active lash uses
 new painted chain art with a separate warning outline; the damage area and
 timing are unchanged. The lead reviewed controlled phase captures, and the
 agent reports two focused isolated tests and lint passing.
@@ -1030,7 +1039,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `791cbc77c8910656690b10313532d59c0bcb3ea7` on `origin/main`, including the Q7 extension described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `14a2217b1286193fa0db8c30d0508e753d6234ac` on `origin/main`, including the C5 Lockpick route, Q7 extension and B10 chain art described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 weakness coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -23,6 +23,8 @@ The Colossus victory and Q8 probe followed in
 `d5a0c067825d8b594d7dbb2576153afef088fd2e`, verified on `origin/main`.
 The Q7 extension followed in `791cbc77c8910656690b10313532d59c0bcb3ea7`,
 verified on `origin/main`.
+The C5 Lockpick route, Q7 extension and B10 chain art followed in
+`14a2217b1286193fa0db8c30d0508e753d6234ac`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -30,14 +32,22 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 extension, working tree (unpushed):** Three actual-tool cases add selected
+**Q7 extension, working tree (unpushed):** Selected actual-tool cases now cover
+15 of 20 encounters, adding Lull Mauler, Gloam Knight and Hushed Colossus with
+the hook, boots and mitts. The Mauler's chunk is repositioned and its physics
+paused; player damage is disabled for Gloam Knight and Colossus, whose movement
+and timers are paused and shard fall initiated. The agent reports two isolated
+`tool_matrix` runs and lint passing. These controlled fixtures are not complete
+fights or human verification; full Q7 coverage remains open.
+
+**Q7 extension, committed in `14a2217`:** Three actual-tool cases add selected
 weaknesses for Sump Lurker, Hollow Captain and Lock Warden, bringing coverage to
 12 of 20 encounters. The tests use isolated arenas and repositioning; Sump
 Lurker uses controlled states with AI paused, Lock Warden disables player damage,
 and Hollow Captain keeps damage active. The agent reports two `tool_matrix`
 runs and lint passing. Full Q7 and visual verification remain open.
 
-**Q3 C5 Lockpick route, working tree (unpushed):** After C4, the continuous
+**Q3 C5 Lockpick route, committed in `14a2217`:** After C4, the continuous
 input route with normal damage takes one deliberate ordinary death and respawn,
 crosses two raft connections and earns keys, the Glow Jar and C5 Lockpick,
 with 2/18 half-hearts remaining. It does not defeat the C5 boss. The bot reads
@@ -45,7 +55,7 @@ internal state and later shards use fixtures and warps; other seeds and human
 play remain unverified. The agent reports all four isolated shards, a repeat
 and lint passing.
 
-**B10 chain lash, working tree (unpushed):** New painted chain art replaces the
+**B10 chain lash, committed in `14a2217`:** New painted chain art replaces the
 active lash presentation, with a separate warning outline and unchanged damage
 area and timing. The lead reviewed controlled phase captures; the agent reports
 two focused isolated tests and lint passing. The lead's first local test lacked

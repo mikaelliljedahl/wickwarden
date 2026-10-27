@@ -50,6 +50,9 @@ func run() -> void:
 	await _lurker_moth()
 	await _captain_moth()
 	await _lock_plate_tools()
+	await _mauler_slag_hook()
+	await _knight_boots()
+	await _colossus_shard()
 
 
 func _gate(parent: Node, row: Array, at: Vector2) -> Node2D:
@@ -771,3 +774,113 @@ func _lock_plate_tools() -> void:
 	await seconds(1.9)
 	check_eq(boss.plates.size(), 3, "Lock Warden: real blast breaks open plate")
 	await dispose(room)
+
+
+func _mauler_slag_hook() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/lull_mauler.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(1300, 480))
+	for i in range(240):
+		if enemy.state == enemy.State.RECOVER:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.RECOVER, "Mauler: natural smash reaches recovery")
+	var chunks := arena.get_children().filter(func(n: Node) -> bool: return n.is_in_group(&"liftable"))
+	check_eq(chunks.size(), 1, "Mauler: actual smash creates one slag chunk")
+	if chunks.size() != 1:
+		await dispose(arena)
+		return
+	var chunk = chunks[0]
+	await frames(10)
+	# Freeze the enemy and position the real chunk to isolate deflected flight.
+	enemy.set_physics_process(false)
+	chunk.global_position = enemy.global_position + Vector2(300, 0)
+	player.place_at(chunk.global_position + Vector2(90, 0))
+	player.facing = Vector2.LEFT
+	await frames(3)
+	Input.action_press(&"attack")
+	await frames(7)
+	Input.action_release(&"attack")
+	check(chunk.deflected, "Mauler: actual hook deflects smash-created slag")
+	await frames(40)
+	check_eq(enemy.hp, 20, "Mauler: returned real slag deals four")
+	check(not is_instance_valid(chunk), "Mauler: returned chunk shatters")
+	check_eq(GameState.health, 6, "Mauler: player avoids damage in fixture")
+	await dispose(arena)
+
+
+func _knight_boots() -> void:
+	reset_state()
+	var scene := load("res://tests/fixtures/gallery/B07.tscn") as PackedScene
+	check(scene != null, "Gloam Knight gallery loads")
+	if scene == null:
+		return
+	var room := scene.instantiate() as Room
+	add_child(room)
+	room.enter()
+	var boss = room.get_node("Enemies/GloamKnight")
+	var player := make_player(room, Vector2(960, 192))
+	# Disable combat damage to isolate island access; pit damage remains active.
+	player.set_hurtbox_enabled(self, false)
+	await seconds(1.7)
+	player.place_at(Vector2(960, 240))
+	player.facing = Vector2.DOWN
+	Input.action_press(&"attack")
+	await frames(10)
+	Input.action_release(&"attack")
+	check_eq(boss.hp, 36, "Gloam Knight: entry hook cannot reach centre")
+	await frames(25)
+	player.place_at(Vector2(960, 240))
+	_equip(player, &"skitter_boots")
+	player.facing = Vector2.DOWN
+	check(player.use_item(), "Gloam Knight: actual boots launch across pit")
+	await seconds(0.45)
+	check_near(player.global_position.y, 432, 1, "Gloam Knight: boots land on centre island")
+	check_eq(GameState.health, 6, "Gloam Knight: leap avoids pit damage")
+	await seconds(0.5)
+	player.facing = Vector2.DOWN
+	Input.action_press(&"attack")
+	await frames(9)
+	Input.action_release(&"attack")
+	check(boss.hp < 36, "Gloam Knight: real hook reaches boss after leap")
+	await dispose(room)
+
+
+func _colossus_shard() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = make_enemy(
+		arena, "res://scenes/enemies/bosses/hushed_colossus.tscn", Vector2(960, 640)
+	)
+	var player := make_player(arena, Vector2(400, 400))
+	player.set_hurtbox_enabled(self, false)
+	_equip(player, &"heft_mitts")
+	await frames(95)
+	# Hold boss movement and attack timers; spawn its real falling shard explicitly.
+	boss.move_speed = 0
+	boss.slam_left = 100
+	boss.shard_left = 100
+	boss.sweep_left = 100
+	boss.quake_left = 100
+	boss.start_attack(&"fall", boss.global_position + Vector2(-300, 0), 1.0, 0.1)
+	await frames(65)
+	check(not boss.shards.is_empty(), "Colossus: actual falling shard lands")
+	if boss.shards.is_empty():
+		await dispose(arena)
+		return
+	var shard = boss.shards.back()
+	player.place_at(shard.global_position - Vector2(72, 0))
+	player.facing = Vector2.RIGHT
+	await frames(3)
+	check(player.use_item(), "Colossus: actual mitts grab shard")
+	await frames(22)
+	check(shard.is_carried(), "Colossus: shard is carried")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await frames(55)
+	check_eq(boss.hp, 42, "Colossus: real thrown shard deals six")
+	await dispose(arena)
