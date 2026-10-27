@@ -1,6 +1,21 @@
 # Current status
 
-**B04 quake art, 2026-10-27 (working tree, unpushed):** Native-alpha painted
+**Q3 Lock Warden victory, 2026-10-27 (working tree, unpushed):** The continuous
+earned input route with normal damage and an ordinary C9 respawn breaks all four
+actual plates with sling shots and defeats Lock Warden. It physically collects
+fragment and core, raising maximum health from 26 to 28 and restoring health to
+28. After the plates, the player physically collects the phase-change ember:
+the PickupCollector signal counts exactly one and health is checked from 13 to
+15/26. The victory leaves 15/26 and one slug after 25 used in phase two. A
+wickling count was observed changing from one to zero; its exact cause is
+unknown. Enemies and damage remain active. The agent reports two final isolated
+runs, shards 2–4 and lint passing. Global seed `20261027` does not control or log
+Archivist's and Tidewick's own randomization. The bot reads boss, eye, plate,
+`open_left`, `bolt_left`, wickling and projectile position/direction state, plus
+earlier bosses' internals. Active minibosses are bypassed; human play, other
+seeds and a complete game remain unverified.
+
+**B04 quake art, 2026-10-27 (committed in `8a0b157`):** Native-alpha painted
 cracks cover dangerous 96×96 checkerboard tiles; outline and fill show the full
 hit rectangles and the active state is brighter. Timing, damage and arena light
 are unchanged. The lead reviewed warning and active captures in the actual
@@ -1310,7 +1325,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `196d4a6b7c31c223f8e7e22ce88f437fb021bacb` on `origin/main`, documenting the isolated C9 phase-two survival probes above; it does not establish a C9 victory. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `8a0b157375f650e6e5fb59c7a264bfbc2a87db9d` on `origin/main`, including the B04 quake art above. The separate C9 victory is only a phase-two fixture, not a continuous earned-route victory. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

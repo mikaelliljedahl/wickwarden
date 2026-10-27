@@ -65,6 +65,8 @@ The continuous C9 plate phase followed in
 reaches phase two without establishing a boss victory.
 The isolated C9 phase-two survival attempts were documented in
 `196d4a6b7c31c223f8e7e22ce88f437fb021bacb`, verified on `origin/main`.
+The B04 quake art followed in `8a0b157375f650e6e5fb59c7a264bfbc2a87db9d`,
+verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -72,7 +74,22 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**B04 quake art, working tree (unpushed):** Native-alpha painted cracks cover
+**Q3 Lock Warden victory, working tree (unpushed):** The continuous earned
+input route with normal damage and an ordinary C9 respawn breaks all four actual
+plates with sling shots and defeats Lock Warden. It physically collects fragment
+and core, raising maximum health from 26 to 28 and restoring health to 28. After
+the plates, the player physically collects the phase-change ember: the
+PickupCollector signal counts exactly one and health is checked from 13 to
+15/26. The victory leaves 15/26 and one slug after 25 used in phase two. A
+wickling count was observed changing from one to zero; its exact cause is
+unknown. Enemies and damage remain active. The agent reports two final isolated
+runs, shards 2–4 and lint passing. Global seed `20261027` does not control or log Archivist's and
+Tidewick's own randomization. The bot reads boss, eye, plate, `open_left`,
+`bolt_left`, wickling and projectile position/direction state, plus earlier
+bosses' internals. Active minibosses are bypassed; human play, other seeds and a
+complete game remain unverified.
+
+**B04 quake art, committed in `8a0b157`:** Native-alpha painted cracks cover
 dangerous 96×96 checkerboard tiles; outline and fill show the full hit rectangles
 and the active state is brighter. Timing, damage and arena light are unchanged.
 The lead reviewed warning and active captures in the actual arena with a forced

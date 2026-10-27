@@ -5,7 +5,7 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4 through C8 and reaches the C9 boss second phase.
+## The continuous route defeats C4 through C9 and collects their rewards.
 ## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through the C9 boss second phase: no repositioning, warps, enemy
+## Continuous opening through C9 victory and rewards: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -3067,6 +3067,175 @@ func fight_lock_plates() -> void:
 	)
 	check_eq(boss.phase, 2, "walking reaches C9 phase two")
 	check_eq(boss.hp, 24, "four real plate breaks leave 24 boss HP")
+	await fight_lock_core(boss)
+
+
+## Reads the boss core/bolt timers and projectile positions/directions for avoidance;
+## wickling positions and liveness choose when to fight or keep the firing lane clear.
+func fight_lock_core(boss: Node2D) -> void:
+	var before_ember := GameState.health
+	var loot := {"ember": 0}
+	var on_pickup := func(pickup: PickupBase) -> void:
+		if pickup.kind == &"ember":
+			loot["ember"] += 1
+	player.collector.picked.connect(on_pickup)
+	await walk_start_to(Vector2(1300, 420))
+	await walk_start_to(Vector2(960, 420))
+	await frames(5)
+	player.collector.picked.disconnect(on_pickup)
+	print(
+		"C9 ember pickups=%d health=%d before=%d" % [loot["ember"], GameState.health, before_ember]
+	)
+	check_eq(loot["ember"], 1, "walking physically collects phase-change ember")
+	check_eq(GameState.health, before_ember + 2, "phase-change ember heals two half-hearts")
+	var last_attack := -100
+	var last_shot := -100
+	var last_hp: int = boss.hp
+	var last_health := GameState.health
+	var last_count := -1
+	for tick in range(15000):
+		if player.is_dead() or not is_instance_valid(boss) or boss.is_dead or boss.is_dying():
+			break
+		var pos: Vector2 = player.global_position
+		var local: Vector2 = pos - world.current_room.global_position
+		var nearest = null
+		var nearest_dist := INF
+		var count := 0
+		for wick in get_tree().get_nodes_in_group(&"wicklings"):
+			if (
+				not is_instance_valid(wick)
+				or wick.is_dead
+				or not world.current_room.is_ancestor_of(wick)
+			):
+				continue
+			count += 1
+			var dist: float = wick.global_position.distance_to(pos)
+			if dist < nearest_dist and dist < 410:
+				nearest = wick
+				nearest_dist = dist
+		if tick % 180 == 0 and nearest != null:
+			print(
+				(
+					"TRACK tick=%d player=%s wick=%s dist=%.1f"
+					% [
+						tick,
+						local,
+						nearest.global_position - world.current_room.global_position,
+						nearest_dist
+					]
+				)
+			)
+		if count != last_count:
+			print("WICK tick=%d alive=%d health=%d" % [tick, count, GameState.health])
+			last_count = count
+		var motion := Vector2.ZERO
+		var strike := false
+		var fire := false
+		if nearest != null:
+			var d: Vector2 = nearest.global_position - pos
+			var wick_local: Vector2 = nearest.global_position - world.current_room.global_position
+			if wick_local.x < 1190 and local.x < 1330:
+				motion = (Vector2(1370, 600) - local).normalized()
+			elif d.length() < 155 and minf(absf(d.x), absf(d.y)) < 90 and tick - last_attack > 23:
+				motion = Vector2(signf(d.x), 0) if absf(d.x) > absf(d.y) else Vector2(0, signf(d.y))
+				strike = true
+			else:
+				motion = d.normalized() * clampf((d.length() - 115) / 80, -1, 1)
+		else:
+			if GameState.active_item != &"tallow_sling":
+				release_inputs()
+				Input.action_press(&"cycle_item")
+				await frames(2)
+				Input.action_release(&"cycle_item")
+				await frames(2)
+				continue
+			var d := Vector2(1300, 600) - local
+			if d.length() < 30 and boss.open_left > 0.5 and tick - last_shot > 25:
+				motion = Vector2.LEFT
+				fire = true
+			else:
+				motion = d.normalized() if d.length() > 10 else Vector2.ZERO
+		if boss.bolt_left < 2.0:
+			motion = (Vector2(1300, 480) - local).normalized()
+			strike = false
+			fire = false
+		var bd: Vector2 = pos - boss.global_position
+		if absf(bd.x) < 205 and absf(bd.y) < 180:
+			motion = Vector2.RIGHT if bd.x >= 0 else Vector2.LEFT
+			strike = false
+			fire = false
+		for shot in get_tree().get_nodes_in_group(&"projectiles"):
+			if not shot is EnemyProjectile or not is_instance_valid(shot):
+				continue
+			var rel: Vector2 = pos - shot.global_position
+			var along: float = rel.dot(shot.direction)
+			var cross: float = absf(rel.cross(shot.direction))
+			if along > -10 and along < 150 and cross < 65:
+				var perp: Vector2 = shot.direction.orthogonal()
+				motion += perp * (3.0 if rel.dot(perp) >= 0 else -3.0)
+				strike = false
+				fire = false
+		if local.x < 160:
+			motion.x = maxf(motion.x, 1)
+		if local.x > 1760:
+			motion.x = minf(motion.x, -1)
+		if local.y < 160:
+			motion.y = maxf(motion.y, 1)
+		if local.y > 800:
+			motion.y = minf(motion.y, -1)
+		release_inputs()
+		if absf(motion.x) > 0.2:
+			Input.action_press(&"move_right" if motion.x > 0 else &"move_left")
+		if absf(motion.y) > 0.2:
+			Input.action_press(&"move_down" if motion.y > 0 else &"move_up")
+		if strike or fire:
+			await frames(2)
+			Input.action_press(&"attack" if strike else &"use_item")
+			if strike:
+				last_attack = tick
+			else:
+				last_shot = tick
+		await frames(1)
+		if is_instance_valid(boss) and (boss.hp != last_hp or GameState.health != last_health):
+			print(
+				(
+					"CORE tick=%d hp=%d health=%d slugs=%d pos=%s open=%.2f"
+					% [tick, boss.hp, GameState.health, GameState.slugs, local, boss.open_left]
+				)
+			)
+			last_hp = boss.hp
+			last_health = GameState.health
+	release_inputs()
+	if is_instance_valid(boss) and not player.is_dead():
+		await seconds(2)
+	check(GameState.has_flag(&"boss_cave_9_10_defeated"), "walking defeats Lock Warden")
+	if GameState.has_flag(&"boss_cave_9_10_defeated") and not player.is_dead():
+		print(
+			(
+				"C9 victory health=%d/%d pots=%d slugs=%d"
+				% [GameState.health, GameState.max_health, GameState.pitch_pots, GameState.slugs]
+			)
+		)
+		check_eq(GameState.max_health, 26, "C9 core starts from 26 half-hearts")
+		check(not GameState.has_flag(&"picked_wick_core_c9"), "C9 core waits for reward walk")
+		await walk_start_to(Vector2(960, 480))
+		await walk_start_to(Vector2(1152, 480))
+		await frames(5)
+		check(GameState.has_fragment(&"c9"), "walking collects C9 fragment")
+		check(GameState.has_flag(&"picked_wick_core_c9"), "walking collects C9 core")
+		check_eq(GameState.max_health, 28, "C9 core increases maximum health")
+		check_eq(GameState.health, 28, "C9 core restores health")
+		print(
+			(
+				"C9 rewards fragment=%s core=%s health=%d/%d"
+				% [
+					GameState.has_fragment(&"c9"),
+					GameState.has_flag(&"picked_wick_core_c9"),
+					GameState.health,
+					GameState.max_health
+				]
+			)
+		)
 
 
 func farm_c4_antechamber() -> void:
