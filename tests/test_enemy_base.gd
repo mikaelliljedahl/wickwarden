@@ -23,6 +23,7 @@ class Counter:
 
 func run() -> void:
 	await _hit_flash_knockback_iframes()
+	await _guard_spark()
 	await _stun()
 	await _death_and_drops()
 	await _drop_table()
@@ -31,6 +32,45 @@ func run() -> void:
 	await _adopt()
 	await _projectile()
 	await _fire_projectile()
+
+
+func _guard_spark() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy := Counter.new()
+	enemy.max_hp = 6
+	enemy.armor_front_deg = 140.0
+	enemy.drops_enabled = false
+	arena.add_child(enemy)
+	enemy.global_position = Vector2(500, 500)
+	enemy.set_facing_dir(Vector2.RIGHT)
+	var hit := Hitbox.new()
+	hit.team = Layers.Team.PLAYER
+	hit.kind = &"hook"
+	hit.damage = 2
+	arena.add_child(hit)
+	hit.global_position = Vector2(600, 500)
+	await frames(2)
+	var blocks := [0]
+	enemy.guard_blocked.connect(func(_hitbox: Hitbox) -> void: blocks[0] += 1)
+	enemy._on_hurtbox_hurt(hit)
+	var spark := arena.get_node_or_null("Puff") as SpriteVisual
+	check_eq(enemy.hp, 6, "guarded hit still causes no damage")
+	check_eq(blocks[0], 1, "guarded hit still emits its signal")
+	check(spark != null, "guard creates painted impact")
+	if spark != null:
+		check_eq(spark.animation, &"impact", "guard uses impact frames")
+		check_near(spark.speed_scale, 1.5, 0.001, "impact retains quarter-second duration")
+		check(spark.global_position.is_equal_approx(Vector2(528, 500)), "guard spark at body edge")
+	await seconds(0.4)
+	check(arena.get_node_or_null("Puff") == null, "painted guard spark frees itself")
+	SpriteVisual.use_manifest("res://tests/fixtures/missing_guard_manifest.json")
+	enemy._on_hurtbox_hurt(hit)
+	check(arena.get_node_or_null("Puff") is Placeholder, "missing art uses visible fallback")
+	check_eq(enemy.hp, 6, "missing art does not change guard damage")
+	check_eq(blocks[0], 2, "missing art does not change guard signal")
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+	await dispose(arena)
 
 
 func _hit_flash_knockback_iframes() -> void:

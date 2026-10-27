@@ -420,7 +420,16 @@ func _spark_guard(hitbox: Hitbox) -> void:
 		var spark_at := (
 			global_position + (hitbox.origin() - global_position).normalized() * body_radius
 		)
-		Placeholder.puff(parent, spark_at, Color(1.0, 0.95, 0.7, 0.9), 12.0)
+		var spark := SpriteVisual.spawn_effect(parent, &"lock_key_volley", spark_at)
+		if spark is SpriteVisual and spark.sprite_frames.has_animation(&"impact"):
+			# Three impact frames at 8 fps, sped up to the old 0.25 s puff duration.
+			spark.z_index = 10
+			spark.speed_scale = 1.5
+			spark.play_anim(&"impact")
+		else:
+			if spark != null:
+				spark.queue_free()
+			Placeholder.puff(parent, spark_at, Color(1.0, 0.95, 0.7, 0.9), 12.0)
 	var attacker := hitbox.source
 	if is_instance_valid(attacker) and attacker.has_method(&"apply_knockback"):
 		var away := attacker.global_position - global_position

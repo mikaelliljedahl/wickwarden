@@ -1,6 +1,26 @@
 # Current status
 
-**Q7 locks and keys, 2026-10-27 (working tree, unpushed):** Controlled arena
+**Q3 Gloam Knight victory, 2026-10-27 (working tree, unpushed):** The continuous
+input route with normal damage and ordinary respawns defeats the C7 boss and
+physically collects its fragment and core; the core raises maximum health from
+22 to 24 half-hearts and restores health to 24. The C7 miniboss is bypassed and
+alive. The bot attacks the Knight from the north with the hook after its dive,
+without boots in the fight, and the reported victory leaves 1/22 half-hearts.
+It reads mode, phase, target, position, island and hurtbox state; earlier bosses
+also use extensive internal-state reads, and Archivist randomization is not
+controlled. The agent reports five C7 victories, four isolated shards and lint
+passing; a different variant died at C5. Other seeds, human balance and a full
+route remain unverified.
+
+**M0 guard spark, 2026-10-27 (working tree, unpushed):** The existing painted
+`lock_key_volley` impact replaces `Placeholder.puff` on a blocked hit, lasting
+0.25 seconds with a fallback if art is unavailable. Position, guard behavior,
+damage and sound are unchanged; no new art was added. The agent reports isolated
+`enemy_base` and four guard-enemy tests and lint passing. The lead reviewed the
+effect with the player in the actual dark `cave_1_5`, with the Captain held
+still for reproducibility. Human play and other effects remain open.
+
+**Q7 locks and keys, 2026-10-27 (committed in `0801f43`):** Controlled arena
 cases physically collect placed pickups and exercise real scoped locks, a boss
 door and the Ninth Door. Wrong scope and sling are rejected; a matching C1 key
 is consumed, the Lockpick is retained, and the Ninth Door rejects eight fragments
@@ -1150,7 +1170,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `8dbbabab106ef53b7077ad30142d83c895bdcdfa` on `origin/main`, including the P08 seam presentation and Q7 raft passage and ravine cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0801f43502015e8de47efe795083c766ac2fc231` on `origin/main`, including the Q7 scoped-key, Lockpick and Ninth Door cases described above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -43,6 +43,8 @@ The Q7 vegetation, rocks and gate cases followed in
 `a53fc9d47010cf9bd85ff4b9933c5d093fd399f6`, verified on `origin/main`.
 The P08 seam presentation and Q7 raft passage and ravine cases followed in
 `8dbbabab106ef53b7077ad30142d83c895bdcdfa`, verified on `origin/main`.
+The Q7 scoped-key, Lockpick and Ninth Door cases followed in
+`0801f43502015e8de47efe795083c766ac2fc231`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -50,7 +52,27 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 locks and keys, working tree (unpushed):** Controlled arena cases physically
+**Q3 Gloam Knight victory, working tree (unpushed):** The continuous input
+route with normal damage and ordinary respawns defeats the C7 boss and
+physically collects its fragment and core; the core raises maximum health from
+22 to 24 half-hearts and restores health to 24. The C7 miniboss is bypassed and
+alive. The bot attacks the Knight from the north with the hook after its dive,
+without boots in the fight, and the reported victory leaves 1/22 half-hearts.
+It reads mode, phase, target, position, island and hurtbox state; earlier bosses
+also use extensive internal-state reads, and Archivist randomization is not
+controlled. The agent reports five C7 victories, four isolated shards and lint
+passing; a different variant died at C5. Other seeds, human balance and a full
+route remain unverified.
+
+**M0 guard spark, working tree (unpushed):** The existing painted
+`lock_key_volley` impact replaces `Placeholder.puff` on a blocked hit, lasting
+0.25 seconds with a fallback if art is unavailable. Position, guard behavior,
+damage and sound are unchanged; no new art was added. The agent reports isolated
+`enemy_base` and four guard-enemy tests and lint passing. The lead reviewed the
+effect with the player in the actual dark `cave_1_5`, with the Captain held
+still for reproducibility. Human play and other effects remain open.
+
+**Q7 locks and keys, committed in `0801f43`:** Controlled arena cases physically
 collect placed pickups and exercise real scoped locks, a boss door and the Ninth
 Door. Wrong scope and sling are rejected; a matching C1 key is consumed, the
 Lockpick is retained, and the Ninth Door rejects eight fragments but opens with
