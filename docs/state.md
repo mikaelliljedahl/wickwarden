@@ -1,6 +1,16 @@
 # Current status
 
-**Q3 C10 boss entrance, 2026-10-28 (working tree, unpushed):** With the room-10
+**Z3 Linux export smoke test, 2026-10-28 (working tree, unpushed):**
+`export_presets.cfg` defines Linux x86_64 with `all_resources`, `*.json`
+included and `tests/*` and `tools/*` excluded. In isolated scratch using the
+official Godot 4.7.2 template, the agent reports building a PCK and release
+executable and running headless for 120 frames with Dummy audio and exit 0.
+The export log contains four data JSON files, `sprites.json` and 222 room/pocket
+paths. Scratch and its templates were removed; real saves and installed templates
+were untouched. This is not human, audio, visual or full-playthrough verification;
+Q3, E1 and release gates remain open.
+
+**Q3 C10 boss entrance, 2026-10-28 (committed in `0d3ab88`):** With the room-10
 fix `b5ba112` synced, the continuous earned input route physically spends key
 two at `e242`, collects key three and spends it at `e243`, collects a +6 slug
 bundle, uses the sling eye, earns the Lockpick and opens the boss door to the
@@ -1422,7 +1432,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `b5ba1124b771a0576228d105302eb20627753d53` on `origin/main`, including the room-10 geometry fix, corrected hound regression and Q3 Reel-bank route above. The Q3 `/tmp` guard and shared runner guard remain open. The earned route to the third key and complete C10 route remain unverified; the user response on the ending-choice conflict remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0d3ab887a9d915ae41a16ba5b088ef696d402a36` on `origin/main`, including the earned route to the C10 boss entrance above. The Q3 `/tmp` guard and shared runner guard remain open. C10 victory and a complete ending remain unverified; the user response on the ending-choice conflict remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

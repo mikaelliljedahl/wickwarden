@@ -80,6 +80,8 @@ The continuous C10 route to room 10 followed in
 `0ca0ee673fe195e2ab3f4d7cedb44080b0cdc20f` on `origin/main`.
 The C10 room-10 geometry fix, corrected hound regression and Q3 Reel-bank route
 followed in `b5ba1124b771a0576228d105302eb20627753d53`, verified on `origin/main`.
+The earned route to the C10 boss entrance followed in
+`0d3ab887a9d915ae41a16ba5b088ef696d402a36`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -87,7 +89,17 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 C10 boss entrance, working tree (unpushed):** With room-10 fix `b5ba112`
+**Z3 Linux export smoke test, working tree (unpushed):** `export_presets.cfg`
+defines Linux x86_64 with `all_resources`, `*.json` included and `tests/*` and
+`tools/*` excluded. In isolated scratch using the official Godot 4.7.2 template,
+the agent reports building a PCK and release executable and running headless for
+120 frames with Dummy audio and exit 0. The export log contains four data JSON
+files, `sprites.json` and 222 room/pocket paths. Scratch and its templates were
+removed; real saves and installed templates were untouched. This is not human,
+audio, visual or full-playthrough verification; Q3, E1 and release gates remain
+open.
+
+**Q3 C10 boss entrance, committed in `0d3ab88`:** With room-10 fix `b5ba112`
 synced, the continuous earned input route physically spends key two at `e242`,
 collects key three and spends it at `e243`, collects a +6 slug bundle, uses the
 sling eye, earns the Lockpick and opens the boss door to the actual The Unlit in
