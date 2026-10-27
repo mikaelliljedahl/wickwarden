@@ -77,9 +77,13 @@ func _free_run(start: Vector2) -> float:
 	var query := PhysicsShapeQueryParameters2D.new()
 	query.shape = shape
 	query.transform = Transform2D(0.0, start)
-	query.motion = facing * LEAP_DISTANCE
 	query.collision_mask = Layers.WORLD
 	query.exclude = rails
+	# cast_motion ignores bodies already overlapping the starting shape. Refuse
+	# the leap until walking clears them; leapable rails stay excluded.
+	if not get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty():
+		return 0.0
+	query.motion = facing * LEAP_DISTANCE
 	var fractions := get_world_2d().direct_space_state.cast_motion(query)
 	return fractions[0] * LEAP_DISTANCE
 

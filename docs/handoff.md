@@ -49,6 +49,10 @@ The Gloam Knight test victory and M0 guard spark followed in
 `3a36abb362921cbb611de24bc3b04d8cb15fb813`, verified on `origin/main`.
 The Q7 one-way test and open landing observation followed in
 `ce9dc584bd69c95611d002c327cb74c7545213d4`, verified on `origin/main`.
+The confirmed one-way softlock was documented in `2c16eb3`; the Coinwyrm
+victory and B10 heart pulse followed in `6f33c122604c7b06faed35152b49963ccb068337`,
+verified on `origin/main`. The revised softlock fix is unpushed; independent
+review passed without blockers and the lead's full `make check` passed.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -56,18 +60,34 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 Coinwyrm victory, working tree (unpushed):** The continuous earned input
+**Q3 Coinwyrm victory, committed in `6f33c12`:** The continuous earned input
 route defeats C8's Coinwyrm with normal damage, using three keys, the Reel and
 boots and passing an active miniboss. The reported victory leaves 3/24
 half-hearts before physical fragment and core collection; the core raises
 maximum health from 24 to 26 and restores health to 26. The agent reports five
-victories, four isolated shards and lint passing. Global seed `20261027` does
+victories, four isolated shards and lint passing; the original C8 runs used the
+unchanged HEAD World. Global seed `20261027` does
 not control Archivist's own randomization. The bot reads boss plates, state,
 positions and projectiles as well as earlier internal state; the C7 victory had
 1/22 health and minibosses remain active. Human play, a complete route and other
 seeds remain unverified.
 
-**Z1 one-way softlock proposal, working tree (unpushed):** At a blocked edge, World
+**Z1 revised one-way fix, working tree (unpushed):** Version 3 restores Player
+and World byte-identically and places the boots-start overlap check in
+`scripts/items/skitter_boots.gd` (`_free_run`/`activate`) to preserve the generic
+Player contract. It rejects WORLD overlaps except leapable rails, including a
+jump away until the body is clear. The agent reports 120 regression checks
+covering natural arrival, free jump starts after 3/15 frames, rails, corners,
+real Reel and raft and damage, plus 15 relevant test files, lint and visual
+captures. Independent review passed without blockers and verified the generic Player
+contract, rail/overlap query, isolated 120-check one-way regression, boots,
+raft, Reel, tool matrix and C7–C10 routes. The query is a snapshot, not coverage
+of all moving obstacles or angles; a rejected press requires a new press after
+clearing the overlap. The lead's full `make check` passed with the reworked fix:
+the Godot suite including all four playthrough shards, lint, world-data check
+and 175 Python tests.
+
+**Z1 first proposal (not accepted):** At a blocked edge, World
 ends external movement and places the player inside the wall plus body radius.
 The `e041`/`e087` softlock was reproduced before the fix. The agent reports 62
 checks after it with real input and natural landing, both edges and 3/15-frame
@@ -77,9 +97,9 @@ C7/C8/C9/Gravelight route tests, lint and visual captures are reported
 passing/reviewed by the agent. An independent reviewer identified a risk that
 the proposal could cancel raft or Reel movement at a closed edge and place the
 player unsafely near corners or obstacles. This is a review finding, not a
-reproduced actual route. The proposal is not accepted and is being reworked.
+reproduced actual route. The proposal was not accepted; the revision is above.
 
-**B10 heart pulse, working tree (unpushed):** A new native-alpha source supplies
+**B10 heart pulse, committed in `6f33c12`:** A new native-alpha source supplies
 the painted phase-three heart pulse through the ordinary art pipeline; geometry,
 warning, speed and damage are unchanged. The lead reviewed radius 200; the
 agent reviewed 40, 200 and 360 and a phase-two regression. The agent reports
