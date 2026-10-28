@@ -229,12 +229,26 @@ Captain testing and Hound art proof were documented in
 `afdaead5a2b43da5b61a1cabb7df50618b07730b` on `origin/main`.
 Clean-check documentation followed in `9125aaf`; Q7 Kilnkeeper phase two is at
 `f257ebca8ec25f98ccf7b9a2bb6839317633ca84` on `origin/main`.
+Kilnkeeper test documentation followed in `171fcf2`; Q7 Coinwyrm and Q6 drops
+are at `403ec8b1b25ba0aaf23dfe768ec81a4efebb5311` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 Coinwyrm and Q6 gated drops, committed in `403ec8b`:** In the actual B08
+gallery, natural phase-one rear has three plates: real hook does no damage,
+three real Reel hits and natural returns remove the plates and yield 15 bits,
+then hook deals two damage to the open head (36→34). The player is controlled
+and protected; this covers only phase-one rear, not the real cave or human play.
+
+Q6 independently sampled 100 stratified actual enemy deaths/pickups per mode:
+pot-only yielded 10/0, sling-only 0/8, with potential 40/48 respectively;
+2,900 checks. This is not natural randomness or an economy playthrough. Agent
+tests and the lead's `tool_matrix` and `economy_budget` passed, as did lint. The
+latest clean full check remains `afdaead`.
 
 **Q7 Kilnkeeper phase two, committed in `f257ebc`:** Six real Cinder Wick fire
 contacts reduce the boss from 24 to 12 HP and trigger natural phase two. Hook is

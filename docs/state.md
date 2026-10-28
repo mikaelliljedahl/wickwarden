@@ -1,5 +1,18 @@
 # Current status
 
+**Q7 Coinwyrm and Q6 gated drops, 2026-10-28 (committed in `403ec8b`):** In
+the actual B08 gallery, natural phase-one rear has three plates: real hook does
+no damage, three real Reel hits and natural returns remove the plates and yield
+15 bits, then hook deals two damage to the open head (36→34). The player is
+controlled and protected; this covers only phase-one rear, not the real cave or
+human play.
+
+Q6 independently sampled 100 stratified actual enemy deaths/pickups per mode:
+pot-only yielded 10/0, sling-only 0/8, with potential 40/48 respectively;
+2,900 checks. This is not natural randomness or an economy playthrough. Agent
+tests and the lead's `tool_matrix` and `economy_budget` passed, as did lint. The
+latest clean full check remains `afdaead`.
+
 **Q7 Kilnkeeper phase two, 2026-10-28 (committed in `f257ebc`):** Six real
 Cinder Wick fire contacts reduce the boss from 24 to 12 HP and trigger natural
 phase two. Hook is blocked by hard armour; four further real Wick hits melt it,
@@ -2347,7 +2360,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-HEAD and the local `origin/main` tracking reference are `f257ebca8ec25f98ccf7b9a2bb6839317633ca84`, including the Q7 Kilnkeeper test above; push verification is in progress. The latest clean full check is at `afdaead`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `403ec8b1b25ba0aaf23dfe768ec81a4efebb5311` on `origin/main`, including Q7 Coinwyrm and Q6 gated drops above. The latest clean full check is at `afdaead`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
