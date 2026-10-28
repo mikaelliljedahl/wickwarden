@@ -1,12 +1,23 @@
 # Current status
 
+**Coinwyrm attack presentation, 2026-10-28 (committed in `3601e4b`):**
+Transparent outlines replace the filled bite and tail areas; the bite reuses
+three painted coin impacts and the tail uses existing art. Collision, damage and
+timing are unchanged. Actual active-state captures are
+`/var/tmp/wick-b08-f29-bite.png` and `/var/tmp/wick-b08-f29-tail.png`, with
+controlled positioning and a forced tail phase. The lead's `boss_coinwyrm` and
+`route_cave_8` tests passed; the agent reports lint and B08 ownership PASS. A
+distinct jaw animation is still missing, and this is not human play. Tidewick's
+projectile art pipeline remains in progress.
+
 **Boss attack visual audit, 2026-10-28:** At `304ce37`, an audit in the
 actual World with ticking bosses and controlled player position visually found
 Coinwyrm's active bite to be a solid-colour effect. Code also shows a
 solid-colour tail sweep, which was not visually captured. Tidewick fires a
 spore projectile instead of the planned ember bolt. Images are in the temporary
-directory `/var/tmp/wickwarden-attack-audit-9155`. Correction agents are working
-in parallel. This is not complete attack-state coverage or human play.
+directory `/var/tmp/wickwarden-attack-audit-9155`. Coinwyrm's correction is
+recorded above; Tidewick work continues. This is not complete attack-state
+coverage or human play.
 
 **Route repeat and Q7 light/blast checks, 2026-10-28:** The route at `d003e28`
 was run three times with normal damage and enemy AI; all three reached the final
@@ -1731,7 +1742,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `09ad1ecab32a656c26cb1fdc218bd7c8e6858af1` on `origin/main`, recording the repeated route and Q7 light/blast checks above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `3601e4b4102f3bd4634274e3c2532fd876bc2d18` on `origin/main`, including Coinwyrm's attack presentation above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

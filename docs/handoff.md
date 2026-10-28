@@ -132,6 +132,8 @@ The room census was recorded in `d003e28`; Q7 light/blast checks followed in
 `304ce3707b6d5bb83196ae0280b5975ede2622db` on `origin/main`.
 The route repeat and Q7 checks were documented in
 `09ad1ecab32a656c26cb1fdc218bd7c8e6858af1` on `origin/main`.
+The boss attack audit was recorded in `1a078b2`; the Coinwyrm presentation fix
+followed in `3601e4b4102f3bd4634274e3c2532fd876bc2d18` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -139,13 +141,24 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Coinwyrm attack presentation, committed in `3601e4b`:** Transparent outlines
+replace the filled bite and tail areas; the bite reuses three painted coin
+impacts and the tail uses existing art. Collision, damage and timing are
+unchanged. Actual active-state captures are `/var/tmp/wick-b08-f29-bite.png` and
+`/var/tmp/wick-b08-f29-tail.png`, with controlled positioning and a forced tail
+phase. The lead's `boss_coinwyrm` and `route_cave_8` tests passed; the agent
+reports lint and B08 ownership PASS. A distinct jaw animation is still missing,
+and this is not human play. Tidewick's projectile art pipeline remains in
+progress.
+
 **Boss attack visual audit, 2026-10-28:** At `304ce37`, an audit in the
 actual World with ticking bosses and controlled player position visually found
 Coinwyrm's active bite to be a solid-colour effect. Code also shows a
 solid-colour tail sweep, which was not visually captured. Tidewick fires a
 spore projectile instead of the planned ember bolt. Images are in the temporary
-directory `/var/tmp/wickwarden-attack-audit-9155`. Correction agents are working
-in parallel. This is not complete attack-state coverage or human play.
+directory `/var/tmp/wickwarden-attack-audit-9155`. Coinwyrm's correction is
+recorded above; Tidewick work continues. This is not complete attack-state
+coverage or human play.
 
 **Route repeat and Q7 light/blast checks, 2026-10-28:** The route at `d003e28`
 was run three times with normal damage and enemy AI; all three reached the final
