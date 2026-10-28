@@ -183,12 +183,23 @@ Sump Lurker's horizontal bite landed in `17de0e5e73a2b7fc2e040f9c982bd8e8f68de0c
 on `origin/main`.
 Sump documentation followed in `e024916`; the C10/playthrough guard landed in
 `3e2eefde47d141e1cb5ad4926d47f868294bc42e` on `origin/main`.
+Guard documentation followed in `ea605c1` and Choirling's active song in
+`669633939d46c79dd81099a5297133b3d9909243` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Choirling active song, committed in `6696339`:** Its previously invisible
+0.5-second active song now uses existing painted `treble_note` images and a cone
+outline, with damage, timing and hitbox unchanged. The lead passed `choirling`;
+the agent reports M4 ownership and lint PASS. Actual `cave_6_8` captures
+`/var/tmp/wick-regular-audit/choirling-song-after.png` and `warning.png` in that
+directory used ticking AI and a placed player, not human play. Capture exit
+reported four ObjectDB and two resource warnings. Dedicated animated song art
+and a full regular-enemy audit remain open.
 
 **C10 and playthrough save guard, committed in `3e2eefd`:** C10 and
 Playthrough4 stop before disk steps when the runner profile is not isolated,
@@ -216,8 +227,8 @@ scratch path obstruct safe test execution when the `/tmp` quota is exhausted.
 Z1 is working across the named runner, base, Q3 and route-test files toward an
 explicit, unique, verified isolated test root, fail-closed behavior and actual
 userdata checks. After discovering autosave and ending branches, Z1 also covers
-SaveGame. Work continues and guards have not been weakened; the solution is not
-complete.
+SaveGame and the direct test runner, using an explicitly scoped ownership list.
+Work continues; the solution is not complete.
 
 **Lull Mauler active attacks, committed in `86cbe79`:** The previously
 invisible slam uses an existing painted crack and 110 px outline; sweep uses a

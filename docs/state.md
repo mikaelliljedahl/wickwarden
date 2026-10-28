@@ -1,5 +1,14 @@
 # Current status
 
+**Choirling active song, 2026-10-28 (committed in `6696339`):** Its previously
+invisible 0.5-second active song now uses existing painted `treble_note` images
+and a cone outline, with damage, timing and hitbox unchanged. The lead passed
+`choirling`; the agent reports M4 ownership and lint PASS. Actual `cave_6_8`
+captures `/var/tmp/wick-regular-audit/choirling-song-after.png` and `warning.png`
+in that directory used ticking AI and a placed player, not human play. Capture
+exit reported four ObjectDB and two resource warnings. Dedicated animated song
+art and a full regular-enemy audit remain open.
+
 **C10 and playthrough save guard, 2026-10-28 (committed in `3e2eefd`):** C10
 and Playthrough4 stop before disk steps when the runner profile is not isolated,
 and disable `SaveGame.enabled` in that case. The guard examines the XDG prefix, simplified
@@ -26,8 +35,8 @@ scratch path obstruct safe test execution when the `/tmp` quota is exhausted.
 Z1 is working across the named runner, base, Q3 and route-test files toward an
 explicit, unique, verified isolated test root, fail-closed behavior and actual
 userdata checks. After discovering autosave and ending branches, Z1 also covers
-SaveGame. Work continues and guards have not been weakened; the solution is not
-complete.
+SaveGame and the direct test runner, using an explicitly scoped ownership list.
+Work continues; the solution is not complete.
 
 **Lull Mauler active attacks, 2026-10-28 (committed in `86cbe79`):** The
 previously invisible slam uses an existing painted crack and 110 px outline;
@@ -2105,7 +2114,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `3e2eefde47d141e1cb5ad4926d47f868294bc42e` on `origin/main`, including the C10/playthrough save guard above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `669633939d46c79dd81099a5297133b3d9909243` on `origin/main`, including Choirling's active song above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
