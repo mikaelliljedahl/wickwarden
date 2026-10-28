@@ -1,9 +1,31 @@
 # Current status
 
+**Snapper and Choirling warnings, 2026-10-28 (committed in `19acc05`):** Both
+use painted warnings with clear edges; attack areas and timing are unchanged.
+Isolated `bramble_snapper`, `choirling`, `area_cave_6` and lint passed. Images
+used actual rooms with a placed player; Choirling was in a natural state, not
+human play. The Snapper capture reported resource warnings at exit, cause
+unknown. The Wisp warning is still being worked on. The latest full check was
+at `5536695` before this change.
+
+**Gloam Knight and Dirge Choir effects, 2026-10-28 (committed in `5536695`):**
+The Knight's landing and ring and the Choir's alto sector use painted effects
+with thin outlines; hit areas and timing are unchanged. Isolated
+`boss_gloam_knight`, `area_cave_7`, `route_cave_7`, `boss_dirge_choir`,
+`area_cave_6` and lint passed. Actual-arena stills used forced frozen Knight
+effects; its ring can, as before, appear outside the island where collisions are
+inactive. The Choir attack was natural but the player was placed and its
+hurtbox disabled. Human play remains unverified. An isolated full `make check`
+passed on `5536695`: 157 Godot test files including playthrough, lint,
+world-check and 175 Python tests. Images of shared telegraphs identified clear
+presentation candidates for Cinder Wisp, Bramble Snapper and Choirling; later
+Snapper and Choirling work is recorded above. Many thin markers are intentional
+readability aids.
+
 **Verification and visual follow-up at `80599b6`, 2026-10-28:** Isolated
 `make check` passed 157 Godot test files including playthrough, lint,
 world-check and 175 Python tests. Visual inventory found a filled Gloam Knight
-landing disc and Dirge Choir's alto sector; work on both is in progress.
+landing disc and Dirge Choir's alto sector; the later change is recorded above.
 
 **Miniboss warnings, 2026-10-28 (committed in `80599b6`):** Wick Automaton's
 tell uses muted painted fire and a thin outline; Corrow's Echo GLOW/FLARE outline
@@ -1571,7 +1593,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `80599b6061f66acc28b944cfb1387e20bfbcd731` on `origin/main`, including the miniboss warnings above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `19acc0541182b29cf42daa1db96e6ebbeefa8929` on `origin/main`, including the Snapper and Choirling warnings above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
