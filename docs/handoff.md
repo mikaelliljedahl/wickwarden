@@ -223,12 +223,26 @@ Automaton test documentation followed in `1a34e23`; Q7 Sump Lurker tests are at
 `67f434051072ad1d3c50b91f35db49b407acfc32` on `origin/main`.
 Sump test documentation followed in `b59d4a4`; the Q7 Dirge cycle is at
 `d3c724fa4213ca1412b45bbc4582c1f19d7c21f4` on `origin/main`.
+Dirge and Hound audit documentation followed in `5afe6e4`; Q7 Hollow Captain is
+at `4b5f4ff32f54e6e3c47b0a159aad4646c44a6d67` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 Hollow Captain recovery, committed in `4b5f4ff`:** Real patrol, telegraph,
+bash and recovery run in a controlled arena. A real sling shot is blocked from
+the front during patrol and hits for one damage during recovery (12→11); ammo is
+consumed. Agent and lead passed `tool_matrix`; the agent reports 1,982 checks and
+lint PASS. The player is manually placed and protected; this is not a real room
+or human play, and other directions/tools remain open.
+
+**Husk Hound art proof:** `/var/tmp/wick-hound-art-proof/` shows source crouch
+220 px, charge 280/279 px and dizzy 240/224 px at a common scale, exceeding the
+binding 192² cell. A diagnostic 320 px cell is not approved; vertical poses are
+missing. Nothing is integrated or human-tested.
 
 **Husk Hound World audit, 2026-10-28:** State-confirmed natural warning
 squash/walk, charge and wall-dizzy show `walk_side` in
