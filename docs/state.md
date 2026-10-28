@@ -1,5 +1,33 @@
 # Current status
 
+**Brine Crab directional actions, 2026-10-28 (committed in `0edb9a5`):**
+Directional warning, lunge and up/down walk/idle poses reuse side walk; warning
+is unshaded in darkness. Timing and combat logic are unchanged, and incomplete
+art falls back to the old 1.2 scaling. Five sources/ten sprites have provenance,
+log and cutter with common 192 px scale and foot 176. Existing side images are
+unchanged; earlier side frames touch the cell edge, new frames do not. Lead and
+agent passed `brine_crab`/`tool_matrix` after import; the agent reports lint and
+`art-test` (25) PASS with the existing ResourceWarning and byte-identical
+independent cutter output.
+
+Controlled actual `cave_8_8` stills at
+`/var/tmp/wick-crab-z1-review/{dark,light}-{up,down,left,right}-{strafe,warning,lunge,recover}.png`
+used a placed, protected player and moved crab, with artificial lighting. The
+fully lit warning figure may need aesthetic review; capture had ObjectDB/resource
+warnings. Human play and continuous motion are not verified. The clean full
+`make check` on exact `0edb9a5` FAILED (exit 2): `test_route_cave_4` failed one
+of 210 checks, “real grab collision carries naturally landed shard”; the other
+158 test files passed. Log `/var/tmp/wick-clean-0edb9a5-t6fwhpy5/check.log`.
+A separate `test_route_cave_4` rerun on the same clean `0edb9a5` passed (exit 0):
+`/var/tmp/wick-c4-rerun-b07k3s1p/route.log`. A clean full `make check` rerun
+on exact `0edb9a5` passed (exit 0):
+`/var/tmp/wick-clean-0edb9a5-repeat-1jby8_7a/check.log`; it is the latest clean
+full PASS. Independent audit `/var/tmp/wick-route-audit-wuizz0h4/` had targeted
+`route_cave_4` PASS 10/10 each on head and parent and 20/20 instrumented runs;
+no direct crab link was found. The original cause remains unknown. Overlapping
+shards selected by grab or lifetime/timing are unproven hypotheses; the full
+check runs tests in parallel.
+
 **Dry vine fragments, 2026-10-28 (committed in `26166f5`):** `dry_vine_screen`
 uses five AtlasTexture twigs from documented `bush_cut_z1` for 0.25 seconds;
 the existing explosion and placeholder fallback remain. Other variants, signal,
@@ -9,8 +37,8 @@ hook capture `/var/tmp/wick-screen-study/cave_5_2-prototype-integrated-vine-dark
 used a placed, protected player and forced drop. Twigs are subtle and partly
 obscured; capture had ObjectDB/resource warnings. Human play and continuous
 motion are not verified. A clean full `make check` on exact `26166f5` passed
-(exit 0); log `/var/tmp/wick-clean-26166f5-4jms95dw/check.log`. It is the latest
-full check.
+(exit 0); log `/var/tmp/wick-clean-26166f5-4jms95dw/check.log`. The later clean
+`0edb9a5` full rerun is recorded above.
 
 **Moss wall fragments, 2026-10-28 (committed in `b1f6c34`):** `moss_wall`
 reuses documented `bush_cut_z1` with tint (0.65, 0.78, 0.56), at 180 px for
@@ -713,14 +741,15 @@ and body mismatch. The candidate
 `/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-0ed57e65-d182-48d2-a79e-bfa5ac5ac171.png`
 was rejected, not integrated or verified as animation; up/down art remains absent.
 
-**Brine Crab action-art review, 2026-10-28:** State-confirmed actual World
+**Earlier Brine Crab action-art review, 2026-10-28:** State-confirmed actual World
 captures `/var/tmp/wick-m3-survey/warning.png` and `lunge.png` in that directory
 show scaled idle with the same low claw. Scratch proofs in
 `/var/tmp/wick-brine-proof-QAneZP/` show the existing lunge at 250–257 px, too
 wide for the binding 192 px cell; the warning is shifted 16 px and has alpha
 pixels at the edge. Body/walk also mismatch, and vertical source art is missing.
 There is no safe integration of these sources; new compact fitting art is needed.
-No runtime change was made.
+No runtime change was made in that review; later directional action art is
+recorded above.
 
 **Earlier Watcher Eye open-state review, 2026-10-28:** The open state looked closed in
 actual AI gameplay at `ow_5_6` (`/var/tmp/wick-regular-audit/eye-open-overworld.png`).
@@ -2909,7 +2938,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `26166f50089fd365a303d4169440100863ad2d40` on `origin/main`, including dry vine fragments above. The latest clean full PASS is at `26166f5`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0edb9a5e0e3ed520cf8ef27993050c38ee794d47` on `origin/main`, including Brine Crab directional actions above. The latest clean full PASS is the rerun at `0edb9a5`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

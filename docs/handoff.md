@@ -323,12 +323,42 @@ Watcher and bush documentation followed in `4d6c188`; moss wall fragments
 landed in `b1f6c346966e7d80015ef99ab9f165fa8dfc0b1e` on `origin/main`.
 Moss documentation followed in `1d9d7fb`; dry vine fragments landed in
 `26166f50089fd365a303d4169440100863ad2d40` on `origin/main`.
+Vine documentation followed in `5adfb2b`; Brine Crab directional actions
+landed in `0edb9a5e0e3ed520cf8ef27993050c38ee794d47` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Brine Crab directional actions, committed in `0edb9a5`:** Directional warning,
+lunge and up/down walk/idle poses reuse side walk; warning is unshaded in
+darkness. Timing and combat logic are unchanged, and incomplete art falls back
+to the old 1.2 scaling. Five sources/ten sprites have provenance, log and cutter
+with common 192 px scale and foot 176. Existing side images are unchanged;
+earlier side frames touch the cell edge, new frames do not. Lead and agent passed
+`brine_crab`/`tool_matrix` after import; the agent reports lint and `art-test`
+(25) PASS with the existing ResourceWarning and byte-identical independent cutter
+output.
+
+Controlled actual `cave_8_8` stills at
+`/var/tmp/wick-crab-z1-review/{dark,light}-{up,down,left,right}-{strafe,warning,lunge,recover}.png`
+used a placed, protected player and moved crab, with artificial lighting. The
+fully lit warning figure may need aesthetic review; capture had ObjectDB/resource
+warnings. Human play and continuous motion are not verified. The clean full
+`make check` on exact `0edb9a5` FAILED (exit 2): `test_route_cave_4` failed one
+of 210 checks, “real grab collision carries naturally landed shard”; the other
+158 test files passed. Log `/var/tmp/wick-clean-0edb9a5-t6fwhpy5/check.log`.
+A separate `test_route_cave_4` rerun on the same clean `0edb9a5` passed (exit 0):
+`/var/tmp/wick-c4-rerun-b07k3s1p/route.log`. A clean full `make check` rerun
+on exact `0edb9a5` passed (exit 0):
+`/var/tmp/wick-clean-0edb9a5-repeat-1jby8_7a/check.log`; it is the latest clean
+full PASS. Independent audit `/var/tmp/wick-route-audit-wuizz0h4/` had targeted
+`route_cave_4` PASS 10/10 each on head and parent and 20/20 instrumented runs;
+no direct crab link was found. The original cause remains unknown. Overlapping
+shards selected by grab or lifetime/timing are unproven hypotheses; the full
+check runs tests in parallel.
 
 **Dry vine fragments, committed in `26166f5`:** `dry_vine_screen` uses five
 AtlasTexture twigs from documented `bush_cut_z1` for 0.25 seconds; the existing
@@ -339,8 +369,8 @@ capture `/var/tmp/wick-screen-study/cave_5_2-prototype-integrated-vine-dark-duri
 used a placed, protected player and forced drop. Twigs are subtle and partly
 obscured; capture had ObjectDB/resource warnings. Human play and continuous
 motion are not verified. A clean full `make check` on exact `26166f5` passed
-(exit 0); log `/var/tmp/wick-clean-26166f5-4jms95dw/check.log`. It is the latest
-full check.
+(exit 0); log `/var/tmp/wick-clean-26166f5-4jms95dw/check.log`. The later clean
+`0edb9a5` full rerun is recorded above.
 
 **Moss wall fragments, committed in `b1f6c34`:** `moss_wall` reuses documented
 `bush_cut_z1` with tint (0.65, 0.78, 0.56), at 180 px for 0.25 seconds with
@@ -1035,14 +1065,15 @@ and body mismatch. The candidate
 `/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-0ed57e65-d182-48d2-a79e-bfa5ac5ac171.png`
 was rejected, not integrated or verified as animation; up/down art remains absent.
 
-**Brine Crab action-art review, 2026-10-28:** State-confirmed actual World
+**Earlier Brine Crab action-art review, 2026-10-28:** State-confirmed actual World
 captures `/var/tmp/wick-m3-survey/warning.png` and `lunge.png` in that directory
 show scaled idle with the same low claw. Scratch proofs in
 `/var/tmp/wick-brine-proof-QAneZP/` show the existing lunge at 250–257 px, too
 wide for the binding 192 px cell; the warning is shifted 16 px and has alpha
 pixels at the edge. Body/walk also mismatch, and vertical source art is missing.
 There is no safe integration of these sources; new compact fitting art is needed.
-No runtime change was made.
+No runtime change was made in that review; later directional action art is
+recorded above.
 
 **Earlier Watcher Eye open-state review, 2026-10-28:** The open state looked closed in
 actual AI gameplay at `ow_5_6` (`/var/tmp/wick-regular-audit/eye-open-overworld.png`).
