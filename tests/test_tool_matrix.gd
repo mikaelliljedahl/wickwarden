@@ -100,6 +100,7 @@ func run() -> void:
 	await _thorn_moth_hook()
 	await _thorn_wick()
 	await _brute_pot()
+	await _brute_flare_rail()
 	await _squire_pit_moth()
 	await _coinwyrm_reel()
 	await _kiln_wick()
@@ -1701,6 +1702,60 @@ func _brute_pot() -> void:
 	await frames(8)
 	Input.action_release(&"attack")
 	check_eq(enemy.hp, 26, "Brute: actual front hook damages unguarded body")
+	await dispose(arena)
+
+
+func _brute_flare_rail() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/abacus_brute.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(910, 480))
+	player.set_hurtbox_enabled(self, false)
+	await frames(3)
+	var blocks: Array[StringName] = []
+	var hits: Array[StringName] = []
+	var flares := [0]
+	enemy.guard_blocked.connect(func(hit: Hitbox) -> void: blocks.append(hit.kind))
+	enemy.hurtbox.hurt.connect(func(hit: Hitbox) -> void: hits.append(hit.kind))
+	player.flare_fired.connect(func() -> void: flares[0] += 1)
+	player.facing = Vector2.LEFT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(blocks, [&"hook"], "Brute: actual front hook contacts guard")
+	check_eq(enemy.rail_hp, 4, "Brute: blocked hook leaves rail intact")
+	check_eq(enemy.hp, 28, "Brute: blocked hook leaves body intact")
+	await frames(25)
+	player.place_at(enemy.global_position + Vector2(300, 0))
+	player.facing = Vector2.LEFT
+	Input.action_press(&"attack")
+	await frames(60)
+	check(player.charge_ready, "Brute: actual flare is charged")
+	check_eq(blocks, [&"hook"], "Brute: distant charge swing misses guard")
+	check_eq(hits, [&"hook"], "Brute: distant charge swing misses hurtbox")
+	check_eq(enemy.rail_hp, 4, "Brute: rail intact before release")
+	# place_at cancels charging, so reposition without resetting player actions.
+	player.global_position = enemy.global_position + Vector2(110, 0)
+	player.facing = Vector2.LEFT
+	Input.action_release(&"attack")
+	await frames(10)
+	check_eq(flares[0], 1, "Brute: actual charged flare fired")
+	check(&"flare" in hits, "Brute: actual charged flare contacts hurtbox")
+	check_eq(enemy.rail_hp, 0, "Brute: flare breaks rail")
+	check_eq(enemy.hp, 28, "Brute: rail absorbs flare without body damage")
+	check_eq(enemy.move_speed, 130.0, "Brute: broken rail increases movement speed")
+	await frames(25)
+	player.place_at(enemy.global_position + Vector2(90, 0))
+	player.facing = Vector2.LEFT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(enemy.hp, 26, "Brute: actual front hook damages body after flare")
+	check_eq(blocks, [&"hook"], "Brute: second front hook is no longer blocked")
+	check(not GameState.has_item(&"reel_line"), "Brute: flare route needs no later reel")
+	print("MATRIX Brute: guard blocks=", blocks, " hits=", hits, " rail=", enemy.rail_hp)
 	await dispose(arena)
 
 
