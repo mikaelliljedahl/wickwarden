@@ -26,6 +26,7 @@ func run() -> void:
 	await _guard_spark()
 	await _stun()
 	await _death_and_drops()
+	await _death_effect_fallback_and_bosses()
 	await _drop_table()
 	await _confinement()
 	await _contact_damage()
@@ -156,13 +157,27 @@ func _death_and_drops() -> void:
 			died_count[0] += 1
 			death_calls[0] = (e as Counter).death_calls
 	)
+	var events := [0]
+	var on_died := func(_e: Node, _at: Vector2) -> void: events[0] += 1
+	Events.enemy_died.connect(on_died)
 	var hit := make_hitbox(arena, Vector2(400, 400), Layers.Team.PLAYER, 2)
 	await frames(3)
 	check_eq(died_count[0], 1, "died signal fires once at 0 hp")
+	check_eq(events[0], 1, "physical death emits one global enemy_died signal")
+	Events.enemy_died.disconnect(on_died)
 	check_eq(death_calls[0], 1, "_on_death hook is called once, before the died signal")
 	await frames(2)
 	check(not is_instance_valid(enemy), "dead enemy is freed")
-	check(arena.get_node_or_null("Puff") != null, "death leaves a puff")
+	var puff := arena.get_node_or_null("Puff") as SpriteVisual
+	check(puff != null, "physical death creates painted poof")
+	if puff != null:
+		check_eq(puff.kind, &"fx_enemy_poof_z1", "regular death uses poof")
+		check_eq(puff.sprite_frames.get_frame_count(&"idle"), 5, "poof has five frames")
+		check_near(
+			puff.sprite_frames.get_animation_speed(&"idle"), 12.0, 0.001, "poof plays at 12 fps"
+		)
+		check(not puff.sprite_frames.get_animation_loop(&"idle"), "poof does not loop")
+		check_near(puff.scale.x, 0.8, 0.001, "poof uses reviewed scale")
 	var drops := arena.get_children().filter(func(n: Node) -> bool: return n is PickupBase)
 	check_eq(drops.size(), 1, "one drop was rolled")
 	if drops.size() == 1:
@@ -175,6 +190,10 @@ func _death_and_drops() -> void:
 			"drop appears where the enemy died"
 		)
 	hit.deactivate()
+	await seconds(0.2)
+	check(is_instance_valid(puff), "poof remains visible before its 5/12 s duration")
+	await seconds(0.3)
+	check(not is_instance_valid(puff), "poof frees itself after its 5/12 s duration")
 	await dispose(arena)
 	# No drop when the roll misses.
 	arena = make_arena()
@@ -190,6 +209,54 @@ func _death_and_drops() -> void:
 		0,
 		"roll 0.95 drops nothing"
 	)
+	await dispose(arena)
+
+
+func _death_effect_fallback_and_bosses() -> void:
+	reset_state()
+	var arena := make_arena()
+	SpriteVisual.use_manifest("res://tests/fixtures/missing_poof_manifest.json")
+	var enemy := Counter.new()
+	enemy.max_hp = 1
+	enemy.drop_roll_override = 0.1
+	arena.add_child(enemy)
+	enemy.global_position = Vector2(400, 400)
+	await frames(2)
+	var events := [0]
+	var on_died := func(_e: Node, _at: Vector2) -> void: events[0] += 1
+	Events.enemy_died.connect(on_died)
+	var hit := make_hitbox(arena, Vector2(400, 400), Layers.Team.PLAYER, 1)
+	await frames(3)
+	var puff := arena.get_node_or_null("Puff")
+	check(puff is Placeholder, "missing poof uses placeholder")
+	check_eq(events[0], 1, "missing art preserves global death signal")
+	check_eq(
+		arena.get_children().filter(func(n: Node) -> bool: return n is PickupBase).size(),
+		1,
+		"missing art preserves drop"
+	)
+	Events.enemy_died.disconnect(on_died)
+	hit.deactivate()
+	await seconds(0.35)
+	check(not is_instance_valid(puff), "fallback frees itself")
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+	await dispose(arena)
+	arena = make_arena()
+	var boss := Counter.new()
+	arena.add_child(boss)
+	boss.add_to_group(&"bosses")
+	boss.kill()
+	var boss_fx := arena.get_node_or_null("Puff") as SpriteVisual
+	check(boss_fx != null and boss_fx.kind == &"explosion", "boss retains explosion")
+	await dispose(arena)
+	arena = make_arena()
+	var part_script := load("res://scripts/enemies/boss_part.gd") as Script
+	var part := part_script.new() as EnemyBase
+	arena.add_child(part)
+	part.global_position = Vector2(500, 500)
+	part.kill()
+	var part_fx := arena.get_node_or_null("Puff") as SpriteVisual
+	check(part_fx != null and part_fx.kind == &"explosion", "boss part retains explosion")
 	await dispose(arena)
 
 

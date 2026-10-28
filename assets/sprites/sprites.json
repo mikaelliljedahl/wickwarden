@@ -1,61 +1,21 @@
 {
-  "abacus_whirl_z1": {
+  "fx_enemy_poof_z1": {
     "cell": [
-      1774,
-      887
+      192,
+      192
     ],
     "anchor": [
-      887.0,
-      443.5
+      96.0,
+      96.0
     ],
-    "texture": true,
     "mirror_side": false,
+    "centered": true,
     "animations": {
       "idle": {
-        "file": "res://assets/sprites/abacus_whirl_z1.png",
-        "frames": 1,
-        "fps": 1,
-        "loop": true
-      }
-    }
-  },
-  "bush_cut_z1": {
-    "cell": [
-      1254,
-      1254
-    ],
-    "anchor": [
-      627.0,
-      627.0
-    ],
-    "texture": true,
-    "mirror_side": false,
-    "animations": {
-      "idle": {
-        "file": "res://assets/sprites/bush_cut_z1.png",
-        "frames": 1,
-        "fps": 1,
-        "loop": true
-      }
-    }
-  },
-  "reed_cut_z1": {
-    "cell": [
-      1402,
-      1122
-    ],
-    "anchor": [
-      701.0,
-      561.0
-    ],
-    "texture": true,
-    "mirror_side": false,
-    "animations": {
-      "idle": {
-        "file": "res://assets/sprites/reed_cut_z1.png",
-        "frames": 1,
-        "fps": 1,
-        "loop": true
+        "file": "res://assets/sprites/fx_enemy_poof_z1_idle.png",
+        "frames": 5,
+        "fps": 12.0,
+        "loop": false
       }
     }
   },
@@ -93,6 +53,46 @@
     "animations": {
       "idle": {
         "file": "res://assets/sprites/fx_mitts_effort_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "abacus_whirl_z1": {
+    "cell": [
+      1774,
+      887
+    ],
+    "anchor": [
+      887.0,
+      443.5
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/abacus_whirl_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "unlit_chain_link_z1": {
+    "cell": [
+      128,
+      192
+    ],
+    "anchor": [
+      64.0,
+      96.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_chain_link_z1.png",
         "frames": 1,
         "fps": 1,
         "loop": true
@@ -153,6 +153,66 @@
     "animations": {
       "idle": {
         "file": "res://assets/sprites/chime_notes_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "bush_cut_z1": {
+    "cell": [
+      1254,
+      1254
+    ],
+    "anchor": [
+      627.0,
+      627.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/bush_cut_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "reed_cut_z1": {
+    "cell": [
+      1402,
+      1122
+    ],
+    "anchor": [
+      701.0,
+      561.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/reed_cut_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "thorn_wreath_z1": {
+    "cell": [
+      1268,
+      1240
+    ],
+    "anchor": [
+      634.0,
+      620.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/thorn_wreath_z1.png",
         "frames": 1,
         "fps": 1,
         "loop": true
@@ -3143,6 +3203,30 @@
         "fps": 1.0,
         "loop": true
       },
+      "walk_up": {
+        "file": "res://assets/sprites/crab_walk_up.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/crab_idle_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_down": {
+        "file": "res://assets/sprites/crab_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/crab_idle_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
       "warning_side": {
         "file": "res://assets/sprites/crab_warning.png",
         "frames": 1,
@@ -3175,30 +3259,6 @@
       },
       "lunge_down": {
         "file": "res://assets/sprites/crab_lunge_down.png",
-        "frames": 1,
-        "fps": 1.0,
-        "loop": true
-      },
-      "walk_up": {
-        "file": "res://assets/sprites/crab_walk_up.png",
-        "frames": 4,
-        "fps": 8.0,
-        "loop": true
-      },
-      "idle_up": {
-        "file": "res://assets/sprites/crab_idle_up.png",
-        "frames": 1,
-        "fps": 1.0,
-        "loop": true
-      },
-      "walk_down": {
-        "file": "res://assets/sprites/crab_walk_down.png",
-        "frames": 4,
-        "fps": 8.0,
-        "loop": true
-      },
-      "idle_down": {
-        "file": "res://assets/sprites/crab_idle_down.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true
@@ -5810,46 +5870,6 @@
         "file": "res://assets/sprites/icon_reel_line.png",
         "frames": 1,
         "fps": 1.0,
-        "loop": true
-      }
-    }
-  },
-  "thorn_wreath_z1": {
-    "cell": [
-      1268,
-      1240
-    ],
-    "anchor": [
-      634.0,
-      620.0
-    ],
-    "texture": true,
-    "mirror_side": false,
-    "animations": {
-      "idle": {
-        "file": "res://assets/sprites/thorn_wreath_z1.png",
-        "frames": 1,
-        "fps": 1,
-        "loop": true
-      }
-    }
-  },
-  "unlit_chain_link_z1": {
-    "cell": [
-      128,
-      192
-    ],
-    "anchor": [
-      64.0,
-      96.0
-    ],
-    "texture": true,
-    "mirror_side": false,
-    "animations": {
-      "idle": {
-        "file": "res://assets/sprites/unlit_chain_link_z1.png",
-        "frames": 1,
-        "fps": 1,
         "loop": true
       }
     }

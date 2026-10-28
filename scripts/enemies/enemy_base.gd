@@ -447,7 +447,17 @@ func _die() -> void:
 	_on_death()
 	var parent := get_parent()
 	if parent != null:
-		if SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.3, 3) == null:
+		var effect := &"explosion"
+		var effect_scale := 0.3
+		var first_frame := 3
+		if _uses_regular_death_effect():
+			effect = &"fx_enemy_poof_z1"
+			effect_scale = 0.8
+			first_frame = 0
+		if (
+			SpriteVisual.spawn_effect(parent, effect, global_position, effect_scale, first_frame)
+			== null
+		):
 			Placeholder.puff(parent, global_position, Placeholder.color_of(visual_kind))
 		if drops_enabled:
 			var kind := DropTable.roll(drop_roll_override)
@@ -461,3 +471,15 @@ func _die() -> void:
 func _set_flash(on: bool) -> void:
 	if visual != null:
 		visual.modulate = Color(4.0, 4.0, 4.0, 1.0) if on else Color.WHITE
+
+
+## Bosses and their parts retain their existing death presentation.
+func _uses_regular_death_effect() -> bool:
+	if is_in_group(&"bosses"):
+		return false
+	var script := get_script() as Script
+	while script != null:
+		if script.resource_path == "res://scripts/enemies/boss_part.gd":
+			return false
+		script = script.get_base_script()
+	return true

@@ -1721,3 +1721,28 @@ walks, but may resemble objects on the ground and can overlap the player's legs.
 `60c0a5fb17fd3fd8d20686076b8ed9ac9da34d7dd177f27136ceb3eac7871267`).
 The native-alpha texture cutter preserves its source dimensions; the in-game warning
 uses the same rectangular-to-square drawing as the scratch study.
+
+## Z1 regular enemy death effect, 2026-10-28
+
+`tools/source_art/fx_enemy_poof_z1.png` is an unchanged 1536×1024 RGBA image from
+the built-in image_gen tool with `transparent_background=true`, session
+`01a18327-9000-7493-9383-309b16c0af5f`, output
+`exec-0067211f-6213-4d50-b939-6571059827e2.png`, original
+`/home/mikael/.codex/generated_images/01a18327-9000-7493-9383-309b16c0af5f/exec-0067211f-6213-4d50-b939-6571059827e2.png`.
+SHA-256 `92c0cdd65fc816aa096e84fc891c5fbc9659909579608cfd3494230e443e8a1b`.
+Reference: `tools/source_art/fx_explosion.png`, SHA-256
+`553c92be97816e17079d9fcfb937f6bdec67010ab6fdccefd49d127e6f8dd7f9`, style and layout only.
+The native-alpha cutter bypasses keying and despill. It detects five poses, uses a 20 px
+crop margin and one shared fit factor (160×160), producing five centred 192×192 cells
+at 12 fps, nonlooping. Faint source glow crosses crop boundaries; the cut is not a
+lossless preservation of the entire source canvas.
+
+Exact generation prompt:
+
+```text
+Original game art for "Wickwarden", a painterly top-down adventure. Hand-painted storybook illustration style with visible brush strokes and soft edges, high detail, warm lamp light against deep dusk colours, low saturation except for light sources. NOT pixel art, no pixel grid, no dithering, no thick black outlines. Three-quarter top-down view, camera about 50 degrees above the ground, key light from the upper left. No text, no letters, no numbers, no labels, no frame borders, no grid lines, no watermark.
+
+Create a game sprite effect sheet with a genuinely transparent background and transparent empty gaps. Exactly five separate complete effect frames in one horizontal row, left to right in time, no extra frames. Wide transparent gaps surround each frame, no touching or overlap, nothing cropped at the image edge. They share one centre line and consistent scale, not a ground line. All five are successive phases of the same small creature's quiet wax-dissolve death effect: pale cream wax particles and soft violet/lavender smoke lit with a violet glow.
+
+Frame 1: compact solid pale cream wax puff with a visible violet inner glow. Frame 2: wax separates into a small soft puff and a few wax crumbs, violet smoke begins emerging. Frame 3: puff visibly breaks apart and spreads, violet wisps curl upward, fewer crumbs. Frame 4: substantially thinner violet smoke and only tiny scattered crumbs. Frame 5: one delicate faint violet wisp, almost vanished, no debris. Progress clearly and consistently from solid to nearly gone, while preserving the same centre and scale. Painterly soft translucent smoke and soft edges. Palette only cream, soft lavender and dusk violet, no green, no blue-grey smoke, no orange fire, no rocks, no radial explosion, no creature, no text. Reference image is for painterly effects style and strip layout only, not its colors, fire or explosion design. Landscape 1536 by 1024.
+```
