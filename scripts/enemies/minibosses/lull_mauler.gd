@@ -129,6 +129,11 @@ func _boss_ready() -> void:
 		add_child(warning)
 
 
+func _reset_state() -> void:
+	super()
+	_enter_phase(1)
+
+
 func _enter_phase(_number: int) -> void:
 	state = State.WALK
 	_timer = APPROACH_TIME

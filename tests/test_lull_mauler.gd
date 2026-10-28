@@ -10,6 +10,7 @@ func run() -> void:
 	await _real_deflect(false)
 	await _real_deflect(true)
 	await _real_moth_and_hooks()
+	await _attack_interruptions()
 	await _lifecycle()
 
 
@@ -185,6 +186,48 @@ func _real_moth_and_hooks() -> void:
 	check(not enemy.is_stunned() and not enemy.is_knocked_back(), "reset clears real tool timers")
 	check_eq(enemy.hp, 24, "reset fullHP")
 	await dispose(arena)
+
+
+func _attack_interruptions() -> void:
+	for smash in [true, false]:
+		for interruption in [&"reset", &"stun", &"death"]:
+			reset_state()
+			var arena := make_arena()
+			var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+			make_player(arena, Vector2(1300, 480))
+			var warning: int = enemy.State.SMASH_WARNING if smash else enemy.State.SWEEP_WARNING
+			await _wait_state(enemy, warning, 500)
+			await _wait_state(enemy, enemy.State.RECOVER)
+			var attack: Hitbox = enemy._attack
+			check(attack.active, "natural attack active before %s" % interruption)
+			check_eq(attack.kind, &"slam" if smash else &"sweep", "expected attack kind")
+			check_eq(_chunks(arena).size(), 1, "natural smash leaves one hazard")
+			match interruption:
+				&"reset":
+					enemy.reset_fight()
+					check_eq(enemy.state, enemy.State.WALK, "reset immediately restores walk")
+					check_eq(enemy._timer, enemy.APPROACH_TIME, "reset restores approach timer")
+					check(enemy._smash_next, "reset restores first smash")
+					check_eq(enemy._attack_left, 0.0, "reset clears attack timer")
+				&"stun":
+					enemy.stun(1.5)
+					check(enemy.is_stunned(), "stun interrupts active attack")
+				&"death":
+					enemy.apply_damage(99, enemy.global_position, 0.0)
+					check(enemy.is_dying(), "lethal hit interrupts active attack")
+			check(not attack.active, "%s immediately disables attack" % interruption)
+			await frames(2)
+			check(not attack.active, "attack stays disabled after %s" % interruption)
+			if interruption != &"stun":
+				check_eq(_chunks(arena).size(), 0, "%s removes slag" % interruption)
+			if interruption == &"reset":
+				await _wait_state(enemy, enemy.State.SMASH_WARNING)
+				await _wait_state(enemy, enemy.State.RECOVER)
+				check(enemy._attack.active, "next fight produces an active attack")
+				check_eq(enemy._attack.kind, &"slam", "next fight starts with slam")
+				check_eq(enemy._attack.damage, 4, "next fight retains slam damage")
+				check_eq(_chunks(arena).size(), 1, "next fight creates fresh slag")
+			await dispose(arena)
 
 
 func _lifecycle() -> void:
