@@ -17,14 +17,17 @@ var _chosen: bool = false
 var _reveal_left: float = 0.0
 var _zones: Array[Area2D] = []
 var _presentation: Node2D
+var _presentation_built := false
 
 
 func _ready() -> void:
 	_presentation = Node2D.new()
 	_presentation.name = "Visual"
 	add_child(_presentation)
-	_build_choice()
+	_build_zones()
 	GameState.flag_changed.connect(_on_flag_changed)
+	if GameState.has_flag(BOSS_FLAG):
+		_build_presentation()
 	_refresh()
 
 
@@ -85,6 +88,7 @@ func _on_flag_changed(flag: StringName, value: bool) -> void:
 	# B10 publishes defeat when its specified two-second death fade begins.
 	if flag == BOSS_FLAG and value:
 		_reveal_left = DEATH_FADE_TIME
+		_build_presentation()
 	_refresh()
 
 
@@ -92,7 +96,7 @@ func _refresh() -> void:
 	_presentation.visible = is_available()
 
 
-func _build_choice() -> void:
+func _build_zones() -> void:
 	for index in CHOICES.size():
 		var zone := Area2D.new()
 		zone.name = String(CHOICES[index])
@@ -106,6 +110,13 @@ func _build_choice() -> void:
 		zone.add_child(shape)
 		add_child(zone)
 		_zones.append(zone)
+
+
+func _build_presentation() -> void:
+	if _presentation_built:
+		return
+	_presentation_built = true
+	for index in CHOICES.size():
 		var kind := StringName("arena_lantern_%s" % CHOICES[index])
 		# Painted choice props include their stone stand. Only the fallback needs another one.
 		if not SpriteVisual.has_art(kind):

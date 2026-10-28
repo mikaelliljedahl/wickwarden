@@ -10,6 +10,7 @@ const ACTIONS_SKIP: Array[StringName] = [&"confirm", &"attack", &"ui_accept", &"
 
 func run() -> void:
 	await _choice_stands()
+	await _lazy_reload()
 	await _gating_and_choice()
 	await _both_codas()
 	await _skip_and_back()
@@ -20,34 +21,71 @@ func run() -> void:
 
 func _choice_stands() -> void:
 	for missing in [false, true]:
-		reset_state()
-		GameState.set_flag(&"boss_cave_10_14_defeated")
-		# The public test-manifest API simulates unavailable art without altering runtime files.
-		if missing:
-			SpriteVisual.use_manifest("res://tests/fixtures/no_ending_art.json")
-		var trigger = _instantiate(TRIGGER)
-		trigger.dry_run = true
-		trigger.position = Vector2(960, 480)
-		add_child(trigger)
-		for choice in [&"rekindle", &"wickwarden"]:
-			var kind := StringName("arena_lantern_%s" % choice)
-			var painted := SpriteVisual.has_art(kind)
-			check_eq(
-				painted, not missing, "%s painted availability in missing=%s" % [choice, missing]
-			)
-			var stand: Node = trigger.get_node_or_null("Visual/FallbackPedestal_%s" % choice)
-			check_eq(
-				stand != null, missing, "%s has a separate stand only without painted art" % choice
-			)
-			var visual: Node = trigger.get_node("Visual/Lantern_%s/Visual" % choice)
-			check_eq(
-				visual is SpriteVisual,
-				not missing,
-				"%s uses the actual painted or fallback visual" % choice
-			)
-		await _capture("choice-fallback" if missing else "choice-painted")
-		await dispose(trigger)
-		SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+		for flag_first in [false, true]:
+			reset_state()
+			if flag_first:
+				GameState.set_flag(&"boss_cave_10_14_defeated")
+			# The public test-manifest API simulates missing art without changing runtime files.
+			if missing:
+				SpriteVisual.use_manifest("res://tests/fixtures/no_ending_art.json")
+			var trigger = _instantiate(TRIGGER)
+			trigger.dry_run = true
+			trigger.position = Vector2(960, 480)
+			add_child(trigger)
+			check_eq(trigger._zones.size(), 2, "both choice zones exist immediately")
+			if not flag_first:
+				check_eq(trigger.get_node("Visual").get_child_count(), 0, "presentation stays lazy")
+				check(not trigger.get_node("Visual").visible, "presentation starts hidden")
+				GameState.set_flag(&"boss_cave_10_14_defeated")
+				check(not trigger.is_available(), "new boss flag retains death fade")
+				check(not trigger.get_node("Visual").visible, "presentation remains hidden during fade")
+				var count: int = trigger.get_node("Visual").get_child_count()
+				GameState.set_flag(&"boss_cave_10_14_defeated", false)
+				GameState.set_flag(&"boss_cave_10_14_defeated")
+				check_eq(trigger.get_node("Visual").get_child_count(), count, "presentation builds once")
+			else:
+				check(trigger.is_available(), "existing boss flag presents choice immediately")
+			for choice in [&"rekindle", &"wickwarden"]:
+				var kind := StringName("arena_lantern_%s" % choice)
+				var painted := SpriteVisual.has_art(kind)
+				check_eq(
+					painted, not missing, "%s painted availability in missing=%s" % [choice, missing]
+				)
+				var stand: Node = trigger.get_node_or_null("Visual/FallbackPedestal_%s" % choice)
+				check_eq(
+					stand != null, missing, "%s has a separate stand only without painted art" % choice
+				)
+				var visual: Node = trigger.get_node("Visual/Lantern_%s/Visual" % choice)
+				check_eq(
+					visual is SpriteVisual,
+					not missing,
+					"%s uses the actual painted or fallback visual" % choice
+				)
+			await _capture("choice-fallback" if missing else "choice-painted")
+			await dispose(trigger)
+			SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+
+
+func _lazy_reload() -> void:
+	reset_state()
+	SaveGame.enabled = true
+	SaveGame.launch_mode = SaveGame.MODE_NEW
+	SaveGame.erase()
+	GameState.set_flag(&"boss_cave_10_14_defeated")
+	check(SaveGame.save(), "boss-defeated slot saves")
+	GameState.reset()
+	check(SaveGame.load_into_state(), "boss-defeated slot reloads")
+	var trigger = _instantiate(TRIGGER)
+	trigger.dry_run = true
+	add_child(trigger)
+	check(trigger.is_available(), "reloaded boss flag shows choice without another fade")
+	check(trigger.get_node("Visual").visible, "reloaded presentation is visible immediately")
+	check(trigger.get_node_or_null("Visual/Lantern_rekindle/Visual") != null, "reloaded left lamp exists")
+	check(trigger.get_node_or_null("Visual/Lantern_wickwarden/Visual") != null, "reloaded right lamp exists")
+	await dispose(trigger)
+	SaveGame.erase()
+	SaveGame.enabled = false
+	SaveGame.launch_mode = SaveGame.MODE_DEV
 
 
 func _gating_and_choice() -> void:
