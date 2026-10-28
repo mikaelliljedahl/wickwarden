@@ -193,12 +193,23 @@ Warning documentation followed in `1221684`; integrated Z1 test isolation is
 at `70d229d257737f0d8f302bdb54ee242448028006` on `origin/main`.
 Z1 verification documentation followed in
 `a82f678c6701fcd2aaad67b148f62cb76c273970` on `origin/main`.
+Watcher Eye animation investigation was documented in
+`534a812f20a5ba7e3598aee4040d3191be67342d` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Brine Crab action-art review, 2026-10-28:** State-confirmed actual World
+captures `/var/tmp/wick-m3-survey/warning.png` and `lunge.png` in that directory
+show scaled idle with the same low claw. Scratch proofs in
+`/var/tmp/wick-brine-proof-QAneZP/` show the existing lunge at 250–257 px, too
+wide for the binding 192 px cell; the warning is shifted 16 px and has alpha
+pixels at the edge. Body/walk also mismatch, and vertical source art is missing.
+There is no safe integration of these sources; new compact fitting art is needed.
+No runtime change was made.
 
 **Watcher Eye open-state review, 2026-10-28:** The open state looks closed in
 actual AI gameplay at `ow_5_6` (`/var/tmp/wick-regular-audit/eye-open-overworld.png`).

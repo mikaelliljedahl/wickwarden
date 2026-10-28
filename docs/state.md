@@ -1,5 +1,14 @@
 # Current status
 
+**Brine Crab action-art review, 2026-10-28:** State-confirmed actual World
+captures `/var/tmp/wick-m3-survey/warning.png` and `lunge.png` in that directory
+show scaled idle with the same low claw. Scratch proofs in
+`/var/tmp/wick-brine-proof-QAneZP/` show the existing lunge at 250–257 px, too
+wide for the binding 192 px cell; the warning is shifted 16 px and has alpha
+pixels at the edge. Body/walk also mismatch, and vertical source art is missing.
+There is no safe integration of these sources; new compact fitting art is needed.
+No runtime change was made.
+
 **Watcher Eye open-state review, 2026-10-28:** The open state looks closed in
 actual AI gameplay at `ow_5_6` (`/var/tmp/wick-regular-audit/eye-open-overworld.png`).
 Down/side cutting proofs in `/var/tmp/wick-watcher-proof-HkQk0n/` are promising,
@@ -2159,7 +2168,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `a82f678c6701fcd2aaad67b148f62cb76c273970` on `origin/main`, documenting Z1 test isolation and its clean full verification above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `534a812f20a5ba7e3598aee4040d3191be67342d` on `origin/main`, documenting the Watcher Eye investigation above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
