@@ -12,6 +12,7 @@ func run() -> void:
 	for tool in TOOLS:
 		for direction in DIRECTIONS:
 			await _use_cue(tool, direction)
+	await _missing_cinder_art()
 
 
 func _use_cue(tool: StringName, direction: Vector2) -> void:
@@ -36,7 +37,23 @@ func _use_cue(tool: StringName, direction: Vector2) -> void:
 	)
 	check_eq(visual.get(&"_facing"), direction, "actual use passes the facing")
 	check(visual.visible, "cue is initially visible")
-	check_eq(visual.get_child_count(), 0, "no body, ground shadow or collision under cue")
+	if tool == &"cinder_wick":
+		check_eq(visual.get_child_count(), 1, "cinder cue has only its painted child")
+		var painted := visual.get_node_or_null("CinderCast") as Sprite2D
+		check(painted != null, "the only cinder child is the painted sprite")
+		if painted != null:
+			check_eq(painted.get_class(), "Sprite2D", "painted child is non-physical")
+			check_eq(painted.get_child_count(), 0, "painted child has no body, shadow or collision")
+			check(painted.texture != null, "painted child has the approved texture")
+			if painted.texture != null:
+				check_eq(
+					painted.texture.resource_path,
+					"res://assets/sprites/fx_cinder_cast_z1.png",
+					"painted child uses the cinder cast asset"
+				)
+			check_near(painted.rotation, direction.angle(), 0.001, "painted cue faces the cast")
+	else:
+		check_eq(visual.get_child_count(), 0, "other cues have no body, shadow or collision")
 	var definition := Placeholder.definition_of(tool)
 	check_eq(visual.get(&"_radius"), definition.radius, "cue preserves original reach")
 	Input.action_release(&"use_item")
@@ -48,3 +65,21 @@ func _use_cue(tool: StringName, direction: Vector2) -> void:
 	else:
 		check(is_instance_valid(item), "wave/leap cooldown still owns its cue")
 	await dispose(arena)
+
+
+func _missing_cinder_art() -> void:
+	var script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	if script == null:
+		check(false, "cue helper loads for missing-art fallback")
+		return
+	var visual := script.new() as Node2D
+	visual.set(&"_kind", &"cinder_wick")
+	visual.set(&"art_path", "res://missing-cinder-cast.png")
+	visual.call(&"set_facing", Vector2.LEFT)
+	add_child(visual)
+	check_eq(visual.get_child_count(), 0, "missing art has no body, shadow or collision")
+	check(visual.get(&"_painted") == null, "missing art retains the geometric drawing path")
+	check(visual.visible, "missing-art cue remains visible")
+	check_eq(visual.get(&"_facing"), Vector2.LEFT, "fallback retains the cast facing")
+	visual.queue_free()
+	await frames(1)
