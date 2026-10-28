@@ -2754,6 +2754,90 @@
     "radius": 30.0,
     "mirror_side": true,
     "animations": {
+      "walk_up": {
+        "file": "res://assets/sprites/hollow_captain_walk_up.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/hollow_captain_idle_up.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": true
+      },
+      "guard_up_side": {
+        "file": "res://assets/sprites/hollow_captain_guard_up_side.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "bash_telegraph_side": {
+        "file": "res://assets/sprites/hollow_captain_bash_telegraph_side.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "bash_side": {
+        "file": "res://assets/sprites/hollow_captain_bash_side.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "stunned_side": {
+        "file": "res://assets/sprites/hollow_captain_stunned_side.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "guard_up_down": {
+        "file": "res://assets/sprites/hollow_captain_guard_up_down.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "bash_telegraph_down": {
+        "file": "res://assets/sprites/hollow_captain_bash_telegraph_down.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "bash_down": {
+        "file": "res://assets/sprites/hollow_captain_bash_down.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "stunned_down": {
+        "file": "res://assets/sprites/hollow_captain_stunned_down.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "guard_up_up": {
+        "file": "res://assets/sprites/hollow_captain_guard_up_up.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "bash_telegraph_up": {
+        "file": "res://assets/sprites/hollow_captain_bash_telegraph_up.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "bash_up": {
+        "file": "res://assets/sprites/hollow_captain_bash_up.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
+      "stunned_up": {
+        "file": "res://assets/sprites/hollow_captain_stunned_up.png",
+        "frames": 1,
+        "fps": 8.0,
+        "loop": false
+      },
       "walk_down": {
         "file": "res://assets/sprites/hollow_captain_walk_down.png",
         "frames": 4,

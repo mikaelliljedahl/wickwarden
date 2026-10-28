@@ -4,6 +4,7 @@ const SCENE := "res://scenes/enemies/minibosses/hollow_captain.tscn"
 
 
 func run() -> void:
+	await _visual_audit()
 	await _warning_art()
 	await _reset_during_death()
 	await _reset_natural_bash()
@@ -279,3 +280,35 @@ func _real_hook_guard() -> void:
 		check_eq(enemy.hp, 12 if front else 10, "real hook front blocked / side damages")
 		check_eq(blocks[0], 1 if front else 0, "real swing collision applies guard direction")
 		await dispose(arena)
+
+
+func _visual_audit() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+	await frames(2)
+	for direction in [Vector2.RIGHT, Vector2.LEFT, Vector2.DOWN, Vector2.UP]:
+		for state in [enemy.State.TELEGRAPH, enemy.State.BASH, enemy.State.RECOVER]:
+			enemy.set_facing_dir(direction)
+			enemy.state = state
+			enemy.velocity = Vector2.ZERO
+			enemy._process(0.0)
+			var anim: String = enemy.visual.animation
+			var suffix := "side" if direction.x != 0 else ("up" if direction == Vector2.UP else "down")
+			var base: String = ["bash_telegraph", "bash", "stunned"][state - 1]
+			check_eq(anim, base + "_" + suffix, "direction and phase select expected visual")
+			if direction.x != 0:
+				check_eq(enemy.visual.flip_h, direction == Vector2.LEFT, "side flip follows direction")
+	var frameset: SpriteFrames = enemy.visual.sprite_frames.duplicate(true)
+	enemy.visual.sprite_frames = frameset
+	frameset.remove_animation(&"bash_side")
+	enemy.set_facing_dir(Vector2.RIGHT)
+	enemy.state = enemy.State.BASH
+	enemy.velocity = Vector2.ZERO
+	enemy._process(0.0)
+	check_eq(enemy.visual.animation, &"idle_side", "missing action selects motion fallback")
+	frameset.remove_animation(&"idle_side")
+	frameset.remove_animation(&"walk_side")
+	enemy._process(0.0)
+	check(enemy.visual is Placeholder, "missing same-facing art uses placeholder")
+	await dispose(arena)

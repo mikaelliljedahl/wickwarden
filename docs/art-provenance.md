@@ -1,5 +1,47 @@
 # Wickwarden — art provenance
 
+## Hollow Captain directional poses (2026-10-28)
+
+Three existing built-in ImageGen outputs from session `01a1833d-ca45-74c1-9b26-660229f7bf0b`; model version not exposed. Source files are unchanged. Prompts are recorded verbatim below.
+
+### side
+
+`tools/source_art/captain_new_side.png`; output `exec-2b81f7d5-334d-4ac3-b367-8e464a8666c5.png`; SHA-256 `30fedaefbbc0852070367acdfe5e26d86b4766696aa5ae9a44c7df04ec171b64`. Reference: `tools/source_art/hollow_captain_walk_side_v2.png`. Prompt:
+
+> Original game art for "Wickwarden", a painterly top-down adventure. Hand-painted storybook illustration style with visible brush strokes and soft edges, high detail, warm lamp light against deep dusk colours, low saturation except for light sources. NOT pixel art, no pixel grid, no dithering, no thick black outlines. Three-quarter top-down view, camera about 50 degrees above the ground, key light from the upper left. No text, no letters, no numbers, no labels, no frame borders, no grid lines, no watermark.
+
+> A sprite sheet on a perfectly flat, uniform pure magenta #FF00FF background that fills the whole image, with no gradient, no texture, no vignette, no floor and no cast shadow on the background. Each pose is a separate, complete figure with a wide empty gap of background on all sides; poses never touch or overlap and nothing is cut off at the image edge. Poses in one row stand on one shared invisible ground line and have the same scale. The figure is identical in every pose: same design, same colours, same proportions.
+
+> Use case: stylized-concept. Asset: game animation source sheet. Image 1 is the existing documented Hollow Captain walk sheet, reference for the exact character, materials, proportions, scale, camera and painterly style. Draw the same helmeted, tattered-cloak armoured character in four distinct full-body poses, all facing RIGHT in the same three-quarter top-down view. Replace the lantern cage with a solid round brass shield held on the forward arm, no cage or lantern. Left to right: guarded walking stance with shield forward; telegraph with shield raised ahead; committed forward shield bash lunging RIGHT; recovery with shield lowered and body exposed. All four figures have the same consistent body size and proportions as the reference, same head-to-foot height, same ground baseline, entire figure and shield visible with ample gaps between poses. One single horizontal row of four separate poses, no overlap, no borders, no labels, no cast shadow. Flat pure magenta background. Soft painterly edges, detailed brass and cloth, warm upper left light, cool shadows. No sprites facing the viewer or left, no text, no effects, no scenery.
+
+> Image size: 1536x1024.
+
+### down
+
+`tools/source_art/captain_new_down.png`; output `exec-99f51dca-b74f-454f-a299-955176c2ce34.png`; SHA-256 `fe4035793c72d185b8a579622fa6ea12920d148150444182fa1ddeebf9367b51`. Reference: `tools/source_art/hollow_captain_walk_down_v3.png`. Prompt:
+
+> Original game art for "Wickwarden", a painterly top-down adventure. Hand-painted storybook illustration style with visible brush strokes and soft edges, high detail, warm lamp light against deep dusk colours, low saturation except for light sources. NOT pixel art, no pixel grid, no dithering, no thick black outlines. Three-quarter top-down view, camera about 50 degrees above the ground, key light from the upper left. No text, no letters, no numbers, no labels, no frame borders, no grid lines, no watermark.
+
+> A sprite sheet on a perfectly flat, uniform pure magenta #FF00FF background that fills the whole image, with no gradient, no texture, no vignette, no floor and no cast shadow on the background. Each pose is a separate, complete figure with a wide empty gap of background on all sides; poses never touch or overlap and nothing is cut off at the image edge. Poses in one row stand on one shared invisible ground line and have the same scale. The figure is identical in every pose: same design, same colours, same proportions.
+
+> Use case: stylized-concept. Asset: game animation source sheet. Image 1 is the existing documented Hollow Captain walk sheet, reference for the exact character, materials, proportions, scale, camera and painterly style. Draw the same helmeted, tattered-cloak armoured character in four distinct full-body poses, all facing DOWN toward the viewer in the same three-quarter top-down view. Replace the lantern cage with a solid round brass shield held on the forward arm, no cage or lantern. Left to right: guarded walking stance with shield forward; telegraph with shield raised ahead; committed forward shield bash lunging toward the viewer; recovery with shield lowered and body exposed. All four figures have the same consistent body size and proportions as the reference, same head-to-foot height, same ground baseline, entire figure and shield visible with ample gaps between poses. One single horizontal row of four separate poses, no overlap, no borders, no labels, no cast shadow. Flat pure magenta background. Soft painterly edges, detailed brass and cloth, warm upper left light, cool shadows. No sprites facing sideways or away, no text, no effects, no scenery.
+
+> Image size: 1536x1024.
+
+### up
+
+`tools/source_art/captain_new_up.png`; output `exec-4c5e57aa-3378-492f-a6c1-e9579bce5a02.png`; SHA-256 `0ca74f715bd0ec546ed8938408d54c84598cc47693b54ad68e7be3520953dc87`. Reference: `tools/source_art/hollow_captain_walk_up_v2.png`. Prompt:
+
+> Original game art for "Wickwarden", a painterly top-down adventure. Hand-painted storybook illustration style with visible brush strokes and soft edges, high detail, warm lamp light against deep dusk colours, low saturation except for light sources. NOT pixel art, no pixel grid, no dithering, no thick black outlines. Three-quarter top-down view, camera about 50 degrees above the ground, key light from the upper left. No text, no letters, no numbers, no labels, no frame borders, no grid lines, no watermark.
+
+> A sprite sheet on a perfectly flat, uniform pure magenta #FF00FF background that fills the whole image, with no gradient, no texture, no vignette, no floor and no cast shadow on the background. Each pose is a separate, complete figure with a wide empty gap of background on all sides; poses never touch or overlap and nothing is cut off at the image edge. Poses in one row stand on one shared invisible ground line and have the same scale. The figure is identical in every pose: same design, same colours, same proportions.
+
+> Use case: stylized-concept. Asset: game animation source sheet. Image 1 is the existing documented Hollow Captain up walk sheet, reference for exact character, materials, proportions, scale, camera and painterly style. Draw the same helmeted, tattered-cloak armoured character in four distinct full-body poses, all facing UP away from the viewer, back of helmet and cloak visible, in the same three-quarter top-down view. Add a solid round brass shield on the forward arm, no lantern or cage. Left to right: guarded stance; telegraph shield raised ahead; committed shield bash toward the top of the image; recovery shield lowered and body exposed. All four figures have the same consistent body size and proportions as the reference, same head-to-foot height, same ground baseline, entire figure and shield visible with ample gaps between poses. One single horizontal row of four separate poses, no overlap, no borders, no labels, no cast shadow. No sprites facing the viewer or sideways, no text, no effects, no scenery.
+
+> Image size: 1536x1024.
+
+The documented up walk source is `hollow_captain_walk_up_v2.png` (batch 54). All Captain strips use the same `encounter_hollow_captain` fit scale, including the up walk and action rows in its reference set; cell 256, foot 236. The shared rescale reduces existing idle figure height by about 7%. The cutter moves the side bash 16 px to fit. The up walk does not show the shield; the up bash raises it overhead. In dark rooms bodies or shields may overlap the player. Controlled captures do not verify human play or continuous motion.
+
 ## Abacus Brute whirl (2026-10-28)
 
 The built-in ImageGen tool produced the native-alpha 1774×887 image

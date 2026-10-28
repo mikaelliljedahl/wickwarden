@@ -453,6 +453,14 @@
     "sheet": "hollow_captain_walk_side_v2",
     "row": 0,
     "poses": 0
+   },
+   {
+    "sheet": "hollow_captain_walk_up_v2",
+    "row": 0
+   },
+   {
+    "sheet": "captain_new_up",
+    "row": 0
    }
   ]
  },
@@ -3091,6 +3099,175 @@
       "scale": "c45_fragment_c5",
       "fps": 8,
       "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "hollow_captain_walk_up_v2": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "hollow_captain",
+      "anim": "walk_up",
+      "file": "hollow_captain_walk_up",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "idle_up",
+      "file": "hollow_captain_idle_up",
+      "poses": 0,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "captain_new_side": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "hollow_captain",
+      "anim": "guard_up_side",
+      "file": "hollow_captain_guard_up_side",
+      "poses": 0,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "bash_telegraph_side",
+      "file": "hollow_captain_bash_telegraph_side",
+      "poses": 1,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "bash_side",
+      "file": "hollow_captain_bash_side",
+      "poses": 2,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "stunned_side",
+      "file": "hollow_captain_stunned_side",
+      "poses": 3,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   }
+  ]
+ },
+ "captain_new_down": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "hollow_captain",
+      "anim": "guard_up_down",
+      "file": "hollow_captain_guard_up_down",
+      "poses": 0,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "bash_telegraph_down",
+      "file": "hollow_captain_bash_telegraph_down",
+      "poses": 1,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "bash_down",
+      "file": "hollow_captain_bash_down",
+      "poses": 2,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "stunned_down",
+      "file": "hollow_captain_stunned_down",
+      "poses": 3,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     }
+    ]
+   }
+  ]
+ },
+ "captain_new_up": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "hollow_captain",
+      "anim": "guard_up_up",
+      "file": "hollow_captain_guard_up_up",
+      "poses": 0,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "bash_telegraph_up",
+      "file": "hollow_captain_bash_telegraph_up",
+      "poses": 1,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "bash_up",
+      "file": "hollow_captain_bash_up",
+      "poses": 2,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
+     },
+     {
+      "kind": "hollow_captain",
+      "anim": "stunned_up",
+      "file": "hollow_captain_stunned_up",
+      "poses": 3,
+      "scale": "encounter_hollow_captain",
+      "fps": 8,
+      "loop": false
      }
     ]
    }

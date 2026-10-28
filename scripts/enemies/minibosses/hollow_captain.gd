@@ -198,3 +198,36 @@ func _on_death() -> void:
 	super()
 	for kind: StringName in [&"ember", &"ember", &"brass_coin", &"brass_coin"]:
 		PickupBase.spawn(kind, get_parent(), global_position, true)
+
+
+func _process(_delta: float) -> void:
+	if not visual is SpriteVisual:
+		return
+	visual.auto_motion = false
+	visual.set_facing(facing_dir)
+	var anim: StringName = &"walk" if velocity.length() > 5.0 else &"idle"
+	if state == State.TELEGRAPH:
+		anim = &"bash_telegraph"
+	elif state == State.BASH:
+		anim = &"bash"
+	elif state == State.RECOVER:
+		anim = &"stunned"
+	elif state == State.PATROL and velocity.length() <= 5.0:
+		anim = &"guard_up"
+	var suffix := "down"
+	if absf(facing_dir.x) > absf(facing_dir.y):
+		suffix = "side"
+	elif facing_dir.y < 0.0:
+		suffix = "up"
+	var frames: SpriteFrames = visual.sprite_frames
+	if frames == null:
+		visual = Placeholder.attach(self, KIND, body_radius)
+		return
+	if not frames.has_animation("%s_%s" % [anim, suffix]):
+		anim = &"walk" if velocity.length() > 5.0 else &"idle"
+	if not frames.has_animation("%s_%s" % [anim, suffix]):
+		anim = &"idle" if anim == &"walk" else &"walk"
+	if not frames.has_animation("%s_%s" % [anim, suffix]):
+		visual = Placeholder.attach(self, KIND, body_radius)
+		return
+	visual.play_anim(anim)
