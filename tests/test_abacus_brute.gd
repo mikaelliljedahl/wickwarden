@@ -9,7 +9,8 @@ func run() -> void:
 	await _live_pot_route()
 	await _real_guard_and_break(false)
 	await _real_guard_and_break(true)
-	await _real_whirl()
+	await _real_whirl(false)
+	await _real_whirl(true)
 	await _real_moth_reset()
 	await _room_lifecycle()
 
@@ -128,12 +129,15 @@ func _real_guard_and_break(pot: bool) -> void:
 	await dispose(arena)
 
 
-func _real_whirl() -> void:
+func _real_whirl(fallback: bool) -> void:
 	for inside in [true, false]:
 		reset_state()
 		var arena := make_arena()
 		var enemy = _enemy(arena)
 		var player := make_player(arena, Vector2(1400, 480))
+		check(enemy._chain_texture != null, "painted chain loaded")
+		if fallback:
+			enemy._chain_texture = null
 		await _wait_state(enemy, enemy.State.TELEGRAPH)
 		await _capture("brute-whirl-warning")
 		player.place_at(enemy.global_position + Vector2(140 if inside else 260, 0))
@@ -146,6 +150,10 @@ func _real_whirl() -> void:
 		await frames(5)
 		check_eq(GameState.health, 3 if inside else 6, "real192radius sweep bypasses ward")
 		check(not enemy._whirl.blockable, "sweep not ward-blockable")
+		check_eq(enemy._whirl.damage, 3, "whirl damage remains three")
+		check_eq(
+			enemy._whirl.get_child(0).shape.radius, 192.0, "whirl hit circle radius remains 192"
+		)
 		await _capture("brute-whirl")
 		elapsed = await _wait_state(enemy, enemy.State.WALK)
 		check_near(elapsed + 5, 72, 2, "spin1.2s")

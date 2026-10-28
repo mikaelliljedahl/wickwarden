@@ -1,5 +1,22 @@
 # Wickwarden — art provenance
 
+## Abacus Brute whirl (2026-10-28)
+
+The built-in ImageGen tool produced the native-alpha 1774×887 image
+`tools/source_art/abacus_whirl_z1.png`, byte-identical to session
+`01a182ad-a587-72d2-82cb-93711cb69ec0`, output
+`exec-d8885e5c-a8a0-4b5b-9853-8c3a2b1faafe.png`; SHA-256
+`ef27d3a430363246a4e023468367f6af1a5403b78dca8ad4ef216fc321c688d5`.
+The model version was not exposed. Prompt:
+
+> Original game art for Wickwarden, painterly top-down adventure. Hand-painted storybook illustration style, visible brush strokes, soft edges, high detail, warm lamp light against deep dusk colours, low saturation except light sources. NOT pixel art, no pixel grid, dithering or thick black outlines. Three-quarter top-down view camera about 50 degrees above ground; key light upper left. Transparent background, no text or frame. Create a single isolated short, horizontal piece of weapon chain for a heavy armoured brute: six large dark mahogany wooden counting beads connected by small tarnished brass links on one strong cord, asymmetrical and slightly curved, side-to-side within image. Distinct small 3D painted beads, physically believable links, muted dark copper and brown, no glow. This is a modular weapon segment, not a closed circle, not a necklace, not a character, no hands, no floor, no cast background shadow. Clear space all around.
+
+The native-alpha cutter retains the full canvas at 1774×887; output SHA-256
+`f7f9cf7bf2639cf844ee9a2395a323c8f728a103f0cc2b3d9f15f060ca661e90`.
+The runtime bends the image into a rotating arc behind the body, with the
+original scuff fallback. The arc can be partly hidden by the figure or read as
+a loose chain; controlled stills do not verify human play or continuous motion.
+
 Brine Crab directional walk and action sheets use the five reviewed ImageGen sources, checksums, prompt notes and cutter settings in the [Z1 source log](../tools/source_art/brine-crab-z1-log.md). Original generation identifiers and model version were not preserved.
 
 ## Bush cut effect (2026-10-28)

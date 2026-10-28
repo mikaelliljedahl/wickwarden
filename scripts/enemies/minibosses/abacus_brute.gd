@@ -14,6 +14,7 @@ var state: State = State.WALK
 var rail_hp := RAIL_HP
 var _timer := APPROACH
 var _stun_immunity := 0.0
+var _chain_texture: Texture2D
 var _whirl: Hitbox
 
 
@@ -35,6 +36,10 @@ func _init() -> void:
 
 
 func _boss_ready() -> void:
+	var path := "res://assets/sprites/abacus_whirl_z1.png"
+	if ResourceLoader.exists(path):
+		_chain_texture = load(path) as Texture2D
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	# Only this body's drawn floor cues use this material; Visual keeps its own lighting.
 	var cue_material := CanvasItemMaterial.new()
 	cue_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
@@ -165,7 +170,10 @@ func _draw() -> void:
 		draw_arc(Vector2.ZERO, 52.0, start, end, 28, Color(0.65, 0.57, 0.4, 0.65), 6.0, true)
 		draw_arc(Vector2.ZERO, 50.0, start, end, 28, Color(0.85, 0.79, 0.61, 0.5), 1.5, true)
 	if state == State.TELEGRAPH or state == State.WHIRL:
-		_draw_chain_scuff()
+		if state == State.WHIRL and _chain_texture != null:
+			_draw_painted_whirl()
+		else:
+			_draw_chain_scuff()
 
 
 func _draw_chain_scuff() -> void:
@@ -205,3 +213,27 @@ func _draw_chain_scuff() -> void:
 		draw_circle(
 			bead - Vector2(0.7, 1.0), 1.6, Color(0.9, 0.81, 0.63, 0.6 * strength), true, -1.0, true
 		)
+
+
+func _draw_painted_whirl() -> void:
+	# Bend the single painted chain into an orbit. The actor's Visual draws above it.
+	draw_arc(
+		Vector2.ZERO, WHIRL_RADIUS - 1.0, 0.0, TAU, 96, Color(0.78, 0.69, 0.51, 0.3), 2.0, true
+	)
+	var turn := (1.0 - _timer / WHIRL_TIME) * TAU
+	var size := _chain_texture.get_size()
+	var centers := [320.0, 425.0, 482.0, 523.0, 577.0, 550.0, 475.0]
+	var segments := 96
+	for i in range(segments):
+		var points := PackedVector2Array()
+		var uvs := PackedVector2Array()
+		for corner in [[0, -1], [1, -1], [1, 1], [0, 1]]:
+			var t: float = float(i + corner[0]) / segments
+			var angle: float = turn + (t - 0.5) * 2.5
+			var radius: float = 164.0 + corner[1] * 26.0
+			points.append(Vector2.from_angle(angle) * radius)
+			var c: float = t * 6.0
+			var idx := mini(int(c), 5)
+			var cy: float = lerpf(centers[idx], centers[idx + 1], c - idx)
+			uvs.append(Vector2((20.0 + t * 1734.0) / size.x, (cy + corner[1] * 200.0) / size.y))
+		draw_polygon(points, PackedColorArray([Color(1.4, 1.25, 1.1, 0.9)]), uvs, _chain_texture)
