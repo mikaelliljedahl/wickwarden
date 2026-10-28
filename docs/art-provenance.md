@@ -1596,3 +1596,9 @@ The jet is cut through `tools/art_manifest.json` into the cutter-generated `asse
 |---|---|---|---|---|---|
 | `coinwyrm_bite_tell_candidate.png` | 1536×1024 | `01a180aa-043a-70b0-9eb6-2282cd818f5d` | `exec-74906545-c829-4d46-be55-96edc2670f8e.png` | `16d2b1278b2f9198` | `coinwyrm-bite-20261028-log.md` |
 | `coinwyrm_bite_candidate.png` | 1536×1024 | `01a180aa-043a-70b0-9eb6-2282cd818f5d` | `exec-f2c65014-131e-453a-9802-eaca2aabd412.png` | `7769793583d42fc0` | `coinwyrm-bite-20261028-log.md` |
+
+### Chime notes, 2026-10-28
+
+| Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
+|---|---|---|---|---|---|
+| `chime_notes_z1.png` | 1254×1254 | `01a18212-e29a-7252-a5b9-b3d9434cc594` | `exec-0b1d8b67-7a62-4fef-ab5e-c8fcdb53ceae.png` | `b1fbd6d66d60f55c` | [chime_notes_z1-log.md](../tools/source_art/chime_notes_z1-log.md) |

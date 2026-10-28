@@ -10,6 +10,7 @@ const STONE_SCENE := "res://scenes/world/resonance_stone.tscn"
 
 func run() -> void:
 	await _scenes_and_tap()
+	await _missing_art_fallback()
 	await _cooldown()
 	await _hold_warps()
 	await _hold_is_blocked_in_boss_arena()
@@ -45,6 +46,21 @@ func _scenes_and_tap() -> void:
 	var waves := get_tree().get_nodes_in_group(&"chime_waves")
 	check_eq(waves.size(), 1, "the chime creates one wave")
 	if waves.size() == 1:
+		var wave := waves[0] as Node2D
+		var painted := wave.get("_painted") as Sprite2D
+		check(painted != null, "the chime uses its painted wave when the texture loads")
+		if painted != null:
+			check_eq(painted.texture.get_size(), Vector2(512, 512), "the full canvas is retained")
+			check_near(
+				painted.scale.x, float(wave.call("current_radius")) / 183.0, 0.001,
+				"painted wave follows the collision radius"
+			)
+			check(not wave.get_node("Visual/Ring").visible, "the fallback ring is hidden")
+		var shape := wave.get_node("Hitbox/Shape") as CollisionShape2D
+		check_near(
+			(shape.shape as CircleShape2D).radius, float(wave.call("current_radius")), 0.01,
+			"the collision radius follows the existing timing"
+		)
 		check_near(
 			float(waves[0].call("current_radius")),
 			320.0,
@@ -61,6 +77,35 @@ func _scenes_and_tap() -> void:
 		0,
 		"the wave ends after its half-second ring"
 	)
+	await dispose(arena)
+
+
+func _missing_art_fallback() -> void:
+	var scene := load(WAVE_SCENE) as PackedScene
+	if scene == null:
+		check(false, "the chime wave scene loads for the fallback test")
+		return
+	var arena := make_arena()
+	var wave := scene.instantiate() as Node2D
+	wave.set("art_path", "res://assets/sprites/missing_chime_test.png")
+	wave.set("preview_active", true)
+	arena.add_child(wave)
+	wave.set_physics_process(false)
+	var ring := wave.get_node("Visual/Ring") as Line2D
+	var shape := wave.get_node("Hitbox/Shape") as CollisionShape2D
+	var hitbox := wave.get_node("Hitbox") as Hitbox
+	check(wave.get("_painted") == null, "missing art creates no painted sprite")
+	check(ring.visible and ring.is_visible_in_tree(), "missing art leaves the fallback ring visible")
+	check(hitbox.active, "fallback wave starts with its hitbox active")
+	wave.call("_physics_process", 0.25)
+	check_near(float(wave.call("current_radius")), 240.0, 0.01, "fallback expands halfway in 0.25 s")
+	check_near(ring.points[0].length(), 240.0, 0.01, "fallback ring follows the wave radius")
+	check_near((shape.shape as CircleShape2D).radius, 240.0, 0.01, "fallback hitbox follows the wave")
+	check(hitbox.active, "fallback hitbox remains active halfway through")
+	wave.call("_physics_process", 0.25)
+	check_near(float(wave.call("current_radius")), 480.0, 0.01, "fallback reaches full radius in 0.5 s")
+	check_near(ring.points[0].length(), 480.0, 0.01, "fallback ring reaches full radius")
+	check(not hitbox.active, "fallback hitbox deactivates after 0.5 s")
 	await dispose(arena)
 
 
