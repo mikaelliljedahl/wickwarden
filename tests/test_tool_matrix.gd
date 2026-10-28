@@ -20,7 +20,17 @@ const GATES := [
 
 
 func run() -> void:
-	print("Q7 PARTIAL: 6 real tools x 7 real gate props; full combat matrix pending")
+	print("Q7 PARTIAL: selected real-tool gate and encounter cases; permutations remain")
+	for entry: String in [
+		"Captain: moth/hook", "Thorn Warden: moth/hook, wick", "Lurker: moth/hook",
+		"Mauler: hook/slag", "Mirror Warden: hook/braziers", "Choir Warden: moth/hook",
+		"Squire: moth/pit", "Brute: pot/hook", "Automaton: moth/hook", "Echo: chime/hook",
+		"Kilnkeeper: wick", "Briar Mother: sling eye", "Tidewick: raft/hook",
+		"Colossus: mitts/shard", "Archivist: jar/hook", "Dirge: chime/hook",
+		"Knight: boots/hook", "Coinwyrm: reel/hook", "Lock Warden: sling/pot plate",
+		"Unlit: sling/wick/reel/hook",
+	]:
+		print("ENCOUNTER MATRIX ", entry)
 	for row: Array in GATES:
 		for tool: StringName in TOOLS:
 			await _gate_pair(row, tool)
@@ -71,6 +81,7 @@ func run() -> void:
 	await _briar_eye_tools()
 	await _echo_chime()
 	await _thorn_moth_hook()
+	await _thorn_wick()
 	await _brute_pot()
 	await _squire_pit_moth()
 	await _coinwyrm_reel()
@@ -87,7 +98,7 @@ func run() -> void:
 	await _dirge_chime()
 	await _archivist_jar()
 	await _tidewick_raft()
-	await _unlit_eye_sling()
+	await _unlit_tools()
 
 
 func _gate(parent: Node, row: Array, at: Vector2) -> Node2D:
@@ -1097,6 +1108,33 @@ func _thorn_moth_hook() -> void:
 	await dispose(arena)
 
 
+func _thorn_wick() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/thorn_warden.tscn", Vector2(850, 480)
+	)
+	var player := make_player(arena, Vector2(610, 480))
+	player.set_hurtbox_enabled(self, false)
+	enemy.move_speed = 0
+	var ticks: Array[int] = []
+	enemy.damaged.connect(func(amount: int) -> void: ticks.append(amount))
+	await frames(3)
+	_equip(player, &"cinder_wick")
+	check(player.use_item(), "Thorn Warden: actual wick launches")
+	for i in range(90):
+		if ticks.size() >= 2:
+			break
+		await frames(1)
+	check_eq(ticks.size(), 2, "Thorn Warden: flame lands and ticks twice")
+	if ticks.size() >= 2:
+		check_eq(ticks[0], 2, "Thorn Warden: first fire tick deals two")
+		check_eq(ticks[1], 2, "Thorn Warden: second fire tick deals two")
+	check_eq(enemy.hp, 12, "Thorn Warden: real fire deals four total")
+	print("MATRIX Thorn Warden: wick ticks=", ticks)
+	await dispose(arena)
+
+
 func _brute_pot() -> void:
 	reset_state()
 	var arena := make_arena()
@@ -1676,7 +1714,7 @@ func _tidewick_raft() -> void:
 	await dispose(room)
 
 
-func _unlit_eye_sling() -> void:
+func _unlit_tools() -> void:
 	reset_state()
 	var room := await _matrix_room("res://tests/fixtures/gallery/B10.tscn")
 	if room == null:
@@ -1687,19 +1725,55 @@ func _unlit_eye_sling() -> void:
 	_equip(player, &"tallow_sling")
 	await seconds(1.6)
 	check_eq(boss.eyes.size(), 5, "Unlit: phase one has five eyes")
-	var eye = boss.eyes[0]
-	var attempts := 0
-	# Reposition near the naturally orbiting eye; no phase or HP override.
-	while is_instance_valid(eye) and not eye.is_dead and attempts < 12:
-		while is_instance_valid(eye) and eye.global_position.y < 180:
-			await frames(6)
-		if not is_instance_valid(eye):
-			break
-		player.place_at(eye.global_position + Vector2(0, 80))
+	# Advance through the encounter with actual slugs, flames, reel and hook.
+	GameState.add_slugs(30)
+	for eye in boss.eyes.duplicate():
+		var attempts := 0
+		while is_instance_valid(eye) and not eye.is_dead and attempts < 12:
+			while is_instance_valid(eye) and eye.global_position.y < 180:
+				await frames(6)
+			if not is_instance_valid(eye):
+				break
+			player.place_at(eye.global_position + Vector2(0, 80))
+			player.facing = Vector2.UP
+			if player.use_item():
+				attempts += 1
+			await seconds(0.35)
+		check(not is_instance_valid(eye) or eye.is_dead, "Unlit: real slugs defeat eye")
+	check_eq(boss.phase, 2, "Unlit: five eyes defeated by sling")
+	check_eq(boss.hp, 60, "Unlit: shell starts at 36 HP")
+	await seconds(1.3)
+	_equip(player, &"cinder_wick")
+	for cast in range(3):
+		player.place_at(boss.global_position + Vector2(0, 180))
 		player.facing = Vector2.UP
-		if player.use_item():
-			attempts += 1
-		await seconds(0.35)
-	check(not is_instance_valid(eye) or eye.is_dead, "Unlit: real slugs defeat moving eye")
-	check_eq(boss.parts().size(), 4, "Unlit: defeated eye leaves four living parts")
+		check(player.use_item(), "Unlit: real wick launches at shell")
+		await seconds(0.3)
+		player.place_at(Vector2(1632, 720))
+		await seconds(3.7)
+	check_eq(boss.phase, 3, "Unlit: three real flames burn shell away")
+	check_eq(boss.hp, 24, "Unlit: heart starts at 24 HP")
+	await seconds(1.3)
+	player.place_at(boss.global_position + Vector2(0, 108))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(10)
+	Input.action_release(&"attack")
+	check_eq(boss.hp, 24, "Unlit: actual hook cannot hit shielded heart")
+	await seconds(0.4)
+	_equip(player, &"reel_line")
+	player.place_at(Vector2(960, 720))
+	player.facing = Vector2.UP
+	check(player.use_item(), "Unlit: real reel launches at lantern")
+	await seconds(0.9)
+	check(boss.exposed_left > 0, "Unlit: reel exposes heart")
+	check_near(boss.lantern.global_position.distance_to(Vector2(960, 288)), 288, 0.5,
+		"Unlit: reel moves lantern 288 pixels")
+	player.place_at(boss.global_position + Vector2(0, 108))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(10)
+	Input.action_release(&"attack")
+	check_eq(boss.hp, 22, "Unlit: actual hook damages exposed heart")
+	print("MATRIX Unlit: sling eyes, wick shell, reel and hook heart")
 	await dispose(room)
