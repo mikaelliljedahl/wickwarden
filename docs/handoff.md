@@ -227,12 +227,23 @@ Dirge and Hound audit documentation followed in `5afe6e4`; Q7 Hollow Captain is
 at `4b5f4ff32f54e6e3c47b0a159aad4646c44a6d67` on `origin/main`.
 Captain testing and Hound art proof were documented in
 `afdaead5a2b43da5b61a1cabb7df50618b07730b` on `origin/main`.
+Clean-check documentation followed in `9125aaf`; Q7 Kilnkeeper phase two is at
+`f257ebca8ec25f98ccf7b9a2bb6839317633ca84` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 Kilnkeeper phase two, committed in `f257ebc`:** Six real Cinder Wick fire
+contacts reduce the boss from 24 to 12 HP and trigger natural phase two. Hook is
+blocked by hard armour; four further real Wick hits melt it, and hook hits for
+4→2 HP. Agent and lead passed `tool_matrix`; the agent reports 2,002 checks and
+lint PASS. The arena is controlled, the player placed and protected and boss
+`move_speed=0`; this is not human play in a real room. Later death phase and
+other combinations remain open. The latest full check is the earlier clean
+`afdaead` run below.
 
 **Clean full check at `afdaead`, 2026-10-28:** A clean git archive of exact
 `afdaead5a2b43da5b61a1cabb7df50618b07730b`, with isolated HOME/XDG and

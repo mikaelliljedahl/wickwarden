@@ -1,5 +1,14 @@
 # Current status
 
+**Q7 Kilnkeeper phase two, 2026-10-28 (committed in `f257ebc`):** Six real
+Cinder Wick fire contacts reduce the boss from 24 to 12 HP and trigger natural
+phase two. Hook is blocked by hard armour; four further real Wick hits melt it,
+and hook hits for 4→2 HP. Agent and lead passed `tool_matrix`; the agent reports
+2,002 checks and lint PASS. The arena is controlled, the player placed and
+protected and boss `move_speed=0`; this is not human play in a real room. Later
+death phase and other combinations remain open. The latest full check is the
+earlier clean `afdaead` run below.
+
 **Clean full check at `afdaead`, 2026-10-28:** A clean git archive of exact
 `afdaead5a2b43da5b61a1cabb7df50618b07730b`, with isolated HOME/XDG and
 `TMPDIR=/var/tmp`, passed `make check`, including the newer Q7 tests. Log:
@@ -2338,7 +2347,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `afdaead5a2b43da5b61a1cabb7df50618b07730b` on `origin/main`, with its subsequent clean full check recorded above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+HEAD and the local `origin/main` tracking reference are `f257ebca8ec25f98ccf7b9a2bb6839317633ca84`, including the Q7 Kilnkeeper test above; push verification is in progress. The latest clean full check is at `afdaead`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
