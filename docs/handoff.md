@@ -173,6 +173,17 @@ The lead's import, `boss_coinwyrm`, `area_cave_8`, `boss_gloam_knight` and
 completed isolated profile was freed, the rerun passed. Agents report lint,
 `art-test` and B07/B08 ownership PASS.
 
+**Q8 profiling at clean `b8f75ef`, 2026-10-28:** Across three processes,
+`cave_10_12` took 56.276–61.049 ms on its first pass versus 3.330–4.859 ms on
+passes two and three; 21 checks passed. Instrumentation found synchronous
+preloading of `cave_10_14` and `the_unlit`. Separate measurements were about
+27 ms for boss scene load and 5.7 ms for ending scene load; instrumentation and
+timing overhead mean these figures cannot be summed. Logs are
+`/var/tmp/wick-q8-repeat{1,2,3}.log` and
+`/var/tmp/wick-q8-profile-run{1,2,3}.log`. The shared machine was unstable, disk
+was warm and runs were headless; calibrated CI, GPU and physical traversal are
+not covered. Q8 and the 50 ms limit remain open; ending Z1 is under investigation.
+
 **Q8 broad survey, committed in `20acebe`:** Three passes over 222 scene targets
 made 666 direct warps. Matched passes two to three showed maximum node growth
 of zero, static-memory growth of 141,888 bytes and zero orphan growth; no orphans
