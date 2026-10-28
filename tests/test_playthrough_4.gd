@@ -6,6 +6,9 @@ extends "res://tests/test_route_cave_10.gd"
 
 
 func run() -> void:
+	SaveGame.enabled = false
+	if not c10_profile_guard():
+		return
 	var start_frame := Engine.get_physics_frames()
 	var previous_script := load("res://tests/test_playthrough_3.gd") as GDScript
 	check(previous_script != null, "previous earned-route shard loads")
@@ -35,7 +38,14 @@ func run() -> void:
 		await dispose(world)
 		return
 	await c10_persistence()
+	if not failures.is_empty() or not c10_profile_guard():
+		await dispose(world)
+		return
 	await ending_branch(&"rekindle")
+	if not failures.is_empty() or not c10_profile_guard():
+		SaveGame.enabled = false
+		await dispose(world)
+		return
 	await dispose(world)
 	GameState.reset()
 	SaveGame.enabled = true

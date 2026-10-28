@@ -12,6 +12,8 @@ var earned_final: Dictionary = {}
 func run() -> void:
 	reset_state()
 	SaveGame.enabled = false
+	if not c10_profile_guard():
+		return
 	world = await make_world()
 	player = world.player
 	player.set_hurtbox_enabled(self, false)
@@ -35,7 +37,14 @@ func run() -> void:
 	await vault_and_eye()
 	await final_fight()
 	await c10_persistence()
+	if not failures.is_empty() or not c10_profile_guard():
+		await dispose(world)
+		return
 	await ending_branch(&"rekindle")
+	if not failures.is_empty() or not c10_profile_guard():
+		SaveGame.enabled = false
+		await dispose(world)
+		return
 	# Independent second-choice fixture restores the genuinely earned pre-choice disk snapshot.
 	# No fake defeat is set: the previous real sling/flame/reel/hook victory remains its source.
 	await dispose(world)
@@ -50,6 +59,29 @@ func run() -> void:
 	await dispose(world)
 	get_tree().current_scene = get_parent()
 	SaveGame.enabled = false
+
+
+func c10_profile_guard() -> bool:
+	var data := OS.get_environment("XDG_DATA_HOME")
+	var user := OS.get_user_data_dir()
+	var safe := data.begins_with("/tmp/wickwarden-check-")
+	safe = safe and data == data.simplify_path() and user == user.simplify_path()
+	safe = safe and user.begins_with(data + "/")
+	var directory := DirAccess.open("/")
+	if directory == null:
+		safe = false
+	else:
+		for path: String in [data, user, user.path_join("save_1.json"),
+				user.path_join("save_1.json.tmp"), user.path_join("save_1.bad")]:
+			var current := ""
+			for part: String in path.split("/", false):
+				current += "/" + part
+				if directory.is_link(current):
+					safe = false
+	if not safe:
+		SaveGame.enabled = false
+	check(safe, "C10 disk proof requires isolated runner userdata")
+	return safe
 
 
 func enter(id: StringName) -> Room:
@@ -492,6 +524,8 @@ func final_fight() -> void:
 
 
 func c10_persistence() -> void:
+	if not c10_profile_guard():
+		return
 	await edge(&"cave_10_14", &"cave_10_12", Vector2.RIGHT)
 	await edge(&"cave_10_12", &"cave_10_14", Vector2.LEFT)
 	check_eq(
@@ -501,8 +535,7 @@ func c10_persistence() -> void:
 	player.place_at(door_to(room, &"ow_10_8").global_position)
 	await seconds(1)
 	check_eq(world.get_current_room_id(), &"ow_10_8", "actual C10 mouth returns to Hushmarch")
-	check(OS.get_user_data_dir().begins_with("/tmp/"), "C10 disk proof uses isolated userdata")
-	if not OS.get_user_data_dir().begins_with("/tmp/"):
+	if not c10_profile_guard():
 		return
 	var before := SaveGame._snapshot()
 	SaveGame.enabled = true
@@ -536,6 +569,8 @@ func c10_persistence() -> void:
 
 
 func ending_branch(choice: StringName) -> void:
+	if not c10_profile_guard():
+		return
 	var room := await enter(&"cave_10_14")
 	var trigger = scripted(room, "ending_trigger.gd")
 	check(trigger.is_available(), "earned victory permits branch " + choice)
@@ -616,6 +651,8 @@ func ending_branch(choice: StringName) -> void:
 	SaveGame.enabled = false
 	# Restore the real earned pre-choice snapshot for the separately labelled second branch.
 	if choice == &"rekindle":
+		if not c10_profile_guard():
+			return
 		var file := FileAccess.open(SaveGame.SAVE_PATH, FileAccess.WRITE)
 		check(file != null, "isolated second-branch fixture file opens")
 		if file != null:
