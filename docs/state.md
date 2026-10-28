@@ -1,5 +1,18 @@
 # Current status
 
+**Mirror Shade scratch cue and cutter studies, 2026-10-28:** In
+`/var/tmp/wick-m5-sweep-review/`, an active cue was tried in four directions with
+Glow Jar and decoy; stun/death/timeout lifecycle tests passed and eight World
+images were captured. The vertical cue looks detached, can imply reach and
+overlaps other visuals; no human play was verified.
+
+`/var/tmp/wick-mirror-pipeline-hs5POG/` tested a native-alpha cutter/output:
+import and 22 `art-test` tests passed, and other sprites were byte-identical.
+256² is only a proposal; provenance and ownership remain open. The source
+candidate is
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-ac92106a-fc5d-4e32-b312-279c4fc406f8.png`.
+Neither study is integrated and no normative change has been made.
+
 **Mirror Shade scratch pipeline, 2026-10-28:** In
 `/var/tmp/wick-shade-echo-M0pvQ5/`, side poses cut into a 192 px cell but the
 strike pose is too dark in `cave_5_1`; three frames at 8 fps cannot fit within
@@ -2267,7 +2280,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `424b845c4f1f450d1d7aaf6ab5561e6f964daa2b` on `origin/main`, documenting the Mirror Shade audit above. The latest clean full check remains at `2c8c68c`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `9c935d3a857e9e0f828d6f92eb3498c3843c3d8d` on `origin/main`, documenting the Mirror Shade echo prototype above. The latest clean full check remains at `2c8c68c`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

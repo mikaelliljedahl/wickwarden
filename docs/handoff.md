@@ -215,12 +215,27 @@ Snapper direction-candidate review followed in
 `5c1751c0f6546da97fb566cccb2fb0e02760f5c7` on `origin/main`.
 The Mirror Shade echo audit followed in
 `424b845c4f1f450d1d7aaf6ab5561e6f964daa2b` on `origin/main`.
+The Mirror Shade echo prototype was documented in
+`9c935d3a857e9e0f828d6f92eb3498c3843c3d8d` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Mirror Shade scratch cue and cutter studies, 2026-10-28:** In
+`/var/tmp/wick-m5-sweep-review/`, an active cue was tried in four directions with
+Glow Jar and decoy; stun/death/timeout lifecycle tests passed and eight World
+images were captured. The vertical cue looks detached, can imply reach and
+overlaps other visuals; no human play was verified.
+
+`/var/tmp/wick-mirror-pipeline-hs5POG/` tested a native-alpha cutter/output:
+import and 22 `art-test` tests passed, and other sprites were byte-identical.
+256² is only a proposal; provenance and ownership remain open. The source
+candidate is
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-ac92106a-fc5d-4e32-b312-279c4fc406f8.png`.
+Neither study is integrated and no normative change has been made.
 
 **Mirror Shade scratch pipeline, 2026-10-28:** In
 `/var/tmp/wick-shade-echo-M0pvQ5/`, side poses cut into a 192 px cell but the
