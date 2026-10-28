@@ -336,14 +336,32 @@ and documentation `995488c` are on `origin/main`; The Unlit wax collapse
 Placeholder inventory documentation `6148f58`, C4 difficulty changes
 `bc7330f` and documentation `f1a34f2` are on `origin/main`; the C4 change
 passed a clean full check. Final playthrough documentation `fc14d7a` is on
-`origin/main`; pocket and tool check documentation `2f343c1` is the latest
-published checkpoint. Verify the remote before integration or push.
+`origin/main`; pocket/tool checks `2f343c1` and C9 access documentation
+`45bf2e6` are on `origin/main`. Hollow Captain poses `8487acf` are locally
+committed and passed a clean full check. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Hollow Captain directional poses, locally committed in `8487acf`:** Guard,
+telegraph, bash and stunned poses cover three views, with walk/idle_up and
+mirrored left. Previously generated sources are documented in
+`docs/art-provenance.md`; all 18 sprites use a common encounter scale with
+256 px cells and foot 236, and recutting was byte-identical. Gameplay and timing
+are unchanged; missing animation falls back. Isolated `hollow_captain` and
+`sprite_visual`, lint and 26 art tests passed, with the known ResourceWarning.
+A clean full `make check` on exact `8487acf` passed (exit 0): 161 Godot test
+files, lint, world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-8487acf-k98etjm1/check.log`; this is the latest clean full
+PASS.
+
+Actual `cave_1_5` captures at `/var/tmp/wick-captain-z1-final/` used a placed,
+protected player and some produced ObjectDB/resource warnings. Up-walk lacks a
+shield, up-bash appears above the figure, side-bash shifts 16 px, and the figure
+is about 7% smaller. Human play and continuous motion remain unverified.
 
 **Cave boss death light, committed in `b70049e`:** Nine cave bosses
 release painted golden light in eight 768 px frames at 8 fps; miniboss and C10
@@ -405,8 +423,8 @@ and ring to finish and resets its timer to 8 seconds. Isolated
 input, boundary and parity checks; targeted lint passed. The clean full
 `make check` on exact `bc7330f` passed (exit 0): 161 Godot test files, lint,
 world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-bc7330f-tm5mapat/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-bc7330f-tm5mapat/check.log`; the later clean full PASS at
+`8487acf` is recorded above.
 
 On a clean exact `bc7330f` after the C4 change, `make rooms-check`,
 `make art-test` and `make playthrough` all passed (exit 0); playthrough includes

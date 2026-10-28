@@ -1,5 +1,22 @@
 # Current status
 
+**Hollow Captain directional poses, locally committed in `8487acf`:** Guard,
+telegraph, bash and stunned poses cover three views, with walk/idle_up and
+mirrored left. Previously generated sources are documented in
+`docs/art-provenance.md`; all 18 sprites use a common encounter scale with
+256 px cells and foot 236, and recutting was byte-identical. Gameplay and timing
+are unchanged; missing animation falls back. Isolated `hollow_captain` and
+`sprite_visual`, lint and 26 art tests passed, with the known ResourceWarning.
+A clean full `make check` on exact `8487acf` passed (exit 0): 161 Godot test
+files, lint, world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-8487acf-k98etjm1/check.log`; this is the latest clean full
+PASS.
+
+Actual `cave_1_5` captures at `/var/tmp/wick-captain-z1-final/` used a placed,
+protected player and some produced ObjectDB/resource warnings. Up-walk lacks a
+shield, up-bash appears above the figure, side-bash shifts 16 px, and the figure
+is about 7% smaller. Human play and continuous motion remain unverified.
+
 **C9 access report and isolated audit, `2f343c1`:** The user reports difficulty
 reaching a room in C9; the exact location is unknown and the image was reused.
 An isolated archive-copy `route_cave_9` passed 202 checks, with its `persistence()`
@@ -60,8 +77,8 @@ and ring to finish and resets its timer to 8 seconds. Isolated
 input, boundary and parity checks; targeted lint passed. The clean full
 `make check` on exact `bc7330f` passed (exit 0): 161 Godot test files, lint,
 world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-bc7330f-tm5mapat/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-bc7330f-tm5mapat/check.log`; the later clean full PASS at
+`8487acf` is recorded above.
 
 On a clean exact `bc7330f` after the C4 change, `make rooms-check`,
 `make art-test` and `make playthrough` all passed (exit 0); playthrough includes
@@ -3125,7 +3142,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `2f343c1` on `origin/main`, documenting pocket and tool visual checks; C4 difficulty changes `bc7330f` passed their clean full check. The latest clean full PASS is `bc7330f`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `45bf2e6` on `origin/main`, documenting C9 access checks; Hollow Captain poses `8487acf` are locally committed and passed a clean full check; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `8487acf`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
