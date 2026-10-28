@@ -1,5 +1,17 @@
 # Current status
 
+**Dry vine fragments, 2026-10-28 (committed in `26166f5`):** `dry_vine_screen`
+uses five AtlasTexture twigs from documented `bush_cut_z1` for 0.25 seconds;
+the existing explosion and placeholder fallback remain. Other variants, signal,
+drops and collision are unchanged. Lead and agent passed bush, `tool_matrix`
+and `route_cave_5`; the agent reports targeted lint PASS. Actual `cave_5_2`
+hook capture `/var/tmp/wick-screen-study/cave_5_2-prototype-integrated-vine-dark-during.png`
+used a placed, protected player and forced drop. Twigs are subtle and partly
+obscured; capture had ObjectDB/resource warnings. Human play and continuous
+motion are not verified. A clean full `make check` on exact `26166f5` passed
+(exit 0); log `/var/tmp/wick-clean-26166f5-4jms95dw/check.log`. It is the latest
+full check.
+
 **Moss wall fragments, 2026-10-28 (committed in `b1f6c34`):** `moss_wall`
 reuses documented `bush_cut_z1` with tint (0.65, 0.78, 0.56), at 180 px for
 0.25 seconds with fallback; other vegetation, signals, drops and collision are
@@ -9,8 +21,8 @@ reports targeted lint PASS. Actual `cave_3_2` hook stills at
 used a placed, protected player, forced drop, darkness and artificial light.
 Leaves may be hidden by the swing; captures had resource warnings. Human play
 and motion are unverified. A clean full `make check` on exact `b1f6c34` passed
-(exit 0); log `/var/tmp/wick-clean-b1f6c34-r46drggk/check.log`. It is the latest
-full check.
+(exit 0); log `/var/tmp/wick-clean-b1f6c34-r46drggk/check.log`. The later clean
+`26166f5` full check is recorded above.
 
 **Default bush fragments, 2026-10-28 (committed in `db8d49e`):** Painted leaves
 and petals use 180 px, 0.65 and 0.25 seconds. Existing reeds, other variants,
@@ -2897,7 +2909,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `b1f6c346966e7d80015ef99ab9f165fa8dfc0b1e` on `origin/main`, including moss wall fragments above. The latest clean full PASS is at `b1f6c34`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `26166f50089fd365a303d4169440100863ad2d40` on `origin/main`, including dry vine fragments above. The latest clean full PASS is at `26166f5`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -321,12 +321,26 @@ Painted default bush fragments followed in
 `db8d49e2d9026083c769b051585fa37591fa34c8` on `origin/main`.
 Watcher and bush documentation followed in `4d6c188`; moss wall fragments
 landed in `b1f6c346966e7d80015ef99ab9f165fa8dfc0b1e` on `origin/main`.
+Moss documentation followed in `1d9d7fb`; dry vine fragments landed in
+`26166f50089fd365a303d4169440100863ad2d40` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Dry vine fragments, committed in `26166f5`:** `dry_vine_screen` uses five
+AtlasTexture twigs from documented `bush_cut_z1` for 0.25 seconds; the existing
+explosion and placeholder fallback remain. Other variants, signal, drops and
+collision are unchanged. Lead and agent passed bush, `tool_matrix` and
+`route_cave_5`; the agent reports targeted lint PASS. Actual `cave_5_2` hook
+capture `/var/tmp/wick-screen-study/cave_5_2-prototype-integrated-vine-dark-during.png`
+used a placed, protected player and forced drop. Twigs are subtle and partly
+obscured; capture had ObjectDB/resource warnings. Human play and continuous
+motion are not verified. A clean full `make check` on exact `26166f5` passed
+(exit 0); log `/var/tmp/wick-clean-26166f5-4jms95dw/check.log`. It is the latest
+full check.
 
 **Moss wall fragments, committed in `b1f6c34`:** `moss_wall` reuses documented
 `bush_cut_z1` with tint (0.65, 0.78, 0.56), at 180 px for 0.25 seconds with
@@ -337,8 +351,8 @@ lint PASS. Actual `cave_3_2` hook stills at
 used a placed, protected player, forced drop, darkness and artificial light.
 Leaves may be hidden by the swing; captures had resource warnings. Human play
 and motion are unverified. A clean full `make check` on exact `b1f6c34` passed
-(exit 0); log `/var/tmp/wick-clean-b1f6c34-r46drggk/check.log`. It is the latest
-full check.
+(exit 0); log `/var/tmp/wick-clean-b1f6c34-r46drggk/check.log`. The later clean
+`26166f5` full check is recorded above.
 
 **Default bush fragments, committed in `db8d49e`:** Painted leaves and petals
 use 180 px, 0.65 and 0.25 seconds. Existing reeds, other variants, fallback, cut
