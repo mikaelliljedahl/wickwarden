@@ -7,6 +7,13 @@ runtime: its four poses are separated, yet their body size differs substantially
 from the existing walk under the shared scale. Original output, SHA-256, prompt,
 rejected attempts and review are in the [candidate log](../tools/source_art/gloam-knight-slash-20261028-log.md).
 
+## The Unlit shell and lantern trials (2026-10-28)
+
+A native-alpha built-in image edit of the accepted Ninth Lantern supplies a
+second glow image. Its source, prompt, SHA-256 and the rejected shell-walk trial
+are recorded in the [C10 trial log](../tools/source_art/unlit-shell-lantern-20261028-log.md).
+The lantern images use a shared cutter scale; the shell trial is not in runtime.
+
 ## The Unlit heart states (2026-10-28)
 
 The shielded and brighter exposed-pulse sprites are built-in image-generation

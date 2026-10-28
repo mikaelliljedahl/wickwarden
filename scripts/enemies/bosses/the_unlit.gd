@@ -99,7 +99,10 @@ func _boss_ready() -> void:
 		lantern.global_position = _phase_origin + LANTERN
 		lantern.reeled.connect(_on_reeled)
 		lantern.hurtbox.enabled = false
-		SpriteVisual.attach(lantern, &"ninth_lantern", 110)
+		var lamp_look := SpriteVisual.attach(lantern, &"ninth_lantern", 110)
+		if lamp_look is SpriteVisual:
+			lamp_look.auto_motion = false
+			lamp_look.add_child(LanternGlowPresentation.new())
 	queue_redraw()
 
 
@@ -478,6 +481,18 @@ func _draw() -> void:
 			Color(0.55, 0.5, 0.45, clampf(_death_left / 2.0, 0, 1) if _dying else 1.0),
 			6
 		)
+
+
+class LanternGlowPresentation:
+	extends Node
+	## The lantern survives the boss, so its presentation travels with its visual.
+	var elapsed := 0.0
+
+	func _process(delta: float) -> void:
+		elapsed += delta
+		var look := get_parent() as SpriteVisual
+		if look != null:
+			look.play_anim(&"glow" if fmod(elapsed, 1.0) >= 0.5 else &"idle")
 
 
 class HeartGlow:

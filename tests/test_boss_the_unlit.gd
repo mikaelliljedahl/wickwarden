@@ -263,6 +263,12 @@ func _full_physical_fight() -> void:
 	await seconds(1.3)
 	check_eq(boss.visual.animation, &"shielded", "heart is visibly shielded")
 	check_eq(boss.visual.offset, Vector2(-256, -256), "heart retains its centre anchor")
+	var lamp_look := boss.lantern.get_node("Visual") as SpriteVisual
+	check(lamp_look != null, "lantern uses painted art")
+	if lamp_look != null:
+		var first_lamp_frame := lamp_look.animation
+		await seconds(0.5)
+		check(lamp_look.animation != first_lamp_frame, "hanging lantern glow changes")
 	await _probe(room, boss.global_position, &"flare", 99)
 	check_eq(boss.hp, 24, "shielded heart rejects flare")
 	await _capture("p3-shielded")
@@ -306,6 +312,12 @@ func _full_physical_fight() -> void:
 	check(boss.is_dying(), "reset cannot revive defeat")
 	await seconds(2.1)
 	check(not is_instance_valid(boss), "two second fade frees actor")
+	if is_instance_valid(lamp_look):
+		var settled_frame := lamp_look.animation
+		await seconds(0.5)
+		check(lamp_look.animation != settled_frame, "settled lantern glow keeps changing")
+	else:
+		check(false, "settled lantern retains its visual")
 	check(get_tree().get_nodes_in_group(&"projectiles").is_empty(), "death cleans projectiles")
 	var packed := load(SCENE) as PackedScene
 	check(packed != null, "actor scene loads")

@@ -1261,6 +1261,12 @@
         "frames": 1,
         "fps": 1.0,
         "loop": true
+      },
+      "glow": {
+        "file": "res://assets/sprites/ninth_lantern_glow.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
       }
     }
   },
