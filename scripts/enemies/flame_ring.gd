@@ -13,6 +13,14 @@ const GROUP := &"flame_rings"
 var _age: float = 0.0
 
 
+class Boundary:
+	extends Node2D
+
+	func _draw() -> void:
+		# A fine edge marks the actual hit radius beneath the irregular painted flames.
+		draw_arc(Vector2.ZERO, RADIUS, 0.0, TAU, 96, Color(1.0, 0.84, 0.45, 0.9), 3.0, true)
+
+
 func _init() -> void:
 	team = Layers.Team.ENEMY
 	kind = &"burst"
@@ -26,7 +34,7 @@ func _ready() -> void:
 	add_to_group(GROUP)
 	add_circle(RADIUS)
 	_register_kinds()
-	Placeholder.attach(self, &"flame_ring", RADIUS)
+	_attach_visual()
 	var light := PointLight2D.new()
 	light.texture = LightTexture.make()
 	light.texture_scale = LightTexture.scale_for(RADIUS * 2.0)
@@ -43,6 +51,23 @@ func _physics_process(delta: float) -> void:
 	if _age >= ACTIVE_TIME:
 		deactivate()
 		queue_free()
+
+
+func _attach_visual() -> void:
+	var visual := SpriteVisual.attach(self, &"fx_wisp_burst")
+	if visual is SpriteVisual:
+		var painted := visual as SpriteVisual
+		if painted.sprite_frames.has_animation(&"idle") and painted.sprite_frames.get_frame_count(&"idle") >= 4:
+			# Frame 3 is the complete ring; the source strip fits 350 px in its cell.
+			painted.stop()
+			painted.set_frame_and_progress(3, 0.0)
+			painted.scale = Vector2.ONE * (RADIUS * 2.0 / 350.0)
+			var edge := Boundary.new()
+			edge.name = "Boundary"
+			add_child(edge)
+			return
+	_register_kinds()
+	Placeholder.attach(self, &"flame_ring", RADIUS)
 
 
 static func _register_kinds() -> void:

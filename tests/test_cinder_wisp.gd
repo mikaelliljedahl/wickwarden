@@ -4,10 +4,12 @@ extends TestCase
 ## a kill and a moth stun during the wind-up, and fire immunity.
 
 const WISP := "res://scenes/enemies/cinder_wisp.tscn"
+const RING_SCRIPT := "res://scripts/enemies/flame_ring.gd"
 
 
 func run() -> void:
 	await _burst_visual_lifetime()
+	await _burst_visual_fallback()
 	await _stats_and_light()
 	await _drifts_toward_tamsin()
 	await _fire_does_nothing()
@@ -174,7 +176,7 @@ func _stun_cancels_the_windup() -> void:
 func _burst_visual_lifetime() -> void:
 	reset_state()
 	var arena := make_arena()
-	var ring := (load("res://scripts/enemies/flame_ring.gd") as Script).new() as Hitbox
+	var ring := (load(RING_SCRIPT) as Script).new() as Hitbox
 	arena.add_child(ring)
 	ring.global_position = Vector2(420, 310)
 	await frames(2)
@@ -187,7 +189,12 @@ func _burst_visual_lifetime() -> void:
 	check(shape != null and shape.shape is CircleShape2D, "burst has circular collision")
 	if shape != null and shape.shape is CircleShape2D:
 		check_near((shape.shape as CircleShape2D).radius, 150.0, 0.01, "burst radius stays 150")
-	check(ring.get_node_or_null("Visual") != null, "full radius marker remains")
+	var ring_art := ring.get_node_or_null("Visual") as SpriteVisual
+	check(ring_art != null, "active radius uses painted fire")
+	if ring_art != null:
+		check_eq(ring_art.frame, 3, "complete fire ring is held for the hitbox")
+		check(not ring_art.is_playing(), "the ring does not shrink during the attack")
+	check(ring.get_node_or_null("Boundary") != null, "painted fire has a radius boundary")
 	var art := arena.get_node_or_null("Puff") as SpriteVisual
 	check(art != null, "painted burst is separate")
 	if art != null:
@@ -198,3 +205,19 @@ func _burst_visual_lifetime() -> void:
 	await seconds(0.3)
 	check(arena.get_node_or_null("Puff") == null, "painted burst cleans itself up")
 	await dispose(arena)
+
+
+func _burst_visual_fallback() -> void:
+	reset_state()
+	SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
+	var arena := make_arena()
+	var ring := (load(RING_SCRIPT) as Script).new() as Hitbox
+	arena.add_child(ring)
+	await frames(2)
+	var fallback := ring.get_node_or_null("Visual") as Placeholder
+	check(fallback != null and fallback.kind == &"flame_ring", "missing art uses ring fallback")
+	check(ring.active and ring.blockable, "missing art preserves active wardable hitbox")
+	await seconds(0.25)
+	check(not is_instance_valid(ring), "fallback disappears with the hitbox")
+	await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
