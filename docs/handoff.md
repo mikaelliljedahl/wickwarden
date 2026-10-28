@@ -342,13 +342,39 @@ passed a clean full check. Final playthrough documentation `fc14d7a` is on
 are on `origin/main`; their clean full check passed. Shell animation-gap
 documentation `3bcabd3`, Coinwyrm study `4fbed38` and shell-study documentation
 `c298322`, Q7 test `070bfe3` and documentation `0d82e90`/`ea98d94` are on
-`origin/main`; the Q7 clean full check passed. Verify the remote before push.
+`origin/main`; runtime fallback audit documentation `8017926` is the latest
+published checkpoint. The Q7 clean full check passed. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Isolated zero-ammo C10 probe, `c298322`:** Scratch
+`/var/tmp/wick-q6-long-Ox5mkZ/project/tests/test_zero_ammo_probe.gd` used real
+hook kills, room crossings, natural drops and physical pickups, then the real
+sling to open the gate. Five seeds (`20261028`, `1`, `2`, `3`, `4`) required
+1–23 enemies; see `/var/tmp/wick-q6-long-Ox5mkZ/seed-{20261028,1,2,3,4}.log`.
+A separate boss fixture began at zero ammo, collected three real arena refills
+of six slugs each and used 15 real shots to defeat five eyes and reach phase 2.
+The player was placed and protected and doors were pre-opened; the boss section
+was separate. Five seeds and protected fixtures do not guarantee random-drop
+economy, survival or human play.
+
+The full per-physics-frame Placeholder audit on isolated `ea98d94` completed:
+162/162 test files passed (161 regular plus one scratch seam test), with 12,468
+node-frame observations in 105 groups. All four playthrough parts passed with
+no observations. After classification no production Placeholder was confirmed.
+Logs: `/var/tmp/wick-runtime-audit/all-visible.log` and `all-groups.txt`.
+Actual seam/wall, shop door and selected miniboss directions were reviewed;
+`room-visuals.log` passed 41 checks. Some tests intentionally replace the sprite
+manifest with missing-art fixtures (for example `test_boss_the_unlit` and
+`test_boss_kilnkeeper`), while others use or mutate fixture objects (for example
+`test_boss_base` and `test_tool_matrix`); these observations are not evidence of
+an unintended production placeholder. Physics-tick tree/alpha checks do not
+establish pixels, camera visibility, occlusion, procedural primitives, between-
+frame states or all possible states. The audit made no repository changes.
 
 **Runtime asset and shell studies, `ea98d94`:** An isolated manifest audit found
 all 220 entries and 448 animation frames present with sufficient dimensions.
