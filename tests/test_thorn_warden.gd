@@ -4,11 +4,53 @@ const SCENE := "res://scenes/enemies/minibosses/thorn_warden.tscn"
 
 
 func run() -> void:
+	await _needle_reset_collision(false)
+	await _needle_reset_collision(true)
 	await _damage_and_ring()
 	await _real_hook_skirt()
 	await _real_flame_ticks()
 	await _real_moth_hit()
 	await _stun_and_persistence()
+
+
+func _needle_reset_collision(reset_on_overlap: bool) -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+	enemy.move_speed = 0.0
+	await frames(2)
+	var player := make_player(arena, Vector2(1050, 480))
+	var initial_health := GameState.health
+	var needle: EnemyProjectile
+	for i in range(280):
+		await frames(1)
+		var needles := get_tree().get_nodes_in_group(&"projectiles")
+		if needles.size() == 8:
+			needle = needles[0] as EnemyProjectile
+			break
+	check(needle != null, "natural needle ring appears")
+	if needle == null:
+		await dispose(arena)
+		return
+	var observed := [false, false, -1]
+	needle.hitbox.area_entered.connect(
+		func(area: Area2D) -> void:
+			if area == player.hurtbox:
+				observed[0] = true
+				if reset_on_overlap:
+					enemy.reset_fight()
+					observed[1] = needle.is_queued_for_deletion()
+					observed[2] = GameState.health
+	)
+	await frames(90)
+	check(observed[0], "natural needle physically overlaps player hurtbox")
+	if reset_on_overlap:
+		check(observed[1], "reset queues the overlapping needle for deletion")
+		check_eq(observed[2], initial_health, "player is unharmed at reset")
+		check_eq(GameState.health, initial_health, "queued needle cannot hurt player after reset")
+	else:
+		check_eq(GameState.health, initial_health - 1, "control needle actually damages player")
+	await dispose(arena)
 
 
 func _damage_and_ring() -> void:

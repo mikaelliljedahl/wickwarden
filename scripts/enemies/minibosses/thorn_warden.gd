@@ -40,6 +40,17 @@ func _enter_phase(_number: int) -> void:
 	_stun_immunity = 0.0
 
 
+func clear_hazards() -> void:
+	# queue_free waits until the end of the frame; stop needle hits immediately,
+	# including when reset is called while physics overlap signals are flushing.
+	for hazard in _hazards:
+		if is_instance_valid(hazard) and hazard is EnemyProjectile:
+			var needle := hazard as EnemyProjectile
+			if is_instance_valid(needle.hitbox):
+				needle.hitbox.set_physics_process(false)
+	super.clear_hazards()
+
+
 func _boss_physics(delta: float) -> void:
 	_cycle -= delta
 	velocity = Vector2.ZERO
