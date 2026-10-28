@@ -1,5 +1,18 @@
 # Current status
 
+**Corrow's Echo TELL, 2026-10-28 (committed in `f9459d7`):** The geometric arc
+is replaced by an existing documented painted wax-wave arc with null fallback;
+0.5-second timing and 110°/150 px hit area are unchanged. Actual `cave_10_4`
+dark stills cover four directions with a placed player; left/right are partly
+obscured, and human play or motion was not verified. Agent and lead passed
+`corrows_echo`, the lead passed `wick_automaton`, and the agent reports lint
+PASS. A clean full `make check` on exact `f9459d7` passed; log
+`/var/tmp/wick-clean-f9459d7-2gkky9l5/check.log`. It is the latest full check.
+
+Chime notes in scratch look promising but are not integrated: at maximum they
+extend about 39 px beyond the shape, and scaling/asset-contract questions remain.
+Review used controlled stills only.
+
 **Hollow Captain bash warning, 2026-10-28 (committed in `69bb6ec`):** A
 painted directional semicircle replaces the geometric TELEGRAPH line, reusing
 `unlit_wax_wave_z1` at alpha 0.5 unshaded behind the figure with null fallback.
@@ -8,7 +21,8 @@ Controlled actual `cave_1_5` stills cover natural phases and four directions
 with a placed player and `move_speed=0`, not human or animation verification.
 Agent and lead passed `hollow_captain`; the agent reports lint PASS. A clean
 full `make check` on exact `69bb6ec` passed; log
-`/var/tmp/wick-clean-69bb6ec-4s7m8gpv/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-69bb6ec-4s7m8gpv/check.log`. The later clean `f9459d7`
+full check is recorded above.
 The scratch 512 px Chime ring was not integrated because of a broad shield-like
 halo and low-alpha clipping; only controlled `cave_6_5`/`cave_6_6` stills were
 reviewed. Other agents' sources were untouched.
@@ -2628,7 +2642,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `69bb6ec85582b279b79d992c9c0145ba5ebac7c7` on `origin/main`, including Hollow Captain’s painted warning above. The latest clean full check is at `69bb6ec`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `f9459d7d525c8bec83c61ccb4764cbbb335ae0c5` on `origin/main`, including Corrow’s Echo warning above. The latest clean full check is at `f9459d7`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

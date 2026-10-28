@@ -284,12 +284,27 @@ Painted Reel documentation followed in `3ea4129`; tip readability landed in
 `32301d2a16f2118481a3a1a7be2e742e0fb029f3` on `origin/main`.
 Reel tip documentation followed in `540d932`; Hollow Captain's painted warning
 landed in `69bb6ec85582b279b79d992c9c0145ba5ebac7c7` on `origin/main`.
+Captain warning documentation followed in `4d39a28`; Corrow's Echo warning
+landed in `f9459d7d525c8bec83c61ccb4764cbbb335ae0c5` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Corrow's Echo TELL, committed in `f9459d7`:** The geometric arc is replaced by
+an existing documented painted wax-wave arc with null fallback; 0.5-second
+timing and 110°/150 px hit area are unchanged. Actual `cave_10_4` dark stills
+cover four directions with a placed player; left/right are partly obscured, and
+human play or motion was not verified. Agent and lead passed `corrows_echo`, the
+lead passed `wick_automaton`, and the agent reports lint PASS. A clean full
+`make check` on exact `f9459d7` passed; log
+`/var/tmp/wick-clean-f9459d7-2gkky9l5/check.log`. It is the latest full check.
+
+Chime notes in scratch look promising but are not integrated: at maximum they
+extend about 39 px beyond the shape, and scaling/asset-contract questions remain.
+Review used controlled stills only.
 
 **Hollow Captain bash warning, committed in `69bb6ec`:** A painted directional
 semicircle replaces the geometric TELEGRAPH line, reusing `unlit_wax_wave_z1` at
@@ -298,8 +313,8 @@ alpha 0.5 unshaded behind the figure with null fallback. The 0.5-second warning,
 stills cover natural phases and four directions with a placed player and
 `move_speed=0`, not human or animation verification. Agent and lead passed
 `hollow_captain`; the agent reports lint PASS. A clean full `make check` on exact
-`69bb6ec` passed; log `/var/tmp/wick-clean-69bb6ec-4s7m8gpv/check.log`. It is the
-latest full check. The scratch 512 px Chime ring was not integrated because of a
+`69bb6ec` passed; log `/var/tmp/wick-clean-69bb6ec-4s7m8gpv/check.log`. The
+later clean `f9459d7` full check is recorded above. The scratch 512 px Chime ring was not integrated because of a
 broad shield-like halo and low-alpha clipping; only controlled `cave_6_5`/`cave_6_6`
 stills were reviewed. Other agents' sources were untouched.
 
