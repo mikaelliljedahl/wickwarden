@@ -1,5 +1,14 @@
 # Current status
 
+**Q7 Unlit repeated heart exposure, 2026-10-28 (committed in `0f6185c`):**
+Existing real sling/Wick play reaches phase three; two real Reel lantern contacts
+and hook hits before, during, after and during the second exposure give
+`exposed=[false,true,false,true]`, `damage=[2,2]`, HP 24→22→22→20, without
+forced phases or timers. Agent and lead passed `tool_matrix`; the agent reports
+2,041 checks and lint PASS. This is B10 gallery with a manually placed, protected
+player, not actual World or human play. Ceiling, death, ending and broad phase
+coverage remain open. The latest clean full check is `afdaead`.
+
 **Q7 Briar Mother eye cycle, 2026-10-28 (committed in `37ed92b`):** A real
 sling shot physically overlaps the protected third eye without damage; the same
 eye lowers naturally and another real sling hit deals one damage to the eye
@@ -514,6 +523,14 @@ The lead's import, `boss_coinwyrm`, `area_cave_8`, `boss_gloam_knight` and
 `route_cave_7` passed. The first route run stopped due to `/tmp` quota; after a
 completed isolated profile was freed, the rerun passed. Agents report lint,
 `art-test` and B07/B08 ownership PASS.
+
+**Q8 exit-drain scratch review, 2026-10-28:** In the older snapshot at
+`/var/tmp/wick-q8-exit-review/`, an idempotent drain of active threaded loads
+before title-menu/WM quit had no parse/load/leak errors in isolated synthetic
+WM, pause, title and save processes. Drain took 7–82 ms with a headless frame
+gap around 7 ms. One direct quit bypasses it and still errors; actual compositor
+close is unverified and stuck loads have no timeout. Cold disk, GPU, CI, human
+play and a full HEAD comparison are missing; this is not ready for integration.
 
 **Q8 deferred-load scratch probe, 2026-10-28:** In
 `/var/tmp/wick-q8-defer-MQL0Qk/`, an older snapshot not fully compared with HEAD
@@ -2378,7 +2395,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `37ed92b87a223055147afad51645c25cfc48d860` on `origin/main`, including Q7 Briar Mother eye tests above. The latest clean full check is at `afdaead`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0f6185c562d72db4caff5203b61b4b7837ed4046` on `origin/main`, including Q7 Unlit repeated exposure above. The latest clean full check is at `afdaead`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -235,12 +235,23 @@ Coinwyrm and drop documentation followed in `ea58756`; Q6 room slides are at
 `6c92d13f6e24140b5dcc1e63baf1a1d07ea33f66` on `origin/main`.
 Room-slide documentation followed in `462b24b`; Q7 Briar Mother's eye cycle is
 at `37ed92b87a223055147afad51645c25cfc48d860` on `origin/main`.
+Briar eye documentation followed in `280b790`; Q7 repeated Unlit exposure is
+landed in `0f6185c562d72db4caff5203b61b4b7837ed4046` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 Unlit repeated heart exposure, committed in `0f6185c`:** Existing real
+sling/Wick play reaches phase three; two real Reel lantern contacts and hook
+hits before, during, after and during the second exposure give
+`exposed=[false,true,false,true]`, `damage=[2,2]`, HP 24→22→22→20, without
+forced phases or timers. Agent and lead passed `tool_matrix`; the agent reports
+2,041 checks and lint PASS. This is B10 gallery with a manually placed, protected
+player, not actual World or human play. Ceiling, death, ending and broad phase
+coverage remain open. The latest clean full check is `afdaead`.
 
 **Q7 Briar Mother eye cycle, committed in `37ed92b`:** A real sling shot
 physically overlaps the protected third eye without damage; the same eye lowers
@@ -752,6 +763,14 @@ The lead's import, `boss_coinwyrm`, `area_cave_8`, `boss_gloam_knight` and
 `route_cave_7` passed. The first route run stopped due to `/tmp` quota; after a
 completed isolated profile was freed, the rerun passed. Agents report lint,
 `art-test` and B07/B08 ownership PASS.
+
+**Q8 exit-drain scratch review, 2026-10-28:** In the older snapshot at
+`/var/tmp/wick-q8-exit-review/`, an idempotent drain of active threaded loads
+before title-menu/WM quit had no parse/load/leak errors in isolated synthetic
+WM, pause, title and save processes. Drain took 7–82 ms with a headless frame
+gap around 7 ms. One direct quit bypasses it and still errors; actual compositor
+close is unverified and stuck loads have no timeout. Cold disk, GPU, CI, human
+play and a full HEAD comparison are missing; this is not ready for integration.
 
 **Q8 deferred-load scratch probe, 2026-10-28:** In
 `/var/tmp/wick-q8-defer-MQL0Qk/`, an older snapshot not fully compared with HEAD
