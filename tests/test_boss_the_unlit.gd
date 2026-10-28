@@ -3,6 +3,7 @@ extends TestCase
 ## Controlled positioning and disabled player hurtbox isolate tool provenance.
 ## These probes do not claim a human balance/feel playthrough.
 const SCENE := "res://scenes/enemies/bosses/the_unlit.tscn"
+const WORLD_SCENE := "res://scenes/world/world.tscn"
 const GALLERY := "res://tests/fixtures/gallery/B10.tscn"
 var captures := false
 var capture_viewport: SubViewport
@@ -15,6 +16,7 @@ func run() -> void:
 		capture_viewport.size = Vector2i(1920, 1080)
 		capture_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 		add_child(capture_viewport)
+	await _arena_presentation()
 	await _room_clone_lifecycle()
 	await _orbit_and_reset()
 	await _full_physical_fight()
@@ -25,6 +27,51 @@ func run() -> void:
 	await _missing_art_presentation()
 	await _chain_presentation()
 	await _lash_missing_art()
+
+
+func _arena_presentation() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var world := (load(WORLD_SCENE) as PackedScene).instantiate() as World
+	add_child(world)
+	world.start_at(&"cave_10_14")
+	world.player.set_hurtbox_enabled(self, false)
+	await frames(5)
+	var room := world.current_room
+	var boss = room.get_node("Enemies/TheUnlit1")
+	var light: PointLight2D = boss._arena_light
+	check(is_instance_valid(light), "arena has a presentation light")
+	check(not light.is_in_group(&"glow_light"), "arena light does not activate glow gameplay")
+	var origin: Vector2 = boss._phase_origin + boss.ARENA_CENTRE
+	check_eq(light.global_position, origin, "arena light starts at room centre")
+	boss.global_position += Vector2(100, 30)
+	await frames(2)
+	check_eq(light.global_position, origin, "arena light stays fixed when boss moves")
+	boss._start_phase(2)
+	check_eq(boss._arena_light, light, "phase two retains one arena light")
+	boss._start_phase(3)
+	check_eq(boss._arena_light, light, "phase three retains one arena light")
+	var mounts := room.get_node("Props/Arena1/Visual")
+	var names := ["LeftPost", "CentrePost", "RightPost"]
+	var positions := [Vector2(576, 96), Vector2(960, 96), Vector2(1344, 96)]
+	for i in range(names.size()):
+		var mount := mounts.get_node(names[i]) as Sprite2D
+		check(mount != null and mount.texture != null, "painted mount is present")
+		check_eq(mount.position, positions[i], "chain post position is unchanged")
+		check_eq(mount.get_child_count(), 0, "chain mount has no physics children")
+		check(not mount.is_in_group(&"reelable"), "chain mount is not a reel target")
+	world.start_at(&"cave_10_12")
+	await frames(5)
+	check(not is_instance_valid(light), "arena light is removed on room exit")
+	world.start_at(&"cave_10_14")
+	await frames(5)
+	boss = world.current_room.get_node("Enemies/TheUnlit1")
+	check(is_instance_valid(boss._arena_light), "arena light returns on re-entry")
+	boss._on_death()
+	await frames(2)
+	check(not is_instance_valid(boss._arena_light), "arena light is removed on death")
+	await dispose(world)
+	reset_state()
 
 
 func _lash_missing_art() -> void:
@@ -141,7 +188,7 @@ func _bolt_presentation() -> void:
 ## Positioned visual fixture in the real streamed C10 room, not an earned route.
 func _world_presentation() -> void:
 	reset_state()
-	var packed := load("res://scenes/world/world.tscn") as PackedScene
+	var packed := load(WORLD_SCENE) as PackedScene
 	check(packed != null, "actual World scene loads")
 	if packed == null:
 		return

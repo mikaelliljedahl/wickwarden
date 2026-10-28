@@ -1,5 +1,5 @@
 {
-    "fx_boss_death_light_z1": {
+  "fx_boss_death_light_z1": {
     "cell": [
       768,
       768
@@ -135,6 +135,26 @@
         "file": "res://assets/sprites/abacus_whirl_z1.png",
         "frames": 1,
         "fps": 1,
+        "loop": true
+      }
+    }
+  },
+  "unlit_chain_mount_z1": {
+    "cell": [
+      128,
+      128
+    ],
+    "anchor": [
+      64.0,
+      64.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_chain_mount_z1_idle.png",
+        "frames": 1,
+        "fps": 1.0,
         "loop": true
       }
     }

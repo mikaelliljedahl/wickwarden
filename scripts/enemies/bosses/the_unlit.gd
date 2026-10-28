@@ -38,6 +38,7 @@ var _slide_left := 0.0
 var chain_art_path := CHAIN_ART
 var _chains: Node2D
 var _wax_effect_spawned := false
+var _arena_light: PointLight2D
 
 
 class ChainPresentation:
@@ -148,12 +149,18 @@ func _enter_tree() -> void:
 	# skips _boss_ready() on the saved defeat flag.
 	_reel_script = load("res://scripts/world/reelable.gd") as GDScript
 	for child in get_children():
-		if child is HeartGlow or child is ChainPresentation or (_reel_script != null and child.get_script() == _reel_script):
+		if (
+			child is HeartGlow
+			or child is ChainPresentation
+			or child.name == "ArenaPresentationLight"
+			or (_reel_script != null and child.get_script() == _reel_script)
+		):
 			remove_child(child)
 			child.free()
 	lantern = null
 	_heart_glow = null
 	_chains = null
+	_arena_light = null
 
 
 func _boss_ready() -> void:
@@ -173,6 +180,8 @@ func _boss_ready() -> void:
 	_heart_glow.visible = false
 	add_child(_heart_glow)
 	_phase_origin = global_position - MASS
+	Events.room_entered.connect(_on_room_entered)
+	_make_arena_light()
 	var script := _reel_script
 	if script != null:
 		lantern = script.new() as Node2D
@@ -187,6 +196,44 @@ func _boss_ready() -> void:
 			lamp_look.auto_motion = false
 			lamp_look.add_child(LanternGlowPresentation.new())
 	queue_redraw()
+
+
+func _on_room_entered(room_id: StringName) -> void:
+	if room_id == arena_id and not is_defeated() and not is_dead:
+		_make_arena_light()
+	else:
+		_clear_arena_light()
+
+
+func _make_arena_light() -> void:
+	if is_instance_valid(_arena_light):
+		return
+	var gradient := Gradient.new()
+	gradient.set_color(0, Color.WHITE)
+	gradient.set_color(1, Color.WHITE)
+	var texture := GradientTexture2D.new()
+	texture.width = 1920
+	texture.height = 960
+	texture.gradient = gradient
+	_arena_light = PointLight2D.new()
+	_arena_light.name = "ArenaPresentationLight"
+	_arena_light.texture = texture
+	_arena_light.color = Color(1.0, 0.9, 0.76)
+	_arena_light.energy = 0.5
+	add_child(_arena_light)
+	_arena_light.top_level = true
+	_arena_light.global_position = _phase_origin + ARENA_CENTRE
+
+
+func _clear_arena_light() -> void:
+	if is_instance_valid(_arena_light):
+		_arena_light.queue_free()
+		_arena_light = null
+
+
+func _on_death() -> void:
+	_clear_arena_light()
+	super()
 
 
 func _enter_phase(number: int) -> void:
@@ -556,6 +603,9 @@ func reset_fight() -> void:
 
 
 func _exit_tree() -> void:
+	_clear_arena_light()
+	if Events.room_entered.is_connected(_on_room_entered):
+		Events.room_entered.disconnect(_on_room_entered)
 	clear_hazards()
 	_free_parts()
 	super()

@@ -1857,3 +1857,12 @@ some warm coverage cannot be ruled out; the source has no independent alpha.
 ### Choir Warden directional poses, Z1
 
 Five original built-in ImageGen sheets and their full prompts, output IDs and SHA-256 hashes are recorded in [choir-warden-z1-log.md](../tools/source_art/choir-warden-z1-log.md). The existing side walk source is reused. New action and walk strips share 256 px cells, foot 236 and a common fit scale; the older down action outputs remain preserved.
+
+
+## The Unlit chain mounting plate (2026-10-28)
+
+Built-in ImageGen generated the native-alpha 1285 × 1224 source `tools/source_art/unlit_chain_mount_z1.png`, from `01a1840f-7255-71c0-858b-0221aa7acb0b/exec-23954776-8406-48d1-b655-666e338f8a73.png`, SHA-256 `03d92de5109e8345b0573adf56d6064d84ef48c50fc6c17ab53a14be3666fff5`. No model version was exposed. Prompt:
+
+> Use case: stylized-concept. Asset: one isolated small fixed chain mounting plate for Wickwarden, a painterly dark fantasy top-down game. Depict exactly one compact forged iron bracket, a slightly irregular vertical oval backplate with two simple rivets and a small closed heavy iron eye at its lower centre for a chain to meet. Three-quarter top-down view (camera 50 degrees), subtle warm upper-left lamplight, worn dark iron with muted aged brass highlights, hand-painted realistic storybook brushwork and soft edges. Centered complete object with generous margins on genuine transparent background. Modest, non-glowing fixed wall hardware, not an interactive item. No chain, no rock, no foliage, no floor, no cast shadow, no text, no border, no game scene, no pixel art.
+
+The native-alpha cutter uses one pose, fits it within 54 × 72 in a 128 × 128 cell, and outputs `assets/sprites/unlit_chain_mount_z1_idle.png`, SHA-256 `ed7f204ab118fb7850b231c1bac201ada0cf719fd838f3a03d317597495dc03c`. An 18 px visual offset aligns the eye with existing chain-post coordinates; this is an approximation, not a physical joint.

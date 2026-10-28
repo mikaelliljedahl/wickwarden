@@ -1,15 +1,18 @@
-[gd_scene format=3]
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/unlit_chain_mount_z1_idle.png" id="1"]
+
 [node name="NinthLanternArena" type="Node2D"]
 [node name="Visual" type="Node2D" parent="."]
-[node name="LeftPost" type="Polygon2D" parent="Visual"]
+[node name="LeftPost" type="Sprite2D" parent="Visual"]
 position = Vector2(576, 96)
-polygon = PackedVector2Array(-20, -24, 20, -24, 20, 24, -20, 24)
-color = Color(0.45, 0.38, 0.3, 1)
-[node name="CentrePost" type="Polygon2D" parent="Visual"]
+offset = Vector2(0, -18)
+texture = ExtResource("1")
+[node name="CentrePost" type="Sprite2D" parent="Visual"]
 position = Vector2(960, 96)
-polygon = PackedVector2Array(-20, -24, 20, -24, 20, 24, -20, 24)
-color = Color(0.45, 0.38, 0.3, 1)
-[node name="RightPost" type="Polygon2D" parent="Visual"]
+offset = Vector2(0, -18)
+texture = ExtResource("1")
+[node name="RightPost" type="Sprite2D" parent="Visual"]
 position = Vector2(1344, 96)
-polygon = PackedVector2Array(-20, -24, 20, -24, 20, 24, -20, 24)
-color = Color(0.45, 0.38, 0.3, 1)
+offset = Vector2(0, -18)
+texture = ExtResource("1")
