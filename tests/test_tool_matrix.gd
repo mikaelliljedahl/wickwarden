@@ -108,6 +108,7 @@ func run() -> void:
 	await _automaton_moth()
 	await _automaton_live_jet_tools()
 	await _lurker_moth()
+	await _lurker_natural_moth()
 	await _captain_moth()
 	await _lock_plate_tools()
 	await _mauler_slag_hook()
@@ -2050,6 +2051,90 @@ func _lurker_moth() -> void:
 	await frames(8)
 	Input.action_release(&"attack")
 	check_eq(enemy.hp, 14, "Lurker: real hook damages surfaced target")
+	await dispose(arena)
+
+
+func _lurker_natural_moth() -> void:
+	reset_state()
+	var arena := make_arena()
+	var zone := _prop(arena, "shallow_zone", Vector2(900, 400))
+	if zone == null:
+		await dispose(arena)
+		return
+	zone.set(&"size", Vector2(600, 192))
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/sump_lurker.tscn", Vector2(900, 496)
+	)
+	var player := make_player(arena, Vector2(900, 830))
+	player.set_hurtbox_enabled(self, false)
+	var hits: Array[StringName] = []
+	var states: Array[int] = []
+	enemy.hurtbox.hurt.connect(func(hit: Hitbox) -> void:
+		hits.append(hit.kind)
+		states.append(enemy.state)
+	)
+	await frames(3)
+	check_eq(enemy.state, enemy.State.SUBMERGED, "Lurker: naturally remains submerged at distant shore")
+	check(not enemy.hurtbox.enabled, "Lurker: submerged hurtbox rejects contact")
+	_equip(player, &"tether_moth")
+	player.facing = Vector2.UP
+	check(player.use_item(), "Lurker: real moth launches toward submerged target")
+	var moths := get_tree().get_nodes_in_group(&"item_tether_moth")
+	check_eq(moths.size(), 1, "Lurker: real moth exists")
+	var overlapped := false
+	if not moths.is_empty():
+		var moth := moths[0] as Node2D
+		var box := moth.get_node_or_null("StunHitbox") as Hitbox
+		check(box != null and box.active, "Lurker: real moth hitbox is active")
+		for i in range(50):
+			await frames(1)
+			if not is_instance_valid(box):
+				break
+			if box.get_overlapping_areas().has(enemy.hurtbox):
+				overlapped = true
+				check_eq(enemy.state, enemy.State.SUBMERGED, "Lurker: physical overlap occurs submerged")
+				break
+	check(overlapped, "Lurker: moth hitbox physically overlaps submerged hurtbox")
+	check(hits.is_empty(), "Lurker: submerged overlap is not accepted")
+	check(not enemy.is_stunned(), "Lurker: submerged overlap does not stun")
+	check_eq(enemy.hp, 16, "Lurker: submerged overlap causes no damage")
+	for i in range(100):
+		if get_tree().get_nodes_in_group(&"item_tether_moth").is_empty():
+			break
+		await frames(1)
+	check(get_tree().get_nodes_in_group(&"item_tether_moth").is_empty(), "Lurker: first moth returns")
+	player.place_at(Vector2(900, 680))
+	for i in range(180):
+		if enemy.state == enemy.State.TELEGRAPH:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.TELEGRAPH, "Lurker: naturally reaches bubble warning")
+	for i in range(60):
+		if enemy.state == enemy.State.SURFACED:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.SURFACED, "Lurker: naturally surfaces")
+	check(enemy.hurtbox.enabled, "Lurker: surfaced hurtbox accepts hits")
+	check(is_instance_valid(enemy._bite) and enemy._bite.active, "Lurker: natural bite starts")
+	player.facing = Vector2.UP
+	check(player.use_item(), "Lurker: real moth launches at surfaced target")
+	for i in range(35):
+		if enemy.is_stunned():
+			break
+		await frames(1)
+	check(&"stun" in hits, "Lurker: moth hits actual surfaced hurtbox")
+	if &"stun" in hits:
+		check_eq(states[hits.find(&"stun")], enemy.State.SURFACED, "Lurker: moth hits while surfaced")
+	check(enemy.is_stunned(), "Lurker: surfaced moth stuns")
+	check_near(enemy._stun_time, 1.5, 0.08, "Lurker: surfaced stun is clamped")
+	player.place_at(enemy.global_position + Vector2(0, 90))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check(&"hook" in hits, "Lurker: real hook contacts surfaced hurtbox")
+	check_eq(enemy.hp, 14, "Lurker: actual hook deals two in opening")
+	print("MATRIX Lurker natural moth: submerged overlap=", overlapped, " accepted=", hits, " states=", states)
 	await dispose(arena)
 
 
