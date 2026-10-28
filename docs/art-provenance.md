@@ -1,5 +1,26 @@
 # Wickwarden — art provenance
 
+## Title art (2026-10-28)
+
+`assets/art/title_splash.png` uses the previously reviewed `title_splash_v2.png`
+(source SHA-256 `2ead284257cb9515fd33796b67b2766243acfa2bff3354c02dd2615d45ae503b`;
+original output and prompt in [the generation log](../tools/source_art/log_art_resume_31.md)).
+The 1536×1024 source was center-cropped to 1536×864 and scaled once to
+1920×1080 with ImageMagick; final SHA-256
+`12bbf7e118d4951c319ab01568461ab52f23084d901af6ca99f1e67cfdbeffda`.
+
+`tools/source_art/title_logo_20261028.png` is a 2076×758 native-alpha image
+from the built-in image generation tool, output
+`01a18005-3114-72d2-8989-eeb9410f5141/exec-955858d7-d230-45a3-90c9-c5c53d35aa73.png`,
+SHA-256 `b1551de49f514ba31bcc93bbce6c475bc202d3bd24d9b68d8665b8822cfc224a`.
+The model version was not exposed. It was scaled proportionally to fit and
+centered on a transparent 1400×420 canvas with ImageMagick. The final
+`assets/art/title_logo.png` SHA-256 is
+`333bd54e3a10080e681b9eeb01c449dfb4afc097368f8195bbfe6a2b9b3e40c2`.
+The lettering and both title-screen menu states were visually reviewed. Prompt:
+
+> Use case: logo-brand. Asset type: transparent title-screen wordmark for original game Wickwarden. Create a single hand-lettered brass-and-wax wordmark with a small lit wick integrated into a letter. Text must read exactly 'Wickwarden', spelled W-i-c-k-w-a-r-d-e-n, with no other lettering. Painterly storybook illustration, rich aged brass and pale wax textures, warm amber light against transparent background, soft edges, high detail; no pixel art, no heavy black outlines. Wide horizontal composition, all letters fully visible with margin, readable at game menu size. No frame, no scene, no shadow backdrop, no watermark.
+
 The Colossus quake source `tools/source_art/colossus_quake_z1.png` is a
 native-alpha image generated 2026-10-27. Its original output is
 `01a17f8a-84c4-7c73-a2cf-e67783559d20/exec-30a02017-b502-4fc5-b868-53e97d5be32d.png`;

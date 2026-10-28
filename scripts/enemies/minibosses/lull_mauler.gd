@@ -18,6 +18,24 @@ var _aim := Vector2.DOWN
 var _impact := Vector2.ZERO
 var _attack: Hitbox
 var _attack_left := 0.0
+var _smash_art: Texture2D
+
+
+class SweepWarning:
+	extends Node2D
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		var mauler = get_parent()
+		if mauler.is_dead or mauler.is_dying() or mauler.state != State.SWEEP_WARNING:
+			return
+		var aim: Vector2 = mauler._aim
+		var edge := Color(1.0, 0.6, 0.2, 0.7)
+		draw_arc(Vector2.ZERO, 140.0, aim.angle() - PI / 2, aim.angle() + PI / 2, 32, edge, 3.0)
+		draw_line(Vector2.ZERO, aim.rotated(-PI / 2) * 140.0, edge, 3.0)
+		draw_line(Vector2.ZERO, aim.rotated(PI / 2) * 140.0, edge, 3.0)
 
 
 class SlagChunk:
@@ -79,6 +97,19 @@ func _init() -> void:
 		{"shape": "rect", "color": Color(0.35, 0.3, 0.26), "size": Vector2(96, 96)},
 		true
 	)
+
+
+func _boss_ready() -> void:
+	var path := "res://assets/sprites/colossus_quake_z1_idle.png"
+	if ResourceLoader.exists(path):
+		_smash_art = load(path) as Texture2D
+	if get_node_or_null("SweepWarning") == null:
+		var warning := SweepWarning.new()
+		warning.name = "SweepWarning"
+		var material := CanvasItemMaterial.new()
+		material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		warning.material = material
+		add_child(warning)
 
 
 func _enter_phase(_number: int) -> void:
@@ -195,15 +226,12 @@ func _draw() -> void:
 	if is_dead or is_dying():
 		return
 	if state == State.SMASH_WARNING:
-		draw_circle(_impact - global_position, 110.0, Color(0.15, 0.08, 0.04, 0.65))
-		draw_arc(_impact - global_position, 110.0, 0.0, TAU, 48, Color(1, 0.6, 0.2), 5.0)
-	elif state == State.SWEEP_WARNING:
-		draw_arc(
-			Vector2.ZERO,
-			140.0,
-			_aim.angle() - PI / 2,
-			_aim.angle() + PI / 2,
-			32,
-			Color(1, 0.6, 0.2),
-			5.0
-		)
+		var centre := _impact - global_position
+		if _smash_art != null:
+			draw_texture_rect(
+				_smash_art, Rect2(centre - Vector2(96, 96), Vector2(192, 192)), false,
+				Color(1, 1, 1, 0.65)
+			)
+		else:
+			draw_circle(centre, 110.0, Color(0.15, 0.08, 0.04, 0.65))
+		draw_arc(centre, 110.0, 0.0, TAU, 48, Color(1, 0.6, 0.2), 3.0)
