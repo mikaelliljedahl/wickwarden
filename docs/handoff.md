@@ -304,12 +304,29 @@ Sling documentation followed in `7d7f8d2`; Heft Mitts flecks landed in
 `e73eb5aaa81c3a240684f829388337e89dfba850` on `origin/main`.
 Mitts effect documentation followed in `74950b3`; Gloam's active slash landed in
 `5999b74277177bf01b745a103e58a0f49f00f24a` on `origin/main`.
+Gloam slash documentation followed in `a9d2a57`; Thorn Warden's painted wreath
+landed in `0ed1b72819b271f3702ea7ef1886b05a858e8668` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Thorn Warden warning wreath, committed in `0ed1b72`:** WALK and TELEGRAPH use
+a painted wreath and subtle warning light, with old lines as image fallback;
+gameplay and timing are unchanged. Source, provenance and metadata are included.
+The lead passed `thorn_warden` and `boss_base` after import; the agent reports
+targeted gdlint and `art-test` (25) PASS with the existing ResourceWarning. The
+agent's first pre-import checks failed.
+
+Controlled actual `cave_2_4` time-separated stills at
+`/var/tmp/wick-thorn-study/integrated-{030,175,190,210,230}.png` show a moving
+boss and placed, unprotected stationary player whose health falls 6→4→2 as
+needles fire. Close play can obscure the wreath. These are not human play or
+continuous motion verification. A clean full `make check` on exact `0ed1b72`
+passed (exit 0); log `/var/tmp/wick-clean-0ed1b72-5wb3xfe3/check.log`. It is
+the latest full check.
 
 **Gloam Knight active slash, committed in `5999b74`:** The active slash uses
 existing documented `mirror_tell_z1` in its own unshaded child; the original
@@ -320,7 +337,8 @@ at `/var/tmp/wick-gloam-paint-study/final-{right,up,down,left,up_right,down_left
 used a placed, protected player, frozen attack/boss and paused pit. Color may
 overlap and resemble blue flame; 0.05-second motion and human play are not
 verified. A clean full `make check` on exact `5999b74` passed (exit 0); log
-`/var/tmp/wick-clean-5999b74-b3e6_y_z/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-5999b74-b3e6_y_z/check.log`. The later clean `0ed1b72`
+full check is recorded above.
 
 **Heft Mitts lift/throw flecks, committed in `e73eb5a`:** Painted world-fixed
 flecks appear on successful lift and throw, not no-op, push or carry; missing art
