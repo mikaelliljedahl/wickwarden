@@ -269,12 +269,21 @@ The owner's placeholder priority was documented in
 `c18a3903b360ec0660f0b161c6c102b6fe81deb7` on `origin/main`.
 Placeholder art trials were documented in
 `1cc825f20fa22b637514d6dabbf8b90fec46974d` on `origin/main`.
+The Mauler sweep prototype was documented in
+`32e7b3ab86d6f8023ce9f685f447483a034502eb` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Bramble upward scratch review, 2026-10-28:** The candidate was rejected: at
+the same 192 px cutter scale the pose requires 309×265 px, the diagonal gaze
+looks vertical despite a different aim, the body is too large and the sector
+obscures it. Review used only controlled static snapshots in actual `ow_6_1`;
+exit reported four ObjectDB and two resource warnings, plus a GLES init failure.
+A new compact jaw image is being tried in scratch, not integrated into the repo.
 
 **Lull sweep scratch refinement, 2026-10-28:** An isolated prototype places a
 painted outline along 16 segments within radius 140. Eight dark `cave_4_4`
