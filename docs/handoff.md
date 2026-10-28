@@ -209,12 +209,27 @@ Clean-check documentation followed in `ed2f646`; Cinder Wisp windup is at
 `d8935706723a1700a0ae49c625ee76a92453aabd` on `origin/main`.
 Cinder Wisp windup was documented in
 `d82b9553c612bd2575878ebee6416a7f4a2b27f9` on `origin/main`.
+The Snapper prototype was documented in
+`1858b014a2bba936e89271822f172078d974fa6f` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Rejected Snapper up candidate, 2026-10-28:** The ImageGen candidate
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-a0629151-d909-4eec-be52-46417083e334.png`
+and scratch proof `/var/tmp/wick-snap-up-JUXI3p/` show a visually correct up
+direction, but a common scale gives 262×243 and 261×268 against the 192 px cell.
+Silhouette and scale mismatch; in World the art is too large and obscures the
+player. It was rejected and not integrated. Only stills were reviewed, not
+animation or human play; new compact matching art is needed.
+
+A further ImageGen candidate,
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-a0ea4437-1783-4a13-976b-8b61387a7fb2.png`,
+was judged by the lead to face right despite the requested upward direction. It
+was rejected without cutting, World testing or integration.
 
 **Bramble Snapper scratch prototype, 2026-10-28:** Painted v3 telegraph/snap
 proofs in `/var/tmp/wick-snap-proof-wjEx9p/` and an isolated World prototype in

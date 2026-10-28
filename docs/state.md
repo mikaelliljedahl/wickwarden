@@ -1,5 +1,18 @@
 # Current status
 
+**Rejected Snapper up candidate, 2026-10-28:** The ImageGen candidate
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-a0629151-d909-4eec-be52-46417083e334.png`
+and scratch proof `/var/tmp/wick-snap-up-JUXI3p/` show a visually correct up
+direction, but a common scale gives 262×243 and 261×268 against the 192 px cell.
+Silhouette and scale mismatch; in World the art is too large and obscures the
+player. It was rejected and not integrated. Only stills were reviewed, not
+animation or human play; new compact matching art is needed.
+
+A further ImageGen candidate,
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-a0ea4437-1783-4a13-976b-8b61387a7fb2.png`,
+was judged by the lead to face right despite the requested upward direction. It
+was rejected without cutting, World testing or integration.
+
 **Bramble Snapper scratch prototype, 2026-10-28:** Painted v3 telegraph/snap
 proofs in `/var/tmp/wick-snap-proof-wjEx9p/` and an isolated World prototype in
 `/var/tmp/wick-snap-world-yZxIXj/` use 192² cells and byte-identical idle. Real
@@ -2239,7 +2252,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `d82b9553c612bd2575878ebee6416a7f4a2b27f9` on `origin/main`, documenting Cinder Wisp windup above. The latest clean full check remains at `2c8c68c`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `1858b014a2bba936e89271822f172078d974fa6f` on `origin/main`, documenting the Snapper prototype above. The latest clean full check remains at `2c8c68c`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
