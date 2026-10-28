@@ -4,7 +4,16 @@ extends TestCase
 const GALLERY := "res://tests/fixtures/gallery/B08.tscn"
 
 
+class MissingWarningArtCoinwyrm:
+	extends "res://scripts/enemies/bosses/coinwyrm.gd"
+
+	func _load_bite_warning_texture() -> Texture2D:
+		return null
+
+
 func run() -> void:
+	await _bite_warning_lifecycle()
+	await _bite_warning_fallback_and_reset()
 	await _challenge()
 	await _windows_and_anchor()
 	await _attacks()
@@ -549,4 +558,91 @@ func _physical_finish() -> void:
 		await frames(24)
 	check(boss.is_dying(), "real reels and hook finish both phases")
 	check(GameState.has_flag(&"boss_cave_8_12_defeated"), "physical finish persists")
+	await dispose(room)
+
+
+func _bite_warning_lifecycle() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var room := _fixture()
+	var boss = room.get_node("Enemies/Coinwyrm")
+	var player := make_player(room, boss.global_position + Vector2(200, 0))
+	player.set_hurtbox_enabled(self, false)
+	boss._bite()
+	var warning := boss.get_parent().get_node_or_null("BiteWarning")
+	check(warning != null, "paint warning spawned")
+	var marker: Node2D
+	for hazard in boss._hazards:
+		if (
+			is_instance_valid(hazard)
+			and hazard.get_script().resource_path.ends_with("telegraph.gd")
+		):
+			marker = hazard
+	check(marker != null and not marker.visible, "original timer is hidden")
+	if marker != null:
+		check_eq(marker.duration, 0.5, "duration preserved")
+		check_eq(marker.radius, 150.0, "radius preserved")
+		check_eq(marker.arc_deg, 180.0, "arc preserved")
+		var finished := [0]
+		marker.finished.connect(func(): finished[0] += 1)
+		await frames(15)
+		check(
+			marker.progress() > 0.35 and marker.progress() < 0.65,
+			"warning progress follows original timer"
+		)
+		check_eq(finished[0], 0, "signal not premature")
+		await frames(20)
+		check_eq(finished[0], 1, "signal exactly once")
+		check(not is_instance_valid(warning), "warning removed with timer")
+	await dispose(room)
+
+
+func _bite_warning_fallback_and_reset() -> void:
+	reset_state()
+	SaveGame.enabled = false
+	var room := _fixture()
+	var original = room.get_node("Enemies/Coinwyrm")
+	var boss := MissingWarningArtCoinwyrm.new()
+	boss.position = original.position
+	original.get_parent().add_child(boss)
+	original.queue_free()
+	var player := make_player(room, boss.global_position + Vector2(200, 0))
+	player.set_hurtbox_enabled(self, false)
+	boss._bite()
+	var marker: Node2D
+	for hazard in boss._hazards:
+		if (
+			is_instance_valid(hazard)
+			and hazard.get_script().resource_path.ends_with("telegraph.gd")
+		):
+			marker = hazard
+	check(marker != null and marker.visible, "missing art keeps visible original marker")
+	check(
+		boss.get_parent().get_node_or_null("BiteWarning") == null,
+		"missing art creates no painted cue"
+	)
+	if marker != null:
+		var finished := [0]
+		marker.finished.connect(func(): finished[0] += 1)
+		await frames(35)
+		check_eq(finished[0], 1, "fallback still emits finished once")
+		check(not is_instance_valid(marker), "fallback timer finishes normally")
+	boss._bite()
+	var reset_marker: Node2D = boss._hazards[-1]
+	boss.reset_fight()
+	await frames(3)
+	check(not is_instance_valid(reset_marker), "reset removes fallback timer")
+	await dispose(boss)
+	boss = null
+	var painted = (load("res://scripts/enemies/bosses/coinwyrm.gd") as GDScript).new()
+	room.get_node("Enemies").add_child(painted)
+	painted._bite()
+	var warning: Node = painted.get_parent().get_node_or_null("BiteWarning")
+	check(warning != null, "warning exists before reset")
+	painted.reset_fight()
+	await frames(3)
+	check(not is_instance_valid(warning), "reset removes painted warning")
+	check(painted._hazards.is_empty(), "reset clears hazards")
+	await frames(35)
+	check(painted._hazards.is_empty(), "cancelled warning spawns no strike")
 	await dispose(room)

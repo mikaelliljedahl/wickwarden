@@ -1,6 +1,7 @@
 extends "res://scripts/enemies/boss_base.gd"
 ## Free reel pulls remove armour. Persistent rewards belong to the cave room.
 
+const BITE_WARNING_TEXTURE := "res://assets/sprites/mirror_tell_z1.png"
 const HEAPS := [Vector2(288, 288), Vector2(288, 672), Vector2(1056, 480), Vector2(1536, 672)]
 const FRONT_BITE_DOT := 0.9659258  # Within 15 degrees of the drawn downward facing.
 const OFFSETS := [Vector2(0, -58), Vector2(-58, 0), Vector2(58, 0), Vector2(0, -108)]
@@ -30,6 +31,50 @@ class PlateCue:
 				[Vector2(-12, -31), Vector2(-7, -41), Vector2(0, -35), Vector2(7, -41), Vector2(12, -31)]
 			)
 			draw_polyline(points, color, 3.0, true)
+
+
+class BiteWarning:
+	extends Node2D
+	var facing := Vector2.RIGHT
+	var timer: Node2D
+	var texture: Texture2D
+
+	func _ready() -> void:
+		var unshaded := CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = unshaded
+		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		if not is_instance_valid(timer) or texture == null:
+			return
+		var progress: float = timer.progress()
+		var start := facing.angle() - PI / 2.0
+		var inner := lerpf(55.0, 95.0, progress)
+		var outer := inner + 55.0
+		for i in range(24):
+			var u := float(i) / 24.0
+			var v := float(i + 1) / 24.0
+			var a := Vector2.from_angle(start + PI * u)
+			var b := Vector2.from_angle(start + PI * v)
+			var points := PackedVector2Array([a * inner, b * inner, b * outer, a * outer])
+			var uv := PackedVector2Array(
+				[Vector2(u, 0.40), Vector2(v, 0.40), Vector2(v, 0.60), Vector2(u, 0.60)]
+			)
+			draw_polygon(
+				points,
+				PackedColorArray([Color(1.0, 0.65, 0.22, lerpf(0.45, 1.0, progress))]),
+				uv,
+				texture
+			)
+		var boundary := PackedVector2Array([Vector2.ZERO])
+		for i in range(25):
+			boundary.append(Vector2.from_angle(start + PI * i / 24.0) * 150.0)
+		boundary.append(Vector2.ZERO)
+		draw_polyline(boundary, Color(1.0, 0.82, 0.35, 0.9), 3.0)
 
 
 class Strike:
@@ -397,9 +442,26 @@ func _bite() -> void:
 	var marker := _marker(at, &"cone", 0.5, 150, Vector2.ZERO, direction)
 	if marker != null:
 		_light_bite(marker, direction)
+		var texture := _load_bite_warning_texture()
+		if texture != null:
+			marker.visible = false
+			var warning := BiteWarning.new()
+			warning.name = "BiteWarning"
+			warning.facing = direction
+			warning.timer = marker
+			warning.texture = texture
+			get_parent().add_child(warning)
+			warning.global_position = at
+			marker.tree_exiting.connect(warning.queue_free)
 		marker.finished.connect(_strike.bind(at, direction, false))
 	else:
 		_head_idle()
+
+
+func _load_bite_warning_texture() -> Texture2D:
+	if not ResourceLoader.exists(BITE_WARNING_TEXTURE):
+		return null
+	return load(BITE_WARNING_TEXTURE) as Texture2D
 
 
 func _light_bite(parent: Node2D, direction: Vector2) -> void:
