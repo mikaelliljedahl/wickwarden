@@ -1,5 +1,15 @@
 # Current status
 
+**Skitter Boots takeoff dust, 2026-10-28 (committed in `7d7ba77`):** The
+geometric cue is replaced by painted start-only dust fixed in World, fading over
+0.3 seconds when actual motion starts. Denied jumps and artificial landings do
+not produce a puff; gameplay and cooldown are unchanged. Source and provenance
+are included. Agent and lead passed six targeted suites and `art-test` (25);
+the agent reports lint PASS. Controlled actual `cave_7_4` stills show a subtle
+puff in darkness, not human or motion verification; capture reported ObjectDB
+and resource warnings. A clean full `make check` on exact `7d7ba77` passed; log
+`/var/tmp/wick-clean-7d7ba77-zypvp3aq/check.log`. It is the latest full check.
+
 **Mirror Warden active slash, 2026-10-28 (committed in `f8da3e5`):** The active
 slash reuses painted `mirror_tell_z1`, with a broader glint than TELL and a thin
 geometric outer edge marking actual 130 px reach. Missing-texture fallback is
@@ -8,7 +18,8 @@ actual `cave_5_4` stills cover eight directions in dark/white lighting with a
 placed, protected player; overlap can occur. Human play and motion are not
 verified. The lead passed `mirror_warden` and `tool_matrix`; the agent reports
 lint PASS. A clean full `make check` on exact `f8da3e5` passed; log
-`/var/tmp/wick-clean-f8da3e5-hckc4a6p/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-f8da3e5-hckc4a6p/check.log`. The later clean `7d7ba77`
+full check is recorded above.
 
 **Tool cue visual test correction, 2026-10-28 (committed in `1ed6d16`):** The
 clean full `make check` on `65f4ee6` FAILED: `test_tool_cue_visual` had four
@@ -2693,7 +2704,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `f8da3e52f667c9439cf5509b30eed1de4be388cb` on `origin/main`, including the painted Mirror Warden active slash above. The latest clean full check is at `f8da3e5`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `7d7ba77f83667467dedddf3e83fb6f2ae8cdc779` on `origin/main`, including painted Skitter Boots takeoff dust above. The latest clean full check is at `7d7ba77`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

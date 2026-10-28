@@ -296,12 +296,24 @@ The tool cue visual test correction landed in
 `1ed6d160743bcd3b0a1ea52c03b251ea371550e9` on `origin/main`.
 Cinder cue documentation followed in `8d5d529`; the Mirror Warden active slash
 landed in `f8da3e52f667c9439cf5509b30eed1de4be388cb` on `origin/main`.
+Mirror slash documentation followed in `c7a6408`; painted takeoff dust landed
+in `7d7ba77f83667467dedddf3e83fb6f2ae8cdc779` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Skitter Boots takeoff dust, committed in `7d7ba77`:** The geometric cue is
+replaced by painted start-only dust fixed in World, fading over 0.3 seconds when
+actual motion starts. Denied jumps and artificial landings do not produce a puff;
+gameplay and cooldown are unchanged. Source and provenance are included. Agent
+and lead passed six targeted suites and `art-test` (25); the agent reports lint
+PASS. Controlled actual `cave_7_4` stills show a subtle puff in darkness, not
+human or motion verification; capture reported ObjectDB and resource warnings.
+A clean full `make check` on exact `7d7ba77` passed; log
+`/var/tmp/wick-clean-7d7ba77-zypvp3aq/check.log`. It is the latest full check.
 
 **Mirror Warden active slash, committed in `f8da3e5`:** The active slash reuses
 painted `mirror_tell_z1`, with a broader glint than TELL and a thin geometric
@@ -311,7 +323,8 @@ timing, 100°/radius and damage are unchanged. Sixteen controlled actual
 protected player; overlap can occur. Human play and motion are not verified.
 The lead passed `mirror_warden` and `tool_matrix`; the agent reports lint PASS.
 A clean full `make check` on exact `f8da3e5` passed; log
-`/var/tmp/wick-clean-f8da3e5-hckc4a6p/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-f8da3e5-hckc4a6p/check.log`. The later clean `7d7ba77`
+full check is recorded above.
 
 **Tool cue visual test correction, committed in `1ed6d16`:** The clean full
 `make check` on `65f4ee6` FAILED: `test_tool_cue_visual` had four failed checks
