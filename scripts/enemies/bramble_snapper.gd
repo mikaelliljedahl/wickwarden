@@ -23,7 +23,7 @@ const BODY_RADIUS := 30.0
 const BURN_TINT := Color(1.0, 0.55, 0.2)
 const SWAY_SPEED := 2.0
 const SWAY_ANGLE := 0.06
-const TELEGRAPH_SCRIPT := "res://scripts/enemies/telegraph.gd"
+const THORN_TEXTURE := "res://assets/sprites/thorn_hedge.png"
 
 enum State { IDLE, TELEGRAPH, SNAP, REST, BURNING }
 
@@ -35,6 +35,30 @@ var _timer: float = 0.0
 var _aim: Vector2 = Vector2.DOWN
 var _marker: Node2D
 var _sway_clock: float = 0.0
+
+
+class SnapWarning:
+	extends Node2D
+	var texture: Texture2D
+	var progress := 0.0
+
+	func _ready() -> void:
+		texture = load(THORN_TEXTURE) as Texture2D
+		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+
+	func _draw() -> void:
+		var points := PackedVector2Array([Vector2.ZERO])
+		var uvs := PackedVector2Array([Vector2(0.0, 0.665)])
+		for i in range(ARC_SEGMENTS + 1):
+			var angle := -PI * 0.5 + PI * float(i) / float(ARC_SEGMENTS)
+			var point := Vector2.from_angle(angle) * SNAP_RADIUS
+			points.append(point)
+			uvs.append(Vector2(point.x / SNAP_RADIUS, 0.33 + (point.y / SNAP_RADIUS + 1.0) * 0.335))
+		draw_colored_polygon(points, Color(0.65, 0.43, 0.19, 0.12 + 0.1 * progress))
+		if texture != null:
+			draw_polygon(points, PackedColorArray([Color(1, 0.85, 0.65, 0.38 + 0.2 * progress)]), uvs, texture)
+		points.append(points[0])
+		draw_polyline(points, Color(1.0, 0.82, 0.45, 0.9), 3.0)
 
 
 func _init() -> void:
@@ -74,6 +98,9 @@ func _enemy_physics(delta: float) -> void:
 		State.TELEGRAPH:
 			_track_aim()
 			_timer -= delta
+			if is_instance_valid(_marker):
+				_marker.progress = clampf(1.0 - _timer / TELEGRAPH_TIME, 0.0, 1.0)
+				_marker.queue_redraw()
 			if _timer <= 0.0:
 				_begin_snap()
 		State.SNAP:
@@ -167,7 +194,7 @@ func _track_aim() -> void:
 		_aim = dir
 		set_facing_dir(dir)
 	if is_instance_valid(_marker):
-		_marker.set(&"facing", _aim)
+		_marker.rotation = _aim.angle()
 
 
 func _begin_snap() -> void:
@@ -190,18 +217,10 @@ func _burn_out() -> void:
 
 
 func _spawn_marker() -> void:
-	var script := load(TELEGRAPH_SCRIPT) as GDScript
-	if script == null:
-		return
-	_marker = script.call(&"spawn", self, global_position) as Node2D
-	if _marker == null:
-		return
-	_marker.set(&"shape", &"cone")
-	_marker.set(&"radius", SNAP_RADIUS)
-	_marker.set(&"arc_deg", SNAP_ARC_DEG)
-	_marker.set(&"duration", TELEGRAPH_TIME)
-	_marker.set(&"facing", _aim)
-	_marker.call(&"start")
+	_marker = SnapWarning.new()
+	_marker.name = "SnapWarning"
+	add_child(_marker)
+	_marker.rotation = _aim.angle()
 
 
 func _free_marker() -> void:

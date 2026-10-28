@@ -22,14 +22,40 @@ const CONE_DAMAGE := 2
 const CONE_KIND := &"song"
 const CONE_SEGMENTS := 12
 const CHIME_STUN := 2.5
-const TELEGRAPH_PATH := "res://scripts/enemies/telegraph.gd"
 const NOTE_KIND := &"note"
+
+
+class SongWarning:
+	extends Node2D
+	var note_texture: Texture2D
+
+	func _ready() -> void:
+		note_texture = load("res://assets/sprites/treble_note_fly.png") as Texture2D
+		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		var light := CanvasItemMaterial.new()
+		light.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = light
+
+	func _draw() -> void:
+		var half := deg_to_rad(CONE_ANGLE) * 0.5
+		var edge := Color(1.0, 0.78, 0.43, 0.75)
+		draw_line(Vector2.ZERO, Vector2.from_angle(-half) * CONE_LENGTH, edge, 2.0)
+		draw_line(Vector2.ZERO, Vector2.from_angle(half) * CONE_LENGTH, edge, 2.0)
+		draw_arc(Vector2.ZERO, CONE_LENGTH, -half, half, CONE_SEGMENTS, edge, 2.0)
+		if note_texture != null:
+			for i in range(3):
+				var distance := 90.0 + i * 120.0
+				var size := 55.0 + i * 25.0
+				draw_texture_rect_region(
+					note_texture, Rect2(distance - size / 2, -size / 2, size, size),
+					Rect2(0, 0, 96, 96), Color(1, 1, 1, 0.65)
+				)
+
 
 var _state: State = State.REST
 var _timer: float = REST_TIME
 var _telegraph: Node2D
 var _cone: Hitbox
-var _telegraph_script: GDScript
 
 
 func _init() -> void:
@@ -52,10 +78,6 @@ static func _register_kinds() -> void:
 		Placeholder.register_kind(
 			NOTE_KIND, {"shape": "diamond", "color": Color(0.95, 0.9, 0.6), "radius": 14.0}
 		)
-
-
-func _enemy_ready() -> void:
-	_telegraph_script = load(TELEGRAPH_PATH) as GDScript  # null: the cone still works, without the marker
 
 
 func _enemy_physics(delta: float) -> void:
@@ -116,6 +138,7 @@ func _begin_telegraph() -> void:
 
 
 func _begin_sing() -> void:
+	_drop_telegraph()
 	_set_state(State.SING, SING_TIME)
 	_cone = _make_cone()
 	add_child(_cone)
@@ -124,15 +147,9 @@ func _begin_sing() -> void:
 
 ## The floor marker of the cone, a child of the singer (it follows it and is freed with it).
 func _spawn_telegraph() -> void:
-	if _telegraph_script == null:
-		return
-	var marker := _telegraph_script.spawn(self, global_position) as Node2D
-	marker.set(&"shape", &"cone")
-	marker.set(&"radius", CONE_LENGTH)
-	marker.set(&"arc_deg", CONE_ANGLE)
-	marker.set(&"facing", facing_dir)
-	marker.set(&"duration", TELEGRAPH_TIME)
-	marker.call(&"start")
+	var marker := SongWarning.new()
+	marker.rotation = facing_dir.angle()
+	add_child(marker)
 	_telegraph = marker
 
 
