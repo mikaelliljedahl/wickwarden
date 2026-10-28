@@ -340,8 +340,8 @@ passed a clean full check. Final playthrough documentation `fc14d7a` is on
 `45bf2e6`, Hollow Captain poses `8487acf` and documentation `f8ad56a` are on
 `origin/main`. Choir Warden poses `aa0f9a2` and their documentation `aa0361c`
 are on `origin/main`; their clean full check passed. Shell animation-gap
-documentation `3bcabd3` is the latest published checkpoint. Verify the remote
-before push.
+documentation `3bcabd3` and Coinwyrm study `4fbed38` are on `origin/main`.
+Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -369,6 +369,9 @@ candidates had wrong facing, repeated steps or unsuitable size. They made no
 repository changes. Six earlier local B70 candidates are untracked and lack
 verified provenance; preserve them. Asset-contract §10 does not permit separately
 generated frames for one animation, and the previous attempts changed no norm.
+Two further isolated walk sheets in `/var/tmp/wick-shell-walk-20261028/report.md`
+were rejected: the cutter found two poses rather than four in each, and the gait
+positions were unclear or repeated. No integration or play test was performed.
 A consistently scaled, correctly directed and distinct-step complete cycle with
 verified provenance, cutter integration and visual motion review remains needed.
 
