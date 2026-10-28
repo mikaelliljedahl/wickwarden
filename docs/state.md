@@ -1,21 +1,45 @@
 # Current status
 
+**Regular enemy death effect, 2026-10-28 (locally committed in `473e14b`):**
+The native-alpha painted death effect uses five 192 px frames at 12 fps for
+regular enemies; bosses and parts retain their explosion and missing art falls
+back to Placeholder. The original ImageGen session is
+`01a18327-9000-7493-9383-309b16c0af5f`, output
+`exec-0067211f-6213-4d50-b939-6571059827e2.png`; the prompt and provenance are
+recorded in `docs/art-provenance.md`. In an isolated copy, `enemy_base`,
+`boss_base`, `spitcap`, `wickling`, `sprite_visual`, lint and 25 art tests
+passed. A clean full `make check` on exact `473e14b` passed (exit 0): 159
+Godot test files, lint, world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-473e14b-u2p1yntk/check.log`; this is the latest clean full
+PASS.
+
+Physical lethal-hit stills in actual `cave_1_3` and `ow_1_1` are at
+`/var/tmp/wick-poof-z1/{cave,light}-frames.png`, with a placed player and frozen
+enemy. The final wisp is faint in darkness; human play and real-time video have
+not been verified.
+
+**Mirror scratch save audit:** Eight image runs used default user-data. MODE_DEV
+prevented autosave, and the save's mtime/ctime predated the runs; Godot logs were
+written. No pre-run hash exists, so this is not a byte-level proof. Mirror
+tell2 and the mirrored prototype are not integration-ready: their presentation
+and balance can be misleading.
+
 **Abacus Brute painted whirl, 2026-10-28 (committed in `cb649a4`):** Painted
 beads rotate behind the figure during the active whirl; the previous scuff is
 the missing-art fallback. Mechanics and hit area are unchanged. The agent's
 isolated `abacus_brute`, `tool_matrix`, `route_cave_8`, lint and 25 art tests
 passed. A clean full `make check` on exact `cb649a4` passed (exit 0): 159
 Godot test files, lint, world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-cb649a4-fivoj9z4/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-cb649a4-fivoj9z4/check.log`; the later clean full PASS at
+`473e14b` is recorded above.
 
 Actual `cave_8_4` controlled stills with a placed, protected player are at
 `/var/tmp/wick-abacus-new/integrated-dark-right-whirl-{0,1,2,3}.png`, with an
 upward fallback capture also taken. The chain can be partly obscured or appear
 detached; captures produced ObjectDB/resource warnings. Continuous motion and
-human play remain unverified. Separate poof source v1/v3 magenta-key trials
+human play remain unverified. Earlier poof source v1/v3 magenta-key trials
 could not preserve violet cleanly with the tested settings; a better source is
-needed.
+now used for the new death effect above.
 
 **Brine Crab directional actions, 2026-10-28 (committed in `0edb9a5`):**
 Directional warning, lunge and up/down walk/idle poses reuse side walk; warning
@@ -2954,7 +2978,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `6c9c64c` on `origin/main`, documenting the Brine Crab directional actions above. Abacus Brute painted whirl is locally committed in `cb649a4`; its clean full check passed. The latest clean full PASS is `cb649a4`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `c9ac1d3` on `origin/main`, documenting the Abacus Brute painted whirl. The regular enemy death effect is locally committed in `473e14b`; its clean full check passed. The latest clean full PASS is `473e14b`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

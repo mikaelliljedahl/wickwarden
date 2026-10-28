@@ -326,8 +326,9 @@ Moss documentation followed in `1d9d7fb`; dry vine fragments landed in
 Vine documentation followed in `5adfb2b`; Brine Crab directional actions
 landed in `0edb9a5e0e3ed520cf8ef27993050c38ee794d47` on `origin/main`.
 Brine Crab documentation followed in `6c9c64c` on `origin/main`; Abacus Brute
-painted whirl is committed locally in `cb649a4` and its clean full check passed.
-A push is planned after the documentation commit; verify the remote before it.
+painted whirl `cb649a4` and its documentation `c9ac1d3` are on `origin/main`.
+Regular enemy death effect `473e14b` is locally committed; its clean full check
+passed. Verify the remote before subsequent integration or push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -335,22 +336,45 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Regular enemy death effect, locally committed in `473e14b`:** The native-alpha
+painted effect uses five 192 px frames at 12 fps for regular enemies; bosses and
+parts retain their explosion and missing art falls back to Placeholder. The
+original ImageGen session is `01a18327-9000-7493-9383-309b16c0af5f`, output
+`exec-0067211f-6213-4d50-b939-6571059827e2.png`; the prompt and provenance are
+in `docs/art-provenance.md`. The agent reports isolated `enemy_base`, `boss_base`,
+`spitcap`, `wickling`, `sprite_visual`, lint and 25 art tests PASS. A clean full
+`make check` on exact `473e14b` passed (exit 0): 159 Godot test files, lint,
+world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-473e14b-u2p1yntk/check.log`; this is the latest clean full
+PASS.
+
+Physical lethal-hit stills in actual `cave_1_3` and `ow_1_1` are at
+`/var/tmp/wick-poof-z1/{cave,light}-frames.png`, with a placed player and frozen
+enemy. The final wisp is faint in darkness; human play and real-time video have
+not been verified.
+
+**Mirror scratch save audit:** Eight image runs used default user-data. MODE_DEV
+prevented autosave, and the save's mtime/ctime predated the runs; Godot logs were
+written. No pre-run hash exists, so this is not a byte-level proof. Mirror
+tell2 and the mirrored prototype are not integration-ready: their presentation
+and balance can be misleading.
+
 **Abacus Brute painted whirl, committed in `cb649a4`:** Painted beads rotate
 behind the figure during the active whirl; the previous scuff is the missing-art
 fallback. Mechanics and hit area are unchanged. The agent reports isolated
 `abacus_brute`, `tool_matrix`, `route_cave_8`, lint and 25 art tests PASS. A
 clean full `make check` on exact `cb649a4` passed (exit 0): 159 Godot test files,
 lint, world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-cb649a4-fivoj9z4/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-cb649a4-fivoj9z4/check.log`; the later clean full PASS at
+`473e14b` is recorded above.
 
 Actual `cave_8_4` controlled stills with a placed, protected player are at
 `/var/tmp/wick-abacus-new/integrated-dark-right-whirl-{0,1,2,3}.png`, with an
 upward fallback capture also taken. The chain can be partly obscured or appear
 detached; captures produced ObjectDB/resource warnings. Continuous motion and
-human play remain unverified. Separate poof source v1/v3 magenta-key trials
+human play remain unverified. Earlier poof source v1/v3 magenta-key trials
 could not preserve violet cleanly with the tested settings; a better source is
-needed.
+now used for the new death effect above.
 
 **Brine Crab directional actions, committed in `0edb9a5`:** Directional warning,
 lunge and up/down walk/idle poses reuse side walk; warning is unshaded in
