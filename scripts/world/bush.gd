@@ -57,6 +57,10 @@ func cut_down() -> void:
 		var used_fragments := variant in [&"reed_cluster", &"rush_wall"] and _spawn_reed_cut(parent)
 		if variant == &"bush":
 			used_fragments = _spawn_cut_fragments(parent, _bush_cut_texture(), &"BushCut")
+		elif variant == &"moss_wall":
+			used_fragments = _spawn_cut_fragments(
+				parent, _bush_cut_texture(), &"BushCut", Color(0.65, 0.78, 0.56)
+			)
 		if not used_fragments and SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.25, 3, tint) == null:
 			Placeholder.puff(parent, global_position, Placeholder.color_of(variant), 36.0)
 		if drops_enabled:
@@ -86,7 +90,9 @@ func _spawn_reed_cut(parent: Node) -> bool:
 	return _spawn_cut_fragments(parent, _reed_cut_texture(), &"ReedCut")
 
 
-func _spawn_cut_fragments(parent: Node, texture: Texture2D, effect_name: StringName) -> bool:
+func _spawn_cut_fragments(
+	parent: Node, texture: Texture2D, effect_name: StringName, tint: Color = Color.WHITE
+) -> bool:
 	if texture == null:
 		return false
 	var puff := Sprite2D.new()
@@ -97,7 +103,7 @@ func _spawn_cut_fragments(parent: Node, texture: Texture2D, effect_name: StringN
 	puff.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	parent.add_child(puff)
 	puff.global_position = global_position + Vector2(0, 24)
-	puff.modulate.a = 0.65
+	puff.modulate = Color(tint.r, tint.g, tint.b, 0.65)
 	var size := 180.0 / maxf(texture.get_width(), texture.get_height())
 	puff.scale = Vector2.ONE * size * 0.7
 	var tween := puff.create_tween().set_parallel(true)

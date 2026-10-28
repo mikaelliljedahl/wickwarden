@@ -17,7 +17,9 @@ func run() -> void:
 		await _check_cut(variant, true)
 	await _check_cut(&"bush", false)
 	await _check_cut(&"bush", true)
-	for variant in [&"moss_wall", &"dry_vine_screen", &"bush_cluster"]:
+	await _check_cut(&"moss_wall", false)
+	await _check_cut(&"moss_wall", true)
+	for variant in [&"dry_vine_screen", &"bush_cluster"]:
 		await _check_cut(variant, false)
 	await _check_placeholder_fallback()
 
@@ -27,7 +29,7 @@ func _check_cut(variant: StringName, missing: bool) -> void:
 	var arena := make_arena()
 	var bush: Bush
 	if missing:
-		bush = MissingBushArt.new() if variant == &"bush" else MissingReedBush.new()
+		bush = MissingBushArt.new() if variant in [&"bush", &"moss_wall"] else MissingReedBush.new()
 	else:
 		bush = Bush.new()
 	bush.variant = variant
@@ -56,11 +58,17 @@ func _check_cut(variant: StringName, missing: bool) -> void:
 		if reed_fx != null:
 			check(reed_fx.top_level and reed_fx.z_index == 10, "effect is world fixed")
 			check(reed_fx.modulate.a > 0.0 and reed_fx.modulate.a <= 0.65, "effect alpha fades from 0.65")
-	elif not missing and variant == &"bush":
-		check(bush_fx != null, "bush spawns painted leaves")
+	elif not missing and variant in [&"bush", &"moss_wall"]:
+		check(bush_fx != null, "%s spawns painted leaves" % variant)
 		if bush_fx != null:
 			check(bush_fx.top_level and bush_fx.z_index == 10, "leaves are world fixed")
 			check(bush_fx.modulate.a > 0.0 and bush_fx.modulate.a <= 0.65, "leaves fade")
+			if variant == &"moss_wall":
+				check_eq(bush_fx.texture, load("res://assets/sprites/bush_cut_z1.png"), "moss reuses bush leaf art")
+				check(
+					bush_fx.modulate.is_equal_approx(Color(0.65, 0.78, 0.56, bush_fx.modulate.a)),
+					"moss leaves have muted green tint"
+				)
 	else:
 		check(reed_fx == null, "other or missing art does not spawn reeds")
 		check(bush_fx == null, "other or missing art does not spawn leaves")
