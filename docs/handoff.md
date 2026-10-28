@@ -247,6 +247,8 @@ Reset audit documentation followed in `59ac8d3`; M0/MB1/B01 reset fixes landed
 in `c8465bc14911bdf1de60a8fab47375b8fe905464` on `origin/main`.
 Boss reset verification documentation followed in
 `1895d08b819fa4d8dfcece735c96b33f72d276e7` on `origin/main`.
+Choir Warden art review was documented in
+`d2391e7401dc3704192675d523f7e6d6d9b288d6` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -833,8 +835,10 @@ In scratch `/var/tmp/wick-q8-failure-review/`, a failed path is retried without
 limit (29 requests in 30 frames), and direct `SceneTree.quit` in test/capture
 bypasses the exit guard. A simulated timeout cancels quit and restores pause,
 but does not test an actually stuck worker or GUI. Real WM-close, cold disk and
-GPU were not tested. Quarantine and all exit paths need handling; there is no
-robust solution or integration.
+GPU were not tested. A safe solution needs a long-lived owner, terminal cleanup,
+failure quarantine, all exit paths, coordinated ownership and real tests. No new
+implementation or test was performed; synchronous production remains unchanged,
+with no robust solution or integration.
 
 **Q8 exit-drain scratch review, 2026-10-28:** In the older snapshot at
 `/var/tmp/wick-q8-exit-review/`, an idempotent drain of active threaded loads

@@ -583,8 +583,10 @@ In scratch `/var/tmp/wick-q8-failure-review/`, a failed path is retried without
 limit (29 requests in 30 frames), and direct `SceneTree.quit` in test/capture
 bypasses the exit guard. A simulated timeout cancels quit and restores pause,
 but does not test an actually stuck worker or GUI. Real WM-close, cold disk and
-GPU were not tested. Quarantine and all exit paths need handling; there is no
-robust solution or integration.
+GPU were not tested. A safe solution needs a long-lived owner, terminal cleanup,
+failure quarantine, all exit paths, coordinated ownership and real tests. No new
+implementation or test was performed; synchronous production remains unchanged,
+with no robust solution or integration.
 
 **Q8 exit-drain scratch review, 2026-10-28:** In the older snapshot at
 `/var/tmp/wick-q8-exit-review/`, an idempotent drain of active threaded loads
@@ -2457,7 +2459,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `1895d08b819fa4d8dfcece735c96b33f72d276e7` on `origin/main`, documenting the boss and Captain reset verification above. The latest clean full check is at `c8465bc`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `d2391e7401dc3704192675d523f7e6d6d9b288d6` on `origin/main`, documenting the Choir Warden art review above. The latest clean full check is at `c8465bc`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
