@@ -1,5 +1,22 @@
 # Current status
 
+**Verification and visual follow-up at `80599b6`, 2026-10-28:** Isolated
+`make check` passed 157 Godot test files including playthrough, lint,
+world-check and 175 Python tests. Visual inventory found a filled Gloam Knight
+landing disc and Dirge Choir's alto sector; work on both is in progress.
+
+**Miniboss warnings, 2026-10-28 (committed in `80599b6`):** Wick Automaton's
+tell uses muted painted fire and a thin outline; Corrow's Echo GLOW/FLARE outline
+is visible outside lamp light. Mechanics are unchanged. Isolated `wick_automaton`,
+`corrows_echo`, `area_cave_10` and lint passed. Captures used actual cave rooms
+with a placed player; Echo had raised test health and FLARE was slowed after a
+natural transition. This is not human playtesting. Some capture tools reported
+resource warnings on exit, cause unknown.
+
+**Export check at `666d61d`, 2026-10-28:** An export using the official Godot
+4.7.2 template contained all 222 world scenes, JSON and title images. The actual
+GUI title screen and headless startup passed; gameplay and audio were not verified.
+
 **Title and Lull Mauler presentation, 2026-10-28 (committed in `666d61d`):**
 The title uses the planned painted splash, upscaled from a previously reviewed
 source, and a new native-alpha logo recorded in `docs/art-provenance.md`. The
@@ -10,7 +27,7 @@ state was reviewed with a placed player, not human play. Capture exit reported
 resource warnings of unknown cause. Further late effects remain to be reviewed.
 An isolated full `make check` has since passed on `666d61d`: 157 Godot test
 files including the playthrough, lint, world-check and 175 Python tests. Export
-verification and miniboss review are in progress.
+verification and miniboss results are recorded above; further review remains.
 
 **Verification at `e760223`, 2026-10-28:** `TMPDIR=/tmp make check` passed 157
 Godot test files, lint, world-check and 175 Python tests. `TMPDIR=/tmp make
@@ -1554,7 +1571,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `666d61d675893e4328e775eebc0e9228a37ab7d9` on `origin/main`, including the title and Lull Mauler presentation above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `80599b6061f66acc28b944cfb1387e20bfbcd731` on `origin/main`, including the miniboss warnings above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

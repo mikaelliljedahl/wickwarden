@@ -102,12 +102,31 @@ The Colossus attack presentation followed in
 `e760223a0c4a46d1ee996200269cce43f65dbaad` on `origin/main`.
 The title and Lull Mauler presentation followed in
 `666d61d675893e4328e775eebc0e9228a37ab7d9` on `origin/main`.
+The miniboss warning changes followed in
+`80599b6061f66acc28b944cfb1387e20bfbcd731` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Verification and visual follow-up at `80599b6`, 2026-10-28:** Isolated
+`make check` passed 157 Godot test files including playthrough, lint,
+world-check and 175 Python tests. Visual inventory found a filled Gloam Knight
+landing disc and Dirge Choir's alto sector; work on both is in progress.
+
+**Miniboss warnings, committed in `80599b6`:** Wick Automaton's tell uses muted
+painted fire and a thin outline; Corrow's Echo GLOW/FLARE outline is visible
+outside lamp light. Mechanics are unchanged. Isolated `wick_automaton`,
+`corrows_echo`, `area_cave_10` and lint passed. Captures used actual cave rooms
+with a placed player; Echo had raised test health and FLARE was slowed after a
+natural transition. This is not human playtesting. Some capture tools reported
+resource warnings on exit, cause unknown.
+
+**Export check at `666d61d`:** An export using the official Godot 4.7.2 template
+contained all 222 world scenes, JSON and title images. The actual GUI title
+screen and headless startup passed; gameplay and audio were not verified.
 
 **Title and Lull Mauler presentation, committed in `666d61d`:** The title uses
 the planned painted splash, upscaled from a previously reviewed source, and a
@@ -118,8 +137,8 @@ in darkness; its focused test passed and a natural state was reviewed with a
 placed player, not human play. Capture exit reported resource warnings of unknown
 cause. Further late effects remain to be reviewed. An isolated full `make check`
 has since passed on `666d61d`: 157 Godot test files including the playthrough,
-lint, world-check and 175 Python tests. Export verification and miniboss review
-are in progress.
+lint, world-check and 175 Python tests. Export and miniboss results are recorded
+above; further review remains.
 
 **Verification at `e760223`, 2026-10-28:** `TMPDIR=/tmp make check` passed 157
 Godot test files, lint, world-check and 175 Python tests. `TMPDIR=/tmp make
