@@ -271,12 +271,22 @@ Placeholder art trials were documented in
 `1cc825f20fa22b637514d6dabbf8b90fec46974d` on `origin/main`.
 The Mauler sweep prototype was documented in
 `32e7b3ab86d6f8023ce9f685f447483a034502eb` on `origin/main`.
+Bramble Snapper's art trial was documented in
+`9751f5f7a3b96167cace6fdbdbff36aa2e53eabb` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Bramble compact2 scratch review, 2026-10-28:** The source fits the same
+192 px cutter/scale, but action is taller and narrower than idle; diagonal
+rotation tilts the root and the sector obscures the jaw. Setting `z=-1` hides
+the sector. Actual `ow_6_1` stills used a placed, protected player; harness
+aim/hitbox checks passed, but animation and human play were not verified and
+capture exit gave warnings. This is not integrated. A separate layering study
+and alternative placeholder work are in progress.
 
 **Bramble upward scratch review, 2026-10-28:** The candidate was rejected: at
 the same 192 px cutter scale the pose requires 309×265 px, the diagonal gaze
