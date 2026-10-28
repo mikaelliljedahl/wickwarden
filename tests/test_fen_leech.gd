@@ -11,6 +11,8 @@ const POOL_SIZE := Vector2(1800, 800)
 
 
 func run() -> void:
+	await _warning_cleanup_probe()
+	await _ripple_cleanup_probe()
 	await _stats_and_drops()
 	await _zone_geometry()
 	await _submerged_is_immune()
@@ -126,7 +128,8 @@ func _trigger_lunge_and_surfaced_window() -> void:
 	await _hit(arena, leech.global_position, 2, &"hook")
 	check_eq(leech.hp, 3, "fen leech is not hurt while it telegraphs")
 	var lunge_wait: int = await _wait_until(func() -> bool: return leech.is_lunging(), 60)
-	check(lunge_wait < 60, "fen leech lunges after its telegraph")
+	check(lunge_wait >= 25 and lunge_wait <= 31, "tell lasts 0.5 s including the two hit-test frames")
+	check(leech.get_node_or_null("BubbleWarning") == null, "warning ends with tell")
 	check(leech.contact_hitbox.active, "contact damage is on during the lunge")
 	var surfaced_wait: int = await _wait_until(func() -> bool: return leech.is_surfaced(), 120)
 	check(surfaced_wait < 120, "fen leech surfaces after the lunge")
@@ -229,3 +232,47 @@ func _wait_until(done: Callable, limit: int) -> int:
 			return i
 		await frames(1)
 	return limit
+
+
+func _warning_cleanup_probe() -> void:
+	reset_state()
+	var arena := _arena_with_pool()
+	make_player(arena, Vector2(1150, 480))
+	var first: Variant = make_enemy(arena, SCENE, Vector2(900, 480))
+	var second: Variant = make_enemy(arena, SCENE, Vector2(1000, 480))
+	await frames(2)
+	first._enter(first.State.TELEGRAPH, first.TELEGRAPH_TIME)
+	second._enter(second.State.TELEGRAPH, second.TELEGRAPH_TIME)
+	first._bubble()
+	second._bubble()
+	var one: Node = first.get_node_or_null("BubbleWarning")
+	var two: Node = second.get_node_or_null("BubbleWarning")
+	check(one != null and two != null and one != two, "two leeches own separate warnings")
+	check(one != null and one.get_child_count() == 1 and one.get_child(0) is PointLight2D, "warning owns its light")
+	check(not first.contact_hitbox.active and first.invulnerable, "tell remains harmless and invulnerable")
+	first._enter(first.State.LUNGE, 0.0)
+	await frames(2)
+	check(not is_instance_valid(one), "warning freed at end of tell")
+	check(is_instance_valid(two), "other leech retains its warning")
+	second.queue_free()
+	await frames(2)
+	check(not is_instance_valid(two), "warning freed with leech")
+	first._enter(first.State.TELEGRAPH, first.TELEGRAPH_TIME)
+	first._bubble()
+	var room_warning: Node = first.get_node_or_null("BubbleWarning")
+	check(room_warning != null, "warning exists before room removal")
+	await dispose(arena)
+	check(not is_instance_valid(room_warning), "room removal frees warning")
+
+
+func _ripple_cleanup_probe() -> void:
+	reset_state()
+	var arena := _arena_with_pool()
+	var leech: Variant = make_enemy(arena, SCENE, Vector2(900, 480))
+	await frames(2)
+	leech._ripple()
+	var ripple := arena.get_node_or_null("WaterRipple") as Sprite2D
+	check(ripple != null and ripple.texture != null, "submerged ripple uses painted art")
+	await frames(20)
+	check(not is_instance_valid(ripple), "painted ripple fades and is freed")
+	await dispose(arena)

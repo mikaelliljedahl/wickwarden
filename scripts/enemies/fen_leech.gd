@@ -21,9 +21,6 @@ const LUNGE_DISTANCE := 240.0
 const SURFACED_TIME := 1.2
 const DIVE_TIME := 0.3
 const RIPPLE_INTERVAL := 0.5
-const RIPPLE_RADIUS := 14.0
-const RIPPLE_COLOR := Color(0.8, 0.9, 1.0, 0.5)
-const BUBBLE_COLOR := Color(0.85, 0.95, 1.0, 0.8)
 const ZONE_GROUP := &"shallows"
 ## Ember is 35 % of this monster's drops (standard table: 25 %). The rest of the table is standard.
 const EMBER_CHANCE := 0.35
@@ -38,6 +35,7 @@ var _lunge_dir := Vector2.ZERO
 var _lunge_left: float = 0.0
 var _ripple_wait: float = 0.0
 var _zone: Area2D = null
+var _warning: Sprite2D = null
 
 
 func _init() -> void:
@@ -82,6 +80,8 @@ func _enemy_physics(delta: float) -> void:
 		State.SUBMERGED:
 			_submerged_physics(delta)
 		State.TELEGRAPH:
+			if _warning != null:
+				_warning.frame = int((TELEGRAPH_TIME - _timer) * 8.0) % 2
 			velocity = Vector2.ZERO
 			_timer -= delta
 			if _timer <= 0.0:
@@ -127,6 +127,9 @@ static func drop_for_roll(roll: float) -> StringName:
 ## Sets the state and its rules: hittable only when surfaced, contact only during the lunge, the
 ## Visual shows only above water.
 func _enter(state: State, time: float) -> void:
+	if _warning != null and state != State.TELEGRAPH:
+		_warning.queue_free()
+		_warning = null
 	_state = state
 	_timer = time
 	invulnerable = state != State.SURFACED
@@ -216,12 +219,43 @@ func _zone_has(pos: Vector2) -> bool:
 
 
 func _bubble() -> void:
-	var parent := get_parent()
-	if parent != null:
-		Placeholder.puff(parent, global_position, BUBBLE_COLOR, RIPPLE_RADIUS * 1.5)
+	var tex := load("res://assets/sprites/sump_water_jet_fly.png") as Texture2D
+	if tex == null:
+		return
+	_warning = Sprite2D.new()
+	_warning.name = "BubbleWarning"
+	_warning.texture = tex
+	_warning.hframes = 2
+	_warning.scale = Vector2(0.55, 0.55)
+	_warning.modulate = Color(1.5, 2.4, 2.5, 1.0)
+	# The supplied non-mirrored leech art faces right; this is its head.
+	_warning.position = Vector2(65.0, -4.0)
+	_warning.z_index = 10
+	add_child(_warning)
+	var light := PointLight2D.new()
+	light.texture = LightTexture.make()
+	# The light inherits the sprite scale, giving an approximately 50 px radius.
+	light.texture_scale = LightTexture.scale_for(90.0)
+	light.color = Color(0.25, 0.85, 1.0)
+	light.energy = 0.5
+	_warning.add_child(light)
 
 
 func _ripple() -> void:
 	var parent := get_parent()
-	if parent != null:
-		Placeholder.puff(parent, global_position, RIPPLE_COLOR, RIPPLE_RADIUS)
+	var tex := load("res://assets/sprites/tidewick_wave_ripple_idle.png") as Texture2D
+	if parent == null or tex == null:
+		return
+	var ripple := Sprite2D.new()
+	ripple.name = "WaterRipple"
+	ripple.texture = tex
+	ripple.hframes = 2
+	ripple.scale = Vector2(0.35, 0.35)
+	ripple.modulate = Color(0.7, 1.0, 1.0, 0.7)
+	ripple.top_level = true
+	parent.add_child(ripple)
+	ripple.global_position = global_position
+	var tween := ripple.create_tween().set_parallel(true)
+	tween.tween_property(ripple, "scale", Vector2(0.5, 0.5), 0.25)
+	tween.tween_property(ripple, "modulate:a", 0.0, 0.25)
+	tween.chain().tween_callback(ripple.queue_free)
