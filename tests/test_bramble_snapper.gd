@@ -78,6 +78,8 @@ func _telegraph_snap_rest_cycle() -> void:
 		2.0,
 		"telegraph lasts about 0.35 s (got %d frames)" % telegraph_frames
 	)
+	var active_marker = enemy.get_node_or_null("SnapWarning")
+	check(active_marker != null and active_marker.active_snap, "snap keeps its active visual")
 	var snap_frames := 0
 	while enemy.is_snapping() and snap_frames < 60:
 		player.global_position = NEAR
@@ -85,6 +87,8 @@ func _telegraph_snap_rest_cycle() -> void:
 		snap_frames += 1
 	check_near(snap_frames, 9.0, 2.0, "snap lasts about 0.15 s (got %d frames)" % snap_frames)
 	check(not enemy.snap_hitbox.active, "snap cone is off after the snap")
+	await frames(2)
+	check(not is_instance_valid(active_marker), "snap visual clears during rest")
 	var rest_frames := 0
 	while rest_frames < 50:
 		player.global_position = NEAR

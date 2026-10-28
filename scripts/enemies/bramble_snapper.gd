@@ -41,6 +41,7 @@ class SnapWarning:
 	extends Node2D
 	var texture: Texture2D
 	var progress := 0.0
+	var active_snap := false
 
 	func _ready() -> void:
 		texture = load(THORN_TEXTURE) as Texture2D
@@ -58,7 +59,8 @@ class SnapWarning:
 		if texture != null:
 			draw_polygon(points, PackedColorArray([Color(1, 0.85, 0.65, 0.38 + 0.2 * progress)]), uvs, texture)
 		points.append(points[0])
-		draw_polyline(points, Color(1.0, 0.82, 0.45, 0.9), 3.0)
+		var edge := Color(1.0, 0.55, 0.32, 1.0) if active_snap else Color(1.0, 0.82, 0.45, 0.9)
+		draw_polyline(points, edge, 3.0)
 
 
 func _init() -> void:
@@ -200,12 +202,19 @@ func _track_aim() -> void:
 func _begin_snap() -> void:
 	_state = State.SNAP
 	_timer = SNAP_TIME
-	_free_marker()
+	if is_instance_valid(_marker):
+		_marker.active_snap = true
+		_marker.progress = 1.0
+		var light := CanvasItemMaterial.new()
+		light.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		_marker.material = light
+		_marker.queue_redraw()
 	snap_hitbox.rotation = _aim.angle()
 	snap_hitbox.active = true
 
 
 func _begin_rest() -> void:
+	_free_marker()
 	_state = State.REST
 	_timer = REST_TIME
 
