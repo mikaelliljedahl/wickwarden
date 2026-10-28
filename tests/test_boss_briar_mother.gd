@@ -109,6 +109,10 @@ func _spore_warning_and_ward() -> void:
 		var shot := shots[0]
 		check_near(shot.speed, 300, 0.001, "spore speed is 300 px/s")
 		check_eq(shot.damage, 2, "spore damage is two half-hearts")
+		var light := shot.get_node_or_null("SporeLight") as PointLight2D
+		check(light != null, "spore has a presentation light")
+		if light != null:
+			check(not light.is_in_group(&"glow_light"), "spore light cannot reveal gameplay secrets")
 		player.place_at(shot.global_position + shot.direction * 100)
 		player.facing = -shot.direction
 		Input.action_press(&"ward")

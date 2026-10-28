@@ -365,13 +365,21 @@ func _tick_pending(delta: float) -> void:
 				var eye: EnemyBase = entry["eye"]
 				if is_instance_valid(eye) and not eye.is_dead and eye.visible:
 					var aim := player_position(eye.global_position + Vector2.DOWN)
-					fire_projectile(
+					var spore := fire_projectile(
 						null,
 						(aim - eye.global_position).normalized(),
 						300.0,
 						2,
 						eye.global_position
 					)
+					# Presentation light follows the projectile; it is not a Glow Jar light.
+					var light := PointLight2D.new()
+					light.name = "SporeLight"
+					light.texture = LightTexture.make()
+					light.texture_scale = LightTexture.scale_for(90.0)
+					light.color = Color(0.78, 0.88, 0.43)
+					light.energy = 1.1
+					spore.add_child(light)
 			&"seed":
 				plant_seed(entry["at"])
 			&"sweep":
