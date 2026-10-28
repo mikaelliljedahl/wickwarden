@@ -49,6 +49,8 @@ func _damage_and_ring() -> void:
 		check_eq(needle.speed, 280.0, "needle speed")
 		check(needle.hitbox.blockable, "ward blocks needles")
 		check(needle.has_node("Visual"), "needle has Visual")
+		if SpriteVisual.has_art(&"gloam_lance"):
+			check(needle.get_node("Visual") is SpriteVisual, "needle uses painted projectile")
 		check_near(
 			needle.direction.angle_to(Vector2.from_angle(TAU * i / 8.0)),
 			0.0,

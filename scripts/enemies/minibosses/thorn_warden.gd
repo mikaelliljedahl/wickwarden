@@ -64,7 +64,19 @@ func _fire_ring() -> void:
 	if scene == null:
 		return
 	for i in range(8):
-		fire_projectile(scene, Vector2.from_angle(TAU * float(i) / 8.0), 280.0, 1)
+		var needle := fire_projectile(scene, Vector2.from_angle(TAU * float(i) / 8.0), 280.0, 1)
+		if needle != null and SpriteVisual.has_art(&"gloam_lance"):
+			# The painted lance points right; turn and tint only the visual.
+			var visual := SpriteVisual.attach(needle, &"gloam_lance", needle.radius)
+			visual.rotation = needle.direction.angle()
+			visual.scale = Vector2.ONE * 0.55
+			visual.modulate = Color(0.8, 1.0, 0.5)
+			var light := PointLight2D.new()
+			light.texture = LightTexture.make()
+			light.texture_scale = LightTexture.scale_for(65.0)
+			light.color = Color(0.8, 1.0, 0.55)
+			light.energy = 1.1
+			needle.add_child(light)
 
 
 func _resolve_damage(hitbox: Hitbox, amount: int) -> int:

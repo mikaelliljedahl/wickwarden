@@ -1,5 +1,23 @@
 # Wickwarden — art provenance
 
+## Intro stills (2026-10-28)
+
+The six runtime stills reuse the previously reviewed source candidates listed below;
+no new images were generated. Each 1536×1024 source was cropped to 1536×864
+(the first aligned to the top to keep the nine lanterns; the others centered),
+then scaled once to 1920×1080 with ImageMagick. The sources and original
+outputs, prompts and review verdicts are recorded in the linked logs. The
+runtime SHA-256 hashes are:
+
+| Runtime image (`assets/art/`) | Source (`tools/source_art/`) | Generation log | Runtime SHA-256 |
+|---|---|---|---|
+| `intro_01_lanterns.png` | `intro_01_lanterns_v3.png` | [resume 23](../tools/source_art/log_art_resume_23.md) | `9a871b5343d6dd4445b80692cb9b61f2440865d712c835f044c797afbabb797c` |
+| `intro_02_lanternfall.png` | `intro_02_lanternfall_v2.png` | [resume 24](../tools/source_art/log_art_resume_24.md) | `136034e38ebf333e1b61c4432c3c82cd2ba8d77de7cfeeb3a52a6d4db87feb0f` |
+| `intro_03_dusk.png` | `intro_03_dusk_v1.png` | [resume 24](../tools/source_art/log_art_resume_24.md) | `8b911c23b02aa6e482dca1088130f4258bdb75e32d56a7a8d370c416829c511a` |
+| `intro_04_tamsin.png` | `intro_04_tamsin_v3.png` | [resume 26](../tools/source_art/log_art_resume_26.md) | `7f175cd46e8198bf52a87fd644bd763a967cfd9f3b52b0593df9ca5fe60a58cb` |
+| `intro_05_hook.png` | `intro_05_hook_v3.png` | [resume 27](../tools/source_art/log_art_resume_27.md) | `28417210accc58fde8d7cfb78db2daaad1c715e0284d8e8a62dcc7d62e302328` |
+| `intro_06_setout.png` | `intro_06_setout_v2.png` | [resume 28](../tools/source_art/log_art_resume_28.md) | `f32795751d1b61c7764b74ca0cfbf5cab66d47033171e6cbb1026af5a0707719` |
+
 ## Title art (2026-10-28)
 
 `assets/art/title_splash.png` uses the previously reviewed `title_splash_v2.png`
