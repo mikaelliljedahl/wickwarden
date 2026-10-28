@@ -59,6 +59,26 @@
       }
     }
   },
+  "chime_hold_notes_z1": {
+    "cell": [
+      512,
+      512
+    ],
+    "anchor": [
+      256.0,
+      256.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/chime_hold_notes_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
   "chime_notes_z1": {
     "cell": [
       512,

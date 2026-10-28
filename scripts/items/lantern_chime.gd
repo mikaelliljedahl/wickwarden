@@ -67,6 +67,9 @@ func _physics_process(delta: float) -> void:
 
 
 func _ring() -> void:
+	var cue := get_node_or_null(Placeholder.VISUAL_NAME) as CanvasItem
+	if cue != null:
+		cue.visible = false
 	var scene := load(WAVE_SCENE_PATH) as PackedScene
 	if scene == null:
 		finish()

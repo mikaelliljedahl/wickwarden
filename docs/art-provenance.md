@@ -1649,6 +1649,20 @@ The cutter uses the entire canvas, no crop or alpha threshold, uniformly scaled 
 The scratch visual review used Mauler-created slag in `cave_4_4`; the flecks can resemble sparkles
 and blend with glowing slag. Still captures do not establish readability in motion or human play.
 
+### Lantern Chime hold notes, 2026-10-28
+
+`chime_hold_notes_z1.png` is the unmodified 1254×1254 RGBA built-in ImageGen output from session
+`01a182be-1117-79e0-854d-268591c75e08`, file
+`exec-87007a92-54b0-4a9c-8d30-32b6e64fb5d0.png` (SHA-256
+`70aee240596b940073e837e9e2220cf60d471f7b7e44e7e5a747cc863098c938`).
+Prompt: two isolated golden musical notes, one smaller, in a painterly top-down dark fantasy style,
+aged brass and warm lantern light, on transparent background; no connecting strokes, rings, staff,
+text or scenery. The native-alpha cutter scales the full canvas uniformly to 512×512, without crop
+or alpha threshold. Output SHA-256
+`ca810efb32191cd61e6e94ebfd1b4be83758b99ead17508918ef6b7b577e8cf0`.
+The scratch review found that the fixed notes mark the wave's original position while the player
+walks, but may resemble objects on the ground and can overlap the player's legs.
+
 ### Thorn Warden wreath, 2026-10-28
 
 `thorn_wreath_z1.png` is the unmodified 1268×1240 RGBA ImageGen output from session

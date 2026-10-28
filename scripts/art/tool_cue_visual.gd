@@ -8,6 +8,8 @@ const CINDER_ART := "res://assets/sprites/fx_cinder_cast_z1.png"
 const CINDER_WIDTH := 82.0
 const MITTS_ART := "res://assets/sprites/fx_mitts_effort_z1.png"
 const DUST_ART := "res://assets/sprites/fx_leap_dust_z1_idle.png"
+const CHIME_HOLD_ART := "res://assets/sprites/chime_hold_notes_z1.png"
+const CHIME_HOLD_WIDTH := 112.0
 const SLING_WIDTH := 64.0
 ## Soften the existing painted strokes into a neutral air trail; no moving projectile is drawn.
 const SLING_SHADER := """
@@ -28,6 +30,7 @@ var art_path: String = CINDER_ART
 var dust_path: String = DUST_ART
 var mitts_art_path: String = MITTS_ART
 var sling_art_path: String = CINDER_ART
+var chime_hold_art_path: String = CHIME_HOLD_ART
 var _kind: StringName
 var _painted: Sprite2D
 var _shape: String = "arc"
@@ -62,6 +65,19 @@ func _ready() -> void:
 	blend.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	if _kind != &"skitter_boots":
 		material = blend
+	if _kind == &"lantern_chime" and ResourceLoader.exists(chime_hold_art_path):
+		var texture := load(chime_hold_art_path) as Texture2D
+		if texture != null and texture.get_width() > 0:
+			_painted = Sprite2D.new()
+			_painted.name = "ChimeHoldNotes"
+			_painted.texture = texture
+			_painted.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			_painted.scale = Vector2.ONE * CHIME_HOLD_WIDTH / float(texture.get_width())
+			_painted.position = Vector2(0.0, -25.0)
+			var paint := CanvasItemMaterial.new()
+			paint.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+			_painted.material = paint
+			add_child(_painted)
 	if _kind == &"tallow_sling" and ResourceLoader.exists(sling_art_path):
 		var texture := load(sling_art_path) as Texture2D
 		if texture != null and texture.get_width() > 0:
@@ -98,6 +114,8 @@ func set_facing(direction: Vector2) -> void:
 
 func _place_painted() -> void:
 	if _painted == null:
+		return
+	if _kind == &"lantern_chime":
 		return
 	var hand := Vector2(38.0 if _facing == Vector2.UP else -38.0, -88.0)
 	if _facing.x != 0.0:

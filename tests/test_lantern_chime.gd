@@ -11,6 +11,7 @@ const STONE_SCENE := "res://scenes/world/resonance_stone.tscn"
 func run() -> void:
 	await _scenes_and_tap()
 	await _missing_art_fallback()
+	await _moving_hold_origin()
 	await _cooldown()
 	await _hold_warps()
 	await _hold_is_blocked_in_boss_arena()
@@ -109,6 +110,39 @@ func _missing_art_fallback() -> void:
 	await dispose(arena)
 
 
+func _moving_hold_origin() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(400, 480))
+	await frames(2)
+	GameState.acquire_item(&"lantern_chime")
+	Input.action_press(&"use_item")
+	await frames(3)
+	var items := get_tree().get_nodes_in_group(ItemBase.group_name(&"lantern_chime"))
+	check_eq(items.size(), 1, "holding creates one chime")
+	if items.is_empty():
+		Input.action_release(&"use_item")
+		await dispose(arena)
+		return
+	var item := items[0] as Node2D
+	var visual := item.get_node("Visual") as Node2D
+	var origin := item.global_position
+	Input.action_press(&"move_right")
+	await frames(20)
+	check(player.global_position.distance_to(origin) > 50.0, "player moves during the hold")
+	check_eq(visual.global_position, origin, "hold cue remains at the activation origin")
+	check(visual.visible, "hold cue remains visible while the player moves")
+	Input.action_release(&"use_item")
+	await frames(3)
+	var waves := get_tree().get_nodes_in_group(&"chime_waves")
+	check_eq(waves.size(), 1, "release creates one wave")
+	if not waves.is_empty():
+		check_eq((waves[0] as Node2D).global_position, origin, "wave retains the activation origin")
+	check(not visual.visible, "release hides the hold cue")
+	Input.action_release(&"move_right")
+	await dispose(arena)
+
+
 func _cooldown() -> void:
 	reset_state()
 	var arena := make_arena()
@@ -149,7 +183,11 @@ func _hold_warps() -> void:
 		1,
 		"the held chime activates once"
 	)
-	await seconds(1.25)
+	await seconds(1.0)
+	check(get_tree().get_first_node_in_group(&"warp_picker_open") == null, "hold has not warped early")
+	var held := get_tree().get_first_node_in_group(ItemBase.group_name(&"lantern_chime"))
+	check(held != null and held.get_node("Visual").visible, "hold cue remains visible before warp")
+	await seconds(0.25)
 	var picker := get_tree().get_first_node_in_group(&"warp_picker_open")
 	check(picker != null, "holding for 1.2 seconds opens the warp picker")
 	if picker != null:

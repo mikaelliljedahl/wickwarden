@@ -15,6 +15,7 @@ func run() -> void:
 			await _use_cue(tool, direction)
 	await _missing_cinder_art()
 	await _missing_sling_art()
+	await _missing_chime_art()
 	await _missing_dust_art()
 	await _missing_mitts_art()
 
@@ -65,6 +66,14 @@ func _use_cue(tool: StringName, direction: Vector2) -> void:
 			check(trail.texture != null, "sling trail has the painted texture")
 			check(trail.material is ShaderMaterial, "sling trail has the neutral softening material")
 			check_near(trail.rotation, direction.angle(), 0.001, "sling trail faces the cast")
+	elif tool == &"lantern_chime":
+		var notes := visual.get_node_or_null("ChimeHoldNotes") as Sprite2D
+		check_eq(visual.get_child_count(), 1, "chime cue contains only painted notes")
+		check(notes != null and notes.texture != null, "chime hold uses painted notes")
+		if notes != null:
+			check_eq(notes.get_child_count(), 0, "notes have no physical children")
+			check_eq(notes.position, Vector2(0, -25), "notes are anchored at the cast origin")
+			check_eq(notes.rotation, 0.0, "notes remain upright in every direction")
 	elif tool == &"skitter_boots":
 		var puff := visual.get_node_or_null("LeapDust") as Sprite2D
 		check(puff != null and puff.texture != null, "accepted leap creates painted dust")
@@ -77,11 +86,29 @@ func _use_cue(tool: StringName, direction: Vector2) -> void:
 	await seconds(0.3)
 	if tool in [&"cinder_wick", &"tallow_sling"]:
 		check(not visual.visible, "existing windup/recoil hides the cue")
+	elif tool == &"lantern_chime":
+		check(not visual.visible, "release hides the hold cue during the wave and cooldown")
 	elif tool == &"heft_mitts":
 		check(not is_instance_valid(item), "empty grab ends on its original lockout")
 	else:
 		check(is_instance_valid(item), "wave/leap cooldown still owns its cue")
 	await dispose(arena)
+
+
+func _missing_chime_art() -> void:
+	var script := load(CUE_SCRIPT) as GDScript
+	if script == null:
+		check(false, "cue helper loads for missing-art fallback")
+		return
+	var visual := script.new() as Node2D
+	visual.set(&"_kind", &"lantern_chime")
+	visual.set(&"chime_hold_art_path", "res://missing-chime-hold-notes.png")
+	add_child(visual)
+	check(visual.get(&"_painted") == null, "missing chime art keeps the geometric fallback")
+	check_eq(visual.get_child_count(), 0, "missing chime art creates no child")
+	check(visual.visible, "missing chime art leaves the fallback visible")
+	visual.queue_free()
+	await frames(1)
 
 
 func _missing_cinder_art() -> void:
