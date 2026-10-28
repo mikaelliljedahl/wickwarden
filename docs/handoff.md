@@ -239,6 +239,8 @@ Briar eye documentation followed in `280b790`; Q7 repeated Unlit exposure is
 landed in `0f6185c562d72db4caff5203b61b4b7837ed4046` on `origin/main`.
 Unlit and streaming documentation followed in `8f05922`; the Q7 exposure cap is
 landed in `e6ab2d3889383121a50aa5d9b3d55f61bf377e64` on `origin/main`.
+Unlit cap and loader-failure documentation followed in `12f58f3`; Q7 Lock Warden
+is at `1bbb94cc401f685848522ee616580ac0df1e6734` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -246,14 +248,26 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Q7 Lock Warden keyhole, committed in `1bbb94c`:** Natural B09 gallery
+progression breaks four plates with real sling and pot, reaching phase two at
+24 HP. A real slug overlaps the closed keyhole without accepted damage; a second
+shot after natural opening deals one damage (HP 23). Agent and lead passed
+`tool_matrix`; the agent reports 2,083 checks and lint PASS. The player is placed
+and protected; this gallery is not the actual room or human play. Other tools,
+closing and death remain open.
+
+**Clean full check at `12f58f3`, 2026-10-28:** A clean exact `12f58f3` run
+passed `make check`; log `/var/tmp/wick-clean-12f58f3-n8hf8asx/check.log`.
+This is the latest clean full check and precedes the Lock Warden test.
+
 **Q7 Unlit exposure damage cap, committed in `e6ab2d3`:** In the real-tool B10
 fixture, four hook hits during the first Reel exposure deal eight damage; a
 fifth actual contact after normal i-frames does none. Natural reshield protects,
 and a second real Reel exposure resets the cap and permits two more damage
 (24→16→14). Agent and lead passed `tool_matrix`; the agent reports 2,058 checks
 and lint PASS. The player is placed and protected; this is not World or human
-play. Flare, pot, death and ending are not covered, and no full check was run on
-this change; the latest clean full check is `afdaead`.
+play. Flare, pot, death and ending are not covered, and the later clean full check at
+`12f58f3` is recorded above.
 
 **Q7 Unlit repeated heart exposure, committed in `0f6185c`:** Existing real
 sling/Wick play reaches phase three; two real Reel lantern contacts and hook
@@ -262,7 +276,7 @@ hits before, during, after and during the second exposure give
 forced phases or timers. Agent and lead passed `tool_matrix`; the agent reports
 2,041 checks and lint PASS. This is B10 gallery with a manually placed, protected
 player, not actual World or human play. Ceiling, death, ending and broad phase
-coverage remain open. The latest clean full check is `afdaead`.
+coverage remain open. The later clean full check is `12f58f3`.
 
 **Q7 Briar Mother eye cycle, committed in `37ed92b`:** A real sling shot
 physically overlaps the protected third eye without damage; the same eye lowers
@@ -270,7 +284,7 @@ naturally and another real sling hit deals one damage to the eye (4→3) and bos
 (28→27), consuming two slugs. Agent and lead passed `tool_matrix`; the agent
 reports 2,028 checks and lint PASS. This is a bare controlled arena with a
 placed, protected player, covering one eye in phase one, not human play, actual
-World or the full fight. The latest clean full check remains `afdaead`.
+World or the full fight. The later clean full check is `12f58f3`.
 
 **Q6 enemy room slides, committed in `6c92d13`:** Real World input traverses
 `ow_0_0↔ow_1_0` and back. Two Spitcaps and three Skitterwicks pause and remain
@@ -292,7 +306,7 @@ Q6 independently sampled 100 stratified actual enemy deaths/pickups per mode:
 pot-only yielded 10/0, sling-only 0/8, with potential 40/48 respectively;
 2,900 checks. This is not natural randomness or an economy playthrough. Agent
 tests and the lead's `tool_matrix` and `economy_budget` passed, as did lint. The
-latest clean full check remains `afdaead`.
+later clean full check is `12f58f3`.
 
 **Q7 Kilnkeeper phase two, committed in `f257ebc`:** Six real Cinder Wick fire
 contacts reduce the boss from 24 to 12 HP and trigger natural phase two. Hook is
@@ -306,8 +320,8 @@ other combinations remain open. The latest full check is the earlier clean
 **Clean full check at `afdaead`, 2026-10-28:** A clean git archive of exact
 `afdaead5a2b43da5b61a1cabb7df50618b07730b`, with isolated HOME/XDG and
 `TMPDIR=/var/tmp`, passed `make check`, including the newer Q7 tests. Log:
-`/var/tmp/wick-clean-afdaead-kxq8q92_/check.log`. This is the latest clean full
-check; all recorded human, art, coverage and performance limits remain open.
+`/var/tmp/wick-clean-afdaead-kxq8q92_/check.log`. The later clean full check at `12f58f3` is recorded above; human, art,
+coverage and performance limits remain open.
 
 **Q7 Hollow Captain recovery, committed in `4b5f4ff`:** Real patrol, telegraph,
 bash and recovery run in a controlled arena. A real sling shot is blocked from

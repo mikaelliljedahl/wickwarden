@@ -1,13 +1,25 @@
 # Current status
 
+**Q7 Lock Warden keyhole, 2026-10-28 (committed in `1bbb94c`):** Natural B09
+gallery progression breaks four plates with real sling and pot, reaching phase
+two at 24 HP. A real slug overlaps the closed keyhole without accepted damage;
+a second shot after natural opening deals one damage (HP 23). Agent and lead
+passed `tool_matrix`; the agent reports 2,083 checks and lint PASS. The player is
+placed and protected; this gallery is not the actual room or human play. Other
+tools, closing and death remain open.
+
+**Clean full check at `12f58f3`, 2026-10-28:** A clean exact `12f58f3` run
+passed `make check`; log `/var/tmp/wick-clean-12f58f3-n8hf8asx/check.log`.
+This is the latest clean full check and precedes the Lock Warden test.
+
 **Q7 Unlit exposure damage cap, 2026-10-28 (committed in `e6ab2d3`):** In
 the real-tool B10 fixture, four hook hits during the first Reel exposure deal
 eight damage; a fifth actual contact after normal i-frames does none. Natural
 reshield protects, and a second real Reel exposure resets the cap and permits
 two more damage (24→16→14). Agent and lead passed `tool_matrix`; the agent
 reports 2,058 checks and lint PASS. The player is placed and protected; this is
-not World or human play. Flare, pot, death and ending are not covered, and no
-full check was run on this change; the latest clean full check is `afdaead`.
+not World or human play. Flare, pot, death and ending are not covered, and the later clean full
+check at `12f58f3` is recorded above.
 
 **Q7 Unlit repeated heart exposure, 2026-10-28 (committed in `0f6185c`):**
 Existing real sling/Wick play reaches phase three; two real Reel lantern contacts
@@ -16,7 +28,7 @@ and hook hits before, during, after and during the second exposure give
 forced phases or timers. Agent and lead passed `tool_matrix`; the agent reports
 2,041 checks and lint PASS. This is B10 gallery with a manually placed, protected
 player, not actual World or human play. Ceiling, death, ending and broad phase
-coverage remain open. The latest clean full check is `afdaead`.
+coverage remain open. The later clean full check is `12f58f3`.
 
 **Q7 Briar Mother eye cycle, 2026-10-28 (committed in `37ed92b`):** A real
 sling shot physically overlaps the protected third eye without damage; the same
@@ -24,7 +36,7 @@ eye lowers naturally and another real sling hit deals one damage to the eye
 (4→3) and boss (28→27), consuming two slugs. Agent and lead passed `tool_matrix`;
 the agent reports 2,028 checks and lint PASS. This is a bare controlled arena
 with a placed, protected player, covering one eye in phase one, not human play,
-actual World or the full fight. The latest clean full check remains `afdaead`.
+actual World or the full fight. The later clean full check is `12f58f3`.
 
 **Q6 enemy room slides, 2026-10-28 (committed in `6c92d13`):** Real World input
 traverses `ow_0_0↔ow_1_0` and back. Two Spitcaps and three Skitterwicks pause
@@ -34,7 +46,7 @@ one Skitterwick moves within 1.5 simulated seconds; the initial 0.5-second
 window was insufficient because of natural initial rest. The agent reports
 three runs PASS and the lead passed `soak_brackwater`. This is one route with
 position sampling and a placed, protected player, not human or full-body
-coverage. The latest clean full check remains `afdaead`.
+coverage. The later clean full check is `12f58f3`.
 
 **Q7 Coinwyrm and Q6 gated drops, 2026-10-28 (committed in `403ec8b`):** In
 the actual B08 gallery, natural phase-one rear has three plates: real hook does
@@ -47,7 +59,7 @@ Q6 independently sampled 100 stratified actual enemy deaths/pickups per mode:
 pot-only yielded 10/0, sling-only 0/8, with potential 40/48 respectively;
 2,900 checks. This is not natural randomness or an economy playthrough. Agent
 tests and the lead's `tool_matrix` and `economy_budget` passed, as did lint. The
-latest clean full check remains `afdaead`.
+later clean full check is `12f58f3`.
 
 **Q7 Kilnkeeper phase two, 2026-10-28 (committed in `f257ebc`):** Six real
 Cinder Wick fire contacts reduce the boss from 24 to 12 HP and trigger natural
@@ -61,8 +73,8 @@ earlier clean `afdaead` run below.
 **Clean full check at `afdaead`, 2026-10-28:** A clean git archive of exact
 `afdaead5a2b43da5b61a1cabb7df50618b07730b`, with isolated HOME/XDG and
 `TMPDIR=/var/tmp`, passed `make check`, including the newer Q7 tests. Log:
-`/var/tmp/wick-clean-afdaead-kxq8q92_/check.log`. This is the latest clean full
-check; all recorded human, art, coverage and performance limits remain open.
+`/var/tmp/wick-clean-afdaead-kxq8q92_/check.log`. The later clean full check at `12f58f3` is recorded above; human, art,
+coverage and performance limits remain open.
 
 **Q7 Hollow Captain recovery, 2026-10-28 (committed in `4b5f4ff`):** Real
 patrol, telegraph, bash and recovery run in a controlled arena. A real sling
@@ -2412,7 +2424,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `e6ab2d3889383121a50aa5d9b3d55f61bf377e64` on `origin/main`, including the Q7 Unlit damage-cap test above. The latest clean full check is at `afdaead`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `1bbb94cc401f685848522ee616580ac0df1e6734` on `origin/main`, including the Q7 Lock Warden test above. The latest clean full check is at `12f58f3`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
