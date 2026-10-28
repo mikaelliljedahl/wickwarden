@@ -66,6 +66,8 @@ func run() -> void:
 	await _cut_screen_flare_and_reel()
 	await _ward_plate_tools()
 	await _brazier_gate_tools()
+	for tool: StringName in [&"cinder_wick", &"tallow_sling"]:
+		await _brazier_contact_revisit(tool)
 	await _scoped_key_gate()
 	await _boss_key_gate()
 	await _ninth_fragment_gate()
@@ -729,6 +731,62 @@ func _brazier_gate_tools() -> void:
 	check(second.lit and gate.is_open, "brazier gate: real fire lights second and opens gate")
 	check(GameState.has_flag(&"gate_matrix_braziers"), "brazier gate: completion persists")
 	await dispose(arena)
+
+
+func _brazier_contact_revisit(tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var nodes := _matrix_brazier_gate(arena)
+	var brazier: Brazier = nodes[0]
+	var gate: Gate = nodes[1]
+	var player := make_player(arena, Vector2(290, 400))
+	await frames(3)
+	var label := "%s -> brazier gate" % tool
+	var hits: Array[StringName] = []
+	brazier.hurtbox.hurt.connect(func(hit: Hitbox) -> void: hits.append(hit.kind))
+	_equip(player, tool)
+	player.facing = Vector2.RIGHT
+	check(not brazier.lit and not gate.is_open, label + ": initially closed")
+	check(player.use_item(), label + ": actual item activated")
+	var contact := false
+	var kind := &"fire" if tool == &"cinder_wick" else &"sling"
+	for i in range(120):
+		await frames(1)
+		contact = contact or _gate_weapon_overlaps(brazier, kind)
+	var opens := tool == &"cinder_wick"
+	check(contact or kind in hits, label + ": actual hitbox contacts brazier")
+	check_eq(brazier.lit, opens, label + ": brazier state")
+	check_eq(gate.is_open, opens, label + ": gate state")
+	check_eq(GameState.has_flag(&"brazier_matrix_contact"), opens, label + ": brazier flag")
+	check_eq(GameState.has_flag(&"gate_matrix_contact"), opens, label + ": gate flag")
+	check_eq(gate._shape.disabled, opens, label + ": gate collision")
+	print("MATRIX ", label, " contact=", contact or kind in hits, " opens=", opens)
+	await dispose(arena)
+	arena = make_arena()
+	nodes = _matrix_brazier_gate(arena)
+	brazier = nodes[0]
+	gate = nodes[1]
+	await frames(3)
+	check_eq(brazier.lit, opens, label + ": revisit brazier")
+	check_eq(gate.is_open, opens, label + ": revisit gate")
+	check_eq(GameState.has_flag(&"brazier_matrix_contact"), opens, label + ": revisit brazier flag")
+	check_eq(GameState.has_flag(&"gate_matrix_contact"), opens, label + ": revisit gate flag")
+	check_eq(gate._shape.disabled, opens, label + ": revisit gate collision")
+	await dispose(arena)
+
+
+func _matrix_brazier_gate(arena: Node) -> Array:
+	var brazier := Brazier.new()
+	brazier.name = "MatrixBrazier"
+	brazier.brazier_id = &"matrix_contact"
+	brazier.position = Vector2(490, 400)
+	arena.add_child(brazier)
+	var gate := Gate.new()
+	gate.gate_id = &"matrix_contact"
+	gate.braziers = [NodePath("../MatrixBrazier")]
+	gate.position = Vector2(900, 800)
+	arena.add_child(gate)
+	return [brazier, gate]
 
 
 func _collect_gate_pickup(arena: Node, player: Player, kind: StringName, scope: StringName) -> void:
