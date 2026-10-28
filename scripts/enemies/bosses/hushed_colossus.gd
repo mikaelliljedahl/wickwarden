@@ -37,12 +37,17 @@ class FloorVisual:
 	extends Node2D
 	var sweep_light: PointLight2D
 	var quake_texture: Texture2D
+	var wave_texture: Texture2D
 
 	func _ready() -> void:
-		if get_parent().kind == &"quake":
+		if get_parent().kind in [&"quake", &"slam"]:
 			var path := "res://assets/sprites/colossus_quake_z1_idle.png"
 			if ResourceLoader.exists(path):
 				quake_texture = load(path) as Texture2D
+		if get_parent().kind in [&"ring", &"sweep"]:
+			var path := "res://assets/sprites/unlit_wax_wave_z1_idle.png"
+			if ResourceLoader.exists(path):
+				wave_texture = load(path) as Texture2D
 		if get_parent().kind == &"sweep":
 			# The attack sets the band orientation immediately after it enters the tree.
 			call_deferred(&"_make_sweep_light")
@@ -60,7 +65,7 @@ class FloorVisual:
 		sweep_light.name = "SweepWarningLight"
 		sweep_light.texture = texture
 		sweep_light.color = Color(1.0, 0.72, 0.3)
-		sweep_light.energy = 0.8
+		sweep_light.energy = 0.12
 		add_child(sweep_light)
 
 	func _process(_delta: float) -> void:
@@ -72,12 +77,22 @@ class FloorVisual:
 		var color := Color(0.95, 0.65, 0.28, 0.35 if not attack.fired else 0.7)
 		match attack.kind:
 			&"sweep":
-				draw_rect(Rect2(-attack.band_size * 0.5, attack.band_size), color)
-				if not attack.fired:
-					draw_rect(
-						Rect2(-attack.band_size * 0.5, attack.band_size),
-						Color(1.0, 0.8, 0.4, 0.9), false, 4.0
+				if wave_texture != null:
+					var horizontal: bool = attack.band_size.x > attack.band_size.y
+					var length: float = attack.band_size.x if horizontal else attack.band_size.y
+					if not horizontal:
+						draw_set_transform(Vector2.ZERO, PI * 0.5)
+					draw_texture_rect(
+						wave_texture, Rect2(-length * 0.5, -48, length, 96), false,
+						Color(0.9, 0.65, 0.4, 1.0 if attack.fired else 0.45)
 					)
+					draw_set_transform(Vector2.ZERO)
+				elif attack.fired:
+					draw_rect(Rect2(-attack.band_size * 0.5, attack.band_size), color)
+				draw_rect(
+					Rect2(-attack.band_size * 0.5, attack.band_size),
+					Color(1.0, 0.8, 0.4, 0.7 if attack.fired else 0.9), false, 2.0
+				)
 			&"quake":
 				for row in range(1, 9):
 					for col in range(1, 19):
@@ -93,10 +108,30 @@ class FloorVisual:
 							else:
 								draw_rect(Rect2(col * 96, row * 96, 96, 96), color)
 			&"ring":
-				draw_arc(Vector2.ZERO, attack.ring_radius(), 0, TAU, 64, color, 14.0)
+				var radius: float = attack.ring_radius()
+				if wave_texture != null and radius > 1.0:
+					for i in range(96):
+						var a := Vector2.from_angle(TAU * i / 96.0)
+						var b := Vector2.from_angle(TAU * (i + 1) / 96.0)
+						var inner := maxf(0.0, radius - 24.0)
+						var outer := radius + 24.0
+						var points := PackedVector2Array([a * inner, b * inner, b * outer, a * outer])
+						var u := float(i) / 96.0
+						var next_u := float(i + 1) / 96.0
+						var uv := PackedVector2Array([Vector2(u, 0), Vector2(next_u, 0), Vector2(next_u, 1), Vector2(u, 1)])
+						draw_polygon(points, PackedColorArray([Color(0.9, 0.65, 0.4)]), uv, wave_texture)
+				else:
+					draw_arc(Vector2.ZERO, radius, 0, TAU, 64, color, 14.0)
+				draw_arc(Vector2.ZERO, radius, 0, TAU, 96, Color(1, 0.8, 0.4, 0.75), 2.0)
 			_:
 				var radius := 60.0 if attack.kind == &"fall" else 130.0
-				draw_circle(Vector2.ZERO, radius, color)
+				if attack.kind != &"slam" or attack.fired:
+					draw_circle(Vector2.ZERO, radius, color)
+				if attack.kind == &"slam" and quake_texture != null:
+					draw_texture_rect(
+						quake_texture, Rect2(-96, -96, 192, 192), false,
+						Color(1, 1, 1, 1.0 if attack.fired else 0.55)
+					)
 				draw_arc(Vector2.ZERO, radius, 0, TAU, 48, Color(1, 0.85, 0.55), 3)
 
 

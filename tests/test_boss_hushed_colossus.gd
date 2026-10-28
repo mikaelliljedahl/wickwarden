@@ -79,6 +79,7 @@ func _sweep_warning_light() -> void:
 		attack.sweep_from = Vector2(960, 480)
 		attack.sweep_to = Vector2(960, 600)
 		await frames(3)
+		check(attack.get_node("Visual").wave_texture != null, "sweep impact art loads")
 		var light := attack.get_node_or_null("Visual/SweepWarningLight") as PointLight2D
 		check(light != null, "each sweep orientation has a warning light")
 		if light != null:
@@ -170,6 +171,7 @@ func _attack_physics() -> void:
 	# A warning follows the player only for the first 0.3 seconds.
 	var slam: Variant = boss.start_attack(&"slam", player.global_position, 0.8, 0.1)
 	await frames(10)
+	check(slam.get_node("Visual").quake_texture != null, "slam impact art loads")
 	player.place_at(Vector2(600, 300))
 	await frames(4)
 	check_near(slam.global_position.distance_to(player.global_position), 0, 1, "slam follows early")
@@ -187,6 +189,7 @@ func _attack_physics() -> void:
 	check(ring != null, "slam impact creates expanding ring")
 	if ring != null:
 		await frames(3)
+		check(ring.get_node("Visual").wave_texture != null, "shockwave art loads")
 		check(ring.box != null and not ring.box.blockable, "shockwave cannot be warded")
 		check_eq(ring.box.damage, 2, "shockwave damage two")
 		check(ring.ring_radius() > 0 and ring.ring_radius() < 260, "ring expands over 0.4 s")
