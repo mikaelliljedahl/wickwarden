@@ -288,12 +288,25 @@ Captain warning documentation followed in `4d39a28`; Corrow's Echo warning
 landed in `f9459d7d525c8bec83c61ccb4764cbbb335ae0c5` on `origin/main`.
 Corrow warning documentation followed in `cdeebe8`; painted Chime notes landed
 in `55f03cc25b876605e88f86effc9a772c490a5a34` on `origin/main`.
+Chime documentation followed in `2188126`; painted Mirror Warden TELL landed
+in `938c0b5f6082bb4f323de4c4a55250b2fede9ebd` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Mirror Warden tell, committed in `938c0b5`:** TELL uses a painted blue-white
+warning; the documented source and provenance are committed. Actual `cave_5_4`
+controlled stills cover eight directions in dark/ambient lighting; the foreground
+warning can overlap figures, and the active slash's geometric glint remains.
+Gameplay and hitbox are unchanged; fallback was tested and captured. The lead
+passed `mirror_warden` and `tool_matrix` after import; the first pre-import
+attempt failed. `art-test` passed 25 tests with the existing ResourceWarning;
+the agent reports lint PASS. Human play and motion remain unverified. A clean
+full `make check` on exact `938c0b5` passed; log
+`/var/tmp/wick-clean-938c0b5-5oaq1700/check.log`. It is the latest full check.
 
 **Chime painted notes, committed in `55f03cc`:** The 512 px native-alpha
 painted notes use the recorded source and provenance. The main rim scales as
@@ -302,7 +315,8 @@ Actual timing and shape are unchanged, and missing-resource fallback was tested.
 The lead passed `lantern_chime`, `resonance_stone` and `art-test` (25 tests);
 the agent reports lint PASS. Actual-room controlled stills are not human or
 motion verification. A clean full `make check` on exact `55f03cc` passed; log
-`/var/tmp/wick-clean-55f03cc-jm2znt98/check.log`. This is the latest full check.
+`/var/tmp/wick-clean-55f03cc-jm2znt98/check.log`. The later clean `938c0b5`
+full check is recorded above.
 
 **Corrow's Echo TELL, committed in `f9459d7`:** The geometric arc is replaced by
 an existing documented painted wax-wave arc with null fallback; 0.5-second
