@@ -241,12 +241,26 @@ Unlit and streaming documentation followed in `8f05922`; the Q7 exposure cap is
 landed in `e6ab2d3889383121a50aa5d9b3d55f61bf377e64` on `origin/main`.
 Unlit cap and loader-failure documentation followed in `12f58f3`; Q7 Lock Warden
 is at `1bbb94cc401f685848522ee616580ac0df1e6734` on `origin/main`.
+Lock Warden test documentation followed in `f5cc279`; Lull Mauler reset landed
+in `a8f06c7b700f559b4493e04105350dfeb9ea9545` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Read-only reset audit, 2026-10-28:** Hollow Captain reset failure and defeated
+bosses reviving during death throes were reproduced. Separate M0 and MB1 fixes
+are in progress; neither issue is resolved by this audit.
+
+**Lull Mauler reset, committed in `a8f06c7`:** Reset closes active slam/sweep
+hitboxes and resets the attack cycle; regression tests cover reset, stun and
+death. `make test T=lull_mauler` passed. A clean full `make check` on exact
+`a8f06c7` passed; log `/var/tmp/wick-clean-a8f06c7-j71imz6t/check.log`. This is
+the latest clean full check. A sweep art prototype was rejected
+because it misrepresents the hit area or is obscured; the geometric placeholder
+remains.
 
 **Q7 Lock Warden keyhole, committed in `1bbb94c`:** Natural B09 gallery
 progression breaks four plates with real sling and pot, reaching phase two at
@@ -258,7 +272,7 @@ closing and death remain open.
 
 **Clean full check at `12f58f3`, 2026-10-28:** A clean exact `12f58f3` run
 passed `make check`; log `/var/tmp/wick-clean-12f58f3-n8hf8asx/check.log`.
-This is the latest clean full check and precedes the Lock Warden test.
+This preceded the Lock Warden test; the later clean `a8f06c7` check is above.
 
 **Q7 Unlit exposure damage cap, committed in `e6ab2d3`:** In the real-tool B10
 fixture, four hook hits during the first Reel exposure deal eight damage; a

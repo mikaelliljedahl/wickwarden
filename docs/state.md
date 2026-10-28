@@ -1,5 +1,17 @@
 # Current status
 
+**Read-only reset audit, 2026-10-28:** Hollow Captain reset failure and defeated
+bosses reviving during death throes were reproduced. Separate M0 and MB1 fixes
+are in progress; neither issue is resolved by this audit.
+
+**Lull Mauler reset, 2026-10-28 (committed in `a8f06c7`):** Reset closes active
+slam/sweep hitboxes and resets the attack cycle; regression tests cover reset,
+stun and death. `make test T=lull_mauler` passed. A clean full `make check` on
+exact `a8f06c7` passed; log `/var/tmp/wick-clean-a8f06c7-j71imz6t/check.log`.
+This is the latest clean full check. A sweep art prototype
+was rejected because it misrepresents the hit area or is obscured; the geometric
+placeholder remains.
+
 **Q7 Lock Warden keyhole, 2026-10-28 (committed in `1bbb94c`):** Natural B09
 gallery progression breaks four plates with real sling and pot, reaching phase
 two at 24 HP. A real slug overlaps the closed keyhole without accepted damage;
@@ -10,7 +22,7 @@ tools, closing and death remain open.
 
 **Clean full check at `12f58f3`, 2026-10-28:** A clean exact `12f58f3` run
 passed `make check`; log `/var/tmp/wick-clean-12f58f3-n8hf8asx/check.log`.
-This is the latest clean full check and precedes the Lock Warden test.
+This preceded the Lock Warden test; the later clean `a8f06c7` check is above.
 
 **Q7 Unlit exposure damage cap, 2026-10-28 (committed in `e6ab2d3`):** In
 the real-tool B10 fixture, four hook hits during the first Reel exposure deal
@@ -2424,7 +2436,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `1bbb94cc401f685848522ee616580ac0df1e6734` on `origin/main`, including the Q7 Lock Warden test above. The latest clean full check is at `12f58f3`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `a8f06c7b700f559b4493e04105350dfeb9ea9545` on `origin/main`, including the Lull Mauler reset above. The latest clean full check is at `a8f06c7`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
