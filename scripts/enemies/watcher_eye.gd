@@ -124,9 +124,15 @@ func _player_on_axis() -> bool:
 
 
 func _fire() -> void:
-	fire_projectile(
+	var beam := fire_projectile(
 		_beam_scene, facing_dir, BEAM_SPEED, BEAM_DAMAGE, global_position + facing_dir * BEAM_START
 	)
+	# The painted bolt must remain readable outside Tamsin's lamp in dark rooms.
+	var beam_visual := beam.get_node_or_null("Visual") as CanvasItem
+	if beam_visual != null:
+		var light := CanvasItemMaterial.new()
+		light.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		beam_visual.material = light
 	_set_state(State.OPEN, OPEN_TIME)
 
 

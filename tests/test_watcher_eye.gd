@@ -73,6 +73,12 @@ func _fires_beam_on_axis() -> void:
 		check_eq(beam.damage, 2, "beam bolt deals 2 half-hearts")
 		check_near(beam.speed, 300.0, 0.01, "beam bolt flies at 300 px/s")
 		check(beam.shape_capsule, "beam bolt is a capsule")
+		var look := beam.get_node_or_null("Visual") as CanvasItem
+		var light := look.material as CanvasItemMaterial if look != null else null
+		check(
+			light != null and light.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED,
+			"beam remains visible outside the lamp light"
+		)
 	await dispose(arena)
 
 
