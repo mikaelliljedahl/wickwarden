@@ -1,5 +1,22 @@
 # Current status
 
+**Integrated Z1 test isolation and clean check, 2026-10-28 (committed in
+`70d229d`):** A clean git archive of exact
+`70d229d257737f0d8f302bdb54ee242448028006` at
+`/var/tmp/wick-clean-70d229d-afalxh3d/` passed `make check` (exit 0): 158
+Godot files, lint, world-check and 175 Python tests. Eleven root unit tests ran
+separately and passed (`root-tests.log`); they are not part of `make check`.
+This is the latest clean full check.
+
+Agent evidence includes 12 negative separate Godot processes and positive
+save/load probes at `/var/tmp/wick-profile-audit-Qx20RO/`, plus a real `/tmp`
+EDQUOT fallback to `/var/tmp` before execution. Independent final review passed
+the earlier error-masking concern; after a run starts, failures are not retried.
+Limits: Linux scope; direct Godot can log before the guard; separate Makefile
+import needs isolated HOME/XDG; parallel imports into the same `.godot` are not
+protected; opt-in captures are unchanged. Human play and complete placeholder
+coverage remain open.
+
 **Watcher Eye warning, 2026-10-28 (committed in `0a2bffe`):** The existing eye
 image is unshaded for the 0.5-second warning; its material is restored on firing
 or stun, with combat values unchanged. Targeted `watcher_eye`, lint and ownership
@@ -55,7 +72,7 @@ Z1 is working across the named runner, base, Q3 and route-test files toward an
 explicit, unique, verified isolated test root, fail-closed behavior and actual
 userdata checks. After discovering autosave and ending branches, Z1 also covers
 SaveGame and the direct test runner, using an explicitly scoped ownership list.
-Work continues; the solution is not complete.
+The later integrated Z1 result and remaining limits are recorded above.
 
 **Lull Mauler active attacks, 2026-10-28 (committed in `86cbe79`):** The
 previously invisible slam uses an existing painted crack and 110 px outline;
@@ -70,7 +87,8 @@ attack pose remain open.
 when `/tmp` hit disk quota and tempfile fallback violated isolation; 144 passed.
 Separate lint, world-check, 175 Python tests, rooms-check (221 rooms) and
 art-test (22 tests) passed. Logs are in `/var/tmp/wick-cfdb4a4-gOuM0c/`. The
-latest complete clean full check remains `4dfd5e6`.
+latest complete clean full check at that time was `4dfd5e6`; the later `70d229d`
+check is recorded above.
 
 **Hollow Captain image attempts, 2026-10-28:** Four new ImageGen candidates in
 `/var/tmp/wick-captain-new/` were rejected for scale, pose/direction/overlap or
@@ -227,8 +245,8 @@ exact `4dfd5e6c6162f638d97fc323b9f2c0a163046a2a`, with isolated HOME/XDG and
 shards, lint, world-check and 175 Python tests. `make rooms-check` passed 221
 rooms and `make art-test` passed 22 tests, emitting expected mismatch diagnostics
 and ResourceWarnings. Logs are in `/var/tmp/wick-verify-4dfd5e6-ZkaakT/`
-(`check.log`, `rooms-check.log`, `art-test.log`). This is the latest clean full
-check; headless automation does not establish human balance, visual or audio
+(`check.log`, `rooms-check.log`, `art-test.log`). The later clean `70d229d`
+check is recorded above; headless automation does not establish human balance, visual or audio
 experience.
 
 **Kilnkeeper wax splash, 2026-10-28 (committed in `9343092`):** A standalone
@@ -2133,7 +2151,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0a2bffe11dd03b3dc782d361eb6d43344227d43a` on `origin/main`, including the Watcher Eye warning above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `70d229d257737f0d8f302bdb54ee242448028006` on `origin/main`, including Z1 test isolation and its clean full verification above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -189,12 +189,31 @@ Choirling documentation followed in `dfe0d78`; Watcher Eye beam presentation
 is at `5d938dd1af1331c475d35f4a574288303dd786c2` on `origin/main`.
 Beam documentation followed in `93ad466`; Watcher Eye warning is at
 `0a2bffe11dd03b3dc782d361eb6d43344227d43a` on `origin/main`.
+Warning documentation followed in `1221684`; integrated Z1 test isolation is
+at `70d229d257737f0d8f302bdb54ee242448028006` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Integrated Z1 test isolation and clean check, 2026-10-28 (committed in
+`70d229d`):** A clean git archive of exact
+`70d229d257737f0d8f302bdb54ee242448028006` at
+`/var/tmp/wick-clean-70d229d-afalxh3d/` passed `make check` (exit 0): 158
+Godot files, lint, world-check and 175 Python tests. Eleven root unit tests ran
+separately and passed (`root-tests.log`); they are not part of `make check`.
+This is the latest clean full check.
+
+Agent evidence includes 12 negative separate Godot processes and positive
+save/load probes at `/var/tmp/wick-profile-audit-Qx20RO/`, plus a real `/tmp`
+EDQUOT fallback to `/var/tmp` before execution. Independent final review passed
+the earlier error-masking concern; after a run starts, failures are not retried.
+Limits: Linux scope; direct Godot can log before the guard; separate Makefile
+import needs isolated HOME/XDG; parallel imports into the same `.godot` are not
+protected; opt-in captures are unchanged. Human play and complete placeholder
+coverage remain open.
 
 **Watcher Eye warning, committed in `0a2bffe`:** The existing eye image is
 unshaded for the 0.5-second warning; its material is restored on firing or stun,
@@ -251,7 +270,7 @@ Z1 is working across the named runner, base, Q3 and route-test files toward an
 explicit, unique, verified isolated test root, fail-closed behavior and actual
 userdata checks. After discovering autosave and ending branches, Z1 also covers
 SaveGame and the direct test runner, using an explicitly scoped ownership list.
-Work continues; the solution is not complete.
+The later integrated Z1 result and remaining limits are recorded above.
 
 **Lull Mauler active attacks, committed in `86cbe79`:** The previously
 invisible slam uses an existing painted crack and 110 px outline; sweep uses a
@@ -266,7 +285,8 @@ pose remain open.
 when `/tmp` hit disk quota and tempfile fallback violated isolation; 144 passed.
 Separate lint, world-check, 175 Python tests, rooms-check (221 rooms) and
 art-test (22 tests) passed. Logs are in `/var/tmp/wick-cfdb4a4-gOuM0c/`. The
-latest complete clean full check remains `4dfd5e6`.
+latest complete clean full check at that time was `4dfd5e6`; the later `70d229d`
+check is recorded above.
 
 **Hollow Captain image attempts, 2026-10-28:** Four new ImageGen candidates in
 `/var/tmp/wick-captain-new/` were rejected for scale, pose/direction/overlap or
@@ -422,8 +442,8 @@ exact `4dfd5e6c6162f638d97fc323b9f2c0a163046a2a`, with isolated HOME/XDG and
 shards, lint, world-check and 175 Python tests. `make rooms-check` passed 221
 rooms and `make art-test` passed 22 tests, emitting expected mismatch diagnostics
 and ResourceWarnings. Logs are in `/var/tmp/wick-verify-4dfd5e6-ZkaakT/`
-(`check.log`, `rooms-check.log`, `art-test.log`). This is the latest clean full
-check; headless automation does not establish human balance, visual or audio
+(`check.log`, `rooms-check.log`, `art-test.log`). The later clean `70d229d`
+check is recorded above; headless automation does not establish human balance, visual or audio
 experience.
 
 **Kilnkeeper wax splash, committed in `9343092`:** A standalone painted
