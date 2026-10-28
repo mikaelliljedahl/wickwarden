@@ -251,12 +251,21 @@ Choir Warden art review was documented in
 `d2391e7401dc3704192675d523f7e6d6d9b288d6` on `origin/main`.
 Streaming lifecycle review was documented in
 `e279442b1188d252961ce2974e6e116c73d82926` on `origin/main`.
+Choir Warden scale review followed in `0d15234`; B02's direct reset guard landed
+in `2b9dc057f2fc417034bc5f840059f002179e5065` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Briar Mother direct reset guard, committed in `2b9dc05`:** Direct reset
+during death is guarded so eyes do not revive; the test uses real sling eye
+combat and a lethal hook hitbox, preserving two embers and living reset behavior.
+Lead and agent targeted tests passed; the agent reports lint PASS. The static B02
+gallery is not a death-sequence review. The latest clean full check remains
+`c8465bc`; new MB3 source-art investigation is ongoing in scratch.
 
 **Choir Warden MB3 scratch review, 2026-10-28:** Inhale/recover-only body art
 shrinks versus walk: 230 px for walk and 177/178 px for action at 10% alpha.
