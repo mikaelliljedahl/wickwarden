@@ -100,12 +100,26 @@ The Sump Lurker water tells followed in
 `772915a074161425debf0c182fed599660124037` on `origin/main`.
 The Colossus attack presentation followed in
 `e760223a0c4a46d1ee996200269cce43f65dbaad` on `origin/main`.
+The title and Lull Mauler presentation followed in
+`666d61d675893e4328e775eebc0e9228a37ab7d9` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Title and Lull Mauler presentation, committed in `666d61d`:** The title uses
+the planned painted splash, upscaled from a previously reviewed source, and a
+new native-alpha logo recorded in `docs/art-provenance.md`. The actual title
+scene was reviewed with and without an isolated test save; `test_title` passed.
+The Mauler's smash warning uses painted cracks and its sweep outline is visible
+in darkness; its focused test passed and a natural state was reviewed with a
+placed player, not human play. Capture exit reported resource warnings of unknown
+cause. Further late effects remain to be reviewed. An isolated full `make check`
+has since passed on `666d61d`: 157 Godot test files including the playthrough,
+lint, world-check and 175 Python tests. Export verification and miniboss review
+are in progress.
 
 **Verification at `e760223`, 2026-10-28:** `TMPDIR=/tmp make check` passed 157
 Godot test files, lint, world-check and 175 Python tests. `TMPDIR=/tmp make
