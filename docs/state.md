@@ -1,5 +1,19 @@
 # Current status
 
+**Read-only action image survey at `0a2726d`, 2026-10-28:** Actual World with
+ticking attacks and a placed, protected player showed painted effects and
+outlines in `/var/tmp/wick-action-survey/`: C2 natural seed burst
+(`c2-seed.png`) and natural sweep in forced phase two (`c2-sweep.png`); C10
+natural phase-one hand (`c10-hand.png`), forced phase-two wave (`c10-wave.png`),
+and phase-three lash and pulse (`c10-lash.png`, `c10-pulse.png`) with manual
+exposure. Remaining eyes in forced C10 phases are a fixture artifact. C2 seed
+capture reported six ObjectDB and three resource warnings; the other captures
+were not logged. This is not complete state, transition, Reel or human coverage.
+
+Two further standalone Gloam slash ImageGen attempts were rejected: a chevron
+or semicircle had incorrect reach, and green key artifacts appeared. Neither is
+integrated; no runtime change resulted and dedicated slash art remains open.
+
 **The Unlit projectiles, 2026-10-28 (committed in `31dfc41`):** Gaze and phase
 three torrent use distinct painted fly and impact art, correctly oriented
 including homing, with presentation light and a spore fallback if art is missing.
@@ -22,8 +36,8 @@ reports import, lint and B02 ownership PASS. Actual arena capture
 `/var/tmp/wick-states-next/cave_2_9.png` used a placed, protected player, not
 human play; capture exit reported four ObjectDB and two resource warnings. The
 inventory also found the earlier C10 gaze spore hard to see; the subsequent
-gaze and torrent changes are recorded above. C2 sweep and seed burst and other
-C10 states remain to be reviewed.
+gaze and torrent changes are recorded above. A later selective C2/C10 action
+survey is also recorded above; complete state coverage remains open.
 
 **Colossus falling shards, 2026-10-28 (committed in `7f7f245`):** Existing
 painted `colossus_shard_fall` art appears during the final half of the one-second
@@ -1950,7 +1964,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `31dfc41c6aa2a93b1e180622b9d56a3ad83b05d9` on `origin/main`, including The Unlit projectile presentation above. The latest clean full verification remains at `4dfd5e6`. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0a2726da39fa02c9864ca63224f9e24a7dd7635e` on `origin/main`, documenting The Unlit projectile presentation above. The latest clean full verification remains at `4dfd5e6`. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
