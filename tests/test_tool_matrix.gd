@@ -49,8 +49,9 @@ func run() -> void:
 		await _wax_seal_pair(tool)
 	for tool: StringName in [&"hook", &"flare", &"pitch_pot"]:
 		await _wax_seal_contact(tool)
-	for tool: StringName in [&"tether_moth", &"reel_line"]:
-		await _grate_key_pair(tool)
+	for scope: StringName in [&"ow", &"c1"]:
+		for tool: StringName in [&"tether_moth", &"reel_line"]:
+			await _grate_key_pair(tool, scope)
 	for tool: StringName in [&"pitch_pot", &"tallow_sling", &"cinder_wick", &"flare"]:
 		for prop: String in ["cracked_wall", "brittle_rocks"]:
 			await _cracked_wall_pair(tool, prop)
@@ -403,24 +404,72 @@ func _wax_seal_contact(tool: StringName) -> void:
 	await dispose(arena)
 
 
-func _grate_key_pair(tool: StringName) -> void:
+func _grate_key_pair(tool: StringName, scope: StringName) -> void:
 	reset_state()
 	var arena := make_arena()
 	var player := make_player(arena, Vector2(600, 600))
 	var grate := _prop(arena, "grate", Vector2(600, 400))
-	var key := PickupBase.spawn(&"key", arena, Vector2(600, 260), false)
-	if grate == null or key == null:
+	var key := PickupBase.new()
+	key.kind = &"key"
+	key.scope = scope
+	key.persistent_id = &"matrix_grate_key"
+	key.position = Vector2(600, 260)
+	arena.add_child(key)
+	if grate == null:
 		await dispose(arena)
 		return
+	var label := "%s -> %s grate key" % [tool, scope]
+	var collected := [0]
+	key.collected.connect(func(_kind: StringName) -> void: collected[0] += 1)
 	await frames(3)
 	_equip(player, tool)
 	player.facing = Vector2.UP
-	check(player.use_item(), "%s -> grate: actual activation" % tool)
-	await seconds(0.4)
-	check_eq(key.is_carried(), tool == &"tether_moth", "%s -> grate: key carried" % tool)
-	await seconds(1.5)
-	check_eq(GameState.keys_in(&"ow"), 1 if tool == &"tether_moth" else 0, "%s -> grate: key" % tool)
-	check(is_instance_valid(grate), "%s -> grate: grate remains" % tool)
+	check(player.use_item(), label + ": actual activation")
+	var crossed := false
+	var hit_grate := false
+	var carried := false
+	var grate_shape := grate.get_node("Shape") as CollisionShape2D
+	var grate_rect := grate_shape.shape as RectangleShape2D
+	var far_edge := grate.global_position.y - grate_rect.size.y * 0.5
+	var near_edge := grate.global_position.y + grate_rect.size.y * 0.5
+	for i in range(120):
+		await frames(1)
+		if is_instance_valid(key):
+			carried = carried or key.is_carried()
+		for moth in get_tree().get_nodes_in_group(&"item_tether_moth"):
+			crossed = crossed or moth.global_position.y < far_edge
+		for tip in get_tree().get_nodes_in_group(&"reel_tips"):
+			hit_grate = hit_grate or (
+				absf(tip.global_position.y - near_edge) < 1.0 and tip._state == tip.State.RETRACT
+			)
+	var fetched := tool == &"tether_moth"
+	if fetched:
+		check(crossed, label + ": real moth crosses the full grate")
+		check(carried, label + ": moth actually carries the key")
+	else:
+		check(hit_grate, label + ": real reel tip hits and retracts at grate")
+		check(not carried, label + ": reel never carries the key")
+	check_eq(collected[0], 1 if fetched else 0, label + ": key collection signal")
+	check_eq(GameState.keys_in(scope), 1 if fetched else 0, label + ": matching scoped key")
+	var other_scope := &"c1" if scope == &"ow" else &"ow"
+	check_eq(GameState.keys_in(other_scope), 0, label + ": other scope unchanged")
+	check_eq(GameState.has_flag(&"picked_matrix_grate_key"), fetched, label + ": pickup flag")
+	check(not (grate.get_node("Shape") as CollisionShape2D).disabled, label + ": grate solid")
+	print("MATRIX ", label, " crossed=", crossed, " hit_grate=", hit_grate, " fetched=", fetched)
+	await dispose(arena)
+	arena = make_arena()
+	grate = _prop(arena, "grate", Vector2(600, 400))
+	var revisited := PickupBase.new()
+	revisited.kind = &"key"
+	revisited.scope = scope
+	revisited.persistent_id = &"matrix_grate_key"
+	revisited.position = Vector2(600, 260)
+	arena.add_child(revisited)
+	await frames(3)
+	check_eq(is_instance_valid(revisited), not fetched, label + ": correct pickup on revisit")
+	check_eq(GameState.has_flag(&"picked_matrix_grate_key"), fetched, label + ": revisit flag")
+	check_eq(GameState.keys_in(scope), 1 if fetched else 0, label + ": revisit key count")
+	check(not (grate.get_node("Shape") as CollisionShape2D).disabled, label + ": revisit solid")
 	await dispose(arena)
 
 
