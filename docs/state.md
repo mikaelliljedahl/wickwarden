@@ -1,5 +1,13 @@
 # Current status
 
+**Q7 gate revisit cases, 2026-10-28 (committed in `0faeca5`):** Real Wick
+positives cover three thorn variants, sling covers the eye switch and Chime covers
+three resonance variants. Twenty-one hook/flare/pot negatives confirm contact
+and check flags and solid blockers on revisit, including both eye blockers.
+Isolated `tool_matrix` and lint passed; these are controlled fixtures, not human
+play. Other tools, gates and encounter combinations remain open. The latest full
+check was at `b41dc6d`.
+
 **Q7 wax seal, 2026-10-28 (committed in `52cbdeb`):** A real flare opens the
 seal after a controlled initial hook miss; hook and pitch-pot explosion are
 negative with confirmed contact. Flag and solidity are checked before and after
@@ -189,7 +197,16 @@ unchanged. The isolated `cinder_wisp` test and lint passed. Controlled-position
 captures were reviewed in a bright room and a dark cave, not human play. The
 Fen Leech warning changed later as recorded above; the full inventory is incomplete.
 
-**Placeholder census, 2026-10-28 (read-only):** An isolated scan of 222
+**Independent placeholder census at `52cbdeb`, 2026-10-28 (read-only):** A
+clean isolated scan instantiated all 222 World targets and inspected them after
+four physics frames. It found four Placeholder nodes, all hidden in the tree:
+the hook wall in `ow_8_0`, seam in `ow_11_7`, wax plate in `cave_1_8`, and
+boss base in `cave_6_11`; none was visible. The temporary report is
+`/var/tmp/wick-audit-52/census.json`. This does not prove pixels or cover later
+attacks and transitions, in-place pockets, HUD, conditional fallbacks or human
+play; full dynamic and visual coverage remains open.
+
+**Earlier placeholder census, 2026-10-28 (read-only):** An isolated scan of 222
 standalone room targets after four physics frames found 35 Placeholder nodes:
 31 visible in the tree and four hidden, including generic puffs. Tree visibility
 is not pixel proof, and this is not coverage of every state. At that census,
@@ -1695,7 +1712,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `52cbdebd5e1a166e6dc790f7ee79f6bbb1a59436` on `origin/main`, including the Q7 wax-seal cases above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0faeca54878a3750b5aed47427aa538fd8913f62` on `origin/main`, including the Q7 gate revisit cases above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
