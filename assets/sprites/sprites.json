@@ -1,4 +1,24 @@
 {
+  "miniboss_death_wax_z1": {
+    "cell": [
+      256,
+      256
+    ],
+    "anchor": [
+      128.0,
+      128.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/miniboss_death_wax_z1_idle.png",
+        "frames": 6,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
   "fx_enemy_poof_z1": {
     "cell": [
       192,

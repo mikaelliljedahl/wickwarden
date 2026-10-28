@@ -90,6 +90,9 @@ func run() -> void:
 	await _reset_combat_state()
 	await _reset_intro_combat_state()
 	await _miniboss_mode()
+	await _miniboss_death_presentation()
+	await _miniboss_death_fallbacks()
+	await _ordinary_boss_death_presentation()
 	await _defeated_stays_dead()
 	await _resupply_and_death_drops()
 	await _parts()
@@ -849,3 +852,107 @@ func _pickups_of(parent: Node, kind: StringName) -> Array[PickupBase]:
 		if node is PickupBase and (node as PickupBase).kind == kind:
 			found.append(node as PickupBase)
 	return found
+
+
+func _miniboss_death_presentation() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss := _make_boss(&"mini_art", &"mini_art_room", [])
+	boss.miniboss = true
+	boss.max_hp = 2
+	boss.drops_enabled = false
+	boss.death_drops = [&"ember"]
+	arena.add_child(boss)
+	boss.global_position = Vector2(500, 500)
+	var defeated_count := [0]
+	var died_count := [0]
+	boss.defeated.connect(func(_boss: EnemyBase) -> void: defeated_count[0] += 1)
+	boss.died.connect(func(_boss: EnemyBase) -> void: died_count[0] += 1)
+	await frames(2)
+	var hit := make_hitbox(arena, boss.global_position, Layers.Team.PLAYER, 2)
+	await frames(3)
+	hit.deactivate()
+	check(boss.is_dying(), "physical lethal hit starts miniboss throes")
+	check(GameState.has_flag(&"mini_mini_art_room"), "miniboss flag set on lethal hit")
+	check_eq(defeated_count[0], 1, "defeated signal fires once at lethal hit")
+	check_eq(died_count[0], 0, "died signal waits for throes")
+	await seconds(1.2)
+	check(is_instance_valid(boss), "miniboss remains during throes")
+	check(arena.get_node_or_null("Puff") == null, "no wax effect during throes")
+	await seconds(0.4)
+	check(not is_instance_valid(boss), "miniboss dies after throes")
+	check_eq(defeated_count[0], 1, "defeated remains once")
+	check_eq(died_count[0], 1, "died emitted once after throes")
+	var fx := arena.get_node_or_null("Puff") as SpriteVisual
+	check(fx != null and fx.kind == &"miniboss_death_wax_z1", "miniboss uses wax")
+	check_eq(
+		arena.get_children().filter(func(n: Node) -> bool: return n is PickupBase).size(),
+		1,
+		"death drop still spawns"
+	)
+	if fx != null:
+		check(
+			fx.global_position.is_equal_approx(Vector2(500, 500)), "wax appears at death position"
+		)
+		check_eq(fx.sprite_frames.get_frame_count(&"idle"), 6, "wax has six frames")
+		check_near(fx.sprite_frames.get_animation_speed(&"idle"), 8.0, 0.001, "wax plays at 8 fps")
+		check(not fx.sprite_frames.get_animation_loop(&"idle"), "wax plays once")
+		check_near(fx.modulate.a, 1.0, 0.01, "wax begins opaque")
+		await seconds(0.48)
+		check(
+			is_instance_valid(fx) and fx.modulate.a < 0.85 and fx.modulate.a > 0.02,
+			"wax fades before ending"
+		)
+		await seconds(0.3)
+		check(not is_instance_valid(fx), "wax frees after animation")
+	await dispose(arena)
+
+
+func _miniboss_death_fallbacks() -> void:
+	var original: Dictionary = JSON.parse_string(
+		FileAccess.get_file_as_string(SpriteVisual.DEFAULT_MANIFEST)
+	)
+	original.erase("miniboss_death_wax_z1")
+	var path := "user://mini_missing_art.json"
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(JSON.stringify(original))
+	file.close()
+	await _check_mini_fallback(path, false)
+	original.erase("explosion")
+	file = FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(JSON.stringify(original))
+	file.close()
+	await _check_mini_fallback(path, true)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+
+
+func _check_mini_fallback(path: String, placeholder: bool) -> void:
+	reset_state()
+	SpriteVisual.use_manifest(path)
+	var arena := make_arena()
+	var boss := _make_boss(&"fallback", &"fallback_room", [])
+	boss.miniboss = true
+	arena.add_child(boss)
+	boss.global_position = Vector2(500, 500)
+	await frames(2)
+	boss.kill()
+	var fx := arena.get_node_or_null("Puff")
+	if placeholder:
+		check(fx is Placeholder, "missing wax and explosion use Placeholder")
+	else:
+		check(fx is SpriteVisual and fx.kind == &"explosion", "missing wax uses explosion")
+	check_eq(boss.miniboss, true, "fallback keeps miniboss classification")
+	await dispose(arena)
+
+
+func _ordinary_boss_death_presentation() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss := _make_boss(&"ordinary", &"ordinary_room", [])
+	arena.add_child(boss)
+	await frames(2)
+	boss.kill()
+	var fx := arena.get_node_or_null("Puff") as SpriteVisual
+	check(fx != null and fx.kind == &"explosion", "ordinary boss keeps explosion")
+	await dispose(arena)

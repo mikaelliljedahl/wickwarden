@@ -1746,3 +1746,24 @@ Create a game sprite effect sheet with a genuinely transparent background and tr
 
 Frame 1: compact solid pale cream wax puff with a visible violet inner glow. Frame 2: wax separates into a small soft puff and a few wax crumbs, violet smoke begins emerging. Frame 3: puff visibly breaks apart and spreads, violet wisps curl upward, fewer crumbs. Frame 4: substantially thinner violet smoke and only tiny scattered crumbs. Frame 5: one delicate faint violet wisp, almost vanished, no debris. Progress clearly and consistently from solid to nearly gone, while preserving the same centre and scale. Painterly soft translucent smoke and soft edges. Palette only cream, soft lavender and dusk violet, no green, no blue-grey smoke, no orange fire, no rocks, no radial explosion, no creature, no text. Reference image is for painterly effects style and strip layout only, not its colors, fire or explosion design. Landscape 1536 by 1024.
 ```
+
+
+## Z1 miniboss death wax, 2026-10-28
+
+`tools/source_art/miniboss_death_wax_z1.png` is the unchanged 2172×724 RGBA output
+of the built-in image_gen tool with `transparent_background=true`; session
+`01a1833e-4196-7423-8c23-d9ec5734cc45`, output
+`exec-7dc17acf-cd71-46e5-9d68-8640d0a17c94.png`, SHA-256
+`b99fc86784bc354d3939d8bf4ac6e74592c0fbab01c09b5210622275f6e79379`.
+No reference image was used. The requested size was 1536×1024. The native-alpha
+cutter uses a common fit of 180×180, crop padding 12, six centred 256×256 cells
+at 8 fps; it preserves soft alpha. The runtime fades the last two frames and
+uses normal room lighting. The exact prompt follows.
+
+```text
+Original game art for "Wickwarden", a painterly top-down adventure. Hand-painted storybook illustration style with visible brush strokes and soft edges, high detail, warm lamp light against deep dusk colours, low saturation except for light sources. NOT pixel art, no pixel grid, no dithering, no thick black outlines. Three-quarter top-down view, camera about 50 degrees above the ground, key light from the upper left. No text, no letters, no numbers, no labels, no frame borders, no grid lines, no watermark.
+
+A game sprite effect sheet with genuine transparent background and transparent empty gaps. Exactly six separate complete animation frames in one horizontal row, left to right in time, evenly spaced with generous transparent gaps; nothing touches another frame or the image edge. Each effect has the same center and shared scale for a 256 by 256 centered game cell, no ground line.
+
+Generic miniboss death effect, usable for many radically different creatures: an abstract, irregular mass of pale cream wax fragments and deep dusk-violet shadow collapsing and dissolving. It must not depict or imply any figure, anatomy, body, head, face, limbs, clothing, armor, character, creature silhouette, object, or recognizable identity. Painterly semi-transparent violet smoke and shadows, soft natural alpha edges, restrained violet inner glow; no floor or cast shadow. Six distinct successive stages of the same effect: 1 compact wax fragments and shadow knot; 2 knot contracts and breaks apart; 3 wax pieces fall inward as shadow spreads; 4 low irregular wax puddle and thinning shadow; 5 smaller wax streaks and faint wisps; 6 a few tiny fading translucent violet wisps and wax flecks, almost gone. Show a coherent collapse and dissipation, with consistently aligned centers, no repeated poses. No magenta or green key background, no checkerboard, no explosion, no radial blast, no fire, no blood. Landscape 1536 by 1024.
+```

@@ -447,18 +447,7 @@ func _die() -> void:
 	_on_death()
 	var parent := get_parent()
 	if parent != null:
-		var effect := &"explosion"
-		var effect_scale := 0.3
-		var first_frame := 3
-		if _uses_regular_death_effect():
-			effect = &"fx_enemy_poof_z1"
-			effect_scale = 0.8
-			first_frame = 0
-		if (
-			SpriteVisual.spawn_effect(parent, effect, global_position, effect_scale, first_frame)
-			== null
-		):
-			Placeholder.puff(parent, global_position, Placeholder.color_of(visual_kind))
+		_spawn_death_effect(parent)
 		if drops_enabled:
 			var kind := DropTable.roll(drop_roll_override)
 			if kind != &"":
@@ -466,6 +455,22 @@ func _die() -> void:
 	died.emit(self)
 	Events.enemy_died.emit(self, global_position)
 	queue_free()
+
+
+## Presentation hook: subclasses may choose a death effect without changing death handling.
+func _spawn_death_effect(parent: Node) -> void:
+	var effect := &"explosion"
+	var effect_scale := 0.3
+	var first_frame := 3
+	if _uses_regular_death_effect():
+		effect = &"fx_enemy_poof_z1"
+		effect_scale = 0.8
+		first_frame = 0
+	if (
+		SpriteVisual.spawn_effect(parent, effect, global_position, effect_scale, first_frame)
+		== null
+	):
+		Placeholder.puff(parent, global_position, Placeholder.color_of(visual_kind))
 
 
 func _set_flash(on: bool) -> void:

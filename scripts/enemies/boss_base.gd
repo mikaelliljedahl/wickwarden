@@ -158,6 +158,21 @@ func _on_death() -> void:
 		spawn_pickup(death_drops[i], ARENA_CENTRE + offset, false)
 
 
+## Minibosses share a wax dissolve; other bosses retain the base explosion.
+func _spawn_death_effect(parent: Node) -> void:
+	if not miniboss:
+		super(parent)
+		return
+	var fx := SpriteVisual.spawn_effect(parent, &"miniboss_death_wax_z1", global_position)
+	if fx == null:
+		super(parent)
+		return
+	# Fade the final two frames without changing the strip's 6/8-second lifetime.
+	var fade := fx.create_tween()
+	fade.tween_interval(0.5)
+	fade.tween_property(fx, "modulate:a", 0.0, 0.25)
+
+
 # ---- Public API ------------------------------------------------------------------------------
 
 
