@@ -276,12 +276,22 @@ Bramble Snapper's art trial was documented in
 Compact Snapper documentation followed in `18dc667`; native-alpha texture
 cutter support landed in `9d2899c81b4660872d943fd0cdae1d869bae2fe9` on
 `origin/main`.
+Transparent strip support was documented in
+`10de26a3f8cff44d2f8f568028a3076a61bcd667` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Reel rope source review, 2026-10-28:** Original v1/v3 are RGB magenta,
+while the new native-alpha cutter requires RGBA and 6:1. Diagnostic keyed crops
+have uncertain lost alpha (up to 0.096/0.119); selected seam maxima were 43/56.5
+and best searched maxima 4/5, against the new implementation tolerance of
+3/255. None is integrated. Actual controlled casts were inspected in light and
+dark, without human or animation verification; usable source investigation
+continues.
 
 **Native-alpha texture cutter, committed in `9d2899c`:** Opt-in support cuts
 rectangular RGBA `native_alpha` textures with proportions, seam and checker
