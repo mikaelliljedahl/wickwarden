@@ -32,6 +32,8 @@ var _state: State = State.SUBMERGED
 ## Seconds left in a timed state. In SUBMERGED: seconds submerged since the last dive.
 var _timer: float = 0.0
 var _lunge_dir := Vector2.ZERO
+## Side-view direction for presentation; vertical lunges keep the last horizontal direction.
+var _facing_left := false
 var _lunge_left: float = 0.0
 var _ripple_wait: float = 0.0
 var _zone: Area2D = null
@@ -166,6 +168,11 @@ func _start_lunge() -> void:
 	var to_target := player_position(global_position) - global_position
 	_lunge_dir = to_target.normalized() if to_target.length_squared() > 0.0001 else facing_dir
 	set_facing_dir(_lunge_dir)
+	# The registered strip is a right-facing side view; mirror it for a leftward lunge.
+	if absf(_lunge_dir.x) > 0.001:
+		_facing_left = _lunge_dir.x < 0.0
+	if visual is SpriteVisual:
+		(visual as SpriteVisual).flip_h = _facing_left
 	_lunge_left = LUNGE_DISTANCE
 	_enter(State.LUNGE, 0.0)
 
@@ -229,7 +236,7 @@ func _bubble() -> void:
 	_warning.scale = Vector2(0.55, 0.55)
 	_warning.modulate = Color(1.5, 2.4, 2.5, 1.0)
 	# The supplied non-mirrored leech art faces right; this is its head.
-	_warning.position = Vector2(65.0, -4.0)
+	_warning.position = Vector2(-65.0 if _facing_left else 65.0, -4.0)
 	_warning.z_index = 10
 	add_child(_warning)
 	var light := PointLight2D.new()

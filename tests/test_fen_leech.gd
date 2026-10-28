@@ -18,6 +18,8 @@ func run() -> void:
 	await _submerged_is_immune()
 	await _far_player_does_not_trigger()
 	await _trigger_lunge_and_surfaced_window()
+	await _left_lunge_presentation()
+	await _presentation_direction_memory()
 	await _lunge_stays_in_water()
 	await _no_zone_no_motion()
 	await _death_drops_ember()
@@ -131,6 +133,7 @@ func _trigger_lunge_and_surfaced_window() -> void:
 	check(lunge_wait >= 25 and lunge_wait <= 31, "tell lasts 0.5 s including the two hit-test frames")
 	check(leech.get_node_or_null("BubbleWarning") == null, "warning ends with tell")
 	check(leech.contact_hitbox.active, "contact damage is on during the lunge")
+	check(not (leech.visual as SpriteVisual).flip_h, "rightward lunge uses right-facing art")
 	var surfaced_wait: int = await _wait_until(func() -> bool: return leech.is_surfaced(), 120)
 	check(surfaced_wait < 120, "fen leech surfaces after the lunge")
 	check(not leech.contact_hitbox.active, "contact damage is off when surfaced")
@@ -140,6 +143,52 @@ func _trigger_lunge_and_surfaced_window() -> void:
 	var dive_wait: int = await _wait_until(func() -> bool: return leech.is_submerged(), 120)
 	check(dive_wait < 120, "fen leech dives back under")
 	check(leech.invulnerable, "a diving fen leech is invulnerable again")
+	await dispose(arena)
+
+
+func _left_lunge_presentation() -> void:
+	reset_state()
+	var arena := _arena_with_pool()
+	var leech: Variant = make_enemy(arena, SCENE, Vector2(900, 480))
+	leech.room_rect = ROOM
+	var player := make_player(arena, Vector2(1150, 480))
+	await _wait_until(func() -> bool: return leech._state == leech.State.TELEGRAPH, 180)
+	player.global_position = leech.global_position + Vector2(-200, 0)
+	await _wait_until(func() -> bool: return leech.is_lunging(), 60)
+	check(leech.is_lunging() and leech.facing_dir.x < -0.9, "natural lunge aims left")
+	check((leech.visual as SpriteVisual).flip_h, "leftward lunge mirrors the leech")
+	leech._enter(leech.State.TELEGRAPH, leech.TELEGRAPH_TIME)
+	leech._bubble()
+	var warning := leech.get_node_or_null("BubbleWarning") as Sprite2D
+	check(warning != null and warning.position.x < 0.0, "warning follows the mirrored head")
+	await dispose(arena)
+
+
+func _presentation_direction_memory() -> void:
+	reset_state()
+	var arena := _arena_with_pool()
+	var leech: Variant = make_enemy(arena, SCENE, Vector2(900, 480))
+	var player := make_player(arena, Vector2(1100, 480))
+	await frames(2)
+	# The first warning uses the initial right-facing direction, independently of Visual.
+	(leech.visual as SpriteVisual).flip_h = true
+	leech._bubble()
+	check(leech._warning.position.x > 0.0, "first warning is on the right")
+	leech._start_lunge()
+	check(not (leech.visual as SpriteVisual).flip_h, "right lunge points right")
+	player.global_position = leech.global_position + Vector2(0, -200)
+	leech._start_lunge()
+	check(not (leech.visual as SpriteVisual).flip_h, "vertical lunge retains right")
+	player.global_position = leech.global_position + Vector2(-200, 0)
+	leech._start_lunge()
+	check((leech.visual as SpriteVisual).flip_h, "left lunge points left")
+	player.global_position = leech.global_position + Vector2(0, 200)
+	leech._start_lunge()
+	check((leech.visual as SpriteVisual).flip_h, "vertical lunge retains left")
+	# A changed Visual must not change the direction used for the next warning.
+	(leech.visual as SpriteVisual).flip_h = false
+	leech._bubble()
+	check(leech._warning.position.x < 0.0, "warning uses remembered left direction")
 	await dispose(arena)
 
 
