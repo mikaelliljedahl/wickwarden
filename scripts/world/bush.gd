@@ -61,6 +61,8 @@ func cut_down() -> void:
 			used_fragments = _spawn_cut_fragments(
 				parent, _bush_cut_texture(), &"BushCut", Color(0.65, 0.78, 0.56)
 			)
+		elif variant == &"dry_vine_screen":
+			used_fragments = _spawn_vine_cut(parent, _bush_cut_texture())
 		if not used_fragments and SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.25, 3, tint) == null:
 			Placeholder.puff(parent, global_position, Placeholder.color_of(variant), 36.0)
 		if drops_enabled:
@@ -88,6 +90,41 @@ func _bush_cut_texture() -> Texture2D:
 
 func _spawn_reed_cut(parent: Node) -> bool:
 	return _spawn_cut_fragments(parent, _reed_cut_texture(), &"ReedCut")
+
+
+func _spawn_vine_cut(parent: Node, texture: Texture2D) -> bool:
+	if texture == null:
+		return false
+	var puff := Sprite2D.new()
+	puff.name = "VineCut"
+	puff.top_level = true
+	puff.z_index = 10
+	puff.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	parent.add_child(puff)
+	puff.global_position = global_position + Vector2(0, 24)
+	puff.modulate = Color(1.0, 0.91, 0.76, 0.8)
+	# Two isolated twigs in the documented bush_cut_z1 texture.
+	var regions := [Rect2(915, 375, 190, 160), Rect2(465, 995, 175, 155)]
+	var positions := [
+		Vector2(-40, -27), Vector2(36, -20), Vector2(-30, 32), Vector2(33, 32), Vector2(0, -4)
+	]
+	var rotations := [-0.4, 0.6, 0.9, -0.7, 0.2]
+	for i in range(positions.size()):
+		var twig := Sprite2D.new()
+		var atlas := AtlasTexture.new()
+		atlas.atlas = texture
+		atlas.region = regions[i % regions.size()]
+		twig.texture = atlas
+		twig.position = positions[i]
+		twig.scale = Vector2.ONE * 0.17
+		twig.rotation = rotations[i]
+		puff.add_child(twig)
+	puff.scale = Vector2.ONE * 0.7
+	var tween := puff.create_tween().set_parallel(true)
+	tween.tween_property(puff, "scale", Vector2.ONE, 0.25)
+	tween.tween_property(puff, "modulate:a", 0.0, 0.18).set_delay(0.07)
+	tween.chain().tween_callback(puff.queue_free)
+	return true
 
 
 func _spawn_cut_fragments(
