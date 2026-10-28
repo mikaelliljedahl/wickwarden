@@ -104,6 +104,7 @@ func run() -> void:
 	await _squire_pit_moth()
 	await _coinwyrm_reel()
 	await _kiln_wick()
+	await _kiln_phase_two_wick()
 	await _choir_warden_moth()
 	await _automaton_moth()
 	await _automaton_live_jet_tools()
@@ -1868,6 +1869,87 @@ func _kiln_wick() -> void:
 	check(boss.is_molten(), "Kilnkeeper: attached flame melts armour")
 	check_eq(boss.melt_ticks, 3, "Kilnkeeper: phase one requires three flame ticks")
 	check_eq(boss.hp, 18, "Kilnkeeper: three real ticks each deal two")
+	await dispose(arena)
+
+
+func _kiln_phase_two_wick() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = make_enemy(arena, "res://scenes/enemies/bosses/kilnkeeper.tscn", Vector2(800, 480))
+	boss.room_rect = Rect2(96, 96, 1728, 768)
+	boss.move_speed = 0
+	var player := make_player(arena, Vector2(600, 480))
+	player.set_hurtbox_enabled(self, false)
+	var hits: Array[StringName] = []
+	var fire_phases: Array[int] = []
+	var damage: Array[int] = []
+	boss.hurtbox.hurt.connect(func(hit: Hitbox) -> void:
+		hits.append(hit.kind)
+		if hit.kind == &"fire":
+			fire_phases.append(boss.phase)
+	)
+	boss.damaged.connect(func(amount: int) -> void: damage.append(amount))
+	for i in range(120):
+		if not boss.is_in_intro():
+			break
+		await frames(1)
+	check_eq(boss.phase, 1, "Kilnkeeper: natural phase one starts")
+	_equip(player, &"cinder_wick")
+	player.facing = Vector2.RIGHT
+	check(player.use_item(), "Kilnkeeper: real wick launches in phase one")
+	for i in range(300):
+		if boss.phase == 2:
+			break
+		await frames(1)
+	check_eq(boss.phase, 2, "Kilnkeeper: actual fire reaches phase two")
+	check_eq(boss.hp, 12, "Kilnkeeper: six real fire hits reach phase threshold")
+	check_eq(hits.count(&"fire"), 6, "Kilnkeeper: six phase-one fire contacts")
+	for i in range(180):
+		if not boss.is_pausing() and get_tree().get_nodes_in_group(&"item_cinder_wick").is_empty():
+			break
+		await frames(1)
+	check(not boss.is_pausing(), "Kilnkeeper: natural phase pause finishes")
+	check(get_tree().get_nodes_in_group(&"item_cinder_wick").is_empty(), "Kilnkeeper: first wick expires")
+	check(not boss.is_molten(), "Kilnkeeper: phase-two armour starts hard")
+	player.place_at(boss.global_position - Vector2(140, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check(&"hook" in hits, "Kilnkeeper: actual hook contacts hard phase-two armour")
+	check_eq(boss.hp, 12, "Kilnkeeper: hard armour rejects real hook")
+	for i in range(20):
+		if player.state == player.State.NORMAL:
+			break
+		await frames(1)
+	player.place_at(boss.global_position - Vector2(200, 0))
+	_equip(player, &"cinder_wick")
+	check(player.use_item(), "Kilnkeeper: second real wick launches in phase two")
+	for i in range(180):
+		if hits.count(&"fire") >= 9:
+			break
+		await frames(1)
+	check_eq(hits.count(&"fire"), 9, "Kilnkeeper: three actual phase-two fire contacts")
+	check_eq(boss.melt_ticks, 3, "Kilnkeeper: three ticks recorded")
+	check(not boss.is_molten(), "Kilnkeeper: three ticks do not melt phase-two armour")
+	check_eq(boss.hp, 6, "Kilnkeeper: three phase-two ticks deal six")
+	for i in range(50):
+		if hits.count(&"fire") >= 10:
+			break
+		await frames(1)
+	check_eq(hits.count(&"fire"), 10, "Kilnkeeper: fourth actual phase-two fire contact")
+	check(boss.is_molten(), "Kilnkeeper: fourth tick melts phase-two armour")
+	check_eq(boss.hp, 4, "Kilnkeeper: four phase-two ticks deal eight")
+	# Allow the previous fire hit's normal i-frames to expire before the next hook.
+	await frames(17)
+	player.place_at(boss.global_position - Vector2(140, 0))
+	player.facing = Vector2.RIGHT
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(hits.count(&"hook"), 2, "Kilnkeeper: actual hook contacts molten armour")
+	check_eq(boss.hp, 2, "Kilnkeeper: molten armour permits actual hook damage")
+	print("MATRIX Kilnkeeper phase two: hits=", hits, " fire_phases=", fire_phases, " damage=", damage)
 	await dispose(arena)
 
 
