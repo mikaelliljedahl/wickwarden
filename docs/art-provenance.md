@@ -1632,3 +1632,12 @@ The cutter uses the entire canvas, no crop or alpha threshold, uniformly scaled 
 `0efc24427f6350fed71e56ca73965e64e1ba29f3124fbda31c2c5aa1737f40f6`.
 The scratch visual review used Mauler-created slag in `cave_4_4`; the flecks can resemble sparkles
 and blend with glowing slag. Still captures do not establish readability in motion or human play.
+
+### Thorn Warden wreath, 2026-10-28
+
+`thorn_wreath_z1.png` is the unmodified 1268×1240 RGBA ImageGen output from session
+`01a18271-1cd0-72b0-b687-f50f13ef1cf9`, file
+`exec-071699c0-b8b3-43ba-a7b5-543cf252d534.png` (SHA-256
+`60c0a5fb17fd3fd8d20686076b8ed9ac9da34d7dd177f27136ceb3eac7871267`).
+The native-alpha texture cutter preserves its source dimensions; the in-game warning
+uses the same rectangular-to-square drawing as the scratch study.

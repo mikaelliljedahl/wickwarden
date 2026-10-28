@@ -4,6 +4,7 @@ extends "res://scripts/enemies/boss_base.gd"
 const KIND := &"thorn_warden"
 const INTERVAL := 3.0
 const WARNING := 0.6
+const WREATH := "res://assets/sprites/thorn_wreath_z1.png"
 const NEEDLE := "res://scenes/enemies/thorn_needle.tscn"
 
 enum State { WALK, TELEGRAPH }
@@ -12,6 +13,8 @@ var state: State = State.WALK
 var _cycle := INTERVAL
 var _timer := 0.0
 var _stun_immunity := 0.0
+var _wreath: Texture2D
+var _warning_light: PointLight2D
 
 
 func _init() -> void:
@@ -33,11 +36,26 @@ func _init() -> void:
 	)
 
 
+func _boss_ready() -> void:
+	if ResourceLoader.exists(WREATH):
+		_wreath = load(WREATH) as Texture2D
+	_warning_light = PointLight2D.new()
+	_warning_light.texture = LightTexture.make()
+	_warning_light.texture_scale = LightTexture.scale_for(70.0)
+	_warning_light.color = Color(1.0, 0.78, 0.4)
+	_warning_light.energy = 0.3
+	_warning_light.visible = false
+	add_child(_warning_light)
+
+
 func _enter_phase(_number: int) -> void:
 	state = State.WALK
 	_cycle = INTERVAL
 	_timer = 0.0
 	_stun_immunity = 0.0
+	if is_instance_valid(_warning_light):
+		_warning_light.visible = false
+	queue_redraw()
 
 
 func clear_hazards() -> void:
@@ -67,6 +85,7 @@ func _boss_physics(delta: float) -> void:
 		if _timer <= 0.0:
 			_fire_ring()
 			state = State.WALK
+	_warning_light.visible = _wreath != null and state == State.TELEGRAPH
 	queue_redraw()
 
 
@@ -101,6 +120,7 @@ func _resolve_damage(hitbox: Hitbox, amount: int) -> int:
 func _on_stunned(_seconds: float) -> void:
 	state = State.WALK
 	_timer = 0.0
+	_warning_light.visible = false
 	queue_redraw()
 
 
@@ -108,9 +128,13 @@ func _draw() -> void:
 	if is_dead or is_dying() or is_stunned():
 		return
 	var radius := 66.0 if state == State.TELEGRAPH else 42.0
-	for i in range(8):
-		var dir := Vector2.from_angle(TAU * float(i) / 8.0)
-		draw_line(dir * 30.0, dir * radius, Color(0.85, 0.8, 0.4), 5.0)
+	if _wreath != null:
+		var tint := Color(1.15, 1.1, 0.9) if state == State.TELEGRAPH else Color.WHITE
+		draw_texture_rect(_wreath, Rect2(-radius, -radius, radius * 2.0, radius * 2.0), false, tint)
+	else:
+		for i in range(8):
+			var dir := Vector2.from_angle(TAU * float(i) / 8.0)
+			draw_line(dir * 30.0, dir * radius, Color(0.85, 0.8, 0.4), 5.0)
 
 
 func stun(seconds: float) -> void:
@@ -135,6 +159,8 @@ func _on_hurt(hitbox: Hitbox) -> void:
 
 
 func _on_death() -> void:
+	_warning_light.visible = false
+	queue_redraw()
 	super()
 	for kind: StringName in [&"ember", &"ember", &"brass_coin", &"brass_coin"]:
 		PickupBase.spawn(kind, get_parent(), global_position, true)

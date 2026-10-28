@@ -6,11 +6,37 @@ const SCENE := "res://scenes/enemies/minibosses/thorn_warden.tscn"
 func run() -> void:
 	await _needle_reset_collision(false)
 	await _needle_reset_collision(true)
+	await _wreath_visual()
 	await _damage_and_ring()
 	await _real_hook_skirt()
 	await _real_flame_ticks()
 	await _real_moth_hit()
 	await _stun_and_persistence()
+
+
+func _wreath_visual() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+	await frames(2)
+	check(enemy._wreath != null, "painted wreath loads")
+	check(not enemy._warning_light.visible, "walking has no warning light")
+	while enemy.state != enemy.State.TELEGRAPH:
+		await frames(1)
+	check(enemy._warning_light.visible, "telegraph lights wreath")
+	enemy.stun(1.5)
+	check(not enemy._warning_light.visible, "stun immediately extinguishes warning light")
+	enemy.reset_fight()
+	enemy._wreath = null
+	await frames(2)
+	while enemy.state != enemy.State.TELEGRAPH:
+		await frames(1)
+	check(not enemy._warning_light.visible, "missing art retains unlit fallback")
+	check_eq(get_tree().get_nodes_in_group(&"projectiles").size(), 0, "fallback warning precedes firing")
+	while enemy.state == enemy.State.TELEGRAPH:
+		await frames(1)
+	check_eq(get_tree().get_nodes_in_group(&"projectiles").size(), 8, "fallback still fires eight needles")
+	await dispose(arena)
 
 
 func _needle_reset_collision(reset_on_overlap: bool) -> void:
