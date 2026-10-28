@@ -245,12 +245,38 @@ func _ward_and_slash() -> void:
 	boss._attack(&"slash", boss.global_position)
 	var slash = boss._hazards[-1]
 	var slash_ref: WeakRef = weakref(slash)
+	var visual := slash.get_node("Visual") as Node2D
+	var paint := visual.get_node_or_null("SlashPaint") as Node2D
+	check(paint != null, "actual slash uses painted effect")
+	if paint != null:
+		check_eq(paint.get("direction"), Vector2.LEFT, "paint follows locked attack aim")
+		check_eq(
+			paint.get("texture").resource_path,
+			"res://assets/sprites/mirror_tell_z1.png",
+			"existing art reused"
+		)
+		check(paint.show_behind_parent, "paint sits behind the original contour")
+		check(visual.material == null, "contour retains its original lighting")
+		check(paint.material is CanvasItemMaterial, "only the painted child is unshaded")
+		check_eq(paint.get_child_count(), 0, "paint adds no collision")
+	var fallback := visual.get_script().new() as Node2D
+	fallback.set(&"slash_art_path", "res://missing-gloam-slash.png")
+	slash.add_child(fallback)
+	check(fallback.get("slash_paint") == null, "missing art retains procedural fallback")
+	check_eq(fallback.get_child_count(), 0, "missing art creates no painted child")
+	fallback.queue_free()
 	check_eq(slash.box.damage, 3, "slash damage remains three")
 	check(not slash.box.blockable, "slash stays unblockable")
 	var shape := slash.box.get_child(0) as CollisionShape2D
 	var polygon := shape.shape as ConvexPolygonShape2D
 	check_eq(polygon.points.size(), 26, "slash collision sector keeps its points")
 	check_near(polygon.points[1].length(), 150.0, 0.01, "slash reach remains 150")
+	check_near(
+		rad_to_deg(polygon.points[1].angle_to(polygon.points[-1])),
+		120.0,
+		0.01,
+		"slash retains 120 degree sector"
+	)
 	await frames(5)
 	check(slash_ref.get_ref() == null, "slash expires after its short active window")
 	check_eq(GameState.health, health - 3, "real slash pierces ward")
@@ -347,7 +373,8 @@ func _streamed_falls() -> void:
 		await frames(3)
 		check_eq(GameState.health, health - 3, "streamed fall charges2 through hit immunity")
 		check_eq(
-			player.global_position, room.global_position + Vector2(960, 192),
+			player.global_position,
+			room.global_position + Vector2(960, 192),
 			"streamed fall returns exact island A after fresh visit/death/reentry"
 		)
 		check_eq(boss.hp, 36, "nonlethal streamed fall preserves fight")

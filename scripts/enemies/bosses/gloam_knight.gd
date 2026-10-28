@@ -36,13 +36,61 @@ class ArenaPit:
 			player.place_at(_owning_room().to_global(entry))
 
 
+class SlashPaint:
+	extends Node2D
+	var texture: Texture2D
+	var direction := Vector2.DOWN
+
+	func _draw() -> void:
+		if texture == null:
+			return
+		var start := direction.angle() - PI / 3.0
+		var finish := direction.angle() + PI / 3.0
+		# Sample the whole painted ribbon, including its transparent margins.
+		var uv_y := [0.0, 160.0 / 362.0, 200.0 / 362.0, 1.0]
+		var radii := [85.0, 105.0, 140.0, 150.0]
+		for i in range(48):
+			var u := float(i) / 48.0
+			var v := float(i + 1) / 48.0
+			var a := Vector2.from_angle(lerpf(start, finish, u))
+			var b := Vector2.from_angle(lerpf(start, finish, v))
+			for j in range(3):
+				var points := PackedVector2Array(
+					[a * radii[j], b * radii[j], b * radii[j + 1], a * radii[j + 1]]
+				)
+				var uv := PackedVector2Array(
+					[
+						Vector2(u, uv_y[j]),
+						Vector2(v, uv_y[j]),
+						Vector2(v, uv_y[j + 1]),
+						Vector2(u, uv_y[j + 1])
+					]
+				)
+				draw_polygon(points, PackedColorArray([Color(0.85, 0.78, 1.0)]), uv, texture)
+
+
 class AttackVisual:
 	extends Node2D
 	var impact_texture: Texture2D
 	var wave_texture: Texture2D
+	var slash_art_path := "res://assets/sprites/mirror_tell_z1.png"
+	var slash_paint: Node2D
 
 	func _ready() -> void:
 		var path := ""
+		if get_parent().kind == &"slash" and ResourceLoader.exists(slash_art_path):
+			var texture := load(slash_art_path) as Texture2D
+			if texture != null:
+				var paint := SlashPaint.new()
+				paint.name = "SlashPaint"
+				paint.texture = texture
+				paint.direction = get_parent().direction
+				paint.show_behind_parent = true
+				var unshaded := CanvasItemMaterial.new()
+				unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+				paint.material = unshaded
+				add_child(paint)
+				slash_paint = paint
 		if get_parent().kind == &"impact":
 			path = "res://assets/sprites/colossus_quake_z1_idle.png"
 		elif get_parent().kind == &"ring":
@@ -83,10 +131,15 @@ class AttackVisual:
 		elif attack.kind == &"slash":
 			var start: float = attack.direction.angle() - PI / 3.0
 			var finish: float = attack.direction.angle() + PI / 3.0
-			# A brief blade glint keeps the attack readable without a solid filled sector.
-			draw_arc(Vector2.ZERO, 130.0, start, finish, 48, Color(0.42, 0.32, 0.68, 0.45), 36.0)
-			draw_arc(Vector2.ZERO, 130.0, start, finish, 48, Color(0.72, 0.68, 0.94, 0.75), 12.0)
-			draw_arc(Vector2.ZERO, 130.0, start, finish, 48, Color(0.96, 0.94, 1.0, 0.9), 3.0)
+			if slash_paint == null:
+				# Keep the original glint if the shared texture is unavailable.
+				draw_arc(
+					Vector2.ZERO, 130.0, start, finish, 48, Color(0.42, 0.32, 0.68, 0.45), 36.0
+				)
+				draw_arc(
+					Vector2.ZERO, 130.0, start, finish, 48, Color(0.72, 0.68, 0.94, 0.75), 12.0
+				)
+				draw_arc(Vector2.ZERO, 130.0, start, finish, 48, Color(0.96, 0.94, 1.0, 0.9), 3.0)
 			# Trace the full 120-degree collision sector without obscuring the floor.
 			draw_line(Vector2.ZERO, Vector2.from_angle(start) * 150.0, edge, 2.0)
 			draw_line(Vector2.ZERO, Vector2.from_angle(finish) * 150.0, edge, 2.0)
