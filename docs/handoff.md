@@ -245,12 +245,21 @@ Lock Warden test documentation followed in `f5cc279`; Lull Mauler reset landed
 in `a8f06c7b700f559b4493e04105350dfeb9ea9545` on `origin/main`.
 Reset audit documentation followed in `59ac8d3`; M0/MB1/B01 reset fixes landed
 in `c8465bc14911bdf1de60a8fab47375b8fe905464` on `origin/main`.
+Boss reset verification documentation followed in
+`1895d08b819fa4d8dfcece735c96b33f72d276e7` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Choir Warden MB3 art review, 2026-10-28 (read-only):** Isolated `cave_6_4`
+normal/dark stills in `/var/tmp/wick-mb3-review/{normal,dark}-{1,2,3}.png`
+show the actual cone aimed downward, but `note_down`'s mouth stream points right
+and is misleading; the singer is nearly invisible in darkness. The candidate
+was rejected, with no implementation. These are stills, not verified animation.
+The existing targeted test baseline passed.
 
 **Boss and Captain reset fixes, committed in `c8465bc`:** M0 prevents
 `player_died` from resetting defeated/dying bosses before override dispatch and
