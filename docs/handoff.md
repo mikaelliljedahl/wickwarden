@@ -112,12 +112,24 @@ The Cinder Wisp windup followed in
 `0a1c45de95a93fc45dd585fbb5b6d8b92163250f` on `origin/main`.
 The intro art and Thorn Warden projectile presentation followed in
 `0b6f9ca46c990020dd87c48eb8f568b8de6e6ec8` on `origin/main`.
+The Q7 real-tool extensions followed in
+`58c58bc3312cc7d653a18b72a319b67ec9df5af6` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 real-tool extensions, committed in `58c58bc`:** Actual tools exercise The
+Unlit's five sling eyes, three Wick casts, Reel exposure and hook against shield
+and heart, plus two two-half-heart fire ticks on Thorn Warden. Isolated
+`tool_matrix` and lint passed. Positions are controlled and player hurtbox
+disabled; this is not human play. Full tool/phase permutations and gate
+negative cases remain incomplete. `make rooms-check` passed 221 rooms and
+`art-test` passed 22 tests; the test tool emitted expected mismatch and resource
+warnings. Runtime asset audit and clean export intro test are running. E1's
+specification conflict remains unanswered.
 
 **Intro and Thorn Warden presentation, committed in `0b6f9ca`:** Six previously
 missing active intro images were completed from earlier generated candidates,

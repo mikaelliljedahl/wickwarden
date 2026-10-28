@@ -1,5 +1,15 @@
 # Current status
 
+**Q7 real-tool extensions, 2026-10-28 (committed in `58c58bc`):** Actual tools
+exercise The Unlit's five sling eyes, three Wick casts, Reel exposure and hook
+against shield and heart, plus two two-half-heart fire ticks on Thorn Warden.
+Isolated `tool_matrix` and lint passed. Positions are controlled and player
+hurtbox disabled; this is not human play. Full tool/phase permutations and gate
+negative cases remain incomplete. `make rooms-check` passed 221 rooms and
+`art-test` passed 22 tests; the test tool emitted expected mismatch and resource
+warnings. Runtime asset audit and clean export intro test are running. E1's
+specification conflict remains unanswered.
+
 **Intro and Thorn Warden presentation, 2026-10-28 (committed in `0b6f9ca`):**
 Six previously missing active intro images were completed from earlier generated
 candidates, with provenance in `docs/art-provenance.md`; the actual intro was
@@ -1621,7 +1631,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0b6f9ca46c990020dd87c48eb8f568b8de6e6ec8` on `origin/main`, including the intro and Thorn Warden presentation above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `58c58bc3312cc7d653a18b72a319b67ec9df5af6` on `origin/main`, including the Q7 real-tool extensions above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
