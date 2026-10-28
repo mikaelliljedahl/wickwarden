@@ -6,6 +6,7 @@ const SEGMENTS := 48
 const BANDS := 8
 const CINDER_ART := "res://assets/sprites/fx_cinder_cast_z1.png"
 const CINDER_WIDTH := 82.0
+const MITTS_ART := "res://assets/sprites/fx_mitts_effort_z1.png"
 const DUST_ART := "res://assets/sprites/fx_leap_dust_z1_idle.png"
 const SLING_WIDTH := 64.0
 ## Soften the existing painted strokes into a neutral air trail; no moving projectile is drawn.
@@ -25,6 +26,7 @@ void fragment() {
 
 var art_path: String = CINDER_ART
 var dust_path: String = DUST_ART
+var mitts_art_path: String = MITTS_ART
 var sling_art_path: String = CINDER_ART
 var _kind: StringName
 var _painted: Sprite2D
@@ -112,7 +114,7 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if _kind == &"skitter_boots" or _painted != null:
+	if _kind in [&"skitter_boots", &"heft_mitts"] or _painted != null:
 		return
 	# Nested bands feather both radial edges; vertex alpha feathers the arc ends.
 	var span := deg_to_rad(110.0) if _shape == "arc" else TAU
@@ -164,3 +166,27 @@ func show_leap_dust(at: Vector2) -> void:
 	var tween := create_tween()
 	tween.tween_property(puff, "modulate:a", 0.0, 0.3)
 	tween.tween_callback(puff.queue_free)
+
+
+func show_mitts_effort(at: Vector2) -> void:
+	if _kind != &"heft_mitts" or not ResourceLoader.exists(mitts_art_path):
+		return
+	var texture := load(mitts_art_path) as Texture2D
+	if texture == null or texture.get_width() <= 0:
+		return
+	var flecks := Sprite2D.new()
+	flecks.name = "MittsEffort"
+	flecks.texture = texture
+	flecks.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	flecks.scale = Vector2.ONE * 300.0 / float(texture.get_width())
+	flecks.modulate.a = 0.7
+	flecks.z_index = 5
+	flecks.top_level = true
+	var paint := CanvasItemMaterial.new()
+	paint.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	flecks.material = paint
+	add_child(flecks)
+	flecks.global_position = at + Vector2(0, 4)
+	var tween := create_tween()
+	tween.tween_property(flecks, "modulate:a", 0.0, 0.35)
+	tween.tween_callback(flecks.queue_free)

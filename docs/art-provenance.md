@@ -1620,3 +1620,15 @@ The jet is cut through `tools/art_manifest.json` into the cutter-generated `asse
 | Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
 |---|---|---|---|---|---|
 | `fx_leap_dust_z1.png` | 2172×724 | `01a18251-08e7-7033-867d-8d712c185de2` | `exec-4f57bb1b-db34-4774-947b-0005d39c2c53.png` | `9b08535d769644b8` | [fx_leap_dust_z1-log.md](../tools/source_art/fx_leap_dust_z1-log.md) |
+
+### Heft Mitts effort, 2026-10-28
+
+`fx_mitts_effort_z1.png` is a byte-identical copy of the built-in ImageGen native-alpha output
+`01a1826a-e6e6-7020-9051-769e12e9cce5/exec-a797d02c-755d-4162-ab71-ab91fda2e752.png`,
+1536×1024 RGBA, SHA-256 `755a97f49ea379888c0323cdc5ff73ba7bcd136a12e642903b0f834ccc0cc08e`.
+Prompt: a single understated painterly cluster of warm ochre and amber settled grit, static, diffuse
+and balanced on a transparent background; no trails, arcs, arrows, burst, objects, hands or text.
+The cutter uses the entire canvas, no crop or alpha threshold, uniformly scaled by 0.5 to 768×512. Output SHA-256
+`0efc24427f6350fed71e56ca73965e64e1ba29f3124fbda31c2c5aa1737f40f6`.
+The scratch visual review used Mauler-created slag in `cave_4_4`; the flecks can resemble sparkles
+and blend with glowing slag. Still captures do not establish readability in motion or human play.

@@ -22,6 +22,7 @@ var _landed_count := 0
 
 func run() -> void:
 	await _scene_and_registry()
+	await _effort_cues_follow_real_actions()
 	await _vanishing_shards_release_mitts()
 	await _lift_roots_then_carries_slower_than_walking()
 	await _carry_blocks_hook_and_items()
@@ -33,6 +34,34 @@ func run() -> void:
 	await _push_slides_boulder()
 	await _nothing_grabbed_is_a_short_lockout()
 	await _room_fixture()
+
+
+func _effort_cues_follow_real_actions() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, START)
+	_give_mitts(player)
+	var rock: Variant = _make_prop(arena, ROCK_SCENE, START + AHEAD)
+	await frames(2)
+	check(player.use_item(), "effort test starts real grab")
+	await frames(2)
+	check(rock.is_carried(), "effort test lifts real rock")
+	var visual := _mitts()[0].get_node("Visual") as Node2D
+	var lift := visual.get_node_or_null("MittsEffort") as Sprite2D
+	check(lift != null and lift.texture != null, "successful lift produces painted effort")
+	if lift != null:
+		check(lift.top_level and lift.get_child_count() == 0, "effort is world-fixed and nonphysical")
+		var lift_position := lift.global_position
+		player.place_at(player.global_position + Vector2(20, 0))
+		check_eq(lift.global_position, lift_position, "effort stays at the action position")
+	await seconds(0.45)
+	check(visual.get_node_or_null("MittsEffort") == null, "no lingering effect while carrying")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	check(not rock.is_carried(), "effort test throws the actual rock")
+	check(visual.get_node_or_null("MittsEffort") != null, "throw produces painted effort")
+	await dispose(arena)
 
 
 func _mitts() -> Array:
@@ -333,6 +362,7 @@ func _push_slides_boulder() -> void:
 	check(player.use_item(), "the grab starts a push on the boulder")
 	await frames(2)
 	check(not boulder.is_carried(), "a boulder is pushed, not lifted")
+	check(_mitts()[0].get_node("Visual").get_child_count() == 0, "push has no lift effect")
 	check_eq(_mitts().size(), 1, "the mitts stay while the push runs")
 	Input.action_press(&"move_right")
 	await seconds(1.0)
@@ -353,6 +383,7 @@ func _nothing_grabbed_is_a_short_lockout() -> void:
 	check(player.use_item(), "a use on nothing starts")
 	await frames(2)
 	check(player.actions_locked(), "the hook is locked for the 0.2 s no-op")
+	check(_mitts()[0].get_node("Visual").get_child_count() == 0, "empty grab has no effort")
 	check(not player.use_item(), "a second use during the no-op is refused")
 	check_eq(_mitts().size(), 1, "the refused use leaves the no-op node alone")
 	await seconds(0.3)

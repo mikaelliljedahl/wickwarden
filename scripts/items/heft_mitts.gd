@@ -128,6 +128,7 @@ func _on_grab_hit(hurtbox: Hurtbox) -> void:
 	_prop = prop
 	prop.call(&"lift", _walker)
 	if _carrying():
+		_show_effort()
 		_phase = Phase.LIFT
 		_left = LIFT_TIME
 		_set_scale(0.0)
@@ -147,6 +148,7 @@ func _update_carry() -> void:
 		_end()
 		return
 	if _use_pressed:
+		_show_effort()
 		_prop.call(&"throw", _walker.get_facing())
 		_prop = null
 		_enter_lockout(THROW_LOCKOUT)
@@ -223,3 +225,9 @@ func _set_lock(on: bool) -> void:
 func _set_scale(factor: float) -> void:
 	if is_instance_valid(_walker):
 		_walker.set_speed_scale(self, factor)
+
+
+func _show_effort() -> void:
+	var visual := get_node_or_null(Placeholder.VISUAL_NAME)
+	if visual != null and visual.has_method(&"show_mitts_effort"):
+		visual.call(&"show_mitts_effort", _walker.global_position)

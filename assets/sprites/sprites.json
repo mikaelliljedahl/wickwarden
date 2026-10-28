@@ -19,6 +19,26 @@
       }
     }
   },
+  "fx_mitts_effort_z1": {
+    "cell": [
+      768,
+      512
+    ],
+    "anchor": [
+      384.0,
+      256.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fx_mitts_effort_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
   "fx_cinder_cast_z1": {
     "cell": [
       1086,

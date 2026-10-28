@@ -16,6 +16,7 @@ func run() -> void:
 	await _missing_cinder_art()
 	await _missing_sling_art()
 	await _missing_dust_art()
+	await _missing_mitts_art()
 
 
 func _use_cue(tool: StringName, direction: Vector2) -> void:
@@ -124,5 +125,17 @@ func _missing_sling_art() -> void:
 	check(visual.get(&"_painted") == null, "missing sling art retains the geometric fallback")
 	check(visual.visible, "missing sling art leaves the cue visible")
 	check_eq(visual.get(&"_facing"), Vector2.UP, "sling fallback retains facing")
+	visual.queue_free()
+	await frames(1)
+
+
+func _missing_mitts_art() -> void:
+	var script := load(CUE_SCRIPT) as GDScript
+	var visual := script.new() as Node2D
+	visual.set(&"_kind", &"heft_mitts")
+	visual.set(&"mitts_art_path", "res://missing-mitts-effort.png")
+	add_child(visual)
+	visual.call(&"show_mitts_effort", Vector2.ZERO)
+	check_eq(visual.get_child_count(), 0, "missing mitts art produces no physical child")
 	visual.queue_free()
 	await frames(1)
