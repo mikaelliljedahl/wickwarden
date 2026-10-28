@@ -7,9 +7,25 @@ const BANDS := 8
 const CINDER_ART := "res://assets/sprites/fx_cinder_cast_z1.png"
 const CINDER_WIDTH := 82.0
 const DUST_ART := "res://assets/sprites/fx_leap_dust_z1_idle.png"
+const SLING_WIDTH := 64.0
+## Soften the existing painted strokes into a neutral air trail; no moving projectile is drawn.
+const SLING_SHADER := """
+shader_type canvas_item;
+render_mode unshaded;
+void fragment() {
+	float alpha = 0.0;
+	for (int x = -2; x <= 2; x++) {
+		for (int y = -2; y <= 2; y++) {
+			alpha += texture(TEXTURE, UV + vec2(float(x), float(y)) * TEXTURE_PIXEL_SIZE * 6.0).a;
+		}
+	}
+	COLOR = vec4(vec3(0.78, 0.76, 0.71), alpha * 0.65 / 25.0);
+}
+"""
 
 var art_path: String = CINDER_ART
 var dust_path: String = DUST_ART
+var sling_art_path: String = CINDER_ART
 var _kind: StringName
 var _painted: Sprite2D
 var _shape: String = "arc"
@@ -44,6 +60,21 @@ func _ready() -> void:
 	blend.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	if _kind != &"skitter_boots":
 		material = blend
+	if _kind == &"tallow_sling" and ResourceLoader.exists(sling_art_path):
+		var texture := load(sling_art_path) as Texture2D
+		if texture != null and texture.get_width() > 0:
+			_painted = Sprite2D.new()
+			_painted.name = "SlingCast"
+			_painted.texture = texture
+			_painted.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			_painted.scale = Vector2.ONE * SLING_WIDTH / float(texture.get_width())
+			var shader := Shader.new()
+			shader.code = SLING_SHADER
+			var paint := ShaderMaterial.new()
+			paint.shader = shader
+			_painted.material = paint
+			add_child(_painted)
+			_place_painted()
 	if _kind == &"cinder_wick" and ResourceLoader.exists(art_path):
 		var texture := load(art_path) as Texture2D
 		if texture != null and texture.get_width() > 0:
@@ -69,7 +100,7 @@ func _place_painted() -> void:
 	var hand := Vector2(38.0 if _facing == Vector2.UP else -38.0, -88.0)
 	if _facing.x != 0.0:
 		hand = Vector2(42.0 * signf(_facing.x), -88.0)
-	_painted.position = hand + _facing * 25.0
+	_painted.position = hand + _facing * (40.0 if _kind == &"tallow_sling" else 25.0)
 	_painted.rotation = _facing.angle()
 
 

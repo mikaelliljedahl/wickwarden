@@ -14,6 +14,7 @@ func run() -> void:
 		for direction in DIRECTIONS:
 			await _use_cue(tool, direction)
 	await _missing_cinder_art()
+	await _missing_sling_art()
 	await _missing_dust_art()
 
 
@@ -54,6 +55,15 @@ func _use_cue(tool: StringName, direction: Vector2) -> void:
 					"painted child uses the cinder cast asset"
 				)
 			check_near(painted.rotation, direction.angle(), 0.001, "painted cue faces the cast")
+	elif tool == &"tallow_sling":
+		check_eq(visual.get_child_count(), 1, "sling has only its painted trail")
+		var trail := visual.get_node_or_null("SlingCast") as Sprite2D
+		check(trail != null, "sling trail is non-physical")
+		if trail != null:
+			check_eq(trail.get_child_count(), 0, "sling trail has no collision or projectile")
+			check(trail.texture != null, "sling trail has the painted texture")
+			check(trail.material is ShaderMaterial, "sling trail has the neutral softening material")
+			check_near(trail.rotation, direction.angle(), 0.001, "sling trail faces the cast")
 	elif tool == &"skitter_boots":
 		var puff := visual.get_node_or_null("LeapDust") as Sprite2D
 		check(puff != null and puff.texture != null, "accepted leap creates painted dust")
@@ -99,5 +109,20 @@ func _missing_dust_art() -> void:
 	add_child(visual)
 	visual.call(&"show_leap_dust", Vector2.ZERO)
 	check_eq(visual.get_child_count(), 0, "missing dust art does not create a child")
+	visual.queue_free()
+	await frames(1)
+
+
+func _missing_sling_art() -> void:
+	var script := load(CUE_SCRIPT) as GDScript
+	var visual := script.new() as Node2D
+	visual.set(&"_kind", &"tallow_sling")
+	visual.set(&"sling_art_path", "res://missing-sling-cast.png")
+	visual.call(&"set_facing", Vector2.UP)
+	add_child(visual)
+	check_eq(visual.get_child_count(), 0, "missing sling art has no physical child")
+	check(visual.get(&"_painted") == null, "missing sling art retains the geometric fallback")
+	check(visual.visible, "missing sling art leaves the cue visible")
+	check_eq(visual.get(&"_facing"), Vector2.UP, "sling fallback retains facing")
 	visual.queue_free()
 	await frames(1)
