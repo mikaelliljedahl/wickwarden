@@ -337,8 +337,9 @@ Placeholder inventory documentation `6148f58`, C4 difficulty changes
 `bc7330f` and documentation `f1a34f2` are on `origin/main`; the C4 change
 passed a clean full check. Final playthrough documentation `fc14d7a` is on
 `origin/main`; pocket/tool checks `2f343c1` and C9 access documentation
-`45bf2e6` are on `origin/main`. Hollow Captain poses `8487acf` are locally
-committed and passed a clean full check. Verify the remote before push.
+`45bf2e6`, Hollow Captain poses `8487acf` and documentation `f8ad56a` are on
+`origin/main`. Choir Warden poses `aa0f9a2` are locally committed; their clean
+full check passed. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -346,7 +347,26 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Hollow Captain directional poses, locally committed in `8487acf`:** Guard,
+**Choir Warden directional poses, locally committed in `aa0f9a2`:** Directional
+inhale, note and recover poses and four-frame up/down walks join the recut side
+walk, with one 256 px/foot-236 scale group. Gameplay is unchanged; missing art
+falls back to walk/Placeholder. Built-in ImageGen sessions and exact prompts,
+IDs and hashes are recorded in `docs/art-provenance.md` and
+`tools/source_art/choir-warden-z1-log.md`. Isolated `choir_warden`,
+`route_cave_6`, `sprite_visual`, lint and 26 art tests passed with the known
+ResourceWarning; 18 PNGs recut byte-identically. A clean full `make check` on
+exact `aa0f9a2` passed (exit 0): 161 Godot test files, lint, world-check and
+175 Python tests. Log `/var/tmp/wick-clean-aa0f9a2-ld761w0b/check.log`; this
+is the latest clean full PASS.
+
+Actual `cave_6_4` stills at
+`/var/tmp/wick-choir-z1-final/{down,up,left,right}-{1,2,3}.png` used a placed,
+protected player, frozen enemy and `SaveGame.enabled=false`. Dark poses may be
+hard to read; human play and real-time motion are unverified. An early accidental
+workspace import was interrupted and may have changed ignored cache/import
+metadata.
+
+**Hollow Captain directional poses, committed in `8487acf`:** Guard,
 telegraph, bash and stunned poses cover three views, with walk/idle_up and
 mirrored left. Previously generated sources are documented in
 `docs/art-provenance.md`; all 18 sprites use a common encounter scale with
@@ -355,8 +375,8 @@ are unchanged; missing animation falls back. Isolated `hollow_captain` and
 `sprite_visual`, lint and 26 art tests passed, with the known ResourceWarning.
 A clean full `make check` on exact `8487acf` passed (exit 0): 161 Godot test
 files, lint, world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-8487acf-k98etjm1/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-8487acf-k98etjm1/check.log`; the later clean full PASS at
+`aa0f9a2` is recorded above.
 
 Actual `cave_1_5` captures at `/var/tmp/wick-captain-z1-final/` used a placed,
 protected player and some produced ObjectDB/resource warnings. Up-walk lacks a

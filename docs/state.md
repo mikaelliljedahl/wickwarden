@@ -1,6 +1,25 @@
 # Current status
 
-**Hollow Captain directional poses, locally committed in `8487acf`:** Guard,
+**Choir Warden directional poses, locally committed in `aa0f9a2`:** Directional
+inhale, note and recover poses and four-frame up/down walks join the recut side
+walk, with one 256 px/foot-236 scale group. Gameplay is unchanged; missing art
+falls back to walk/Placeholder. Built-in ImageGen sessions and exact prompts,
+IDs and hashes are recorded in `docs/art-provenance.md` and
+`tools/source_art/choir-warden-z1-log.md`. Isolated `choir_warden`,
+`route_cave_6`, `sprite_visual`, lint and 26 art tests passed with the known
+ResourceWarning; 18 PNGs recut byte-identically. A clean full `make check` on
+exact `aa0f9a2` passed (exit 0): 161 Godot test files, lint, world-check and
+175 Python tests. Log `/var/tmp/wick-clean-aa0f9a2-ld761w0b/check.log`; this
+is the latest clean full PASS.
+
+Actual `cave_6_4` stills at
+`/var/tmp/wick-choir-z1-final/{down,up,left,right}-{1,2,3}.png` used a placed,
+protected player, frozen enemy and `SaveGame.enabled=false`. Dark poses may be
+hard to read; human play and real-time motion are unverified. An early accidental
+workspace import was interrupted and may have changed ignored cache/import
+metadata.
+
+**Hollow Captain directional poses, committed in `8487acf`:** Guard,
 telegraph, bash and stunned poses cover three views, with walk/idle_up and
 mirrored left. Previously generated sources are documented in
 `docs/art-provenance.md`; all 18 sprites use a common encounter scale with
@@ -9,8 +28,8 @@ are unchanged; missing animation falls back. Isolated `hollow_captain` and
 `sprite_visual`, lint and 26 art tests passed, with the known ResourceWarning.
 A clean full `make check` on exact `8487acf` passed (exit 0): 161 Godot test
 files, lint, world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-8487acf-k98etjm1/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-8487acf-k98etjm1/check.log`; the later clean full PASS at
+`aa0f9a2` is recorded above.
 
 Actual `cave_1_5` captures at `/var/tmp/wick-captain-z1-final/` used a placed,
 protected player and some produced ObjectDB/resource warnings. Up-walk lacks a
@@ -3142,7 +3161,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `45bf2e6` on `origin/main`, documenting C9 access checks; Hollow Captain poses `8487acf` are locally committed and passed a clean full check; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `8487acf`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `f8ad56a` on `origin/main`, documenting Hollow Captain poses; Choir Warden poses `aa0f9a2` are locally committed and their clean full check passed; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `aa0f9a2`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
