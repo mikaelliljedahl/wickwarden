@@ -1,5 +1,16 @@
 # Current status
 
+**Cinder Wisp windup, 2026-10-28 (committed in `d893570`):** Its registered
+`swell` animation now plays during the 0.5-second warning; previously the
+animation stayed idle while warning and ring were visible. Stun restores idle
+and `auto_motion`; mechanics are unchanged. Targeted `cinder_wisp`, `husk_hound`,
+lint and M2 ownership passed. Actual World `ow_8_0` captures
+`/var/tmp/wick-m2-wisp/windup-before.png` and `windup-after.png` in that directory
+used natural AI and a placed, protected player. These are two stills in a light
+room with a subtle difference, not human play or animation verification. The
+before capture had six ObjectDB and three resource warnings; the after capture
+had none. The latest full check is the earlier `2c8c68c` run below.
+
 **Clean full check at `2c8c68c`, 2026-10-28:** A clean git archive of exact
 `2c8c68ce755ab3e36d2daea0ecb500352843ff5b`, with isolated HOME/XDG and
 `TMPDIR=/var/tmp`, passed `make check`. Log:
@@ -2219,7 +2230,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `2c8c68ce755ab3e36d2daea0ecb500352843ff5b` on `origin/main`, with its subsequent clean full check recorded above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `d8935706723a1700a0ae49c625ee76a92453aabd` on `origin/main`, including Cinder Wisp windup above. The latest clean full check remains at `2c8c68c`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

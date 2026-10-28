@@ -205,12 +205,25 @@ Clean-check documentation followed in `afc3c39`; Bramble Snapper's active bite
 is at `1cd150cac9d2f22977096adc68d77affcc8b6529` on `origin/main`.
 Bramble Snapper documentation followed in
 `2c8c68ce755ab3e36d2daea0ecb500352843ff5b` on `origin/main`.
+Clean-check documentation followed in `ed2f646`; Cinder Wisp windup is at
+`d8935706723a1700a0ae49c625ee76a92453aabd` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Cinder Wisp windup, committed in `d893570`:** Its registered `swell` animation
+now plays during the 0.5-second warning; previously the animation stayed idle
+while warning and ring were visible. Stun restores idle and `auto_motion`;
+mechanics are unchanged. Targeted `cinder_wisp`, `husk_hound`, lint and M2
+ownership passed. Actual World `ow_8_0` captures
+`/var/tmp/wick-m2-wisp/windup-before.png` and `windup-after.png` in that directory
+used natural AI and a placed, protected player. These are two stills in a light
+room with a subtle difference, not human play or animation verification. The
+before capture had six ObjectDB and three resource warnings; the after capture
+had none. The latest full check is the earlier `2c8c68c` run below.
 
 **Clean full check at `2c8c68c`, 2026-10-28:** A clean git archive of exact
 `2c8c68ce755ab3e36d2daea0ecb500352843ff5b`, with isolated HOME/XDG and
