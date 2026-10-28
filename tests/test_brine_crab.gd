@@ -16,6 +16,74 @@ func run() -> void:
 	await _lunge()
 	await _lunge_hurts_in_path()
 	await _death_drops_brass_bit()
+	await _visual_states()
+	await _visual_fallback()
+
+
+func _visual_states() -> void:
+	reset_state()
+	var arena := make_arena()
+	var crab: Variant = make_enemy(arena, SCENE, POS)
+	await frames(2)
+	var art: SpriteVisual = crab.visual
+	check(art is SpriteVisual, "painted crab is available")
+	for pair in [[Vector2.RIGHT, "side"], [Vector2.LEFT, "side"], [Vector2.UP, "up"], [Vector2.DOWN, "down"]]:
+		crab.set_facing_dir(pair[0])
+		crab._start_telegraph()
+		check_eq(String(art.animation), "warning_" + pair[1], "directional warning")
+		check_eq(art.flip_h, pair[0] == Vector2.LEFT, "side warning mirrors left")
+		check(
+			art.material is CanvasItemMaterial
+			and art.material.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED,
+			"warning is visible without room light"
+		)
+		crab.stun(0.1)
+		await frames(2)
+		check(crab.is_telegraphing(), "stun pauses warning state")
+		check_eq(String(art.animation), "warning_" + pair[1], "stun retains warning")
+		crab._start_lunge()
+		check_eq(String(art.animation), "lunge_" + pair[1], "directional lunge")
+		check(art.material == null, "lunge restores material")
+		crab._start_recover()
+		check_eq(String(art.animation), "idle_" + pair[1], "directional recovery")
+		check(art.auto_motion, "recovery restores automatic motion")
+	crab._start_telegraph()
+	crab.set_facing_dir(Vector2.UP)
+	check_eq(String(art.animation), "warning_up", "turning updates warning")
+	crab._start_lunge()
+	crab._start_recover()
+	crab._back_to_strafe()
+	await frames(15)
+	check(String(art.animation).begins_with("walk_"), "strafing resumes walk after recovery")
+	await dispose(arena)
+
+	var incomplete := make_arena()
+	var partial: Variant = make_enemy(incomplete, SCENE, POS)
+	await frames(2)
+	partial.visual.sprite_frames = partial.visual.sprite_frames.duplicate()
+	partial.visual.sprite_frames.remove_animation(&"warning_up")
+	partial._start_telegraph()
+	check_eq(partial.visual.scale, Vector2(1.2, 1.2), "incomplete action art uses fallback")
+	partial._start_lunge()
+	partial._start_recover()
+	check_eq(partial.visual.scale, Vector2.ONE, "partial art restores scale")
+	await dispose(incomplete)
+
+
+func _visual_fallback() -> void:
+	reset_state()
+	SpriteVisual.use_manifest("res://missing_crab_manifest.json")
+	var arena := make_arena()
+	var crab: Variant = make_enemy(arena, SCENE, POS)
+	await frames(2)
+	check(not crab.visual is SpriteVisual, "missing art uses placeholder")
+	crab._start_telegraph()
+	check_eq(crab.visual.scale, Vector2(1.2, 1.2), "placeholder warning keeps original scale")
+	crab._start_lunge()
+	crab._start_recover()
+	check_eq(crab.visual.scale, Vector2.ONE, "placeholder recovery restores scale")
+	await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _stats() -> void:

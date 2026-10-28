@@ -3122,6 +3122,66 @@
         "frames": 1,
         "fps": 1.0,
         "loop": true
+      },
+      "warning_side": {
+        "file": "res://assets/sprites/crab_warning.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "lunge_side": {
+        "file": "res://assets/sprites/crab_lunge.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "warning_up": {
+        "file": "res://assets/sprites/crab_warning_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "lunge_up": {
+        "file": "res://assets/sprites/crab_lunge_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "warning_down": {
+        "file": "res://assets/sprites/crab_warning_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "lunge_down": {
+        "file": "res://assets/sprites/crab_lunge_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/crab_walk_up.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/crab_idle_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_down": {
+        "file": "res://assets/sprites/crab_walk_down.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/crab_idle_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
       }
     }
   },

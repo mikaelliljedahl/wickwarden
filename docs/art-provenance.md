@@ -1,5 +1,7 @@
 # Wickwarden — art provenance
 
+Brine Crab directional walk and action sheets use the five reviewed ImageGen sources, checksums, prompt notes and cutter settings in the [Z1 source log](../tools/source_art/brine-crab-z1-log.md). Original generation identifiers and model version were not preserved.
+
 ## Bush cut effect (2026-10-28)
 
 The built-in ImageGen tool produced the native-alpha 1254×1254 source

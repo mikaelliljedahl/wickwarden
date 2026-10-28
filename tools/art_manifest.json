@@ -5911,6 +5911,152 @@
     ]
    }
   ]
+ },
+ "walk_up_new": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "brine_crab",
+      "anim": "walk_up",
+      "file": "crab_walk_up",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_brine_crab",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "brine_crab",
+      "anim": "idle_up",
+      "file": "crab_idle_up",
+      "poses": 0,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "walk_down_new": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 4,
+    "outputs": [
+     {
+      "kind": "brine_crab",
+      "anim": "walk_down",
+      "file": "crab_walk_down",
+      "poses": [
+       0,
+       4
+      ],
+      "scale": "encounter_brine_crab",
+      "fps": 8,
+      "loop": true
+     },
+     {
+      "kind": "brine_crab",
+      "anim": "idle_down",
+      "file": "crab_idle_down",
+      "poses": 0,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "crab_new": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "brine_crab",
+      "anim": "warning_side",
+      "file": "crab_warning",
+      "poses": 0,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     },
+     {
+      "kind": "brine_crab",
+      "anim": "lunge_side",
+      "file": "crab_lunge",
+      "poses": 1,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "crab_up": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "brine_crab",
+      "anim": "warning_up",
+      "file": "crab_warning_up",
+      "poses": 0,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     },
+     {
+      "kind": "brine_crab",
+      "anim": "lunge_up",
+      "file": "crab_lunge_up",
+      "poses": 1,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
+ },
+ "crab_down": {
+  "key": "magenta",
+  "rows": [
+   {
+    "poses": 2,
+    "outputs": [
+     {
+      "kind": "brine_crab",
+      "anim": "warning_down",
+      "file": "crab_warning_down",
+      "poses": 0,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     },
+     {
+      "kind": "brine_crab",
+      "anim": "lunge_down",
+      "file": "crab_lunge_down",
+      "poses": 1,
+      "scale": "encounter_brine_crab",
+      "fps": 1,
+      "loop": true
+     }
+    ]
+   }
+  ]
  }
  }
 }

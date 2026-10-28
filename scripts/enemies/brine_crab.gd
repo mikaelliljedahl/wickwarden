@@ -35,6 +35,8 @@ var _period_left: float = LUNGE_PERIOD
 ## +1 or -1: the side the crab walks to, relative to its facing.
 var _side: float = 1.0
 var _lunge_left: float = 0.0
+var _warning_material: Material
+var _warning_active := false
 
 
 func _init() -> void:
@@ -123,12 +125,24 @@ func _start_telegraph() -> void:
 	_timer = TELEGRAPH_TIME
 	_period_left = LUNGE_PERIOD
 	if visual != null:
-		visual.scale = CLAWS_UP_SCALE
+		_warning_material = visual.material
+		var unshaded := CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		visual.material = unshaded
+		_warning_active = true
+		if _has_action_art():
+			visual.auto_motion = false
+			visual.play_anim(&"warning")
+		else:
+			visual.scale = CLAWS_UP_SCALE
 
 
 func _start_lunge() -> void:
 	_state = State.LUNGE
 	_lunge_left = LUNGE_DISTANCE
+	_clear_warning()
+	if _has_action_art():
+		visual.play_anim(&"lunge")
 
 
 func _start_recover() -> void:
@@ -136,8 +150,27 @@ func _start_recover() -> void:
 	_timer = RECOVER_TIME
 	if visual != null:
 		visual.scale = Vector2.ONE
+		if visual is SpriteVisual:
+			visual.play_anim(&"idle")
+			visual.auto_motion = true
 
 
 func _back_to_strafe() -> void:
 	_state = State.STRAFE
 	_timer = randf_range(STRAFE_MIN, STRAFE_MAX)
+
+
+## Use the complete directional set or retain the original scaled warning fallback.
+func _has_action_art() -> bool:
+	if not visual is SpriteVisual or visual.sprite_frames == null:
+		return false
+	for anim in [&"warning_side", &"warning_up", &"warning_down", &"lunge_side", &"lunge_up", &"lunge_down"]:
+		if not visual.sprite_frames.has_animation(anim):
+			return false
+	return true
+
+
+func _clear_warning() -> void:
+	if _warning_active and visual != null:
+		visual.material = _warning_material
+		_warning_active = false
