@@ -165,12 +165,36 @@ Unlit projectiles followed in `31dfc41c6aa2a93b1e180622b9d56a3ad83b05d9` on
 `origin/main`.
 Their documentation followed in `0a2726da39fa02c9864ca63224f9e24a7dd7635e` on
 `origin/main`.
+Q7 Brazier/Gate cases followed in `ad3f29d`; the active visual review was
+documented in `135f2d0aac1d43a2d2f0682f8b444eb27627e2c0` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Three fresh-state route runs at clean `0a2726d`, 2026-10-28:** Three retries
+passed 1,529 checks on the continuous route from new in-memory state, with
+normal damage and enemy AI, reaching real `ending.tscn` with rekindle/completed.
+Each had eight normal deaths: C5 twice, C6 twice, C7 once, C9 once and C10
+twice including the final boss; the final boss retry began at 16/28 and won at
+10/28 half-hearts. The bot reads internal state, farms and deliberately dies for
+respawns; the global seed is fixed while some boss RNG is independent. This is
+not human balance, broad randomness or both endings coverage.
+
+The first three attempts also reached the ending but failed in scratch-wrapper
+cleanup; after that wrapper was fixed, all three retries passed. Logs are
+`/var/tmp/wick-route-0a2726d-oE3gzZ/retry{1,2,3}.log`. This route evidence is
+separate from the clean full `make check` at `4dfd5e6` below.
+
+**Q7 Brazier and Gate, committed in `ad3f29d`:** In a controlled fixture with
+real Brazier and Gate, Cinder Wick is positive and Tallow Sling negative with
+actual contact. Flags, gate collision and revisit through in-memory GameState
+are checked. The lead passed `tool_matrix`; the agent reports lint PASS. There
+was no actual room transition, disk save, human play or complete matrix coverage;
+no visual capture was made because `xvfb-run` was missing in the agent environment.
+The earlier active visual review below was documented in `135f2d0`.
 
 **Read-only action image survey at `0a2726d`, 2026-10-28:** Actual World with
 ticking attacks and a placed, protected player showed painted effects and
