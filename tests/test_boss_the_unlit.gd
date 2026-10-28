@@ -410,9 +410,13 @@ func _full_physical_fight() -> void:
 	var lamp_look := boss.lantern.get_node("Visual") as SpriteVisual
 	check(lamp_look != null, "lantern uses painted art")
 	if lamp_look != null:
-		var first_lamp_frame := lamp_look.animation
+		check_eq(lamp_look.animation, &"flicker", "lantern plays its flicker strip")
+		check_eq(lamp_look.sprite_frames.get_frame_count(&"flicker"), 2, "flicker has two frames")
+		check_near(lamp_look.sprite_frames.get_animation_speed(&"flicker"), 2.0, 0.01, "flicker runs at 2 fps")
+		check(lamp_look.sprite_frames.get_animation_loop(&"flicker"), "flicker loops")
+		var first_lamp_frame := lamp_look.frame
 		await seconds(0.5)
-		check(lamp_look.animation != first_lamp_frame, "hanging lantern glow changes")
+		check(lamp_look.frame != first_lamp_frame, "hanging lantern glow changes frame")
 	await _probe(room, boss.global_position, &"flare", 99)
 	check_eq(boss.hp, 24, "shielded heart rejects flare")
 	await _capture("p3-shielded")
@@ -457,9 +461,10 @@ func _full_physical_fight() -> void:
 	await seconds(2.1)
 	check(not is_instance_valid(boss), "two second fade frees actor")
 	if is_instance_valid(lamp_look):
-		var settled_frame := lamp_look.animation
+		check_eq(lamp_look.animation, &"flicker", "settled lantern keeps the flicker strip")
+		var settled_frame := lamp_look.frame
 		await seconds(0.5)
-		check(lamp_look.animation != settled_frame, "settled lantern glow keeps changing")
+		check(lamp_look.frame != settled_frame, "settled lantern glow keeps changing frame")
 	else:
 		check(false, "settled lantern retains its visual")
 	check(get_tree().get_nodes_in_group(&"projectiles").is_empty(), "death cleans projectiles")

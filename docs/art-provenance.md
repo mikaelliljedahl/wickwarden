@@ -1,5 +1,28 @@
 # Wickwarden — art provenance
 
+## Ninth Lantern flicker strip (2026-10-28)
+
+The built-in image generation tool produced one native-alpha 1855 × 848 source sheet,
+`tools/source_art/ninth_lantern_loop_z1.png`, with two poses in one generation. Session
+`01a1842c-376e-7d02-aa7f-d42373775f0d`, output
+`exec-a8b6a7dd-85ea-44c8-a625-d4efab720793.png`, SHA-256
+`c5741939191e3a38e791dabc75bfda29fccd208f8b33c9d62fec1f20af8ebdce`.
+The tool did not expose a model version. The reference was the accepted
+`ninth_lantern_candidate_20261027c.png`, SHA-256
+`edb5a731dd9551c552aa3554d98b8090daf5a76f058294f006c833a80aaedb85`.
+Exact prompt:
+
+> Use case: identity-preserve. Asset: one native-alpha source sheet for a painterly top-down game. Image 1 is the exact established Ninth Lantern: preserve the complete brass casing, short top loop, violet glass, candle, perspective, silhouette, scale, painterly detail and warm light. Create ONE horizontal row of exactly TWO separate complete views of this same lantern, same size and same position vertically. First shows the established violet flame at normal glow, second shows only the violet flame and glow inside the glass slightly brighter for a slow ambient flicker. Keep metal, glass geometry, outer silhouette and every detail identical across both; no external halo or detached parts. Wide clear transparent vertical gap and generous transparent margins, both figures completely inside canvas. True transparent background; no floor, shadow, text, borders, grid, extra objects.
+
+The cutter uses the existing shared lantern scale, centre anchor and two frames at 2 fps.
+The generated `assets/sprites/ninth_lantern_loop_z1.png` SHA-256 is
+`da42610ef0bfd90090bba0cfc5589469eee55524308245a15b087f4b82116b12`.
+The owner reviewed the proof. In an isolated controlled fight, frame 0 and 1 were
+captured after a real Reel hit and again after boss death, with the same offset;
+the player was placed and protected and saving disabled. The run passed 371 checks
+but reported two resources still in use at exit. Continuous real-time playback and
+human play have not been verified.
+
 ## Hollow Captain directional poses (2026-10-28)
 
 Three existing built-in ImageGen outputs from session `01a1833d-ca45-74c1-9b26-660229f7bf0b`; model version not exposed. Source files are unchanged. Prompts are recorded verbatim below.
