@@ -1,5 +1,11 @@
 # Current status
 
+**Clean full check at `2c8c68c`, 2026-10-28:** A clean git archive of exact
+`2c8c68ce755ab3e36d2daea0ecb500352843ff5b`, with isolated HOME/XDG and
+`TMPDIR=/var/tmp`, passed `make check`. Log:
+`/var/tmp/wick-clean-2c8c68c-h973z694/check.log`. This is the latest clean full
+check; human play, art and performance coverage remain open.
+
 **Bramble Snapper active bite, 2026-10-28 (committed in `1cd150c`):** The
 previously invisible active bite retains the existing painted `thorn_hedge`
 warning for 0.15 seconds, with an orange sector boundary and unshaded rendering;
@@ -8,15 +14,15 @@ M1 ownership passed. State-confirmed actual World images in `ow_6_1`,
 `/var/tmp/wick-m1-snap/snap-before.png` and `snap-after.png` in that directory,
 used ticking AI and a placed, protected player. Only upward direction in a light
 room was reviewed, not human play. The reused warning and geometric outline are
-provisional; dedicated animated jaws remain missing. The latest full check is
-the earlier `95c72ae` run below.
+provisional; dedicated animated jaws remain missing. The later clean full check
+at `2c8c68c` is recorded above.
 
 **Clean full check at `95c72ae`, 2026-10-28:** A clean git archive of exact
 `95c72ae88d7c10dcbbae3b8616609dcd3149a95b` in
 `/var/tmp/wick-clean-95c72ae-c_oztizi/` with isolated HOME/XDG and
 `TMPDIR=/var/tmp` passed `make check` (exit 0), including Fen Leech. The log is
-`/var/tmp/wick-clean-95c72ae-c_oztizi/check.log`. This is the latest clean full
-check; human play and the other recorded coverage limitations remain open.
+`/var/tmp/wick-clean-95c72ae-c_oztizi/check.log`. The later clean full check at
+`2c8c68c` is recorded above; human play and other coverage limitations remain open.
 
 **Fen Leech lunge direction, 2026-10-28 (committed in `b8c8a4c`):** A
 leftward lunge that previously appeared rightward is now mirrored, with the
@@ -2213,7 +2219,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `1cd150cac9d2f22977096adc68d77affcc8b6529` on `origin/main`, including Bramble Snapper's active bite above. The latest clean full check remains at `95c72ae`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `2c8c68ce755ab3e36d2daea0ecb500352843ff5b` on `origin/main`, with its subsequent clean full check recorded above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

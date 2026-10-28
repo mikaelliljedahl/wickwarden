@@ -203,12 +203,20 @@ Fen Leech and streaming results were documented in
 `95c72ae88d7c10dcbbae3b8616609dcd3149a95b` on `origin/main`.
 Clean-check documentation followed in `afc3c39`; Bramble Snapper's active bite
 is at `1cd150cac9d2f22977096adc68d77affcc8b6529` on `origin/main`.
+Bramble Snapper documentation followed in
+`2c8c68ce755ab3e36d2daea0ecb500352843ff5b` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Clean full check at `2c8c68c`, 2026-10-28:** A clean git archive of exact
+`2c8c68ce755ab3e36d2daea0ecb500352843ff5b`, with isolated HOME/XDG and
+`TMPDIR=/var/tmp`, passed `make check`. Log:
+`/var/tmp/wick-clean-2c8c68c-h973z694/check.log`. This is the latest clean full
+check; human play, art and performance coverage remain open.
 
 **Bramble Snapper active bite, committed in `1cd150c`:** The previously
 invisible active bite retains the existing painted `thorn_hedge` warning for
@@ -218,15 +226,15 @@ ownership passed. State-confirmed actual World images in `ow_6_1`,
 `/var/tmp/wick-m1-snap/snap-before.png` and `snap-after.png` in that directory,
 used ticking AI and a placed, protected player. Only upward direction in a light
 room was reviewed, not human play. The reused warning and geometric outline are
-provisional; dedicated animated jaws remain missing. The latest full check is
-the earlier `95c72ae` run below.
+provisional; dedicated animated jaws remain missing. The later clean full check
+at `2c8c68c` is recorded above.
 
 **Clean full check at `95c72ae`, 2026-10-28:** A clean git archive of exact
 `95c72ae88d7c10dcbbae3b8616609dcd3149a95b` in
 `/var/tmp/wick-clean-95c72ae-c_oztizi/` with isolated HOME/XDG and
 `TMPDIR=/var/tmp` passed `make check` (exit 0), including Fen Leech. The log is
-`/var/tmp/wick-clean-95c72ae-c_oztizi/check.log`. This is the latest clean full
-check; human play and the other recorded coverage limitations remain open.
+`/var/tmp/wick-clean-95c72ae-c_oztizi/check.log`. The later clean full check at
+`2c8c68c` is recorded above; human play and other coverage limitations remain open.
 
 **Fen Leech lunge direction, committed in `b8c8a4c`:** A leftward lunge that
 previously appeared rightward is now mirrored, with the warning bubble at the
