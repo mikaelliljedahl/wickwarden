@@ -1,5 +1,16 @@
 # Current status
 
+**Coinwyrm directional bite scratch study, `3bcabd3`:** Side and upward bite
+poses and image trials remain isolated scratch, not approved or integrated.
+Provenance and source attempts are in `/var/tmp/wick-coin-audit-9365UJ/provenance.md`;
+the first side source yielded only three of five poses. Armor plates and crown
+can obscure the face or appear to float; simply shifting the visual position would
+misrepresent the fixed hit markers. Scratch `boss_coinwyrm`, `route_cave_8` and
+`tool_matrix` passed. Controlled captures in the same directory produced
+ObjectDB/resource leak warnings at exit; human motion has not been verified.
+A visually aligned directional solution consistent with the hit markers and a
+motion review remain open.
+
 **The Unlit phase 2 shell walk, `aa0361c`:** The shell remains a still image
 while moving; gameplay works, but human motion has not been verified. Isolated
 art studies `/var/tmp/wick-c10-shell-audit/provenance.md`,
@@ -3173,7 +3184,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `aa0361c` on `origin/main`, documenting Choir Warden poses `aa0f9a2` and their clean full check; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `aa0f9a2`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `3bcabd3` on `origin/main`, documenting The Unlit shell animation gap; Choir Warden poses `aa0f9a2` passed their clean full check; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `aa0f9a2`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -339,13 +339,26 @@ passed a clean full check. Final playthrough documentation `fc14d7a` is on
 `origin/main`; pocket/tool checks `2f343c1` and C9 access documentation
 `45bf2e6`, Hollow Captain poses `8487acf` and documentation `f8ad56a` are on
 `origin/main`. Choir Warden poses `aa0f9a2` and their documentation `aa0361c`
-are on `origin/main`; their clean full check passed. Verify the remote before push.
+are on `origin/main`; their clean full check passed. Shell animation-gap
+documentation `3bcabd3` is the latest published checkpoint. Verify the remote
+before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Coinwyrm directional bite scratch study, `3bcabd3`:** Side and upward bite
+poses and image trials remain isolated scratch, not approved or integrated.
+Provenance and source attempts are in `/var/tmp/wick-coin-audit-9365UJ/provenance.md`;
+the first side source yielded only three of five poses. Armor plates and crown
+can obscure the face or appear to float; simply shifting the visual position would
+misrepresent the fixed hit markers. Scratch `boss_coinwyrm`, `route_cave_8` and
+`tool_matrix` passed. Controlled captures in the same directory produced
+ObjectDB/resource leak warnings at exit; human motion has not been verified.
+A visually aligned directional solution consistent with the hit markers and a
+motion review remain open.
 
 **The Unlit phase 2 shell walk, `aa0361c`:** The shell remains a still image
 while moving; gameplay works, but human motion has not been verified. Isolated
