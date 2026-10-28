@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import sys
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -452,6 +453,41 @@ class BodyHeight(unittest.TestCase):
 
 
 class TextureCase(unittest.TestCase):
+    def test_native_alpha_horizontal_texture_and_rejections(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            pixels = np.zeros((32, 192, 4), np.uint8)
+            pixels[8:24, :, :] = (190, 70, 30, 128)
+            Image.fromarray(pixels, "RGBA").save(root / "line.png")
+            manifest = {"defaults": {}, "scale_groups": {},
+                        "kinds": {"line": {"cell": [96, 16], "texture": True}},
+                        "sheets": {"line": {"type": "texture", "output": "line",
+                                            "input_mode": "native_alpha", "size": [96, 16]}}}
+            out, proof = root / "out", root / "proof"
+            done, _, errors = cut.run(manifest, root, out, proof)
+            self.assertEqual((done, errors), (["line"], []))
+            with Image.open(out / "line.png") as image:
+                self.assertEqual((image.mode, image.size), ("RGBA", (96, 16)))
+                result = np.asarray(image)
+            self.assertEqual(result[0, 20, 3], 0)
+            self.assertEqual(result[-1, 20, 3], 0)
+            self.assertEqual(result[8, 20, 3], 128)
+            np.testing.assert_array_equal(result[:, 0], result[:, -1])
+            self.assertEqual(json.loads((out / "sprites.json").read_text())["line"]["cell"], [96, 16])
+            with Image.open(proof / "line_proof.png") as image:
+                self.assertEqual(image.size, (192, 16))
+
+            pixels[:, -1, :] = (0, 0, 0, 255)
+            Image.fromarray(pixels, "RGBA").save(root / "line.png")
+            self.assertIn("edges do not match", cut.run(manifest, root, out, proof)[2][0])
+            Image.fromarray(pixels[:, :-1], "RGBA").save(root / "line.png")
+            self.assertIn("proportions", cut.run(manifest, root, out, proof)[2][0])
+            Image.fromarray(pixels[..., :3], "RGB").save(root / "line.png")
+            self.assertIn("RGBA PNG", cut.run(manifest, root, out, proof)[2][0])
+            manifest["sheets"]["line"]["size"] = [384, 64]
+            Image.fromarray(pixels, "RGBA").save(root / "line.png")
+            self.assertIn("at least target size", cut.run(manifest, root, out, proof)[2][0])
+
     def test_texture_tiles_seamlessly(self):
         rng = np.random.default_rng(3)
         n = 512
@@ -493,6 +529,10 @@ class TextureCase(unittest.TestCase):
             img = Image.open(root / "out" / "ground_t.png")
             self.assertEqual(img.size, (96, 96))
             self.assertEqual(img.mode, "RGB")
+            with Image.open(root / "tex_t.png") as source:
+                expected = cut.make_texture(source, 96, 0.2, True)
+            np.testing.assert_array_equal(np.asarray(img), expected)
+            img.close()
 
 
 if __name__ == "__main__":

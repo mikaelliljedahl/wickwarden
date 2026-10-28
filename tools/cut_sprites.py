@@ -1038,6 +1038,34 @@ def cut_texture(name: str, sdef: dict, manifest: dict, source_dir: Path, out_dir
     if not path.exists():
         raise CutError(f"sheet {name}: source image missing ({path})")
     params = merged_params(manifest, sdef)
+    if sdef.get("input_mode", "key") == "native_alpha":
+        # An already seamless horizontal texture: preserve the full canvas and its alpha.
+        size = sdef.get("size")
+        if (not isinstance(size, list) or len(size) != 2
+                or any(type(v) is not int or v <= 0 for v in size)):
+            raise CutError(f"sheet {name}: native alpha texture size must be [width, height]")
+        w, h = size
+        with Image.open(path) as img:
+            if img.format != "PNG" or img.mode != "RGBA":
+                raise CutError(f"sheet {name}: native alpha texture must be RGBA PNG")
+            sw, sh = img.size
+            if sw * h != sh * w or sw < w or sh < h:
+                raise CutError(f"sheet {name}: source must match target proportions and be at least target size")
+            rgba = np.asarray(img, dtype=np.float32).copy()
+        rgba[..., 3] /= 255.0
+        arr = to_uint8(resize_rgba(rgba, w / sw))
+        # Compare visible premultiplied colours as well as alpha; RGB under zero alpha is irrelevant.
+        edges = arr[:, [0, -1]].astype(np.float32)
+        edges[..., :3] *= edges[..., 3:4] / 255.0
+        if np.max(np.abs(edges[:, 0] - edges[:, 1])) > 3.0:
+            raise CutError(f"sheet {name}: horizontal texture edges do not match")
+        write_png(out_dir / f"{sdef['output']}.png", arr, "RGBA")
+        proof_dir.mkdir(parents=True, exist_ok=True)
+        proof = over_checker(np.tile(arr.astype(np.float32) / [1, 1, 1, 255], (1, 2, 1)))
+        Image.fromarray(proof.astype(np.uint8), "RGB").save(proof_dir / f"{name}_proof.png")
+        return sdef["output"], (w, h), params
+    if sdef.get("input_mode", "key") != "key":
+        raise CutError(f"sheet {name}: unknown texture input_mode {sdef['input_mode']!r}")
     size = int(sdef.get("size", 384))
     arr = make_texture(Image.open(path), size, float(sdef.get("blend", 0.2)), bool(sdef.get("variance_preserve", True)))
     write_png(out_dir / f"{sdef['output']}.png", arr, "RGB")
@@ -1078,7 +1106,7 @@ def run(
     missing: list[str] = []
     errors: list[str] = []
     results: list[OutputResult] = []
-    textures: dict[str, int] = {}
+    textures: dict[str, int | tuple[int, int]] = {}
     for name in names:
         sdef = manifest["sheets"].get(name)
         if sdef is None:
@@ -1104,9 +1132,11 @@ def run(
         existing = json.loads(path.read_text()) if path.exists() else {}
         data = build_sprites_json(manifest, existing, results, textures, done)
         for tex in textures:
+            size = textures[tex]
+            w, h = size if isinstance(size, tuple) else (size, size)
             data[tex] = {
-                "cell": [textures[tex], textures[tex]],
-                "anchor": [textures[tex] / 2, textures[tex] / 2],
+                "cell": [w, h],
+                "anchor": [w / 2, h / 2],
                 "texture": True,
                 "mirror_side": False,
                 "animations": {"idle": {"file": f"{RES_PREFIX}{tex}.png", "frames": 1, "fps": 1, "loop": True}},
