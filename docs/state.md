@@ -1,5 +1,12 @@
 # Current status
 
+**Q7 hook-tap wall, 2026-10-28 (committed in `a403f20`):** A real hook hit is
+positive; flare and pitch-pot explosion are negative with confirmed contact and
+flag/solidity checked before and after revisit. The flare is charged beyond hook
+range to prove the hook misses. Isolated `tool_matrix` and lint passed; this is a
+controlled fixture, not human play. Other tools and matrix cases remain open.
+The latest full `make check` was at `b41dc6d`, before this test change.
+
 **C10 lantern glow, 2026-10-28 (committed in `b41dc6d`):** Two painted glow
 variants alternate every 0.5 seconds through a presentation child that follows
 the lantern after the boss dies. Mechanics are unchanged. Isolated import,
@@ -1682,7 +1689,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `b41dc6d3c97c065bae20a1471db31d2cbd5135af` on `origin/main`, including the C10 lantern glow above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `a403f209af2ad1f3c6a3a7e24999bf3f8364476c` on `origin/main`, including the Q7 hook-tap wall cases above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
