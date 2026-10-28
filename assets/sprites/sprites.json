@@ -5657,5 +5657,25 @@
         "loop": true
       }
     }
+  },
+  "unlit_chain_link_z1": {
+    "cell": [
+      128,
+      192
+    ],
+    "anchor": [
+      64.0,
+      96.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_chain_link_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
   }
 }

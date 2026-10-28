@@ -23,6 +23,36 @@ func run() -> void:
 	await _scheduled_attacks()
 	await _world_presentation()
 	await _missing_art_presentation()
+	await _chain_presentation()
+
+
+func _chain_presentation() -> void:
+	reset_state()
+	var arena := make_arena()
+	var packed := load(SCENE) as PackedScene
+	var boss = packed.instantiate()
+	arena.add_child(boss)
+	await frames(2)
+	check(boss._chains != null, "lantern chains use painted link when present")
+	if boss._chains != null:
+		var chains = boss._chains
+		check(chains.texture != null, "chain retains its texture for drawing")
+		check_eq(chains.get_child_count(), 0, "chains create no physics children")
+		var short: Array[Vector2] = chains.pieces(67.0)
+		var longer: Array[Vector2] = chains.pieces(92.0)
+		check_eq(short.size(), 4, "short chain has overlapping pieces")
+		check_eq(longer.size(), 5, "longer chain adds pieces")
+		for i in range(short.size()):
+			check_eq(short[i].x, longer[i].x, "existing links stay anchored at the post")
+		check_near(short.back().y, 1.0, 0.001, "last partial link clips to the lantern")
+	await dispose(arena)
+	var missing_arena := make_arena()
+	var missing = packed.instantiate()
+	missing.chain_art_path = "res://missing-unlit-chain.png"
+	missing_arena.add_child(missing)
+	await frames(2)
+	check(missing._chains == null, "missing chain art keeps original line fallback")
+	await dispose(missing_arena)
 
 
 func _missing_art_presentation() -> void:

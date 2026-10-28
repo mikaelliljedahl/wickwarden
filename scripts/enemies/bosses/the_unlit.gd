@@ -8,6 +8,8 @@ const LANTERN := Vector2(960, 288)
 const EYES := 5
 const ORBIT := 330.0
 const ORBIT_SPEED := 24.0
+const CHAIN_ART := "res://assets/sprites/unlit_chain_link_z1.png"
+const CHAIN_POSTS := [Vector2(576, 96), Vector2(960, 96), Vector2(1344, 96)]
 
 var eyes: Array[EnemyBase] = []
 var angles: Array[float] = []
@@ -33,6 +35,60 @@ var _phase_origin := Vector2.ZERO
 var _lantern_origin := Vector2.ZERO
 var _lantern_target := Vector2.ZERO
 var _slide_left := 0.0
+var chain_art_path := CHAIN_ART
+var _chains: Node2D
+
+
+class ChainPresentation:
+	extends Node2D
+	## The spacing stays fixed at the post; only the final overlapping links are clipped.
+	const STEP := 22.0
+	const LENGTH := 36.0
+	var texture: Texture2D
+
+	func _ready() -> void:
+		var light := CanvasItemMaterial.new()
+		light.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = light
+		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+
+	static func pieces(distance: float) -> Array[Vector2]:
+		var result: Array[Vector2] = []
+		var top := 0.0
+		while top < distance:
+			result.append(Vector2(top, minf(LENGTH, distance - top)))
+			top += STEP
+		return result
+
+	func _draw() -> void:
+		var boss = get_parent()
+		if boss.is_dead or texture == null:
+			return
+		var lamp: Vector2 = boss._phase_origin + LANTERN
+		if is_instance_valid(boss.lantern):
+			lamp = boss.lantern.global_position
+		# Approximate the visible loop on the lantern; neither endpoint is a physical joint.
+		lamp += Vector2(0, -105)
+		var opacity: float = clampf(boss._death_left / 2.0, 0.0, 1.0) if boss._dying else 1.0
+		for post in CHAIN_POSTS:
+			var from := to_local(boss._phase_origin + post)
+			var delta := to_local(lamp) - from
+			draw_set_transform(from, delta.angle() - PI / 2.0)
+			var spans := pieces(delta.length())
+			for i in range(spans.size()):
+				var span := spans[i]
+				var half_width := 7.0 if i % 2 == 1 else 12.0
+				var alpha := opacity * (0.7 if i == 0 else 1.0)
+				draw_texture_rect_region(
+					texture,
+					Rect2(-half_width, span.x, half_width * 2.0, span.y),
+					Rect2(0, 0, texture.get_width(), span.y * texture.get_height() / LENGTH),
+					Color(0.52, 0.52, 0.52, alpha)
+				)
+			draw_set_transform(Vector2.ZERO)
 
 
 class UnlitBolt:
@@ -91,14 +147,24 @@ func _enter_tree() -> void:
 	# skips _boss_ready() on the saved defeat flag.
 	_reel_script = load("res://scripts/world/reelable.gd") as GDScript
 	for child in get_children():
-		if child is HeartGlow or (_reel_script != null and child.get_script() == _reel_script):
+		if child is HeartGlow or child is ChainPresentation or (_reel_script != null and child.get_script() == _reel_script):
 			remove_child(child)
 			child.free()
 	lantern = null
 	_heart_glow = null
+	_chains = null
 
 
 func _boss_ready() -> void:
+	if ResourceLoader.exists(chain_art_path):
+		var texture := load(chain_art_path) as Texture2D
+		if texture != null and texture.get_width() > 0 and texture.get_height() > 0:
+			var chain := ChainPresentation.new()
+			chain.name = "LanternChains"
+			chain.texture = texture
+			add_child(chain)
+			move_child(chain, 0)
+			_chains = chain
 	contact_hitbox.get_child(0).shape.radius = 120.0
 	_heart_glow = HeartGlow.new()
 	_heart_glow.name = "HeartGlow"
@@ -522,12 +588,12 @@ func _tick_death(delta: float) -> void:
 
 func _draw() -> void:
 	super()
-	if is_dead:
+	if is_dead or is_instance_valid(_chains):
 		return
 	var lamp := to_local(_phase_origin + LANTERN)
 	if is_instance_valid(lantern):
 		lamp = to_local(lantern.global_position)
-	for post in [Vector2(576, 96), Vector2(960, 96), Vector2(1344, 96)]:
+	for post in CHAIN_POSTS:
 		draw_line(
 			to_local(_phase_origin + post),
 			lamp,

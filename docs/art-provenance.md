@@ -1,5 +1,21 @@
 # Wickwarden — art provenance
 
+## The Unlit hanging chain link (2026-10-28)
+
+The built-in image generation tool produced the native-alpha 1024×1536 source
+`tools/source_art/unlit_chain_link_z1.png`, copied unchanged from
+`01a1826a-e6ec-7c42-af1a-c5aa44349561/exec-ddfbfde4-5121-4de4-9fa1-6714113c2e77.png`.
+The source SHA-256 is `c9a9b1a71cf6227947396d4f8fc28254d750a312d6d0b3cc6a3ff4af341dd112`;
+the tool did not expose a model version. Prompt:
+
+> Use case: stylized-concept. Asset type: isolated game sprite for a painterly dark fantasy adventure. Draw exactly ONE simple closed oval chain link viewed from above at a slight three-quarter angle, long axis vertical, centered, genuine transparent background with generous clear margins. Weathered dark iron with muted aged brass edge and a modest soft warm highlight, matte worn texture, hand-painted realistic storybook style. A single continuous forged metal oval loop with a transparent open hole. No other objects, no second link, no rope, no pedestal, no floor, no cast shadow, no glow, no typography, no borders. Intended to overlap identical copies into a small hanging chain, so keep silhouette simple and symmetrical.
+
+The cutter uses the full native-alpha source and uniform scale 1/8 to produce
+`assets/sprites/unlit_chain_link_z1.png` at 128×192; its SHA-256 is
+`43ffb0e7b4972714a1a1fbd2406c5624100154d92e1c71e85e8e6a9e6c5d1f71`.
+The link is repeated from the fixed posts, clipped at the lantern; partial end
+links and the apparent attachments are visual approximations.
+
 ## Gloam Knight standalone slash effect (2026-10-28)
 
 The standalone transparent slash candidate was rejected after B07 reviewed eight directions: vertical rotations read as upright loops, tips extend outside the sector, and the strongest arc is misplaced. Its pipeline registrations were removed. The source, ImageGen reference, exact prompt, checksums and reviews are recorded in the [source review](../tools/source_art/gloam-slash-effect-20261028-log.md). The boss continues to use its procedural glint.
