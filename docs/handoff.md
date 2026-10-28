@@ -128,12 +128,25 @@ The Q7 wax-seal cases followed in
 `52cbdebd5e1a166e6dc790f7ee79f6bbb1a59436` on `origin/main`.
 The Q7 gate revisit cases followed in
 `0faeca54878a3750b5aed47427aa538fd8913f62` on `origin/main`.
+The room census was recorded in `d003e28`; Q7 light/blast checks followed in
+`304ce3707b6d5bb83196ae0280b5975ede2622db` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Route repeat and Q7 light/blast checks, 2026-10-28:** The route at `d003e28`
+was run three times with normal damage and enemy AI; all three reached the final
+boss and actual ending. The bot reads internal state, uses randomness and
+respawns; this is not evidence of human balance or play. At `304ce37`, real
+Glow Jar and Chime are tested against three secret openings: the Jar reveals
+them and Chime does not. Real pitch-pot explosions open two cracked obstacle
+types; flare does not. Contact, flags and solidity are checked on revisit using
+in-memory state. The targeted `tool_matrix` test passed. These controlled
+fixtures do not prove human play or complete tool/gate coverage; the latest full
+`make check` remains `b41dc6d`.
 
 **Q7 gate revisit cases, committed in `0faeca5`:** Real Wick positives cover
 three thorn variants, sling covers the eye switch and Chime covers three
