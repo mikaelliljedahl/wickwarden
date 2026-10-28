@@ -282,6 +282,8 @@ Reel source review followed in `d308967`; painted Reel rope landed in
 `5e5199892151f898ecaf5bea54fbf30364da378b` on `origin/main`.
 Painted Reel documentation followed in `3ea4129`; tip readability landed in
 `32301d2a16f2118481a3a1a7be2e742e0fb029f3` on `origin/main`.
+Reel tip documentation followed in `540d932`; Hollow Captain's painted warning
+landed in `69bb6ec85582b279b79d992c9c0145ba5ebac7c7` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -289,14 +291,26 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Hollow Captain bash warning, committed in `69bb6ec`:** A painted directional
+semicircle replaces the geometric TELEGRAPH line, reusing `unlit_wax_wave_z1` at
+alpha 0.5 unshaded behind the figure with null fallback. The 0.5-second warning,
+300 px/s 0.4-second dash and damage are unchanged. Controlled actual `cave_1_5`
+stills cover natural phases and four directions with a placed player and
+`move_speed=0`, not human or animation verification. Agent and lead passed
+`hollow_captain`; the agent reports lint PASS. A clean full `make check` on exact
+`69bb6ec` passed; log `/var/tmp/wick-clean-69bb6ec-4s7m8gpv/check.log`. It is the
+latest full check. The scratch 512 px Chime ring was not integrated because of a
+broad shield-like halo and low-alpha clipping; only controlled `cave_6_5`/`cave_6_6`
+stills were reviewed. Other agents' sources were untouched.
+
 **Reel Line tip readability, committed in `32301d2`:** The existing tip
 `SpriteVisual` gains a faint alpha 0.35 unshaded copy of its current painted
 frame, synced and rotated; no copy is made for a placeholder. Controlled stills
 show actual flight, contact, HELD and RETRACT in light and dark with a placed
 player, not human or motion verification. The lead passed `reel_line` and
 `tool_matrix`; the agent reports lint PASS. A clean full `make check` on exact
-`32301d2` passed; log `/var/tmp/wick-clean-32301d2-2uc8jp9_/check.log`. It is
-the latest full check.
+`32301d2` passed; log `/var/tmp/wick-clean-32301d2-2uc8jp9_/check.log`. The
+later `69bb6ec` clean full check is recorded above.
 
 **Reel Line painted rope, committed in `5e51998`:** The geometric line is
 replaced by a 96×16 painted rope, with null fallback and unshaded 0.28 painted

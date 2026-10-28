@@ -1,13 +1,26 @@
 # Current status
 
+**Hollow Captain bash warning, 2026-10-28 (committed in `69bb6ec`):** A
+painted directional semicircle replaces the geometric TELEGRAPH line, reusing
+`unlit_wax_wave_z1` at alpha 0.5 unshaded behind the figure with null fallback.
+The 0.5-second warning, 300 px/s 0.4-second dash and damage are unchanged.
+Controlled actual `cave_1_5` stills cover natural phases and four directions
+with a placed player and `move_speed=0`, not human or animation verification.
+Agent and lead passed `hollow_captain`; the agent reports lint PASS. A clean
+full `make check` on exact `69bb6ec` passed; log
+`/var/tmp/wick-clean-69bb6ec-4s7m8gpv/check.log`. It is the latest full check.
+The scratch 512 px Chime ring was not integrated because of a broad shield-like
+halo and low-alpha clipping; only controlled `cave_6_5`/`cave_6_6` stills were
+reviewed. Other agents' sources were untouched.
+
 **Reel Line tip readability, 2026-10-28 (committed in `32301d2`):** The existing
 tip `SpriteVisual` gains a faint alpha 0.35 unshaded copy of its current painted
 frame, synced and rotated; no copy is made for a placeholder. Controlled stills
 show actual flight, contact, HELD and RETRACT in light and dark with a placed
 player, not human or motion verification. The lead passed `reel_line` and
 `tool_matrix`; the agent reports lint PASS. A clean full `make check` on exact
-`32301d2` passed; log `/var/tmp/wick-clean-32301d2-2uc8jp9_/check.log`. It is
-the latest full check.
+`32301d2` passed; log `/var/tmp/wick-clean-32301d2-2uc8jp9_/check.log`. The
+later `69bb6ec` clean full check is recorded above.
 
 **Reel Line painted rope, 2026-10-28 (committed in `5e51998`):** The geometric
 line is replaced by a 96×16 painted rope, with null fallback and unshaded 0.28
@@ -2615,7 +2628,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `32301d2a16f2118481a3a1a7be2e742e0fb029f3` on `origin/main`, including Reel tip readability above. The latest clean full check is at `32301d2`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `69bb6ec85582b279b79d992c9c0145ba5ebac7c7` on `origin/main`, including Hollow Captain’s painted warning above. The latest clean full check is at `69bb6ec`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
