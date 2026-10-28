@@ -207,12 +207,23 @@ Bramble Snapper documentation followed in
 `2c8c68ce755ab3e36d2daea0ecb500352843ff5b` on `origin/main`.
 Clean-check documentation followed in `ed2f646`; Cinder Wisp windup is at
 `d8935706723a1700a0ae49c625ee76a92453aabd` on `origin/main`.
+Cinder Wisp windup was documented in
+`d82b9553c612bd2575878ebee6416a7f4a2b27f9` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Bramble Snapper scratch prototype, 2026-10-28:** Painted v3 telegraph/snap
+proofs in `/var/tmp/wick-snap-proof-wjEx9p/` and an isolated World prototype in
+`/var/tmp/wick-snap-world-yZxIXj/` use 192² cells and byte-identical idle. Real
+AI was exercised right/up, with idle/fire and active hitbox; targeted test and
+lint passed. Jaws are clearer in the warning but the sector obscures them; the
+bite is barely clearer, and when facing up the source art points right. Nothing
+is integrated; visual animation and human approval remain open, as does
+directional art.
 
 **Cinder Wisp windup, committed in `d893570`:** Its registered `swell` animation
 now plays during the 0.5-second warning; previously the animation stayed idle
