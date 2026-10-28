@@ -116,12 +116,29 @@ The Q7 real-tool extensions followed in
 `58c58bc3312cc7d653a18b72a319b67ec9df5af6` on `origin/main`.
 The Gloam Knight animation followed in
 `cea4152e3cd0ca9074466184528f7e9cd48b4f4f` on `origin/main`.
+The Unlit heart states followed in
+`c31b391d690fc2002e949b832e2b8ff638d940a8` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Unlit heart states, committed in `c31b391`:** Shielded and exposed pulse
+states use two provenance-recorded ImageGen edits of the accepted heart, shown
+on the existing timer with a small light. Gameplay and hitboxes are unchanged.
+Isolated import, `boss_the_unlit` (296 checks), `tool_matrix` (1201), lint and
+`art-test` passed. An actual C10 capture used a controlled phase and real Reel,
+with the player repositioned and hurtbox disabled; it is not human play. Shell
+and lantern animations remain incomplete. Gloam source review tested all
+documented sources: none supplied a correctly segmented, correctly scaled
+four-pose slash row, so none was installed; the rejected candidate and log remain.
+The first full `make check` produced 13 route failures when temporary quota forced
+profiles to `/var/tmp`, while the test safety boundary requires `/tmp`. After a
+finished 101 MB scratch project copy was removed, `route_cave_5` passed and a
+subsequent isolated `make check` passed 157 Godot test files, lint, world-check
+and 175 Python tests. Remaining C10 animation art and the E1 conflict stay open.
 
 **Gloam Knight animation, committed in `cea4152`:** Two crouch frames play
 during the existing 0.5-second warning, retaining the prior fallback. Four
@@ -136,9 +153,10 @@ under Xvfb used actual New game input, showed all six intro texts and images and
 naturally entered World with isolated saves. Dummy audio was used; two ALSA
 capture attempts failed, so audible audio remains unverified. Animation audit
 found C10 phase-two, phase-three and lantern runtime art is idle-only, one frame,
-and Gloam Knight used still images only at that audit. Later Gloam work is
-recorded above; planned animations remain incomplete. C10 candidate images lack provenance
-and differ visually. The E1 specification conflict remains open.
+and Gloam Knight used still images only at that audit. Later Gloam and heart-state
+work is recorded above; planned animations remain incomplete. The earlier C10
+candidate images lacked provenance and differed visually. The E1 specification
+conflict remains open.
 
 **Q7 real-tool extensions, committed in `58c58bc`:** Actual tools exercise The
 Unlit's five sling eyes, three Wick casts, Reel exposure and hook against shield
