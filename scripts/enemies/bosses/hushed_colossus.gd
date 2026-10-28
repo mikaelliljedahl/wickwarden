@@ -38,6 +38,7 @@ class FloorVisual:
 	var sweep_light: PointLight2D
 	var quake_texture: Texture2D
 	var wave_texture: Texture2D
+	var shard_fall_texture: Texture2D
 
 	func _ready() -> void:
 		if get_parent().kind in [&"quake", &"slam"]:
@@ -48,6 +49,10 @@ class FloorVisual:
 			var path := "res://assets/sprites/unlit_wax_wave_z1_idle.png"
 			if ResourceLoader.exists(path):
 				wave_texture = load(path) as Texture2D
+		if get_parent().kind == &"fall":
+			var path := "res://assets/sprites/colossus_shard_fall.png"
+			if ResourceLoader.exists(path):
+				shard_fall_texture = load(path) as Texture2D
 		if get_parent().kind == &"sweep":
 			# The attack sets the band orientation immediately after it enters the tree.
 			call_deferred(&"_make_sweep_light")
@@ -123,6 +128,15 @@ class FloorVisual:
 				else:
 					draw_arc(Vector2.ZERO, radius, 0, TAU, 64, color, 14.0)
 				draw_arc(Vector2.ZERO, radius, 0, TAU, 96, Color(1, 0.8, 0.4, 0.75), 2.0)
+			&"fall":
+				# Keep the full floor shadow visible while the painted shard descends.
+				draw_circle(Vector2.ZERO, 60.0, Color(0.14, 0.09, 0.06, 0.45))
+				draw_arc(Vector2.ZERO, 60.0, 0, TAU, 48, Color(1, 0.85, 0.55), 3)
+				if shard_fall_texture != null and not attack.fired:
+					var progress: float = clampf((attack.age / maxf(attack.warning, 0.001) - 0.5) * 2.0, 0.0, 1.0)
+					if progress > 0.0:
+						var height := 120.0 * (1.0 - progress)
+						draw_texture_rect(shard_fall_texture, Rect2(-48, -48 - height, 96, 96), false)
 			_:
 				var radius := 60.0 if attack.kind == &"fall" else 130.0
 				if attack.kind != &"slam" or attack.fired:

@@ -13,12 +13,34 @@ func run() -> void:
 	await _sweep_sides()
 	await _sweep_warning_light()
 	await _quake_presentation()
+	await _fall_presentation()
 	await _armour_and_intro()
 	await _attack_physics()
 	await _damage_and_expiration()
 	await _actual_mitts_in_every_phase()
 	await _reset_and_retirement()
 	await _gallery()
+
+
+func _fall_presentation() -> void:
+	await _setup()
+	boss.set_physics_process(false)
+	player.hurtbox.enabled = false
+	var fall = boss.start_attack(&"fall", Vector2(700, 400), 1.0, 0.1)
+	await frames(3)
+	check(fall.get_node("Visual").shard_fall_texture != null, "painted falling shard loads")
+	check_eq(fall.warning, 1.0, "fall warning remains one second")
+	check_eq(fall.active_time, 0.1, "fall impact remains 0.1 seconds")
+	await frames(52)
+	check(not fall.fired and fall.box == null, "fall remains harmless during its warning")
+	await frames(7)
+	check(fall.fired, "fall impacts after its warning")
+	check_eq(fall.box.damage, 2, "fall damage remains two")
+	check(not fall.box.blockable, "fall remains unwardable")
+	var collision := fall.box.get_child(0) as CollisionShape2D
+	check_eq((collision.shape as CircleShape2D).radius, 60.0, "fall hit radius remains 60")
+	check_eq(boss.floor_shards(), 1, "impact creates the liftable shard")
+	await dispose(arena)
 
 
 func _quake_presentation() -> void:
