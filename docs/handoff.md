@@ -175,12 +175,30 @@ Ending/miniboss and rejected Gloam documentation followed in `efd1ce9` and
 `d2d9dc241cf102824ea1e1b82e55e1757d2000aa` on `origin/main`.
 The Abacus and Captain review followed in
 `0cd35a2ca57ad8acc0e3a3c1654b700ceaa2adcb` on `origin/main`.
+Captain review documentation followed in `cfdb4a4` and `65e64ba`; Lull Mauler
+active attacks followed in `86cbe7986a3359eca5811009cade0e62ee30e0c2` on
+`origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Lull Mauler active attacks, committed in `86cbe79`:** The previously
+invisible slam uses an existing painted crack and 110 px outline; sweep uses a
+procedural glint and 180°/140 px boundary, shown only while the hitbox is active.
+Mechanics are unchanged. Lead and agent passed `lull_mauler` and `route_cave_4`;
+the agent reports lint and MB2 ownership PASS. Actual World captures
+`/var/tmp/wick-mini-next/slam.png` and `sweep.png` in that directory used a
+placed, protected player, not human play. A dedicated painted sweep and attack
+pose remain open.
+
+**Clean `cfdb4a4` check attempt:** `make check` failed 13 of 157 Godot files
+when `/tmp` hit disk quota and tempfile fallback violated isolation; 144 passed.
+Separate lint, world-check, 175 Python tests, rooms-check (221 rooms) and
+art-test (22 tests) passed. Logs are in `/var/tmp/wick-cfdb4a4-gOuM0c/`. The
+latest complete clean full check remains `4dfd5e6`.
 
 **Hollow Captain image attempts, 2026-10-28:** Four new ImageGen candidates in
 `/var/tmp/wick-captain-new/` were rejected for scale, pose/direction/overlap or

@@ -1,5 +1,20 @@
 # Current status
 
+**Lull Mauler active attacks, 2026-10-28 (committed in `86cbe79`):** The
+previously invisible slam uses an existing painted crack and 110 px outline;
+sweep uses a procedural glint and 180°/140 px boundary, shown only while the
+hitbox is active. Mechanics are unchanged. Lead and agent passed `lull_mauler`
+and `route_cave_4`; the agent reports lint and MB2 ownership PASS. Actual World
+captures `/var/tmp/wick-mini-next/slam.png` and `sweep.png` in that directory
+used a placed, protected player, not human play. A dedicated painted sweep and
+attack pose remain open.
+
+**Clean `cfdb4a4` check attempt:** `make check` failed 13 of 157 Godot files
+when `/tmp` hit disk quota and tempfile fallback violated isolation; 144 passed.
+Separate lint, world-check, 175 Python tests, rooms-check (221 rooms) and
+art-test (22 tests) passed. Logs are in `/var/tmp/wick-cfdb4a4-gOuM0c/`. The
+latest complete clean full check remains `4dfd5e6`.
+
 **Hollow Captain image attempts, 2026-10-28:** Four new ImageGen candidates in
 `/var/tmp/wick-captain-new/` were rejected for scale, pose/direction/overlap or
 cell placement/size (`-8`, 174×277). No sprites were installed; art and human
@@ -2061,7 +2076,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0cd35a2ca57ad8acc0e3a3c1654b700ceaa2adcb` on `origin/main`, documenting the Abacus and Captain review above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `86cbe7986a3359eca5811009cade0e62ee30e0c2` on `origin/main`, including Lull Mauler's active attack presentation above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
