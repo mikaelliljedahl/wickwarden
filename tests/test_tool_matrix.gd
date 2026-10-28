@@ -2640,12 +2640,14 @@ func _colossus_shard() -> void:
 	await dispose(arena)
 
 
-func _matrix_room(path: String) -> Room:
+func _matrix_room(path: String, room_id: StringName = &"") -> Room:
 	var scene := load(path) as PackedScene
 	check(scene != null, "encounter gallery loads: " + path)
 	if scene == null:
 		return null
 	var room := scene.instantiate() as Room
+	if room_id != &"":
+		room.room_id = room_id
 	add_child(room)
 	room.enter()
 	return room
@@ -2860,10 +2862,14 @@ func _tidewick_raft() -> void:
 
 func _unlit_tools() -> void:
 	reset_state()
-	var room := await _matrix_room("res://tests/fixtures/gallery/B10.tscn")
+	var room := await _matrix_room("res://tests/fixtures/gallery/B10.tscn", &"cave_10_14")
 	if room == null:
 		return
 	var boss = room.get_node("Enemies/TheUnlit")
+	var phases: Array[int] = [boss.phase]
+	boss.phase_changed.connect(func(phase: int) -> void: phases.append(phase))
+	check_eq(boss.phase, 1, "Unlit: fight starts in eye phase")
+	check(not GameState.has_flag(&"boss_cave_10_14_defeated"), "Unlit: defeat flag initially absent")
 	var player := make_player(room, Vector2(1632, 480))
 	player.set_hurtbox_enabled(self, false)
 	_equip(player, &"tallow_sling")
@@ -2980,6 +2986,41 @@ func _unlit_tools() -> void:
 		"Unlit: hook contacts second exposure")
 	check_eq(heart_damage, [2, 2, 2, 2, 2], "Unlit: new exposure resets damage cap")
 	check_eq(boss.hp, 14, "Unlit: second exposure permits hook damage")
+	for swing in range(3):
+		await seconds(0.4)
+		check(boss.exposed_left > 0.0, "Unlit: second exposure remains open")
+		player.place_at(boss.global_position + Vector2(0, 108))
+		player.facing = Vector2.UP
+		Input.action_press(&"attack")
+		await frames(10)
+		Input.action_release(&"attack")
+		check_eq(boss.hp, 12 - 2 * swing, "Unlit: real hook damages second exposure")
+	check(not GameState.has_flag(&"boss_cave_10_14_defeated"), "Unlit: flag absent before lethal hit")
+	for i in range(420):
+		if boss.exposed_left <= 0.0:
+			break
+		await frames(1)
+	check_eq(boss.exposed_left, 0.0, "Unlit: second exposure naturally reshields")
+	check_near(boss.lantern.global_position.distance_to(Vector2(960, 288)), 0.0, 0.5,
+		"Unlit: lantern returns after second exposure")
+	player.place_at(Vector2(960, 720))
+	player.facing = Vector2.UP
+	check(player.use_item(), "Unlit: third real reel launches")
+	await seconds(0.9)
+	check_eq(reel_contacts, [&"reel", &"reel", &"reel"], "Unlit: three real reel contacts")
+	check(boss.exposed_left > 0.0, "Unlit: third pull exposes heart")
+	for swing in range(4):
+		if swing > 0:
+			await seconds(0.4)
+		check(boss.exposed_left > 0.0, "Unlit: third exposure remains open")
+		player.place_at(boss.global_position + Vector2(0, 108))
+		player.facing = Vector2.UP
+		Input.action_press(&"attack")
+		await frames(10)
+		Input.action_release(&"attack")
+	check_eq(phases, [1, 2, 3], "Unlit: real tools advance phases in order")
+	check(boss.is_dying(), "Unlit: real hook starts death")
+	check(GameState.has_flag(&"boss_cave_10_14_defeated"), "Unlit: real victory earns boss flag")
 	print("MATRIX Unlit heart: hook exposed=", heart_contacts, " damage=", heart_damage,
 		" reel contacts=", reel_contacts, " HP=", boss.hp)
 	await dispose(room)
