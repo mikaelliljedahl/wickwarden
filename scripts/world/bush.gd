@@ -54,8 +54,10 @@ func cut_down() -> void:
 	var parent := get_parent()
 	if parent != null:
 		var tint := Color(0.6, 0.8, 0.45)
-		var used_reeds := variant in [&"reed_cluster", &"rush_wall"] and _spawn_reed_cut(parent)
-		if not used_reeds and SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.25, 3, tint) == null:
+		var used_fragments := variant in [&"reed_cluster", &"rush_wall"] and _spawn_reed_cut(parent)
+		if variant == &"bush":
+			used_fragments = _spawn_cut_fragments(parent, _bush_cut_texture(), &"BushCut")
+		if not used_fragments and SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.25, 3, tint) == null:
 			Placeholder.puff(parent, global_position, Placeholder.color_of(variant), 36.0)
 		if drops_enabled:
 			var kind := DropTable.roll(drop_roll_override)
@@ -73,12 +75,22 @@ func _reed_cut_texture() -> Texture2D:
 	return load(path) as Texture2D
 
 
+func _bush_cut_texture() -> Texture2D:
+	var path := "res://assets/sprites/bush_cut_z1.png"
+	if not ResourceLoader.exists(path):
+		return null
+	return load(path) as Texture2D
+
+
 func _spawn_reed_cut(parent: Node) -> bool:
-	var texture := _reed_cut_texture()
+	return _spawn_cut_fragments(parent, _reed_cut_texture(), &"ReedCut")
+
+
+func _spawn_cut_fragments(parent: Node, texture: Texture2D, effect_name: StringName) -> bool:
 	if texture == null:
 		return false
 	var puff := Sprite2D.new()
-	puff.name = "ReedCut"
+	puff.name = effect_name
 	puff.texture = texture
 	puff.top_level = true
 	puff.z_index = 10

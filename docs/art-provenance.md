@@ -1,5 +1,24 @@
 # Wickwarden — art provenance
 
+## Bush cut effect (2026-10-28)
+
+The built-in ImageGen tool produced the native-alpha 1254×1254 source
+`tools/source_art/bush_cut_z1.png`, copied unchanged from session
+`01a182e1-5cf7-7ee3-9034-a0cc82a5e6f6`, file
+`exec-e724856c-9e85-4640-b1de-ea5737704d3a.png`, SHA-256
+`2feeff56f41bf939d72da7a1df5e3eee38bc982743694e20e7e28456128aa3c6`.
+The model version was not exposed. `assets/sprites/bush.png` was used as a style and
+colour reference. Prompt:
+
+> Use case: stylized-concept. Make a single VFX sprite of cut foliage for a painterly three-quarter top-down game. Use the reference bush ONLY for leaf, flower palette and painterly style. Detached small oval dark green and olive leaves and a few cream flower petals, plus very few short twigs, scattered loosely outward; approximately 20 distinct pieces with generous completely empty space between them. Native transparent alpha background. Absolutely no glow, no haze, no atmospheric light, no gradient, no smoke, no dust, no explosion, no intact bush, no backdrop, no cast shadow. Render each fragment as a solid hand-painted object with soft antialiased edges, warm light, nothing else. Centered composition with transparent margins.
+
+The native-alpha cutter uses the whole canvas at its original size, without crop or
+alpha threshold. Output SHA-256:
+`5f562b45b9a9dda363b16c42644fa7ba9c19a9b33ce9cae308a8bbc5903f20c1`.
+The effect expands to 180 px and fades over 0.25 seconds. In controlled room
+stills the hook sweep partly obscures the fragments, especially in darkness;
+human play and continuous motion were not verified.
+
 ## Reed cut effect (2026-10-28)
 
 `reed_cut_z1.png` is the unchanged 1402×1122 RGBA built-in ImageGen output from

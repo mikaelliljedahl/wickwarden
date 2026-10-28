@@ -1,4 +1,24 @@
 {
+  "bush_cut_z1": {
+    "cell": [
+      1254,
+      1254
+    ],
+    "anchor": [
+      627.0,
+      627.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/bush_cut_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
   "reed_cut_z1": {
     "cell": [
       1402,
