@@ -96,6 +96,7 @@ func run() -> void:
 		await _watcher_slug(opened)
 	await _briar_eye_tools()
 	await _echo_chime()
+	await _echo_chime_outside_glow()
 	await _thorn_moth_hook()
 	await _thorn_wick()
 	await _brute_pot()
@@ -1535,6 +1536,12 @@ func _echo_chime() -> void:
 		arena, "res://scenes/enemies/minibosses/corrows_echo.tscn", Vector2(800, 480)
 	)
 	var player := make_player(arena, Vector2(940, 480))
+	player.set_hurtbox_enabled(self, false)
+	var chime_hits := [0]
+	enemy.hurtbox.hurt.connect(func(hit: Hitbox) -> void:
+		if hit.kind == &"chime":
+			chime_hits[0] += 1
+	)
 	for i in range(400):
 		if enemy.state == enemy.State.GLOW:
 			break
@@ -1548,13 +1555,57 @@ func _echo_chime() -> void:
 			break
 		await frames(1)
 	check(enemy.is_stunned(), "Echo: travelling chime interrupts glow")
+	check_eq(chime_hits[0], 1, "Echo: actual chime hits during glow")
 	check_near(enemy._stun_time, 2.0, 0.05, "Echo: opening lasts two seconds")
+	var flared := false
+	for i in range(60):
+		await frames(1)
+		flared = flared or enemy.state == enemy.State.FLARE
+	check(not flared and enemy.is_stunned(), "Echo: interrupted flare does not fire")
 	player.place_at(enemy.global_position + Vector2(90, 0))
 	player.facing = Vector2.LEFT
 	Input.action_press(&"attack")
 	await frames(8)
 	Input.action_release(&"attack")
 	check_eq(enemy.hp, 34, "Echo: actual hook deals two during opening")
+	await dispose(arena)
+
+
+func _echo_chime_outside_glow() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/corrows_echo.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(940, 480))
+	player.set_hurtbox_enabled(self, false)
+	for i in range(180):
+		if enemy.state == enemy.State.TELL:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.TELL, "Echo: natural combo warning reached")
+	var hit_states: Array[int] = []
+	enemy.hurtbox.hurt.connect(func(hit: Hitbox) -> void:
+		if hit.kind == &"chime":
+			hit_states.append(enemy.state)
+	)
+	player.place_at(enemy.global_position + Vector2(100, 0))
+	_equip(player, &"lantern_chime")
+	check(player.use_item(), "Echo: actual chime rings outside glow")
+	await frames(20)
+	check_eq(hit_states, [enemy.State.TELL], "Echo: chime actually hits during combo warning")
+	check(not enemy.is_stunned(), "Echo: outside-glow hit does not stun")
+	check_eq(enemy.hp, 36, "Echo: chime causes no damage")
+	var flared := false
+	for i in range(240):
+		await frames(1)
+		if enemy.state == enemy.State.FLARE:
+			flared = true
+			break
+	check(flared, "Echo: uninterrupted cycle reaches real flare")
+	check(is_instance_valid(enemy._attack) and enemy._attack.active,
+		"Echo: flare has an active attack")
+	print("MATRIX Echo chime: warning hit=", hit_states, " later flare=", flared)
 	await dispose(arena)
 
 
