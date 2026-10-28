@@ -344,14 +344,31 @@ documentation `3bcabd3`, Coinwyrm study `4fbed38` and shell-study documentation
 `c298322`, Q7 test `070bfe3` and documentation `0d82e90`/`ea98d94` are on
 `origin/main`; runtime fallback audit `8017926` and full placeholder/ammo audit
 documentation `c602813` and visual-check documentation `62b8416` are published.
-C10 lighting/mounts `1c6afe5` and documentation `dd5f7d0` and `c22abc4` are
-on `origin/main`; their clean full check passed. Verify the remote before push.
+C10 lighting/mounts `1c6afe5` and documentation `dd5f7d0`, `c22abc4` and
+`cbaeb5a` are on `origin/main`. Lantern flicker `95b939c` is locally committed
+and passed a clean full check. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Final lantern flicker, locally committed in `95b939c`:** A single-generation
+two-frame strip at 2 fps replaces alternation between separately generated
+images during the physical Reel/hook fight and after death. Isolated import,
+`boss_the_unlit`, `sprite_visual`, lint, 26 art tests and recut passed. A
+rendered test passed 376 checks (`/var/tmp/wick-lantern-z1/render.log`) with a
+placed, protected player and saving disabled. An earlier scratch exit emitted
+resource warnings; the later exit was clean. Continuous human playback remains
+unverified. A clean full `make check` on exact `95b939c` passed (exit 0): 161
+Godot test files, lint, world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-95b939c-tbstjcai/check.log`; this is the latest clean full
+PASS.
+
+The heart's separately generated image loop and shell walk remain open. The first
+heart candidate was rejected for size mismatch; see
+`/var/tmp/wick-unlit-loop-study/provenance.md`.
 
 **Isolated playthrough, exact `c22abc4`:** `make playthrough` passed route-check
 and all four shards with 1770/2119/2559/2769 checks respectively; log
@@ -363,9 +380,10 @@ other seeds.
 
 **C10 B70 animation audit:** The phase-2 shell uses idle only while actually
 moving; dedicated shell wave/burn/break animations are missing, although their
-effects exist. Heart and lantern glow each alternate two separately generated
-single-image states every half second: a functional animation loop that does
-not meet asset-contract §10's one-generation-per-animation rule. See
+effects exist. At that checkpoint, heart and lantern glow each alternated two separately
+generated single-image states every half second: functional animation loops
+that did not meet asset-contract §10's one-generation-per-animation rule. The
+lantern change is recorded above; the heart loop remains open. See
 `scripts/enemies/bosses/the_unlit.gd:335` and `:679` and
 `docs/asset-contract.md` §10. A compliant art study is in progress; no normative
 document was changed.
@@ -396,8 +414,8 @@ targeted suites, lint and 26 art tests passed; recut was byte-identical. Evidenc
 and controlled images are in `/var/tmp/wick-z1-integrate/`. The clean full
 `make check` on exact `1c6afe5` passed (exit 0): 161 Godot test files, lint,
 world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-1c6afe5-tmjf9sru/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-1c6afe5-tmjf9sru/check.log`; the later clean full PASS at
+`95b939c` is recorded above.
 
 Captures forced phases and placement with saves disabled; P2/P3 exits reported
 resource warnings. A forced transition showed a brief chain offset also present
