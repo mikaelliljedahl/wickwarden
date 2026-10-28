@@ -458,6 +458,60 @@
       }
     }
   },
+  "unlit_gaze_bolt": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_gaze_bolt_fly.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "impact": {
+        "file": "res://assets/sprites/unlit_gaze_bolt_impact.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
+  "unlit_hush_torrent": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/unlit_hush_torrent_fly.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      },
+      "impact": {
+        "file": "res://assets/sprites/unlit_hush_torrent_impact.png",
+        "frames": 3,
+        "fps": 8.0,
+        "loop": false
+      }
+    }
+  },
   "tidewick_ember_bolt": {
     "cell": [
       96,

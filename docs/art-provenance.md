@@ -15,6 +15,15 @@ runtime: its four poses are separated, yet their body size differs substantially
 from the existing walk under the shared scale. Original output, SHA-256, prompt,
 rejected attempts and review are in the [candidate log](../tools/source_art/gloam-knight-slash-20261028-log.md).
 
+## The Unlit projectile strips (2026-10-28)
+
+The gaze and Hush torrent strips reuse `proj_gaze_bolt_v1.png` and
+`proj_hush_torrent_v1.png`, respectively. Their ImageGen sessions, output names,
+checksums and original logs are recorded in the B49 and B50 entries below. The
+manifest cuts each into two flight frames and three impact frames at 96×96 per
+cell, with one scale per source row. Both source proofs were visually reviewed;
+reproduction and limitations are in the [projectile log](../tools/source_art/unlit-projectiles-20261028-log.md).
+
 ## The Unlit shell and lantern trials (2026-10-28)
 
 A native-alpha built-in image edit of the accepted Ninth Lantern supplies a

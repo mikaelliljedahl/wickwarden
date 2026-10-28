@@ -19,6 +19,7 @@ func run() -> void:
 	await _orbit_and_reset()
 	await _full_physical_fight()
 	await _hazards_and_ward()
+	await _bolt_presentation()
 	await _scheduled_attacks()
 	await _world_presentation()
 	await _missing_art_presentation()
@@ -37,8 +38,55 @@ func _missing_art_presentation() -> void:
 	await frames(2)
 	check(hand.visual is Placeholder, "missing hand retains fallback")
 	check_eq(hand.visual.get_child_count(), 0, "missing hand needs no presentation observer")
+	boss._bolt(Vector2(300, 300), 320.0)
+	var fallback = boss._hazards.back()
+	check_eq(fallback.visual_kind, &"spore", "missing projectile art retains spore fallback")
+	fallback.destroy(&"hit")
+	check_eq(room.find_children("BoltImpact", "Node2D", true, false).size(), 0, "no missing impact is spawned")
 	await dispose(room)
 	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+
+
+func _bolt_presentation() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/TheUnlit")
+	var player := make_player(room, Vector2(1400, 700))
+	player.set_hurtbox_enabled(self, false)
+	await seconds(1.6)
+	boss.set_physics_process(false)
+	for homing in [false, true]:
+		var kind: StringName = &"unlit_hush_torrent" if homing else &"unlit_gaze_bolt"
+		boss._bolt(Vector2(600, 400), 240.0 if homing else 320.0, 0.4, homing)
+		var bolt = boss._hazards.back()
+		check_eq(bolt.visual_kind, kind, "bolt selects its own painted art")
+		check_eq(bolt.damage, 2, "bolt keeps two damage")
+		check_eq(bolt.radius, 12.0, "bolt keeps collision radius")
+		check(bolt.blockable_by_ward, "bolt remains blockable")
+		var look := bolt.get_node("Visual") as SpriteVisual
+		check(look != null, "bolt has painted visual")
+		if look != null:
+			check_eq(look.sprite_frames.get_frame_count(&"idle"), 2, "flight has two frames")
+			check_near(look.rotation, bolt.direction.angle(), 0.001, "flight points along direction")
+		var light := bolt.get_node("BoltLight") as PointLight2D
+		check(not light.is_in_group(&"glow_light"), "bolt light is presentation only")
+		await frames(10)
+		if is_instance_valid(bolt) and look != null:
+			check_near(look.rotation, bolt.direction.angle(), 0.001, "visual follows homing turns")
+			bolt.destroy(&"wall")
+			var impact = boss._hazards.back()
+			check_eq(impact.name, &"BoltImpact", "physical impact spawns effect")
+			var effect := impact.get_node("Visual") as SpriteVisual
+			check_eq(effect.animation, &"impact", "impact plays its own animation")
+			check_eq(effect.sprite_frames.get_frame_count(&"impact"), 3, "impact has three frames")
+			await seconds(0.5)
+			check(not is_instance_valid(impact), "impact retires after animation")
+	for reason in [&"range", &"bounds"]:
+		boss._bolt(Vector2(600, 400), 320.0)
+		var bolt = boss._hazards.back()
+		bolt.destroy(reason)
+		check_eq(room.find_children("BoltImpact", "Node2D", true, false).size(), 0, "expiry has no impact")
+	await dispose(room)
 
 
 ## Positioned visual fixture in the real streamed C10 room, not an earned route.
@@ -343,10 +391,18 @@ func _hazards_and_ward() -> void:
 	await frames(4)
 	var health := GameState.health
 	boss._bolt(Vector2(960, 540), 320)
-	await seconds(0.7)
+	var ward_impact: Node
+	for tick in range(42):
+		await frames(1)
+		var impacts := room.find_children("BoltImpact", "Node2D", true, false)
+		if not impacts.is_empty():
+			ward_impact = impacts[0]
+			break
+	check(ward_impact != null, "real ward contact creates an impact effect")
 	check_eq(GameState.health, health, "real ward destroys gaze bolt")
 	boss.clear_hazards()
 	await frames(3)
+	check(not is_instance_valid(ward_impact), "clearing hazards removes impact effects")
 	boss._ring(Vector2(960, 480), 720, 360, 96)
 	await seconds(1.0)
 	check_eq(GameState.health, health, "front ward negates annular wax area")

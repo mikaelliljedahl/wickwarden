@@ -35,6 +35,22 @@ var _lantern_target := Vector2.ZERO
 var _slide_left := 0.0
 
 
+class UnlitBolt:
+	extends EnemyProjectile
+	var owner_boss: Node2D
+	var painted_kind: StringName
+
+	func _orient_shapes() -> void:
+		super()
+		var look := get_node_or_null("Visual") as Node2D
+		if look != null and visual_kind == painted_kind:
+			look.rotation = direction.angle()
+
+	func _on_destroyed(reason: StringName) -> void:
+		if reason in [&"hit", &"wall", &"ward"] and is_instance_valid(owner_boss):
+			owner_boss.call(&"_bolt_impact", global_position, direction, painted_kind)
+
+
 func _init() -> void:
 	boss_id = &"the_unlit"
 	arena_id = &"cave_10_14"
@@ -350,11 +366,48 @@ func _tick_heart(delta: float) -> void:
 
 
 func _bolt(at: Vector2, speed: float, spread := 0.0, homing := false) -> void:
-	var bolt := fire_projectile(
-		null, (player_position(at + Vector2.DOWN) - at).normalized().rotated(spread), speed, 2, at
-	)
+	var bolt := UnlitBolt.new()
+	bolt.owner_boss = self
+	bolt.painted_kind = &"unlit_hush_torrent" if homing else &"unlit_gaze_bolt"
+	bolt.visual_kind = bolt.painted_kind if SpriteVisual.has_art(bolt.painted_kind) else &"spore"
+	bolt.speed = speed
+	bolt.damage = 2
+	bolt.room_rect = room_rect
 	bolt.homing_turn_deg = 90.0 if homing else 0.0
 	bolt.lifetime = 4.0 if homing else 8.0
+	Audio.play_sfx(&"spit", global_position)
+	get_parent().add_child(bolt)
+	bolt.launch(at, (player_position(at + Vector2.DOWN) - at).normalized().rotated(spread))
+	add_hazard(bolt)
+	bolt.add_child(_bolt_light())
+
+
+func _bolt_light() -> PointLight2D:
+	var light := PointLight2D.new()
+	light.name = "BoltLight"
+	light.texture = LightTexture.make()
+	light.texture_scale = LightTexture.scale_for(110.0)
+	light.color = Color(0.55, 0.8, 1.0)
+	light.energy = 1.0
+	return light
+
+
+func _bolt_impact(at: Vector2, direction: Vector2, kind: StringName) -> void:
+	if not SpriteVisual.has_art(kind):
+		return
+	var holder := Node2D.new()
+	holder.name = "BoltImpact"
+	get_parent().add_child(holder)
+	holder.global_position = at
+	holder.add_child(_bolt_light())
+	var look := SpriteVisual.attach(holder, kind) as SpriteVisual
+	if look == null or not look.sprite_frames.has_animation(&"impact"):
+		holder.queue_free()
+		return
+	look.rotation = direction.angle()
+	look.play_anim(&"impact")
+	look.animation_finished.connect(holder.queue_free, CONNECT_ONE_SHOT)
+	add_hazard(holder)
 
 
 func _marker(at: Vector2, duration: float, radius: float) -> void:
