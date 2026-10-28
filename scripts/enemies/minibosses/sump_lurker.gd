@@ -22,6 +22,7 @@ var _stun_immunity := 0.0
 var _zone: Area2D
 var _bite: Hitbox
 var _bite_left := 0.0
+var _water_light: PointLight2D
 
 
 func _init() -> void:
@@ -43,6 +44,18 @@ func _init() -> void:
 	Placeholder.register_kind(
 		&"sump_water_jet", {"shape": "diamond", "color": Color(0.4, 0.75, 0.9), "radius": 12.0}
 	)
+
+
+func _ready() -> void:
+	super()
+	_water_light = PointLight2D.new()
+	_water_light.name = "WaterTellLight"
+	_water_light.texture = LightTexture.make()
+	_water_light.texture_scale = LightTexture.scale_for(100.0)
+	_water_light.color = Color(0.45, 0.8, 1.0)
+	_water_light.energy = 0.8
+	_water_light.enabled = not is_dead and state != State.SURFACED
+	add_child(_water_light)
 
 
 func _enter_phase(_number: int) -> void:
@@ -115,6 +128,8 @@ func _enter(next: State, duration: float) -> void:
 	set_contact_enabled(state == State.SURFACED)
 	if visual != null:
 		visual.visible = state != State.SUBMERGED
+	if is_instance_valid(_water_light):
+		_water_light.enabled = state != State.SURFACED and not is_dead and not is_dying()
 	queue_redraw()
 
 
@@ -224,6 +239,8 @@ func _tick_timers(delta: float) -> void:
 func _on_hurt(hitbox: Hitbox) -> void:
 	super(hitbox)
 	if is_dying():
+		if is_instance_valid(_water_light):
+			_water_light.enabled = false
 		_stun_time = 0.0
 		_knock_time = 0.0
 		velocity = Vector2.ZERO
@@ -241,12 +258,26 @@ func _on_death() -> void:
 func _draw() -> void:
 	if is_dead or is_dying():
 		return
-	if state == State.SUBMERGED or state == State.TELEGRAPH or state == State.DIVE:
-		var color := Color(0.65, 0.9, 1.0, 0.8)
-		var radius := 48.0 if state == State.TELEGRAPH else 24.0
-		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 32, color, 4.0)
+	var ripple := SpriteVisual.icon_of(&"tidewick_wave_ripple")
+	var bubbles := SpriteVisual.icon_of(&"sump_water_jet")
+	if state in [State.SUBMERGED, State.TELEGRAPH, State.DIVE]:
+		if ripple != null:
+			var size := 110.0 if state == State.TELEGRAPH else 64.0
+			draw_texture_rect(ripple, Rect2(Vector2(-size / 2, -size / 2), Vector2(size, size)), false)
+		else:
+			draw_arc(Vector2.ZERO, 24.0, 0.0, TAU, 32, Color(0.65, 0.9, 1.0, 0.8), 4.0)
 		if state == State.TELEGRAPH:
-			var angle := facing_dir.angle()
-			draw_arc(Vector2.ZERO, BITE_RADIUS, angle - PI / 3, angle + PI / 3, 24, color, 3.0)
-	if state == State.SUBMERGED and _jet_left < 0.5:
-		draw_circle(Vector2.ZERO, 18.0, Color(0.4, 0.8, 1.0, 0.8))
+			# Painted ripples trace the committed bite's outer edge and its two limits.
+			for i in range(7):
+				var point := Vector2.from_angle(facing_dir.angle() - PI / 3 + i * PI / 9) * BITE_RADIUS
+				if ripple != null:
+					draw_texture_rect(ripple, Rect2(point - Vector2(28, 28), Vector2(56, 56)), false)
+			if bubbles != null:
+				draw_texture_rect(bubbles, Rect2(-Vector2(40, 40), Vector2(80, 80)), false)
+			else:
+				draw_arc(
+					Vector2.ZERO, BITE_RADIUS, facing_dir.angle() - PI / 3,
+					facing_dir.angle() + PI / 3, 24, Color(0.65, 0.9, 1.0, 0.8), 3.0
+				)
+	if state == State.SUBMERGED and _jet_left < 0.5 and bubbles != null:
+		draw_texture_rect(bubbles, Rect2(-Vector2(30, 30), Vector2(60, 60)), false)
