@@ -19,6 +19,57 @@ var _aim := Vector2.RIGHT
 var _cone: Hitbox
 
 
+class SongCue:
+	extends Node2D
+	var note_texture: Texture2D
+
+	func _ready() -> void:
+		note_texture = SpriteVisual.icon_of(&"treble_note")
+		var unshaded := CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = unshaded
+
+	func _physics_process(_delta: float) -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		var singer = get_parent()
+		if singer.is_dead or singer.is_dying():
+			return
+		if singer.state != singer.State.TELEGRAPH and singer.state != singer.State.SING:
+			return
+		var active: bool = singer.state == singer.State.SING
+		var alpha := 0.85 if active else 0.5
+		var aim: float = singer._aim.angle()
+		if note_texture != null:
+			for i in range(3):
+				var distance := 150.0 + 125.0 * i
+				for offset in [-0.42, 0.0, 0.42]:
+					var at := Vector2.from_angle(aim + offset) * distance
+					draw_set_transform(at, aim)
+					draw_texture_rect(
+						note_texture, Rect2(-32, -32, 64, 64), false, Color(1, 1, 1, alpha)
+					)
+				draw_set_transform(Vector2.ZERO)
+		var edge := Color(0.85, 0.8, 1.0, 0.8 if active else 0.55)
+		var left := aim - PI / 4.0
+		var right := aim + PI / 4.0
+		draw_line(Vector2.ZERO, Vector2.from_angle(left) * CONE_REACH, edge, 3.0)
+		draw_line(Vector2.ZERO, Vector2.from_angle(right) * CONE_REACH, edge, 3.0)
+		draw_arc(Vector2.ZERO, CONE_REACH, left, right, 32, edge, 3.0)
+
+
+func _boss_ready() -> void:
+	# Room templates may already contain a copied runtime cue.
+	var old := get_node_or_null("SongCue")
+	if old != null:
+		remove_child(old)
+		old.free()
+	var cue := SongCue.new()
+	cue.name = "SongCue"
+	add_child(cue)
+
+
 func _init() -> void:
 	max_hp = 20
 	contact_damage = 2
@@ -156,14 +207,5 @@ func _on_death() -> void:
 func _draw() -> void:
 	if is_dead or is_dying():
 		return
-	if state == State.TELEGRAPH or state == State.SING:
-		var alpha := 0.8 if state == State.TELEGRAPH else 0.4
-		var points := PackedVector2Array([Vector2.ZERO])
-		for i in range(17):
-			points.append(
-				Vector2.from_angle(_aim.angle() + deg_to_rad(-45.0 + 90.0 * i / 16.0)) * CONE_REACH
-			)
-		draw_colored_polygon(points, Color(0.7, 0.65, 1.0, alpha * 0.25))
-		draw_polyline(points, Color(0.85, 0.8, 1.0, alpha), 4.0)
-	elif state == State.RECOVER:
+	if state == State.RECOVER:
 		draw_line(Vector2(-16, -10), Vector2(16, -10), Color(0.9, 0.85, 1), 5.0)

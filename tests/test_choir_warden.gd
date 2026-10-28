@@ -63,6 +63,16 @@ func _cycle() -> void:
 	check_near(enemy.velocity.length(), 100, .01, "walk100")
 	check_eq(enemy.knockback_scale, .5, "half hook knockback")
 	check(enemy.has_node("Visual"), "Visual exists")
+	var cue := enemy.get_node_or_null("SongCue") as Node2D
+	check(cue != null, "song has a separate presentation cue")
+	if cue != null:
+		check(cue.material is CanvasItemMaterial, "song has a material")
+		check_eq(
+			(cue.material as CanvasItemMaterial).light_mode,
+			CanvasItemMaterial.LIGHT_MODE_UNSHADED,
+			"song remains visible in a dark room"
+		)
+		check(cue.note_texture != null, "song reuses the painted note art")
 	await frames(290)
 	check_eq(enemy.state, enemy.State.WALK, "note waits five seconds")
 	await _wait_state(enemy, enemy.State.TELEGRAPH)
@@ -71,6 +81,8 @@ func _cycle() -> void:
 	var elapsed := await _wait_state(enemy, enemy.State.SING)
 	check_near(elapsed, 48, 2, "inhale .8s")
 	check_eq(enemy._cone.damage, 2, "note damage2")
+	var polygon := enemy._cone.get_child(0) as CollisionPolygon2D
+	check_near(polygon.polygon[1].length(), 480.0, 0.01, "song collision reach unchanged")
 	check(enemy._cone.once_per_target, "once per target per note")
 	check(
 		enemy._cone.blockable and not enemy._cone.block_destroys_carrier,
