@@ -5,7 +5,7 @@ extends "res://tests/test_route_cave_2.gd"
 ## defeats C2 and C3, collects their rewards and reaches the C4 boss. The fixed seed 20261027
 ## collects the hermit and hidden C3 cores and farms earned enemy drops using player input.
 ## The bot reads enemy and pickup state.
-## The continuous route defeats C4 through C9, collects their rewards and reaches the C10 boss.
+## The continuous route defeats C4 through C10 and reaches an actual ending scene.
 ## Its boss bots read combat internals; the C4 bot uses physics queries to steer.
 ## Later probes use positioned actions, warps and enemy removal; this is not a human playthrough.
 
@@ -49,7 +49,7 @@ func run() -> void:
 	SaveGame.enabled = false
 
 
-## Continuous opening through the C10 boss entrance: no repositioning, warps, enemy
+## Continuous opening through the C10 ending: no repositioning, warps, enemy
 ## removal or damage suppression. Later cave probes use documented shortcuts.
 func walk_from_start() -> void:
 	seed(20261027)
@@ -3775,6 +3775,711 @@ func walk_c10_approach() -> void:
 			]
 		)
 	)
+	if final_boss != null:
+		await retry_unlit()
+
+
+func retry_unlit() -> void:
+	await walk_start_to(Vector2(960, 740))
+	release_inputs()
+	for tick in range(3600):
+		if player.is_dead():
+			break
+		await frames(1)
+	check(player.is_dead(), "final boss causes ordinary death")
+	for tick in range(600):
+		await frames(1)
+		if not player.is_dead() and world.get_current_room_id() == &"ow_10_8":
+			break
+	check_eq(world.get_current_room_id(), &"ow_10_8", "Unlit death returns to checkpoint")
+	check_eq(GameState.health, 28, "Unlit respawn restores earned health")
+	check(GameState.has_big_key(&"c10"), "final Lockpick survives Unlit death")
+	var retry_pickups := {"slugs": 0}
+	var on_pickup := func(kind: StringName) -> void:
+		if kind == &"slug_bundle":
+			retry_pickups["slugs"] += 1
+			print(
+				(
+					"UNLIT retry physical pickup=%s room=%s slugs=%d"
+					% [kind, world.get_current_room_id(), GameState.slugs]
+				)
+			)
+	Events.pickup_collected.connect(on_pickup)
+	print(
+		(
+			"UNLIT retry respawn room=%s health=%d slugs=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.slugs]
+		)
+	)
+	await walk_start_to(Vector2(960, 720))
+	await walk_start_to(Vector2(1440, 720))
+	await walk_start_to(Vector2(1440, 528))
+	await seconds(1)
+	check_eq(world.get_current_room_id(), &"cave_10_1", "walking re-enters final cave")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_10_2")
+	await walk_start_to(Vector2(1680, 480))
+	await walk_start_cross(&"move_right", &"cave_10_4")
+	await walk_start_to(Vector2(200, 150))
+	await walk_start_to(Vector2(1700, 150))
+	await walk_start_to(Vector2(1730, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"reed_raft":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	await walk_raft_cross(&"cave_10_5")
+	print("C10 return cellar health=%d" % GameState.health)
+	await walk_start_to(Vector2(300, 600))
+	await walk_start_to(Vector2(960, 600))
+	await walk_start_to(Vector2(960, 780))
+	await walk_start_cross(&"move_down", &"cave_10_8")
+	await walk_start_to(Vector2(1584, 480))
+	for cycle in range(10):
+		if GameState.active_item == &"skitter_boots":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1)
+	await walk_start_cross(&"move_right", &"cave_10_9")
+	check(not player.is_dead(), "walking survives final pit leap")
+	print("C10 pit room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(120, 480))
+	await seconds(0.7)
+	print(
+		(
+			"C10 pit jump start pos=%s health=%d item=%s"
+			% [
+				player.global_position - world.current_room.global_position,
+				GameState.health,
+				GameState.active_item
+			]
+		)
+	)
+	Input.action_press(&"move_right")
+	await frames(2)
+	Input.action_release(&"move_right")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1)
+	print(
+		(
+			"C10 pit jump end pos=%s health=%d"
+			% [player.global_position - world.current_room.global_position, GameState.health]
+		)
+	)
+	await walk_start_to(Vector2(336, 384))
+	await walk_start_to(Vector2(1008, 384))
+	for cycle in range(10):
+		if GameState.active_item == &"reel_line":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await seconds(0.6)
+	print(
+		(
+			"C10 reel start pos=%s health=%d item=%s"
+			% [
+				player.global_position - world.current_room.global_position,
+				GameState.health,
+				GameState.active_item
+			]
+		)
+	)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.5)
+	print(
+		(
+			"C10 reel end pos=%s health=%d"
+			% [player.global_position - world.current_room.global_position, GameState.health]
+		)
+	)
+	await walk_start_cross(&"move_down", &"cave_10_10")
+	check(not player.is_dead(), "walking reaches final anchor drop alive")
+	print(
+		(
+			"C10 anchor room=%s health=%d keys=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.keys_in(&"c10")]
+		)
+	)
+	await walk_start_to(Vector2(1008, 192))
+	await seconds(0.6)
+	Input.action_press(&"move_down")
+	await frames(2)
+	Input.action_release(&"move_down")
+	Input.action_press(&"use_item")
+	await frames(2)
+	Input.action_release(&"use_item")
+	await seconds(1.5)
+	var south: Vector2 = player.global_position - world.current_room.global_position
+	check(
+		south.distance_to(Vector2(1008, 648)) < 25, "earned reel lands on final anchor south bank"
+	)
+	check(not player.is_dead(), "walking reaches final anchor south bank alive")
+
+	print(
+		(
+			"C10 anchor south room=%s pos=%s health=%d/%d keys=%d"
+			% [
+				world.get_current_room_id(),
+				south,
+				GameState.health,
+				GameState.max_health,
+				GameState.keys_in(&"c10")
+			]
+		)
+	)
+
+	await walk_start_to(Vector2(840, 640))
+	await walk_start_to(Vector2(720, 640))
+	await walk_start_to(Vector2(720, 520))
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_10_11")
+	check(GameState.has_flag(&"door_e242"), "walking opens final second key door")
+
+	print("C10 vault entry room=%s health=%d" % [world.get_current_room_id(), GameState.health])
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_10_12")
+	await walk_start_to(Vector2(200, 480))
+	await walk_start_cross(&"move_left", &"cave_10_14")
+	check(not player.is_dead(), "walking returns to Unlit alive")
+	Events.pickup_collected.disconnect(on_pickup)
+	check(retry_pickups["slugs"] > 0, "actual slug pickup refills the retry")
+	var boss = world.current_room.get_node_or_null("Enemies/TheUnlit1")
+	check(boss != null, "Unlit appears again after respawn")
+	print(
+		(
+			"UNLIT retry entry room=%s health=%d slugs=%d"
+			% [world.get_current_room_id(), GameState.health, GameState.slugs]
+		)
+	)
+	if boss != null:
+		await fight_unlit_probe(boss)
+
+
+func fight_unlit_probe(boss: Node2D) -> void:
+	var on_hurt := func(hit: Hitbox) -> void:
+		print(
+			(
+				"UNLIT HIT kind=%s damage=%d source=%s ward=%s facing=%s"
+				% [
+					hit.kind,
+					hit.damage_for(player.hurtbox),
+					hit.source,
+					player.ward_up,
+					player.facing
+				]
+			)
+		)
+	player.hurtbox.hurt.connect(on_hurt)
+	for cycle in range(12):
+		if GameState.active_item == &"tallow_sling":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	await walk_start_to(Vector2(960, 760))
+	Input.action_press(&"move_up")
+	await frames(2)
+	Input.action_release(&"move_up")
+	var last_shot := -100
+	var last_attack := -100
+	var last_hp := -1
+	var last_health := GameState.health
+	var travel_dir := -1.0
+	var sprint_until := -1
+	for tick in range(12000):
+		if (
+			player.is_dead()
+			or not is_instance_valid(boss)
+			or boss.is_dead
+			or boss.is_dying()
+			or boss.phase != 1
+		):
+			break
+		var pos: Vector2 = player.global_position
+		var local: Vector2 = pos - world.current_room.global_position
+		var alive := 0
+		var fire := false
+		var target = null
+		for i in range(boss.eyes.size()):
+			var eye = boss.eyes[i]
+			if not is_instance_valid(eye) or eye.is_dead:
+				continue
+			alive += 1
+		for i in range(boss.eyes.size()):
+			var eye = boss.eyes[i]
+			if not is_instance_valid(eye) or eye.is_dead:
+				continue
+			var e: Vector2 = eye.global_position - world.current_room.global_position
+			var travel: float = (local.y - e.y - 40.0) / 720.0
+			var omega: float = deg_to_rad(24.0) * (1.0 + (5 - alive) * 0.25)
+			var predicted_x: float = 960.0 + 330.0 * cos(boss.angles[i] + omega * travel)
+			if (
+				e.y > 230
+				and e.y < local.y - 65
+				and travel > 0
+				and absf(predicted_x - local.x) < 18
+				and tick - last_shot > 26
+			):
+				fire = true
+				target = eye
+				break
+		if tick >= sprint_until:
+			if local.x < 650:
+				travel_dir = 1.0
+			if local.x > 1270:
+				travel_dir = -1.0
+		if boss._hands_left < 0.25 and tick > sprint_until:
+			travel_dir = 1.0 if local.x < 960 else -1.0
+			sprint_until = tick + 100
+		var nearest = null
+		var best := INF
+		for enemy in world.current_room.get_enemies():
+			if enemy == boss or not is_instance_valid(enemy) or enemy.is_dead or enemy in boss.eyes:
+				continue
+			if enemy.visual_kind == &"unlit_hush_hand":
+				continue
+			var d: float = enemy.global_position.distance_to(pos)
+			if d < best:
+				best = d
+				nearest = enemy
+		var strike := nearest != null and best < 135 and tick - last_attack > 27
+		release_inputs()
+		if tick < sprint_until:
+			Input.action_press(&"move_right" if travel_dir > 0 else &"move_left")
+		elif strike:
+			var d: Vector2 = nearest.global_position - pos
+			if absf(d.x) > absf(d.y):
+				Input.action_press(&"move_right" if d.x > 0 else &"move_left")
+			else:
+				Input.action_press(&"move_down" if d.y > 0 else &"move_up")
+			await frames(2)
+			Input.action_press(&"attack")
+			last_attack = tick
+		elif fire and player.facing == Vector2.UP:
+			Input.action_press(&"use_item")
+			last_shot = tick
+		elif player.facing != Vector2.UP:
+			Input.action_press(&"move_up")
+		else:
+			Input.action_press(&"ward")
+			Input.action_press(&"move_right" if travel_dir > 0 else &"move_left")
+			if local.y < 730:
+				Input.action_press(&"move_down")
+			if local.y > 790:
+				Input.action_press(&"move_up")
+		await frames(1)
+		if is_instance_valid(boss) and (boss.hp != last_hp or GameState.health != last_health):
+			print(
+				(
+					"UNLIT tick=%d phase=%d hp=%d health=%d eyes=%d slugs=%d pos=%s"
+					% [tick, boss.phase, boss.hp, GameState.health, alive, GameState.slugs, local]
+				)
+			)
+			last_hp = boss.hp
+			last_health = GameState.health
+	release_inputs()
+	if is_instance_valid(boss):
+		print(
+			(
+				"UNLIT end phase=%d hp=%d health=%d slugs=%d"
+				% [boss.phase, boss.hp, GameState.health, GameState.slugs]
+			)
+		)
+	check(is_instance_valid(boss) and boss.phase >= 2, "walking reaches Unlit shell phase")
+	if is_instance_valid(boss) and boss.phase == 2:
+		check_eq(boss.hp, 60, "five actual eyes leave Unlit at 60 HP")
+		check_eq(boss.parts().size(), 0, "all five Unlit eyes are defeated")
+	if is_instance_valid(boss) and boss.phase == 2 and not player.is_dead():
+		await fight_unlit_shell(boss)
+
+
+func fight_unlit_shell(boss: Node2D) -> void:
+	var casts := {"cinder": 0}
+	var on_item := func(item_id: StringName) -> void:
+		if item_id == &"cinder_wick":
+			casts["cinder"] += 1
+	player.item_used.connect(on_item)
+	for cycle in range(12):
+		if GameState.active_item == &"cinder_wick":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	var last_cast := -300
+	var last_attack := -100
+	var last_hp: int = boss.hp
+	var last_health := GameState.health
+	for tick in range(4000):
+		if (
+			player.is_dead()
+			or not is_instance_valid(boss)
+			or boss.is_dead
+			or boss.is_dying()
+			or boss.phase != 2
+		):
+			break
+		var pos: Vector2 = player.global_position
+		var local: Vector2 = pos - world.current_room.global_position
+		var d: Vector2 = boss.global_position - pos
+		var face := Vector2(signf(d.x), 0) if absf(d.x) > absf(d.y) else Vector2(0, signf(d.y))
+		var fire: bool = (
+			d.length() < 300
+			and d.length() > 160
+			and minf(absf(d.x), absf(d.y)) < 70
+			and tick - last_cast > 235
+			and not boss.is_pausing()
+		)
+		var threat = null
+		var threat_dist := INF
+		for enemy in world.current_room.get_enemies():
+			if not is_instance_valid(enemy) or enemy.is_dead or enemy == boss or enemy in boss.eyes:
+				continue
+			var distance: float = enemy.global_position.distance_to(pos)
+			if distance < threat_dist:
+				threat = enemy
+				threat_dist = distance
+		var strike := threat != null and threat_dist < 140 and tick - last_attack > 26
+		var ring_danger := false
+		var ring_face := face
+		for hazard in boss._hazards:
+			if (
+				not is_instance_valid(hazard)
+				or not ("kind" in hazard)
+				or hazard.kind != &"unlit_ring"
+			):
+				continue
+			var rd: Vector2 = hazard.global_position - pos
+			if absf(rd.length() - hazard.radius) < 125:
+				ring_danger = true
+				ring_face = (
+					Vector2(signf(rd.x), 0) if absf(rd.x) > absf(rd.y) else Vector2(0, signf(rd.y))
+				)
+		var motion := Vector2.ZERO
+		if fire:
+			motion = face
+		elif d.length() < 260:
+			motion = -d.normalized()
+		elif d.length() > 340:
+			motion = d.normalized()
+		else:
+			motion = d.normalized().orthogonal()
+		if local.x < 180:
+			motion.x = maxf(motion.x, 1)
+		if local.x > 1740:
+			motion.x = minf(motion.x, -1)
+		if local.y < 160:
+			motion.y = maxf(motion.y, 1)
+		if local.y > 800:
+			motion.y = minf(motion.y, -1)
+		release_inputs()
+		if ring_danger:
+			if player.facing != ring_face:
+				if ring_face.x != 0:
+					Input.action_press(&"move_right" if ring_face.x > 0 else &"move_left")
+				else:
+					Input.action_press(&"move_down" if ring_face.y > 0 else &"move_up")
+			else:
+				Input.action_press(&"ward")
+		elif d.length() < 235:
+			var escape: Vector2 = -d.normalized() + d.normalized().orthogonal() * 0.8
+			if local.x < 230:
+				escape.x = maxf(escape.x, 1.0)
+			if local.x > 1690:
+				escape.x = minf(escape.x, -1.0)
+			if local.y < 210:
+				escape.y = maxf(escape.y, 1.0)
+			if local.y > 750:
+				escape.y = minf(escape.y, -1.0)
+			if absf(escape.x) > 0.2:
+				Input.action_press(&"move_right" if escape.x > 0 else &"move_left")
+			if absf(escape.y) > 0.2:
+				Input.action_press(&"move_down" if escape.y > 0 else &"move_up")
+		elif strike:
+			var q: Vector2 = threat.global_position - pos
+			if absf(q.x) > absf(q.y):
+				Input.action_press(&"move_right" if q.x > 0 else &"move_left")
+			else:
+				Input.action_press(&"move_down" if q.y > 0 else &"move_up")
+			await frames(2)
+			Input.action_press(&"attack")
+			last_attack = tick
+		elif fire:
+			if face.x != 0:
+				Input.action_press(&"move_right" if face.x > 0 else &"move_left")
+			else:
+				Input.action_press(&"move_down" if face.y > 0 else &"move_up")
+			await frames(2)
+			Input.action_press(&"use_item")
+			last_cast = tick
+		elif player.facing != face:
+			if face.x != 0:
+				Input.action_press(&"move_right" if face.x > 0 else &"move_left")
+			else:
+				Input.action_press(&"move_down" if face.y > 0 else &"move_up")
+		else:
+			Input.action_press(&"ward")
+			if absf(motion.x) > 0.2:
+				Input.action_press(&"move_right" if motion.x > 0 else &"move_left")
+			if absf(motion.y) > 0.2:
+				Input.action_press(&"move_down" if motion.y > 0 else &"move_up")
+		await frames(1)
+		if is_instance_valid(boss) and (boss.hp != last_hp or GameState.health != last_health):
+			print(
+				(
+					"SHELL tick=%d hp=%d health=%d pos=%s boss=%s"
+					% [
+						tick,
+						boss.hp,
+						GameState.health,
+						local,
+						boss.global_position - world.current_room.global_position
+					]
+				)
+			)
+			last_hp = boss.hp
+			last_health = GameState.health
+	release_inputs()
+	player.item_used.disconnect(on_item)
+	print("SHELL actual cinder casts=%d" % casts["cinder"])
+	check_eq(casts["cinder"], 3, "three actual cinder activations open Unlit shell")
+	if is_instance_valid(boss):
+		print("SHELL end phase=%d hp=%d health=%d" % [boss.phase, boss.hp, GameState.health])
+	check(is_instance_valid(boss) and boss.phase >= 3, "walking reaches Unlit heart phase")
+	if is_instance_valid(boss) and boss.phase == 3:
+		check_eq(boss.hp, 24, "actual cinder damage opens the heart at 24 HP")
+	if is_instance_valid(boss) and boss.phase == 3 and not player.is_dead():
+		await fight_unlit_heart(boss)
+
+
+func fight_unlit_heart(boss: Node2D) -> void:
+	var before := GameState.health
+	var loot := {"ember": 0}
+	var on_pickup := func(pickup: PickupBase) -> void:
+		if pickup.kind == &"ember":
+			loot["ember"] += 1
+	player.collector.picked.connect(on_pickup)
+	await walk_start_to(Vector2(960, 480))
+	await frames(5)
+	player.collector.picked.disconnect(on_pickup)
+	check_eq(loot["ember"], 1, "walking physically collects final phase ember")
+	check_eq(GameState.health, before + 2, "final phase ember heals two half-hearts")
+	print("HEART ember pickups=%d before=%d after=%d" % [loot["ember"], before, GameState.health])
+	await walk_start_to(Vector2(960, 700))
+	for cycle in range(12):
+		if GameState.active_item == &"reel_line":
+			break
+		Input.action_press(&"cycle_item")
+		await frames(2)
+		Input.action_release(&"cycle_item")
+		await frames(2)
+	var last_use := -100
+	var last_attack := -100
+	var last_hp: int = boss.hp
+	var last_health := GameState.health
+	var last_hounds := -1
+	for tick in range(8000):
+		if player.is_dead() or not is_instance_valid(boss) or boss.is_dead or boss.is_dying():
+			break
+		var pos: Vector2 = player.global_position
+		var local: Vector2 = pos - world.current_room.global_position
+		var motion := Vector2.ZERO
+		var strike := false
+		var fire := false
+		var hound = null
+		var nearest := INF
+		var count := 0
+		for e in get_tree().get_nodes_in_group(&"unlit_hounds"):
+			if not is_instance_valid(e) or e.is_dead:
+				continue
+			count += 1
+			var dist: float = e.global_position.distance_to(pos)
+			if dist < nearest:
+				nearest = dist
+				hound = e
+		if count != last_hounds:
+			print("HEART tick=%d hounds=%d health=%d" % [tick, count, GameState.health])
+			last_hounds = count
+		if hound != null and nearest < 155 and tick - last_attack > 24:
+			var d: Vector2 = hound.global_position - pos
+			motion = Vector2(signf(d.x), 0) if absf(d.x) > absf(d.y) else Vector2(0, signf(d.y))
+			strike = true
+		elif boss.exposed_left > 0 and boss.pull_damage < 8:
+			var d: Vector2 = boss.global_position - pos
+			if d.length() < 220 and minf(absf(d.x), absf(d.y)) < 110 and tick - last_attack > 24:
+				motion = Vector2(signf(d.x), 0) if absf(d.x) > absf(d.y) else Vector2(0, signf(d.y))
+				strike = true
+			else:
+				motion = d.normalized() * clampf((d.length() - 180) / 60, -1, 1)
+		else:
+			var d := Vector2(960, 700) - local
+			if (
+				boss.exposed_left <= 0
+				and not boss.is_pausing()
+				and d.length() < 35
+				and tick - last_use > 60
+			):
+				motion = Vector2.UP
+				fire = true
+			elif d.length() > 12:
+				motion = d.normalized()
+		var shot_danger := false
+		var shot_face := Vector2.UP
+		var shot_distance := INF
+		for shot in get_tree().get_nodes_in_group(&"projectiles"):
+			if shot is EnemyProjectile and is_instance_valid(shot):
+				var sd: Vector2 = shot.global_position - pos
+				if sd.length() < 150 and sd.length() < shot_distance:
+					shot_danger = true
+					shot_distance = sd.length()
+					shot_face = (
+						Vector2(signf(sd.x), 0)
+						if absf(sd.x) > absf(sd.y)
+						else Vector2(0, signf(sd.y))
+					)
+		var ring_danger := false
+		var ring_face := Vector2.UP
+		for hazard in boss._hazards:
+			if not is_instance_valid(hazard) or not ("kind" in hazard):
+				continue
+			if hazard.kind == &"unlit_ring":
+				var rd: Vector2 = hazard.global_position - pos
+				if absf(rd.length() - hazard.radius) < 95:
+					ring_danger = true
+					ring_face = (
+						Vector2(signf(rd.x), 0)
+						if absf(rd.x) > absf(rd.y)
+						else Vector2(0, signf(rd.y))
+					)
+			if (
+				hazard.kind == &"chain_lash"
+				and hazard.age < 1.0
+				and absf(pos.x - hazard.global_position.x) < 125
+			):
+				motion.x = 3.0 if pos.x > hazard.global_position.x else -3.0
+				fire = false
+				strike = false
+		if local.x < 170:
+			motion.x = maxf(motion.x, 1)
+		if local.x > 1750:
+			motion.x = minf(motion.x, -1)
+		if local.y < 150:
+			motion.y = maxf(motion.y, 1)
+		if local.y > 800:
+			motion.y = minf(motion.y, -1)
+		release_inputs()
+		if ring_danger or shot_danger:
+			var defend_face := ring_face if ring_danger else shot_face
+			if player.facing != defend_face:
+				if defend_face.x != 0:
+					Input.action_press(&"move_right" if defend_face.x > 0 else &"move_left")
+				else:
+					Input.action_press(&"move_down" if defend_face.y > 0 else &"move_up")
+			else:
+				Input.action_press(&"ward")
+			strike = false
+			fire = false
+		else:
+			if absf(motion.x) > 0.2:
+				Input.action_press(&"move_right" if motion.x > 0 else &"move_left")
+			if absf(motion.y) > 0.2:
+				Input.action_press(&"move_down" if motion.y > 0 else &"move_up")
+		if strike or fire:
+			await frames(2)
+			Input.action_press(&"attack" if strike else &"use_item")
+			if strike:
+				last_attack = tick
+			else:
+				last_use = tick
+		await frames(1)
+		if is_instance_valid(boss) and (boss.hp != last_hp or GameState.health != last_health):
+			print(
+				(
+					"HEART tick=%d hp=%d health=%d exposed=%.2f pos=%s"
+					% [tick, boss.hp, GameState.health, boss.exposed_left, local]
+				)
+			)
+			last_hp = boss.hp
+			last_health = GameState.health
+	release_inputs()
+	if is_instance_valid(boss):
+		check_eq(boss.pulls, 3, "three real reel pulls expose final heart")
+	if not player.is_dead():
+		await seconds(2)
+	check(GameState.has_flag(&"boss_cave_10_14_defeated"), "walking defeats Unlit")
+	check(not player.is_dead(), "walking survives Unlit victory")
+	print(
+		(
+			"UNLIT victory room=%s health=%d/%d slugs=%d pots=%d defeated=%s"
+			% [
+				world.get_current_room_id(),
+				GameState.health,
+				GameState.max_health,
+				GameState.slugs,
+				GameState.pitch_pots,
+				GameState.has_flag(&"boss_cave_10_14_defeated")
+			]
+		)
+	)
+	if GameState.has_flag(&"boss_cave_10_14_defeated") and not player.is_dead():
+		await walk_start_to(Vector2(768, 480))
+		var trigger = world.current_room.get_node("Props/EndingTrigger1")
+		check(trigger.is_available(), "ending choice opens after actual victory")
+		# Preserve the headless runner when the real ending changes the current scene.
+		var runner_scene := get_tree().current_scene
+		get_tree().current_scene = null
+		Input.action_press(&"confirm")
+		await frames(2)
+		Input.action_release(&"confirm")
+		await frames(5)
+		var actual_ending := get_tree().current_scene
+		check(GameState.has_flag(&"ending_rekindle"), "physical contact and confirm choose ending")
+		check(GameState.has_flag(&"completed"), "actual ending scene marks run completed")
+		check(
+			(
+				actual_ending != null
+				and actual_ending.scene_file_path == "res://scenes/ui/ending.tscn"
+			),
+			"actual ending scene loads"
+		)
+		print(
+			(
+				"ENDING scene=%s choice=%s completed=%s"
+				% [
+					actual_ending.scene_file_path if actual_ending != null else "none",
+					GameState.has_flag(&"ending_rekindle"),
+					GameState.has_flag(&"completed")
+				]
+			)
+		)
+		get_tree().current_scene = runner_scene
+		if actual_ending != null:
+			actual_ending.queue_free()
+		await frames(2)
 
 
 func farm_c4_antechamber() -> void:

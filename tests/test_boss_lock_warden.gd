@@ -7,6 +7,7 @@ const GALLERY := "res://tests/fixtures/gallery/B09.tscn"
 func run() -> void:
 	await _plate_visual_states()
 	await _room_clone_lifecycle()
+	await _boss_immunity_and_drops()
 	await _tools_and_finish()
 	await _attacks_and_reset()
 	await _lids_refill_and_phase_two()
@@ -158,6 +159,60 @@ func _capture_world_plate(viewport: SubViewport, label: String) -> void:
 	var path := "/tmp/wickwarden-b09-world-%s.png" % label
 	check_eq(viewport.get_texture().get_image().save_png(path), OK, "World proof capture saves")
 	print("saved ", path)
+
+
+func _boss_immunity_and_drops() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/LockWarden")
+	check_eq(boss.knockback_scale, 0.0, "scene boss inherits knockback immunity")
+	check_eq(boss.stun_scale, 0.0, "scene boss inherits stun immunity")
+	check(not boss.drops_enabled, "scene boss disables random drops")
+	var player := make_player(room, Vector2(660, 600))
+	player.set_hurtbox_enabled(self, false)
+	GameState.acquire_item(&"tallow_sling")
+	GameState.acquire_item(&"tether_moth")
+	GameState.add_slugs(10)
+	await seconds(1.6)
+	boss._clear_plates()
+	boss._start_phase(2)
+	boss.hp = 24
+	await seconds(1.3)
+	boss.clear_hazards()
+	boss.volley_left = 100
+	boss.bolt_left = 100
+	boss.open_left = 10
+	var origin: Vector2 = boss.global_position
+	GameState.set_active_item(&"tallow_sling")
+	player.facing = Vector2.RIGHT
+	check(player.use_item(), "real sling fires at open core")
+	await seconds(0.5)
+	check_eq(boss.hp, 23, "real sling damages open core")
+	check_eq(boss.global_position, origin, "real sling does not move boss")
+	check(not boss.is_knocked_back(), "real sling does not start knockback")
+	var moth_hits := [0]
+	boss.hurtbox.hurt.connect(func(hit: Hitbox) -> void:
+		if hit.kind == &"stun":
+			moth_hits[0] += 1
+	)
+	GameState.set_active_item(&"tether_moth")
+	check(player.use_item(), "real moth launches at open core")
+	await seconds(0.5)
+	check(moth_hits[0] > 0, "real moth reaches core")
+	check(not boss.is_stunned(), "real moth cannot stun boss")
+	check_eq(boss.global_position, origin, "moth leaves boss stationary")
+	for pickup in get_tree().get_nodes_in_group(&"pickups"):
+		pickup.queue_free()
+	await frames(2)
+	boss.drop_roll_override = 0.0
+	boss.kill()
+	await frames(3)
+	var kinds: Array[StringName] = []
+	for pickup in get_tree().get_nodes_in_group(&"pickups"):
+		kinds.append(pickup.kind)
+	check_eq(kinds.size(), 2, "death creates only the two timed embers")
+	check_eq(kinds.count(&"ember"), 2, "death creates both intended embers")
+	await dispose(room)
 
 
 func _tools_and_finish() -> void:

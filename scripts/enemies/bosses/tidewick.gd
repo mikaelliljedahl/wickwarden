@@ -50,6 +50,7 @@ class UndertowVisual:
 
 
 func _init() -> void:
+	super()
 	boss_id = &"tidewick"
 	arena_id = &"cave_3_9"
 	max_hp = 24

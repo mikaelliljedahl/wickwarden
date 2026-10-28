@@ -84,12 +84,54 @@ The earned route to the C10 boss entrance followed in
 `0d3ab887a9d915ae41a16ba5b088ef696d402a36`, verified on `origin/main`.
 The Linux export preset followed in `fec1e9514b0dad0025602da7019d898eba1f1b79`,
 verified on `origin/main`.
+The rejected Fen Leech prototype and remaining limitation were documented in
+`750e4f15f2912c7c3c5763b107c94b39a9209b8c`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**B03/B09 immunity fixes, working tree (unpushed):** Both subclass initializers
+now call `BossBase`'s initializer; actual scenes have stun and knockback scales
+zero and drops disabled. In B09, real sling damage no longer pushes and the Moth
+does not stun; forced-death drop checks show only intended embers. B03 retains
+real raft/tail and reward behavior. The agents report isolated B03, B09, C3, C9
+and Q7 tests and lint passing; the lead passed the five corresponding tests.
+The earlier continuous Q3 ending-scene win depended on B09 knockback and predates
+these fixes; the synced rerun is recorded below.
+
+**B09/B03 immunity audit:** In the actual Lock Warden scene, knockback and stun
+scales are 1: an actual slug moves the boss and an actual Moth stuns it, contrary
+to binding boss immunity and stationary Warden requirements. The audit points to
+subclass `_init`; `drops_enabled` is also true, a static risk of unplanned drops.
+Tidewick likewise has defaults 1/true, but its separate hitboxes filter
+interactions and a direct effect was not demonstrated. The later unpushed fixes
+are recorded above. The earlier ending-scene victory preceded the B09 fix; the
+synced rerun is below.
+
+**Q3 earned route to ending scene, working tree (unpushed):** The continuous
+input route from start through C1–C10 defeats The Unlit with normal damage and
+active enemies, including an ordinary boss death, respawn and full return, and
+an actual slug-bundle pickup. Phase one uses 15 sling shots, phase two three
+Cinder Wick uses and ward, and phase three a physical ember, three Reel uses and
+24 hook damage; victory leaves 10/28 half-hearts. Physical contact at the left
+pedestal plus the current confirm action loads the actual `ending.tscn` and sets
+`ending_rekindle` and `completed`. To protect the test harness, the test sets
+`current_scene` to null and restores the runner; SaveGame is disabled. The agent
+reports two exact isolated first shards, a separate audit, shards 2–4 and lint
+passing with both B03 and B09 fixes synced. B09 remained stationary; C9 victory
+was at 15/26 and C10 at 10/28. Actual ammo and ember were collected, with
+ordinary C9 and C10 respawns, active enemies and no warp or manual state in the
+continuous portion. The lead's `TMPDIR=/tmp make check` passed with the B03/B09
+fixes and route to ending: all Godot suites including four shards, lint,
+world-data and Python tests.
+Credits, title return and the other ending are not continuously
+tested. The bot reads boss, hazards, eyes, projectiles and other internal state;
+the global seed does not control or log two bosses' own RNG, and C7 had a 1/22
+margin. Human play and balance remain open; the ending-choice contract conflict
+and pending user decision remain unchanged.
 
 **Z3 Linux export smoke test, committed in `fec1e95`:** `export_presets.cfg`
 defines Linux x86_64 with `all_resources`, `*.json` included and `tests/*` and
@@ -111,8 +153,9 @@ the route includes an earlier ordinary respawn. The agent reports two first-shar
 runs, shards 2–4 and lint passing; the lead passed `TMPDIR=/tmp make test
 T=playthrough_1` locally with the boss entrance. Global seed `20261027`
 does not control independent boss RNG; the bot reads boss ID, phase and HP and
-earlier enemy/projectile state. Human play, victory and a full ending remain
-open; E1 is unchanged and the user response remains pending.
+earlier enemy/projectile state. At that checkpoint victory and a full ending
+remained open; the later unpushed route and remaining limits are recorded above.
+E1 is unchanged and the user response remains pending.
 
 **C10.c room-10 geometry, committed in `b5ba112`:** Two floor tiles were opened
 in `cave_10_10` and `make rooms` generated the scene. From the north bank,
@@ -284,7 +327,7 @@ correct-tool positive cases existed previously. The agent reports two isolated
 matrix runs and lint passing. Other combinations, real-room and human
 verification remain open.
 
-**Fen Leech presentation:** An earlier prototype was rejected because it
+**Fen Leech presentation (documented in `750e4f1`):** An earlier prototype was rejected because it
 overlaps at 35 px in darkness. A later unpublished paired-cluster prototype was
 also rejected: it sits behind the player but hides one cluster, has broad static
 duplication, and the actual raft route places part of it on land. Close real-raft,

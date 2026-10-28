@@ -72,6 +72,9 @@ func _room_template_lifecycle() -> void:
 		for visit in range(3):
 			room.enter()
 			var boss := room.get_node("Enemies/Tidewick1") as Node2D
+			check_eq(boss.get("stun_scale"), 0.0, "actual scene inherits boss stun immunity")
+			check_eq(boss.get("knockback_scale"), 0.0, "actual scene inherits boss knockback immunity")
+			check(not boss.get("drops_enabled"), "actual scene disables random drops")
 			_assembly_check(boss, room)
 			await seconds(1.6)
 			_assembly_check(boss, room)
@@ -157,6 +160,13 @@ func _motion_and_exposure() -> void:
 	check(boss.tail_exposed(), "tail resurfaces on5second cycle")
 	check(not boss.ripple.visible, "warning ends when the tail surfaces")
 	var hp: int = boss.hp
+	var moth := make_hitbox(room, boss.global_position, Layers.Team.PLAYER, 0, 65)
+	moth.kind = &"moth"
+	moth.stun_time = 3.0
+	await frames(4)
+	check(not boss.is_stunned(), "moth overlapping head does not stun boss")
+	check_eq(boss.hp, hp, "moth overlapping head does not damage boss")
+	await dispose(moth)
 	var hit := make_hitbox(room, boss.global_position, Layers.Team.PLAYER, 4, 65)
 	hit.kind = &"flare"
 	await frames(4)
@@ -199,7 +209,8 @@ func _phases_reset_and_rewards() -> void:
 	var boss = room.get_node("Enemies/Tidewick")
 	boss.rng.seed = 12345
 	await seconds(1.6)
-	check(boss.apply_damage(14, boss.global_position, 0), "scripted threshold setup accepted")
+	check(boss.apply_damage(14, boss.global_position + Vector2.LEFT, 300), "scripted threshold setup accepted")
+	check(not boss.is_knocked_back(), "boss immunity prevents knockback on accepted damage")
 	check_eq(boss.phase, 2, "phase2 begins at10HP")
 	check_near(boss.travel_speed, 260, 0.01, "phase2speed260")
 	await seconds(1.4)
@@ -228,6 +239,7 @@ func _phases_reset_and_rewards() -> void:
 	check(not is_instance_valid(boss.wave), "reset clears wave")
 	check(not boss.tail_exposed(), "reset intro closes tail")
 	await seconds(1.6)
+	boss.drop_roll_override = 0.0
 	boss.apply_damage(99, boss.global_position, 0)
 	check(GameState.has_flag(&"boss_cave_3_9_defeated"), "death sets canonical flag")
 	check(not boss.contact_hitbox.active, "death head harmless")
@@ -235,6 +247,8 @@ func _phases_reset_and_rewards() -> void:
 	check(boss.death_drops.is_empty(), "boss owns no fragment/core rewards")
 	await seconds(1.6)
 	check(not is_instance_valid(boss), "death throes free boss")
+	var drops := room.get_node("Enemies").get_children().filter(func(n: Node) -> bool: return n is PickupBase)
+	check_eq(drops.size(), 0, "forced winning drop roll produces no random boss pickup")
 	var scene := load(SCENE) as PackedScene
 	var retired := scene.instantiate() as EnemyBase
 	room.get_node("Enemies").add_child(retired)

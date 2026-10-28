@@ -150,6 +150,7 @@ class Deadbolt:
 
 
 func _init() -> void:
+	super._init()
 	boss_id = &"lock_warden"
 	arena_id = &"cave_9_10"
 	max_hp = 40
