@@ -50,6 +50,7 @@ var knockback_direction: Vector2 = Vector2.ZERO
 var _hit_ids: Dictionary = {}
 ## hurtbox instance id -> seconds until it may be hit again (tick_interval only).
 var _tick_wait: Dictionary = {}
+var _hazard_stopped: bool = false
 
 
 func _ready() -> void:
@@ -84,6 +85,12 @@ func deactivate() -> void:
 	active = false
 
 
+## Stops a discarded hazard immediately without changing physics-server state during signal flush.
+func stop_hazard() -> void:
+	_hazard_stopped = true
+	set_physics_process(false)
+
+
 func damage_for(hurtbox: Hurtbox) -> int:
 	if hurtbox.team == Layers.Team.PLAYER and damage_vs_player >= 0:
 		return damage_vs_player
@@ -113,10 +120,12 @@ func knockback_velocity(victim_pos: Vector2) -> Vector2:
 
 
 func _physics_process(delta: float) -> void:
-	if not active:
+	if not active or _hazard_stopped:
 		return
 	_tick_timers(delta)
 	for area in get_overlapping_areas():
+		if _hazard_stopped:
+			break
 		if area is Hurtbox:
 			_try_hit(area as Hurtbox)
 

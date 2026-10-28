@@ -82,9 +82,6 @@ func reset_fight() -> void:
 	if is_dying():
 		return
 	_cancel_attack()
-	if is_instance_valid(_hook):
-		_hook.destroy(&"range")
-	_hook = null
 	super()
 	if not is_dead:
 		_enter_phase(1)
@@ -181,15 +178,13 @@ func _throw_hook() -> void:
 
 
 func clear_hazards() -> void:
-	if is_instance_valid(_hook):
-		_hook.destroy(&"range")
 	_hook = null
 	super()
 
 
 func _cancel_attack() -> void:
 	if is_instance_valid(_attack):
-		_attack.deactivate()
+		_attack.stop_hazard()
 		_attack.queue_free()
 	_attack = null
 

@@ -4,6 +4,7 @@ extends TestCase
 ## hitbox tick interval and carrier rule, capsule and homing projectiles).
 
 const TELEGRAPH := preload("res://scripts/enemies/telegraph.gd")
+const BRIAR_SCENE := "res://scenes/enemies/bosses/briar_mother.tscn"
 
 var _finished := 0
 var _hits := 0
@@ -75,6 +76,13 @@ func run() -> void:
 	await _phases_and_flag()
 	await _intro()
 	await _hazards_and_phase_effects()
+	await _hazard_overlap(false, false)
+	await _hazard_overlap(false, true)
+	await _hazard_overlap(true, false)
+	await _hazard_overlap(true, true)
+	await _hazard_reset_during_hit_loop()
+	await _pending_non_hitbox_hazard()
+	await _enemy_hazard_hurtbox()
 	await _arena_lock_and_reset()
 	await _death_interrupted_by_player_death()
 	await _subclass_death_interrupted_by_player_death()
@@ -195,6 +203,126 @@ func _hazards_and_phase_effects() -> void:
 	await dispose(arena)
 
 
+func _hazard_overlap(nested: bool, reset_on_overlap: bool) -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss: Variant
+	var hazard: Node
+	var box: Hitbox
+	if nested:
+		var scene := load("res://scenes/enemies/bosses/gloam_knight.tscn") as PackedScene
+		check(scene != null, "Gloam Knight loads for nested hazard test")
+		if scene == null:
+			await dispose(arena)
+			return
+		boss = scene.instantiate()
+		arena.add_child(boss)
+		boss.set_physics_process(false)
+		boss._attack(&"impact", Vector2(1000, 480))
+		hazard = boss._hazards.back()
+		box = hazard.box
+	else:
+		boss = _make_boss(&"hazard", &"cave_test_hazard", [])
+		arena.add_child(boss)
+		boss.set_physics_process(false)
+		hazard = boss.fire_projectile(null, Vector2.RIGHT, 0.0, 1, Vector2(1000, 480))
+		box = hazard.hitbox
+	var player := make_player(arena, Vector2(1000, 480))
+	var health := GameState.health
+	var seen := [false, false]
+	box.area_entered.connect(
+		func(area: Area2D) -> void:
+			if area == player.hurtbox:
+				seen[0] = true
+				if reset_on_overlap:
+					boss.reset_fight()
+					seen[1] = hazard.is_queued_for_deletion()
+	)
+	await frames(8)
+	check(seen[0], "actual hazard overlaps the player during physics signal flush")
+	if reset_on_overlap:
+		check(seen[1], "reset queues the overlapping hazard")
+		check_eq(GameState.health, health, "reset prevents the overlapping hazard hit")
+	else:
+		check(GameState.health < health, "actual hazard hits without reset")
+	await dispose(arena)
+
+
+func _hazard_reset_during_hit_loop() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss := _make_boss(&"loop", &"cave_test_hazard_loop", [])
+	arena.add_child(boss)
+	boss.set_physics_process(false)
+	var box := Hitbox.new()
+	box.team = Layers.Team.ENEMY
+	box.add_circle(60)
+	arena.add_child(box)
+	box.global_position = Vector2(1000, 480)
+	box.activate()
+	boss.add_hazard(box)
+	var hits := [0]
+	for i in range(2):
+		var target := Hurtbox.new()
+		target.team = Layers.Team.PLAYER
+		target.add_circle(20)
+		arena.add_child(target)
+		target.global_position = box.global_position
+		target.hurt.connect(
+			func(_hit: Hitbox) -> void:
+				hits[0] += 1
+				boss.reset_fight()
+		)
+	await frames(5)
+	check_eq(hits[0], 1, "reset inside a hit stops the remaining targets in the same loop")
+	await dispose(arena)
+
+
+func _pending_non_hitbox_hazard() -> void:
+	reset_state()
+	var arena := make_arena()
+	var scene := load("res://scenes/enemies/bosses/hushed_colossus.tscn") as PackedScene
+	check(scene != null, "Colossus loads for pending hazard test")
+	if scene == null:
+		await dispose(arena)
+		return
+	var boss = scene.instantiate()
+	arena.add_child(boss)
+	boss.set_physics_process(false)
+	var attack = boss.start_attack(&"fall", Vector2(1000, 480), 0.1, 0.2)
+	check(attack is Node2D and not attack is Hitbox, "fall warning is a non-hitbox hazard")
+	boss.reset_fight()
+	check(not attack.is_physics_processing(), "reset stops pending attack physics immediately")
+	await frames(12)
+	check(not is_instance_valid(attack), "pending non-hitbox hazard is removed")
+	check_eq(boss.floor_shards(), 0, "cancelled fall cannot create a shard")
+	await dispose(arena)
+
+
+func _enemy_hazard_hurtbox() -> void:
+	reset_state()
+	var arena := make_arena()
+	var scene := load(BRIAR_SCENE) as PackedScene
+	check(scene != null, "Briar Mother loads for enemy hazard test")
+	if scene == null:
+		await dispose(arena)
+		return
+	var boss = scene.instantiate()
+	arena.add_child(boss)
+	boss.set_physics_process(false)
+	var first: EnemyBase = boss.plant_seed(Vector2(700, 480))
+	var second: EnemyBase = boss.plant_seed(Vector2(800, 480))
+	var hook := Hitbox.new()
+	hook.team = Layers.Team.PLAYER
+	hook.kind = &"hook"
+	check(first.hurtbox.receive_hit(hook), "living enemy hazard accepts a real hook hit")
+	boss.reset_fight()
+	check(not second.hurtbox.enabled, "reset immediately disables the enemy hazard hurtbox")
+	check(not second.hurtbox.receive_hit(hook), "queued enemy hazard rejects later hook hits")
+	hook.free()
+	await dispose(arena)
+
+
 func _arena_lock_and_reset() -> void:
 	reset_state()
 	var arena := make_arena()
@@ -256,7 +384,7 @@ func _death_interrupted_by_player_death() -> void:
 func _subclass_death_interrupted_by_player_death() -> void:
 	reset_state()
 	var arena := make_arena()
-	var scene := load("res://scenes/enemies/bosses/briar_mother.tscn") as PackedScene
+	var scene := load(BRIAR_SCENE) as PackedScene
 	check(scene != null, "Briar Mother scene loads for subclass reset test")
 	if scene == null:
 		await dispose(arena)

@@ -7,6 +7,8 @@ const SCENE := "res://scenes/enemies/minibosses/corrows_echo.tscn"
 func run() -> void:
 	await _cycle_and_chime()
 	await _attacks()
+	await _hook_overlap_reset(false)
+	await _hook_overlap_reset(true)
 	await _lifecycle()
 
 
@@ -146,8 +148,45 @@ func _attacks() -> void:
 	enemy._throw_hook()
 	hook = enemy._hook
 	enemy.reset_fight()
-	check(hook.is_destroyed and not hook.hitbox.active, "reset immediately disables hook")
+	check(hook.is_queued_for_deletion() and not hook.hitbox.is_physics_processing(), "reset immediately stops hook")
 	check_eq(enemy.hp, 36, "reset fullHP")
+	await dispose(arena)
+
+
+func _hook_overlap_reset(reset_on_overlap: bool) -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = _spawn(arena)
+	enemy.set_physics_process(false)
+	var player := make_player(arena, enemy.global_position + Vector2(300, 0))
+	enemy._strike(150, 110, 3)
+	var attack: Hitbox = enemy._attack
+	enemy._throw_hook()
+	var hook: EnemyProjectile = enemy._hook
+	hook.speed = 0.0
+	hook.global_position = player.global_position
+	var seen := [false, false]
+	var health := GameState.health
+	hook.hitbox.area_entered.connect(
+		func(area: Area2D) -> void:
+			if area == player.hurtbox:
+				seen[0] = true
+				if reset_on_overlap:
+					enemy.reset_fight()
+					seen[1] = (
+						hook.is_queued_for_deletion()
+						and not hook.hitbox.is_physics_processing()
+						and attack.is_queued_for_deletion()
+						and not attack.is_physics_processing()
+					)
+	)
+	await frames(8)
+	check(seen[0], "actual wax hook enters player hurtbox")
+	if reset_on_overlap:
+		check(seen[1], "callback reset stops and queues hook immediately")
+		check_eq(GameState.health, health, "callback reset prevents hook damage")
+	else:
+		check(GameState.health < health, "hook damages player without reset")
 	await dispose(arena)
 
 

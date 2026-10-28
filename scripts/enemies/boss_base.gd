@@ -198,9 +198,23 @@ func add_hazard(node: Node) -> void:
 ## Removes every hazard recorded with add_hazard() or fired with fire_projectile().
 func clear_hazards() -> void:
 	for node in _hazards:
-		if is_instance_valid(node) and not node.is_queued_for_deletion():
-			node.queue_free()
+		if is_instance_valid(node):
+			_stop_hazard_tree(node)
+			if not node.is_queued_for_deletion():
+				node.queue_free()
 	_hazards = []
+
+
+## Do not alter Area2D monitoring or collision shapes while overlap signals are flushing.
+func _stop_hazard_tree(node: Node) -> void:
+	if node is Hitbox:
+		(node as Hitbox).stop_hazard()
+	else:
+		node.set_physics_process(false)
+	if node is Hurtbox:
+		(node as Hurtbox).enabled = false
+	for child in node.get_children():
+		_stop_hazard_tree(child)
 
 
 ## Adds a part (a BossPart or any EnemyBase) next to the boss at `at`. The part's `damaged` and `died`
