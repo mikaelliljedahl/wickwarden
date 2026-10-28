@@ -91,6 +91,11 @@ func stop_hazard() -> void:
 	set_physics_process(false)
 
 
+## A stopped hazard cannot finish an in-flight hit, even inside a hurtbox filter.
+func is_hazard_stopped() -> bool:
+	return _hazard_stopped
+
+
 func damage_for(hurtbox: Hurtbox) -> int:
 	if hurtbox.team == Layers.Team.PLAYER and damage_vs_player >= 0:
 		return damage_vs_player

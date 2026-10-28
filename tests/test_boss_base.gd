@@ -81,6 +81,7 @@ func run() -> void:
 	await _hazard_overlap(true, false)
 	await _hazard_overlap(true, true)
 	await _hazard_reset_during_hit_loop()
+	await _hazard_filter_cases()
 	await _pending_non_hitbox_hazard()
 	await _enemy_hazard_hurtbox()
 	await _arena_lock_and_reset()
@@ -276,6 +277,47 @@ func _hazard_reset_during_hit_loop() -> void:
 	await frames(5)
 	check_eq(hits[0], 1, "reset inside a hit stops the remaining targets in the same loop")
 	await dispose(arena)
+
+
+func _hazard_filter_cases() -> void:
+	for mode in [&"reset", &"accept", &"veto"]:
+		reset_state()
+		var arena := make_arena()
+		var boss := _make_boss(&"filter", &"cave_test_filter", [])
+		arena.add_child(boss)
+		boss.set_physics_process(false)
+		var player := make_player(arena, Vector2(1000, 480))
+		var shot := boss.fire_projectile(null, Vector2.RIGHT, 0.0, 1, player.global_position)
+		var box: Hitbox = shot.hitbox
+		var seen := [0, 0, 0, false]
+		player.hurtbox.hurt.connect(func(_hit: Hitbox) -> void: seen[1] += 1)
+		box.hit_landed.connect(func(_target: Hurtbox) -> void: seen[2] += 1)
+		player.hurtbox.filter = func(_hit: Hitbox) -> bool:
+			seen[0] += 1
+			if mode == &"reset":
+				boss.reset_fight()
+				seen[3] = box.is_hazard_stopped() and shot.is_queued_for_deletion()
+			return mode != &"veto"
+		await frames(8)
+		check(seen[0] > 0, "%s filter reached by real projectile collision" % mode)
+		if mode == &"accept":
+			check_eq(GameState.health, 5, "accepted projectile damages real player")
+			check_eq(seen[1], 1, "accepted projectile emits hurt")
+			check_eq(seen[2], 1, "accepted projectile emits hit_landed")
+		else:
+			check_eq(GameState.health, 6, "%s filter prevents damage" % mode)
+			check_eq(seen[1], 0, "%s filter prevents hurt signal" % mode)
+			check_eq(seen[2], 0, "%s filter prevents hit_landed signal" % mode)
+		if mode == &"reset":
+			check(seen[3], "filter reset stops and queues the projectile immediately")
+		await dispose(arena)
+	var inactive := Hitbox.new()
+	inactive.team = Layers.Team.ENEMY
+	var target := Hurtbox.new()
+	target.team = Layers.Team.PLAYER
+	check(target.receive_hit(inactive), "direct hit from inactive unstopped hitbox is accepted")
+	inactive.free()
+	target.free()
 
 
 func _pending_non_hitbox_hazard() -> void:

@@ -47,7 +47,7 @@ func receive_hit(hitbox: Hitbox) -> bool:
 		return false
 	if filter.is_valid() and not bool(filter.call(hitbox)):
 		return false
-	if invulnerable:
+	if hitbox.is_hazard_stopped() or invulnerable:
 		return false
 	hurt.emit(hitbox)
 	return true
