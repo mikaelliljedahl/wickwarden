@@ -82,6 +82,8 @@ The C10 room-10 geometry fix, corrected hound regression and Q3 Reel-bank route
 followed in `b5ba1124b771a0576228d105302eb20627753d53`, verified on `origin/main`.
 The earned route to the C10 boss entrance followed in
 `0d3ab887a9d915ae41a16ba5b088ef696d402a36`, verified on `origin/main`.
+The Linux export preset followed in `fec1e9514b0dad0025602da7019d898eba1f1b79`,
+verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -89,7 +91,7 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Z3 Linux export smoke test, working tree (unpushed):** `export_presets.cfg`
+**Z3 Linux export smoke test, committed in `fec1e95`:** `export_presets.cfg`
 defines Linux x86_64 with `all_resources`, `*.json` included and `tests/*` and
 `tools/*` excluded. In isolated scratch using the official Godot 4.7.2 template,
 the agent reports building a PCK and release executable and running headless for
@@ -287,7 +289,11 @@ overlaps at 35 px in darkness. A later unpublished paired-cluster prototype was
 also rejected: it sits behind the player but hides one cluster, has broad static
 duplication, and the actual raft route places part of it on land. Close real-raft,
 multiple-enemy and cleanup behavior were not verified. Neither candidate changed
-the repo; the placeholder remains and no art solution has been accepted.
+the repo. A subsequent native-alpha plume placed on the leech was also rejected
+and not integrated: at 100% it covered the player's face during an actual moving
+near-raft sequence, while at 45% it was too faint in darkness. Isolated tests
+passed multiple warnings and cleanup on state exit, free and parent free; room
+transition and human play were not verified. The current Placeholder remains.
 
 **Q3 Coinwyrm victory, committed in `6f33c12`:** The continuous earned input
 route defeats C8's Coinwyrm with normal damage, using three keys, the Reel and

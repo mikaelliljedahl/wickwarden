@@ -1,6 +1,6 @@
 # Current status
 
-**Z3 Linux export smoke test, 2026-10-28 (working tree, unpushed):**
+**Z3 Linux export smoke test, 2026-10-28 (committed in `fec1e95`):**
 `export_presets.cfg` defines Linux x86_64 with `all_resources`, `*.json`
 included and `tests/*` and `tools/*` excluded. In isolated scratch using the
 official Godot 4.7.2 template, the agent reports building a PCK and release
@@ -199,7 +199,11 @@ overlaps at 35 px in darkness. A later unpublished paired-cluster prototype was
 also rejected: it sits behind the player but hides one cluster, has broad static
 duplication, and the actual raft route places part of it on land. Close real-raft,
 multiple-enemy and cleanup behavior were not verified. Neither candidate changed
-the repo; the placeholder remains and no art solution has been accepted.
+the repo. A subsequent native-alpha plume placed on the leech was also rejected
+and not integrated: at 100% it covered the player's face during an actual moving
+near-raft sequence, while at 45% it was too faint in darkness. Isolated tests
+passed multiple warnings and cleanup on state exit, free and parent free; room
+transition and human play were not verified. The current Placeholder remains.
 
 **Q3 Coinwyrm victory, 2026-10-27 (committed in `6f33c12`):** The continuous
 earned input route defeats C8's Coinwyrm with normal damage, using three keys,
@@ -1432,7 +1436,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0d3ab887a9d915ae41a16ba5b088ef696d402a36` on `origin/main`, including the earned route to the C10 boss entrance above. The Q3 `/tmp` guard and shared runner guard remain open. C10 victory and a complete ending remain unverified; the user response on the ending-choice conflict remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `fec1e9514b0dad0025602da7019d898eba1f1b79` on `origin/main`, including the Linux export preset and isolated smoke evidence above. The Q3 `/tmp` guard and shared runner guard remain open. C10 victory and a complete ending remain unverified; the user response on the ending-choice conflict remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
