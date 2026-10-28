@@ -338,8 +338,8 @@ Placeholder inventory documentation `6148f58`, C4 difficulty changes
 passed a clean full check. Final playthrough documentation `fc14d7a` is on
 `origin/main`; pocket/tool checks `2f343c1` and C9 access documentation
 `45bf2e6`, Hollow Captain poses `8487acf` and documentation `f8ad56a` are on
-`origin/main`. Choir Warden poses `aa0f9a2` are locally committed; their clean
-full check passed. Verify the remote before push.
+`origin/main`. Choir Warden poses `aa0f9a2` and their documentation `aa0361c`
+are on `origin/main`; their clean full check passed. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -347,7 +347,19 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Choir Warden directional poses, locally committed in `aa0f9a2`:** Directional
+**The Unlit phase 2 shell walk, `aa0361c`:** The shell remains a still image
+while moving; gameplay works, but human motion has not been verified. Isolated
+art studies `/var/tmp/wick-c10-shell-audit/provenance.md`,
+`/var/tmp/wick-shell-final/provenance.md` and
+`/var/tmp/wick-shell-cycle-probe/report.md` found no integrable walk cycles:
+candidates had wrong facing, repeated steps or unsuitable size. They made no
+repository changes. Six earlier local B70 candidates are untracked and lack
+verified provenance; preserve them. Asset-contract §10 does not permit separately
+generated frames for one animation, and the previous attempts changed no norm.
+A consistently scaled, correctly directed and distinct-step complete cycle with
+verified provenance, cutter integration and visual motion review remains needed.
+
+**Choir Warden directional poses, committed in `aa0f9a2`:** Directional
 inhale, note and recover poses and four-frame up/down walks join the recut side
 walk, with one 256 px/foot-236 scale group. Gameplay is unchanged; missing art
 falls back to walk/Placeholder. Built-in ImageGen sessions and exact prompts,
