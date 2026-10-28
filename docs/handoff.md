@@ -130,12 +130,22 @@ The Q7 gate revisit cases followed in
 `0faeca54878a3750b5aed47427aa538fd8913f62` on `origin/main`.
 The room census was recorded in `d003e28`; Q7 light/blast checks followed in
 `304ce3707b6d5bb83196ae0280b5975ede2622db` on `origin/main`.
+The route repeat and Q7 checks were documented in
+`09ad1ecab32a656c26cb1fdc218bd7c8e6858af1` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Boss attack visual audit, 2026-10-28:** At `304ce37`, an audit in the
+actual World with ticking bosses and controlled player position visually found
+Coinwyrm's active bite to be a solid-colour effect. Code also shows a
+solid-colour tail sweep, which was not visually captured. Tidewick fires a
+spore projectile instead of the planned ember bolt. Images are in the temporary
+directory `/var/tmp/wickwarden-attack-audit-9155`. Correction agents are working
+in parallel. This is not complete attack-state coverage or human play.
 
 **Route repeat and Q7 light/blast checks, 2026-10-28:** The route at `d003e28`
 was run three times with normal damage and enemy AI; all three reached the final
