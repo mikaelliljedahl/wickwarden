@@ -1,5 +1,9 @@
 # Wickwarden — art provenance
 
+## Gloam Knight standalone slash effect (2026-10-28)
+
+The standalone transparent slash candidate was rejected after B07 reviewed eight directions: vertical rotations read as upright loops, tips extend outside the sector, and the strongest arc is misplaced. Its pipeline registrations were removed. The source, ImageGen reference, exact prompt, checksums and reviews are recorded in the [source review](../tools/source_art/gloam-slash-effect-20261028-log.md). The boss continues to use its procedural glint.
+
 ## Kilnkeeper wax splash (2026-10-28)
 
 The standalone `fx_wax_splash` strip uses the existing verified ImageGen
