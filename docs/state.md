@@ -1,5 +1,14 @@
 # Current status
 
+**Export intro and animation audit, 2026-10-28:** A clean export of `d33a360`
+under Xvfb used actual New game input, showed all six intro texts and images and
+naturally entered World with isolated saves. Dummy audio was used; two ALSA
+capture attempts failed, so audible audio remains unverified. Animation audit
+found C10 phase-two, phase-three and lantern runtime art is idle-only, one frame,
+and Gloam Knight uses still images only; planned animation art is absent at
+runtime. Gloam pipeline work is in progress. C10 candidate images lack provenance
+and differ visually. The E1 specification conflict remains open.
+
 **Q7 real-tool extensions, 2026-10-28 (committed in `58c58bc`):** Actual tools
 exercise The Unlit's five sling eyes, three Wick casts, Reel exposure and hook
 against shield and heart, plus two two-half-heart fire ticks on Thorn Warden.
@@ -7,8 +16,8 @@ Isolated `tool_matrix` and lint passed. Positions are controlled and player
 hurtbox disabled; this is not human play. Full tool/phase permutations and gate
 negative cases remain incomplete. `make rooms-check` passed 221 rooms and
 `art-test` passed 22 tests; the test tool emitted expected mismatch and resource
-warnings. Runtime asset audit and clean export intro test are running. E1's
-specification conflict remains unanswered.
+warnings. Later export intro and animation audit results are recorded above;
+E1's specification conflict remains unanswered.
 
 **Intro and Thorn Warden presentation, 2026-10-28 (committed in `0b6f9ca`):**
 Six previously missing active intro images were completed from earlier generated
@@ -23,8 +32,8 @@ shards, lint, world-check and 175 Python tests. Human play, complete dynamic
 visual coverage and the ending-choice conflict remain open. A clean Linux export
 on `0b6f9ca` using official Godot 4.7.2 passed import, export and headless
 startup; its log includes all six intro PNG `.import` and ctex files, intro JSON
-and scene. The project intro was visually reviewed, not the exported intro, and
-audio was not tested. A direct scene override exited 1 because the release
+and scene. At that check the project intro was visually reviewed, not the exported
+intro; the later export intro check is recorded above. A direct scene override exited 1 because the release
 template does not support path overrides; this limits that method, not the
 headless startup result.
 
