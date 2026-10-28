@@ -1,6 +1,6 @@
 # Current status
 
-**Cave boss death light, 2026-10-28 (locally committed in `b70049e`):** Nine
+**Cave boss death light, 2026-10-28 (committed in `b70049e`):** Nine
 cave bosses release painted golden light in eight 768 px frames at 8 fps;
 miniboss and C10 effects remain as before. Missing or incomplete art and wrong
 fps fall back to explosion/Placeholder; gameplay is unchanged. The built-in
@@ -20,8 +20,20 @@ or overlap other elements; human play and real-time video are unverified.
 
 **Closing inventory:** The owner requests a quick finish. A read-only final
 inventory found no confirmed serious placeholder in the code paths inspected;
-it does not prove complete dynamic coverage. A separate room census is still
-in progress.
+it does not prove complete dynamic coverage.
+
+A fresh runtime census of exact `b70049e` used a git archive at
+`/var/tmp/wick-final-census-DFcfbV/project`, isolated HOME/XDG,
+`SaveGame.enabled=false` and MODE_DEV. Godot import and census exited 0: all
+222 separate graph targets (88 overworld, 104 cave and 30 pocket scenes) were
+instantiated; three in-place pockets are not separate targets. At physics frames
+4 and 30, no Placeholder-class nodes were visible in the tree under
+`current_room`. Four fallback nodes were hidden by their room art/parts:
+`ow_8_0` hook_tap_wall, `ow_11_7` sealed_seam, `cave_1_8` wax_plate and
+`cave_6_11` dirge_choir. Logs `census.json`, `census.log` and `import.log` are
+in `/var/tmp/wick-final-census-DFcfbV/`. This headless visibility-tree check does
+not establish pixels or cover procedural drawing, HUD/player, attacks,
+reveal/open states, transitions, in-place pockets or human play.
 
 **The Unlit wax collapse, 2026-10-28 (committed in `053da3e`):** A
 reproducible `joined_outputs` cutter produces eight 768 px frames at 4 fps from
@@ -3056,7 +3068,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `c0e240a` on `origin/main`, documenting The Unlit wax collapse. Cave boss death light is locally committed in `b70049e`; its clean full check passed. The latest clean full PASS is `b70049e`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0a4bb72` on `origin/main`, documenting cave boss death light `b70049e`; its clean full check passed. The latest clean full PASS is `b70049e`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

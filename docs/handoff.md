@@ -331,8 +331,8 @@ Regular enemy death effect `473e14b`, miniboss wax collapse `41cf781` and
 documentation `c5bb5ec` are on `origin/main`. Coinwyrm bite warning `11988ae`
 and documentation `995488c` are on `origin/main`; The Unlit wax collapse
 `053da3e` and documentation `c0e240a` are on `origin/main`. Cave boss light
-`b70049e` is locally committed and its clean full check passed. Verify the
-remote before integration or push.
+`b70049e` and its documentation `0a4bb72` are on `origin/main`; the clean
+full check passed. Verify the remote before integration or push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -340,7 +340,7 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Cave boss death light, locally committed in `b70049e`:** Nine cave bosses
+**Cave boss death light, committed in `b70049e`:** Nine cave bosses
 release painted golden light in eight 768 px frames at 8 fps; miniboss and C10
 effects remain as before. Missing or incomplete art and wrong fps fall back to
 explosion/Placeholder; gameplay is unchanged. The built-in ImageGen source,
@@ -360,8 +360,20 @@ or overlap other elements; human play and real-time video are unverified.
 
 **Closing inventory:** The owner requests a quick finish. A read-only final
 inventory found no confirmed serious placeholder in the code paths inspected;
-it does not prove complete dynamic coverage. A separate room census is still
-in progress.
+it does not prove complete dynamic coverage.
+
+A fresh runtime census of exact `b70049e` used a git archive at
+`/var/tmp/wick-final-census-DFcfbV/project`, isolated HOME/XDG,
+`SaveGame.enabled=false` and MODE_DEV. Godot import and census exited 0: all
+222 separate graph targets (88 overworld, 104 cave and 30 pocket scenes) were
+instantiated; three in-place pockets are not separate targets. At physics frames
+4 and 30, no Placeholder-class nodes were visible in the tree under
+`current_room`. Four fallback nodes were hidden by their room art/parts:
+`ow_8_0` hook_tap_wall, `ow_11_7` sealed_seam, `cave_1_8` wax_plate and
+`cave_6_11` dirge_choir. Logs `census.json`, `census.log` and `import.log` are
+in `/var/tmp/wick-final-census-DFcfbV/`. This headless visibility-tree check does
+not establish pixels or cover procedural drawing, HUD/player, attacks,
+reveal/open states, transitions, in-place pockets or human play.
 
 **The Unlit wax collapse, committed in `053da3e`:** A reproducible
 `joined_outputs` cutter produces eight 768 px frames at 4 fps from a green-key
