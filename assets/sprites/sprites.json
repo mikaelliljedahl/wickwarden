@@ -19,6 +19,26 @@
       }
     }
   },
+  "mirror_tell_z1": {
+    "cell": [
+      1086,
+      362
+    ],
+    "anchor": [
+      543.0,
+      181.0
+    ],
+    "texture": true,
+    "mirror_side": false,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/mirror_tell_z1.png",
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    }
+  },
   "reel_line_rope": {
     "cell": [
       96,

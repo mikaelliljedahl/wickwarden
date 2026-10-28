@@ -26,6 +26,49 @@ var _aim := Vector2.RIGHT
 var _slash: Hitbox
 
 
+class SlashWarning:
+	extends Node2D
+	var texture: Texture2D
+
+	func _ready() -> void:
+		var path := "res://assets/sprites/mirror_tell_z1.png"
+		if ResourceLoader.exists(path):
+			texture = load(path) as Texture2D
+		var unshaded := CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = unshaded
+		z_index = 10
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+
+	func showing_warning() -> bool:
+		var enemy = get_parent()
+		return not enemy.is_dead and not enemy.is_dying() and enemy.state == State.TELEGRAPH
+
+	func _draw() -> void:
+		if not showing_warning():
+			return
+		var enemy = get_parent()
+		var start: float = enemy._aim.angle() - deg_to_rad(50)
+		var finish: float = enemy._aim.angle() + deg_to_rad(50)
+		if texture == null:
+			draw_arc(Vector2.ZERO, SLASH_REACH, start, finish, 24, Color(1, 0.85, 0.4), 4.0)
+			return
+		# The full source includes transparent margins; this maps its visible band to
+		# the reviewed warning radius without trimming the image or altering alpha.
+		for i in range(32):
+			var u := float(i) / 32.0
+			var v := float(i + 1) / 32.0
+			var a := Vector2.from_angle(lerpf(start, finish, u))
+			var b := Vector2.from_angle(lerpf(start, finish, v))
+			var points := PackedVector2Array([a * 103.0, b * 103.0, b * 152.2, a * 152.2])
+			var uv := PackedVector2Array(
+				[Vector2(u, 0), Vector2(v, 0), Vector2(v, 1), Vector2(u, 1)]
+			)
+			draw_polygon(points, PackedColorArray([Color.WHITE]), uv, texture)
+
+
 class Reflection:
 	extends Node2D
 	## A sensor, not a Hurtbox: reflections never receive damage, stun or enemy drops.
@@ -85,12 +128,15 @@ func _enter_tree() -> void:
 	# Room snapshots an already-ready enemy. Discard copies before even a retired enemy enters.
 	decoys = []
 	for child in get_children():
-		if child is Reflection:
+		if child is Reflection or child is SlashWarning:
 			remove_child(child)
 			child.free()
 
 
 func _boss_ready() -> void:
+	var warning := SlashWarning.new()
+	warning.name = "SlashWarning"
+	add_child(warning)
 	# Floor cues must remain readable beyond the player's lamp in dark rooms.
 	var cue_material := CanvasItemMaterial.new()
 	cue_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
@@ -301,16 +347,6 @@ func _on_death() -> void:
 func _draw() -> void:
 	if is_dead or is_dying():
 		return
-	if state == State.TELEGRAPH:
-		draw_arc(
-			Vector2.ZERO,
-			SLASH_REACH,
-			_aim.angle() - deg_to_rad(50),
-			_aim.angle() + deg_to_rad(50),
-			24,
-			Color(1, 0.85, 0.4),
-			4.0
-		)
 	if _slash_left > 0.0:
 		var start := _aim.angle() - deg_to_rad(SLASH_ARC / 2.0)
 		var finish := _aim.angle() + deg_to_rad(SLASH_ARC / 2.0)

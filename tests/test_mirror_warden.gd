@@ -51,6 +51,8 @@ func _fixture_reentry() -> void:
 		if enemies.size() == 1:
 			var enemy = enemies[0]
 			check_eq(enemy.decoys.size(), 2, "Room snapshot creates only two managed reflections")
+			var warnings := enemy.get_children().filter(func(n: Node) -> bool: return n.name == "SlashWarning")
+			check_eq(warnings.size(), 1, "Room reentry has one warning")
 			var helpers := 0
 			for child in enemy.get_children():
 				if child.name.begins_with("Reflection"):
@@ -168,6 +170,15 @@ func _real_combo() -> void:
 		var enemy = _enemy(arena)
 		var player := make_player(arena, Vector2(1400, 480))
 		await _wait_state(enemy, enemy.State.TELEGRAPH)
+		var warning = enemy.get_node("SlashWarning")
+		check(warning.showing_warning(), "painted cue follows actual telegraph")
+		check(warning.texture != null, "painted cue loads")
+		var image: Texture2D = warning.texture
+		warning.texture = null
+		warning.queue_redraw()
+		await frames(1)
+		check(warning.showing_warning(), "missing texture retains fallback warning")
+		warning.texture = image
 		check_near(enemy.velocity.length(), 0, .01, "commits facing and stops during warning")
 		var offset: Vector2 = enemy._aim * 110.0 if inside else enemy._aim.rotated(PI / 2) * 110.0
 		player.place_at(enemy.global_position + offset)
@@ -177,7 +188,8 @@ func _real_combo() -> void:
 		check_eq(GameState.health, 6, "slash telegraph harmless")
 		await _capture("mirror-slash-warning")
 		var elapsed := await _wait_state(enemy, enemy.State.COMBO)
-		check_near(elapsed + 10, 30, 2, "combo warns .5s")
+		check_near(elapsed + 11, 30, 2, "combo warns .5s")
+		check(not warning.showing_warning(), "warning ends at the active combo")
 		await frames(4)
 		check_eq(
 			GameState.health,

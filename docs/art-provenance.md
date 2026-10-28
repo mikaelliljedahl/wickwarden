@@ -1602,3 +1602,9 @@ The jet is cut through `tools/art_manifest.json` into the cutter-generated `asse
 | Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
 |---|---|---|---|---|---|
 | `chime_notes_z1.png` | 1254×1254 | `01a18212-e29a-7252-a5b9-b3d9434cc594` | `exec-0b1d8b67-7a62-4fef-ab5e-c8fcdb53ceae.png` | `b1fbd6d66d60f55c` | [chime_notes_z1-log.md](../tools/source_art/chime_notes_z1-log.md) |
+
+### Mirror Warden tell, 2026-10-28
+
+| Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
+|---|---|---|---|---|---|
+| `mirror_tell_z1.png` | 2172×724 | `01a1822f-57bc-7273-9f4b-3845c421cee4` | `exec-44dcfc43-836a-444c-abb2-92aa800ed95f.png` | `3e41be7a0a390f48` | [mirror_tell_z1-log.md](../tools/source_art/mirror_tell_z1-log.md) |
