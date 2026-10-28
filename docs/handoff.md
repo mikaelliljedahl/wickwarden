@@ -94,6 +94,10 @@ Both E1 ending-flow fixture checks were documented in
 `b59388c4cb77e9297ead5b06f0536c56bdbe0963`, verified on `origin/main`.
 The Cinder Wisp active attack presentation followed in
 `7b25985f52a6ea08663734e487c77636b8444a69` on `origin/main`.
+The Fen Leech warning presentation followed in
+`ceb9c4b146ae40cdd69df1b3f2d3556dc3674d98` on `origin/main`.
+The Sump Lurker water tells followed in
+`772915a074161425debf0c182fed599660124037` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -101,11 +105,27 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Sump Lurker water tells, committed in `772915a`:** The water marker and bite
+warning reuse painted water art with mechanics unchanged. The isolated
+`sump_lurker` test and lint passed. Natural states in `cave_3_4` were visually
+reviewed with a placed player, not through human play or multiple angles. The
+capture tool reported a resource/ObjectDB warning on exit; its cause is unknown.
+Colossus effects are being developed further after visual review and are not
+finished.
+
+**Fen Leech warning, committed in `ceb9c4b`:** Existing painted water art
+replaces the yellow Placeholder puffs, with the 0.5-second warning and mechanics
+unchanged. The isolated `fen_leech` test and lint passed. Captures used a forced
+warning from a moving raft in dark `cave_3_6`; natural play has not been tested.
+Static inventory identified candidate geometric effects in the Colossus slam,
+shockwave and sweep and in Sump Lurker. Later Sump work is recorded above;
+Colossus investigation continues and the full inventory is incomplete.
+
 **Cinder Wisp active attack, committed in `7b25985`:** The attack reuses a
 painted fire ring with an outline marking its radius; mechanics are unchanged.
 The isolated `cinder_wisp` test and lint passed. Controlled-position captures
 were reviewed in a bright room and a dark cave, not human play. The Fen Leech
-placeholder remains and the full placeholder inventory is incomplete.
+warning changed later as recorded above; the full inventory is incomplete.
 
 **Placeholder census, 2026-10-28 (read-only):** An isolated scan of 222
 standalone room targets after four physics frames found 35 Placeholder nodes:
@@ -379,7 +399,8 @@ the repo. A subsequent native-alpha plume placed on the leech was also rejected
 and not integrated: at 100% it covered the player's face during an actual moving
 near-raft sequence, while at 45% it was too faint in darkness. Isolated tests
 passed multiple warnings and cleanup on state exit, free and parent free; room
-transition and human play were not verified. The current Placeholder remains.
+transition and human play were not verified. The later committed warning change
+is recorded above.
 
 **Q3 Coinwyrm victory, committed in `6f33c12`:** The continuous earned input
 route defeats C8's Coinwyrm with normal damage, using three keys, the Reel and
