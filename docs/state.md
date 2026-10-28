@@ -1,12 +1,26 @@
 # Current status
 
+**Verification at `e760223`, 2026-10-28:** `TMPDIR=/tmp make check` passed 157
+Godot test files, lint, world-check and 175 Python tests. `TMPDIR=/tmp make
+playthrough` passed the route check and all four shard files, including a
+continuous fresh-save run through all caves and the final boss to the actual
+ending. The bot reads internal state; this is not human playtesting and does not
+prove every branch. The earlier separate checks of both endings remain separate
+evidence. Full effect inventory remains in progress.
+
+**Colossus attack presentation, 2026-10-28 (committed in `e760223`):** Slam,
+ring and sweep, plus the yellow sweep and slam warnings, use painted effects and
+thin hit-area boundaries; timing and hitboxes are unchanged. Isolated
+`boss_hushed_colossus` and `area_cave_4` tests and lint passed. Stills from the
+actual C4 arena used forced states, not human play. A small seam is visible in
+the ring texture. Full effect inventory and natural playtesting remain open.
+
 **Sump Lurker water tells, 2026-10-28 (committed in `772915a`):** The water
 marker and bite warning reuse painted water art with mechanics unchanged. The
 isolated `sump_lurker` test and lint passed. Natural states in `cave_3_4` were
 visually reviewed with a placed player, not through human play or multiple
 angles. The capture tool reported a resource/ObjectDB warning on exit; its cause
-is unknown. Colossus effects are being developed further after visual review and
-are not finished.
+is unknown. The later Colossus presentation work is recorded above.
 
 **Fen Leech warning, 2026-10-28 (committed in `ceb9c4b`):** Existing painted
 water art replaces the yellow Placeholder puffs, with the 0.5-second warning
@@ -14,7 +28,7 @@ and mechanics unchanged. The isolated `fen_leech` test and lint passed. Captures
 used a forced warning from a moving raft in dark `cave_3_6`; natural play has not
 been tested. Static inventory identified candidate geometric effects in the
 Colossus slam, shockwave and sweep and in Sump Lurker. Later Sump work is
-recorded above; Colossus investigation continues and the full inventory is incomplete.
+recorded above; later Colossus work is also above and the full inventory is incomplete.
 
 **Cinder Wisp active attack, 2026-10-28 (committed in `7b25985`):** The attack
 reuses a painted fire ring with an outline marking its radius; mechanics are
@@ -1528,7 +1542,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `772915a074161425debf0c182fed599660124037` on `origin/main`, including the Sump Lurker water tells above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `e760223a0c4a46d1ee996200269cce43f65dbaad` on `origin/main`, including the Colossus attack presentation above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
