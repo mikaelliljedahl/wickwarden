@@ -138,12 +138,27 @@ Coinwyrm documentation followed in `d5edd90` and the Tidewick ember bolt in
 `bb87f5874b5028374e2444901fe1b2bd56114a12` on `origin/main`.
 Tidewick and Q6/Q8 verification were documented in
 `c780a05ffeddd47a3a2303c36266c38d0f208e46` on `origin/main`.
+The Tidewick export check followed in `201b3f1`; the Q7 scoped grate-key tests
+followed in `045900a1b11b4fdda8ee2e5162eea680b957e315` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 scoped keys through grates, committed in `045900a`:** Real Tether Moth
+retrieves remaining scoped keys across grates in overworld and C1 cases, while
+Reel Line is stopped. Actual contact is measured and flags and solid blockers
+are checked after recreation. These controlled fixtures retain in-memory state,
+not a save file; they do not establish human play or a complete matrix.
+`tool_matrix`, lint and Q7 ownership are reported PASS.
+
+**Full check in a changing worktree:** `make check` passed 157 Godot test files
+including playthrough shards, lint, world-check and 175 Python tests while
+uncommitted boss, streaming and Q7 files were changing in parallel. It cannot
+be attributed to an exact clean commit. The previous clean full check remains
+`b41dc6d`.
 
 **Linux release export at `bb87f58`, 2026-10-28:** A clean export of exact
 `bb87f5874b5028374e2444901fe1b2bd56114a12` used official Godot 4.7.2 and its
