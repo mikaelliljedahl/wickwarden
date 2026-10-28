@@ -1,19 +1,31 @@
 # Current status
 
+**Thorn Warden needle reset, 2026-10-28 (committed in `4d50440`):** A natural
+needle collided with the real player's hurtbox, whose health fell 6→5 in the same
+physics frame when reset was artificially invoked from `area_entered` before
+polling. The fix stops needle hitbox polling before queued deletion; a control
+without reset still hits. Targeted `thorn_warden` and `boss_base` passed. Natural
+player-death timing was not demonstrated; a still cannot show collision, and
+capture exit reported four ObjectDB and two resource warnings. The latest clean
+full check remains `03f0acf`; no new full check is reported.
+
+**MB3 new scratch candidate:** `/var/tmp/wick-mb3-new/v2` has correctly centred
+song but requires recutting walk from 230→222 px and is barely visible in dark;
+preserving the original scale clips it. It is not integrated.
+
 **Tidewick direct reset guard, 2026-10-28 (committed in `32b8654`):** Tests
 verify setup, living reset and dying reset/flag behavior. The lead passed
 `boss_base` and `boss_tidewick`; the agent reports lint PASS. A clean full
 `make check` on exact `03f0acf` passed (log
 `/var/tmp/wick-clean-03f0acf-xn2ihyou/check.log`); `32b8654` has not yet had a
-full check. MB3 source-art work has no confirmed delivery or current run status.
+full check. The later MB3 scratch candidate is recorded above.
 
 **Briar Mother direct reset guard, 2026-10-28 (committed in `2b9dc05`):**
 Direct reset during death is guarded so eyes do not revive; the test uses real
 sling eye combat and a lethal hook hitbox, preserving two embers and living
 reset behavior. Lead and agent targeted tests passed; the agent reports lint
-PASS. The static B02 gallery is not a death-sequence review. The latest clean
-later clean full check at `03f0acf` is recorded above. MB3 source-art delivery
-is not confirmed.
+PASS. The static B02 gallery is not a death-sequence review. The later clean
+full check at `03f0acf` is recorded above; MB3's scratch candidate is above.
 
 **Choir Warden MB3 scratch review, 2026-10-28:** Inhale/recover-only body art
 shrinks versus walk: 230 px for walk and 177/178 px for action at 10% alpha.
@@ -46,9 +58,8 @@ check is recorded above. Earlier documentation commit `59ac8d3` was also pushed.
 
 Direct subclass reset during death can still mutate subclass state in other
 overrides; at that audit no production use was found except Tidewick init. The
-subsequent Tidewick guard is recorded above. Thorn Warden hazard
-remains active until `queue_free`, but damage has not been demonstrated; this
-remains open.
+subsequent Tidewick guard is recorded above. The later Thorn Warden same-frame
+reproduction and needle reset fix are recorded above.
 
 **Read-only reset audit, 2026-10-28:** Hollow Captain reset failure and defeated
 bosses reviving during death throes were reproduced. Subsequent M0, MB1 and B01
@@ -2488,7 +2499,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `32b8654affef5425acde5978428b4235fdadadb9` on `origin/main`, including the Tidewick direct reset guard above. The latest clean full check is at `03f0acf`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `4d504404e32e7615a1e7a0be3ba9ce425c025ae1` on `origin/main`, including the Thorn Warden needle reset fix above. The latest clean full check is at `03f0acf`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

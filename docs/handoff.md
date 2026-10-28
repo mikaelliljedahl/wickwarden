@@ -255,6 +255,8 @@ Choir Warden scale review followed in `0d15234`; B02's direct reset guard landed
 in `2b9dc057f2fc417034bc5f840059f002179e5065` on `origin/main`.
 Briar reset documentation followed in `03f0acf`; Tidewick's direct reset guard
 landed in `32b8654affef5425acde5978428b4235fdadadb9` on `origin/main`.
+Tidewick verification was documented in `6bafa12`; the Thorn Warden fix landed
+in `4d504404e32e7615a1e7a0be3ba9ce425c025ae1` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -262,19 +264,32 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Thorn Warden needle reset, committed in `4d50440`:** A natural needle
+collided with the real player's hurtbox, whose health fell 6→5 in the same physics
+frame when reset was artificially invoked from `area_entered` before polling.
+The fix stops needle hitbox polling before queued deletion; a control without
+reset still hits. Targeted `thorn_warden` and `boss_base` passed. Natural
+player-death timing was not demonstrated; a still cannot show collision, and
+capture exit reported four ObjectDB and two resource warnings. The latest clean
+full check remains `03f0acf`; no new full check is reported.
+
+**MB3 new scratch candidate:** `/var/tmp/wick-mb3-new/v2` has correctly centred
+song but requires recutting walk from 230→222 px and is barely visible in dark;
+preserving the original scale clips it. It is not integrated.
+
 **Tidewick direct reset guard, committed in `32b8654`:** Tests verify setup,
 living reset and dying reset/flag behavior. The lead passed `boss_base` and
 `boss_tidewick`; the agent reports lint PASS. A clean full `make check` on exact
 `03f0acf` passed (log `/var/tmp/wick-clean-03f0acf-xn2ihyou/check.log`);
-`32b8654` has not yet had a full check. MB3 source-art work has no confirmed
-delivery or current run status.
+`32b8654` has not yet had a full check. The later MB3 scratch candidate is
+recorded above.
 
 **Briar Mother direct reset guard, committed in `2b9dc05`:** Direct reset
 during death is guarded so eyes do not revive; the test uses real sling eye
 combat and a lethal hook hitbox, preserving two embers and living reset behavior.
 Lead and agent targeted tests passed; the agent reports lint PASS. The static B02
 gallery is not a death-sequence review. The later clean full check at `03f0acf`
-is recorded above. MB3 source-art delivery is not confirmed.
+is recorded above; MB3's scratch candidate is above.
 
 **Choir Warden MB3 scratch review, 2026-10-28:** Inhale/recover-only body art
 shrinks versus walk: 230 px for walk and 177/178 px for action at 10% alpha.
@@ -307,9 +322,8 @@ check is recorded above. Earlier documentation commit `59ac8d3` was also pushed.
 
 Direct subclass reset during death can still mutate subclass state in other
 overrides; at that audit no production use was found except Tidewick init. The
-subsequent Tidewick guard is recorded above. Thorn Warden hazard
-remains active until `queue_free`, but damage has not been demonstrated; this
-remains open.
+subsequent Tidewick guard is recorded above. The later Thorn Warden same-frame
+reproduction and needle reset fix are recorded above.
 
 **Read-only reset audit, 2026-10-28:** Hollow Captain reset failure and defeated
 bosses reviving during death throes were reproduced. Subsequent M0, MB1 and B01
