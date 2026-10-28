@@ -14,6 +14,41 @@ func run() -> void:
 	var probe: RefCounted = probe_script.new()
 	await frames(2)
 	var baseline: Dictionary = probe.sample()
+	var survey_world := await make_world()
+	var survey: Dictionary = await probe.survey(survey_world)
+	check(survey.valid, "survey enters every requested room")
+	check(survey.targets.size() * 2 >= 300, "survey covers at least 300 room changes")
+	var previous: Array = survey.passes[1]
+	var latest: Array = survey.passes[2]
+	var node_growth := 0
+	var memory_growth := 0
+	var orphan_growth := 0
+	var survey_max_nodes := 0
+	var survey_max_orphans := 0
+	for i in range(latest.size()):
+		node_growth = maxi(node_growth, latest[i].nodes - previous[i].nodes)
+		memory_growth = maxi(memory_growth, latest[i].memory - previous[i].memory)
+		orphan_growth = maxi(orphan_growth, latest[i].orphans - previous[i].orphans)
+		survey_max_nodes = maxi(survey_max_nodes, latest[i].nodes)
+		survey_max_orphans = maxi(survey_max_orphans, latest[i].orphans)
+	print("Q8 broad survey: %d distinct targets, %d instant switches, mean=%.3f ms max=%.3f ms" % [
+		survey.targets.size(), survey.targets.size() * 3, survey.mean_ms, survey.max_ms
+	])
+	print("Q8 slowest target=%s pass=%d" % [survey.slowest, survey.slowest_pass])
+	print("Q8 matched passes 2 to 3: max growth nodes=%d static bytes=%d orphans=%d" % [
+		node_growth, memory_growth, orphan_growth
+	])
+	print("Q8 pass 3 maxima nodes=%d orphans=%d" % [survey_max_nodes, survey_max_orphans])
+	var broad_budget_env := OS.get_environment("WICKWARDEN_ROOM_BUDGET_MS")
+	if broad_budget_env.is_valid_float() and float(broad_budget_env) > 0.0:
+		check(survey.max_ms <= float(broad_budget_env), "broad survey meets CI switch budget")
+	check(node_growth <= 10, "broad survey matched node counts plateau")
+	check(memory_growth <= 1024 * 1024, "broad survey matched static memory plateaus within 1 MiB")
+	check(orphan_growth == 0, "broad survey orphan count does not grow")
+	await dispose(survey_world)
+	var survey_final: Dictionary = probe.sample()
+	print("Q8 broad survey orphans baseline=%d after disposal=%d" % [baseline.orphans, survey_final.orphans])
+	check(survey_final.orphans <= baseline.orphans, "survey disposal leaves no additional orphans")
 	var world := await make_world()
 	var result: Dictionary = await probe.run(world)
 	check(result.valid, "all switches enter the requested room")

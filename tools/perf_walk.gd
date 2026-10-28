@@ -1,7 +1,8 @@
 extends RefCounted
 ## The instant-warp benchmark measures synchronous switch work including neighbour
 ## instantiation. The separate slide probe moves by input after placing the player
-## near each exit; neither is a continuous walk or a full-world benchmark.
+## near each exit. The separate broad survey visits all scene-backed targets;
+## none of these probes is a continuous full-world walk.
 
 const ROUTE: Array[StringName] = [&"ow_1_0", &"ow_1_1", &"ow_0_1", &"ow_0_0"]
 const CHANGES := 300
@@ -14,6 +15,49 @@ func sample() -> Dictionary:
 		"nodes": int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
 		"memory": int(Performance.get_monitor(Performance.MEMORY_STATIC)),
 		"orphans": int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)),
+	}
+
+
+## Three passes over all scene-backed graph targets. Instant warps exercise loading,
+## not navigation or input. Repeating the same order makes per-target comparisons
+## meaningful even when rooms have very different node counts.
+func survey(world: World) -> Dictionary:
+	var targets: Array[String] = WorldData.room_ids()
+	targets.append_array(WorldData.all_pockets())
+	targets = targets.filter(func(id: String) -> bool: return not WorldData.scene_path(id).is_empty())
+	targets.sort()
+	var passes: Array = []
+	var max_usec := 0
+	var slowest := ""
+	var slowest_pass := 0
+	var total_usec := 0
+	var valid := true
+	world.start_at(&"ow_0_0")
+	world.player.set_hurtbox_enabled(world, false)
+	# Keep the controlled placement from triggering an unrelated transition.
+	world.set_physics_process(false)
+	for lap in range(3):
+		var samples: Array = []
+		for id: String in targets:
+			var before := Time.get_ticks_usec()
+			world.warp_to(StringName(id), &"Default", false)
+			var elapsed := Time.get_ticks_usec() - before
+			if elapsed > max_usec:
+				max_usec = elapsed
+				slowest = id
+				slowest_pass = lap + 1
+			total_usec += elapsed
+			valid = valid and world.get_current_room_id() == StringName(id)
+			await world.get_tree().process_frame
+			samples.append(sample())
+		passes.append(samples)
+	world.set_physics_process(true)
+	world.player.set_hurtbox_enabled(world, true)
+	return {
+		"targets": targets, "passes": passes, "valid": valid,
+		"max_ms": max_usec / 1000.0,
+		"slowest": slowest, "slowest_pass": slowest_pass,
+		"mean_ms": total_usec / 1000.0 / (targets.size() * 3),
 	}
 
 
