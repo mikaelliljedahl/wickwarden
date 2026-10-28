@@ -1,12 +1,28 @@
 # Current status
 
+**Reel Line painted rope, 2026-10-28 (committed in `5e51998`):** The geometric
+line is replaced by a 96×16 painted rope, with null fallback and unshaded 0.28
+painted accent for darkness. It reuses documented `reel_line_rope_v1` source
+(SHA prefix `96cea33d`), original key matte, crop `[380,421,1472,603]` as
+`x0,y0,x1,y1`, scale 96/1092 and seam maximum/tolerance 4. Manifest and sprites
+come through the cutter; no new generated source or provenance edit.
+
+Targeted `reel_line` and `tool_matrix` passed, as did `art-test` (25 tests, old
+ResourceWarning); the agent reports lint PASS. Agent time-step images show real
+ring-contact HELD, actual item drag and denied RETRACT in light/dark with placed
+player. The hook tip is weak in darkness; human play and full motion remain
+unverified. The lead's first pre-import test had null/script error/timeout;
+the test now has a null guard and import plus retest passed. A clean full
+`make check` on exact `5e51998` passed; log
+`/var/tmp/wick-clean-5e51998-gvu30wjn/check.log`. It is the latest full check.
+
 **Reel rope source review, 2026-10-28:** Original v1/v3 are RGB magenta,
 while the new native-alpha cutter requires RGBA and 6:1. Diagnostic keyed crops
 have uncertain lost alpha (up to 0.096/0.119); selected seam maxima were 43/56.5
 and best searched maxima 4/5, against the new implementation tolerance of
-3/255. None is integrated. Actual controlled casts were inspected in light and
-dark, without human or animation verification; usable source investigation
-continues.
+3/255. Those candidates were not integrated; the later v1 rope integration is
+recorded above. Actual controlled casts were inspected in light and dark,
+without human or animation verification.
 
 **Native-alpha texture cutter, 2026-10-28 (committed in `9d2899c`):** Opt-in
 support cuts rectangular RGBA `native_alpha` textures with proportions, seam and
@@ -15,7 +31,7 @@ and the agent reports lint PASS. The proof is synthetic and the existing
 ResourceWarning remains. A Reel rope v2 scratch source is not integrated: the seam
 maximum difference was about 67/255 premultiplied, and the crop is uncertain
 because 3,738 pixels with alpha 1 were excluded. Existing rope sources v1–v3 are
-being investigated. Bramble's layered scratch trial was rejected
+were investigated; the later v1 integration is above. Bramble's layered scratch trial was rejected
 for double heads, rotation and conflicting direction, based on controlled stills
 only.
 
@@ -65,8 +81,8 @@ accept/veto and an inactive direct hit. The lead passed six targeted suites; the
 agent reports lint and global ownership PASS. The static Z1 WP checker reports
 STRAY because the ticket ownership is not represented there. The callback case
 is synthetic; natural timing is not claimed. A clean full `make check` on exact
-`dc54616` passed; log `/var/tmp/wick-clean-dc54616-mzhz0tbv/check.log`. It is the
-latest clean full check.
+`dc54616` passed; log `/var/tmp/wick-clean-dc54616-mzhz0tbv/check.log`. The
+later clean full check at `5e51998` is recorded above.
 
 **Boss hazard cleanup, 2026-10-28 (committed in `c34b164`):** M0 stops
 registered hazard-tree physics polling and hurtboxes before `queue_free`; Hitbox
@@ -2588,7 +2604,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `10de26a3f8cff44d2f8f568028a3076a61bcd667` on `origin/main`, documenting native-alpha texture cutter support above. The latest clean full check is at `dc54616`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `5e5199892151f898ecaf5bea54fbf30364da378b` on `origin/main`, including the painted Reel rope above. The latest clean full check is at `5e51998`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
