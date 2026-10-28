@@ -15,6 +15,20 @@ class WaxHook:
 			destroy(&"range")
 
 
+class FlareWarning:
+	extends Node2D
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		var echo = get_parent()
+		if echo.is_dead or echo.is_dying():
+			return
+		if echo.state == State.GLOW or echo.state == State.FLARE:
+			draw_arc(Vector2.ZERO, 170, 0, TAU, 48, Color(1, 0.8, 0.35, 0.6), 7)
+
+
 enum State { APPROACH, TELL, COMBO, RETREAT, GLOW, FLARE, RECOVER }
 
 var state := State.APPROACH
@@ -45,6 +59,15 @@ func _init() -> void:
 	Placeholder.register_kind(
 		&"wax_hook", {"shape": "circle", "color": Color(0.8, 0.75, 0.6), "radius": 16.0}
 	)
+
+
+func _boss_ready() -> void:
+	var warning := FlareWarning.new()
+	warning.name = "FlareWarning"
+	var material := CanvasItemMaterial.new()
+	material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	warning.material = material
+	add_child(warning)
 
 
 func _enter_phase(_number: int) -> void:
@@ -225,5 +248,3 @@ func _draw() -> void:
 			Color(1, 0.7, 0.3),
 			4
 		)
-	elif state == State.GLOW or state == State.FLARE:
-		draw_arc(Vector2.ZERO, 170, 0, TAU, 48, Color(1, 0.8, 0.35, 0.6), 7)

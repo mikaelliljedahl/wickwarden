@@ -157,7 +157,13 @@ func _draw() -> void:
 	if is_dead or is_dying():
 		return
 	if state == State.TELL:
-		draw_line(Vector2.ZERO, _aim * 192, Color(1, 0.45, 0.1, 0.5), 64.0)
+		draw_set_transform(Vector2.ZERO, _aim.angle())
+		if _fire_art != null:
+			draw_texture_rect(
+				_fire_art, Rect2(0, -32, 192, 64), false, Color(1, 0.7, 0.4, 0.4)
+			)
+		draw_rect(Rect2(0, -32, 192, 64), Color(1, 0.5, 0.12, 0.8), false, 2.0)
+		draw_set_transform(Vector2.ZERO)
 	elif state == State.JET:
 		draw_set_transform(Vector2.ZERO, _aim.angle())
 		draw_rect(Rect2(0, -32, 192, 64), Color(1, 0.5, 0.12, 0.8), false, 2.0)
