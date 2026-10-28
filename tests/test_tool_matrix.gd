@@ -2446,7 +2446,7 @@ func _lock_plate_tools() -> void:
 	player.set_hurtbox_enabled(self, false)
 	GameState.acquire_item(&"tallow_sling")
 	GameState.acquire_item(&"pitch_pot")
-	GameState.add_pitch_pots(2)
+	GameState.add_pitch_pots(8)
 	await seconds(1.6)
 	check_eq(boss.plates.size(), 4, "Lock Warden: four plates after intro")
 	var plate = boss.plates[0]
@@ -2468,6 +2468,65 @@ func _lock_plate_tools() -> void:
 	player.place_at(Vector2(300, 192))
 	await seconds(1.9)
 	check_eq(boss.plates.size(), 3, "Lock Warden: real blast breaks open plate")
+	# Finish the real plate sequence rather than selecting the core phase directly.
+	for i in range(3):
+		if boss.plates.is_empty():
+			break
+		plate = boss.plates[0]
+		_equip(player, &"tallow_sling")
+		player.place_at(plate.eye.global_position + Vector2(-240, 0))
+		player.facing = Vector2.RIGHT
+		check(player.use_item(), "Lock Warden: real slug fired at plate %d" % (i + 2))
+		await seconds(0.5)
+		check(plate.lid_left > 5, "Lock Warden: slug opens plate %d" % (i + 2))
+		_equip(player, &"pitch_pot")
+		player.place_at(plate.global_position + Vector2(-192, 0))
+		player.facing = Vector2.RIGHT
+		check(player.use_item(), "Lock Warden: real pot placed at plate %d" % (i + 2))
+		player.place_at(Vector2(300, 192))
+		await seconds(1.9)
+		check_eq(boss.plates.size(), 2 - i, "Lock Warden: real blast removes one plate")
+	check_eq(boss.phase, 2, "Lock Warden: four real plates reach phase two")
+	check_eq(boss.hp, 24, "Lock Warden: untouched keyhole has 24 HP")
+	check_eq(boss.open_left, 0.0, "Lock Warden: keyhole starts closed")
+	var core_hits: Array[StringName] = []
+	var open_at_hit: Array[bool] = []
+	var core_damage: Array[int] = []
+	boss.hurtbox.hurt.connect(
+		func(hit: Hitbox) -> void:
+			core_hits.append(hit.kind)
+			open_at_hit.append(boss.open_left > 0.0)
+	)
+	boss.damaged.connect(func(amount: int) -> void: core_damage.append(amount))
+	_equip(player, &"tallow_sling")
+	player.place_at(boss.global_position + Vector2(0, 220))
+	player.facing = Vector2.UP
+	check(player.use_item(), "Lock Warden: real sling fired at closed keyhole")
+	var overlap_closed := false
+	for i in range(35):
+		await frames(1)
+		for slug: Node in get_tree().get_nodes_in_group(&"sling_slugs"):
+			if slug is Hitbox and (slug as Hitbox).get_overlapping_areas().has(boss.hurtbox):
+				if (slug as Hitbox).global_position.distance_to(boss.global_position) <= 42.0:
+					overlap_closed = boss.open_left <= 0.0 and (slug as Hitbox).kind == &"sling"
+	check(overlap_closed, "Lock Warden: slug physically overlaps closed keyhole")
+	check(core_hits.is_empty() and core_damage.is_empty(), "Lock Warden: closed keyhole rejects shot")
+	check_eq(boss.hp, 24, "Lock Warden: closed keyhole takes no damage")
+	for i in range(420):
+		if boss.open_left > 0 and get_tree().get_nodes_in_group(&"sling_slugs").is_empty():
+			break
+		await frames(1)
+	check(boss.open_left > 0, "Lock Warden: tumbler naturally opens keyhole")
+	player.place_at(boss.global_position + Vector2(0, 220))
+	player.facing = Vector2.UP
+	check(player.use_item(), "Lock Warden: real sling fired at open keyhole")
+	await frames(40)
+	check_eq(core_hits, [&"sling"], "Lock Warden: real slug contacts open keyhole")
+	check_eq(open_at_hit, [true], "Lock Warden: keyhole open at actual contact")
+	check_eq(core_damage, [1], "Lock Warden: open keyhole takes one damage")
+	check_eq(boss.hp, 23, "Lock Warden: slug damages only open keyhole")
+	print("MATRIX Lock Warden core: closed overlap=", overlap_closed, " open hits=", core_hits,
+		" damage=", core_damage, " HP=", boss.hp)
 	await dispose(room)
 
 
