@@ -181,12 +181,26 @@ active attacks followed in `86cbe7986a3359eca5811009cade0e62ee30e0c2` on
 Mauler and test-isolation documentation followed in `8bd50f7` and `c0522b6`;
 Sump Lurker's horizontal bite landed in `17de0e5e73a2b7fc2e040f9c982bd8e8f68de0cf`
 on `origin/main`.
+Sump documentation followed in `e024916`; the C10/playthrough guard landed in
+`3e2eefde47d141e1cb5ad4926d47f868294bc42e` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**C10 and playthrough save guard, committed in `3e2eefd`:** C10 and
+Playthrough4 stop before disk steps when the runner profile is not isolated,
+and disable `SaveGame.enabled` in that case. The guard examines the XDG prefix, simplified
+paths and userdata, including slot/temp/bad symlinks; normal SaveGame behavior
+is unchanged. A positive `/tmp-wickwarden-check` guard probe without saving
+passed; negative XDG/slot-symlink and invalid-profile route/playthrough probes
+passed with the sentinel untouched (Godot logs are separate). Isolated probes:
+`/var/tmp/wick-c10-guard-I7WFim`. The agent reports lint and diff-check PASS.
+Full positive save/load and suite verification was not run because of `/tmp`
+quota. This does not protect against a deliberate same-UID race; the `/var/tmp`
+runner contract and other tests remain open.
 
 **Sump Lurker bite, committed in `17de0e5`:** The existing three painted bite
 frames play within ±15° of horizontal, mirrored left; vertical and diagonal

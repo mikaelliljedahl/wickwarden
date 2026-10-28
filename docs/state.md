@@ -1,5 +1,17 @@
 # Current status
 
+**C10 and playthrough save guard, 2026-10-28 (committed in `3e2eefd`):** C10
+and Playthrough4 stop before disk steps when the runner profile is not isolated,
+and disable `SaveGame.enabled` in that case. The guard examines the XDG prefix, simplified
+paths and userdata, including slot/temp/bad symlinks; normal SaveGame behavior
+is unchanged. A positive `/tmp-wickwarden-check` guard probe without saving
+passed; negative XDG/slot-symlink and invalid-profile route/playthrough probes
+passed with the sentinel untouched (Godot logs are separate). Isolated probes:
+`/var/tmp/wick-c10-guard-I7WFim`. The agent reports lint and diff-check PASS.
+Full positive save/load and suite verification was not run because of `/tmp`
+quota. This does not protect against a deliberate same-UID race; the `/var/tmp`
+runner contract and other tests remain open.
+
 **Sump Lurker bite, 2026-10-28 (committed in `17de0e5`):** The existing three
 painted bite frames play within ±15° of horizontal, mirrored left; vertical and
 diagonal directions retain idle and need directional art. The 0.12-second
@@ -2093,7 +2105,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `17de0e5e73a2b7fc2e040f9c982bd8e8f68de0cf` on `origin/main`, including Sump Lurker's horizontal bite above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `3e2eefde47d141e1cb5ad4926d47f868294bc42e` on `origin/main`, including the C10/playthrough save guard above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
