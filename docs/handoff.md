@@ -267,12 +267,22 @@ Hit-cancellation verification was documented in
 `19f8acc5500538b127a6c3acfabc45c110dac6fe` on `origin/main`.
 The owner's placeholder priority was documented in
 `c18a3903b360ec0660f0b161c6c102b6fe81deb7` on `origin/main`.
+Placeholder art trials were documented in
+`1cc825f20fa22b637514d6dabbf8b90fec46974d` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Lull sweep scratch refinement, 2026-10-28:** An isolated prototype places a
+painted outline along 16 segments within radius 140. Eight dark `cave_4_4`
+stills show the outline through the attack; the warning spans 36 physics frames
+and the active interval 0.12 seconds. It is not integrated: a thin geometric
+line still draws over figures and the existing warning remains. Animation,
+human play and asset-contract compliance are not fully verified. Another
+placeholder inventory is in progress.
 
 **Three isolated art reviews, 2026-10-28:** All three candidates were rejected
 after controlled stills, not human play. Choir's new source follows the cutter
