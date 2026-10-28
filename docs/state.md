@@ -1,5 +1,24 @@
 # Current status
 
+**Gloam and Coinwyrm attack presentation, 2026-10-28 (committed in
+`df7de44` and `501765e`):** Gloam Knight's filled slash is replaced with a
+procedural multilayer blade glint and 120° outline, without changes to damage,
+area or timing. Dedicated painted slash art is still missing. The actual arena
+capture `/var/tmp/wick-gloam-b2b4/cave_7_11-east.png` used a placed, protected
+player and a frozen attack, not human play.
+
+Coinwyrm uses new ImageGen bite-tell and bite animations when facing downward
+within 15°; other directions retain the idle head and directional effect. Plate
+hitboxes do not move, the head returns to idle and gameplay is unchanged.
+`/home/mikael/.cache/wick-b08-direction/plated-grid.png` and `bare-grid.png` in
+the same directory show controlled positioning, not human play. Directional
+head animations for other angles remain open.
+
+The lead's import, `boss_coinwyrm`, `area_cave_8`, `boss_gloam_knight` and
+`route_cave_7` passed. The first route run stopped due to `/tmp` quota; after a
+completed isolated profile was freed, the rerun passed. Agents report lint,
+`art-test` and B07/B08 ownership PASS.
+
 **Q8 broad survey, 2026-10-28 (committed in `20acebe`):** Three passes over
 222 scene targets made 666 direct warps. Matched passes two to three showed
 maximum node growth of zero, static-memory growth of 141,888 bytes and zero orphan
@@ -11,8 +30,8 @@ of 144.305 ms. Logs: `/var/tmp/wick-q8-broad-final.log` and
 coverage or full physical traversal; the 50 ms limit is not established and Q8
 remains open.
 
-**Coinwyrm art candidate:** New art is not integrated: the frontal bite does not
-match a sideways attack direction. A solution is being investigated.
+**Earlier Coinwyrm art candidate:** The frontal bite did not match sideways
+attacks; its limited downward-facing integration is recorded above.
 
 **Choir Warden song cone, 2026-10-28 (committed in `f6b1daf`):** The note
 cone uses the existing painted treble note and a light-independent boundary;
@@ -22,7 +41,8 @@ damage, hitbox, ward and timing are unchanged. Actual arena captures are
 player; this is not human play. The lead verified `choir_warden` and
 `route_cave_6`; the agent reports lint and MB3 ownership PASS. Choir's song
 animation is incomplete and uses `walk_side`. Gloam Knight showed a solid purple
-sector in `/var/tmp/wick-dynamic-7b3d/cave_7_11-active.png`; B07 is investigating.
+sector in `/var/tmp/wick-dynamic-7b3d/cave_7_11-active.png`; its subsequent
+presentation change is recorded above.
 
 **Q7 scoped keys through grates, 2026-10-28 (committed in `045900a`):** Real
 Tether Moth retrieves remaining scoped keys across grates in overworld and C1
@@ -1815,7 +1835,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `20acebe0d9769174b1cb115961c888fbd1324357` on `origin/main`, including the Q8 broad survey above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `501765e4a5928f07711744fa46b86ca1e0ac0404` on `origin/main`, including the Gloam and Coinwyrm presentation changes above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
