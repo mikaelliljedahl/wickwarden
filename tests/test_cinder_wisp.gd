@@ -8,6 +8,7 @@ const RING_SCRIPT := "res://scripts/enemies/flame_ring.gd"
 
 
 func run() -> void:
+	await _windup_visual_and_fallback()
 	await _burst_visual_lifetime()
 	await _burst_visual_fallback()
 	await _stats_and_light()
@@ -173,6 +174,44 @@ func _stun_cancels_the_windup() -> void:
 	await dispose(arena)
 
 
+func _windup_visual_and_fallback() -> void:
+	for missing_art in [false, true]:
+		reset_state()
+		if missing_art:
+			SpriteVisual.use_manifest("res://tests/fixtures/no_item_art.json")
+		var arena := make_arena()
+		make_player(arena, Vector2(400, 300))
+		var wisp := make_enemy(arena, WISP, Vector2(540, 300))
+		await frames(3)
+		var warning := wisp.get_node_or_null("WindupVisual")
+		check(warning != null, "wind-up shows the boundary with or without art")
+		if warning != null:
+			var boundary_material := warning.material as CanvasItemMaterial
+			check(
+				(
+					boundary_material != null
+					and boundary_material.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED
+				),
+				"warning boundary is visible independently of lighting"
+			)
+			check_eq(
+				warning.get_node_or_null("Visual") is SpriteVisual,
+				not missing_art,
+				"painted warning only when art is available"
+			)
+		check(
+			wisp._telegraph != null and not wisp._telegraph.visible,
+			"shared timer runs without its filled disc"
+		)
+		await seconds(0.2)
+		check(is_instance_valid(wisp) and _rings().is_empty(), "warning is not a damaging burst")
+		wisp.stun(1.5)
+		await frames(2)
+		check(wisp.get_node_or_null("WindupVisual") == null, "stun removes the warning")
+		await dispose(arena)
+		SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+
+
 func _burst_visual_lifetime() -> void:
 	reset_state()
 	var arena := make_arena()
@@ -198,7 +237,9 @@ func _burst_visual_lifetime() -> void:
 	var art := arena.get_node_or_null("Puff") as SpriteVisual
 	check(art != null, "painted burst is separate")
 	if art != null:
-		check_eq(art.global_position, ring.global_position, "art follows the assigned burst position")
+		check_eq(
+			art.global_position, ring.global_position, "art follows the assigned burst position"
+		)
 	await seconds(0.25)
 	check(not is_instance_valid(ring), "hitbox expires after 0.2 seconds")
 	check(arena.get_node_or_null("Puff") is SpriteVisual, "animation outlives hitbox")

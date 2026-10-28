@@ -22,6 +22,50 @@ const LIGHT_COLOR := Color(1.0, 0.6, 0.25)
 var _age: float = 0.0
 ## The wind-up telegraph while the wisp winds up; null otherwise.
 var _telegraph: Node2D = null
+var _warning_visual: Node2D = null
+
+
+class WindupVisual:
+	extends Node2D
+	var timer: Node2D
+	var flame: SpriteVisual
+
+	func _ready() -> void:
+		var boundary_material := CanvasItemMaterial.new()
+		boundary_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = boundary_material
+		if SpriteVisual.has_art(&"fx_wisp_burst"):
+			var picture := SpriteVisual.attach(self, &"fx_wisp_burst")
+			if picture is SpriteVisual:
+				flame = picture as SpriteVisual
+				if (
+					flame.sprite_frames.has_animation(&"idle")
+					and flame.sprite_frames.get_frame_count(&"idle") >= 2
+				):
+					flame.stop()
+					flame.set_frame_and_progress(1, 0.0)
+					flame.scale = Vector2.ONE * 0.65
+				else:
+					flame.queue_free()
+					flame = null
+		_update_look()
+
+	func _process(_delta: float) -> void:
+		_update_look()
+
+	func _update_look() -> void:
+		if not is_instance_valid(timer):
+			return
+		var progress := float(timer.call(&"progress"))
+		if flame != null:
+			flame.modulate = Color(1.0, 0.85, 0.65, lerpf(0.25, 0.55, progress))
+		queue_redraw()
+
+	func _draw() -> void:
+		# The steady edge denotes the future 150 px hit radius, not an active hitbox.
+		draw_arc(
+			Vector2.ZERO, FLAME_RING.RADIUS, 0.0, TAU, 96, Color(1.0, 0.9, 0.65, 0.9), 2.0, true
+		)
 
 
 func _init() -> void:
@@ -81,11 +125,19 @@ func _start_windup() -> void:
 	add_child(telegraph)
 	telegraph.connect(&"finished", _on_windup_finished)
 	telegraph.call(&"start")
+	# Keep the shared timer and its finished signal, but replace only its drawing.
+	telegraph.visible = false
 	_telegraph = telegraph
+	var warning := WindupVisual.new()
+	warning.name = "WindupVisual"
+	warning.timer = telegraph
+	add_child(warning)
+	_warning_visual = warning
 
 
 func _on_windup_finished() -> void:
 	_telegraph = null
+	_clear_warning_visual()
 	if is_dead:
 		return
 	var holder := get_parent()
@@ -103,9 +155,16 @@ func _cancel_windup() -> void:
 	if is_instance_valid(_telegraph):
 		_telegraph.queue_free()
 	_telegraph = null
+	_clear_warning_visual()
 	if visual != null:
 		visual.scale = Vector2.ONE
 		visual.modulate = Color.WHITE
+
+
+func _clear_warning_visual() -> void:
+	if is_instance_valid(_warning_visual):
+		_warning_visual.queue_free()
+	_warning_visual = null
 
 
 ## Presentation only: swell and glow with the telegraph's progress.
