@@ -1,5 +1,13 @@
 # Current status
 
+**Test-root guard investigation, 2026-10-28:** Hardcoded `/tmp` prefixes, the
+runner's temporary-directory fallback to `/var/tmp` and Gravelight's hardcoded
+scratch path obstruct safe test execution when the `/tmp` quota is exhausted.
+Z1 is working across the named runner, base, Q3 and route-test files toward an
+explicit, unique, verified isolated test root, fail-closed behavior and actual
+userdata checks. The solution is not complete; no change to test safety has yet
+been established.
+
 **Lull Mauler active attacks, 2026-10-28 (committed in `86cbe79`):** The
 previously invisible slam uses an existing painted crack and 110 px outline;
 sweep uses a procedural glint and 180°/140 px boundary, shown only while the
