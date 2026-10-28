@@ -1815,19 +1815,51 @@ func _coinwyrm_reel() -> void:
 	var player := make_player(room, Vector2(1728, 480))
 	# Focus this fixture on tool collision rather than surviving simultaneous attacks.
 	player.set_hurtbox_enabled(self, false)
-	_equip(player, &"reel_line")
-	await seconds(2.5)
+	var hook_plate_counts: Array[int] = []
+	var hook_states: Array[StringName] = []
+	var damage: Array[int] = []
+	var reeled: Array[StringName] = []
+	boss.hurtbox.hurt.connect(func(hit: Hitbox) -> void:
+		if hit.kind == &"hook":
+			hook_plate_counts.append(boss.plates.size())
+			hook_states.append(boss.state)
+	)
+	boss.damaged.connect(func(amount: int) -> void: damage.append(amount))
+	for i in range(200):
+		if boss.state == &"rear" and boss.plates.size() == 3:
+			break
+		await frames(1)
+	check_eq(boss.state, &"rear", "Coinwyrm naturally rears")
 	check_eq(boss.plates.size(), 3, "Coinwyrm naturally rears with three plates")
+	player.place_at(boss.global_position + Vector2(0, 108))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(10)
+	Input.action_release(&"attack")
+	check_eq(hook_plate_counts, [3], "Coinwyrm: actual hook contacts plated head")
+	check_eq(boss.hp, 36, "Coinwyrm: plates block actual hook damage")
+	check(damage.is_empty(), "Coinwyrm: plated hook causes no damage signal")
+	for i in range(20):
+		if player.state == player.State.NORMAL:
+			break
+		await frames(1)
+	_equip(player, &"reel_line")
 	for expected in [2, 1, 0]:
 		if boss.plates.is_empty():
 			check(false, "Coinwyrm has a plate for the next shot")
 			break
 		var plate: Node2D = boss.plates[0]
+		plate.reeled.connect(func(hit: Hitbox) -> void: reeled.append(hit.kind))
 		player.place_at(plate.global_position + Vector2(0, 200))
 		player.facing = Vector2.UP
 		check(player.use_item(), "Coinwyrm: actual reel launches")
-		await seconds(1.4)
+		for i in range(100):
+			await frames(1)
+			if get_tree().get_nodes_in_group(&"item_reel_line").is_empty():
+				break
+		check(get_tree().get_nodes_in_group(&"item_reel_line").is_empty(), "Coinwyrm: real reel returns")
 		check_eq(boss.plates.size(), expected, "Coinwyrm: real reel removes one plate")
+	check_eq(reeled, [&"reel", &"reel", &"reel"], "Coinwyrm: actual reel hits each plate")
 	check(boss.bare, "Coinwyrm: third plate exposes head")
 	check_eq(GameState.currency, 15, "Coinwyrm: three actual plate rewards collected")
 	player.place_at(boss.global_position + Vector2(0, 108))
@@ -1835,7 +1867,12 @@ func _coinwyrm_reel() -> void:
 	Input.action_press(&"attack")
 	await frames(10)
 	Input.action_release(&"attack")
+	check_eq(hook_plate_counts, [3, 0], "Coinwyrm: real hook contacts protected then bare head")
+	check_eq(hook_states, [&"rear", &"rear"], "Coinwyrm: both hook hits occur during natural rear")
+	check_eq(damage, [2], "Coinwyrm: only bare head takes hook damage")
 	check_eq(boss.hp, 34, "Coinwyrm: actual hook damages exposed head")
+	print("MATRIX Coinwyrm: hook plates=", hook_plate_counts, " states=", hook_states,
+		" reel contacts=", reeled, " damage=", damage)
 	await dispose(room)
 
 

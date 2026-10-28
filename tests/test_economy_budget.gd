@@ -67,8 +67,10 @@ func run() -> void:
 		print("Q6 budget ", area, ": ", counts[area])
 	check_eq(total, TOTAL, "world budget totals match section 6.1")
 	print("Q6 budget total: ", total)
-	await _death_drop_budget(false)
-	await _death_drop_budget(true)
+	await _death_drop_budget(false, false)
+	await _death_drop_budget(true, false)
+	await _death_drop_budget(false, true)
+	await _death_drop_budget(true, true)
 	reset_state()
 
 
@@ -81,10 +83,11 @@ func _area_for(id: String) -> String:
 
 ## Stratified rolls exercise actual enemy deaths and pickup effects, without relying on RNG luck.
 ## Totals are potential yields: resetting each resource prevents wallet/ammo/health caps hiding drops.
-func _death_drop_budget(tools_found: bool) -> void:
+func _death_drop_budget(pot_found: bool, sling_found: bool) -> void:
 	reset_state()
-	if tools_found:
+	if pot_found:
 		GameState.acquire_item(&"pitch_pot")
+	if sling_found:
 		GameState.acquire_item(&"tallow_sling")
 	var arena := make_arena()
 	var counts := {&"ember": 0, &"brass_bit": 0, &"brass_coin": 0,
@@ -110,9 +113,10 @@ func _death_drop_budget(tools_found: bool) -> void:
 			yields[1] += GameState.currency
 			yields[2] += GameState.pitch_pots
 			yields[3] += GameState.slugs
-	var expected := [25, 35, 5, 10 if tools_found else 0, 8 if tools_found else 0]
+	var expected := [25, 35, 5, 10 if pot_found else 0, 8 if sling_found else 0]
 	check_eq(counts.values(), expected, "100 stratified deaths match the standard drop shares")
-	check_eq(yields, [50, 60, 40 if tools_found else 0, 48 if tools_found else 0],
+	check_eq(yields, [50, 60, 40 if pot_found else 0, 48 if sling_found else 0],
 		"collected drops produce the expected potential resources")
-	print("Q6 100 standard deaths, tools found=", tools_found, ": ", counts, " yields ", yields)
+	print("Q6 100 standard deaths, pot=", pot_found, " sling=", sling_found,
+		": ", counts, " yields ", yields)
 	await dispose(arena)
