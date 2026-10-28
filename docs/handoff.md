@@ -182,6 +182,21 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Hollow Captain image attempts, 2026-10-28:** Four new ImageGen candidates in
+`/var/tmp/wick-captain-new/` were rejected for scale, pose/direction/overlap or
+cell placement/size (`-8`, 174×277). No sprites were installed; art and human
+play remain open.
+
+**Q8 C10 load profiling at clean `d2d9dc2`, 2026-10-28:** Headless processes
+with warm OS cache measured cold `the_unlit.gd` load at 28.35–29.16 ms,
+boss-room scene load at 31.30–33.27 ms, instantiation at 0.076–0.121 ms and
+`add_child` at 6.32–6.53 ms during 11→12. Instrumentation and dependencies are
+not exclusive, so timings cannot be summed. Avoiding a redundant placeholder
+saved only 8–13 microseconds; switch differences were within noise and the
+experiment changed Reelable semantics, so it was not integrated. Logs are in
+`/var/tmp/wick-q8-c10-d2d9dc2/`. Calibrated CI, GPU and human play are not
+covered; Q8 remains open.
+
 **Hollow Captain source review, 2026-10-28:** Provenance matched for
 `actions_side_v2` and `actions_down_v3`, but default source segmentation misses
 poses. A temporary component method yields figures 142–191 px versus idle
