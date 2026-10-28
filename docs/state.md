@@ -1,5 +1,13 @@
 # Current status
 
+**Hollow Captain source review, 2026-10-28:** Provenance matched for
+`actions_side_v2` and `actions_down_v3`, but default source segmentation misses
+poses. A temporary component method yields figures 142–191 px versus idle
+206/231 px at the same scale, and down bash changes direction. The action images
+were rejected and not installed. Proofs are in
+`/var/tmp/wick-captain-cut/proofs/`; image attempts based on accepted idle are
+in progress. Art and human-play verification remain open.
+
 **Abacus attack art review, 2026-10-28:** Existing B60 sources have the chain
 baked into the body, while Unlit links are the wrong type. Two new transparent
 ImageGen candidates were tested in scratch and actual C8 with a placed,
@@ -2038,7 +2046,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `d2d9dc241cf102824ea1e1b82e55e1757d2000aa` on `origin/main`, including the Q7 Abacus guard test above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0cd35a2ca57ad8acc0e3a3c1654b700ceaa2adcb` on `origin/main`, documenting the Abacus and Captain review above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -173,12 +173,22 @@ slash followed in `51b614e` and Q7 Echo tests in
 Ending/miniboss and rejected Gloam documentation followed in `efd1ce9` and
 `088498f`; Q7 Abacus guard testing landed in
 `d2d9dc241cf102824ea1e1b82e55e1757d2000aa` on `origin/main`.
+The Abacus and Captain review followed in
+`0cd35a2ca57ad8acc0e3a3c1654b700ceaa2adcb` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Hollow Captain source review, 2026-10-28:** Provenance matched for
+`actions_side_v2` and `actions_down_v3`, but default source segmentation misses
+poses. A temporary component method yields figures 142–191 px versus idle
+206/231 px at the same scale, and down bash changes direction. The action images
+were rejected and not installed. Proofs are in
+`/var/tmp/wick-captain-cut/proofs/`; image attempts based on accepted idle are
+in progress. Art and human-play verification remain open.
 
 **Abacus attack art review, 2026-10-28:** Existing B60 sources have the chain
 baked into the body, while Unlit links are the wrong type. Two new transparent
