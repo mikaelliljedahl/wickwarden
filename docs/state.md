@@ -1,5 +1,21 @@
 # Current status
 
+**Lantern Chime hold cue, 2026-10-28 (committed in `0cee12b`):** Two painted
+notes appear at the item's fixed activation point while held and hide on release,
+with missing-art fallback; wave origin, timing and warp are unchanged. Source,
+provenance and metadata are included. Lead and agent passed `tool_cue_visual`,
+`lantern_chime` and `warp_picker` after import; the agent reports lint and
+`art-test` (25) PASS with the existing ResourceWarning.
+
+Controlled actual `ow_1_1`/`cave_6_5` stills under
+`/var/tmp/wick-chime-hold-study/images/motion-integrated-{ow_1_1,cave_6_5}-{right,left}-{moving-hold,moving-release,longhold,picker}.png`
+used a placed, protected player and real simulated move/hold/release/picker input.
+After 138 px movement the item/cue, and after release the wave, remain at the
+activation point as before. Notes can resemble objects or overlap legs; these
+stills do not verify human play or continuous motion. A clean full `make check`
+on exact `0cee12b` passed (exit 0); log
+`/var/tmp/wick-clean-0cee12b-blo8djzu/check.log`. It is the latest full check.
+
 **Lull sweep and Dirge bass ring, 2026-10-28 (committed in `f794562`):** Warm
 painted Lull active sweep and violet note-based Dirge ring reuse documented
 existing art with original geometric fallbacks; hitboxes and timing are
@@ -16,8 +32,8 @@ Choir natural attack stills at
 radii in `cave_6_11` with a placed, protected player. Chime resemblance, overlap
 and motion are not human-verified; fallback is very dark. Human play and motion
 remain unverified for both. A clean full `make check` on exact `f794562` passed
-(exit 0); log `/var/tmp/wick-clean-f794562-xy13nqw2/check.log`. It is the latest
-full check.
+(exit 0); log `/var/tmp/wick-clean-f794562-xy13nqw2/check.log`. The later clean
+`0cee12b` full check is recorded above.
 
 **The Unlit chain-lash warning, 2026-10-28 (committed in `e205edb`):** A faint
 existing documented painted chain image replaces the warning color block, with
@@ -2806,7 +2822,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `f7945622c08aecb1525c975424d0389414d29997` on `origin/main`, including Lull and Choir effects above. The latest clean full check is at `f794562`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0cee12b7a34b65df06326169994d0943cd313a2c` on `origin/main`, including the Chime hold cue above. The latest clean full check is at `0cee12b`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

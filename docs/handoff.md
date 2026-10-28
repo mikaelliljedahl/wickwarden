@@ -311,12 +311,30 @@ in `90c3e949c427036ad287a63e51a6e41813f1be4f` on `origin/main`.
 Lantern-chain documentation followed in `deff114`; the chain-lash warning landed
 in `e205edbcc49a15345b21417d21a494cf2976e49a` on `origin/main`. Lull/Choir
 effects landed in `f7945622c08aecb1525c975424d0389414d29997` on `origin/main`.
+Boss-effect documentation followed in `bd1c733`; the Chime hold cue landed in
+`0cee12b7a34b65df06326169994d0943cd313a2c` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Lantern Chime hold cue, committed in `0cee12b`:** Two painted notes appear at
+the item's fixed activation point while held and hide on release, with missing-art
+fallback; wave origin, timing and warp are unchanged. Source, provenance and
+metadata are included. Lead and agent passed `tool_cue_visual`, `lantern_chime`
+and `warp_picker` after import; the agent reports lint and `art-test` (25) PASS
+with the existing ResourceWarning.
+
+Controlled actual `ow_1_1`/`cave_6_5` stills under
+`/var/tmp/wick-chime-hold-study/images/motion-integrated-{ow_1_1,cave_6_5}-{right,left}-{moving-hold,moving-release,longhold,picker}.png`
+used a placed, protected player and real simulated move/hold/release/picker input.
+After 138 px movement the item/cue, and after release the wave, remain at the
+activation point as before. Notes can resemble objects or overlap legs; these
+stills do not verify human play or continuous motion. A clean full `make check`
+on exact `0cee12b` passed (exit 0); log
+`/var/tmp/wick-clean-0cee12b-blo8djzu/check.log`. It is the latest full check.
 
 **Lull sweep and Dirge bass ring, committed in `f794562`:** Warm painted Lull
 active sweep and violet note-based Dirge ring reuse documented existing art with
@@ -334,8 +352,8 @@ Choir natural attack stills at
 radii in `cave_6_11` with a placed, protected player. Chime resemblance, overlap
 and motion are not human-verified; fallback is very dark. Human play and motion
 remain unverified for both. A clean full `make check` on exact `f794562` passed
-(exit 0); log `/var/tmp/wick-clean-f794562-xy13nqw2/check.log`. It is the latest
-full check.
+(exit 0); log `/var/tmp/wick-clean-f794562-xy13nqw2/check.log`. The later clean
+`0cee12b` full check is recorded above.
 
 **The Unlit chain-lash warning, committed in `e205edb`:** A faint existing
 documented painted chain image replaces the warning color block, with the
