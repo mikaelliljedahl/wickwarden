@@ -221,12 +221,30 @@ Mirror Shade effect studies were documented in `6e121b4`; Q7 Automaton jet
 tests are at `6d72c5c6ce9eb946a9987c66a2e6bdbf62210708` on `origin/main`.
 Automaton test documentation followed in `1a34e23`; Q7 Sump Lurker tests are at
 `67f434051072ad1d3c50b91f35db49b407acfc32` on `origin/main`.
+Sump test documentation followed in `b59d4a4`; the Q7 Dirge cycle is at
+`d3c724fa4213ca1412b45bbc4582c1f19d7c21f4` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Husk Hound World audit, 2026-10-28:** State-confirmed natural warning
+squash/walk, charge and wall-dizzy show `walk_side` in
+`/var/tmp/wick-m2-hound/`. The v1 crouch/charge/dizzy source art remains uncut;
+art pipeline, direction and anchoring are unresolved. The player was arranged
+and protected; the review was horizontal in a light room, not human play. One
+process reported four ObjectDB and two resource warnings. No runtime change.
+
+**Q7 Dirge Choir natural Chime cycle, committed in `d3c724f`:** After natural
+intro and bass song, a real hook is rejected while protected; real Chime
+interrupts and opens the head, and real hook deals damage (12→10). During a
+natural second song within three-second deafness, Chime makes contact but does
+not open or interrupt. Agent and lead passed `tool_matrix`; the agent reports
+1,962 checks and lint PASS. Only bass phase one is covered in a controlled arena
+with a placed, protected player, not human play or a real room. The latest clean
+full check remains `1a34e23`.
 
 **Q7 Sump Lurker natural weakness, committed in `67f4340`:** With normal physics
 in a controlled `shallow_zone` arena, real Moth physically overlaps the submerged

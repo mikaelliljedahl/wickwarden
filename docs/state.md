@@ -1,5 +1,21 @@
 # Current status
 
+**Husk Hound World audit, 2026-10-28:** State-confirmed natural warning
+squash/walk, charge and wall-dizzy show `walk_side` in
+`/var/tmp/wick-m2-hound/`. The v1 crouch/charge/dizzy source art remains uncut;
+art pipeline, direction and anchoring are unresolved. The player was arranged
+and protected; the review was horizontal in a light room, not human play. One
+process reported four ObjectDB and two resource warnings. No runtime change.
+
+**Q7 Dirge Choir natural Chime cycle, 2026-10-28 (committed in `d3c724f`):**
+After natural intro and bass song, a real hook is rejected while protected; real
+Chime interrupts and opens the head, and real hook deals damage (12→10). During
+a natural second song within three-second deafness, Chime makes contact but does
+not open or interrupt. Agent and lead passed `tool_matrix`; the agent reports
+1,962 checks and lint PASS. Only bass phase one is covered in a controlled arena
+with a placed, protected player, not human play or a real room. The latest clean
+full check remains `1a34e23`.
+
 **Q7 Sump Lurker natural weakness, 2026-10-28 (committed in `67f4340`):**
 With normal physics in a controlled `shallow_zone` arena, real Moth physically
 overlaps the submerged hurtbox without an accepted hit or damage. Following
@@ -2303,7 +2319,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `67f434051072ad1d3c50b91f35db49b407acfc32` on `origin/main`, including the Q7 Sump Lurker test above. The latest clean full check is at `1a34e23`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `d3c724fa4213ca1412b45bbc4582c1f19d7c21f4` on `origin/main`, including the Q7 Dirge cycle above. The latest clean full check is at `1a34e23`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
