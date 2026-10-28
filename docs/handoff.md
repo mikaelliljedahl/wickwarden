@@ -140,12 +140,40 @@ Tidewick and Q6/Q8 verification were documented in
 `c780a05ffeddd47a3a2303c36266c38d0f208e46` on `origin/main`.
 The Tidewick export check followed in `201b3f1`; the Q7 scoped grate-key tests
 followed in `045900a1b11b4fdda8ee2e5162eea680b957e315` on `origin/main`.
+The grate-check documentation followed in `0b531af`; Choir Warden's cone followed
+in `f6b1dafd07391252aa562ab7f4a8113103917fd0` on `origin/main`.
+The broad streaming survey followed in
+`20acebe0d9769174b1cb115961c888fbd1324357` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q8 broad survey, committed in `20acebe`:** Three passes over 222 scene targets
+made 666 direct warps. Matched passes two to three showed maximum node growth
+of zero, static-memory growth of 141,888 bytes and zero orphan growth; no orphans
+remained after World disposal. The agent reports the isolated test PASS; the
+lead independently passed `TMPDIR=/tmp make test T=streaming`. The agent
+measured a 6.501 ms mean and 79.971 ms maximum, with an earlier maximum of
+144.305 ms. Logs: `/var/tmp/wick-q8-broad-final.log` and
+`/var/tmp/wick-q8-broad-final-rss.csv`. There is no calibrated CI or render/GPU
+coverage or full physical traversal; the 50 ms limit is not established and Q8
+remains open.
+
+**Coinwyrm art candidate:** New art is not integrated: the frontal bite does not
+match a sideways attack direction. A solution is being investigated.
+
+**Choir Warden song cone, committed in `f6b1daf`:** The note cone uses the
+existing painted treble note and a light-independent boundary; damage, hitbox,
+ward and timing are unchanged. Actual arena captures are
+`/var/tmp/wick-dynamic-7b3d/cave_6_4-tell.png` and
+`/var/tmp/wick-dynamic-7b3d/cave_6_4-active.png`, with a placed, protected
+player; this is not human play. The lead verified `choir_warden` and
+`route_cave_6`; the agent reports lint and MB3 ownership PASS. Choir's song
+animation is incomplete and uses `walk_side`. Gloam Knight showed a solid purple
+sector in `/var/tmp/wick-dynamic-7b3d/cave_7_11-active.png`; B07 is investigating.
 
 **Q7 scoped keys through grates, committed in `045900a`:** Real Tether Moth
 retrieves remaining scoped keys across grates in overworld and C1 cases, while
