@@ -438,6 +438,27 @@
       }
     }
   },
+  "tidewick_ember_bolt": {
+    "cell": [
+      96,
+      96
+    ],
+    "anchor": [
+      48.0,
+      48.0
+    ],
+    "radius": 12.0,
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/tidewick_ember_bolt_fly.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": true
+      }
+    }
+  },
   "archivist_ink_bolt": {
     "cell": [
       96,

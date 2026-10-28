@@ -14,6 +14,7 @@ func run() -> void:
 	await _room_template_lifecycle()
 	await _motion_and_exposure()
 	await _bolt_warning_presentation()
+	await _bolt_art_fallback()
 	await _phases_reset_and_rewards()
 	await _wave_visual_directions()
 	await _wave_warning_directions()
@@ -200,7 +201,38 @@ func _bolt_warning_presentation() -> void:
 	if not bolts.is_empty():
 		check_near(bolts[0].speed, 320.0, 0.01, "bolt retains its speed")
 		check_eq(bolts[0].damage, 2, "bolt retains its damage")
+		var bolt := bolts[0] as EnemyProjectile
+		var look := bolt.get_node_or_null("Visual") as SpriteVisual
+		check(look != null and look.kind == &"tidewick_ember_bolt", "bolt uses ember art")
+		if look != null:
+			check_eq(look.sprite_frames.get_frame_count(&"idle"), 2, "ember has two flight frames")
+			check_near(look.rotation, bolt.direction.angle(), 0.001, "ember points along flight")
+			check_eq(look.scale, Vector2.ONE, "ember scale is unchanged")
+			check(not look.flip_h, "ember is never mirrored")
+		var lights := bolt.find_children("*", "PointLight2D", false, false)
+		check_eq(lights.size(), 1, "ember has presentation light")
+		if not lights.is_empty():
+			check(not lights[0].is_in_group(&"glow_light"), "ember light is not gameplay glow")
+		check(bolt.hitbox.blockable, "ember remains wardable")
+		check_near(bolt.hitbox.knockback, 0.0, 0.01, "ember knockback remains zero")
 	await dispose(room)
+
+
+func _bolt_art_fallback() -> void:
+	reset_state()
+	SpriteVisual.use_manifest("res://tests/fixtures/b10_missing_art.json")
+	var room := _fixture()
+	await seconds(4.6)
+	var bolts := get_tree().get_nodes_in_group(&"projectiles")
+	check_eq(bolts.size(), 1, "missing ember art still fires")
+	if not bolts.is_empty():
+		var bolt := bolts[0] as EnemyProjectile
+		check(bolt.get_node_or_null("Visual") != null, "missing art keeps generic fallback")
+		check_eq(bolt.damage, 2, "fallback keeps bolt damage")
+		check_near(bolt.speed, 320.0, 0.01, "fallback keeps bolt speed")
+		check(bolt.hitbox.blockable, "fallback remains wardable")
+	await dispose(room)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _phases_reset_and_rewards() -> void:

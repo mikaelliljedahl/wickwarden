@@ -309,6 +309,11 @@ func _tick_bolt(delta: float) -> void:
 		if is_instance_valid(_bolt_warning):
 			_bolt_warning.queue_free()
 		var bolt := fire_projectile(null, direction_to_player(), 320.0, 2)
+		# The generic projectile has already built its fallback; replace only its look.
+		if SpriteVisual.has_art(&"tidewick_ember_bolt"):
+			var look := SpriteVisual.attach(bolt, &"tidewick_ember_bolt", bolt.radius)
+			look.rotation = bolt.direction.angle()
+			_light(bolt, Color(1.0, 0.55, 0.22), 100.0)
 		bolt.hitbox.knockback = 0.0
 
 
