@@ -178,6 +178,9 @@ The Abacus and Captain review followed in
 Captain review documentation followed in `cfdb4a4` and `65e64ba`; Lull Mauler
 active attacks followed in `86cbe7986a3359eca5811009cade0e62ee30e0c2` on
 `origin/main`.
+Mauler and test-isolation documentation followed in `8bd50f7` and `c0522b6`;
+Sump Lurker's horizontal bite landed in `17de0e5e73a2b7fc2e040f9c982bd8e8f68de0cf`
+on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -185,13 +188,22 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Sump Lurker bite, committed in `17de0e5`:** The existing three painted bite
+frames play within ±15° of horizontal, mirrored left; vertical and diagonal
+directions retain idle and need directional art. The 0.12-second hitbox, damage
+and timing are unchanged; idle speed is restored on stun, reset, phase change
+and death. The lead passed `sump_lurker`, `area_cave_3` and `route_cave_3`; the
+agent reports lint and MB2 ownership PASS. Natural C3 capture
+`/var/tmp/wick-sump-bite/bite.png` used a placed, protected player, not human play.
+
 **Test-root guard investigation, 2026-10-28:** Hardcoded `/tmp` prefixes, the
 runner's temporary-directory fallback to `/var/tmp` and Gravelight's hardcoded
 scratch path obstruct safe test execution when the `/tmp` quota is exhausted.
 Z1 is working across the named runner, base, Q3 and route-test files toward an
 explicit, unique, verified isolated test root, fail-closed behavior and actual
-userdata checks. The solution is not complete; no change to test safety has yet
-been established.
+userdata checks. After discovering autosave and ending branches, Z1 also covers
+SaveGame. Work continues and guards have not been weakened; the solution is not
+complete.
 
 **Lull Mauler active attacks, committed in `86cbe79`:** The previously
 invisible slam uses an existing painted crack and 110 px outline; sweep uses a
