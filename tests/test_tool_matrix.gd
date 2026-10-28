@@ -110,6 +110,7 @@ func run() -> void:
 	await _lurker_moth()
 	await _lurker_natural_moth()
 	await _captain_moth()
+	await _captain_natural_bash_sling()
 	await _lock_plate_tools()
 	await _mauler_slag_hook()
 	await _knight_boots()
@@ -2171,6 +2172,78 @@ func _captain_moth() -> void:
 	await frames(8)
 	Input.action_release(&"attack")
 	check_eq(enemy.hp, 10, "Captain: real front hook damages stunned target")
+	await dispose(arena)
+
+
+func _captain_natural_bash_sling() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/hollow_captain.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(1300, 480))
+	player.set_hurtbox_enabled(self, false)
+	var hits: Array[StringName] = []
+	var states: Array[int] = []
+	var blocks: Array[StringName] = []
+	var damage: Array[int] = []
+	enemy.hurtbox.hurt.connect(func(hit: Hitbox) -> void:
+		hits.append(hit.kind)
+		states.append(enemy.state)
+	)
+	enemy.guard_blocked.connect(func(hit: Hitbox) -> void: blocks.append(hit.kind))
+	enemy.damaged.connect(func(amount: int) -> void: damage.append(amount))
+	for i in range(150):
+		if enemy.facing_dir.dot(Vector2.RIGHT) > 0.99:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.PATROL, "Captain: naturally patrols behind raised guard")
+	check(enemy.facing_dir.dot(Vector2.RIGHT) > 0.99, "Captain: naturally turns toward player")
+	player.place_at(enemy.global_position + Vector2(200, 0))
+	_equip(player, &"tallow_sling")
+	player.facing = Vector2.LEFT
+	check(player.use_item(), "Captain: real sling fires at front guard")
+	for i in range(40):
+		if not blocks.is_empty():
+			break
+		await frames(1)
+	check_eq(hits, [&"sling"], "Captain: actual slug reaches guarded hurtbox")
+	check_eq(blocks, [&"sling"], "Captain: raised guard blocks actual slug")
+	check_eq(enemy.hp, 12, "Captain: guarded slug deals no damage")
+	check_eq(GameState.slugs, 11, "Captain: guarded slug consumes ammo")
+	player.place_at(enemy.global_position + Vector2(1000, 0))
+	for i in range(300):
+		if enemy.state == enemy.State.TELEGRAPH:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.TELEGRAPH, "Captain: natural shield-bash warning")
+	for i in range(60):
+		if enemy.state == enemy.State.BASH:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.BASH, "Captain: warning leads to real bash")
+	check_eq(enemy.contact_hitbox.damage, 3, "Captain: actual bash contact is active")
+	for i in range(60):
+		if enemy.state == enemy.State.RECOVER:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.RECOVER, "Captain: real bash leads to recovery")
+	check_eq(enemy.armor_front_deg, 0.0, "Captain: guard drops during recovery")
+	check(enemy.facing_dir.dot(Vector2.RIGHT) > 0.99, "Captain: still faces shot direction")
+	player.place_at(enemy.global_position + Vector2(170, 0))
+	player.facing = Vector2.LEFT
+	check(player.use_item(), "Captain: real sling fires from front during recovery")
+	for i in range(40):
+		if hits.size() >= 2:
+			break
+		await frames(1)
+	check_eq(hits, [&"sling", &"sling"], "Captain: second real slug hits")
+	check_eq(states, [enemy.State.PATROL, enemy.State.RECOVER], "Captain: hits land in intended phases")
+	check_eq(blocks, [&"sling"], "Captain: recovery slug is not blocked")
+	check_eq(damage, [1], "Captain: unguarded slug deals one damage")
+	check_eq(enemy.hp, 11, "Captain: recovery hit damages miniboss")
+	check_eq(GameState.slugs, 10, "Captain: both real shots spend ammo")
+	print("MATRIX Captain natural bash: hits=", hits, " states=", states, " blocked=", blocks, " damage=", damage)
 	await dispose(arena)
 
 
