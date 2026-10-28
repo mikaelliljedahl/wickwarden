@@ -62,22 +62,7 @@ func run() -> void:
 
 
 func c10_profile_guard() -> bool:
-	var data := OS.get_environment("XDG_DATA_HOME")
-	var user := OS.get_user_data_dir()
-	var safe := data.begins_with("/tmp/wickwarden-check-")
-	safe = safe and data == data.simplify_path() and user == user.simplify_path()
-	safe = safe and user.begins_with(data + "/")
-	var directory := DirAccess.open("/")
-	if directory == null:
-		safe = false
-	else:
-		for path: String in [data, user, user.path_join("save_1.json"),
-				user.path_join("save_1.json.tmp"), user.path_join("save_1.bad")]:
-			var current := ""
-			for part: String in path.split("/", false):
-				current += "/" + part
-				if directory.is_link(current):
-					safe = false
+	var safe := isolated_test_profile()
 	if not safe:
 		SaveGame.enabled = false
 	check(safe, "C10 disk proof requires isolated runner userdata")

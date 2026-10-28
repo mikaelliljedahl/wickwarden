@@ -360,8 +360,8 @@ func lock_floor() -> void:
 
 
 func persistence() -> void:
-	check(OS.get_user_data_dir().begins_with("/tmp/"), "disk proof requires isolated user data")
-	if not OS.get_user_data_dir().begins_with("/tmp/"):
+	check(isolated_test_profile(), "disk proof requires isolated user data")
+	if not isolated_test_profile():
 		return
 	var before := SaveGame._snapshot()
 	SaveGame.enabled = true

@@ -202,8 +202,8 @@ func persistence() -> void:
 	check_eq(
 		world.get_current_room_id(), &"ow_10_2", "actual full return reaches mouth without bounce"
 	)
-	check(OS.get_user_data_dir().begins_with("/tmp/"), "disk proof requires isolated userdata")
-	if not OS.get_user_data_dir().begins_with("/tmp/"):
+	check(isolated_test_profile(), "disk proof requires isolated userdata")
+	if not isolated_test_profile():
 		return
 	var before := SaveGame._snapshot()
 	SaveGame.enabled = true

@@ -323,8 +323,8 @@ func c8_persistence() -> void:
 	player.place_at(door_to(room, &"ow_9_7").global_position)
 	await seconds(1)
 	check_eq(world.get_current_room_id(), &"ow_9_7", "actual resonance return mouth")
-	check(OS.get_user_data_dir().begins_with("/tmp/"), "isolated disk location")
-	if not OS.get_user_data_dir().begins_with("/tmp/"):
+	check(isolated_test_profile(), "isolated disk location")
+	if not isolated_test_profile():
 		return
 	var before := SaveGame._snapshot()
 	SaveGame.enabled = true

@@ -280,8 +280,8 @@ func r2_save() -> void:
 	var flags: Dictionary = GameState.flags.duplicate(true)
 	check(not SaveGame.enabled, "controlled route never writes user's save")
 	# Runner supplies an isolated temporary userdata root for each suite.
-	check(OS.get_user_data_dir().begins_with("/tmp/"), "save probe isolated from user slot")
-	if not OS.get_user_data_dir().begins_with("/tmp/"):
+	check(isolated_test_profile(), "save probe isolated from user slot")
+	if not isolated_test_profile():
 		return
 	SaveGame.enabled = true
 	check(SaveGame.save(), "actual R2 flags save to isolated disk slot")

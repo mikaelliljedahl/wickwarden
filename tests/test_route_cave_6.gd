@@ -501,7 +501,7 @@ func persistence() -> void:
 	check_eq(world.get_current_room_id(), &"ow_6_6", "actual cave exit returns to Choir Steps")
 	await seconds(.5)
 	check_eq(world.get_current_room_id(), &"ow_6_6", "mouth return avoids bounce")
-	var safe := OS.get_user_data_dir().begins_with("/tmp/")
+	var safe := isolated_test_profile()
 	check(safe, "disk proof requires isolated temporary user data")
 	if not safe:
 		return

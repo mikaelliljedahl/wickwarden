@@ -4943,9 +4943,7 @@ func walk_start_cross(action: StringName, target: StringName) -> void:
 
 
 func save_and_reload() -> bool:
-	var isolated := OS.get_environment("XDG_DATA_HOME")
-	var safe := isolated.begins_with("/tmp/wickwarden-check-")
-	safe = safe and OS.get_user_data_dir().begins_with(isolated + "/")
+	var safe := isolated_test_profile()
 	check(safe, "disk roundtrip requires the isolated test runner userdata")
 	if not safe:
 		return false

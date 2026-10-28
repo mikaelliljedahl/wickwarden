@@ -16,6 +16,10 @@ func _run() -> void:
 		printerr("runner: missing --test=res://tests/test_x.gd")
 		get_tree().quit(2)
 		return
+	if not TestCase.isolated_test_profile():
+		printerr("runner: isolated test profile required")
+		get_tree().quit(2)
+		return
 	var script := load(path) as GDScript
 	if script == null:
 		printerr("runner: cannot load %s" % path)

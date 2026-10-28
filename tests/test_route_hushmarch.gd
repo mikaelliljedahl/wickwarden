@@ -345,8 +345,8 @@ func _shop() -> void:
 
 func _save() -> void:
 	check(not SaveGame.enabled, "route kept user save disabled")
-	check(OS.get_user_data_dir().begins_with("/tmp/"), "disk probe requires isolated userdata")
-	if not OS.get_user_data_dir().begins_with("/tmp/"):
+	check(isolated_test_profile(), "disk probe requires isolated userdata")
+	if not isolated_test_profile():
 		return
 	var flags := GameState.flags.duplicate(true)
 	var money := GameState.currency

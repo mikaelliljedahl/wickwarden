@@ -418,10 +418,10 @@ func persistence() -> void:
 	await seconds(.5)
 	check_eq(world.get_current_room_id(), &"ow_6_3", "mouth return marker avoids bounce")
 	check(
-		OS.get_user_data_dir().begins_with("/tmp/"),
+		isolated_test_profile(),
 		"full-state disk proof requires temporary isolated userdata"
 	)
-	if not OS.get_user_data_dir().begins_with("/tmp/"):
+	if not isolated_test_profile():
 		return
 	var before := SaveGame._snapshot()
 	SaveGame.enabled = true

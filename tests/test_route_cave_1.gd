@@ -448,18 +448,9 @@ func persistence() -> void:
 	check_eq(GameState.max_health, 8, "reentry never awards a second core")
 	# Disk proof is opt-in only in a process with a deliberately isolated userdata root.
 	if OS.get_environment("WICK_C01_DISK") == "1":
-		var isolated := OS.get_environment("XDG_DATA_HOME")
-		check(
-			isolated.begins_with("/tmp/wick-c01-"), "disk child has an isolated temporary XDG root"
-		)
-		check(
-			OS.get_user_data_dir().begins_with(isolated + "/"),
-			"Godot userdata is inside isolated root"
-		)
-		if (
-			isolated.begins_with("/tmp/wick-c01-")
-			and OS.get_user_data_dir().begins_with(isolated + "/")
-		):
+		var safe := isolated_test_profile()
+		check(safe, "disk child has an isolated runner profile")
+		if safe:
 			snapshot = summary()
 			SaveGame.enabled = true
 			check(SaveGame.save(), "isolated actual route writes disk slot")

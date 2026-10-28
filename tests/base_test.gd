@@ -24,6 +24,51 @@ var failures: Array[String] = []
 var checks: int = 0
 
 
+## The test runner creates a private root and one profile per suite. Fail closed if the
+## actual Godot user directory or any relevant path differs from that contract.
+static func isolated_test_profile() -> bool:
+	var root := OS.get_environment("WICK_TEST_ROOT")
+	var profile := OS.get_environment("WICK_TEST_PROFILE")
+	var token := OS.get_environment("WICK_TEST_TOKEN")
+	var data := OS.get_environment("XDG_DATA_HOME")
+	var user := OS.get_user_data_dir()
+	if OS.get_name() != "Linux" or token.length() != 64:
+		return false
+	if root == "" or root != root.simplify_path() or profile != profile.simplify_path():
+		return false
+	if root.get_base_dir() not in ["/tmp", "/var/tmp"]:
+		return false
+	if not root.get_file().begins_with("wickwarden-check-") or profile.get_base_dir() != root:
+		return false
+	if OS.get_environment("HOME") != profile or data != profile.path_join(".local/share"):
+		return false
+	var expected := data.path_join("godot/app_userdata").path_join(
+		str(ProjectSettings.get_setting("application/config/name"))
+	)
+	if user != expected or user != user.simplify_path():
+		return false
+	var dir := DirAccess.open("/")
+	if dir == null:
+		return false
+	for path: String in [root, profile, data, user, root.path_join(".wick-test-root"),
+			user.path_join("save_1.json"), user.path_join("save_1.json.tmp"),
+			user.path_join("save_1.bad"), user.path_join("settings.json")]:
+		var current := ""
+		for part: String in path.split("/", false):
+			current += "/" + part
+			if dir.is_link(current):
+				return false
+	if not DirAccess.dir_exists_absolute(profile) or not DirAccess.dir_exists_absolute(user):
+		return false
+	if FileAccess.get_unix_permissions(root) & 63 != 0:
+		return false
+	if FileAccess.get_unix_permissions(profile) & 63 != 0:
+		return false
+	if not FileAccess.file_exists(root.path_join(".wick-test-root")):
+		return false
+	return FileAccess.get_file_as_string(root.path_join(".wick-test-root")) == token
+
+
 ## Override. Put the scenarios here.
 func run() -> void:
 	pass

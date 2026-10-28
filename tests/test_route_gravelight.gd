@@ -414,8 +414,11 @@ func _ravines() -> void:
 
 
 func _saved_reload() -> void:
-	# Round-trip real SaveGame schema through a unique /tmp file, never user://save_1.json.
-	var path := "/tmp/wick-r5-save-%s.json" % OS.get_process_id()
+	# Round-trip the schema in this suite’s isolated user directory.
+	if not isolated_test_profile():
+		check(false, "R5 scratch requires isolated runner profile")
+		return
+	var path := OS.get_user_data_dir().path_join("r5-snapshot.json")
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(JSON.stringify(SaveGame._snapshot()))
 	file.close()

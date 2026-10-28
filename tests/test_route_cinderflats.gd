@@ -425,7 +425,7 @@ func shop() -> void:
 func persistence() -> void:
 	var flags := GameState.flags.duplicate(true)
 	check(not SaveGame.enabled, "acceptance writes no ordinary user save")
-	if not OS.get_user_data_dir().begins_with("/tmp/"):
+	if not isolated_test_profile():
 		print("PENDING R3 disk persistence: isolated /tmp userdata required")
 		return
 	SaveGame.enabled = true

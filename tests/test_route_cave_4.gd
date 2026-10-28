@@ -677,11 +677,7 @@ func persistence() -> void:
 			check(not reward.visible, "collected persistent reward stays absent")
 	check_eq(GameState.max_health, before["max"], "reentry cannot duplicate core")
 	if OS.get_environment("WICK_C04_DISK") == "1":
-		var isolated := OS.get_environment("XDG_DATA_HOME")
-		var safe := (
-			isolated.begins_with("/tmp/wick-c04-")
-			and OS.get_user_data_dir().begins_with(isolated + "/")
-		)
+		var safe := isolated_test_profile()
 		check(safe, "disk proof requires isolated temporary userdata root")
 		if safe:
 			before = summary()
