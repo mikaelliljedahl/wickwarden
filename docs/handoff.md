@@ -167,12 +167,45 @@ Their documentation followed in `0a2726da39fa02c9864ca63224f9e24a7dd7635e` on
 `origin/main`.
 Q7 Brazier/Gate cases followed in `ad3f29d`; the active visual review was
 documented in `135f2d0aac1d43a2d2f0682f8b444eb27627e2c0` on `origin/main`.
+The route and Brazier checks were documented in `4c0a3cc`; Mirror Warden's
+slash followed in `51b614e` and Q7 Echo tests in
+`da5d9acdc7326046471495a4241f6082b4b42492` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Continuous Wickwarden ending at clean `4c0a3cc`, 2026-10-28:** In a clean
+archive of `4c0a3cca400a0b42ab6ab08a2b1757537d856a3b`, a fresh-state C1–C10
+bot route with normal enemy AI and damage had eight normal deaths/respawns and
+won the final boss at 10/28 half-hearts. The scratch wrapper selected the physical
+right pedestal. Run 3 passed 1,542 checks through the real Wickwarden
+`ending.tscn`, credits, title and Continue: state was reset before confirmation,
+and actual World reloaded completed/Wickwarden flags, health and checkpoint
+`ow_10_8` from isolated persistent save JSON. Log:
+`/var/tmp/wick-ending-4c0a3cc-rXeJyO/run3.log`. Run 1 passed with a save
+warning; run 2 failed due to `/tmp` quota; run 3 used a clean `/var/tmp` profile.
+This is the other ending on this particular bot route, not human or broad-seed
+coverage: the bot reads internal state, farms, deliberately dies and uses a fixed
+seed.
+
+**Mirror Warden and Echo checks, committed in `51b614e` and `da5d9ac`:** Mirror
+Warden's previously invisible active slash now has a light-independent procedural
+glint and outline; damage, timing and area are unchanged. Dedicated painted
+slash art is still missing. The actual World image
+`/var/tmp/wick-mini-inventory/cave_5_4.png` used a placed, protected player,
+not human play. The agent reports `mirror_warden`, `route_cave_5` and lint PASS;
+the lead passed `mirror_warden`, but `route_cave_5` failed its isolated user-data
+safety guard because of `/tmp` quota, not as a normal-save-environment result.
+
+Q7 tests real Chime contact during Echo's natural GLOW, causing two seconds of
+stun and permitting hook; separately, actual contact during natural TELL caused
+no stun or damage and natural FLARE followed. The lead passed `tool_matrix`;
+the agent reports lint PASS. The player was placed and protected; there was no
+visual capture, human test or complete matrix. Hollow Captain's bash and Abacus
+Brute's whirl still lack dedicated painted animations.
 
 **Three fresh-state route runs at clean `0a2726d`, 2026-10-28:** Three retries
 passed 1,529 checks on the continuous route from new in-memory state, with
@@ -716,8 +749,9 @@ ordinary C9 and C10 respawns, active enemies and no warp or manual state in the
 continuous portion. The lead's `TMPDIR=/tmp make check` passed with the B03/B09
 fixes and route to ending: all Godot suites including four shards, lint,
 world-data and Python tests.
-Credits, title return and the other ending are not continuously
-tested. The bot reads boss, hazards, eyes, projectiles and other internal state;
+At that checkpoint credits, title return and the other ending were not continuously
+tested; the later Wickwarden route through Continue is recorded above. The bot
+reads boss, hazards, eyes, projectiles and other internal state;
 the global seed does not control or log two bosses' own RNG, and C7 had a 1/22
 margin. Human play and balance remain open; the ending-choice contract conflict
 and pending user decision remain unchanged.

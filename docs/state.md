@@ -1,5 +1,35 @@
 # Current status
 
+**Continuous Wickwarden ending at clean `4c0a3cc`, 2026-10-28:** In a clean
+archive of `4c0a3cca400a0b42ab6ab08a2b1757537d856a3b`, a fresh-state C1–C10
+bot route with normal enemy AI and damage had eight normal deaths/respawns and
+won the final boss at 10/28 half-hearts. The scratch wrapper selected the physical
+right pedestal. Run 3 passed 1,542 checks through the real Wickwarden
+`ending.tscn`, credits, title and Continue: state was reset before confirmation,
+and actual World reloaded completed/Wickwarden flags, health and checkpoint
+`ow_10_8` from isolated persistent save JSON. Log:
+`/var/tmp/wick-ending-4c0a3cc-rXeJyO/run3.log`. Run 1 passed with a save
+warning; run 2 failed due to `/tmp` quota; run 3 used a clean `/var/tmp` profile.
+This is the other ending on this particular bot route, not human or broad-seed
+coverage: the bot reads internal state, farms, deliberately dies and uses a fixed
+seed.
+
+**Mirror Warden and Echo checks, 2026-10-28 (committed in `51b614e` and
+`da5d9ac`):** Mirror Warden's previously invisible active slash now has a
+light-independent procedural glint and outline; damage, timing and area are
+unchanged. Dedicated painted slash art is still missing. The actual World image
+`/var/tmp/wick-mini-inventory/cave_5_4.png` used a placed, protected player,
+not human play. The agent reports `mirror_warden`, `route_cave_5` and lint PASS;
+the lead passed `mirror_warden`, but `route_cave_5` failed its isolated user-data
+safety guard because of `/tmp` quota, not as a normal-save-environment result.
+
+Q7 tests real Chime contact during Echo's natural GLOW, causing two seconds of
+stun and permitting hook; separately, actual contact during natural TELL caused
+no stun or damage and natural FLARE followed. The lead passed `tool_matrix`;
+the agent reports lint PASS. The player was placed and protected; there was no
+visual capture, human test or complete matrix. Hollow Captain's bash and Abacus
+Brute's whirl still lack dedicated painted animations.
+
 **Three fresh-state route runs at clean `0a2726d`, 2026-10-28:** Three retries
 passed 1,529 checks on the continuous route from new in-memory state, with
 normal damage and enemy AI, reaching real `ending.tscn` with rekindle/completed.
@@ -1987,7 +2017,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `135f2d0aac1d43a2d2f0682f8b444eb27627e2c0` on `origin/main`, documenting the active visual review above and following Q7 Brazier/Gate tests. The latest clean full verification remains at `4dfd5e6`. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `da5d9acdc7326046471495a4241f6082b4b42492` on `origin/main`, including the Mirror Warden presentation and Q7 Echo tests above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
