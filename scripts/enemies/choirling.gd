@@ -28,6 +28,7 @@ const NOTE_KIND := &"note"
 class SongWarning:
 	extends Node2D
 	var note_texture: Texture2D
+	var active_song := false
 
 	func _ready() -> void:
 		note_texture = load("res://assets/sprites/treble_note_fly.png") as Texture2D
@@ -38,7 +39,7 @@ class SongWarning:
 
 	func _draw() -> void:
 		var half := deg_to_rad(CONE_ANGLE) * 0.5
-		var edge := Color(1.0, 0.78, 0.43, 0.75)
+		var edge := Color(1.0, 0.88, 0.65, 0.95) if active_song else Color(1.0, 0.78, 0.43, 0.75)
 		draw_line(Vector2.ZERO, Vector2.from_angle(-half) * CONE_LENGTH, edge, 2.0)
 		draw_line(Vector2.ZERO, Vector2.from_angle(half) * CONE_LENGTH, edge, 2.0)
 		draw_arc(Vector2.ZERO, CONE_LENGTH, -half, half, CONE_SEGMENTS, edge, 2.0)
@@ -48,7 +49,7 @@ class SongWarning:
 				var size := 55.0 + i * 25.0
 				draw_texture_rect_region(
 					note_texture, Rect2(distance - size / 2, -size / 2, size, size),
-					Rect2(0, 0, 96, 96), Color(1, 1, 1, 0.65)
+					Rect2(0, 0, 96, 96), Color(1, 1, 1, 1.0 if active_song else 0.65)
 				)
 
 
@@ -183,6 +184,10 @@ func _make_cone() -> Hitbox:
 	var polygon := CollisionPolygon2D.new()
 	polygon.polygon = _cone_points()
 	cone.add_child(polygon)
+	var song_visual := SongWarning.new()
+	song_visual.name = "Visual"
+	song_visual.active_song = true
+	cone.add_child(song_visual)
 	return cone
 
 
