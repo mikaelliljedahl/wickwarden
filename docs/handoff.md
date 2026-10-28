@@ -344,8 +344,8 @@ documentation `3bcabd3`, Coinwyrm study `4fbed38` and shell-study documentation
 `c298322`, Q7 test `070bfe3` and documentation `0d82e90`/`ea98d94` are on
 `origin/main`; runtime fallback audit `8017926` and full placeholder/ammo audit
 documentation `c602813` and visual-check documentation `62b8416` are published.
-C10 lighting/mounts `1c6afe5` are locally committed and passed a clean full
-check. Verify the remote before push.
+C10 lighting/mounts `1c6afe5` and documentation `dd5f7d0` are on `origin/main`;
+their clean full check passed. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -353,7 +353,26 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**C10 arena lighting and chain mounts, locally committed in `1c6afe5`:** Arena
+**Isolated visual and geometry audits, `dd5f7d0`:** A production scene census
+of 356 `.tscn` files found no serialized Polygon2D or ColorRect; scripts contain
+three and seven respectively, including shader-based floors/water and UI. No
+new placeholders were confirmed. Inventory: `/var/tmp/wick-shape-audit/census.txt`.
+
+In C5, actual Glow Jar via `use_item` showed the shadow for the real Archivist
+and three copies in four directions with a placed, protected player and direct
+phase-2 damage. `boss_archivist` passed; stills are at
+`/var/tmp/wick-shape-audit/base{1,2,3,7-pos0}-after.png`. Human motion was not
+verified.
+
+In a rendered B10 gallery, a real tool fight produced 2675 frames and 70 checks
+PASS (`/var/tmp/wick-b10-chain-audit/run.log` and `frames.csv`). At 60 fps, the
+first chain mount and lantern endpoint had maximum deviation zero across all
+frames, including transition and Reel. The player was placed and invulnerable
+and ammunition granted; the other mounts were not measured numerically. The
+previous forced-transition offset was not reproduced. These studies made no
+repository changes and are not human play.
+
+**C10 arena lighting and chain mounts, committed in `1c6afe5`:** Arena
 lighting and three painted chain mounts replace flat Polygon2D shapes; gameplay
 is unchanged. Source/provenance are in `docs/art-provenance.md`. Five isolated
 targeted suites, lint and 26 art tests passed; recut was byte-identical. Evidence
