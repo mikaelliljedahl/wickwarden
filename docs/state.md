@@ -29,7 +29,7 @@ on sweep direction; the rerun passed 467/467, with the original cause unknown.
 These headless visibility-tree checks are not pixel evidence and do not cover
 all phases or frames or human play.
 
-**C4 difficulty, locally committed in `bc7330f`:** The owner explicitly reports
+**C4 difficulty, committed in `bc7330f`:** The owner explicitly reports
 C4 is too difficult and requests clear safe zones; this owner direction overrides
 the earlier contract numbers without changing the normative documents. Slam
 radius is 80 (formerly 130), ring radius 160 (formerly 260). Quake uses 4×4
@@ -42,6 +42,14 @@ input, boundary and parity checks; targeted lint passed. The clean full
 world-check and 175 Python tests. Log
 `/var/tmp/wick-clean-bc7330f-tm5mapat/check.log`; this is the latest clean full
 PASS.
+
+On a clean exact `bc7330f` after the C4 change, `make rooms-check`,
+`make art-test` and `make playthrough` all passed (exit 0); playthrough includes
+route-check and all four test parts. Log
+`/var/tmp/wick-clean-bc7330f-tm5mapat/final-validation.log`. The route is
+bot-driven with internal state and limited seed coverage; later parts use
+fixtures/warps. This is not human play or human balance verification, and the
+owner's visual C4 test remains outstanding.
 
 Controlled screenshots `/var/tmp/wick-c4-audit-gt4xDg/quake-soft-{0,1}.png`
 used a placed, protected player. Human real-time play and whether the difficulty
@@ -3097,7 +3105,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `6148f58` on `origin/main`, documenting the dynamic placeholder checks; C4 difficulty changes `bc7330f` are locally committed and their clean full check passed. The latest clean full PASS is `bc7330f`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `f1a34f2` on `origin/main`, documenting C4 difficulty changes `bc7330f`; their clean full check passed. The latest clean full PASS is `bc7330f`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

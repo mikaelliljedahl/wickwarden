@@ -333,9 +333,9 @@ and documentation `995488c` are on `origin/main`; The Unlit wax collapse
 `053da3e` and documentation `c0e240a` are on `origin/main`. Cave boss light
 `b70049e`, its documentation `0a4bb72` and room-census documentation
 `efb6b78` are on `origin/main`; the clean full check passed on `b70049e`.
-Placeholder inventory documentation `6148f58` is on `origin/main`; C4
-difficulty changes `bc7330f` are locally committed and passed a clean full
-check. Verify the remote before integration or push.
+Placeholder inventory documentation `6148f58`, C4 difficulty changes
+`bc7330f` and documentation `f1a34f2` are on `origin/main`; the C4 change
+passed a clean full check. Verify the remote before integration or push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -372,7 +372,7 @@ on sweep direction; the rerun passed 467/467, with the original cause unknown.
 These headless visibility-tree checks are not pixel evidence and do not cover
 all phases or frames or human play.
 
-**C4 difficulty, locally committed in `bc7330f`:** The owner explicitly reports
+**C4 difficulty, committed in `bc7330f`:** The owner explicitly reports
 C4 is too difficult and requests clear safe zones; this owner direction overrides
 the earlier contract numbers without changing the normative documents. Slam
 radius is 80 (formerly 130), ring radius 160 (formerly 260). Quake uses 4×4
@@ -385,6 +385,14 @@ input, boundary and parity checks; targeted lint passed. The clean full
 world-check and 175 Python tests. Log
 `/var/tmp/wick-clean-bc7330f-tm5mapat/check.log`; this is the latest clean full
 PASS.
+
+On a clean exact `bc7330f` after the C4 change, `make rooms-check`,
+`make art-test` and `make playthrough` all passed (exit 0); playthrough includes
+route-check and all four test parts. Log
+`/var/tmp/wick-clean-bc7330f-tm5mapat/final-validation.log`. The route is
+bot-driven with internal state and limited seed coverage; later parts use
+fixtures/warps. This is not human play or human balance verification, and the
+owner's visual C4 test remains outstanding.
 
 Controlled screenshots `/var/tmp/wick-c4-audit-gt4xDg/quake-soft-{0,1}.png`
 used a placed, protected player. Human real-time play and whether the difficulty
