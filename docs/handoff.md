@@ -217,12 +217,23 @@ The Mirror Shade echo audit followed in
 `424b845c4f1f450d1d7aaf6ab5561e6f964daa2b` on `origin/main`.
 The Mirror Shade echo prototype was documented in
 `9c935d3a857e9e0f828d6f92eb3498c3843c3d8d` on `origin/main`.
+Mirror Shade effect studies were documented in `6e121b4`; Q7 Automaton jet
+tests are at `6d72c5c6ce9eb946a9987c66a2e6bdbf62210708` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 Wick Automaton jet, committed in `6d72c5c`:** In a controlled arena with
+the actual natural warning and active jet, a real Chime hit has no effect; a
+real Tether Moth hit then stuns for 1.5 seconds and opens the vent. A delayed
+real pitch pot hits the vent for four damage (30→26), and the jet does not
+resume. Agent and lead passed `tool_matrix`; the agent reports 1,916 verbose
+checks and lint PASS. The player is protected and miniboss movement set to zero;
+this is not a real room or human play. Other phase/tool combinations remain open;
+the latest full `make check` is the earlier `2c8c68c` run.
 
 **Mirror Shade scratch cue and cutter studies, 2026-10-28:** In
 `/var/tmp/wick-m5-sweep-review/`, an active cue was tried in four directions with

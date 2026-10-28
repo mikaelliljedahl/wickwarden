@@ -1,5 +1,14 @@
 # Current status
 
+**Q7 Wick Automaton jet, 2026-10-28 (committed in `6d72c5c`):** In a controlled
+arena with the actual natural warning and active jet, a real Chime hit has no
+effect; a real Tether Moth hit then stuns for 1.5 seconds and opens the vent. A
+delayed real pitch pot hits the vent for four damage (30→26), and the jet does
+not resume. Agent and lead passed `tool_matrix`; the agent reports 1,916 verbose
+checks and lint PASS. The player is protected and miniboss movement set to zero;
+this is not a real room or human play. Other phase/tool combinations remain open;
+the latest full `make check` is the earlier `2c8c68c` run.
+
 **Mirror Shade scratch cue and cutter studies, 2026-10-28:** In
 `/var/tmp/wick-m5-sweep-review/`, an active cue was tried in four directions with
 Glow Jar and decoy; stun/death/timeout lifecycle tests passed and eight World
@@ -2280,7 +2289,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `9c935d3a857e9e0f828d6f92eb3498c3843c3d8d` on `origin/main`, documenting the Mirror Shade echo prototype above. The latest clean full check remains at `2c8c68c`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `6d72c5c6ce9eb946a9987c66a2e6bdbf62210708` on `origin/main`, including the Q7 Automaton jet test above. The latest clean full check remains at `2c8c68c`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
