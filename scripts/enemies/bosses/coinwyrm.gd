@@ -42,18 +42,29 @@ class Strike:
 		extends Node2D
 
 		func _draw() -> void:
-			draw_rect(Rect2(-864, -48, 1728, 96), Color(1.0, 0.64, 0.15, 0.32))
 			draw_rect(Rect2(-864, -48, 1728, 96), Color(1.0, 0.82, 0.35, 0.9), false, 4.0)
 
 	class BiteVisual:
 		extends Node2D
 		var facing := Vector2.RIGHT
 
+		func _ready() -> void:
+			# The existing painted coin impact gives the bite a short scatter of gold.
+			if not SpriteVisual.has_art(&"coinwyrm_coin"):
+				return
+			for angle in [-PI / 3, 0.0, PI / 3]:
+				var holder := Node2D.new()
+				holder.position = facing.rotated(angle) * 112.0
+				add_child(holder)
+				var impact := SpriteVisual.attach(holder, &"coinwyrm_coin") as SpriteVisual
+				impact.auto_motion = false
+				impact.play_anim(&"impact")
+
 		func _draw() -> void:
+			# Keep the complete damage boundary visible without a solid sector over the art.
 			var points := PackedVector2Array([Vector2.ZERO])
 			for i in range(25):
 				points.append(facing.rotated(-PI / 2 + PI * i / 24.0) * 150)
-			draw_colored_polygon(points, Color(1.0, 0.64, 0.15, 0.32))
 			points.append(Vector2.ZERO)
 			draw_polyline(points, Color(1.0, 0.82, 0.35, 0.9), 4.0)
 

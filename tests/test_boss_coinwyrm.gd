@@ -8,6 +8,7 @@ func run() -> void:
 	await _challenge()
 	await _windows_and_anchor()
 	await _attacks()
+	await _strike_presentation()
 	await _coin_presentation()
 	await _physical_finish()
 	await _finish()
@@ -380,6 +381,32 @@ func _attacks() -> void:
 	check_eq(boss.hp, 36, "death reset health")
 	check(get_tree().get_nodes_in_group(&"projectiles").is_empty(), "reset clears coins")
 	check(player != null, "real player fixture")
+	await dispose(room)
+
+
+func _strike_presentation() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/Coinwyrm")
+	await seconds(2.6)
+	boss._strike(boss.global_position, Vector2.RIGHT, false)
+	var bite = boss._hazards[-1]
+	check_eq(bite.box.damage, 4, "bite damage remains four")
+	var polygon := bite.box.get_child(0) as CollisionPolygon2D
+	check_eq(polygon.polygon.size(), 26, "bite retains the 180-degree collision polygon")
+	check_near(polygon.polygon[1].length(), 150, 0.01, "bite radius remains 150")
+	var visual := bite.get_node("Visual") as Node2D
+	if SpriteVisual.has_art(&"coinwyrm_coin"):
+		check_eq(visual.get_child_count(), 3, "bite shows three painted coin impacts")
+		for holder in visual.get_children():
+			var impact := holder.get_node_or_null("Visual") as SpriteVisual
+			check(impact != null and impact.animation == &"impact", "bite plays painted impact")
+	boss._strike(boss.global_position, Vector2.RIGHT, true, boss.global_position)
+	var sweep = boss._hazards[-1]
+	check_eq(sweep.box.damage, 3, "tail damage remains three")
+	var shape := sweep.box.get_child(0) as CollisionShape2D
+	check_eq((shape.shape as RectangleShape2D).size, Vector2(1728, 96), "tail band unchanged")
+	check_near(sweep.life, 0.12, 0.001, "strike duration remains 0.12 seconds")
 	await dispose(room)
 
 
