@@ -237,12 +237,23 @@ Room-slide documentation followed in `462b24b`; Q7 Briar Mother's eye cycle is
 at `37ed92b87a223055147afad51645c25cfc48d860` on `origin/main`.
 Briar eye documentation followed in `280b790`; Q7 repeated Unlit exposure is
 landed in `0f6185c562d72db4caff5203b61b4b7837ed4046` on `origin/main`.
+Unlit and streaming documentation followed in `8f05922`; the Q7 exposure cap is
+landed in `e6ab2d3889383121a50aa5d9b3d55f61bf377e64` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 Unlit exposure damage cap, committed in `e6ab2d3`:** In the real-tool B10
+fixture, four hook hits during the first Reel exposure deal eight damage; a
+fifth actual contact after normal i-frames does none. Natural reshield protects,
+and a second real Reel exposure resets the cap and permits two more damage
+(24→16→14). Agent and lead passed `tool_matrix`; the agent reports 2,058 checks
+and lint PASS. The player is placed and protected; this is not World or human
+play. Flare, pot, death and ending are not covered, and no full check was run on
+this change; the latest clean full check is `afdaead`.
 
 **Q7 Unlit repeated heart exposure, committed in `0f6185c`:** Existing real
 sling/Wick play reaches phase three; two real Reel lantern contacts and hook
@@ -763,6 +774,14 @@ The lead's import, `boss_coinwyrm`, `area_cave_8`, `boss_gloam_knight` and
 `route_cave_7` passed. The first route run stopped due to `/tmp` quota; after a
 completed isolated profile was freed, the rerun passed. Agents report lint,
 `art-test` and B07/B08 ownership PASS.
+
+**Q8 read-only failure review, 2026-10-28:** Production has no threaded loader.
+In scratch `/var/tmp/wick-q8-failure-review/`, a failed path is retried without
+limit (29 requests in 30 frames), and direct `SceneTree.quit` in test/capture
+bypasses the exit guard. A simulated timeout cancels quit and restores pause,
+but does not test an actually stuck worker or GUI. Real WM-close, cold disk and
+GPU were not tested. Quarantine and all exit paths need handling; there is no
+robust solution or integration.
 
 **Q8 exit-drain scratch review, 2026-10-28:** In the older snapshot at
 `/var/tmp/wick-q8-exit-review/`, an idempotent drain of active threaded loads
