@@ -1,5 +1,26 @@
 # Current status
 
+**Abacus attack art review, 2026-10-28:** Existing B60 sources have the chain
+baked into the body, while Unlit links are the wrong type. Two new transparent
+ImageGen candidates were tested in scratch and actual C8 with a placed,
+protected player and frozen attack: a closed ring looked like a floating
+necklace; an open radial chain crossed the body/face and lacked attachment in
+some directions. Captures: `/var/tmp/wick-abacus-art/arena.png` and
+`/var/tmp/wick-abacus-art/contact.png`. Both were rejected and neither was
+registered; the painted attack remains open, and this was not human play.
+
+**Q7 Abacus guard, 2026-10-28 (committed in `d2d9dc2`):** A real frontal hook
+is guard-blocked; the hook during charge misses, then a real flare hits and
+breaks the rail from 4 to 0 without body damage (28 HP). A subsequent hook
+reduces body HP to 26; no Reel is used. Enemy AI ticks, but the player is
+arranged and protected: this is not human play, a full fight or a complete
+matrix. The lead passed `tool_matrix`; the agent reports lint PASS. No visual
+capture was made for this test.
+
+**Hollow Captain QA:** `/var/tmp/wick-captain-qa/natural-bash.mp4` and
+`contact.png` in the same directory show idle/walk during bash. Existing uncut
+side/down actions need the art pipeline; human play remains untested.
+
 **Continuous Wickwarden ending at clean `4c0a3cc`, 2026-10-28:** In a clean
 archive of `4c0a3cca400a0b42ab6ab08a2b1757537d856a3b`, a fresh-state C1–C10
 bot route with normal enemy AI and damage had eight normal deaths/respawns and
@@ -2017,7 +2038,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `da5d9acdc7326046471495a4241f6082b4b42492` on `origin/main`, including the Mirror Warden presentation and Q7 Echo tests above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `d2d9dc241cf102824ea1e1b82e55e1757d2000aa` on `origin/main`, including the Q7 Abacus guard test above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
