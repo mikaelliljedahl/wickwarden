@@ -185,12 +185,23 @@ Sump documentation followed in `e024916`; the C10/playthrough guard landed in
 `3e2eefde47d141e1cb5ad4926d47f868294bc42e` on `origin/main`.
 Guard documentation followed in `ea605c1` and Choirling's active song in
 `669633939d46c79dd81099a5297133b3d9909243` on `origin/main`.
+Choirling documentation followed in `dfe0d78`; Watcher Eye beam presentation
+is at `5d938dd1af1331c475d35f4a574288303dd786c2` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Watcher Eye beam, committed in `5d938dd`:** The existing painted beam is
+visible outside the lamp field using unshaded rendering; mechanics are unchanged.
+In actual `cave_10_12`, the agent captured
+`/var/tmp/wick-regular-audit/eye-before-130.png` and `eye-after-130.png` in that
+directory with a placed player and ticking AI. The agent reports `watcher_eye`,
+`choirling`, lint and ownership PASS. Only downward direction was verified; the
+warning remains difficult to see and the broader enemy inventory remains open.
+This is not human play.
 
 **Choirling active song, committed in `6696339`:** Its previously invisible
 0.5-second active song now uses existing painted `treble_note` images and a cone
