@@ -854,13 +854,14 @@ class BandPresentation:
 
 	func _process(_delta: float) -> void:
 		var band := get_parent() as Band
-		picture.visible = band.age >= 0.8
+		picture.visible = true
+		picture.modulate = Color.WHITE if band.age >= 0.8 else Color(0.75, 0.84, 1.0, 0.25)
 		queue_redraw()
 
 	func _draw() -> void:
 		var band := get_parent() as Band
 		var active := band.age >= 0.8
 		var bounds := Rect2(-48, -384, 96, 768)
-		if not active or picture.texture == null:
+		if picture.texture == null:
 			draw_rect(bounds, Color(0.8, 0.56, 0.22, 0.12 if not active else 0.5))
 		draw_rect(bounds, Color(1.0, 0.76, 0.35, 0.9 if active else 0.65), false, 3.0)

@@ -24,6 +24,25 @@ func run() -> void:
 	await _world_presentation()
 	await _missing_art_presentation()
 	await _chain_presentation()
+	await _lash_missing_art()
+
+
+func _lash_missing_art() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = (load(SCENE) as PackedScene).instantiate()
+	var lash = boss.Band.new()
+	arena.add_child(lash)
+	var look = lash.get_node("Visual")
+	look.picture.texture = null
+	await frames(2)
+	check(look.picture.texture == null, "missing lash texture keeps fallback path")
+	check(not lash.active, "missing lash art preserves safe warning")
+	check_eq((lash.get_child(0).shape as RectangleShape2D).size, Vector2(96, 768), "fallback keeps bounds")
+	await seconds(0.8)
+	check(is_instance_valid(lash) and lash.active, "missing lash art preserves activation")
+	await dispose(arena)
+	boss.free()
 
 
 func _chain_presentation() -> void:
@@ -557,11 +576,13 @@ func _scheduled_attacks() -> void:
 		check_eq((shape.shape as RectangleShape2D).size, Vector2(96, 768), "lash damage bounds")
 		var look = lash.get_node("Visual")
 		check(look.picture.texture != null, "lash uses the cut painted chain")
-		check(not look.picture.visible, "chain stays hidden during warning")
+		check(look.picture.visible, "painted chain is visible during warning")
+		check_eq(look.picture.modulate, Color(0.75, 0.84, 1.0, 0.25), "warning is faint and cool")
 	await seconds(0.8)
 	if is_instance_valid(lash):
 		check(lash.active, "chain lash activates aftertell")
 		check(lash.get_node("Visual").picture.visible, "chain appears during active lash")
+		check_eq(lash.get_node("Visual").picture.modulate, Color.WHITE, "active lash keeps original art")
 	GameState.acquire_item(&"reel_line")
 	GameState.set_active_item(&"reel_line")
 	player.place_at(Vector2(960, 720))
