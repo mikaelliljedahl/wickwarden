@@ -327,9 +327,10 @@ Vine documentation followed in `5adfb2b`; Brine Crab directional actions
 landed in `0edb9a5e0e3ed520cf8ef27993050c38ee794d47` on `origin/main`.
 Brine Crab documentation followed in `6c9c64c` on `origin/main`; Abacus Brute
 painted whirl `cb649a4` and its documentation `c9ac1d3` are on `origin/main`.
-Regular enemy death effect `473e14b` and documentation `47483e5` are on
-`origin/main`; miniboss wax collapse `41cf781` is locally committed and its
-clean full check passed. Verify the remote before integration or push.
+Regular enemy death effect `473e14b`, miniboss wax collapse `41cf781` and
+documentation `c5bb5ec` are on `origin/main`. Coinwyrm bite warning `11988ae`
+is locally committed; its clean full check passed. Verify the remote before
+integration or push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -337,7 +338,23 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Miniboss wax collapse, locally committed in `41cf781`:** Six 256 px frames at
+**Coinwyrm bite warning, locally committed in `11988ae`:** The warning reuses
+documented `mirror_tell_z1`, with a painted arc animated by progress and a thin
+sector boundary. The original marker's 0.5-second signal, 180-degree/150 px
+warning and hitbox are unchanged; missing art falls back to the marker. Isolated
+`boss_coinwyrm` and `route_cave_8` passed, as did targeted lint. A clean full
+`make check` on exact `11988ae` passed (exit 0): 159 Godot test files, lint,
+world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-11988ae-xqtcu724/check.log`; this is the latest clean full
+PASS.
+
+Actual `cave_8_12` captures used natural AI and a placed, protected player in
+four directions: `/var/tmp/wick-bite-integrated-nmNxw3/overlap.png`. Early,
+late and light samples are at `/var/tmp/wick-bite-scratch/v3/matrix.jpg`.
+The player and plates can overlap the warning; human play and real-time video
+remain unverified.
+
+**Miniboss wax collapse, committed in `41cf781`:** Six 256 px frames at
 8 fps use natural room lighting and a soft fade over the last 0.25 seconds.
 Regular bosses and parts retain the explosion; missing art falls back to
 explosion/Placeholder. Logic and timing are unchanged. The built-in ImageGen
@@ -347,8 +364,8 @@ source is session `01a1833e-4196-7423-8c23-d9ec5734cc45`, output
 passed; art tests emitted the existing ResourceWarning. A clean full
 `make check` on exact `41cf781` passed (exit 0): 159 Godot test files, lint,
 world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-41cf781-wyt5rznn/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-41cf781-wyt5rznn/check.log`; the later clean full PASS at
+`11988ae` is recorded above.
 
 Physical synthetic Hitbox captures in four actual miniboss rooms are at
 `/var/tmp/wick-mini-z1/cave_{1_5,2_4,8_4,9_4}-{before,0..11}.png`, with logs,
