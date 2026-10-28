@@ -39,6 +39,8 @@ func run() -> void:
 	for prop: String in ["hidden_seam", "hidden_stairs", "sealed_seam"]:
 		for tool: StringName in [&"tallow_sling", &"lantern_chime", &"glow_jar"]:
 			await _seam_pair(prop, tool)
+		for tool: StringName in [&"glow_jar", &"lantern_chime"]:
+			await _seam_light_contact(prop, tool)
 	for tool: StringName in [&"tallow_sling", &"cinder_wick", &"hook"]:
 		await _tap_wall_pair(tool)
 	for tool: StringName in [&"hook", &"flare", &"pitch_pot"]:
@@ -52,6 +54,9 @@ func run() -> void:
 	for tool: StringName in [&"pitch_pot", &"tallow_sling", &"cinder_wick", &"flare"]:
 		for prop: String in ["cracked_wall", "brittle_rocks"]:
 			await _cracked_wall_pair(tool, prop)
+	for prop: String in ["cracked_wall", "brittle_rocks"]:
+		for tool: StringName in [&"flare", &"pitch_pot"]:
+			await _cracked_contact(prop, tool)
 	for prop: String in ["reed_cluster", "rush_wall", "moss_wall", "dry_vine_screen", "bush_cluster"]:
 		for tool: StringName in [&"hook", &"tallow_sling", &"cinder_wick", &"pitch_pot"]:
 			await _cut_screen_pair(prop, tool)
@@ -148,6 +153,54 @@ func _seam_pair(prop: String, tool: StringName) -> void:
 	await frames(3)
 	if seam != null:
 		check_eq(seam.get(&"is_revealed"), opens, "%s -> %s: revisit" % [tool, prop])
+	await dispose(arena)
+
+
+func _seam_light_contact(prop: String, tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var seam := _gate(arena, [prop, &"seam_id"], Vector2(400, 400))
+	if seam == null:
+		await dispose(arena)
+		return
+	var player := make_player(arena, Vector2(400, 650))
+	await frames(3)
+	_equip(player, tool)
+	player.facing = Vector2.UP
+	var label := "%s -> %s" % [tool, prop]
+	check(player.use_item(), label + ": real item activated")
+	var reached := false
+	var shown_before_permanent := false
+	for i in range(110):
+		await frames(1)
+		if tool == &"glow_jar":
+			for light in get_tree().get_nodes_in_group(&"glow_light"):
+				if light.is_lit() and light.global_position.distance_to(seam.global_position) <= 520:
+					reached = true
+			shown_before_permanent = shown_before_permanent or (
+				bool(seam.get(&"is_shown")) and not bool(seam.get(&"is_revealed"))
+			)
+		else:
+			for wave in get_tree().get_nodes_in_group(&"chime_waves"):
+				if wave.current_radius() >= wave.global_position.distance_to(seam.global_position):
+					reached = true
+	var opens := tool == &"glow_jar"
+	check(reached, label + ": actual light or chime reaches opening")
+	if opens:
+		check(shown_before_permanent, label + ": briefly shown before permanent reveal")
+	check_eq(bool(seam.get(&"is_revealed")), opens, label + ": persistent reveal")
+	check_eq(GameState.has_flag(&"revealed_matrix"), opens, label + ": flag")
+	check_eq((seam.get_node("Body/Shape") as CollisionShape2D).disabled, opens, label + ": solid")
+	print("MATRIX ", label, " reaches=", reached, " opens=", opens)
+	await dispose(arena)
+	arena = make_arena()
+	seam = _gate(arena, [prop, &"seam_id"], Vector2(400, 400))
+	await frames(3)
+	if seam != null:
+		check_eq(bool(seam.get(&"is_revealed")), opens, label + ": revisit reveal")
+		check_eq(GameState.has_flag(&"revealed_matrix"), opens, label + ": revisit flag")
+		check_eq((seam.get_node("Body/Shape") as CollisionShape2D).disabled, opens,
+			label + ": revisit solid")
 	await dispose(arena)
 
 
@@ -406,6 +459,81 @@ func _cracked_wall_pair(tool: StringName, prop: String) -> void:
 	check_eq((wall.get_node("Shape") as CollisionShape2D).disabled, opens, "wall collision")
 	check(not bool(far.get(&"is_open")), "%s -> distant wall remains closed" % tool)
 	check(not GameState.has_flag(&"cracked_matrix_far"), "distant wall has no flag")
+	await dispose(arena)
+
+
+func _cracked_contact(prop: String, tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var wall := _gate(arena, [prop, &"wall_id"], Vector2(644, 400))
+	if wall == null:
+		await dispose(arena)
+		return
+	var player := make_player(arena, Vector2(444 if tool == &"pitch_pot" else 400, 400))
+	player.set_hurtbox_enabled(self, false)
+	var blasts: Array[Vector2] = []
+	var radii: Array[float] = []
+	var on_blast := func(pos: Vector2, radius: float) -> void:
+		blasts.append(pos)
+		radii.append(radius)
+	Events.explosion.connect(on_blast)
+	await frames(3)
+	player.facing = Vector2.RIGHT
+	var label := "%s -> %s" % [tool, prop]
+	var contact := false
+	var flares := [0]
+	player.flare_fired.connect(func() -> void: flares[0] += 1)
+	if tool == &"pitch_pot":
+		_equip(player, tool)
+		GameState.add_pitch_pots(1)
+		check(player.use_item(), label + ": real pot placed")
+	else:
+		Input.action_press(&"attack")
+		await frames(60)
+		check(player.charge_ready, label + ": actual flare charged")
+		var bounds := Rect2(wall.global_position - wall.size * 0.5, wall.size)
+		check(player.global_position.x + Player.SWING_REACH < bounds.position.x,
+			label + ": initial hook is outside wall reach")
+		check(not bool(wall.get(&"is_open")), label + ": wall remains closed while charging")
+		player.global_position = Vector2(504, 400)
+		Input.action_release(&"attack")
+	for i in range(120):
+		await frames(1)
+		if tool == &"flare" and player.flare_hitbox.active:
+			var shape := player.flare_hitbox.get_child(0) as CollisionShape2D
+			var query := PhysicsShapeQueryParameters2D.new()
+			query.shape = shape.shape
+			query.transform = shape.global_transform
+			query.collision_mask = Layers.WORLD
+			for result in arena.get_world_2d().direct_space_state.intersect_shape(query):
+				contact = contact or result.collider == wall
+	Events.explosion.disconnect(on_blast)
+	if tool == &"flare":
+		check_eq(flares[0], 1, label + ": actual flare fired")
+	else:
+		check_eq(blasts.size(), 1, label + ": one actual explosion")
+		if blasts.size() == 1:
+			var bounds := Rect2(wall.global_position - wall.size * 0.5, wall.size)
+			var nearest := Vector2(
+				clampf(blasts[0].x, bounds.position.x, bounds.end.x),
+				clampf(blasts[0].y, bounds.position.y, bounds.end.y)
+			)
+			contact = blasts[0].distance_to(nearest) <= radii[0]
+	check(contact, label + ": actual blast or flare reaches solid body")
+	var opens := tool == &"pitch_pot"
+	check_eq(bool(wall.get(&"is_open")), opens, label + ": opening")
+	check_eq(GameState.has_flag(&"cracked_matrix"), opens, label + ": flag")
+	check_eq((wall.get_node("Shape") as CollisionShape2D).disabled, opens, label + ": solid")
+	print("MATRIX ", label, " contact=", contact, " opens=", opens)
+	await dispose(arena)
+	arena = make_arena()
+	wall = _gate(arena, [prop, &"wall_id"], Vector2(644, 400))
+	await frames(3)
+	if wall != null:
+		check_eq(bool(wall.get(&"is_open")), opens, label + ": revisit opening")
+		check_eq(GameState.has_flag(&"cracked_matrix"), opens, label + ": revisit flag")
+		check_eq((wall.get_node("Shape") as CollisionShape2D).disabled, opens,
+			label + ": revisit solid")
 	await dispose(arena)
 
 
