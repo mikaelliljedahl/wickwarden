@@ -10,8 +10,8 @@ the audit found no matte outside crops and a byte-identical recut
 (`/var/tmp/wick-boss-light-z1/audit.log`). Six targeted Godot suites, lint and
 26 art tests passed. A clean full `make check` on exact `b70049e` passed
 (exit 0): 161 Godot test files, lint, world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-b70049e-hwle9lfh/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-b70049e-hwle9lfh/check.log`; the later clean full PASS at
+`bc7330f` is recorded below.
 
 Physical synthetic lethal hits in isolated C1/C5 with a placed, protected player
 were captured at `/var/tmp/wick-boss-light-z1/room-cave_{1_8,5_10}-dark-*.png`.
@@ -29,8 +29,23 @@ on sweep direction; the rerun passed 467/467, with the original cause unknown.
 These headless visibility-tree checks are not pixel evidence and do not cover
 all phases or frames or human play.
 
-**C4 difficulty:** The owner reports C4 is difficult. Investigation and a fix
-are in progress; no resolution is claimed.
+**C4 difficulty, locally committed in `bc7330f`:** The owner explicitly reports
+C4 is too difficult and requests clear safe zones; this owner direction overrides
+the earlier contract numbers without changing the normative documents. Slam
+radius is 80 (formerly 130), ring radius 160 (formerly 260). Quake uses 4×4
+blocks with the same hitboxes, a cool safe outline inset 28 px versus the 24 px
+damage radius, and cracks on dangerous areas. Quake waits for the slam series
+and ring to finish and resets its timer to 8 seconds. Isolated
+`boss_hushed_colossus` and `route_cave_4` passed, including physical Mitts and
+input, boundary and parity checks; targeted lint passed. The clean full
+`make check` on exact `bc7330f` passed (exit 0): 161 Godot test files, lint,
+world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-bc7330f-tm5mapat/check.log`; this is the latest clean full
+PASS.
+
+Controlled screenshots `/var/tmp/wick-c4-audit-gt4xDg/quake-soft-{0,1}.png`
+used a placed, protected player. Human real-time play and whether the difficulty
+is resolved remain unverified.
 
 **Closing inventory:** The owner requests a quick finish. A read-only final
 inventory found no confirmed serious placeholder in the code paths inspected;
@@ -3082,7 +3097,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `efb6b78` on `origin/main`, recording the earlier room census; cave boss death light `b70049e` passed its clean full check. The latest clean full PASS is `b70049e`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `6148f58` on `origin/main`, documenting the dynamic placeholder checks; C4 difficulty changes `bc7330f` are locally committed and their clean full check passed. The latest clean full PASS is `bc7330f`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
