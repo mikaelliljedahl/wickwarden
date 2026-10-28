@@ -290,12 +290,34 @@ Corrow warning documentation followed in `cdeebe8`; painted Chime notes landed
 in `55f03cc25b876605e88f86effc9a772c490a5a34` on `origin/main`.
 Chime documentation followed in `2188126`; painted Mirror Warden TELL landed
 in `938c0b5f6082bb4f323de4c4a55250b2fede9ebd` on `origin/main`.
+Mirror Warden documentation followed in `b69f360`; the Cinder Wick cast cue
+landed in `65f4ee6e66050769180fdab3269903ecf4dbf623` on `origin/main`.
+The tool cue visual test correction landed in
+`1ed6d160743bcd3b0a1ea52c03b251ea371550e9` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Tool cue visual test correction, committed in `1ed6d16`:** The clean full
+`make check` on `65f4ee6` FAILED: `test_tool_cue_visual` had four failed checks
+caused by the new painted `Sprite2D` child. The test correction keeps explicit
+nonphysical checks, no body/shadow/collision, unchanged other cues and missing-art
+coverage. The lead passed six targeted suites. A clean full `make check` on
+exact `1ed6d16` passed; log `/var/tmp/wick-clean-1ed6d16-fk7k3e9w/check.log`.
+This is the latest full check.
+
+**Cinder Wick painted cast cue, committed in `65f4ee6`:** The painted cue
+appears by the lantern with missing-art fallback; source and provenance are in
+the commit. Other tools retain their cue, and cast timing and gameplay are
+unchanged. The agent captured controlled stills of natural use in four directions
+in `ow_1_1`/`cave_1_5`, with health 6/6 and an unmodified enemy; up/down are
+subtle. Human play and motion were not verified. The lead passed `cinder`,
+`sling`, `boots` and `mitts` after import; the agent reports lint and 25
+`art-test` tests PASS. The later full-check failure and test correction are
+recorded above.
 
 **Mirror Warden tell, committed in `938c0b5`:** TELL uses a painted blue-white
 warning; the documented source and provenance are committed. Actual `cave_5_4`
@@ -306,7 +328,8 @@ passed `mirror_warden` and `tool_matrix` after import; the first pre-import
 attempt failed. `art-test` passed 25 tests with the existing ResourceWarning;
 the agent reports lint PASS. Human play and motion remain unverified. A clean
 full `make check` on exact `938c0b5` passed; log
-`/var/tmp/wick-clean-938c0b5-5oaq1700/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-938c0b5-5oaq1700/check.log`. The later clean `1ed6d16`
+full check is recorded above.
 
 **Chime painted notes, committed in `55f03cc`:** The 512 px native-alpha
 painted notes use the recorded source and provenance. The main rim scales as
