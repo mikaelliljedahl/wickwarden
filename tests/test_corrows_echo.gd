@@ -39,6 +39,14 @@ func _cycle_and_chime() -> void:
 	var enemy = _spawn(arena)
 	var player := make_player(arena, Vector2(940, 480))
 	await _wait_state(enemy, enemy.State.TELL)
+	var warning := enemy.get_node_or_null("ComboWarning")
+	check(warning != null and warning.texture != null, "combo warning uses painted art")
+	if warning != null:
+		var material := warning.material as CanvasItemMaterial
+		check(
+			material != null and material.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED,
+			"warning is readable in darkness"
+		)
 	check_eq(enemy.max_hp, 36, "HP36")
 	check_eq(enemy.move_speed, 200.0, "speed200")
 	check_eq(enemy.contact_damage, 4, "contact4")
@@ -148,7 +156,10 @@ func _attacks() -> void:
 	enemy._throw_hook()
 	hook = enemy._hook
 	enemy.reset_fight()
-	check(hook.is_queued_for_deletion() and not hook.hitbox.is_physics_processing(), "reset immediately stops hook")
+	check(
+		hook.is_queued_for_deletion() and not hook.hitbox.is_physics_processing(),
+		"reset immediately stops hook"
+	)
 	check_eq(enemy.hp, 36, "reset fullHP")
 	await dispose(arena)
 

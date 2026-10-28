@@ -29,6 +29,42 @@ class FlareWarning:
 			draw_arc(Vector2.ZERO, 170, 0, TAU, 48, Color(1, 0.8, 0.35, 0.6), 7)
 
 
+class ComboWarning:
+	extends Node2D
+	var texture: Texture2D
+
+	func _ready() -> void:
+		var path := "res://assets/sprites/unlit_wax_wave_z1_idle.png"
+		if ResourceLoader.exists(path):
+			texture = load(path) as Texture2D
+		var unshaded := CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = unshaded
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		var echo = get_parent()
+		if echo.is_dead or echo.is_dying() or echo.state != State.TELL:
+			return
+		var start: float = echo._aim.angle() - deg_to_rad(55)
+		var finish: float = echo._aim.angle() + deg_to_rad(55)
+		if texture == null:
+			draw_arc(Vector2.ZERO, 150, start, finish, 24, Color(1, 0.7, 0.3), 4)
+			return
+		for i in range(32):
+			var u := float(i) / 32.0
+			var v := float(i + 1) / 32.0
+			var a := Vector2.from_angle(lerpf(start, finish, u))
+			var b := Vector2.from_angle(lerpf(start, finish, v))
+			var points := PackedVector2Array([a * 130, b * 130, b * 150, a * 150])
+			var uv := PackedVector2Array(
+				[Vector2(u, 0), Vector2(v, 0), Vector2(v, 1), Vector2(u, 1)]
+			)
+			draw_polygon(points, PackedColorArray([Color(1, 0.8, 0.55, 0.65)]), uv, texture)
+
+
 enum State { APPROACH, TELL, COMBO, RETREAT, GLOW, FLARE, RECOVER }
 
 var state := State.APPROACH
@@ -62,6 +98,10 @@ func _init() -> void:
 
 
 func _boss_ready() -> void:
+	var combo_warning := ComboWarning.new()
+	combo_warning.name = "ComboWarning"
+	add_child(combo_warning)
+	move_child(combo_warning, 0)
 	var warning := FlareWarning.new()
 	warning.name = "FlareWarning"
 	var material := CanvasItemMaterial.new()
@@ -228,18 +268,3 @@ func _on_death() -> void:
 	super()
 	for kind: StringName in [&"ember", &"ember", &"brass_coin", &"brass_coin"]:
 		PickupBase.spawn(kind, get_parent(), global_position, true)
-
-
-func _draw() -> void:
-	if is_dead or is_dying():
-		return
-	if state == State.TELL:
-		draw_arc(
-			Vector2.ZERO,
-			150,
-			_aim.angle() - deg_to_rad(55),
-			_aim.angle() + deg_to_rad(55),
-			24,
-			Color(1, 0.7, 0.3),
-			4
-		)
