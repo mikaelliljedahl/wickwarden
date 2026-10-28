@@ -1,5 +1,13 @@
 # Wickwarden — art provenance
 
+## Kilnkeeper wax splash (2026-10-28)
+
+The standalone `fx_wax_splash` strip uses the existing verified ImageGen
+`fx_wax_splash_v1.png` source. Original output, SHA-256, exact prompt, reference
+and visual limits are recorded in the [source review](../tools/source_art/fx-wax-splash-20261028-log.md).
+The cutter output `fx_wax_splash_idle.png` SHA-256 is
+`2d18de33e2636b6ac8236011ad418c30febae4838b3c95aa13dc370f6dc12682`.
+
 ## Gloam Knight slash candidate (2026-10-28)
 
 A new built-in image generation candidate was reviewed but not registered for

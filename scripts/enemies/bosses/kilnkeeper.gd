@@ -279,6 +279,12 @@ func _tick_attack(delta: float) -> void:
 			attack = Attack.RUSH
 			_rush_distance = 0.0
 		Attack.SPLASH_WARNING:
+			var effect := SpriteVisual.spawn_effect(self, &"fx_wax_splash", global_position, 0.8)
+			if effect != null:
+				var unshaded := CanvasItemMaterial.new()
+				unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+				effect.material = unshaded
+				add_hazard(effect)
 			_splash = Hitbox.new()
 			_splash.team = Layers.Team.ENEMY
 			_splash.kind = &"wax_splash"
@@ -286,6 +292,9 @@ func _tick_attack(delta: float) -> void:
 			_splash.source = self
 			_splash.blockable = false
 			_splash.add_circle(SPLASH_RADIUS)
+			var look := SplashVisual.new()
+			look.name = "Visual"
+			_splash.add_child(look)
 			add_child(_splash)
 			add_hazard(_splash)
 			_splash.activate()
@@ -307,3 +316,15 @@ func _slag_impact(reason: StringName, shot: EnemyProjectile) -> void:
 	var effect := SpriteVisual.spawn_effect(get_parent(), &"kiln_slag", shot.global_position)
 	if effect is SpriteVisual:
 		effect.play_anim(&"impact")
+
+
+class SplashVisual:
+	extends Node2D
+
+	func _ready() -> void:
+		var unshaded := CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = unshaded
+
+	func _draw() -> void:
+		draw_arc(Vector2.ZERO, SPLASH_RADIUS, 0, TAU, 96, Color(1.0, 0.72, 0.3, 0.9), 3.0)

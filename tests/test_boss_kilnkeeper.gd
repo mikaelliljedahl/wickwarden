@@ -10,10 +10,56 @@ func run() -> void:
 	if _capture_requested():
 		return
 	await _death_contact()
+	await _splash_presentation_lifecycle()
 	await _armour_and_fight()
 	await _molten_expiry_and_splash()
 	await _attacks_and_reset()
 	await _arena_scene()
+
+
+func _splash_presentation_lifecycle() -> void:
+	for missing_art in [false, true]:
+		reset_state()
+		SpriteVisual.use_manifest(
+			"res://tests/fixtures/no_wax_plate_art.json" if missing_art else SpriteVisual.DEFAULT_MANIFEST
+		)
+		var arena := make_arena()
+		var boss = _boss(arena, Vector2(800, 480))
+		await seconds(1.6)
+		boss.attack = boss.Attack.SPLASH_WARNING
+		boss._attack_left = 0.0
+		boss._tick_attack(0.0)
+		var hit: Hitbox = boss._splash
+		var effect := boss.get_node_or_null("Puff") as SpriteVisual
+		check(hit != null and hit.active, "splash creates its active hitbox")
+		check(hit.get_node_or_null("Visual") != null, "splash retains boundary without art")
+		check_eq(effect != null, not missing_art, "splash uses painted effect when available")
+		if effect != null:
+			check_eq(effect.sprite_frames.get_frame_count(&"idle"), 5, "splash has five painted frames")
+		await frames(5)
+		check(not is_instance_valid(hit), "splash hitbox expires after its short active window")
+		if effect != null:
+			check(is_instance_valid(effect), "painted effect outlives the hitbox")
+			await seconds(0.5)
+			check(not is_instance_valid(effect), "painted effect ends on its own")
+			boss.attack = boss.Attack.SPLASH_WARNING
+			boss._attack_left = 0.0
+			boss._tick_attack(0.0)
+			effect = boss.get_node_or_null("Puff") as SpriteVisual
+			boss.reset_fight()
+			await frames(2)
+			check(not is_instance_valid(effect), "reset clears the painted splash")
+			await seconds(1.6)
+			boss.attack = boss.Attack.SPLASH_WARNING
+			boss._attack_left = 0.0
+			boss._tick_attack(0.0)
+			effect = boss.get_node_or_null("Puff") as SpriteVisual
+			boss.apply_damage(99, boss.global_position, 0.0)
+			await frames(2)
+			check(boss.is_dying(), "lethal hit starts death")
+			check(not is_instance_valid(effect), "death clears the painted splash")
+		await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
 
 
 func _plate_visual_adapter() -> void:
