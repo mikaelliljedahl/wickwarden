@@ -1,5 +1,19 @@
 # Current status
 
+**C10 arena lighting and chain mounts, locally committed in `1c6afe5`:** Arena
+lighting and three painted chain mounts replace flat Polygon2D shapes; gameplay
+is unchanged. Source/provenance are in `docs/art-provenance.md`. Five isolated
+targeted suites, lint and 26 art tests passed; recut was byte-identical. Evidence
+and controlled images are in `/var/tmp/wick-z1-integrate/`. The clean full
+`make check` on exact `1c6afe5` passed (exit 0): 161 Godot test files, lint,
+world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-1c6afe5-tmjf9sru/check.log`; this is the latest clean full
+PASS.
+
+Captures forced phases and placement with saves disabled; P2/P3 exits reported
+resource warnings. A forced transition showed a brief chain offset also present
+in the old scene. Natural play and human motion have not been verified.
+
 **Isolated C9/C10 visual study, `c602813`:** Four active effects use painted
 sprites with thin indicator boundaries; no filled square placeholders were
 confirmed in `/var/tmp/wick-primitive-c602/{deadbolt,lash,wax,pulse}.png`. The
@@ -71,8 +85,8 @@ phases lead through three Reel contacts and hook attacks to the victory flag;
 the isolated matrix passed 2104 checks. The player is placed and invulnerable,
 ammunition is granted, and this is not human play. A clean full `make check`
 passed on exact `070bfe3` (exit 0): 161 Godot test files, lint, world-check and
-175 Python tests. Log `/var/tmp/wick-clean-070bfe3-kg54dsw0/check.log`; this is
-the latest clean full PASS.
+175 Python tests. Log `/var/tmp/wick-clean-070bfe3-kg54dsw0/check.log`; the
+later clean full PASS at `1c6afe5` is recorded above.
 
 **Q6 C10 longer soak, isolated scratch:** Two runs passed 5221 checks, each
 sampling 30 simulated seconds per room across 15 C10 targets with a protected
@@ -3269,7 +3283,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `c602813` on `origin/main`, documenting the full placeholder and ammo audits; Q7 test `070bfe3` passed its clean full check; Choir Warden poses `aa0f9a2` passed their clean full check; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `070bfe3`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `62b8416` on `origin/main`, documenting final arena visual checks; C10 lighting/mounts `1c6afe5` are locally committed with a clean full check passed; Q7 test `070bfe3` passed its clean full check; Choir Warden poses `aa0f9a2` passed their clean full check; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `1c6afe5`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
