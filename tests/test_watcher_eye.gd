@@ -13,6 +13,7 @@ func run() -> void:
 	await _stats()
 	await _faces_nearest_wall()
 	await _lid_closed_ignores_sling()
+	await _warning_clears_on_stun()
 	await _fires_beam_on_axis()
 	await _no_fire_off_axis_or_out_of_range()
 	await _ward_blocks_beam()
@@ -79,6 +80,24 @@ func _fires_beam_on_axis() -> void:
 			light != null and light.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED,
 			"beam remains visible outside the lamp light"
 		)
+		check(eye.visual.material == null, "eye returns to normal lighting after firing")
+	await dispose(arena)
+
+
+func _warning_clears_on_stun() -> void:
+	reset_state()
+	var arena := make_arena()
+	var eye := make_enemy(arena, EYE_SCENE, EYE_AT)
+	eye.room_rect = INTERIOR
+	make_player(arena, EYE_AT + Vector2(300, 0))
+	await seconds(1.7)
+	var material := eye.visual.material as CanvasItemMaterial
+	check(
+		material != null and material.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED,
+		"natural warning is visible outside the lamp light"
+	)
+	eye.stun(1.5)
+	check(eye.visual.material == null, "stun clears warning lighting")
 	await dispose(arena)
 
 

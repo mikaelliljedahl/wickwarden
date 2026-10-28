@@ -27,6 +27,8 @@ var _state: State = State.REST
 var _timer: float = REST_TIME
 var _aimed: bool = false
 var _beam_scene: PackedScene
+var _normal_material: Material
+var _warning_material: CanvasItemMaterial
 
 
 func _init() -> void:
@@ -52,6 +54,10 @@ static func _register_kinds() -> void:
 
 func _enemy_ready() -> void:
 	_beam_scene = load(BEAM_SCENE_PATH) as PackedScene  # null is fine: plain projectile
+	if visual != null:
+		_normal_material = visual.material
+		_warning_material = CanvasItemMaterial.new()
+		_warning_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	_set_state(State.REST, REST_TIME)
 
 
@@ -148,3 +154,4 @@ func _set_state(state: State, seconds: float) -> void:
 func _glow(on: bool) -> void:
 	if visual != null:
 		visual.modulate = GLOW if on else Color.WHITE
+		visual.material = _warning_material if on else _normal_material
