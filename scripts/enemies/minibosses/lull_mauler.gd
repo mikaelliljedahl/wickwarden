@@ -29,13 +29,30 @@ class SweepWarning:
 
 	func _draw() -> void:
 		var mauler = get_parent()
-		if mauler.is_dead or mauler.is_dying() or mauler.state != State.SWEEP_WARNING:
+		if mauler.is_dead or mauler.is_dying():
 			return
 		var aim: Vector2 = mauler._aim
 		var edge := Color(1.0, 0.6, 0.2, 0.7)
-		draw_arc(Vector2.ZERO, 140.0, aim.angle() - PI / 2, aim.angle() + PI / 2, 32, edge, 3.0)
-		draw_line(Vector2.ZERO, aim.rotated(-PI / 2) * 140.0, edge, 3.0)
-		draw_line(Vector2.ZERO, aim.rotated(PI / 2) * 140.0, edge, 3.0)
+		if mauler.state == State.SWEEP_WARNING:
+			draw_arc(Vector2.ZERO, 140.0, aim.angle() - PI / 2, aim.angle() + PI / 2, 32, edge, 3.0)
+			draw_line(Vector2.ZERO, aim.rotated(-PI / 2) * 140.0, edge, 3.0)
+			draw_line(Vector2.ZERO, aim.rotated(PI / 2) * 140.0, edge, 3.0)
+		elif is_instance_valid(mauler._attack) and mauler._attack.active:
+			if mauler._attack.kind == &"slam":
+				var centre: Vector2 = mauler._impact - mauler.global_position
+				if mauler._smash_art != null:
+					draw_texture_rect(
+						mauler._smash_art, Rect2(centre - Vector2(110, 110), Vector2(220, 220)), false
+					)
+				draw_arc(centre, 110.0, 0.0, TAU, 48, edge, 3.0)
+			else:
+				var start := aim.angle() - PI / 2
+				var finish := aim.angle() + PI / 2
+				draw_arc(Vector2.ZERO, 126.0, start, finish, 32, Color(0.75, 0.55, 0.35, 0.45), 24.0)
+				draw_arc(Vector2.ZERO, 126.0, start, finish, 32, Color(1, 0.82, 0.55, 0.8), 7.0)
+				draw_arc(Vector2.ZERO, 140.0, start, finish, 32, edge, 3.0)
+				draw_line(Vector2.ZERO, aim.rotated(-PI / 2) * 140.0, edge, 3.0)
+				draw_line(Vector2.ZERO, aim.rotated(PI / 2) * 140.0, edge, 3.0)
 
 
 class SlagChunk:
