@@ -1,12 +1,23 @@
 # Current status
 
+**Mirror Warden active slash, 2026-10-28 (committed in `f8da3e5`):** The active
+slash reuses painted `mirror_tell_z1`, with a broader glint than TELL and a thin
+geometric outer edge marking actual 130 px reach. Missing-texture fallback is
+retained; timing, 100°/radius and damage are unchanged. Sixteen controlled
+actual `cave_5_4` stills cover eight directions in dark/white lighting with a
+placed, protected player; overlap can occur. Human play and motion are not
+verified. The lead passed `mirror_warden` and `tool_matrix`; the agent reports
+lint PASS. A clean full `make check` on exact `f8da3e5` passed; log
+`/var/tmp/wick-clean-f8da3e5-hckc4a6p/check.log`. It is the latest full check.
+
 **Tool cue visual test correction, 2026-10-28 (committed in `1ed6d16`):** The
 clean full `make check` on `65f4ee6` FAILED: `test_tool_cue_visual` had four
 failed checks caused by the new painted `Sprite2D` child. The test correction
 keeps explicit nonphysical checks, no body/shadow/collision, unchanged other
 cues and missing-art coverage. The lead passed six targeted suites. A clean full
 `make check` on exact `1ed6d16` passed; log
-`/var/tmp/wick-clean-1ed6d16-fk7k3e9w/check.log`. This is the latest full check.
+`/var/tmp/wick-clean-1ed6d16-fk7k3e9w/check.log`. The later clean `f8da3e5`
+full check is recorded above.
 
 **Cinder Wick painted cast cue, 2026-10-28 (committed in `65f4ee6`):** The
 painted cue appears by the lantern with missing-art fallback; source and
@@ -21,8 +32,8 @@ recorded above.
 **Mirror Warden tell, 2026-10-28 (committed in `938c0b5`):** TELL uses a painted
 blue-white warning; the documented source and provenance are committed. Actual
 `cave_5_4` controlled stills cover eight directions in dark/ambient lighting;
-the foreground warning can overlap figures, and the active slash's geometric
-glint remains. Gameplay and hitbox are unchanged; fallback was tested and
+the foreground warning can overlap figures; the later active slash change is
+recorded above. Gameplay and hitbox are unchanged; fallback was tested and
 captured. The lead passed `mirror_warden` and `tool_matrix` after import; the
 first pre-import attempt failed. `art-test` passed 25 tests with the existing
 ResourceWarning; the agent reports lint PASS. Human play and motion remain
@@ -2682,7 +2693,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `1ed6d160743bcd3b0a1ea52c03b251ea371550e9` on `origin/main`, including the tool cue visual test correction above. The latest clean full check is at `1ed6d16`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `f8da3e52f667c9439cf5509b30eed1de4be388cb` on `origin/main`, including the painted Mirror Warden active slash above. The latest clean full check is at `f8da3e5`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
