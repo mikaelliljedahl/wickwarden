@@ -136,12 +136,24 @@ The boss attack audit was recorded in `1a078b2`; the Coinwyrm presentation fix
 followed in `3601e4b4102f3bd4634274e3c2532fd876bc2d18` on `origin/main`.
 Coinwyrm documentation followed in `d5edd90` and the Tidewick ember bolt in
 `bb87f5874b5028374e2444901fe1b2bd56114a12` on `origin/main`.
+Tidewick and Q6/Q8 verification were documented in
+`c780a05ffeddd47a3a2303c36266c38d0f208e46` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Linux release export at `bb87f58`, 2026-10-28:** A clean export of exact
+`bb87f5874b5028374e2444901fe1b2bd56114a12` used official Godot 4.7.2 and its
+matching template with an isolated profile. Import and export passed; the new
+`.import` and remapped `.ctex` were verified in the PCK. Headless startup and C3
+startup passed. In an isolated Xvfb GUI run of the export with
+`--start-room=cave_3_9`, the boss naturally fired toward the player at spawn.
+The capture is `/var/tmp/wick-bb87-export/c3-ember-flight.png` and the video is
+`/var/tmp/wick-bb87-export/c3-export.mkv`. Dummy audio was used; this is neither
+human play nor audible-sound verification.
 
 **Q6 and Q8 isolated reports at `d5edd906`, 2026-10-28:** Q6's 16 soak and
 economy tests passed. The soak instantiated 222 standalone scenes for five
@@ -166,8 +178,8 @@ source image and includes the Godot `.import`. The lead's import,
 `boss_tidewick`, `area_cave_3` and `tool_matrix` passed; the agent reports lint,
 B03 ownership and `art-test` PASS. The active arena capture
 `/home/mikael/.cache/wick-b03-final/ember-flight.png` used a controlled, protected
-player; human play and a new export remain unverified. Q6 and Q8 reports are
-recorded above.
+player; human play remains unverified. The subsequent export check and Q6/Q8
+reports are recorded above.
 
 **Coinwyrm attack presentation, committed in `3601e4b`:** Transparent outlines
 replace the filled bite and tail areas; the bite reuses three painted coin
