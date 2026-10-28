@@ -313,12 +313,30 @@ in `e205edbcc49a15345b21417d21a494cf2976e49a` on `origin/main`. Lull/Choir
 effects landed in `f7945622c08aecb1525c975424d0389414d29997` on `origin/main`.
 Boss-effect documentation followed in `bd1c733`; the Chime hold cue landed in
 `0cee12b7a34b65df06326169994d0943cd313a2c` on `origin/main`.
+Chime hold documentation followed in `81aeae4`; painted cut vegetation landed
+in `4d975e38f00fbeeafca449126eee4f483aad2fe8` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Cut vegetation fragments, committed in `4d975e3`:** Painted fragments for
+`reed_cluster`/`rush_wall` last 0.25 seconds at 180 px, retaining the original
+explosion and placeholder fallback. Other bushes, drops, signals and collision
+are unchanged. New source, metadata and provenance are present; the original
+prompt/model are unavailable according to that record. Lead and agent passed
+bush/variants/`tool_matrix`/`route_brackwater` after import; the agent reports
+lint and `art-test` (25) PASS with the existing ResourceWarning.
+
+Actual `ow_1_3` and `ow_1_5` physical-hook stills at
+`/var/tmp/wick-vegetation-v2/ow_1_{3,5}-prototype-integrated-{before,during,after}.png`
+used a placed, protected player and include a two-wall double hit and fallback.
+The fragments are subtle and may be hidden by the swing; one capture had a
+resource warning. Human play and motion are not verified. A clean full
+`make check` on exact `4d975e3` passed (exit 0); log
+`/var/tmp/wick-clean-4d975e3-3w67_5t3/check.log`. It is the latest full check.
 
 **Lantern Chime hold cue, committed in `0cee12b`:** Two painted notes appear at
 the item's fixed activation point while held and hide on release, with missing-art
@@ -334,7 +352,8 @@ After 138 px movement the item/cue, and after release the wave, remain at the
 activation point as before. Notes can resemble objects or overlap legs; these
 stills do not verify human play or continuous motion. A clean full `make check`
 on exact `0cee12b` passed (exit 0); log
-`/var/tmp/wick-clean-0cee12b-blo8djzu/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-0cee12b-blo8djzu/check.log`. The later clean `4d975e3`
+full check is recorded above.
 
 **Lull sweep and Dirge bass ring, committed in `f794562`:** Warm painted Lull
 active sweep and violet note-based Dirge ring reuse documented existing art with
