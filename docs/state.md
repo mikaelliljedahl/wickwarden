@@ -1,6 +1,17 @@
 # Current status
 
-**Q3 playthrough command, 2026-10-28:** After `59e339f`, the lead's
+**E1 ending-flow verification, 2026-10-28 (isolated fixtures):** Two separate
+fixture saves with boss flag and checkpoint used actual player inputs under the
+current confirm behavior through World → actual `ending.tscn` → credits → title
+→ Continue → World. Each retained its correct exclusive ending flag, completed
+state and save slot. Rekindle used the full natural holds; Wickwarden used
+confirm-skip. Rendered text, images and credits were reviewed. The scratch
+harness reported shutdown leak warnings after Continue; these have not been
+shown to be a product defect. No real saves were touched. These are not an
+earned boss route or human test; the ending-choice contract conflict and user
+question remain open.
+
+**Q3 playthrough command, 2026-10-28 (documented in `338e41f`):** After `59e339f`, the lead's
 `TMPDIR=/tmp make playthrough` passed: `playthrough_route --check` and all four
 shards passed. The first contains the continuous earned normal-damage route to
 the rekindle scene described below; later sections use fixtures and warps. This
@@ -1484,7 +1495,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `59e339f01dcfc5158f4c5ffc607b8edea40b62d1` on `origin/main`, including the B03/B09 fixes and continuous earned route to the rekindle ending scene above. Credits, title return and the other ending remain unverified in that continuous route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `338e41fc9939b2b9d5ee1f3df4ea2f9832975e80` on `origin/main`, documenting the `make playthrough` evidence above. Credits, title return and the other ending remain unverified in the continuous route; the user response on the ending-choice conflict remains pending. The Fen Leech placeholder, Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

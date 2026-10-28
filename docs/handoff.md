@@ -88,6 +88,8 @@ The rejected Fen Leech prototype and remaining limitation were documented in
 `750e4f15f2912c7c3c5763b107c94b39a9209b8c`, verified on `origin/main`.
 The B03/B09 immunity fixes and continuous earned route to the rekindle ending
 scene followed in `59e339f01dcfc5158f4c5ffc607b8edea40b62d1`, verified on `origin/main`.
+The `make playthrough` evidence followed in
+`338e41fc9939b2b9d5ee1f3df4ea2f9832975e80`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -95,7 +97,18 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q3 playthrough command, 2026-10-28:** After `59e339f`, the lead's
+**E1 ending-flow verification, 2026-10-28 (isolated fixtures):** Two separate
+fixture saves with boss flag and checkpoint used actual player inputs under the
+current confirm behavior through World → actual `ending.tscn` → credits → title
+→ Continue → World. Each retained its correct exclusive ending flag, completed
+state and save slot. Rekindle used the full natural holds; Wickwarden used
+confirm-skip. Rendered text, images and credits were reviewed. The scratch
+harness reported shutdown leak warnings after Continue; these have not been
+shown to be a product defect. No real saves were touched. These are not an
+earned boss route or human test; the ending-choice contract conflict and user
+question remain open.
+
+**Q3 playthrough command, 2026-10-28 (documented in `338e41f`):** After `59e339f`, the lead's
 `TMPDIR=/tmp make playthrough` passed: `playthrough_route --check` and all four
 shards passed. The first contains the continuous earned normal-damage route to
 the rekindle scene described below; later sections use fixtures and warps. This
