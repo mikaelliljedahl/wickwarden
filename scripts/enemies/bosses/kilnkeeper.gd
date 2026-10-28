@@ -111,9 +111,9 @@ func _enter_phase(_number: int) -> void:
 
 
 func reset_fight() -> void:
-	super()
-	if is_dead:
+	if is_dead or is_defeated() or is_dying():
 		return
+	super()
 	global_position = arena_point(START)
 	_enter_phase(1)
 

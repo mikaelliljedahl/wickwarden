@@ -4,10 +4,71 @@ const SCENE := "res://scenes/enemies/minibosses/hollow_captain.tscn"
 
 
 func run() -> void:
+	await _reset_during_death()
+	await _reset_natural_bash()
 	await _guard_and_bash()
 	await _real_hook_guard()
 	await _real_moth_hit()
 	await _stun_and_persistence()
+
+
+func _reset_during_death() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+	enemy.arena_id = &"mb1_reset_death_test"
+	await frames(2)
+	var elapsed := 0
+	while enemy.state != enemy.State.BASH and elapsed < 360:
+		await frames(1)
+		elapsed += 1
+	check_eq(enemy.state, enemy.State.BASH, "death test reaches natural bash")
+	enemy.apply_damage(99, enemy.global_position, 0.0)
+	check(enemy.is_dying() and enemy.is_defeated(), "lethal hit starts death throes")
+	check(not enemy.contact_hitbox.active, "lethal hit disables contact")
+	var cycle: float = enemy._cycle
+	var timer: float = enemy._timer
+	var death_left: float = enemy._death_left
+	var damage: int = enemy.contact_hitbox.damage
+	enemy.reset_fight()
+	check(enemy.is_dying() and enemy.is_defeated(), "direct reset preserves death throes")
+	check_eq(enemy.state, enemy.State.BASH, "direct reset leaves attack state untouched")
+	check_eq(enemy._cycle, cycle, "direct reset leaves attack cycle untouched")
+	check_eq(enemy._timer, timer, "direct reset leaves attack timer untouched")
+	check_eq(enemy.contact_hitbox.damage, damage, "direct reset leaves contact damage untouched")
+	check(not enemy.contact_hitbox.active, "direct reset does not reactivate contact")
+	check_eq(enemy._death_left, death_left, "direct reset leaves death timer untouched")
+	check(GameState.has_flag(&"mini_mb1_reset_death_test"), "defeat flag remains set")
+	await frames(100)
+	check(not is_instance_valid(enemy), "death completes after direct reset")
+	var drops := arena.get_children().filter(func(n: Node) -> bool: return n is PickupBase)
+	check_eq(drops.size(), 4, "death still produces exactly four drops")
+	await dispose(arena)
+
+
+func _reset_natural_bash() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+	await frames(2)
+	var elapsed := 0
+	while enemy.state != enemy.State.BASH and elapsed < 360:
+		await frames(1)
+		elapsed += 1
+	check_eq(enemy.state, enemy.State.BASH, "natural cycle reaches bash")
+	check_eq(enemy.contact_hitbox.damage, 3, "natural bash raises contact damage")
+	enemy.reset_fight()
+	check_eq(enemy.state, enemy.State.PATROL, "reset immediately returns to patrol")
+	check_eq(enemy.contact_hitbox.damage, 2, "reset immediately restores contact damage")
+	check_eq(enemy._cycle, enemy.INTERVAL, "reset immediately restarts attack cycle")
+	check_eq(enemy._timer, enemy.INTERVAL, "reset immediately clears bash timer")
+	check_eq(enemy.armor_front_deg, 140.0, "reset immediately raises guard")
+	check_eq(enemy.velocity, Vector2.ZERO, "reset immediately stops dash")
+	await frames(2)
+	check_eq(enemy.state, enemy.State.PATROL, "reset remains in patrol after physics")
+	check_eq(enemy.contact_hitbox.damage, 2, "contact damage remains restored after physics")
+	check(enemy._cycle > enemy.INTERVAL - 0.1, "new cycle starts after reset")
+	await dispose(arena)
 
 
 func _guard_and_bash() -> void:

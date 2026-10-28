@@ -222,10 +222,10 @@ func parts() -> Array[EnemyBase]:
 
 
 ## Restores the boss to its start: full HP, phase 1, intro again, arena doors open, parts and hazards gone.
-## Does nothing to a dead boss. Called on player death; leaving the room frees the boss and the next
+## Does nothing to a defeated or dead boss. Called on player death; leaving the room frees the boss and the next
 ## entry makes a new one.
 func reset_fight() -> void:
-	if is_dead:
+	if is_dead or _defeated or _dying:
 		return
 	_set_arena_locked(false)
 	clear_hazards()
@@ -465,7 +465,8 @@ func _arena_doors() -> Array[Node]:
 
 
 func _on_player_died() -> void:
-	reset_fight()
+	if not is_dead and not _defeated and not _dying:
+		reset_fight()
 
 
 func _exit_tree() -> void:

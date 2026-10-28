@@ -10,6 +10,7 @@ func run() -> void:
 	if _capture_requested():
 		return
 	await _death_contact()
+	await _living_reset_contact()
 	await _splash_presentation_lifecycle()
 	await _armour_and_fight()
 	await _molten_expiry_and_splash()
@@ -172,10 +173,32 @@ func _death_contact() -> void:
 	check_eq(GameState.health, health, "overlapping real player takes no death contact damage")
 	await seconds(1.0)
 	check_eq(GameState.health, health, "contact stays harmless throughout death throes")
-	player.place_at(Vector2(192, 192))
+	var death_position: Vector2 = boss.global_position
+	var death_left: float = boss._death_left
+	boss.attack = boss.Attack.RECOVER
 	boss.reset_fight()
-	check(not boss.contact_hitbox.active, "reset keeps contact off during intro")
+	check(boss.is_dying() and boss.is_defeated(), "reset preserves death and defeat")
+	check_eq(boss.global_position, death_position, "reset does not move the dying boss")
+	check_eq(boss.attack, boss.Attack.RECOVER, "reset does not restart the attack cycle")
+	check_eq(boss._death_left, death_left, "reset preserves the death timer")
+	check(not boss.contact_hitbox.active, "reset does not restore death contact")
+	await seconds(0.8)
+	check(not is_instance_valid(boss), "death throes finish after reset")
+	check(GameState.has_flag(FLAG), "defeat flag survives reset and death")
+	await dispose(arena)
+
+
+func _living_reset_contact() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = _boss(arena, Vector2(800, 480))
+	await seconds(1.6)
+	var player := make_player(arena, Vector2(192, 192))
+	var health := GameState.health
+	boss.reset_fight()
 	check_eq(boss.contact_hitbox.damage, 0, "reset intro keeps immediate damage off")
+	await frames(2)
+	check(not boss.contact_hitbox.active, "reset keeps contact off during intro")
 	await seconds(1.6)
 	check(boss.contact_hitbox.active, "reset restores contact after the new intro")
 	check_eq(boss.contact_hitbox.damage, 2, "reset restores normal contact damage")

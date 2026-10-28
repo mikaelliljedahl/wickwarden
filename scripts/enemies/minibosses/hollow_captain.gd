@@ -41,7 +41,15 @@ func _enter_phase(_number: int) -> void:
 	_timer = INTERVAL
 	armor_front_deg = 140.0
 	_stun_immunity = 0.0
+	_aim = Vector2.DOWN
 	_restore_contact()
+
+
+func reset_fight() -> void:
+	if is_dead or is_dying() or is_defeated():
+		return
+	super.reset_fight()
+	_enter_phase(1)
 
 
 func _boss_physics(delta: float) -> void:

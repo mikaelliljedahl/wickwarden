@@ -16,6 +16,11 @@ class Probe:
 	var physics_ticks: int = 0
 	var part_damage: int = 0
 	var part_deaths: int = 0
+	var resets: int = 0
+
+	func reset_fight() -> void:
+		resets += 1
+		super()
 
 	func _enter_phase(number: int) -> void:
 		entered.append(number)
@@ -71,6 +76,8 @@ func run() -> void:
 	await _intro()
 	await _hazards_and_phase_effects()
 	await _arena_lock_and_reset()
+	await _death_interrupted_by_player_death()
+	await _subclass_death_interrupted_by_player_death()
 	await _reset_combat_state()
 	await _reset_intro_combat_state()
 	await _miniboss_mode()
@@ -216,6 +223,56 @@ func _arena_lock_and_reset() -> void:
 	boss.apply_damage(24, Vector2.ZERO)
 	await frames(2)
 	check(not door.locked, "a death opens the doors")
+	await dispose(arena)
+
+
+func _death_interrupted_by_player_death() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss := _make_boss(&"death_reset", &"cave_test_death_reset", [])
+	var defeats := [0]
+	boss.death_drops = [&"ember"]
+	arena.add_child(boss)
+	boss.defeated.connect(func(_boss: EnemyBase) -> void: defeats[0] += 1)
+	await frames(2)
+	check(boss.apply_damage(24, Vector2.ZERO), "lethal hit starts death reset test")
+	check(boss.is_dying() and boss.is_defeated(), "lethal hit sets dying and defeated")
+	check(GameState.has_flag(&"boss_cave_test_death_reset_defeated"), "defeat flag is set")
+	Events.player_died.emit()
+	check_eq(boss.resets, 0, "player death does not dispatch subclass reset during death")
+	check(boss.is_dying() and boss.is_defeated(), "player death preserves death throes")
+	check_eq(boss.hp, 1, "player death does not restore hp")
+	boss.reset_fight()
+	check(boss.is_dying() and boss.is_defeated(), "direct base reset preserves death throes")
+	check_eq(boss.hp, 1, "direct reset does not restore hp")
+	check_eq(defeats[0], 1, "defeated signal fires once")
+	await seconds(1.6)
+	check(not is_instance_valid(boss), "death completes after player death")
+	check(GameState.has_flag(&"boss_cave_test_death_reset_defeated"), "defeat flag remains set")
+	check_eq(_count_pickups(arena, &"ember"), 1, "death reward appears once")
+	await dispose(arena)
+
+
+func _subclass_death_interrupted_by_player_death() -> void:
+	reset_state()
+	var arena := make_arena()
+	var scene := load("res://scenes/enemies/bosses/briar_mother.tscn") as PackedScene
+	check(scene != null, "Briar Mother scene loads for subclass reset test")
+	if scene == null:
+		await dispose(arena)
+		return
+	var boss = scene.instantiate()
+	boss.arena_id = &"cave_test_briar_death_reset"
+	boss.intro_time = 0.0
+	arena.add_child(boss)
+	await frames(2)
+	boss._begin_death()
+	var eyes_before: Array = boss.eyes.duplicate()
+	Events.player_died.emit()
+	check(boss.is_dying() and boss.is_defeated(), "subclass stays defeated on player death")
+	check_eq(boss.eyes, eyes_before, "player death does not recreate Briar Mother eyes")
+	await seconds(1.6)
+	check(not is_instance_valid(boss), "subclass completes death after player death")
 	await dispose(arena)
 
 
