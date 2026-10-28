@@ -240,6 +240,10 @@ func _phases_reset_and_rewards() -> void:
 	var room := _fixture()
 	var boss = room.get_node("Enemies/Tidewick")
 	boss.rng.seed = 12345
+	check_eq(boss.global_position, boss.arena_point(boss.path_point(0.0)), "setup reset positions head")
+	check_eq(boss.followers.size(), 7, "setup reset initializes followers")
+	check_eq(boss._trail.size(), 241, "setup reset initializes trail")
+	check(not boss.tail_exposed(), "setup reset keeps tail closed during intro")
 	await seconds(1.6)
 	check(boss.apply_damage(14, boss.global_position + Vector2.LEFT, 300), "scripted threshold setup accepted")
 	check(not boss.is_knocked_back(), "boss immunity prevents knockback on accepted damage")
@@ -277,6 +281,19 @@ func _phases_reset_and_rewards() -> void:
 	check(not boss.contact_hitbox.active, "death head harmless")
 	check(not boss.tail_exposed(), "death closes tail")
 	check(boss.death_drops.is_empty(), "boss owns no fragment/core rewards")
+	var death_position: Vector2 = boss.global_position
+	var death_distance: float = boss._distance
+	var death_clock: float = boss.tail_clock
+	var death_direction: float = boss.travel_direction
+	boss.reset_fight()
+	check(boss.is_dying() and boss.is_defeated(), "direct reset preserves death throes")
+	check_eq(boss.global_position, death_position, "direct reset preserves death position")
+	check_eq(boss._distance, death_distance, "direct reset preserves path distance")
+	check_eq(boss.tail_clock, death_clock, "direct reset preserves tail clock")
+	check_eq(boss.travel_direction, death_direction, "direct reset preserves direction")
+	check_eq(boss.contact_hitbox.damage, 0, "direct reset keeps death contact damage zero")
+	check(not boss.contact_hitbox.active and not boss.tail_exposed(), "direct reset keeps death harmless")
+	check(GameState.has_flag(&"boss_cave_3_9_defeated"), "direct reset preserves reward flag")
 	await seconds(1.6)
 	check(not is_instance_valid(boss), "death throes free boss")
 	var drops := room.get_node("Enemies").get_children().filter(func(n: Node) -> bool: return n is PickupBase)

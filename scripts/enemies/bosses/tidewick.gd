@@ -174,8 +174,10 @@ func path_point(distance: float) -> Vector2:
 
 
 func reset_fight() -> void:
+	if is_dead or is_defeated() or is_dying():
+		return
 	super()
-	if is_dead or tail == null:
+	if tail == null:
 		return
 	_clear_leeches()
 	_distance = 0.0
