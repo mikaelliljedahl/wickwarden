@@ -1,6 +1,29 @@
 # Current status
 
-**The Unlit wax collapse, 2026-10-28 (locally committed in `053da3e`):** A
+**Cave boss death light, 2026-10-28 (locally committed in `b70049e`):** Nine
+cave bosses release painted golden light in eight 768 px frames at 8 fps;
+miniboss and C10 effects remain as before. Missing or incomplete art and wrong
+fps fall back to explosion/Placeholder; gameplay is unchanged. The built-in
+ImageGen source, exact prompt, ID and hash are in `docs/art-provenance.md`.
+The `joined_outputs` cutter uses a soft green-key ramp and crop padding 20;
+the audit found no matte outside crops and a byte-identical recut
+(`/var/tmp/wick-boss-light-z1/audit.log`). Six targeted Godot suites, lint and
+26 art tests passed. A clean full `make check` on exact `b70049e` passed
+(exit 0): 161 Godot test files, lint, world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-b70049e-hwle9lfh/check.log`; this is the latest clean full
+PASS.
+
+Physical synthetic lethal hits in isolated C1/C5 with a placed, protected player
+were captured at `/var/tmp/wick-boss-light-z1/room-cave_{1_8,5_10}-dark-*.png`.
+The C5 capture produced ObjectDB/resource warnings. The light can resemble fire
+or overlap other elements; human play and real-time video are unverified.
+
+**Closing inventory:** The owner requests a quick finish. A read-only final
+inventory found no confirmed serious placeholder in the code paths inspected;
+it does not prove complete dynamic coverage. A separate room census is still
+in progress.
+
+**The Unlit wax collapse, 2026-10-28 (committed in `053da3e`):** A
 reproducible `joined_outputs` cutter produces eight 768 px frames at 4 fps from
 a green-key source with a soft ramp; the crop audit found no matte loss
 (`/var/tmp/wick-green-z1/audit.log`). The built-in ImageGen source is session
@@ -12,8 +35,8 @@ Isolated `unlit_death_visual`, `boss_the_unlit`, full ending, 26 art tests and
 lint passed. The final fallback extension also passed a focused test and lint
 (`/var/tmp/wick-wax-review-dUmkPO`). A clean full `make check` on exact
 `053da3e` passed (exit 0): 160 Godot test files, lint, world-check and 175 Python
-tests. Log `/var/tmp/wick-clean-053da3e-wfdsnih6/check.log`; this is the latest
-clean full PASS.
+tests. Log `/var/tmp/wick-clean-053da3e-wfdsnih6/check.log`; the later clean
+full PASS at `b70049e` is recorded above.
 
 Actual hook hits after synthetic phase 3 HP 1/exposure in C10 were captured at
 `/var/tmp/wick-green-z1/physical-{natural,bright}-{wax,fallback}.log` and PNGs,
@@ -3033,7 +3056,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `995488c` on `origin/main`, documenting Coinwyrm bite warning. The Unlit wax collapse is locally committed in `053da3e`; its clean full check passed. The latest clean full PASS is `053da3e`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `c0e240a` on `origin/main`, documenting The Unlit wax collapse. Cave boss death light is locally committed in `b70049e`; its clean full check passed. The latest clean full PASS is `b70049e`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
