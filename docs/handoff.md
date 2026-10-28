@@ -341,14 +341,33 @@ passed a clean full check. Final playthrough documentation `fc14d7a` is on
 `origin/main`. Choir Warden poses `aa0f9a2` and their documentation `aa0361c`
 are on `origin/main`; their clean full check passed. Shell animation-gap
 documentation `3bcabd3`, Coinwyrm study `4fbed38` and shell-study documentation
-`c298322`, Q7 test `070bfe3` and documentation `0d82e90` are on `origin/main`;
-its clean full check passed. Verify the remote before push.
+`c298322`, Q7 test `070bfe3` and documentation `0d82e90`/`ea98d94` are on
+`origin/main`; the Q7 clean full check passed. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Runtime asset and shell studies, `ea98d94`:** An isolated manifest audit found
+all 220 entries and 448 animation frames present with sufficient dimensions.
+Seventeen targeted tests passed with temporary `Placeholder.attach` logging
+(`/var/tmp/wick-runtime-audit/dynamic.log`). A created node is not necessarily
+visible. A subsequent per-physics-frame `boss_` and `tool_matrix` audit passed
+14 files, with 8233 observations in 41 groups
+(`/var/tmp/wick-runtime-audit/visible.log`). Production seam/wall usage was
+reproduced in actual `ow_11_7` and `ow_8_0`: fallback remained hidden both closed
+and open (6 checks PASS, `/var/tmp/wick-runtime-audit/seams.log`). Other hits
+were test scenes or intentionally altered graphics; no production Placeholder
+was confirmed. Tree/alpha observations do not prove pixels or occlusion, cover
+between-frame states or establish complete coverage or natural play.
+
+A separate template-based shell generation study
+(`/var/tmp/wick-shell-template-study/report.md`) produced four separable poses,
+but poses 1 and 3 have the same leading leg. It covers only a down view; live
+playback and common scale across the character were not verified. It was
+rejected and not integrated.
 
 **Isolated active-effect studies, `0d82e90`:** In
 `/var/tmp/wick-active-audit-0d82/loot.log`, five forced drop types and the enemy
