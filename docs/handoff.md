@@ -187,6 +187,8 @@ Guard documentation followed in `ea605c1` and Choirling's active song in
 `669633939d46c79dd81099a5297133b3d9909243` on `origin/main`.
 Choirling documentation followed in `dfe0d78`; Watcher Eye beam presentation
 is at `5d938dd1af1331c475d35f4a574288303dd786c2` on `origin/main`.
+Beam documentation followed in `93ad466`; Watcher Eye warning is at
+`0a2bffe11dd03b3dc782d361eb6d43344227d43a` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -194,13 +196,23 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Watcher Eye warning, committed in `0a2bffe`:** The existing eye image is
+unshaded for the 0.5-second warning; its material is restored on firing or stun,
+with combat values unchanged. Targeted `watcher_eye`, lint and ownership passed.
+Before/after captures `/var/tmp/wick-regular-audit/eye-warning-before.png` and
+`eye-warning-after.png` in that directory show `cave_10_12` with a placed player
+and ticking AI; the fired capture reported four ObjectDB and two resource
+warnings. The whole stone frame lights up while the lid is closed; separate iris
+and animation remain open. Human play and a direction matrix are not verified.
+
 **Watcher Eye beam, committed in `5d938dd`:** The existing painted beam is
 visible outside the lamp field using unshaded rendering; mechanics are unchanged.
 In actual `cave_10_12`, the agent captured
 `/var/tmp/wick-regular-audit/eye-before-130.png` and `eye-after-130.png` in that
 directory with a placed player and ticking AI. The agent reports `watcher_eye`,
 `choirling`, lint and ownership PASS. Only downward direction was verified; the
-warning remains difficult to see and the broader enemy inventory remains open.
+warning was difficult to see at that checkpoint; the later warning change is
+recorded above. The broader enemy inventory remains open.
 This is not human play.
 
 **Choirling active song, committed in `6696339`:** Its previously invisible

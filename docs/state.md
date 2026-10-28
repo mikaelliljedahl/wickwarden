@@ -1,12 +1,22 @@
 # Current status
 
+**Watcher Eye warning, 2026-10-28 (committed in `0a2bffe`):** The existing eye
+image is unshaded for the 0.5-second warning; its material is restored on firing
+or stun, with combat values unchanged. Targeted `watcher_eye`, lint and ownership
+passed. Before/after captures `/var/tmp/wick-regular-audit/eye-warning-before.png`
+and `eye-warning-after.png` in that directory show `cave_10_12` with a placed
+player and ticking AI; the fired capture reported four ObjectDB and two resource
+warnings. The whole stone frame lights up while the lid is closed; separate iris
+and animation remain open. Human play and a direction matrix are not verified.
+
 **Watcher Eye beam, 2026-10-28 (committed in `5d938dd`):** The existing painted
 beam is visible outside the lamp field using unshaded rendering; mechanics are
 unchanged. In actual `cave_10_12`, the agent captured
 `/var/tmp/wick-regular-audit/eye-before-130.png` and `eye-after-130.png` in that
 directory with a placed player and ticking AI. The agent reports `watcher_eye`,
 `choirling`, lint and ownership PASS. Only downward direction was verified; the
-warning remains difficult to see and the broader enemy inventory remains open.
+warning was difficult to see at that checkpoint; the later warning change is
+recorded above. The broader enemy inventory remains open.
 This is not human play.
 
 **Choirling active song, 2026-10-28 (committed in `6696339`):** Its previously
@@ -2123,7 +2133,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `5d938dd1af1331c475d35f4a574288303dd786c2` on `origin/main`, including the Watcher Eye beam above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0a2bffe11dd03b3dc782d361eb6d43344227d43a` on `origin/main`, including the Watcher Eye warning above. The latest clean full verification remains at `4dfd5e6`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
