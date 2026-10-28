@@ -1,5 +1,15 @@
 # Current status
 
+**Briar Mother spores, 2026-10-28 (committed in `eeb017d`):** Natural spores
+have presentation lighting, not gameplay glow; damage, speed and timing are
+unchanged. The lead passed `boss_briar_mother` and `route_cave_2`; the agent
+reports import, lint and B02 ownership PASS. Actual arena capture
+`/var/tmp/wick-states-next/cave_2_9.png` used a placed, protected player, not
+human play; capture exit reported four ObjectDB and two resource warnings. The
+inventory also found C10 gaze uses the wrong spore and is hard to see; gaze and
+torrent art pipeline work is in progress. C2 sweep and seed burst and other C10
+states remain to be reviewed.
+
 **Colossus falling shards, 2026-10-28 (committed in `7f7f245`):** Existing
 painted `colossus_shard_fall` art appears during the final half of the one-second
 warning, with a 60 px marker; timing, hitbox and damage are unchanged. The lead
@@ -1911,7 +1921,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `fc4395193c97bd43adf2f4e6538695d1f7ab6a51` on `origin/main`, recording the clean verification at `4dfd5e6`; subsequent Colossus and Gloam changes are recorded above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `eeb017d6320c3c414b7ae356c96edddb3efe3162` on `origin/main`, including Briar Mother spore lighting above. The latest clean full verification remains at `4dfd5e6`. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

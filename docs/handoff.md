@@ -157,12 +157,25 @@ Its documentation followed in `4dfd5e6c6162f638d97fc323b9f2c0a163046a2a` on
 Colossus falling shards landed in `7f7f245`, Gloam candidate review was recorded
 in `2974f78`, and the clean check was documented in
 `fc4395193c97bd43adf2f4e6538695d1f7ab6a51` on `origin/main`.
+Shard and streaming investigation documentation followed in `77449fc`, and
+Briar Mother spore lighting in `eeb017d6320c3c414b7ae356c96edddb3efe3162` on
+`origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Briar Mother spores, committed in `eeb017d`:** Natural spores have
+presentation lighting, not gameplay glow; damage, speed and timing are unchanged.
+The lead passed `boss_briar_mother` and `route_cave_2`; the agent reports import,
+lint and B02 ownership PASS. Actual arena capture
+`/var/tmp/wick-states-next/cave_2_9.png` used a placed, protected player, not
+human play; capture exit reported four ObjectDB and two resource warnings. The
+inventory also found C10 gaze uses the wrong spore and is hard to see; gaze and
+torrent art pipeline work is in progress. C2 sweep and seed burst and other C10
+states remain to be reviewed.
 
 **Colossus falling shards, committed in `7f7f245`:** Existing painted
 `colossus_shard_fall` art appears during the final half of the one-second
