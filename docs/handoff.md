@@ -331,8 +331,9 @@ Regular enemy death effect `473e14b`, miniboss wax collapse `41cf781` and
 documentation `c5bb5ec` are on `origin/main`. Coinwyrm bite warning `11988ae`
 and documentation `995488c` are on `origin/main`; The Unlit wax collapse
 `053da3e` and documentation `c0e240a` are on `origin/main`. Cave boss light
-`b70049e` and its documentation `0a4bb72` are on `origin/main`; the clean
-full check passed. Verify the remote before integration or push.
+`b70049e`, its documentation `0a4bb72` and room-census documentation
+`efb6b78` are on `origin/main`; the clean full check passed on `b70049e`.
+Verify the remote before integration or push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -357,6 +358,20 @@ Physical synthetic lethal hits in isolated C1/C5 with a placed, protected player
 were captured at `/var/tmp/wick-boss-light-z1/room-cave_{1_8,5_10}-dark-*.png`.
 The C5 capture produced ObjectDB/resource warnings. The light can resemble fire
 or overlap other elements; human play and real-time video are unverified.
+
+**Complementary placeholder inventories, `efb6b78`:**
+`/var/tmp/wick-reveal-census-PVofxB` reports 222 rooms under synthetic
+reveal/open with zero visible Placeholder nodes; HUD textures and seven targeted
+suites passed. It is not a complete tool census and does not cover in-place
+pockets or visual rendering. `/var/tmp/wick-dynamic-efb` instrumented ten boss
+and 32 other tests and found zero confirmed production Placeholders, excluding
+synthetic test alternatives. The first Colossus run had two of 467 checks fail
+on sweep direction; the rerun passed 467/467, with the original cause unknown.
+These headless visibility-tree checks are not pixel evidence and do not cover
+all phases or frames or human play.
+
+**C4 difficulty:** The owner reports C4 is difficult. Investigation and a fix
+are in progress; no resolution is claimed.
 
 **Closing inventory:** The owner requests a quick finish. A read-only final
 inventory found no confirmed serious placeholder in the code paths inspected;
