@@ -120,12 +120,24 @@ The Unlit heart states followed in
 `c31b391d690fc2002e949b832e2b8ff638d940a8` on `origin/main`.
 The Q7 heavy-obstacle negative cases followed in
 `26713bf764a958aca9ca4b57785488c3dae5a8ce` on `origin/main`.
+The C10 lantern glow followed in `b41dc6d3c97c065bae20a1471db31d2cbd5135af`
+on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**C10 lantern glow, committed in `b41dc6d`:** Two painted glow variants
+alternate every 0.5 seconds through a presentation child that follows the
+lantern after the boss dies. Mechanics are unchanged. Isolated import,
+`boss_the_unlit`, `tool_matrix`, lint and `art-test` passed. An actual-arena
+capture used forced phase two and a placed player, not human play. A new shell
+walk candidate was rejected for scale and is not in runtime; shell animations
+and the E1 conflict remain open. An isolated `make check` passed at `b41dc6d`:
+157 Godot test files including playthrough, lint, world-check and 175 Python
+tests. Another agent continues Q7 in an isolated copy.
 
 **Q7 heavy obstacles, committed in `26713bf`:** Twelve negative cases use actual
 hook, flare and pitch-pot explosion against four heavy variants, verifying
@@ -140,8 +152,8 @@ states use two provenance-recorded ImageGen edits of the accepted heart, shown
 on the existing timer with a small light. Gameplay and hitboxes are unchanged.
 Isolated import, `boss_the_unlit` (296 checks), `tool_matrix` (1201), lint and
 `art-test` passed. An actual C10 capture used a controlled phase and real Reel,
-with the player repositioned and hurtbox disabled; it is not human play. Shell
-and lantern animations remain incomplete. Gloam source review tested all
+with the player repositioned and hurtbox disabled; it is not human play. The
+later lantern glow is recorded above; shell animations remain incomplete. Gloam source review tested all
 documented sources: none supplied a correctly segmented, correctly scaled
 four-pose slash row, so none was installed; the rejected candidate and log remain.
 The first full `make check` produced 13 route failures when temporary quota forced

@@ -41,6 +41,8 @@ func run() -> void:
 			await _seam_pair(prop, tool)
 	for tool: StringName in [&"tallow_sling", &"cinder_wick", &"hook"]:
 		await _tap_wall_pair(tool)
+	for tool: StringName in [&"hook", &"flare", &"pitch_pot"]:
+		await _tap_wall_contact(tool)
 	for tool: StringName in [&"hook", &"tallow_sling", &"cinder_wick", &"flare"]:
 		await _wax_seal_pair(tool)
 	for tool: StringName in [&"tether_moth", &"reel_line"]:
@@ -174,6 +176,76 @@ func _tap_wall_pair(tool: StringName) -> void:
 		opens,
 		"%s -> hook wall: blocker" % tool
 	)
+	await dispose(arena)
+
+
+func _tap_wall_contact(tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var wall := _gate(arena, ["hook_tap_wall", &"seam_id"], Vector2(400, 400))
+	if wall == null:
+		await dispose(arena)
+		return
+	var start := Vector2(400, 500 if tool == &"hook" else 650)
+	if tool == &"pitch_pot":
+		start = Vector2(400, 600)
+	var player := make_player(arena, start)
+	player.set_hurtbox_enabled(self, false)
+	var hurtbox := wall.get_node("Hurtbox") as Hurtbox
+	var accepted: Array[StringName] = []
+	hurtbox.hurt.connect(func(hit: Hitbox) -> void: accepted.append(hit.kind))
+	await frames(3)
+	player.facing = Vector2.UP
+	var label := "%s -> hook-tap wall" % tool
+	var kind := &"explosion" if tool == &"pitch_pot" else tool
+	var contact := false
+	var flares := [0]
+	player.flare_fired.connect(func() -> void: flares[0] += 1)
+	if tool == &"pitch_pot":
+		_equip(player, tool)
+		player.facing = Vector2.UP
+		GameState.add_pitch_pots(1)
+		check(player.use_item(), label + ": actual pot placed")
+	elif tool == &"flare":
+		# The attack press also swings the hook. Charge well outside its reach.
+		Input.action_press(&"attack")
+		var initial_hook_contact := false
+		for i in range(60):
+			await frames(1)
+			initial_hook_contact = initial_hook_contact or _gate_weapon_overlaps(wall, &"hook")
+		check(not initial_hook_contact, label + ": initial hook misses")
+		check(accepted.is_empty() and not wall.get(&"is_revealed"), label + ": wall stays closed")
+		check(player.charge_ready, label + ": charge ready")
+		player.global_position = Vector2(400, 500)
+		Input.action_release(&"attack")
+	else:
+		Input.action_press(&"attack")
+		await frames(8)
+		Input.action_release(&"attack")
+	for i in range(120):
+		await frames(1)
+		contact = contact or _gate_weapon_overlaps(wall, kind)
+	var opens := tool == &"hook"
+	if tool == &"flare":
+		check_eq(flares[0], 1, label + ": charged flare fired")
+	if opens:
+		check_eq(accepted, [&"hook"], label + ": real hook accepted")
+	else:
+		check(contact, label + ": actual wrong-tool hitbox overlaps wall")
+		check(accepted.is_empty(), label + ": wrong hit is rejected")
+	check_eq(wall.get(&"is_revealed"), opens, label + ": opening")
+	check_eq(GameState.has_flag(&"revealed_matrix"), opens, label + ": flag")
+	check_eq((wall.get_node("Body/Shape") as CollisionShape2D).disabled, opens, label + ": solid")
+	print("MATRIX ", label, " opens=", opens, " contact=", contact or not accepted.is_empty())
+	await dispose(arena)
+	arena = make_arena()
+	wall = _gate(arena, ["hook_tap_wall", &"seam_id"], Vector2(400, 400))
+	await frames(3)
+	if wall != null:
+		check_eq(wall.get(&"is_revealed"), opens, label + ": revisit opening")
+		check_eq(GameState.has_flag(&"revealed_matrix"), opens, label + ": revisit flag")
+		check_eq((wall.get_node("Body/Shape") as CollisionShape2D).disabled, opens,
+			label + ": revisit solid")
 	await dispose(arena)
 
 

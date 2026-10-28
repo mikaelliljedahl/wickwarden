@@ -1,5 +1,15 @@
 # Current status
 
+**C10 lantern glow, 2026-10-28 (committed in `b41dc6d`):** Two painted glow
+variants alternate every 0.5 seconds through a presentation child that follows
+the lantern after the boss dies. Mechanics are unchanged. Isolated import,
+`boss_the_unlit`, `tool_matrix`, lint and `art-test` passed. An actual-arena
+capture used forced phase two and a placed player, not human play. A new shell
+walk candidate was rejected for scale and is not in runtime; shell animations
+and the E1 conflict remain open. An isolated `make check` passed at `b41dc6d`:
+157 Godot test files including playthrough, lint, world-check and 175 Python
+tests. Another agent continues Q7 in an isolated copy.
+
 **Q7 heavy obstacles, 2026-10-28 (committed in `26713bf`):** Twelve negative
 cases use actual hook, flare and pitch-pot explosion against four heavy variants,
 verifying contact and that each obstacle remains solid, undisturbed and unflagged
@@ -14,7 +24,7 @@ heart, shown on the existing timer with a small light. Gameplay and hitboxes are
 unchanged. Isolated import, `boss_the_unlit` (296 checks), `tool_matrix` (1201),
 lint and `art-test` passed. An actual C10 capture used a controlled phase and
 real Reel, with the player repositioned and hurtbox disabled; it is not human
-play. Shell and lantern animations remain incomplete. Gloam source review tested
+play. The later lantern glow is recorded above; shell animations remain incomplete. Gloam source review tested
 all documented sources: none supplied a correctly segmented, correctly scaled
 four-pose slash row, so none was installed; the rejected candidate and log remain.
 The first full `make check` produced 13 route failures when temporary quota forced
@@ -1672,7 +1682,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `26713bf764a958aca9ca4b57785488c3dae5a8ce` on `origin/main`, including the Q7 heavy-obstacle cases above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `b41dc6d3c97c065bae20a1471db31d2cbd5135af` on `origin/main`, including the C10 lantern glow above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
