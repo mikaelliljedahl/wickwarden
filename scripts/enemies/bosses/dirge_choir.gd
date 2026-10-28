@@ -139,8 +139,18 @@ class Note:
 class SongVisual:
 	extends Node2D
 	var note_texture: Texture2D
+	var bass_texture: Texture2D
 
 	func _ready() -> void:
+		if get_parent().voice == 0:
+			var path := "res://assets/sprites/chime_notes_z1.png"
+			if ResourceLoader.exists(path):
+				bass_texture = load(path) as Texture2D
+			if bass_texture != null:
+				texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+				var light := CanvasItemMaterial.new()
+				light.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+				material = light
 		if get_parent().voice == 1:
 			note_texture = load("res://assets/sprites/treble_note_fly.png") as Texture2D
 			texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
@@ -153,15 +163,12 @@ class SongVisual:
 		var color := Color(0.95, 0.75, 0.35, 0.45)
 		if song.voice == 0:
 			var radius := maxf(56, song.progress() * 640)
-			draw_arc(
-				Vector2.ZERO,
-				radius,
-				song.aim + deg_to_rad(25),
-				song.aim + TAU - deg_to_rad(25),
-				80,
-				color,
-				64 if song.age >= 0.8 else 5
-			)
+			var start: float = song.aim + deg_to_rad(25)
+			var finish: float = song.aim + TAU - deg_to_rad(25)
+			if bass_texture != null and song.age >= 0.8:
+				_draw_bass_ring(song.progress() * 640.0, start, finish)
+			else:
+				draw_arc(Vector2.ZERO, radius, start, finish, 80, color, 64 if song.age >= 0.8 else 5)
 		elif song.voice == 1:
 			var angle: float = song.angle()
 			if note_texture != null:
@@ -182,6 +189,29 @@ class SongVisual:
 			draw_arc(Vector2.ZERO, 720, left, right, 16, edge, 2.0)
 		else:
 			draw_arc(Vector2.ZERO, 64, 0, TAU, 48, color, 5)
+
+	func _draw_bass_ring(radius: float, start: float, finish: float) -> void:
+		# Follow the collision annulus and leave its 50-degree safe wedge empty.
+		var inner := maxf(0.1, radius - 32.0)
+		var outer := radius + 32.0
+		var centre := Vector2(0.5, 0.5)
+		for i in range(96):
+			var a := start + (finish - start) * i / 96.0
+			var b := start + (finish - start) * (i + 1) / 96.0
+			var va := Vector2.from_angle(a)
+			var vb := Vector2.from_angle(b)
+			var points := PackedVector2Array([va * inner, vb * inner, vb * outer, va * outer])
+			var uv := PackedVector2Array(
+				[centre + va * 0.29, centre + vb * 0.29, centre + vb * 0.43, centre + va * 0.43]
+			)
+			draw_colored_polygon(points, Color(0.48, 0.30, 0.57, 0.20))
+			draw_polygon(points, PackedColorArray([Color(0.83, 0.75, 1.0)]), uv, bass_texture)
+		var edge := Color(1.0, 0.86, 0.55, 0.95)
+		if inner > 0.1:
+			draw_arc(Vector2.ZERO, inner, start, finish, 96, edge, 2.0)
+		draw_arc(Vector2.ZERO, outer, start, finish, 96, edge, 2.0)
+		draw_line(Vector2.from_angle(start) * inner, Vector2.from_angle(start) * outer, edge, 2.0)
+		draw_line(Vector2.from_angle(finish) * inner, Vector2.from_angle(finish) * outer, edge, 2.0)
 
 
 class Song:

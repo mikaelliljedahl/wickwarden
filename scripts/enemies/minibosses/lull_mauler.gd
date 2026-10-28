@@ -23,6 +23,33 @@ var _smash_art: Texture2D
 
 class SweepWarning:
 	extends Node2D
+	const ART_PATH := "res://assets/sprites/mirror_tell_z1.png"
+	static var cached_texture: Texture2D
+	var art_path := ART_PATH
+	var texture: Texture2D
+
+	func _ready() -> void:
+		if art_path == ART_PATH and cached_texture != null:
+			texture = cached_texture
+			return
+		if not ResourceLoader.exists(art_path):
+			return
+		var source := load(art_path) as Texture2D
+		if source == null:
+			return
+		var image := source.get_image()
+		if image == null or image.is_empty():
+			return
+		# Preserve alpha and brushwork while changing the cold glint to warm slag light.
+		image.convert(Image.FORMAT_RGBA8)
+		for y in range(image.get_height()):
+			for x in range(image.get_width()):
+				var color := image.get_pixel(x, y)
+				var light := color.r * 0.2126 + color.g * 0.7152 + color.b * 0.0722
+				image.set_pixel(x, y, Color(light, light * 0.70, light * 0.35, color.a))
+		texture = ImageTexture.create_from_image(image)
+		if art_path == ART_PATH:
+			cached_texture = texture
 
 	func _process(_delta: float) -> void:
 		queue_redraw()
@@ -47,12 +74,43 @@ class SweepWarning:
 				draw_arc(centre, 110.0, 0.0, TAU, 48, edge, 3.0)
 			else:
 				var start := aim.angle() - PI / 2
-				var finish := aim.angle() + PI / 2
-				draw_arc(Vector2.ZERO, 126.0, start, finish, 32, Color(0.75, 0.55, 0.35, 0.45), 24.0)
-				draw_arc(Vector2.ZERO, 126.0, start, finish, 32, Color(1, 0.82, 0.55, 0.8), 7.0)
-				draw_arc(Vector2.ZERO, 140.0, start, finish, 32, edge, 3.0)
-				draw_line(Vector2.ZERO, aim.rotated(-PI / 2) * 140.0, edge, 3.0)
-				draw_line(Vector2.ZERO, aim.rotated(PI / 2) * 140.0, edge, 3.0)
+				if texture != null:
+					_draw_sweep_paint(start)
+				else:
+					draw_arc(Vector2.ZERO, 126.0, start, start + PI, 32, Color(0.75, 0.55, 0.35, 0.45), 24.0)
+					draw_arc(Vector2.ZERO, 126.0, start, start + PI, 32, Color(1, 0.82, 0.55, 0.8), 7.0)
+				_draw_sweep_edge(start)
+
+	func _draw_sweep_paint(start: float) -> void:
+		# The painted ribbon is decorative; map it close to the actual outer edge.
+		var uv_y := [0.0, 160.0 / 362.0, 200.0 / 362.0, 1.0]
+		var radii := [0.01, 120.0, 139.0, 140.0]
+		for i in range(16):
+			var u := float(i) / 16.0
+			var v := float(i + 1) / 16.0
+			var a := Vector2.from_angle(start + PI * u)
+			var b := Vector2.from_angle(start + PI * v)
+			for j in range(3):
+				var points := PackedVector2Array(
+					[a * radii[j], b * radii[j], b * radii[j + 1], a * radii[j + 1]]
+				)
+				var uv := PackedVector2Array(
+					[Vector2(u, uv_y[j]), Vector2(v, uv_y[j]),
+					Vector2(v, uv_y[j + 1]), Vector2(u, uv_y[j + 1])]
+				)
+				draw_polygon(points, PackedColorArray([Color(1, 1, 1, 0.65)]), uv, texture)
+
+	func _draw_sweep_edge(start: float) -> void:
+		# Match the 16 chords and two radial edges of the actual collision polygon.
+		var edge := Color(1.0, 0.78, 0.4, 0.95)
+		var first := Vector2.from_angle(start) * 140.0
+		var last := first
+		for i in range(1, 17):
+			var next := Vector2.from_angle(start + PI * i / 16.0) * 140.0
+			draw_line(last, next, edge, 2.0)
+			last = next
+		draw_line(Vector2.ZERO, first, edge, 2.0)
+		draw_line(Vector2.ZERO, last, edge, 2.0)
 
 
 class SlagChunk:

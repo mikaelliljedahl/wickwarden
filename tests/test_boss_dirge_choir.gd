@@ -182,6 +182,8 @@ func _songs_and_ward() -> void:
 	player.set_hurtbox_enabled(self, false)
 	var bass: Variant = boss.heads[0]
 	var ring: Variant = boss.make_song(bass, 0)
+	var bass_visual: Variant = ring.get_node("Visual")
+	check(bass_visual.bass_texture != null, "Bass loads the documented painted note ring")
 	await frames(45)
 	check(not ring.fired and ring.box == null, "heavy Bass attack waits full 0.8 s warning")
 	await frames(7)
@@ -191,6 +193,22 @@ func _songs_and_ward() -> void:
 		"ward negates area without killing singer"
 	)
 	check(ring.progress() > 0 and ring.progress() < 0.2, "ring starts at radius zero")
+	var radius_before: float = ring.progress() * 640.0
+	await frames(12)
+	check_near(ring.progress() * 640.0 - radius_before, 128.0, 2.0, "Bass expands at 640 px/s")
+	check_eq(ring.box.get_child_count(), 48, "Bass retains the 310 degree annulus slices")
+	var first_slice := ring.box.get_child(0) as CollisionPolygon2D
+	check_near(
+		first_slice.polygon[1].length() - first_slice.polygon[0].length(),
+		64.0, 0.1, "Bass active ring remains 64 px thick"
+	)
+	# Removing the resource selects the original geometric look on the live attack.
+	bass_visual.bass_texture = null
+	bass_visual.queue_redraw()
+	await frames(2)
+	check(bass_visual.bass_texture == null, "missing note texture keeps the fallback selected")
+	check(ring.fired and ring.box.active, "missing art does not stop the active Bass hitbox")
+	check_eq(ring.box.damage, 3, "missing art does not change Bass damage")
 	# Test the real player's ward against a Bass annulus away from its 50-degree safe wedge.
 	ring.queue_free()
 	await frames(3)

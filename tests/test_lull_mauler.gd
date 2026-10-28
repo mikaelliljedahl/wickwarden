@@ -6,12 +6,44 @@ const SCENE := "res://scenes/enemies/minibosses/lull_mauler.tscn"
 
 func run() -> void:
 	await _attacks()
+	await _sweep_visual()
 	await _real_attack_geometry()
 	await _real_deflect(false)
 	await _real_deflect(true)
 	await _real_moth_and_hooks()
 	await _attack_interruptions()
 	await _lifecycle()
+
+
+func _sweep_visual() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+	make_player(arena, Vector2(1300, 480))
+	await frames(2)
+	var warning = enemy.get_node("SweepWarning")
+	check(warning.texture != null, "documented sweep art loads")
+	var missing = warning.get_script().new()
+	missing.art_path = "res://missing-mauler-sweep.png"
+	enemy.add_child(missing)
+	check(missing.texture == null, "missing sweep art uses fallback")
+	await _wait_state(enemy, enemy.State.SWEEP_WARNING, 500)
+	await _wait_state(enemy, enemy.State.RECOVER)
+	check(enemy._attack.active, "sweep active for painted and fallback visuals")
+	check_eq(enemy._attack.kind, &"sweep", "active visual follows sweep")
+	var polygon := enemy._attack.get_child(0) as CollisionPolygon2D
+	check(polygon != null, "sweep uses collision polygon")
+	if polygon != null:
+		check_eq(polygon.polygon.size(), 18, "sweep retains centre and 17 rim vertices")
+		check_eq(polygon.polygon[0], Vector2.ZERO, "sweep polygon starts at centre")
+		for i in range(17):
+			var expected := Vector2.from_angle(enemy._aim.angle() - PI / 2 + PI * i / 16.0) * 140.0
+			check_near(polygon.polygon[i + 1].distance_to(expected), 0.0, 0.01, "sweep rim vertex %s" % i)
+	missing.queue_redraw()
+	warning.queue_redraw()
+	await frames(1)
+	check(enemy._attack.active, "fallback redraw does not alter live attack")
+	await dispose(arena)
 
 
 func _wait_state(enemy: EnemyBase, target: int, limit: int = 240) -> int:
