@@ -302,12 +302,25 @@ Skitter Boots documentation followed in `a7aec9f`; the painted sling cast cue
 landed in `bd2ab68222c29b8e5e9d4dde17ea1d40b9fc4d85` on `origin/main`.
 Sling documentation followed in `7d7f8d2`; Heft Mitts flecks landed in
 `e73eb5aaa81c3a240684f829388337e89dfba850` on `origin/main`.
+Mitts effect documentation followed in `74950b3`; Gloam's active slash landed in
+`5999b74277177bf01b745a103e58a0f49f00f24a` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Gloam Knight active slash, committed in `5999b74`:** The active slash uses
+existing documented `mirror_tell_z1` in its own unshaded child; the original
+120°/150 px markings and gameplay are unchanged, with three original arcs as
+missing-art fallback. Lead and agent passed `boss_gloam_knight` and
+`tool_matrix`; the agent reports lint PASS. Controlled actual `cave_7_11` stills
+at `/var/tmp/wick-gloam-paint-study/final-{right,up,down,left,up_right,down_left}.png`
+used a placed, protected player, frozen attack/boss and paused pit. Color may
+overlap and resemble blue flame; 0.05-second motion and human play are not
+verified. A clean full `make check` on exact `5999b74` passed (exit 0); log
+`/var/tmp/wick-clean-5999b74-b3e6_y_z/check.log`. It is the latest full check.
 
 **Heft Mitts lift/throw flecks, committed in `e73eb5a`:** Painted world-fixed
 flecks appear on successful lift and throw, not no-op, push or carry; missing art
@@ -319,7 +332,8 @@ attack and the throw is subtle; human play and motion are not verified. The lead
 passed six targeted suites after import; the first pre-import attempt failed two
 checks. The agent reports lint and `art-test` (25) PASS. A clean full `make check`
 on exact `e73eb5a` passed (exit 0); log
-`/var/tmp/wick-clean-e73eb5a-btufi8n_/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-e73eb5a-btufi8n_/check.log`. The later clean `5999b74`
+full check is recorded above.
 
 **Tallow Sling cast cue, committed in `bd2ab68`:** The cue reuses the existing
 documented Cinder image with a shader for a neutral soft trail; game mechanics

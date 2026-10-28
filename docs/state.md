@@ -1,5 +1,16 @@
 # Current status
 
+**Gloam Knight active slash, 2026-10-28 (committed in `5999b74`):** The active
+slash uses existing documented `mirror_tell_z1` in its own unshaded child; the
+original 120°/150 px markings and gameplay are unchanged, with three original
+arcs as missing-art fallback. Lead and agent passed `boss_gloam_knight` and
+`tool_matrix`; the agent reports lint PASS. Controlled actual `cave_7_11` stills
+at `/var/tmp/wick-gloam-paint-study/final-{right,up,down,left,up_right,down_left}.png`
+used a placed, protected player, frozen attack/boss and paused pit. Color may
+overlap and resemble blue flame; 0.05-second motion and human play are not
+verified. A clean full `make check` on exact `5999b74` passed (exit 0); log
+`/var/tmp/wick-clean-5999b74-b3e6_y_z/check.log`. It is the latest full check.
+
 **Heft Mitts lift/throw flecks, 2026-10-28 (committed in `e73eb5a`):** Painted
 world-fixed flecks appear on successful lift and throw, not no-op, push or carry;
 missing art is safe. Origin is documented and sprite metadata exists. Controlled
@@ -10,7 +21,8 @@ attack and the throw is subtle; human play and motion are not verified. The lead
 passed six targeted suites after import; the first pre-import attempt failed two
 checks. The agent reports lint and `art-test` (25) PASS. A clean full `make check`
 on exact `e73eb5a` passed (exit 0); log
-`/var/tmp/wick-clean-e73eb5a-btufi8n_/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-e73eb5a-btufi8n_/check.log`. The later clean `5999b74`
+full check is recorded above.
 
 **Tallow Sling cast cue, 2026-10-28 (committed in `bd2ab68`):** The cue reuses
 the existing documented Cinder image with a shader for a neutral soft trail;
@@ -2728,7 +2740,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `e73eb5aaa81c3a240684f829388337e89dfba850` on `origin/main`, including Heft Mitts flecks above. The latest clean full check is at `e73eb5a`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `5999b74277177bf01b745a103e58a0f49f00f24a` on `origin/main`, including Gloam Knight’s painted active slash above. The latest clean full check is at `5999b74`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
