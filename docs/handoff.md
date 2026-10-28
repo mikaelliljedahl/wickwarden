@@ -273,12 +273,26 @@ The Mauler sweep prototype was documented in
 `32e7b3ab86d6f8023ce9f685f447483a034502eb` on `origin/main`.
 Bramble Snapper's art trial was documented in
 `9751f5f7a3b96167cace6fdbdbff36aa2e53eabb` on `origin/main`.
+Compact Snapper documentation followed in `18dc667`; native-alpha texture
+cutter support landed in `9d2899c81b4660872d943fd0cdae1d869bae2fe9` on
+`origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Native-alpha texture cutter, committed in `9d2899c`:** Opt-in support cuts
+rectangular RGBA `native_alpha` textures with proportions, seam and checker
+proof; legacy RGB behavior is unchanged. `make art-test` passed 23 tests and
+the agent reports lint PASS. The proof is synthetic and the existing
+ResourceWarning remains. A Reel rope v2 scratch source is not integrated: the seam
+maximum difference was about 67/255 premultiplied, and the crop is uncertain
+because 3,738 pixels with alpha 1 were excluded. Existing rope sources v1–v3 are
+being investigated. Bramble's layered scratch trial was rejected
+for double heads, rotation and conflicting direction, based on controlled stills
+only.
 
 **Bramble compact2 scratch review, 2026-10-28:** The source fits the same
 192 px cutter/scale, but action is taller and narrower than idle; diagonal
