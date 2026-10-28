@@ -1,4 +1,24 @@
 {
+  "fx_leap_dust_z1": {
+    "cell": [
+      96,
+      128
+    ],
+    "anchor": [
+      48.0,
+      64.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fx_leap_dust_z1_idle.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": false
+      }
+    }
+  },
   "fx_cinder_cast_z1": {
     "cell": [
       1086,

@@ -1412,6 +1412,7 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"fx_leap_dust_z1": {"cell": [96, 128], "align": "center", "anchor": [48, 64], "radius": 0},
 "fx_cinder_cast_z1": {"cell": [1086, 362], "align": "center", "texture": true},
 "chime_notes_z1": {"cell": [512, 512], "align": "center", "texture": true},
 "mirror_tell_z1": {"cell": [1086, 362], "align": "center", "texture": true},
@@ -2162,6 +2163,7 @@
  }
  },
  "sheets": {
+"fx_leap_dust_z1": {"input_mode": "native_alpha", "rows": [{"poses": 4, "outputs": [{"kind": "fx_leap_dust_z1", "anim": "idle", "file": "fx_leap_dust_z1_idle", "poses": [0, 1], "scale": {"measure": "fit", "value": [64, 64]}, "fps": 1, "loop": false}]}]},
 "fx_cinder_cast_z1": {"type": "texture", "output": "fx_cinder_cast_z1", "input_mode": "native_alpha", "size": [1086, 362]},
 "chime_notes_z1": {"type": "texture", "output": "chime_notes_z1", "input_mode": "native_alpha", "size": [512, 512]},
 "mirror_tell_z1": {"type": "texture", "output": "mirror_tell_z1", "input_mode": "native_alpha", "size": [1086, 362]},

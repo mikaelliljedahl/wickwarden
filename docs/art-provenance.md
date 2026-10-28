@@ -1614,3 +1614,9 @@ The jet is cut through `tools/art_manifest.json` into the cutter-generated `asse
 | Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
 |---|---|---|---|---|---|
 | `fx_cinder_cast_z1.png` | 2172×724 | `01a1822f-5808-7c52-a278-6bcdc4715bf1` | `exec-5b77914a-a8c2-4328-be36-30de7c4cacd2.png` | `05311a78c79ce164` | [fx_cinder_cast_z1-log.md](../tools/source_art/fx_cinder_cast_z1-log.md) |
+
+### Leap dust, 2026-10-28
+
+| Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
+|---|---|---|---|---|---|
+| `fx_leap_dust_z1.png` | 2172×724 | `01a18251-08e7-7033-867d-8d712c185de2` | `exec-4f57bb1b-db34-4774-947b-0005d39c2c53.png` | `9b08535d769644b8` | [fx_leap_dust_z1-log.md](../tools/source_art/fx_leap_dust_z1-log.md) |

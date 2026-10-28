@@ -16,6 +16,7 @@ const LEAP_LANDING_X := 692.0
 
 
 func run() -> void:
+	await _dust_lifecycle()
 	await _leap_crosses_pit()
 	await _landing_in_pit_falls()
 	await _stops_at_wall()
@@ -257,4 +258,56 @@ func _room_fixture() -> void:
 		1.0,
 		"the fixture leap lands past the pit"
 	)
+	await dispose(arena)
+
+
+func _dust_lifecycle() -> void:
+	reset_state()
+	var arena := make_arena()
+	var start := Vector2(400, 500)
+	var player := make_player(arena, start)
+	await frames(2)
+	_give_boots(player)
+	check(player.use_item(), "dust test starts a leap")
+	var item := _boots()[0] as Node2D
+	var visual := item.get_node("Visual") as Node2D
+	var puff := visual.get_node_or_null("LeapDust") as Sprite2D
+	check(puff != null, "successful start produces one puff")
+	if puff != null:
+		check_eq(puff.global_position, start + Vector2(0, 8), "puff starts at the feet")
+	await frames(8)
+	if is_instance_valid(puff):
+		check_eq(puff.global_position, start + Vector2(0, 8), "puff stays at the takeoff point")
+	await seconds(0.5)
+	check_eq(visual.get_child_count(), 0, "puff fades and landing creates no cue")
+	await dispose(arena)
+
+	reset_state()
+	arena = make_arena()
+	player = make_player(arena, start)
+	await frames(2)
+	_give_boots(player)
+	check(player.use_item(), "cancellation test starts a leap")
+	item = _boots()[0] as Node2D
+	visual = item.get_node("Visual") as Node2D
+	player.place_at(start + Vector2(192, 0))
+	check_eq(visual.get_child_count(), 1, "cancel at endpoint creates no second puff")
+	await seconds(0.5)
+	check_eq(visual.get_child_count(), 0, "cancelled puff expires without landing cue")
+	await dispose(arena)
+
+	reset_state()
+	arena = make_arena()
+	player = make_player(arena, start)
+	await frames(2)
+	var path: Array[Vector2] = [start + Vector2(100, 0)]
+	check(player.begin_external_motion(path, 100.0), "other motion starts")
+	var scene := load(ITEM_SCENE) as PackedScene
+	item = scene.instantiate() as Node2D
+	item.set("player", player)
+	item.set("facing", Vector2.RIGHT)
+	arena.add_child(item)
+	check(not item.call("activate"), "motion API refuses the leap")
+	visual = item.get_node("Visual") as Node2D
+	check_eq(visual.get_child_count(), 0, "refused motion creates no puff")
 	await dispose(arena)

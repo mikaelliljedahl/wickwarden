@@ -1,6 +1,7 @@
 extends TestCase
 ## Real item use owns the cue lifecycle; the helper only draws and accepts facing.
 
+const CUE_SCRIPT := "res://scripts/art/tool_cue_visual.gd"
 const TOOLS: Array[StringName] = [
 	&"cinder_wick", &"tallow_sling", &"heft_mitts", &"lantern_chime", &"skitter_boots"
 ]
@@ -13,6 +14,7 @@ func run() -> void:
 		for direction in DIRECTIONS:
 			await _use_cue(tool, direction)
 	await _missing_cinder_art()
+	await _missing_dust_art()
 
 
 func _use_cue(tool: StringName, direction: Vector2) -> void:
@@ -52,6 +54,10 @@ func _use_cue(tool: StringName, direction: Vector2) -> void:
 					"painted child uses the cinder cast asset"
 				)
 			check_near(painted.rotation, direction.angle(), 0.001, "painted cue faces the cast")
+	elif tool == &"skitter_boots":
+		var puff := visual.get_node_or_null("LeapDust") as Sprite2D
+		check(puff != null and puff.texture != null, "accepted leap creates painted dust")
+		check_eq(visual.get_child_count(), 1, "boots have only the start puff")
 	else:
 		check_eq(visual.get_child_count(), 0, "other cues have no body, shadow or collision")
 	var definition := Placeholder.definition_of(tool)
@@ -68,7 +74,7 @@ func _use_cue(tool: StringName, direction: Vector2) -> void:
 
 
 func _missing_cinder_art() -> void:
-	var script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	var script := load(CUE_SCRIPT) as GDScript
 	if script == null:
 		check(false, "cue helper loads for missing-art fallback")
 		return
@@ -81,5 +87,17 @@ func _missing_cinder_art() -> void:
 	check(visual.get(&"_painted") == null, "missing art retains the geometric drawing path")
 	check(visual.visible, "missing-art cue remains visible")
 	check_eq(visual.get(&"_facing"), Vector2.LEFT, "fallback retains the cast facing")
+	visual.queue_free()
+	await frames(1)
+
+
+func _missing_dust_art() -> void:
+	var script := load(CUE_SCRIPT) as GDScript
+	var visual := script.new() as Node2D
+	visual.set(&"_kind", &"skitter_boots")
+	visual.set(&"dust_path", "res://missing-dust.png")
+	add_child(visual)
+	visual.call(&"show_leap_dust", Vector2.ZERO)
+	check_eq(visual.get_child_count(), 0, "missing dust art does not create a child")
 	visual.queue_free()
 	await frames(1)

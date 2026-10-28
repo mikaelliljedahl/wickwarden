@@ -47,6 +47,9 @@ func activate() -> bool:
 		path, LEAP_DISTANCE / LEAP_TIME, {"airborne": true, "hurtbox": false}
 	):
 		return false
+	var visual := get_node_or_null("Visual")
+	if visual != null and visual.has_method("show_leap_dust"):
+		visual.call("show_leap_dust", start)
 	_leaping = true
 	_hero.motion_finished.connect(_on_motion_finished, CONNECT_ONE_SHOT)
 	Audio.play_sfx(&"moth_launch", start)

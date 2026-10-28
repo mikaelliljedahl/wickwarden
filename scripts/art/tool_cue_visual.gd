@@ -6,8 +6,10 @@ const SEGMENTS := 48
 const BANDS := 8
 const CINDER_ART := "res://assets/sprites/fx_cinder_cast_z1.png"
 const CINDER_WIDTH := 82.0
+const DUST_ART := "res://assets/sprites/fx_leap_dust_z1_idle.png"
 
 var art_path: String = CINDER_ART
+var dust_path: String = DUST_ART
 var _kind: StringName
 var _painted: Sprite2D
 var _shape: String = "arc"
@@ -40,7 +42,8 @@ static func attach(parent: Node, kind: StringName, facing: Vector2) -> Node2D:
 func _ready() -> void:
 	var blend := CanvasItemMaterial.new()
 	blend.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-	material = blend
+	if _kind != &"skitter_boots":
+		material = blend
 	if _kind == &"cinder_wick" and ResourceLoader.exists(art_path):
 		var texture := load(art_path) as Texture2D
 		if texture != null and texture.get_width() > 0:
@@ -78,7 +81,7 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if _painted != null:
+	if _kind == &"skitter_boots" or _painted != null:
 		return
 	# Nested bands feather both radial edges; vertex alpha feathers the arc ends.
 	var span := deg_to_rad(110.0) if _shape == "arc" else TAU
@@ -111,3 +114,22 @@ func _point(angle: float, reach: float) -> Vector2:
 	if _shape == "diamond":
 		direction /= absf(direction.x) + absf(direction.y)
 	return direction * reach
+
+
+func show_leap_dust(at: Vector2) -> void:
+	if _kind != &"skitter_boots" or not ResourceLoader.exists(dust_path):
+		return
+	var texture := load(dust_path) as Texture2D
+	if texture == null:
+		return
+	var puff := Sprite2D.new()
+	puff.name = "LeapDust"
+	puff.texture = texture
+	puff.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	puff.modulate.a = 0.72
+	puff.top_level = true
+	add_child(puff)
+	puff.global_position = at + Vector2(0, 8)
+	var tween := create_tween()
+	tween.tween_property(puff, "modulate:a", 0.0, 0.3)
+	tween.tween_callback(puff.queue_free)
