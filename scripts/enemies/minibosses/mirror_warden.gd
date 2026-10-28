@@ -91,6 +91,10 @@ func _enter_tree() -> void:
 
 
 func _boss_ready() -> void:
+	# Floor cues must remain readable beyond the player's lamp in dark rooms.
+	var cue_material := CanvasItemMaterial.new()
+	cue_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	material = cue_material
 	for i in range(2):
 		var reflection := Reflection.new()
 		reflection.name = "Reflection%d" % i
@@ -307,5 +311,12 @@ func _draw() -> void:
 			Color(1, 0.85, 0.4),
 			4.0
 		)
+	if _slash_left > 0.0:
+		var start := _aim.angle() - deg_to_rad(SLASH_ARC / 2.0)
+		var finish := _aim.angle() + deg_to_rad(SLASH_ARC / 2.0)
+		# A short blade glint and outer edge show the active cone without filling it.
+		draw_arc(Vector2.ZERO, 114.0, start, finish, 32, Color(0.45, 0.61, 0.72, 0.45), 24.0, true)
+		draw_arc(Vector2.ZERO, 114.0, start, finish, 32, Color(0.75, 0.87, 0.95, 0.8), 8.0, true)
+		draw_arc(Vector2.ZERO, SLASH_REACH, start, finish, 32, Color(0.9, 0.96, 1.0, 0.9), 2.0, true)
 	if _reveal_left > 0.0 or _flash_left > 0.0:
 		draw_arc(Vector2.ZERO, 45.0, 0, TAU, 32, Color(0.7, 0.9, 1), 5.0)
