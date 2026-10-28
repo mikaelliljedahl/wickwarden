@@ -1568,3 +1568,10 @@ the width of the hook swing in particular, in play.
 | `wick_automaton_jet_z1.png` | 2172x724 | `01a17f48-f9dc-76f2-be17-1bf130213b6c` | `exec-72d7ce02-b238-4d73-9e79-fc30aaf7130a.png` | `d9c9d14c3413c9f0` | `wick-automaton-jet-z1-log.md` |
 
 The jet is cut through `tools/art_manifest.json` into the cutter-generated `assets/sprites/sprites.json`; reproduction details are in its log.
+
+### Coinwyrm bite, 2026-10-28
+
+| Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
+|---|---|---|---|---|---|
+| `coinwyrm_bite_tell_candidate.png` | 1536×1024 | `01a180aa-043a-70b0-9eb6-2282cd818f5d` | `exec-74906545-c829-4d46-be55-96edc2670f8e.png` | `16d2b1278b2f9198` | `coinwyrm-bite-20261028-log.md` |
+| `coinwyrm_bite_candidate.png` | 1536×1024 | `01a180aa-043a-70b0-9eb6-2282cd818f5d` | `exec-f2c65014-131e-453a-9802-eaca2aabd412.png` | `7769793583d42fc0` | `coinwyrm-bite-20261028-log.md` |

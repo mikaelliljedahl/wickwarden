@@ -2,6 +2,7 @@ extends "res://scripts/enemies/boss_base.gd"
 ## Free reel pulls remove armour. Persistent rewards belong to the cave room.
 
 const HEAPS := [Vector2(288, 288), Vector2(288, 672), Vector2(1056, 480), Vector2(1536, 672)]
+const FRONT_BITE_DOT := 0.9659258  # Within 15 degrees of the drawn downward facing.
 const OFFSETS := [Vector2(0, -58), Vector2(-58, 0), Vector2(58, 0), Vector2(0, -108)]
 
 var plates: Array[Node2D] = []
@@ -117,6 +118,10 @@ func _init() -> void:
 
 
 func _boss_ready() -> void:
+	if visual is SpriteVisual:
+		visual.auto_motion = false
+		if not visual.animation_finished.is_connected(_head_animation_finished):
+			visual.animation_finished.connect(_head_animation_finished)
 	_home = global_position
 	# Presentation-only illumination follows the visible head in the dark arena.
 	if not has_node("HeadLight"):
@@ -256,6 +261,7 @@ func _plate_pulled(_hit: Hitbox, plate: Node2D) -> void:
 
 
 func _begin_burrow(delay: float) -> void:
+	_head_idle()
 	_clear_heap_cues()
 	_clear_plates()
 	state = &"burrow"
@@ -384,10 +390,16 @@ func _marker(
 func _bite() -> void:
 	var direction := direction_to_player()
 	var at := global_position
+	_head_idle()
+	# The authored head faces down; other directions use the directional strike effect.
+	if direction.dot(Vector2.DOWN) >= FRONT_BITE_DOT and visual is SpriteVisual:
+		visual.play_anim(&"bite_telegraph")
 	var marker := _marker(at, &"cone", 0.5, 150, Vector2.ZERO, direction)
 	if marker != null:
 		_light_bite(marker, direction)
 		marker.finished.connect(_strike.bind(at, direction, false))
+	else:
+		_head_idle()
 
 
 func _light_bite(parent: Node2D, direction: Vector2) -> void:
@@ -432,6 +444,8 @@ func _light_tail_band(parent: Node2D) -> void:
 func _strike(at: Vector2, direction: Vector2, tail: bool, origin := Vector2.INF) -> void:
 	if is_dying() or is_dead or is_pausing() or state != &"rear":
 		return
+	if not tail and direction.dot(Vector2.DOWN) >= FRONT_BITE_DOT and visual is SpriteVisual:
+		visual.play_anim(&"bite")
 	var strike := Strike.new()
 	strike.tail = tail
 	strike.facing = direction
@@ -477,6 +491,16 @@ func _strike(at: Vector2, direction: Vector2, tail: bool, origin := Vector2.INF)
 	add_hazard(strike)
 
 
+func _head_idle() -> void:
+	if visual is SpriteVisual:
+		visual.play_anim(&"idle")
+
+
+func _head_animation_finished() -> void:
+	if visual is SpriteVisual and visual.animation == &"bite":
+		_head_idle()
+
+
 func _tail_animation_finished(effect: SpriteVisual) -> void:
 	if not is_instance_valid(effect):
 		return
@@ -489,6 +513,7 @@ func _tail_animation_finished(effect: SpriteVisual) -> void:
 func _on_hurt(hit: Hitbox) -> void:
 	super._on_hurt(hit)
 	if is_dying():
+		_head_idle()
 		_clear_plates()
 		set_contact_enabled(false)
 
@@ -496,6 +521,7 @@ func _on_hurt(hit: Hitbox) -> void:
 func reset_fight() -> void:
 	if is_dead or is_defeated():
 		return
+	_head_idle()
 	_clear_plates()
 	global_position = _home
 	visible = true

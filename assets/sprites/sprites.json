@@ -636,6 +636,18 @@
     "mirror_side": false,
     "centered": true,
     "animations": {
+      "bite_telegraph": {
+        "file": "res://assets/sprites/coinwyrm_bite_telegraph.png",
+        "frames": 2,
+        "fps": 4.0,
+        "loop": false
+      },
+      "bite": {
+        "file": "res://assets/sprites/coinwyrm_bite.png",
+        "frames": 3,
+        "fps": 25.0,
+        "loop": false
+      },
       "idle": {
         "file": "res://assets/sprites/coinwyrm_idle.png",
         "frames": 1,

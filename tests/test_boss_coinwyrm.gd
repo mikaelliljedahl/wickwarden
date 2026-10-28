@@ -9,6 +9,7 @@ func run() -> void:
 	await _windows_and_anchor()
 	await _attacks()
 	await _strike_presentation()
+	await _directional_bite_head()
 	await _coin_presentation()
 	await _physical_finish()
 	await _finish()
@@ -407,6 +408,59 @@ func _strike_presentation() -> void:
 	var shape := sweep.box.get_child(0) as CollisionShape2D
 	check_eq((shape.shape as RectangleShape2D).size, Vector2(1728, 96), "tail band unchanged")
 	check_near(sweep.life, 0.12, 0.001, "strike duration remains 0.12 seconds")
+	await dispose(room)
+
+
+func _directional_bite_head() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/Coinwyrm")
+	var player := make_player(room, Vector2(1728, 480))
+	player.set_hurtbox_enabled(self, false)
+	await seconds(3.6)
+	boss.clear_hazards()
+	boss.set_physics_process(false)
+	var look := boss.visual as SpriteVisual
+	check(look != null, "bite head uses painted visual")
+	if look == null:
+		await dispose(room)
+		return
+	check_eq(look.sprite_frames.get_frame_count(&"bite_telegraph"), 2, "bite tell has two frames")
+	check_eq(look.sprite_frames.get_frame_count(&"bite"), 3, "bite strike has three frames")
+	for plated in [true, false]:
+		if not plated:
+			for plate in boss.plates.duplicate():
+				boss._plate_pulled(null, plate)
+			await frames(3)
+		check_eq(boss.plates.size(), 3 if plated else 0, "test has expected armour")
+		for direction: Vector2 in [Vector2.DOWN, Vector2.UP, Vector2.LEFT, Vector2.RIGHT]:
+			player.place_at(boss.global_position + direction * 250.0)
+			boss._bite()
+			await frames(20)
+			var label := "bite %s plated=%s" % [direction, plated]
+			check_eq(look.animation, &"bite_telegraph" if direction == Vector2.DOWN else &"idle",
+				label + ": direction-correct tell")
+			for plate in boss.plates:
+				check_eq(plate.position, boss.OFFSETS[plate.get_meta("slot")],
+					label + ": plate collision position unchanged")
+			for hazard in boss._hazards:
+				if is_instance_valid(hazard) and hazard.get_script() == boss.get_script().Strike:
+					check(hazard.tail, label + ": no bite before 0.5 second tell")
+			await frames(12)
+			var strike: Node2D
+			for hazard in boss._hazards:
+				if is_instance_valid(hazard) and hazard.get_script() == boss.get_script().Strike:
+					if not hazard.tail:
+						strike = hazard
+			check(strike != null, label + ": strike follows tell")
+			if strike != null:
+				check_eq(strike.facing, direction, label + ": actual hit area direction")
+				check_eq(strike.box.damage, 4, label + ": damage unchanged")
+			check_eq(look.animation, &"bite" if direction == Vector2.DOWN else &"idle",
+				label + ": correct strike art")
+			await frames(20)
+			check_eq(look.animation, &"idle", label + ": restores idle")
+			check(not is_instance_valid(strike), label + ": 0.12 second strike expires")
 	await dispose(room)
 
 
