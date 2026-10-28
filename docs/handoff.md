@@ -86,6 +86,8 @@ The Linux export preset followed in `fec1e9514b0dad0025602da7019d898eba1f1b79`,
 verified on `origin/main`.
 The rejected Fen Leech prototype and remaining limitation were documented in
 `750e4f15f2912c7c3c5763b107c94b39a9209b8c`, verified on `origin/main`.
+The B03/B09 immunity fixes and continuous earned route to the rekindle ending
+scene followed in `59e339f01dcfc5158f4c5ffc607b8edea40b62d1`, verified on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -93,7 +95,15 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**B03/B09 immunity fixes, working tree (unpushed):** Both subclass initializers
+**Q3 playthrough command, 2026-10-28:** After `59e339f`, the lead's
+`TMPDIR=/tmp make playthrough` passed: `playthrough_route --check` and all four
+shards passed. The first contains the continuous earned normal-damage route to
+the rekindle scene described below; later sections use fixtures and warps. This
+is not human testing. The bot, RNG and harness limitations below, untested
+continuous credits/title and other ending, E1 conflict and Fen Leech placeholder
+remain open.
+
+**B03/B09 immunity fixes, committed in `59e339f`:** Both subclass initializers
 now call `BossBase`'s initializer; actual scenes have stun and knockback scales
 zero and drops disabled. In B09, real sling damage no longer pushes and the Moth
 does not stun; forced-death drop checks show only intended embers. B03 retains
@@ -107,11 +117,11 @@ scales are 1: an actual slug moves the boss and an actual Moth stuns it, contrar
 to binding boss immunity and stationary Warden requirements. The audit points to
 subclass `_init`; `drops_enabled` is also true, a static risk of unplanned drops.
 Tidewick likewise has defaults 1/true, but its separate hitboxes filter
-interactions and a direct effect was not demonstrated. The later unpushed fixes
+interactions and a direct effect was not demonstrated. The later committed fixes
 are recorded above. The earlier ending-scene victory preceded the B09 fix; the
 synced rerun is below.
 
-**Q3 earned route to ending scene, working tree (unpushed):** The continuous
+**Q3 earned route to ending scene, committed in `59e339f`:** The continuous
 input route from start through C1–C10 defeats The Unlit with normal damage and
 active enemies, including an ordinary boss death, respawn and full return, and
 an actual slug-bundle pickup. Phase one uses 15 sling shots, phase two three

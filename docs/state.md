@@ -1,6 +1,14 @@
 # Current status
 
-**B03/B09 immunity fixes, 2026-10-28 (working tree, unpushed):** Both subclass
+**Q3 playthrough command, 2026-10-28:** After `59e339f`, the lead's
+`TMPDIR=/tmp make playthrough` passed: `playthrough_route --check` and all four
+shards passed. The first contains the continuous earned normal-damage route to
+the rekindle scene described below; later sections use fixtures and warps. This
+is not human testing. The bot, RNG and harness limitations below, untested
+continuous credits/title and other ending, E1 conflict and Fen Leech placeholder
+remain open.
+
+**B03/B09 immunity fixes, 2026-10-28 (committed in `59e339f`):** Both subclass
 initializers now call `BossBase`'s initializer; actual scenes have stun and
 knockback scales zero and drops disabled. In B09, real sling damage no longer
 pushes and the Moth does not stun; forced-death drop checks show only intended
@@ -15,10 +23,10 @@ Moth stuns it, contrary to the binding boss immunity and stationary Warden
 requirements. The audit points to subclass `_init`; `drops_enabled` is also
 true, a static risk of unplanned drops. Tidewick likewise has defaults 1/true,
 but its separate hitboxes filter interactions and a direct effect was not
-demonstrated. The later unpushed fixes are recorded above. The Q3 continuous
-earlier ending-scene victory preceded the B09 fix; the synced rerun is below.
+demonstrated. The later committed fixes are recorded above. The earlier Q3
+ending-scene victory preceded the B09 fix; the synced rerun is below.
 
-**Q3 earned route to ending scene, 2026-10-28 (working tree, unpushed):** The
+**Q3 earned route to ending scene, 2026-10-28 (committed in `59e339f`):** The
 continuous input route from start through C1–C10 defeats The Unlit with normal
 damage and active enemies, including an ordinary boss death, respawn and full
 return, and an actual slug-bundle pickup. Phase one uses 15 sling shots, phase
@@ -1476,7 +1484,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `750e4f15f2912c7c3c5763b107c94b39a9209b8c` on `origin/main`, documenting the rejected Fen Leech prototype and remaining limitation above. The Q3 `/tmp` guard and shared runner guard remain open. C10 victory and a complete ending remain unverified; the user response on the ending-choice conflict remains pending. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not count as Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance, a complete earned-route and human playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `59e339f01dcfc5158f4c5ffc607b8edea40b62d1` on `origin/main`, including the B03/B09 fixes and continuous earned route to the rekindle ending scene above. Credits, title return and the other ending remain unverified in that continuous route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
