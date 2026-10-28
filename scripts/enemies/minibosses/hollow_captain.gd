@@ -16,6 +16,50 @@ var _timer := INTERVAL
 var _cycle := INTERVAL
 var _aim := Vector2.DOWN
 var _stun_immunity := 0.0
+var _warning_visual: Node2D
+
+
+class BashWarningVisual:
+	extends Node2D
+	var texture: Texture2D
+
+	func _ready() -> void:
+		var path := "res://assets/sprites/unlit_wax_wave_z1_idle.png"
+		if ResourceLoader.exists(path):
+			texture = load(path) as Texture2D
+		var unshaded := CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = unshaded
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+
+	func showing_warning() -> bool:
+		var captain = get_parent()
+		return not captain.is_dead and not captain.is_dying() and captain.state == State.TELEGRAPH
+
+	func _draw() -> void:
+		if not showing_warning():
+			return
+		var captain = get_parent()
+		var angle: float = captain.facing_dir.angle()
+		var centre := Vector2(0, -70)
+		var start := angle - 0.85
+		var finish := angle + 0.85
+		if texture == null:
+			draw_arc(centre, 112.0, start, finish, 32, Color(1, 0.5, 0.15, 0.8), 8.0)
+			return
+		for i in range(32):
+			var a := Vector2.from_angle(lerpf(start, finish, float(i) / 32.0))
+			var b := Vector2.from_angle(lerpf(start, finish, float(i + 1) / 32.0))
+			var points := PackedVector2Array([
+				centre + a * 102.0, centre + b * 102.0,
+				centre + b * 122.0, centre + a * 122.0,
+			])
+			var u := float(i) / 32.0
+			var v := float(i + 1) / 32.0
+			var uv := PackedVector2Array([Vector2(u, 0), Vector2(v, 0), Vector2(v, 1), Vector2(u, 1)])
+			draw_polygon(points, PackedColorArray([Color(1.0, 0.8, 0.55, 0.5)]), uv, texture)
 
 
 func _init() -> void:
@@ -33,6 +77,13 @@ func _init() -> void:
 	Placeholder.register_kind(
 		KIND, {"shape": "circle", "color": Color(0.65, 0.58, 0.36), "radius": 30.0}
 	)
+
+
+func _boss_ready() -> void:
+	_warning_visual = BashWarningVisual.new()
+	_warning_visual.name = "BashWarningVisual"
+	add_child(_warning_visual)
+	move_child(_warning_visual, 0)
 
 
 func _enter_phase(_number: int) -> void:
@@ -117,8 +168,6 @@ func _draw() -> void:
 			Color(0.95, 0.82, 0.4),
 			7.0
 		)
-	if state == State.TELEGRAPH:
-		draw_line(Vector2.ZERO, facing_dir * DASH_SPEED * DASH_TIME, Color(1, 0.5, 0.15, 0.8), 10.0)
 
 
 func stun(seconds: float) -> void:

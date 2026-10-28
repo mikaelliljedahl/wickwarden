@@ -4,12 +4,45 @@ const SCENE := "res://scenes/enemies/minibosses/hollow_captain.tscn"
 
 
 func run() -> void:
+	await _warning_art()
 	await _reset_during_death()
 	await _reset_natural_bash()
 	await _guard_and_bash()
 	await _real_hook_guard()
 	await _real_moth_hit()
 	await _stun_and_persistence()
+
+
+func _warning_art() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(arena, SCENE, Vector2(800, 480))
+	await frames(2)
+	var warning = enemy.get_node("BashWarningVisual")
+	check(warning.texture != null, "painted warning texture loads")
+	check(not warning.showing_warning(), "warning hidden during patrol")
+	var elapsed := 0
+	while enemy.state != enemy.State.TELEGRAPH and elapsed < 360:
+		await frames(1)
+		elapsed += 1
+	check(enemy.state == enemy.State.TELEGRAPH, "natural cycle reaches warning")
+	check(warning.showing_warning(), "warning visible during telegraph")
+	warning.texture = null
+	warning.queue_redraw()
+	await frames(1)
+	check(warning.showing_warning(), "missing art retains warning fallback")
+	while enemy.state == enemy.State.TELEGRAPH and elapsed < 420:
+		await frames(1)
+		elapsed += 1
+	check(enemy.state == enemy.State.BASH, "natural cycle reaches bash")
+	check(not warning.showing_warning(), "warning ends when bash starts")
+	check_eq(enemy.contact_hitbox.damage, 3, "fallback does not change bash damage")
+	enemy.reset_fight()
+	check(not warning.showing_warning(), "reset clears warning")
+	enemy.state = enemy.State.TELEGRAPH
+	enemy.stun(1.0)
+	check(not warning.showing_warning(), "stun cancels warning")
+	await dispose(arena)
 
 
 func _reset_during_death() -> void:
