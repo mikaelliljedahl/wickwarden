@@ -1,14 +1,34 @@
 # Current status
 
-**Coinwyrm bite warning, 2026-10-28 (locally committed in `11988ae`):** The
+**The Unlit wax collapse, 2026-10-28 (locally committed in `053da3e`):** A
+reproducible `joined_outputs` cutter produces eight 768 px frames at 4 fps from
+a green-key source with a soft ramp; the crop audit found no matte loss
+(`/var/tmp/wick-green-z1/audit.log`). The built-in ImageGen source is session
+`01a18355-4a0b-7ad1-9188-83c0519cd410`, output
+`exec-938669d2-d18d-4780-984a-b613b71c4967.png`; exact prompt and hash are in
+`docs/art-provenance.md`. The effect fades over two seconds behind the lantern;
+missing art, wrong fps or truncated wax falls back to explosion/Placeholder.
+Isolated `unlit_death_visual`, `boss_the_unlit`, full ending, 26 art tests and
+lint passed. The final fallback extension also passed a focused test and lint
+(`/var/tmp/wick-wax-review-dUmkPO`). A clean full `make check` on exact
+`053da3e` passed (exit 0): 160 Godot test files, lint, world-check and 175 Python
+tests. Log `/var/tmp/wick-clean-053da3e-wfdsnih6/check.log`; this is the latest
+clean full PASS.
+
+Actual hook hits after synthetic phase 3 HP 1/exposure in C10 were captured at
+`/var/tmp/wick-green-z1/physical-{natural,bright}-{wax,fallback}.log` and PNGs,
+with isolated saves disabled. Greenish details, a plastic appearance in bright
+light and overlap remain concerns; human play and real-time video are unverified.
+
+**Coinwyrm bite warning, 2026-10-28 (committed in `11988ae`):** The
 warning reuses documented `mirror_tell_z1`, with a painted arc animated by
 progress and a thin sector boundary. The original marker's 0.5-second signal,
 180-degree/150 px warning and hitbox are unchanged; missing art falls back to
 the marker. Isolated `boss_coinwyrm` and `route_cave_8` passed, as did targeted
 lint. A clean full `make check` on exact `11988ae` passed (exit 0): 159 Godot
 test files, lint, world-check and 175 Python tests. Log
-`/var/tmp/wick-clean-11988ae-xqtcu724/check.log`; this is the latest clean full
-PASS.
+`/var/tmp/wick-clean-11988ae-xqtcu724/check.log`; the later clean full PASS at
+`053da3e` is recorded above.
 
 Actual `cave_8_12` captures used natural AI and a placed, protected player in
 four directions: `/var/tmp/wick-bite-integrated-nmNxw3/overlap.png`. Early,
@@ -3013,7 +3033,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `c5bb5ec` on `origin/main`, documenting miniboss wax collapse. Coinwyrm bite warning is locally committed in `11988ae`; its clean full check passed. The latest clean full PASS is `11988ae`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `995488c` on `origin/main`, documenting Coinwyrm bite warning. The Unlit wax collapse is locally committed in `053da3e`; its clean full check passed. The latest clean full PASS is `053da3e`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
