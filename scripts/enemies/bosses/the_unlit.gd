@@ -123,6 +123,18 @@ func _enter_phase(number: int) -> void:
 	visual = SpriteVisual.attach(self, looks[number - 1], body_radius)
 	visual.modulate = Color(1.0, 0.85, 0.55) if number == 2 else Color.WHITE
 	_heart_glow.visible = number == 3 and not SpriteVisual.has_art(&"unlit_p3_heart")
+	if number == 3 and visual is SpriteVisual:
+		# Presentation follows the exposure timer, never the sprite's animation state.
+		visual.auto_motion = false
+		# The reeled lantern can cross the heart; keep the vulnerable centre readable.
+		visual.z_index = 1
+		visual.play_anim(&"shielded")
+		var heart_light := PointLight2D.new()
+		heart_light.texture = LightTexture.make()
+		heart_light.texture_scale = LightTexture.scale_for(200.0)
+		heart_light.color = Color(1.0, 0.75, 0.45)
+		heart_light.energy = 0.9
+		visual.add_child(heart_light)
 	set_contact_enabled(number != 3)
 	if is_instance_valid(lantern):
 		lantern.global_position = _phase_origin + LANTERN
@@ -187,7 +199,14 @@ func _boss_physics(delta: float) -> void:
 			_tick_heart(delta)
 			_heart_glow.exposed = exposed_left > 0
 			_heart_glow.queue_redraw()
-			visual.modulate = Color(1.2, 1.0, 0.7) if exposed_left > 0 else Color(0.35, 0.35, 0.55)
+			if visual is SpriteVisual:
+				var pose: StringName = &"shielded"
+				if exposed_left > 0:
+					pose = &"pulse" if fmod(exposed_left, 1.0) < 0.5 else &"idle"
+				visual.play_anim(pose)
+				visual.modulate = Color.WHITE
+			else:
+				visual.modulate = Color(1.2, 1.0, 0.7) if exposed_left > 0 else Color(0.35, 0.35, 0.55)
 	queue_redraw()
 
 

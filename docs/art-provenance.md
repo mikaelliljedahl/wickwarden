@@ -1,5 +1,20 @@
 # Wickwarden — art provenance
 
+## Gloam Knight slash candidate (2026-10-28)
+
+A new built-in image generation candidate was reviewed but not registered for
+runtime: its four poses are separated, yet their body size differs substantially
+from the existing walk under the shared scale. Original output, SHA-256, prompt,
+rejected attempts and review are in the [candidate log](../tools/source_art/gloam-knight-slash-20261028-log.md).
+
+## The Unlit heart states (2026-10-28)
+
+The shielded and brighter exposed-pulse sprites are built-in image-generation
+edits of the accepted `unlit_heart_candidate_20261027a.png`. The native-alpha
+sources, exact prompts, output IDs and SHA-256 hashes are in the
+[heart states log](../tools/source_art/unlit-heart-states-20261028-log.md).
+The cutter uses a common scale for both states and the original heart.
+
 ## Intro stills (2026-10-28)
 
 The six runtime stills reuse the previously reviewed source candidates listed below;

@@ -261,6 +261,8 @@ func _full_physical_fight() -> void:
 	check_eq(boss.phase, 3, "three actual flame casts finish36shell")
 	check_eq(boss.hp, 24, "heart starts24")
 	await seconds(1.3)
+	check_eq(boss.visual.animation, &"shielded", "heart is visibly shielded")
+	check_eq(boss.visual.offset, Vector2(-256, -256), "heart retains its centre anchor")
 	await _probe(room, boss.global_position, &"flare", 99)
 	check_eq(boss.hp, 24, "shielded heart rejects flare")
 	await _capture("p3-shielded")
@@ -271,6 +273,7 @@ func _full_physical_fight() -> void:
 		check(player.use_item(), "actual reel fired within576")
 		await seconds(0.5)
 		check(boss.exposed_left > 0, "real reel hit exposes heart")
+		check(boss.visual.animation in [&"idle", &"pulse"], "reel shows exposed heart")
 		await seconds(0.4)
 		check_near(
 			boss.lantern.global_position.distance_to(Vector2(960, 288)),
@@ -292,6 +295,7 @@ func _full_physical_fight() -> void:
 		if cycle < 2:
 			await seconds(3.6)
 			check(boss.exposed_left <= 0, "six second exposure expires")
+			check_eq(boss.visual.animation, &"shielded", "heart closes when exposure expires")
 			check_eq(boss.lantern.global_position, Vector2(960, 288), "chains rehoist lantern")
 	check_eq(boss.pulls, 3, "three physical reel pulls")
 	check(boss.is_dying(), "real hook lethal starts fade")

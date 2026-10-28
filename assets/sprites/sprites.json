@@ -1228,6 +1228,18 @@
         "frames": 1,
         "fps": 1.0,
         "loop": true
+      },
+      "shielded": {
+        "file": "res://assets/sprites/unlit_p3_heart_shielded.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "pulse": {
+        "file": "res://assets/sprites/unlit_p3_heart_pulse.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
       }
     }
   },
