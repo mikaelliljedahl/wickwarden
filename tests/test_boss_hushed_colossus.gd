@@ -17,6 +17,9 @@ func run() -> void:
 	await _armour_and_intro()
 	await _attack_physics()
 	await _damage_and_expiration()
+	await _quake_safe_edge()
+	await _carrying_dodge()
+	await _quake_combo_spacing()
 	await _actual_mitts_in_every_phase()
 	await _reset_and_retirement()
 	await _gallery()
@@ -58,7 +61,9 @@ func _quake_presentation() -> void:
 		check_eq(quake.box.get_child_count(), 72, "quake retains 72 dangerous tiles")
 		for shape in quake.box.get_children():
 			var cell: Vector2 = (shape.position - Vector2(48, 48)) / 96.0
-			check_eq((int(cell.x) + int(cell.y)) % 2, parity, "hitbox matches marked parity")
+			var block_x := int((cell.x - 1) / 4.0)
+			var block_y := int((cell.y - 1) / 4.0)
+			check_eq((block_x + block_y) % 2, parity, "hitbox matches marked 4x4 block")
 			check_eq(shape.shape.size, Vector2(96, 96), "marked tile retains full hitbox")
 		await dispose(quake)
 	await dispose(arena)
@@ -254,7 +259,7 @@ func _attack_physics() -> void:
 	check_eq(boss.phase, 3, "16 HP threshold starts phase three")
 	await frames(80)
 	boss.move_speed = 0
-	await frames(480)
+	await frames(610)
 	var quake: Variant = null
 	for hazard in boss._hazards:
 		if is_instance_valid(hazard) and hazard.get("kind") != null and hazard.kind == &"quake":
@@ -305,12 +310,80 @@ func _damage_and_expiration() -> void:
 	check_eq(GameState.health, initial - 3, "glowing checker tile deals three")
 	await frames(105)
 	GameState.heal(99)
-	player.place_at(Vector2(432, 336))
+	player.place_at(Vector2(528, 336))
 	initial = GameState.health
 	quake = boss.start_attack(&"quake", boss.arena_point(Vector2.ZERO), 1.2, 0.2)
 	quake.parity = 0
 	await frames(80)
 	check_eq(GameState.health, initial, "complementary checker tile stays safe")
+	await dispose(arena)
+
+
+func _quake_safe_edge() -> void:
+	await _setup()
+	await frames(95)
+	boss.set_physics_process(false)
+	for example in [[0, 503, true], [0, 508, false], [1, 457, true], [1, 452, false]]:
+		GameState.heal(99)
+		player.place_at(Vector2(example[1], 288))
+		var health := GameState.health
+		var quake: Variant = boss.start_attack(&"quake", boss.arena_point(Vector2.ZERO), 1.2, 0.2)
+		quake.parity = example[0]
+		await frames(80)
+		check_eq(GameState.health, health - (3 if example[2] else 0), "safe edge respects hurtbox")
+		await frames(65)
+	await dispose(arena)
+
+
+func _carrying_dodge() -> void:
+	await _setup()
+	await frames(95)
+	boss.set_physics_process(false)
+	GameState.acquire_item(&"heft_mitts")
+	GameState.set_active_item(&"heft_mitts")
+	player.place_at(Vector2(500, 400))
+	player.facing = Vector2.RIGHT
+	boss.land_shard(Vector2(572, 400))
+	var shard: Variant = boss.shards.back()
+	await frames(3)
+	check(player.use_item(), "real mitts start lifting")
+	await frames(22)
+	check(shard.is_carried(), "player carries an actual shard")
+	var slam: Variant = boss.start_attack(&"slam", player.global_position, 0.8, 0.1)
+	await frames(20)
+	var locked: Vector2 = slam.global_position
+	check_near(player.global_position.distance_to(locked), 0, 1, "dodge starts at locked centre")
+	var health := GameState.health
+	Input.action_press(&"move_right")
+	await frames(58)
+	Input.action_release(&"move_right")
+	check_eq(GameState.health, health, "carrying input escapes both slam and ring")
+	check(player.global_position.distance_to(locked) > 200, "carrying player actually moved")
+	player.place_at(Vector2(288, 288))
+	var quake: Variant = boss.start_attack(&"quake", boss.arena_point(Vector2.ZERO), 1.2, 0.2)
+	quake.parity = 0
+	Input.action_press(&"move_right")
+	await frames(56)
+	Input.action_release(&"move_right")
+	await frames(30)
+	check_eq(GameState.health, health, "carrying input reaches a safe quake block")
+	check(player.global_position.x > 504, "player cleared the marked block with hurtbox margin")
+	await dispose(arena)
+
+
+func _quake_combo_spacing() -> void:
+	await _setup()
+	await frames(95)
+	player.hurtbox.enabled = false
+	boss.phase = 3
+	boss._enter_phase(3)
+	boss.slam_left = 0.01
+	boss.quake_left = 0.01
+	await frames(5)
+	check(boss._slam_in_progress(), "combo has begun")
+	check(boss.quake_left <= 0.0, "quake waits for concurrent combo")
+	await frames(140)
+	check(boss.quake_left > 0.0, "quake starts after combo and shockwaves clear")
 	await dispose(arena)
 
 

@@ -4,6 +4,8 @@ extends "res://scripts/enemies/boss_base.gd"
 const WALK := [60.0, 80.0, 100.0]
 const SLAM_INTERVAL := 4.0
 const SHARD_INTERVAL := [5.0, 4.0, 4.0]
+const SLAM_RADIUS := 80.0
+const RING_RADIUS := 160.0
 var slam_left := SLAM_INTERVAL
 var shard_left := 5.0
 var sweep_left := 5.0
@@ -99,19 +101,32 @@ class FloorVisual:
 					Color(1.0, 0.8, 0.4, 0.7 if attack.fired else 0.9), false, 2.0
 				)
 			&"quake":
-				for row in range(1, 9):
-					for col in range(1, 19):
-						if (row + col) % 2 == attack.parity:
-							if quake_texture != null:
-								var tile := Rect2(col * 96, row * 96, 96, 96)
-								draw_rect(tile, Color(0.95, 0.55, 0.2, 0.22 if not attack.fired else 0.4))
-								draw_rect(tile.grow(-1), Color(1.0, 0.75, 0.35, 0.65), false, 2.0)
-								draw_texture_rect(
-									quake_texture, tile, false,
-									Color(1, 1, 1, 1.0 if attack.fired else 0.75)
-								)
+				for row in range(1, 9, 4):
+					for col in range(1, 19, 4):
+						var block := Rect2(col * 96, row * 96, mini(4, 19 - col) * 96, 384)
+						var danger: bool = FloorAttack.quake_cell(row, col) == attack.parity
+						if not attack.fired:
+							if danger:
+								draw_rect(block, Color(0.95, 0.30, 0.08, 0.12))
+								draw_rect(block.grow(-3), Color(1.0, 0.69, 0.25, 0.9), false, 4.0)
+								if quake_texture != null:
+									for tile_row in range(row, row + 4, 2):
+										for tile_col in range(col, mini(col + 4, 19), 2):
+											draw_texture_rect(
+												quake_texture, Rect2(tile_col * 96, tile_row * 96, 192, 192),
+												false, Color(1, 1, 1, 0.65)
+											)
 							else:
-								draw_rect(Rect2(col * 96, row * 96, 96, 96), color)
+								# The entire cool outline lies at least 24 px inside the safe block.
+								var safe := block.grow(-28)
+								draw_rect(safe, Color(0.12, 0.72, 0.75, 0.10))
+								draw_rect(safe, Color(0.45, 0.95, 0.95, 0.8), false, 4.0)
+						elif danger:
+							draw_rect(block, Color(0.95, 0.24, 0.04, 0.6))
+							if quake_texture != null:
+								for tile_row in range(row, row + 4):
+									for tile_col in range(col, mini(col + 4, 19)):
+										draw_texture_rect(quake_texture, Rect2(tile_col * 96, tile_row * 96, 96, 96), false)
 			&"ring":
 				var radius: float = attack.ring_radius()
 				if wave_texture != null and radius > 1.0:
@@ -138,12 +153,12 @@ class FloorVisual:
 						var height := 120.0 * (1.0 - progress)
 						draw_texture_rect(shard_fall_texture, Rect2(-48, -48 - height, 96, 96), false)
 			_:
-				var radius := 60.0 if attack.kind == &"fall" else 130.0
+				var radius := 60.0 if attack.kind == &"fall" else SLAM_RADIUS
 				if attack.kind != &"slam" or attack.fired:
 					draw_circle(Vector2.ZERO, radius, color)
 				if attack.kind == &"slam" and quake_texture != null:
-					draw_texture_rect(
-						quake_texture, Rect2(-96, -96, 192, 192), false,
+						draw_texture_rect(
+							quake_texture, Rect2(-SLAM_RADIUS, -SLAM_RADIUS, SLAM_RADIUS * 2, SLAM_RADIUS * 2), false,
 						Color(1, 1, 1, 1.0 if attack.fired else 0.55)
 					)
 				draw_arc(Vector2.ZERO, radius, 0, TAU, 48, Color(1, 0.85, 0.55), 3)
@@ -171,7 +186,10 @@ class FloorAttack:
 		add_child(picture)
 
 	func ring_radius() -> float:
-		return clampf((age - warning) / 0.4, 0.0, 1.0) * 260.0
+		return clampf((age - warning) / 0.4, 0.0, 1.0) * RING_RADIUS
+
+	static func quake_cell(row: int, col: int) -> int:
+		return (int((row - 1) / 4.0) + int((col - 1) / 4.0)) % 2
 
 	func _physics_process(delta: float) -> void:
 		age += delta
@@ -211,13 +229,13 @@ class FloorAttack:
 			&"quake":
 				for row in range(1, 9):
 					for col in range(1, 19):
-						if (row + col) % 2 == parity:
+						if quake_cell(row, col) == parity:
 							_rect(Vector2(col * 96 + 48, row * 96 + 48), Vector2(96, 96))
 			&"ring":
 				for i in range(40):
 					ring_shapes.append(box.add_circle(14.0))
 			_:
-				box.add_circle(60.0 if kind == &"fall" else 130.0)
+				box.add_circle(60.0 if kind == &"fall" else SLAM_RADIUS)
 		add_child(box)
 		box.activate()
 		if not is_instance_valid(colossus):
@@ -356,10 +374,19 @@ func _boss_physics(delta: float) -> void:
 			attack.sweep_to = arena_point(points[1])
 	if phase == 3:
 		quake_left -= delta
-		if quake_left <= 0.0:
-			quake_left += 8.0
+		# Finish the whole slam combo, including its ring, before warning a quake.
+		if quake_left <= 0.0 and combo_count == 0 and not _slam_in_progress():
+			quake_left = 8.0
 			var quake := start_attack(&"quake", arena_point(Vector2.ZERO), 1.2, 0.2)
 			quake.parity = randi() % 2
+
+
+func _slam_in_progress() -> bool:
+	for hazard in _hazards:
+		if is_instance_valid(hazard) and not hazard.is_queued_for_deletion():
+			if hazard is FloorAttack and hazard.kind in [&"slam", &"ring"]:
+				return true
+	return false
 
 
 func start_attack(kind: StringName, at: Vector2, warning: float, active_time: float) -> FloorAttack:
