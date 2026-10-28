@@ -283,9 +283,9 @@ func _resolve_damage(hitbox: Hitbox, amount: int) -> int:
 
 
 func reset_fight() -> void:
-	super()
-	if is_dead:
+	if is_dead or is_defeated() or is_dying():
 		return
+	super()
 	eyes.clear()
 	_pending.clear()
 	seeds.clear()
