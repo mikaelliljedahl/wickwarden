@@ -1,5 +1,18 @@
 # Current status
 
+**Choir Warden MB3 scratch review, 2026-10-28:** Inhale/recover-only body art
+shrinks versus walk: 230 px for walk and 177/178 px for action at 10% alpha.
+A generated corrected note has a central direction but the same scale problem
+and is barely visible in darkness. These prototypes are not integrated; review
+used stills, a placed/protected player and enemy speed 0, not human play. Scratch
+tests passed; capture reported four ObjectDB and two resource warnings. The
+completed scratch scale study was not integrated: per-animation 1.3× scaling
+conflicts with the shared-scale rule in binding `asset-contract.md` §5 and blurs
+raster art. The foot coordinate is mathematically preserved but body proportions
+change, the dark figure remains hard to see and the active pose's side stream is
+wrong. Only controlled stills were reviewed, not full motion or human play;
+correctly shared-scaled source art and a directional active pose remain needed.
+
 **Choir Warden MB3 art review, 2026-10-28 (read-only):** Isolated `cave_6_4`
 normal/dark stills in `/var/tmp/wick-mb3-review/{normal,dark}-{1,2,3}.png`
 show the actual cone aimed downward, but `note_down`'s mouth stream points right
@@ -2459,7 +2472,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `d2391e7401dc3704192675d523f7e6d6d9b288d6` on `origin/main`, documenting the Choir Warden art review above. The latest clean full check is at `c8465bc`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `e279442b1188d252961ce2974e6e116c73d82926` on `origin/main`, documenting the streaming lifecycle review above. The latest clean full check is at `c8465bc`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

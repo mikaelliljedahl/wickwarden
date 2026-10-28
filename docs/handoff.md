@@ -249,12 +249,27 @@ Boss reset verification documentation followed in
 `1895d08b819fa4d8dfcece735c96b33f72d276e7` on `origin/main`.
 Choir Warden art review was documented in
 `d2391e7401dc3704192675d523f7e6d6d9b288d6` on `origin/main`.
+Streaming lifecycle review was documented in
+`e279442b1188d252961ce2974e6e116c73d82926` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Choir Warden MB3 scratch review, 2026-10-28:** Inhale/recover-only body art
+shrinks versus walk: 230 px for walk and 177/178 px for action at 10% alpha.
+A generated corrected note has a central direction but the same scale problem
+and is barely visible in darkness. These prototypes are not integrated; review
+used stills, a placed/protected player and enemy speed 0, not human play. Scratch
+tests passed; capture reported four ObjectDB and two resource warnings. The
+completed scratch scale study was not integrated: per-animation 1.3× scaling
+conflicts with the shared-scale rule in binding `asset-contract.md` §5 and blurs
+raster art. The foot coordinate is mathematically preserved but body proportions
+change, the dark figure remains hard to see and the active pose's side stream is
+wrong. Only controlled stills were reviewed, not full motion or human play;
+correctly shared-scaled source art and a directional active pose remain needed.
 
 **Choir Warden MB3 art review, 2026-10-28 (read-only):** Isolated `cave_6_4`
 normal/dark stills in `/var/tmp/wick-mb3-review/{normal,dark}-{1,2,3}.png`
