@@ -1,5 +1,31 @@
 # Current status
 
+**Q6 and Q8 isolated reports at `d5edd906`, 2026-10-28:** Q6's 16 soak and
+economy tests passed. The soak instantiated 222 standalone scenes for five
+simulated seconds each, sampling the centre every 0.5 seconds against known
+obstacles; economy covered 2,348 checks with controlled drop rolls. This is not
+continuous full-body coverage or human balance testing. The temporary log is
+`/var/tmp/wick-q6-d5edd906-results.log`.
+
+Q8 passed three headless four-room loops, each with 300 warps and 300
+input-driven slides, using a placed player with damage disabled. Runs reported
+276 nodes, peak RSS 161,816–163,712 KiB, RSS change of 96–155 KiB between the
+2–3s and 8–9s windows, mean warp time 5.58–5.69 ms and maximum 42.26–46.19 ms,
+and zero orphans at World disposal. Logs are in `/var/tmp/wick-q8-db8871/`.
+This short warm loop does not cover GPU, cold start, calibrated CI or a
+long-term plateau; Q8 is not fully verified.
+
+**Tidewick ember bolt, 2026-10-28 (committed in `bb87f58`):** Tidewick now
+fires a correctly oriented, painted animated ember bolt in place of the spore.
+Its light is presentation-only, not gameplay glow; the existing fallback, speed,
+damage and collision logic remain unchanged. The pipeline reuses a
+provenance-documented source image and includes the Godot `.import`. The lead's
+import, `boss_tidewick`, `area_cave_3` and `tool_matrix` passed; the agent reports
+lint, B03 ownership and `art-test` PASS. The active arena capture
+`/home/mikael/.cache/wick-b03-final/ember-flight.png` used a controlled, protected
+player; human play and a new export remain unverified. Q6 and Q8 reports are
+recorded above.
+
 **Coinwyrm attack presentation, 2026-10-28 (committed in `3601e4b`):**
 Transparent outlines replace the filled bite and tail areas; the bite reuses
 three painted coin impacts and the tail uses existing art. Collision, damage and
@@ -8,15 +34,15 @@ timing are unchanged. Actual active-state captures are
 controlled positioning and a forced tail phase. The lead's `boss_coinwyrm` and
 `route_cave_8` tests passed; the agent reports lint and B08 ownership PASS. A
 distinct jaw animation is still missing, and this is not human play. Tidewick's
-projectile art pipeline remains in progress.
+subsequent projectile change is recorded above.
 
 **Boss attack visual audit, 2026-10-28:** At `304ce37`, an audit in the
 actual World with ticking bosses and controlled player position visually found
 Coinwyrm's active bite to be a solid-colour effect. Code also shows a
 solid-colour tail sweep, which was not visually captured. Tidewick fires a
 spore projectile instead of the planned ember bolt. Images are in the temporary
-directory `/var/tmp/wickwarden-attack-audit-9155`. Coinwyrm's correction is
-recorded above; Tidewick work continues. This is not complete attack-state
+directory `/var/tmp/wickwarden-attack-audit-9155`. Coinwyrm and Tidewick
+corrections are recorded above. This is not complete attack-state
 coverage or human play.
 
 **Route repeat and Q7 light/blast checks, 2026-10-28:** The route at `d003e28`
@@ -1742,7 +1768,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `3601e4b4102f3bd4634274e3c2532fd876bc2d18` on `origin/main`, including Coinwyrm's attack presentation above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `bb87f5874b5028374e2444901fe1b2bd56114a12` on `origin/main`, including Tidewick's ember bolt above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
