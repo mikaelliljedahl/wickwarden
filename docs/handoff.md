@@ -213,12 +213,22 @@ The Snapper prototype was documented in
 `1858b014a2bba936e89271822f172078d974fa6f` on `origin/main`.
 Snapper direction-candidate review followed in
 `5c1751c0f6546da97fb566cccb2fb0e02760f5c7` on `origin/main`.
+The Mirror Shade echo audit followed in
+`424b845c4f1f450d1d7aaf6ab5561e6f964daa2b` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Mirror Shade scratch pipeline, 2026-10-28:** In
+`/var/tmp/wick-shade-echo-M0pvQ5/`, side poses cut into a 192 px cell but the
+strike pose is too dark in `cave_5_1`; three frames at 8 fps cannot fit within
+the 0.12-second echo. Up/down sprites are missing. A few static samples used
+natural AI, Glow Jar and a decoy; a targeted test passed but did not verify full
+presentation or interruption. Nothing is integrated; a separate readable cue is
+under investigation.
 
 **Mirror Shade World audit, 2026-10-28:** Actual `cave_5_1` with natural AI,
 a placed, protected player, real Glow Jar and player hook produced
