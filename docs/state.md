@@ -1,5 +1,19 @@
 # Current status
 
+**Q7 Sump Lurker natural weakness, 2026-10-28 (committed in `67f4340`):**
+With normal physics in a controlled `shallow_zone` arena, real Moth physically
+overlaps the submerged hurtbox without an accepted hit or damage. Following
+natural warning, surfacing and active bite, real Tether Moth stuns for 1.5
+seconds and hook deals two damage (16→14). Agent and lead passed `tool_matrix`;
+the agent reports 1,939 checks and lint PASS. The player is manually placed and
+protected; this is not a real room or human play, and other phase/tool cases
+remain open.
+
+**Clean full check at `1a34e23`, 2026-10-28:** A clean archive of exact
+`1a34e23` with isolated HOME/XDG and `TMPDIR=/var/tmp` passed `make check`.
+Log: `/var/tmp/wick-clean-1a34e23-uk_zij8_/check.log`. This is the latest clean
+full check, preceding the Sump test commit.
+
 **Q7 Wick Automaton jet, 2026-10-28 (committed in `6d72c5c`):** In a controlled
 arena with the actual natural warning and active jet, a real Chime hit has no
 effect; a real Tether Moth hit then stuns for 1.5 seconds and opens the vent. A
@@ -7,7 +21,7 @@ delayed real pitch pot hits the vent for four damage (30→26), and the jet does
 not resume. Agent and lead passed `tool_matrix`; the agent reports 1,916 verbose
 checks and lint PASS. The player is protected and miniboss movement set to zero;
 this is not a real room or human play. Other phase/tool combinations remain open;
-the latest full `make check` is the earlier `2c8c68c` run.
+the later clean full check at `1a34e23` is recorded above.
 
 **Mirror Shade scratch cue and cutter studies, 2026-10-28:** In
 `/var/tmp/wick-m5-sweep-review/`, an active cue was tried in four directions with
@@ -73,8 +87,8 @@ had none. The latest full check is the earlier `2c8c68c` run below.
 **Clean full check at `2c8c68c`, 2026-10-28:** A clean git archive of exact
 `2c8c68ce755ab3e36d2daea0ecb500352843ff5b`, with isolated HOME/XDG and
 `TMPDIR=/var/tmp`, passed `make check`. Log:
-`/var/tmp/wick-clean-2c8c68c-h973z694/check.log`. This is the latest clean full
-check; human play, art and performance coverage remain open.
+`/var/tmp/wick-clean-2c8c68c-h973z694/check.log`. The later clean full check at
+`1a34e23` is recorded above; human play, art and performance remain open.
 
 **Bramble Snapper active bite, 2026-10-28 (committed in `1cd150c`):** The
 previously invisible active bite retains the existing painted `thorn_hedge`
@@ -2289,7 +2303,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `6d72c5c6ce9eb946a9987c66a2e6bdbf62210708` on `origin/main`, including the Q7 Automaton jet test above. The latest clean full check remains at `2c8c68c`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `67f434051072ad1d3c50b91f35db49b407acfc32` on `origin/main`, including the Q7 Sump Lurker test above. The latest clean full check is at `1a34e23`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

@@ -219,12 +219,27 @@ The Mirror Shade echo prototype was documented in
 `9c935d3a857e9e0f828d6f92eb3498c3843c3d8d` on `origin/main`.
 Mirror Shade effect studies were documented in `6e121b4`; Q7 Automaton jet
 tests are at `6d72c5c6ce9eb946a9987c66a2e6bdbf62210708` on `origin/main`.
+Automaton test documentation followed in `1a34e23`; Q7 Sump Lurker tests are at
+`67f434051072ad1d3c50b91f35db49b407acfc32` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 Sump Lurker natural weakness, committed in `67f4340`:** With normal physics
+in a controlled `shallow_zone` arena, real Moth physically overlaps the submerged
+hurtbox without an accepted hit or damage. Following natural warning, surfacing
+and active bite, real Tether Moth stuns for 1.5 seconds and hook deals two damage
+(16→14). Agent and lead passed `tool_matrix`; the agent reports 1,939 checks and
+lint PASS. The player is manually placed and protected; this is not a real room
+or human play, and other phase/tool cases remain open.
+
+**Clean full check at `1a34e23`, 2026-10-28:** A clean archive of exact
+`1a34e23` with isolated HOME/XDG and `TMPDIR=/var/tmp` passed `make check`.
+Log: `/var/tmp/wick-clean-1a34e23-uk_zij8_/check.log`. This is the latest clean
+full check, preceding the Sump test commit.
 
 **Q7 Wick Automaton jet, committed in `6d72c5c`:** In a controlled arena with
 the actual natural warning and active jet, a real Chime hit has no effect; a
@@ -233,7 +248,7 @@ real pitch pot hits the vent for four damage (30→26), and the jet does not
 resume. Agent and lead passed `tool_matrix`; the agent reports 1,916 verbose
 checks and lint PASS. The player is protected and miniboss movement set to zero;
 this is not a real room or human play. Other phase/tool combinations remain open;
-the latest full `make check` is the earlier `2c8c68c` run.
+the later clean full check at `1a34e23` is recorded above.
 
 **Mirror Shade scratch cue and cutter studies, 2026-10-28:** In
 `/var/tmp/wick-m5-sweep-review/`, an active cue was tried in four directions with
@@ -299,8 +314,8 @@ had none. The latest full check is the earlier `2c8c68c` run below.
 **Clean full check at `2c8c68c`, 2026-10-28:** A clean git archive of exact
 `2c8c68ce755ab3e36d2daea0ecb500352843ff5b`, with isolated HOME/XDG and
 `TMPDIR=/var/tmp`, passed `make check`. Log:
-`/var/tmp/wick-clean-2c8c68c-h973z694/check.log`. This is the latest clean full
-check; human play, art and performance coverage remain open.
+`/var/tmp/wick-clean-2c8c68c-h973z694/check.log`. The later clean full check at
+`1a34e23` is recorded above; human play, art and performance remain open.
 
 **Bramble Snapper active bite, committed in `1cd150c`:** The previously
 invisible active bite retains the existing painted `thorn_hedge` warning for
