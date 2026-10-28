@@ -1,5 +1,13 @@
 # Current status
 
+**Three isolated art reviews, 2026-10-28:** All three candidates were rejected
+after controlled stills, not human play. Choir's new source follows the cutter
+and leaves walk unchanged, but action is 199–200 px versus walk 229–231 px and
+barely visible in darkness. Thorn's existing lance spikes are obscured and risk
+being mistaken for projectiles in actual `cave_2_4`. Lull's painted fan stays
+within the hit area but does not communicate the entire area and is obscured in
+different directions. Lull refinement continues; none is accepted.
+
 **Owner priority, 2026-10-28:** The owner reports room-transition performance is
 acceptable in actual play and asks that work focus on placeholders, since an
 automated route has demonstrated that the game can be completed. Performance
@@ -2538,7 +2546,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `19f8acc5500538b127a6c3acfabc45c110dac6fe` on `origin/main`, documenting the Z1 filter reentrancy guard and verification above. The latest clean full check is at `dc54616`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `c18a3903b360ec0660f0b161c6c102b6fe81deb7` on `origin/main`, documenting the owner’s placeholder priority above. The latest clean full check is at `dc54616`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
