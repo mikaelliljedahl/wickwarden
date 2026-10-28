@@ -248,6 +248,20 @@ The lead's import, `boss_coinwyrm`, `area_cave_8`, `boss_gloam_knight` and
 completed isolated profile was freed, the rerun passed. Agents report lint,
 `art-test` and B07/B08 ownership PASS.
 
+**Q8 resource owner prototype v2, 2026-10-28:** A minimal reproduction supports
+unretrieved threaded request results as the cause of RefCounted warnings when
+World is freed. A global owner polls to completion: one World-free sample took
+2.3 ms and produced no warnings after ten frames. Experimental cooperative app
+exit took an additional 55 ms without a frame spike, but actual quit paths are
+not integrated and immediate quit still warns.
+
+Across 36 headless processes with warm disk, room 11→12 slide maximum frame
+time was 57–61 ms baseline versus 18–22 ms for the variant. Direct start/warp
+and fade initiation were slower and RSS was about 10 MB higher. Job priority is
+not guaranteed and synchronous fallback remains. Logs and prototype are in
+`/var/tmp/wick-q8-owner-v2/`; render/GPU, CI, human play and a long-term plateau
+were not tested. Nothing is merged into production and Q8 remains open.
+
 **Q8 threaded resource-cache prototype, 2026-10-28:** An isolated scratch
 prototype in `/var/tmp/wick-q8-thread-probe` compared baseline and variant in
 three headless processes. Maximum frame time for the room 11→12 transition was
