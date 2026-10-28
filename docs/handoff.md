@@ -233,12 +233,22 @@ Kilnkeeper test documentation followed in `171fcf2`; Q7 Coinwyrm and Q6 drops
 are at `403ec8b1b25ba0aaf23dfe768ec81a4efebb5311` on `origin/main`.
 Coinwyrm and drop documentation followed in `ea58756`; Q6 room slides are at
 `6c92d13f6e24140b5dcc1e63baf1a1d07ea33f66` on `origin/main`.
+Room-slide documentation followed in `462b24b`; Q7 Briar Mother's eye cycle is
+at `37ed92b87a223055147afad51645c25cfc48d860` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 Briar Mother eye cycle, committed in `37ed92b`:** A real sling shot
+physically overlaps the protected third eye without damage; the same eye lowers
+naturally and another real sling hit deals one damage to the eye (4→3) and boss
+(28→27), consuming two slugs. Agent and lead passed `tool_matrix`; the agent
+reports 2,028 checks and lint PASS. This is a bare controlled arena with a
+placed, protected player, covering one eye in phase one, not human play, actual
+World or the full fight. The latest clean full check remains `afdaead`.
 
 **Q6 enemy room slides, committed in `6c92d13`:** Real World input traverses
 `ow_0_0↔ow_1_0` and back. Two Spitcaps and three Skitterwicks pause and remain
