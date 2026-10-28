@@ -1,9 +1,26 @@
 # Current status
 
+**Boss hazard cleanup, 2026-10-28 (committed in `c34b164`):** M0 stops
+registered hazard-tree physics polling and hurtboxes before `queue_free`; Hitbox
+stops further targets in an already-running loop. MB5 Corrow's Echo avoids a
+physics-flush error during callback reset by stopping and queuing hook and attack.
+The agent passed many targeted tests; the lead passed `boss_base`, `corrows_echo`,
+`wick_automaton`, `thorn_warden`, Gloam, Colossus and `tool_matrix`. A clean full
+`make check` on exact `c34b164` passed; log
+`/var/tmp/wick-clean-c34b164-tcxwgdej/check.log`. It is the latest full check.
+
+Independent verification found a remaining synthetic case: a `hurtbox.filter`
+callback resets and returns true, yet health can still fall 6→5 after reset
+because `Hurtbox.receive_hit` does not recheck. `hurtbox.gd` is outside M0
+ownership; no natural trigger is established. Z1 has an explicit Owns scope for
+`hurtbox`, `hitbox` and `test_boss_base` to address filter reentrancy; no fix is
+in place yet. Safety for arbitrary internal children or external callbacks is not
+guaranteed.
+
 **Clean full check at `0de6e27`, 2026-10-28:** A clean full `make check` on
 exact `0de6e27d0627b78c78c6558f38d85a0477f8d1c8` passed; log
-`/var/tmp/wick-clean-0de6e27-yld3x0kl/check.log`. General hazard-cleanup
-investigation continues; no general fix is in place.
+`/var/tmp/wick-clean-0de6e27-yld3x0kl/check.log`. The later registered-hazard
+cleanup and its limits are recorded above.
 
 **Thorn Warden needle reset, 2026-10-28 (committed in `4d50440`):** A natural
 needle collided with the real player's hurtbox, whose health fell 6→5 in the same
@@ -2504,7 +2521,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0de6e27d0627b78c78c6558f38d85a0477f8d1c8` on `origin/main`, with its clean full check recorded above. The latest clean full check is at `0de6e27`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `c34b164b9df1bc10a89c2812d862e7e966447fc0` on `origin/main`, including registered boss hazard cleanup above. The latest clean full check is at `c34b164`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
