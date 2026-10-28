@@ -1,5 +1,17 @@
 # Current status
 
+**Heft Mitts lift/throw flecks, 2026-10-28 (committed in `e73eb5a`):** Painted
+world-fixed flecks appear on successful lift and throw, not no-op, push or carry;
+missing art is safe. Origin is documented and sprite metadata exists. Controlled
+actual `cave_4_4` Mauler-attack captures are
+`/var/tmp/wick-mitts-z1/verified-{right,up}-{lift,carry,throw}.png`, with a
+protected, repositioned player and frozen boss. Flecks may be confused with the
+attack and the throw is subtle; human play and motion are not verified. The lead
+passed six targeted suites after import; the first pre-import attempt failed two
+checks. The agent reports lint and `art-test` (25) PASS. A clean full `make check`
+on exact `e73eb5a` passed (exit 0); log
+`/var/tmp/wick-clean-e73eb5a-btufi8n_/check.log`. It is the latest full check.
+
 **Tallow Sling cast cue, 2026-10-28 (committed in `bd2ab68`):** The cue reuses
 the existing documented Cinder image with a shader for a neutral soft trail;
 game mechanics are unchanged and missing art falls back. The lead passed ten
@@ -8,7 +20,8 @@ relevant test files; the agent reports lint PASS. Controlled captures at
 actual `ow_1_1` and `cave_1_5` with a protected, placed player. They do not
 verify human play or motion; upward can resemble smoke and capture reported
 resource warnings. A clean full `make check` on exact `bd2ab68` passed (exit 0);
-log `/var/tmp/wick-clean-bd2ab68-ex84r0kl/check.log`. It is the latest full check.
+log `/var/tmp/wick-clean-bd2ab68-ex84r0kl/check.log`. The later clean `e73eb5a`
+full check is recorded above.
 
 **Skitter Boots takeoff dust, 2026-10-28 (committed in `7d7ba77`):** The
 geometric cue is replaced by painted start-only dust fixed in World, fading over
@@ -2715,7 +2728,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `bd2ab68222c29b8e5e9d4dde17ea1d40b9fc4d85` on `origin/main`, including the painted Tallow Sling cast cue above. The latest clean full check is at `bd2ab68`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `e73eb5aaa81c3a240684f829388337e89dfba850` on `origin/main`, including Heft Mitts flecks above. The latest clean full check is at `e73eb5a`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

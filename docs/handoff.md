@@ -300,12 +300,26 @@ Mirror slash documentation followed in `c7a6408`; painted takeoff dust landed
 in `7d7ba77f83667467dedddf3e83fb6f2ae8cdc779` on `origin/main`.
 Skitter Boots documentation followed in `a7aec9f`; the painted sling cast cue
 landed in `bd2ab68222c29b8e5e9d4dde17ea1d40b9fc4d85` on `origin/main`.
+Sling documentation followed in `7d7f8d2`; Heft Mitts flecks landed in
+`e73eb5aaa81c3a240684f829388337e89dfba850` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Heft Mitts lift/throw flecks, committed in `e73eb5a`:** Painted world-fixed
+flecks appear on successful lift and throw, not no-op, push or carry; missing art
+is safe. Origin is documented and sprite metadata exists. Controlled actual
+`cave_4_4` Mauler-attack captures are
+`/var/tmp/wick-mitts-z1/verified-{right,up}-{lift,carry,throw}.png`, with a
+protected, repositioned player and frozen boss. Flecks may be confused with the
+attack and the throw is subtle; human play and motion are not verified. The lead
+passed six targeted suites after import; the first pre-import attempt failed two
+checks. The agent reports lint and `art-test` (25) PASS. A clean full `make check`
+on exact `e73eb5a` passed (exit 0); log
+`/var/tmp/wick-clean-e73eb5a-btufi8n_/check.log`. It is the latest full check.
 
 **Tallow Sling cast cue, committed in `bd2ab68`:** The cue reuses the existing
 documented Cinder image with a shader for a neutral soft trail; game mechanics
@@ -315,7 +329,8 @@ files; the agent reports lint PASS. Controlled captures at
 actual `ow_1_1` and `cave_1_5` with a protected, placed player. They do not
 verify human play or motion; upward can resemble smoke and capture reported
 resource warnings. A clean full `make check` on exact `bd2ab68` passed (exit 0);
-log `/var/tmp/wick-clean-bd2ab68-ex84r0kl/check.log`. It is the latest full check.
+log `/var/tmp/wick-clean-bd2ab68-ex84r0kl/check.log`. The later clean `e73eb5a`
+full check is recorded above.
 
 **Skitter Boots takeoff dust, committed in `7d7ba77`:** The geometric cue is
 replaced by painted start-only dust fixed in World, fading over 0.3 seconds when
