@@ -335,7 +335,8 @@ and documentation `995488c` are on `origin/main`; The Unlit wax collapse
 `efb6b78` are on `origin/main`; the clean full check passed on `b70049e`.
 Placeholder inventory documentation `6148f58`, C4 difficulty changes
 `bc7330f` and documentation `f1a34f2` are on `origin/main`; the C4 change
-passed a clean full check. Verify the remote before integration or push.
+passed a clean full check. Final playthrough documentation `fc14d7a` is on
+`origin/main`. Verify the remote before integration or push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -369,8 +370,17 @@ pockets or visual rendering. `/var/tmp/wick-dynamic-efb` instrumented ten boss
 and 32 other tests and found zero confirmed production Placeholders, excluding
 synthetic test alternatives. The first Colossus run had two of 467 checks fail
 on sweep direction; the rerun passed 467/467, with the original cause unknown.
-These headless visibility-tree checks are not pixel evidence and do not cover
-all phases or frames or human play.
+Additional controlled `efb6b78` checks in
+`/var/tmp/wick-reveal-census-PVofxB/actual-census-clean.log` opened all three
+in-place pockets with physical hook, key and pot and collected their rewards
+(36 checks). Ten tools were activated through `Player.use_item`, one scenario
+per tool over 453 physics frames (36 checks); no visible Placeholder nodes were
+found in these sampled sequences. Players/items were placed, tools dev-granted
+and enemies absent. Alternative targets, all directions and human play remain
+unverified. A read-only procedural-drawing review on `fc14d7a` found no
+confirmed placeholders in the code paths inspected. These headless
+visibility-tree checks are not pixel evidence and do not cover all phases or
+frames or human play.
 
 **C4 difficulty, committed in `bc7330f`:** The owner explicitly reports
 C4 is too difficult and requests clear safe zones; this owner direction overrides

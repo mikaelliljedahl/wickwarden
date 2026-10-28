@@ -26,8 +26,17 @@ pockets or visual rendering. `/var/tmp/wick-dynamic-efb` instrumented ten boss
 and 32 other tests and found zero confirmed production Placeholders, excluding
 synthetic test alternatives. The first Colossus run had two of 467 checks fail
 on sweep direction; the rerun passed 467/467, with the original cause unknown.
-These headless visibility-tree checks are not pixel evidence and do not cover
-all phases or frames or human play.
+Additional controlled `efb6b78` checks in
+`/var/tmp/wick-reveal-census-PVofxB/actual-census-clean.log` opened all three
+in-place pockets with physical hook, key and pot and collected their rewards
+(36 checks). Ten tools were activated through `Player.use_item`, one scenario
+per tool over 453 physics frames (36 checks); no visible Placeholder nodes were
+found in these sampled sequences. Players/items were placed, tools dev-granted
+and enemies absent. Alternative targets, all directions and human play remain
+unverified. A read-only procedural-drawing review on `fc14d7a` found no
+confirmed placeholders in the code paths inspected. These headless
+visibility-tree checks are not pixel evidence and do not cover all phases or
+frames or human play.
 
 **C4 difficulty, committed in `bc7330f`:** The owner explicitly reports
 C4 is too difficult and requests clear safe zones; this owner direction overrides
@@ -3105,7 +3114,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `f1a34f2` on `origin/main`, documenting C4 difficulty changes `bc7330f`; their clean full check passed. The latest clean full PASS is `bc7330f`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `fc14d7a` on `origin/main`, documenting final playthrough verification; C4 difficulty changes `bc7330f` passed their clean full check. The latest clean full PASS is `bc7330f`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
