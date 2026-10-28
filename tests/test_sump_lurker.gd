@@ -7,6 +7,7 @@ const ZONE := "res://scenes/world/shallow_zone.tscn"
 
 func run() -> void:
 	await _shore_cycle()
+	await _bite_presentation()
 	await _real_tools()
 	await _real_bite_geometry()
 	await _real_jet_and_ward()
@@ -98,6 +99,48 @@ func _real_bite_geometry() -> void:
 		)
 		release_inputs()
 		await dispose(arena)
+
+
+func _bite_presentation() -> void:
+	reset_state()
+	var arena := make_arena()
+	_zone(arena)
+	var enemy = make_enemy(arena, SCENE, Vector2(900, 400))
+	var player := make_player(arena, Vector2(1350, 400))
+	player.set_hurtbox_enabled(self, false)
+	await _wait_state(enemy, enemy.State.SURFACED)
+	check(enemy.visual is SpriteVisual, "painted lurker visual is available")
+	if enemy.visual is SpriteVisual:
+		var sprite := enemy.visual as SpriteVisual
+		check_eq(sprite.animation, &"bite", "natural east bite plays painted bite")
+		check(not sprite.flip_h, "east bite faces right")
+		check(enemy._bite.active, "bite art starts with active hitbox")
+		await frames(4)
+		check(sprite.frame > 0, "bite advances while hitbox is active")
+		await frames(6)
+		check(not enemy._bite.active, "bite hitbox ends at existing duration")
+		check_eq(sprite.animation, &"idle", "painted bite returns to surfaced idle")
+		check_near(sprite.speed_scale, 1.0, .001, "idle playback speed restored")
+		enemy.set_physics_process(false)
+		enemy.set_facing_dir(Vector2.LEFT)
+		enemy._bite_attack()
+		check_eq(sprite.animation, &"bite", "west bite uses painted bite")
+		check(sprite.flip_h, "west bite is mirrored")
+		enemy.stun(1.5)
+		check_eq(sprite.animation, &"idle", "stun cancels bite presentation")
+		enemy.reset_fight()
+		enemy._enter(enemy.State.SURFACED, 1.5)
+		enemy.set_facing_dir(Vector2.RIGHT)
+		enemy._bite_attack()
+		enemy.reset_fight()
+		check_eq(sprite.animation, &"idle", "reset cancels active bite presentation")
+		enemy._enter(enemy.State.SURFACED, 1.5)
+		enemy.set_facing_dir(Vector2.DOWN)
+		enemy._bite_attack()
+		check_eq(sprite.animation, &"idle", "vertical bite avoids sideways pose")
+		enemy.reset_fight()
+		check_eq(sprite.animation, &"idle", "reset restores idle presentation")
+	await dispose(arena)
 
 
 func _real_tools() -> void:

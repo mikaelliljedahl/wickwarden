@@ -65,6 +65,7 @@ func _enter_phase(_number: int) -> void:
 	_bite_left = 0.0
 	if is_instance_valid(_bite):
 		_bite.deactivate()
+	_end_bite_visual()
 	_enter(State.SUBMERGED, 0.0)
 
 
@@ -86,6 +87,7 @@ func _boss_physics(delta: float) -> void:
 		_bite_left -= delta
 		if _bite_left <= 0.0 and is_instance_valid(_bite):
 			_bite.deactivate()
+			_end_bite_visual()
 	var zone := _home_zone()
 	var player := get_player()
 	if zone == null or player == null:
@@ -190,6 +192,22 @@ func _bite_attack() -> void:
 	_bite.rotation = facing_dir.angle()
 	_bite.activate()
 	_bite_left = BITE_TIME
+	# The single painted view faces right; mirror it for left, but do not show it
+	# pointing sideways when the actual bite is aimed up or down.
+	if visual is SpriteVisual and absf(facing_dir.y) <= sin(deg_to_rad(15.0)):
+		var sprite := visual as SpriteVisual
+		if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(&"bite"):
+			sprite.auto_motion = false
+			sprite.speed_scale = 3.125  # Three 8 fps frames over the existing .12 s bite.
+			sprite.play_anim(&"bite")
+
+
+func _end_bite_visual() -> void:
+	if visual is SpriteVisual:
+		var sprite := visual as SpriteVisual
+		sprite.speed_scale = 1.0
+		sprite.auto_motion = true
+		sprite.play_anim(&"idle")
 
 
 func _fire_jet() -> void:
@@ -223,6 +241,7 @@ func _on_stunned(_seconds: float) -> void:
 	if is_instance_valid(_bite):
 		_bite.deactivate()
 	_bite_left = 0.0
+	_end_bite_visual()
 	set_contact_enabled(false)
 
 
@@ -247,6 +266,7 @@ func _on_hurt(hitbox: Hitbox) -> void:
 		set_contact_enabled(false)
 		if is_instance_valid(_bite):
 			_bite.deactivate()
+		_end_bite_visual()
 
 
 func _on_death() -> void:
