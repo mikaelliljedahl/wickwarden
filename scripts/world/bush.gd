@@ -54,7 +54,8 @@ func cut_down() -> void:
 	var parent := get_parent()
 	if parent != null:
 		var tint := Color(0.6, 0.8, 0.45)
-		if SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.25, 3, tint) == null:
+		var used_reeds := variant in [&"reed_cluster", &"rush_wall"] and _spawn_reed_cut(parent)
+		if not used_reeds and SpriteVisual.spawn_effect(parent, &"explosion", global_position, 0.25, 3, tint) == null:
 			Placeholder.puff(parent, global_position, Placeholder.color_of(variant), 36.0)
 		if drops_enabled:
 			var kind := DropTable.roll(drop_roll_override)
@@ -63,6 +64,35 @@ func cut_down() -> void:
 	Audio.play_sfx(&"bush_cut", global_position)
 	cut.emit()
 	queue_free()
+
+
+func _reed_cut_texture() -> Texture2D:
+	var path := "res://assets/sprites/reed_cut_z1.png"
+	if not ResourceLoader.exists(path):
+		return null
+	return load(path) as Texture2D
+
+
+func _spawn_reed_cut(parent: Node) -> bool:
+	var texture := _reed_cut_texture()
+	if texture == null:
+		return false
+	var puff := Sprite2D.new()
+	puff.name = "ReedCut"
+	puff.texture = texture
+	puff.top_level = true
+	puff.z_index = 10
+	puff.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	parent.add_child(puff)
+	puff.global_position = global_position + Vector2(0, 24)
+	puff.modulate.a = 0.65
+	var size := 180.0 / maxf(texture.get_width(), texture.get_height())
+	puff.scale = Vector2.ONE * size * 0.7
+	var tween := puff.create_tween().set_parallel(true)
+	tween.tween_property(puff, "scale", Vector2.ONE * size, 0.25)
+	tween.tween_property(puff, "modulate:a", 0.0, 0.18).set_delay(0.07)
+	tween.chain().tween_callback(puff.queue_free)
+	return true
 
 
 ## Placeholder looks of the variants (registered once; "bush" is in Placeholder.KINDS already).

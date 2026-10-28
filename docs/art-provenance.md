@@ -1,5 +1,17 @@
 # Wickwarden — art provenance
 
+## Reed cut effect (2026-10-28)
+
+`reed_cut_z1.png` is the unchanged 1402×1122 RGBA built-in ImageGen output from
+session `01a182ad-a505-7613-b919-39e5c1a765dd`, file
+`exec-b7224f17-8c16-4bf8-907c-9d77a28d8fb3.png`, SHA-256
+`18e5078d4b22f6da6be757ad1f7c44652a9399ed5f67bb9c2ac393642aa0137a`.
+The original prompt and model version were not available in this handoff. The native-alpha cutter
+uses the entire canvas at its original dimensions, without crop or alpha threshold; output SHA-256
+`59918989230d43e0655bcee99883c2365a5bb46ade8b8a15f2019da373c034db`.
+The reviewed effect grows to 180 px at initial alpha 0.65 and fades over 0.25 s. Controlled
+room stills showed reduced player overlap; readability in human play and motion is unverified.
+
 ## The Unlit hanging chain link (2026-10-28)
 
 The built-in image generation tool produced the native-alpha 1024×1536 source
