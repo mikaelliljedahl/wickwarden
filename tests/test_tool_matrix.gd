@@ -5,6 +5,7 @@ extends TestCase
 ## Controlled bare arenas and fixed initial positions; this is not a continuous playthrough.
 ## Pending: remaining tools/props, encounter weaknesses and regular-enemy permutations.
 
+const BRIAR_SCENE := "res://scenes/enemies/bosses/briar_mother.tscn"
 const TOOLS: Array[StringName] = [
 	&"cinder_wick", &"tallow_sling", &"lantern_chime", &"reel_line", &"tether_moth", &"glow_jar"
 ]
@@ -95,6 +96,7 @@ func run() -> void:
 	for opened: bool in [false, true]:
 		await _watcher_slug(opened)
 	await _briar_eye_tools()
+	await _briar_natural_eye_cycle()
 	await _echo_chime()
 	await _echo_chime_outside_glow()
 	await _thorn_moth_hook()
@@ -1507,7 +1509,7 @@ func _briar_eye_tools() -> void:
 	reset_state()
 	var arena := make_arena()
 	var player := make_player(arena, Vector2(480, 590))
-	var scene := load("res://scenes/enemies/bosses/briar_mother.tscn") as PackedScene
+	var scene := load(BRIAR_SCENE) as PackedScene
 	check(scene != null, "Briar Mother scene loads")
 	if scene == null:
 		await dispose(arena)
@@ -1532,6 +1534,69 @@ func _briar_eye_tools() -> void:
 	await seconds(0.3)
 	check_eq(eye.hp, 3, "Briar lowered eye takes one actual slug")
 	check_eq(GameState.slugs, 11, "Briar: shot consumes one slug")
+	await dispose(arena)
+
+
+func _briar_natural_eye_cycle() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, Vector2(1440, 590))
+	player.set_hurtbox_enabled(self, false)
+	var scene := load(BRIAR_SCENE) as PackedScene
+	check(scene != null, "Briar cycle: real boss scene loads")
+	if scene == null:
+		await dispose(arena)
+		return
+	var boss = scene.instantiate()
+	boss.position = Vector2(960, 192)
+	arena.add_child(boss)
+	for i in range(180):
+		if boss._fight_started:
+			break
+		await frames(1)
+	check(boss._fight_started and boss.phase == 1, "Briar cycle: normal intro starts phase one")
+	var eye: EnemyBase = boss.eyes[2]
+	await frames(2)
+	check(not eye.hurtbox.enabled and not eye.visible, "Briar cycle: third eye naturally raised")
+	var damage: Array[int] = []
+	var hit_visibility: Array[bool] = []
+	eye.damaged.connect(
+		func(amount: int) -> void:
+			damage.append(amount)
+			hit_visibility.append(eye.visible and eye.hurtbox.enabled)
+	)
+	_equip(player, &"tallow_sling")
+	player.place_at(eye.global_position + Vector2(0, 80))
+	player.facing = Vector2.UP
+	check(player.use_item(), "Briar cycle: real sling fires at raised eye")
+	var overlapped := false
+	var raised_on_overlap := false
+	for i in range(30):
+		await frames(1)
+		for slug: Node in get_tree().get_nodes_in_group(&"sling_slugs"):
+			if slug is Hitbox and (slug as Hitbox).get_overlapping_areas().has(eye.hurtbox):
+				overlapped = (slug as Hitbox).kind == &"sling" and (slug as Hitbox).active
+				raised_on_overlap = not eye.visible and not eye.hurtbox.enabled
+	check(overlapped, "Briar cycle: real slug overlaps raised eye hurtbox")
+	check(raised_on_overlap, "Briar cycle: eye remains raised at overlap")
+	check_eq(eye.hp, 4, "Briar cycle: raised eye takes no damage")
+	check(damage.is_empty(), "Briar cycle: no raised-eye damage signal")
+	for i in range(300):
+		if eye.hurtbox.enabled and eye.visible and get_tree().get_nodes_in_group(&"sling_slugs").is_empty():
+			break
+		await frames(1)
+	check(eye.hurtbox.enabled and eye.visible, "Briar cycle: same eye naturally lowers")
+	player.place_at(eye.global_position + Vector2(0, 80))
+	player.facing = Vector2.UP
+	check(player.use_item(), "Briar cycle: real sling fires at lowered eye")
+	await frames(30)
+	check_eq(damage, [1], "Briar cycle: lowered eye receives one real hit")
+	check_eq(hit_visibility, [true], "Briar cycle: damage occurs while eye is lowered")
+	check_eq(eye.hp, 3, "Briar cycle: lowered eye loses one HP")
+	check_eq(boss.hp, 27, "Briar cycle: eye damage reaches mother")
+	check_eq(GameState.slugs, 10, "Briar cycle: both shots consume ammunition")
+	print("MATRIX Briar natural eye: raised overlap=", overlapped, " damage=", damage,
+		" eye_hp=", eye.hp, " boss_hp=", boss.hp)
 	await dispose(arena)
 
 
