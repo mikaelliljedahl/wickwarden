@@ -315,12 +315,60 @@ Boss-effect documentation followed in `bd1c733`; the Chime hold cue landed in
 `0cee12b7a34b65df06326169994d0943cd313a2c` on `origin/main`.
 Chime hold documentation followed in `81aeae4`; painted cut vegetation landed
 in `4d975e38f00fbeeafca449126eee4f483aad2fe8` on `origin/main`.
+Vegetation documentation followed in `d3db757`; Watcher Eye open poses landed
+in `91c3f652b69891fae982628f87450249ee681aed` on `origin/main`.
+Painted default bush fragments followed in
+`db8d49e2d9026083c769b051585fa37591fa34c8` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Default bush fragments, committed in `db8d49e`:** Painted leaves and petals
+use 180 px, 0.65 and 0.25 seconds. Existing reeds, other variants, fallback, cut
+behavior and drops are unchanged; source and cutter are documented. Agent and
+lead passed bush/variants/`tool_matrix`/`route_brackwater` after import; the agent
+reports lint and `art-test` (25) PASS with the old ResourceWarning. An earlier
+test leak was corrected before final testing.
+
+Real-hook stills at `/var/tmp/wick-bush-z1/integrated-comparison.jpg` use a
+placed, protected player in `ow_1_1`/`cave_3_7` and include fallback; darkness
+or swing can obscure leaves. Capture reported a resource warning. Human play
+and motion are unverified; a clean full `make check` on exact `db8d49e` passed
+(exit 0), log `/var/tmp/wick-clean-db8d49e-s_fu600y/check.log`. This is the latest
+full check.
+
+**Watcher Eye open poses, committed in `91c3f65`:** Existing documented sources
+supply direct open poses during OPEN/stun; the opening strip is registered but
+unused. Rest/warning retain idle; open uses natural color unshaded. Mechanics and
+timing are unchanged, with fallback. Agent and lead passed `watcher_eye` after
+import; the agent reports lint and `art-test` (25) PASS.
+
+Controlled natural attack/stun in actual `ow_5_6`/`cave_10_12` with a placed,
+frozen player is recorded in `/var/tmp/wick-eye-study/final-{ow_5_6,cave_10_12}-{attack,stun}.log`
+and `natural-*.png` there; `/var/tmp/wick-eye-study/integrated-matrix.png` uses
+forced directions. The upward pupil is partly hidden and gaze ambiguous; these
+stills do not verify human play or continuous motion, and capture had resource
+warnings. The clean `make check` on exact `91c3f65` FAILED (exit 2):
+`test_playthrough_4` died against Archivist and produced 17 subsequent failures;
+the other 158 test files passed. Log:
+`/var/tmp/wick-clean-91c3f65-zg4pqbya/check.log`. A separate
+`make test T=playthrough_4` rerun on the same clean `91c3f65` passed (exit 0):
+`/var/tmp/wick-route-rerun-dqxfmmqj/route.log`. A subsequent clean full
+`make check` rerun on exact `91c3f65` passed (exit 0), log
+`/var/tmp/wick-clean-91c3f65-repeat-keg1isfn/check.log`. The original cause
+remains under investigation; no regression or cause is asserted. A later clean
+full check at `db8d49e` is recorded above.
+
+The independent `/var/tmp/wick-archivist-repro/` audit ran three serial
+`playthrough_4` passes each on exact `91c3f65` and parent `d3db757`, plus an
+additional full head PASS. The failure's boss HP 30 was a reset on player death,
+not HP at death: the bot spent a long time at boss HP 6 while taking damage;
+the lethal hazard is unknown. Archivist has its own `randomize` RNG despite the
+bot seed, a possible contributor but not a proven cause. No direct connection to
+Watcher is established.
 
 **Cut vegetation fragments, committed in `4d975e3`:** Painted fragments for
 `reed_cluster`/`rush_wall` last 0.25 seconds at 180 px, retaining the original
@@ -336,7 +384,8 @@ used a placed, protected player and include a two-wall double hit and fallback.
 The fragments are subtle and may be hidden by the swing; one capture had a
 resource warning. Human play and motion are not verified. A clean full
 `make check` on exact `4d975e3` passed (exit 0); log
-`/var/tmp/wick-clean-4d975e3-3w67_5t3/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-4d975e3-3w67_5t3/check.log`. The later clean `91c3f65`
+full rerun is recorded above.
 
 **Lantern Chime hold cue, committed in `0cee12b`:** Two painted notes appear at
 the item's fixed activation point while held and hide on release, with missing-art
@@ -967,13 +1016,14 @@ pixels at the edge. Body/walk also mismatch, and vertical source art is missing.
 There is no safe integration of these sources; new compact fitting art is needed.
 No runtime change was made.
 
-**Watcher Eye open-state review, 2026-10-28:** The open state looks closed in
+**Earlier Watcher Eye open-state review, 2026-10-28:** The open state looked closed in
 actual AI gameplay at `ow_5_6` (`/var/tmp/wick-regular-audit/eye-open-overworld.png`).
 Down/side cutting proofs in `/var/tmp/wick-watcher-proof-HkQk0n/` are promising,
 but the animation has not been reviewed during play and an up-facing source is
 missing. A new ImageGen candidate at
 `/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-65898650-1ca0-4938-8be0-a2cc6a492966.png`
 was independently rejected: its gaze is frontal, not upward. It is not used.
+The later open-pose implementation and its limits are recorded above.
 
 **Integrated Z1 test isolation and clean check, 2026-10-28 (committed in
 `70d229d`):** A clean git archive of exact
