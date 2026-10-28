@@ -1853,3 +1853,7 @@ speck removal. Both rows share one 500×500 fit scale; joined output is eight
 The measured keyed matte has no nonzero pixels outside the crops and all
 output cell perimeters have zero alpha. Keyed green contamination and loss of
 some warm coverage cannot be ruled out; the source has no independent alpha.
+
+### Choir Warden directional poses, Z1
+
+Five original built-in ImageGen sheets and their full prompts, output IDs and SHA-256 hashes are recorded in [choir-warden-z1-log.md](../tools/source_art/choir-warden-z1-log.md). The existing side walk source is reused. New action and walk strips share 256 px cells, foot 236 and a common fit scale; the older down action outputs remain preserved.

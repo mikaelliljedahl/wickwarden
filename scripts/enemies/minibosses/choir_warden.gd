@@ -129,6 +129,44 @@ func _boss_physics(delta: float) -> void:
 	queue_redraw()
 
 
+func _process(_delta: float) -> void:
+	if not visual is SpriteVisual:
+		return
+	visual.auto_motion = false
+	var direction := facing_dir if state == State.WALK else _aim
+	visual.set_facing(direction)
+	var suffix := "side"
+	if absf(direction.x) <= absf(direction.y):
+		suffix = "up" if direction.y < 0.0 else "down"
+	var anim: StringName = &"walk" if velocity.length() > 5.0 else &"idle"
+	if state == State.TELEGRAPH:
+		anim = &"inhale"
+	elif state == State.SING:
+		anim = &"note"
+	elif state == State.RECOVER:
+		anim = &"recover"
+	var frames: SpriteFrames = visual.sprite_frames
+	if frames == null:
+		visual = Placeholder.attach(self, KIND, body_radius)
+		return
+	if not _has_pose(frames, anim, suffix):
+		anim = &"walk"
+	if not _has_pose(frames, anim, suffix):
+		visual = Placeholder.attach(self, KIND, body_radius)
+		return
+	visual.play_anim(anim)
+
+
+func _has_pose(frames: SpriteFrames, anim: StringName, suffix: String) -> bool:
+	var name := StringName("%s_%s" % [anim, suffix])
+	if not frames.has_animation(name) or frames.get_frame_count(name) == 0:
+		return false
+	for i in range(frames.get_frame_count(name)):
+		if frames.get_frame_texture(name, i) == null:
+			return false
+	return true
+
+
 func _start_note() -> void:
 	_cancel_note()
 	state = State.SING

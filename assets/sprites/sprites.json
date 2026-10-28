@@ -2630,19 +2630,79 @@
         "loop": true
       },
       "inhale_down": {
-        "file": "res://assets/sprites/choir_warden_inhale_down.png",
-        "frames": 2,
-        "fps": 8.0,
+        "file": "res://assets/sprites/choir_new_inhale_down.png",
+        "frames": 1,
+        "fps": 1.0,
         "loop": true
       },
       "note_down": {
-        "file": "res://assets/sprites/choir_warden_note_down.png",
-        "frames": 2,
-        "fps": 8.0,
+        "file": "res://assets/sprites/choir_new_note_down.png",
+        "frames": 1,
+        "fps": 1.0,
         "loop": true
       },
       "recover_down": {
-        "file": "res://assets/sprites/choir_warden_recover_down.png",
+        "file": "res://assets/sprites/choir_new_recover_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "inhale_side": {
+        "file": "res://assets/sprites/choir_new_inhale_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "note_side": {
+        "file": "res://assets/sprites/choir_new_note_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "recover_side": {
+        "file": "res://assets/sprites/choir_new_recover_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "inhale_up": {
+        "file": "res://assets/sprites/choir_new_inhale_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "note_up": {
+        "file": "res://assets/sprites/choir_new_note_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "recover_up": {
+        "file": "res://assets/sprites/choir_new_recover_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_down": {
+        "file": "res://assets/sprites/choir_walk_down_z1.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_down": {
+        "file": "res://assets/sprites/choir_idle_down_z1.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "walk_up": {
+        "file": "res://assets/sprites/choir_walk_up_z1.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "idle_up": {
+        "file": "res://assets/sprites/choir_idle_up_z1.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true

@@ -5,11 +5,42 @@ const SCENE := "res://scenes/enemies/minibosses/choir_warden.tscn"
 
 
 func run() -> void:
+	SaveGame.enabled = false
+	await _poses()
 	await _fixture_reentry()
 	await _cycle()
 	await _real_ward_geometry()
 	await _real_tools()
 	await _lifecycle()
+
+
+func _poses() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = _enemy(arena)
+	await frames(2)
+	check(enemy.visual is SpriteVisual, "painted choir visual loads")
+	if enemy.visual is SpriteVisual:
+		var visual: SpriteVisual = enemy.visual
+		for direction in [Vector2.DOWN, Vector2.UP, Vector2.LEFT, Vector2.RIGHT]:
+			for state in [enemy.State.TELEGRAPH, enemy.State.SING, enemy.State.RECOVER]:
+				enemy.state = state
+				enemy._aim = direction
+				enemy._process(0.0)
+				var suffix := "side" if direction.x != 0 else ("up" if direction.y < 0 else "down")
+				var base: String = ["inhale", "note", "recover"][state - 1]
+				check_eq(visual.animation, StringName(base + "_" + suffix), "directional pose")
+				check_eq(visual.flip_h, direction == Vector2.LEFT, "left mirrored")
+		visual.sprite_frames.remove_animation(&"inhale_up")
+		enemy.state = enemy.State.TELEGRAPH
+		enemy._aim = Vector2.UP
+		enemy._process(0.0)
+		check_eq(visual.animation, &"walk_up", "missing action falls back to walk")
+		visual.sprite_frames.remove_animation(&"walk_up")
+		enemy._process(0.0)
+		check(enemy.visual is Placeholder, "missing walk falls back to placeholder")
+	check(not SaveGame.enabled, "saves disabled")
+	await dispose(arena)
 
 
 func _enemy(arena: Node) -> EnemyBase:

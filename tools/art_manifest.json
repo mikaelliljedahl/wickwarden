@@ -304,48 +304,105 @@
   ]
  },
  "c45_choir_warden": {
-  "measure": "fit",
-  "value": [
-   244,
-   230
-  ],
-  "ref": [
-   {
-    "sheet": "choir_warden_walk_side_v1",
-    "row": 0,
-    "poses": [
-     0,
-     4
-    ]
-   },
-   {
-    "sheet": "choir_warden_walk_side_v1",
-    "row": 0,
-    "poses": 0
-   },
-   {
-    "sheet": "choir_warden_actions_down_v3",
-    "row": 0,
-    "poses": [
-     0,
-     2
-    ]
-   },
-   {
-    "sheet": "choir_warden_actions_down_v3",
-    "row": 0,
-    "poses": [
-     2,
-     4
-    ]
-   },
-   {
-    "sheet": "choir_warden_actions_down_v3",
-    "row": 1,
-    "poses": 0
-   }
-  ]
- },
+ "measure": "fit",
+ "value": [
+  244,
+  230
+ ],
+ "ref": [
+  {
+   "sheet": "choir_warden_walk_side_v1",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "choir_new_side_v2",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "choir_new_down_v1",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "choir_new_up_v1",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "choir_walk_down_z1",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "choir_walk_up_z1",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  }
+ ]
+},
+ "c45_choir_legacy": {
+ "measure": "fit",
+ "value": [
+  244,
+  230
+ ],
+ "ref": [
+  {
+   "sheet": "choir_warden_walk_side_v1",
+   "row": 0,
+   "poses": [
+    0,
+    4
+   ]
+  },
+  {
+   "sheet": "choir_warden_walk_side_v1",
+   "row": 0,
+   "poses": 0
+  },
+  {
+   "sheet": "choir_warden_actions_down_v3",
+   "row": 0,
+   "poses": [
+    0,
+    2
+   ]
+  },
+  {
+   "sheet": "choir_warden_actions_down_v3",
+   "row": 0,
+   "poses": [
+    2,
+    4
+   ]
+  },
+  {
+   "sheet": "choir_warden_actions_down_v3",
+   "row": 1,
+   "poses": 0
+  }
+ ]
+},
  "c45_item_heft_mitts": {
   "measure": "fit",
   "value": [
@@ -2950,7 +3007,7 @@
       0,
       2
      ],
-     "scale": "c45_choir_warden",
+     "scale": "c45_choir_legacy",
      "fps": 8,
      "loop": true
     },
@@ -2962,7 +3019,7 @@
       2,
       4
      ],
-     "scale": "c45_choir_warden",
+     "scale": "c45_choir_legacy",
      "fps": 8,
      "loop": true
     }
@@ -2976,7 +3033,7 @@
      "anim": "recover_down",
      "file": "choir_warden_recover_down",
      "poses": 0,
-     "scale": "c45_choir_warden",
+     "scale": "c45_choir_legacy",
      "fps": 1,
      "loop": true
     }
@@ -2987,6 +3044,179 @@
   "split": "components",
   "noise_area": 500
  }
+},
+ "choir_new_side_v2": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "choir_warden",
+     "anim": "inhale_side",
+     "file": "choir_new_inhale_side",
+     "poses": 1,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "note_side",
+     "file": "choir_new_note_side",
+     "poses": 2,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "recover_side",
+     "file": "choir_new_recover_side",
+     "poses": 3,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  }
+ ]
+},
+ "choir_new_down_v1": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "choir_warden",
+     "anim": "inhale_down",
+     "file": "choir_new_inhale_down",
+     "poses": 1,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "note_down",
+     "file": "choir_new_note_down",
+     "poses": 2,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "recover_down",
+     "file": "choir_new_recover_down",
+     "poses": 3,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  }
+ ]
+},
+ "choir_new_up_v1": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "choir_warden",
+     "anim": "inhale_up",
+     "file": "choir_new_inhale_up",
+     "poses": 1,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "note_up",
+     "file": "choir_new_note_up",
+     "poses": 2,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "recover_up",
+     "file": "choir_new_recover_up",
+     "poses": 3,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  }
+ ]
+},
+ "choir_walk_down_z1": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "choir_warden",
+     "anim": "walk_down",
+     "file": "choir_walk_down_z1",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "c45_choir_warden",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "idle_down",
+     "file": "choir_idle_down_z1",
+     "poses": 0,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  }
+ ]
+},
+ "choir_walk_up_z1": {
+ "key": "magenta",
+ "rows": [
+  {
+   "poses": 4,
+   "outputs": [
+    {
+     "kind": "choir_warden",
+     "anim": "walk_up",
+     "file": "choir_walk_up_z1",
+     "poses": [
+      0,
+      4
+     ],
+     "scale": "c45_choir_warden",
+     "fps": 8,
+     "loop": true
+    },
+    {
+     "kind": "choir_warden",
+     "anim": "idle_up",
+     "file": "choir_idle_up_z1",
+     "poses": 0,
+     "scale": "c45_choir_warden",
+     "fps": 1,
+     "loop": true
+    }
+   ]
+  }
+ ]
 },
  "item_heft_mitts_v1": {
   "key": "magenta",
