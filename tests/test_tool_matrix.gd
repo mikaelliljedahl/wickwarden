@@ -73,6 +73,8 @@ func run() -> void:
 		await _pit_pair(width, &"reel_line")
 	for prop: String in ["heavy_stone", "heavy_stones", "heavy_boulder", "heavy_door"]:
 		await _heavy_pair(prop)
+		for tool: StringName in [&"hook", &"flare", &"pitch_pot"]:
+			await _heavy_wrong_weapon(prop, tool)
 	await _mitts_throw_snapper()
 	for front: bool in [true, false]:
 		await _crab_slug(front)
@@ -938,6 +940,53 @@ func _heavy_pair(prop: String) -> void:
 		await seconds(0.9)
 	check(GameState.has_flag(&"moved_matrix_heavy"), prop + ": persistent opening")
 	print("MATRIX mitts -> ", prop, " push=", pushes)
+	await dispose(arena)
+
+
+func _heavy_wrong_weapon(prop: String, tool: StringName) -> void:
+	reset_state()
+	var arena := make_arena()
+	var stone := _gate(arena, [prop, &"stone_id"], Vector2(540, 500))
+	if stone == null:
+		await dispose(arena)
+		return
+	var player := make_player(arena, Vector2(340 if tool == &"pitch_pot" else 400, 500))
+	player.set_hurtbox_enabled(self, false)
+	await frames(3)
+	player.facing = Vector2.RIGHT
+	var label := "%s -> %s" % [tool, prop]
+	var kind := &"explosion" if tool == &"pitch_pot" else tool
+	var contact := false
+	if tool == &"pitch_pot":
+		_equip(player, tool)
+		GameState.add_pitch_pots(1)
+		check(player.use_item(), label + ": actual pot placed")
+	else:
+		Input.action_press(&"attack")
+		for i in range(60 if tool == &"flare" else 8):
+			await frames(1)
+			contact = contact or _gate_weapon_overlaps(stone, kind)
+		if tool == &"flare":
+			check(player.charge_ready, label + ": flare fully charged")
+		Input.action_release(&"attack")
+	for i in range(120):
+		await frames(1)
+		contact = contact or _gate_weapon_overlaps(stone, kind)
+	check(contact, label + ": real hitbox overlaps grab zone")
+	check(is_instance_valid(stone), label + ": obstacle survives")
+	if is_instance_valid(stone):
+		check_eq(stone.global_position, Vector2(540, 500), label + ": obstacle stays in place")
+		check(not stone.call(&"is_carried"), label + ": not carried")
+		check(not (stone.get_node("Shape") as CollisionShape2D).disabled, label + ": solid")
+	check(not GameState.has_flag(&"moved_matrix"), label + ": no opening flag")
+	print("MATRIX ", label, " expected=false contact=", contact)
+	await dispose(arena)
+	arena = make_arena()
+	stone = _gate(arena, [prop, &"stone_id"], Vector2(540, 500))
+	await frames(3)
+	if stone != null:
+		check_eq(stone.global_position, Vector2(540, 500), label + ": still closed on revisit")
+		check(not (stone.get_node("Shape") as CollisionShape2D).disabled, label + ": revisit solid")
 	await dispose(arena)
 
 
