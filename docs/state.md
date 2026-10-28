@@ -1,12 +1,23 @@
 # Current status
 
+**Clean verification at `4dfd5e6`, 2026-10-28:** An isolated git archive of
+exact `4dfd5e6c6162f638d97fc323b9f2c0a163046a2a`, with isolated HOME/XDG and
+`TMPDIR=/tmp`, passed `make check`: 157 Godot tests including four playthrough
+shards, lint, world-check and 175 Python tests. `make rooms-check` passed 221
+rooms and `make art-test` passed 22 tests, emitting expected mismatch diagnostics
+and ResourceWarnings. Logs are in `/var/tmp/wick-verify-4dfd5e6-ZkaakT/`
+(`check.log`, `rooms-check.log`, `art-test.log`). This is the latest clean full
+check; headless automation does not establish human balance, visual or audio
+experience.
+
 **Kilnkeeper wax splash, 2026-10-28 (committed in `9343092`):** A standalone
 painted five-frame splash uses a verified ImageGen source, import and provenance,
 with a thin active 150 px outline. The animation outlasts the three-frame
 hitbox and is cleared on reset, phase change or death; damage and timing are
-unchanged. The lead's import, `boss_kilnkeeper` and `route_cave_1` passed, along
-with ten additional filter-matched tests; the agent reports lint, B01 ownership
-and `art-test` PASS. Actual C1 captures at `/var/tmp/wick-c1-audit/phase1-active.png`,
+unchanged. The lead's import, `boss_kilnkeeper` and `route_cave_1` passed; the
+filter also matched two additional test files, `route_cave_10` and
+`route_cave_10_anchor_drop`. The agent reports lint, B01 ownership and `art-test`
+PASS. Actual C1 captures at `/var/tmp/wick-c1-audit/phase1-active.png`,
 `phase1-later.png`, `phase2-active.png` and `phase2-later.png` in that directory
 used a placed, protected player, molten set and forced phase two, not human play.
 Capture exit reported four ObjectDB and two resource warnings; a separate export
@@ -94,8 +105,8 @@ matrix. `tool_matrix`, lint and Q7 ownership are reported PASS.
 **Full check in a changing worktree:** `make check` passed 157 Godot test files
 including playthrough shards, lint, world-check and 175 Python tests while
 uncommitted boss, streaming and Q7 files were changing in parallel. It cannot
-be attributed to an exact clean commit. The previous clean full check remains
-`b41dc6d`.
+be attributed to an exact clean commit. At that time the previous clean full
+check was `b41dc6d`; the later clean `4dfd5e6` check is recorded above.
 
 **Linux release export at `bb87f58`, 2026-10-28:** A clean export of exact
 `bb87f5874b5028374e2444901fe1b2bd56114a12` used official Godot 4.7.2 and its
@@ -160,16 +171,16 @@ Glow Jar and Chime are tested against three secret openings: the Jar reveals
 them and Chime does not. Real pitch-pot explosions open two cracked obstacle
 types; flare does not. Contact, flags and solidity are checked on revisit using
 in-memory state. The targeted `tool_matrix` test passed. These controlled
-fixtures do not prove human play or complete tool/gate coverage; the latest full
-`make check` remains `b41dc6d`.
+fixtures do not prove human play or complete tool/gate coverage; the later clean
+full `make check` at `4dfd5e6` is recorded above.
 
 **Q7 gate revisit cases, 2026-10-28 (committed in `0faeca5`):** Real Wick
 positives cover three thorn variants, sling covers the eye switch and Chime covers
 three resonance variants. Twenty-one hook/flare/pot negatives confirm contact
 and check flags and solid blockers on revisit, including both eye blockers.
 Isolated `tool_matrix` and lint passed; these are controlled fixtures, not human
-play. Other tools, gates and encounter combinations remain open. The latest full
-check was at `b41dc6d`.
+play. Other tools, gates and encounter combinations remain open. The later clean
+full check at `4dfd5e6` is recorded above.
 
 **Q7 wax seal, 2026-10-28 (committed in `52cbdeb`):** A real flare opens the
 seal after a controlled initial hook miss; hook and pitch-pot explosion are
@@ -182,7 +193,8 @@ positive; flare and pitch-pot explosion are negative with confirmed contact and
 flag/solidity checked before and after revisit. The flare is charged beyond hook
 range to prove the hook misses. Isolated `tool_matrix` and lint passed; this is a
 controlled fixture, not human play. Other tools and matrix cases remain open.
-The latest full `make check` was at `b41dc6d`, before this test change.
+At the time, the previous full `make check` was at `b41dc6d`; a later clean
+check at `4dfd5e6` is recorded above.
 
 **C10 lantern glow, 2026-10-28 (committed in `b41dc6d`):** Two painted glow
 variants alternate every 0.5 seconds through a presentation child that follows
@@ -1875,7 +1887,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `934309234dc498fa8e2d8507dc67bada2fa7ae08` on `origin/main`, including Kilnkeeper's wax splash above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `4dfd5e6c6162f638d97fc323b9f2c0a163046a2a` on `origin/main`, including the Kilnkeeper documentation above; its subsequent clean verification is recorded above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
