@@ -263,12 +263,22 @@ Clean verification documentation followed in `3394d59`; boss hazard cleanup
 landed in `c34b164b9df1bc10a89c2812d862e7e966447fc0` on `origin/main`.
 Hazard cleanup documentation followed in `0916c2f`; the Z1 filter guard landed
 in `dc54616ce94ed1bfef845989bdb6d9a4e543bb0d` on `origin/main`.
+Hit-cancellation verification was documented in
+`19f8acc5500538b127a6c3acfabc45c110dac6fe` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Owner priority, 2026-10-28:** The owner reports room-transition performance is
+acceptable in actual play and asks that work focus on placeholders, since an
+automated route has demonstrated that the game can be completed. Performance
+work is paused at the owner's direction. This experience is not a measurement
+or verification of the 50 ms budget; Q8's recorded measurement and coverage
+limits remain open. The completed route uses bot input and internal state and
+does not establish human balance or complete all-branch coverage.
 
 **Z1 filter reentrancy guard, committed in `dc54616`:** With explicit ticket
 Owns, `is_hazard_stopped` is checked after the filter to cancel the verified
