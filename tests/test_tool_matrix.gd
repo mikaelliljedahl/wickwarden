@@ -836,12 +836,20 @@ func _gate_pair(row: Array, tool: StringName) -> void:
 	GameState.acquire_item(tool)
 	GameState.set_active_item(tool)
 	var label := "%s -> %s" % [tool, row[0]]
+	var accepted: Array[StringName] = []
+	var hurtbox := gate.get_node("Hurtbox") as Hurtbox
+	hurtbox.hurt.connect(func(hit: Hitbox) -> void: accepted.append(hit.kind))
 	check(not bool(gate.get(row[3])), label + ": initially closed")
 	check(player.use_item(), label + ": real player activates tool")
 	await frames(2)
 	check(not bool(gate.get(row[3])), label + ": no remote instant activation")
 	await seconds(2.0)
 	var opens: bool = tool == row[2]
+	if opens:
+		var expected_kind: StringName = {
+			&"cinder_wick": &"fire", &"tallow_sling": &"sling", &"lantern_chime": &"chime"
+		}[tool]
+		check(expected_kind in accepted, label + ": real tool hit accepted by gate")
 	check_eq(bool(gate.get(row[3])), opens, label + ": gate result")
 	var flag := StringName(String(row[4]) + "matrix")
 	check_eq(GameState.has_flag(flag), opens, label + ": persistent flag")
@@ -862,6 +870,20 @@ func _gate_pair(row: Array, tool: StringName) -> void:
 	await frames(3)
 	if gate != null:
 		check_eq(bool(gate.get(row[3])), opens, label + ": revisit state")
+		check_eq(GameState.has_flag(flag), opens, label + ": revisit flag")
+		if row[0] != "eye_switch":
+			check_eq((gate.get_node("Shape") as CollisionShape2D).disabled, opens,
+				label + ": revisit collision")
+		else:
+			var restored_blockers: Array[Node2D] = []
+			for name: String in ["eye_portcullis", "eye_cell"]:
+				restored_blockers.append(_gate(arena, [name, &"eye_id"], Vector2(900, 700)))
+			await frames(3)
+			for restored: Node2D in restored_blockers:
+				if restored != null:
+					check_eq(bool(restored.get(&"is_open")), opens, label + ": revisit blocker")
+					check_eq((restored.get_node("Shape") as CollisionShape2D).disabled, opens,
+						label + ": revisit blocker collision")
 	await dispose(arena)
 
 
@@ -906,6 +928,24 @@ func _gate_base_weapon_pair(row: Array, tool: StringName) -> void:
 	if row[0] != "eye_switch":
 		check(not (gate.get_node("Shape") as CollisionShape2D).disabled, label + ": blocker solid")
 	print("MATRIX ", label, " expected=false")
+	await dispose(arena)
+	arena = make_arena()
+	gate = _gate(arena, row, Vector2(540, 500))
+	await frames(3)
+	if gate != null:
+		check(not bool(gate.get(row[3])), label + ": revisit closed")
+		check(not GameState.has_flag(StringName(String(row[4]) + "matrix")),
+			label + ": revisit no flag")
+		if row[0] != "eye_switch":
+			check(not (gate.get_node("Shape") as CollisionShape2D).disabled,
+				label + ": revisit solid")
+		else:
+			for name: String in ["eye_portcullis", "eye_cell"]:
+				var blocker := _gate(arena, [name, &"eye_id"], Vector2(900, 700))
+				if blocker != null:
+					check(not bool(blocker.get(&"is_open")), label + ": revisit blocker")
+					check(not (blocker.get_node("Shape") as CollisionShape2D).disabled,
+						label + ": revisit blocker solid")
 	await dispose(arena)
 
 

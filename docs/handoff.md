@@ -124,12 +124,20 @@ The C10 lantern glow followed in `b41dc6d3c97c065bae20a1471db31d2cbd5135af`
 on `origin/main`.
 The Q7 hook-tap wall cases followed in
 `a403f209af2ad1f3c6a3a7e24999bf3f8364476c` on `origin/main`.
+The Q7 wax-seal cases followed in
+`52cbdebd5e1a166e6dc790f7ee79f6bbb1a59436` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 wax seal, committed in `52cbdeb`:** A real flare opens the seal after a
+controlled initial hook miss; hook and pitch-pot explosion are negative with
+confirmed contact. Flag and solidity are checked before and after revisit.
+Isolated `tool_matrix` and lint passed. This is a controlled fixture, not human
+play; other tools and combinations remain open.
 
 **Q7 hook-tap wall, committed in `a403f20`:** A real hook hit is positive;
 flare and pitch-pot explosion are negative with confirmed contact and
