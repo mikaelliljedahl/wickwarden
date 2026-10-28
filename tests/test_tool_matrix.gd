@@ -36,6 +36,8 @@ func run() -> void:
 			await _gate_pair(row, tool)
 		for tool: StringName in [&"hook", &"flare", &"pitch_pot"]:
 			await _gate_base_weapon_pair(row, tool)
+		if row[0] in ["thorn_hedge", "thorn_wall", "thorn_door", "eye_switch"]:
+			await _gate_base_weapon_pair(row, &"reel_line")
 	for prop: String in ["hidden_seam", "hidden_stairs", "sealed_seam"]:
 		for tool: StringName in [&"tallow_sling", &"lantern_chime", &"glow_jar"]:
 			await _seam_pair(prop, tool)
@@ -1073,18 +1075,25 @@ func _gate_base_weapon_pair(row: Array, tool: StringName) -> void:
 		return
 	var start := Vector2(340, 500) if tool == &"pitch_pot" else Vector2(400, 500)
 	var player := make_player(arena, start)
+	var blockers: Array[Node2D] = []
+	if row[0] == "eye_switch":
+		for name: String in ["eye_portcullis", "eye_cell"]:
+			blockers.append(_gate(arena, [name, &"eye_id"], Vector2(900, 700)))
 	await frames(3)
 	player.facing = Vector2.RIGHT
 	var label := "%s -> %s" % [tool, row[0]]
 	var contact := false
 	var kind := &"explosion" if tool == &"pitch_pot" else tool
+	if tool == &"reel_line":
+		kind = &"reel"
 	var blasts := [0]
 	var on_blast := func(_pos: Vector2, _radius: float) -> void: blasts[0] += 1
 	Events.explosion.connect(on_blast)
-	if tool == &"pitch_pot":
-		_equip(player, &"pitch_pot")
-		GameState.add_pitch_pots(1)
-		check(player.use_item(), label + ": actual pot placed")
+	if tool in [&"pitch_pot", &"reel_line"]:
+		_equip(player, tool)
+		if tool == &"pitch_pot":
+			GameState.add_pitch_pots(1)
+		check(player.use_item(), label + ": actual tool activated")
 	else:
 		Input.action_press(&"attack")
 		for i in range(60 if tool == &"flare" else 8):
@@ -1104,6 +1113,11 @@ func _gate_base_weapon_pair(row: Array, tool: StringName) -> void:
 	check(not GameState.has_flag(StringName(String(row[4]) + "matrix")), label + ": no flag")
 	if row[0] != "eye_switch":
 		check(not (gate.get_node("Shape") as CollisionShape2D).disabled, label + ": blocker solid")
+	for blocker: Node2D in blockers:
+		if blocker != null:
+			check(not bool(blocker.get(&"is_open")), label + ": linked blocker closed")
+			check(not (blocker.get_node("Shape") as CollisionShape2D).disabled,
+				label + ": linked blocker solid")
 	print("MATRIX ", label, " expected=false")
 	await dispose(arena)
 	arena = make_arena()
