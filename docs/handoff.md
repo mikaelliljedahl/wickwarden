@@ -325,12 +325,32 @@ Moss documentation followed in `1d9d7fb`; dry vine fragments landed in
 `26166f50089fd365a303d4169440100863ad2d40` on `origin/main`.
 Vine documentation followed in `5adfb2b`; Brine Crab directional actions
 landed in `0edb9a5e0e3ed520cf8ef27993050c38ee794d47` on `origin/main`.
+Brine Crab documentation followed in `6c9c64c` on `origin/main`; Abacus Brute
+painted whirl is committed locally in `cb649a4` and its clean full check passed.
+A push is planned after the documentation commit; verify the remote before it.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Abacus Brute painted whirl, committed in `cb649a4`:** Painted beads rotate
+behind the figure during the active whirl; the previous scuff is the missing-art
+fallback. Mechanics and hit area are unchanged. The agent reports isolated
+`abacus_brute`, `tool_matrix`, `route_cave_8`, lint and 25 art tests PASS. A
+clean full `make check` on exact `cb649a4` passed (exit 0): 159 Godot test files,
+lint, world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-cb649a4-fivoj9z4/check.log`; this is the latest clean full
+PASS.
+
+Actual `cave_8_4` controlled stills with a placed, protected player are at
+`/var/tmp/wick-abacus-new/integrated-dark-right-whirl-{0,1,2,3}.png`, with an
+upward fallback capture also taken. The chain can be partly obscured or appear
+detached; captures produced ObjectDB/resource warnings. Continuous motion and
+human play remain unverified. Separate poof source v1/v3 magenta-key trials
+could not preserve violet cleanly with the tested settings; a better source is
+needed.
 
 **Brine Crab directional actions, committed in `0edb9a5`:** Directional warning,
 lunge and up/down walk/idle poses reuse side walk; warning is unshaded in
@@ -353,8 +373,7 @@ of 210 checks, “real grab collision carries naturally landed shard”; the oth
 A separate `test_route_cave_4` rerun on the same clean `0edb9a5` passed (exit 0):
 `/var/tmp/wick-c4-rerun-b07k3s1p/route.log`. A clean full `make check` rerun
 on exact `0edb9a5` passed (exit 0):
-`/var/tmp/wick-clean-0edb9a5-repeat-1jby8_7a/check.log`; it is the latest clean
-full PASS. Independent audit `/var/tmp/wick-route-audit-wuizz0h4/` had targeted
+`/var/tmp/wick-clean-0edb9a5-repeat-1jby8_7a/check.log`. Independent audit `/var/tmp/wick-route-audit-wuizz0h4/` had targeted
 `route_cave_4` PASS 10/10 each on head and parent and 20/20 instrumented runs;
 no direct crab link was found. The original cause remains unknown. Overlapping
 shards selected by grab or lifetime/timing are unproven hypotheses; the full

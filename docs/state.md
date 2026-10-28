@@ -1,5 +1,22 @@
 # Current status
 
+**Abacus Brute painted whirl, 2026-10-28 (committed in `cb649a4`):** Painted
+beads rotate behind the figure during the active whirl; the previous scuff is
+the missing-art fallback. Mechanics and hit area are unchanged. The agent's
+isolated `abacus_brute`, `tool_matrix`, `route_cave_8`, lint and 25 art tests
+passed. A clean full `make check` on exact `cb649a4` passed (exit 0): 159
+Godot test files, lint, world-check and 175 Python tests. Log
+`/var/tmp/wick-clean-cb649a4-fivoj9z4/check.log`; this is the latest clean full
+PASS.
+
+Actual `cave_8_4` controlled stills with a placed, protected player are at
+`/var/tmp/wick-abacus-new/integrated-dark-right-whirl-{0,1,2,3}.png`, with an
+upward fallback capture also taken. The chain can be partly obscured or appear
+detached; captures produced ObjectDB/resource warnings. Continuous motion and
+human play remain unverified. Separate poof source v1/v3 magenta-key trials
+could not preserve violet cleanly with the tested settings; a better source is
+needed.
+
 **Brine Crab directional actions, 2026-10-28 (committed in `0edb9a5`):**
 Directional warning, lunge and up/down walk/idle poses reuse side walk; warning
 is unshaded in darkness. Timing and combat logic are unchanged, and incomplete
@@ -21,8 +38,7 @@ of 210 checks, “real grab collision carries naturally landed shard”; the oth
 A separate `test_route_cave_4` rerun on the same clean `0edb9a5` passed (exit 0):
 `/var/tmp/wick-c4-rerun-b07k3s1p/route.log`. A clean full `make check` rerun
 on exact `0edb9a5` passed (exit 0):
-`/var/tmp/wick-clean-0edb9a5-repeat-1jby8_7a/check.log`; it is the latest clean
-full PASS. Independent audit `/var/tmp/wick-route-audit-wuizz0h4/` had targeted
+`/var/tmp/wick-clean-0edb9a5-repeat-1jby8_7a/check.log`. Independent audit `/var/tmp/wick-route-audit-wuizz0h4/` had targeted
 `route_cave_4` PASS 10/10 each on head and parent and 20/20 instrumented runs;
 no direct crab link was found. The original cause remains unknown. Overlapping
 shards selected by grab or lifetime/timing are unproven hypotheses; the full
@@ -2938,7 +2954,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0edb9a5e0e3ed520cf8ef27993050c38ee794d47` on `origin/main`, including Brine Crab directional actions above. The latest clean full PASS is the rerun at `0edb9a5`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `6c9c64c` on `origin/main`, documenting the Brine Crab directional actions above. Abacus Brute painted whirl is locally committed in `cb649a4`; its clean full check passed. The latest clean full PASS is `cb649a4`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
