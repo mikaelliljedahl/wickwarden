@@ -37,6 +37,7 @@ var _lantern_target := Vector2.ZERO
 var _slide_left := 0.0
 var chain_art_path := CHAIN_ART
 var _chains: Node2D
+var _wax_effect_spawned := false
 
 
 class ChainPresentation:
@@ -563,10 +564,33 @@ func _exit_tree() -> void:
 func _begin_death() -> void:
 	super()
 	_death_left = 2.0
+	var fx := SpriteVisual.spawn_effect(self, &"fx_boss_death_wax_z1", global_position, 0.7) as SpriteVisual
+	if fx != null:
+		var frames := fx.sprite_frames
+		if (
+			frames == null
+			or not frames.has_animation(&"idle")
+			or frames.get_frame_count(&"idle") != 8
+			or frames.get_animation_speed(&"idle") != 4.0
+		):
+			fx.free()
+			fx = null
+	_wax_effect_spawned = fx != null
+	if fx != null:
+		fx.z_index = 0
+		move_child(fx, 0)
+		var fade := fx.create_tween()
+		fade.tween_interval(1.4)
+		fade.tween_property(fx, "modulate:a", 0.0, 0.5)
 	set_contact_enabled(false)
 	hurtbox.enabled = false
 	if is_instance_valid(lantern):
 		lantern.hurtbox.enabled = false
+
+
+func _spawn_death_effect(parent: Node) -> void:
+	if not _wax_effect_spawned:
+		super(parent)
 
 
 func _tick_death(delta: float) -> void:

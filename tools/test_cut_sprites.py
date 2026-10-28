@@ -572,5 +572,67 @@ class TextureCase(unittest.TestCase):
             img.close()
 
 
+
+class JoinedRowsTest(unittest.TestCase):
+    def test_native_alpha_join_order_metadata_and_reproducibility(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            image = np.zeros((240, 480, 4), np.uint8)
+            for row in range(2):
+                for col in range(4):
+                    x, y = 30 + col * 110, 20 + row * 110
+                    w = 30 + row * 8
+                    image[y:y + 35, x:x + w] = (20 + (row * 4 + col) * 25, 70, 90, 255)
+                    image[y - 1, x:x + w] = (20 + (row * 4 + col) * 25, 70, 90, 100)
+            Image.fromarray(image, "RGBA").save(root / "s.png")
+            output = {"file": "joined", "kind": "wax", "anim": "idle", "rows": [0, 1],
+                      "scale": "shared", "fps": 4, "loop": False}
+            manifest = {"defaults": {}, "scale_groups": {"shared": {"measure": "fit", "value": [60, 60],
+                         "ref": [{"sheet": "s", "row": 0}, {"sheet": "s", "row": 1}]}},
+                        "kinds": {"wax": {"cell": [96, 96], "align": "center", "anchor": [48, 48]}},
+                        "sheets": {"s": {"input_mode": "native_alpha", "rows": [
+                            {"poses": 4, "outputs": []}, {"poses": 4, "outputs": []}],
+                            "joined_outputs": [output]}}}
+            done, _, errors = cut.run(manifest, root, root / "out", root / "proof", ["s"])
+            self.assertEqual((done, errors), (["s"], []))
+            path = root / "out/joined.png"
+            original = path.read_bytes()
+            pixels = np.asarray(Image.open(path))
+            self.assertEqual(pixels.shape, (96, 768, 4))
+            self.assertTrue(np.any((pixels[..., 3] > 0) & (pixels[..., 3] < 255)))
+            for idx in range(8):
+                cell = pixels[:, idx * 96:(idx + 1) * 96]
+                visible = cell[cell[..., 3] == 255]
+                self.assertTrue(np.any(visible[:, 0] == 20 + idx * 25))
+            # Compare against separately built rows: their pixels, order, alpha and
+            # common scale must be exactly the same as the joined animation.
+            import copy
+            separate = copy.deepcopy(manifest)
+            del separate["sheets"]["s"]["joined_outputs"]
+            for row in range(2):
+                separate["sheets"]["s"]["rows"][row]["outputs"] = [{
+                    "file": f"row{row}", "kind": "wax", "anim": f"row{row}",
+                    "scale": "shared", "fps": 4, "loop": False}]
+            _, _, errors = cut.run(separate, root, root / "separate", root / "separate-proof", ["s"])
+            self.assertEqual(errors, [])
+            expected = np.concatenate([np.asarray(Image.open(root / f"separate/row{r}.png"))
+                                       for r in range(2)], axis=1)
+            np.testing.assert_array_equal(pixels, expected)
+            def opaque_width(index):
+                ys, xs = np.where(pixels[:, index * 96:(index + 1) * 96, 3] == 255)
+                return xs.max() - xs.min() + 1
+            self.assertGreater(opaque_width(4), opaque_width(0))
+            record = json.loads((root / "out/sprites.json").read_text())["wax"]["animations"]["idle"]
+            self.assertEqual((record["frames"], record["fps"], record["loop"]), (8, 4, False))
+            cut.run(manifest, root, root / "out", root / "proof", ["s"])
+            self.assertEqual(path.read_bytes(), original)
+            output["scale"] = {"measure": "fit", "value": [60, 60]}
+            _, _, errors = cut.run(manifest, root, root / "bad", root / "bad-proof", ["s"])
+            self.assertTrue(any("named shared scale group" in e for e in errors))
+            output["scale"] = "shared"
+            output["rows"] = [0, 0]
+            _, _, errors = cut.run(manifest, root, root / "bad", root / "bad-proof", ["s"])
+            self.assertTrue(any("distinct valid row indices" in e for e in errors))
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -972,7 +972,7 @@ def owned_anims(manifest: dict, sheet: str) -> set[tuple[str, str]]:
     sdef = manifest["sheets"][sheet]
     if sdef.get("type") == "texture":
         return {(sdef["output"], "idle")}
-    return {(o["kind"], o["anim"]) for row in sdef["rows"] for o in row["outputs"]}
+    return {(o["kind"], o["anim"]) for row in sdef["rows"] for o in row["outputs"]} | {(o["kind"], o["anim"]) for o in sdef.get("joined_outputs", [])}
 
 
 def build_sprites_json(manifest: dict, existing: dict, results: list[OutputResult], textures: dict, done: list[str]) -> dict:
@@ -1005,6 +1005,8 @@ def build_sprites_json(manifest: dict, existing: dict, results: list[OutputResul
         for row in sdef["rows"]:
             for o in row["outputs"]:
                 anim_order.setdefault(o["kind"], []).append(o["anim"])
+        for o in sdef.get("joined_outputs", []):
+            anim_order.setdefault(o["kind"], []).append(o["anim"])
     data: dict = {}
     for kind in order:
         kdef = manifest["kinds"][kind]
@@ -1106,6 +1108,27 @@ def cut_sheet(name: str, ctx: Context, out_dir: Path, proof_dir: Path) -> list[O
             for note in out.notes:
                 print(f"  note: {out.name}: {note}")
             results.append(out)
+    # An animation may span source rows. Build every row with the same named scale
+    # group, then concatenate already aligned cells in explicit temporal order.
+    for out_def in sdef.get("joined_outputs", []):
+        rows = out_def.get("rows")
+        if (not isinstance(rows, list) or not rows
+                or any(type(r) is not int or r < 0 or r >= len(sheet.rows) for r in rows)
+                or len(set(rows)) != len(rows)):
+            raise CutError(f"sheet {name}: joined output rows must be distinct valid row indices")
+        if not isinstance(out_def.get("scale"), str) or out_def["scale"] not in ctx.manifest["scale_groups"]:
+            raise CutError(f"sheet {name}: joined output requires a named shared scale group")
+        kdef = ctx.manifest["kinds"][out_def["kind"]]
+        pieces = [build_output(out_def, kdef, ctx, sheet, r) for r in rows]
+        out = pieces[0]
+        for piece in pieces[1:]:
+            out.frames.extend(piece.frames)
+            out.shadow_widths.extend(piece.shadow_widths)
+            out.notes.extend(piece.notes)
+        write_strip(out_dir / f"{out.name}.png", out.frames)
+        for note in out.notes:
+            print(f"  note: {out.name}: {note}")
+        results.append(out)
     proof_for_outputs(sheet, results, proof_dir / f"{name}_proof.png")
     return results
 

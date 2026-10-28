@@ -1767,3 +1767,23 @@ A game sprite effect sheet with genuine transparent background and transparent e
 
 Generic miniboss death effect, usable for many radically different creatures: an abstract, irregular mass of pale cream wax fragments and deep dusk-violet shadow collapsing and dissolving. It must not depict or imply any figure, anatomy, body, head, face, limbs, clothing, armor, character, creature silhouette, object, or recognizable identity. Painterly semi-transparent violet smoke and shadows, soft natural alpha edges, restrained violet inner glow; no floor or cast shadow. Six distinct successive stages of the same effect: 1 compact wax fragments and shadow knot; 2 knot contracts and breaks apart; 3 wax pieces fall inward as shadow spreads; 4 low irregular wax puddle and thinning shadow; 5 smaller wax streaks and faint wisps; 6 a few tiny fading translucent violet wisps and wax flecks, almost gone. Show a coherent collapse and dissipation, with consistently aligned centers, no repeated poses. No magenta or green key background, no checkerboard, no explosion, no radial blast, no fire, no blood. Landscape 1536 by 1024.
 ```
+
+
+## Z1 The Unlit boss death wax, 2026-10-28
+
+`tools/source_art/fx_boss_death_wax_z1.png` is the unchanged 1774×887 output
+of the built-in image_gen tool with `transparent_background=false`, session
+`01a18355-4a0b-7ad1-9188-83c0519cd410`, output
+`exec-938669d2-d18d-4780-984a-b613b71c4967.png`, SHA-256
+`f7a0a6c3a2eb76403fbaa6c0583693301151448fa39033c61af543551c03283a`.
+No reference image was used. The green-key cutter uses a soft [28, 110] distance
+ramp, measured key [2, 250, 2], 20 px crop padding and no speck removal. One
+500×500 fit scale covers both rows; eight centred 768×768 frames play at 4 fps.
+The strip SHA-256 is `d700ec23c8449634bfdff41d4808a62692252c7857862de46bf65356fd9ca37c`.
+The keyed source has clear matte gaps; the proof and in-room study show bright,
+glossy wax, and some late puddle details retain a greenish tint. The heart and
+lantern can obscure the effect. The exact prompt follows.
+
+```text
+Original game art for Wickwarden, a painterly top-down action-adventure. Asset: eight sequential frames of one abstract boss-death wax collapse on a perfectly flat uniform solid pure green #00FF00 background, with no variation, texture, shadows, checkerboard or gradient in the background. Arrange exactly 8 separate complete poses as 4 columns by 2 rows, time order left to right on top row then left to right on bottom row. Place each pose comfortably inside its own area, with very wide clear uninterrupted green gutters between every neighboring pose and between rows, nothing touching, overlapping or clipped. Same three-quarter top-down viewpoint and shared scale throughout. A low soft irregular mass of pale ivory and muted dusk-violet wax, no rocks, no stone, no figure, no face, no candles, no fire, no blood. Frame 1 a rounded cohesive wax mound; 2 visibly drooping; 3 sagging and spreading; 4 halfway melted; 5 low wide slumped wax; 6 spreading puddle; 7 thinning puddle; 8 fading tiny remnants. Hand-painted storybook brushwork with soft edges, gentle warm upper-left lamplight and cool violet shadows. The green is only the background and never appears in the wax. No cast shadows on the background, no text, grid lines, borders, symbols, watermark or extra objects.
+```

@@ -1,4 +1,24 @@
 {
+  "fx_boss_death_wax_z1": {
+    "cell": [
+      768,
+      768
+    ],
+    "anchor": [
+      384.0,
+      384.0
+    ],
+    "mirror_side": false,
+    "centered": true,
+    "animations": {
+      "idle": {
+        "file": "res://assets/sprites/fx_boss_death_wax_z1_idle.png",
+        "frames": 8,
+        "fps": 4.0,
+        "loop": false
+      }
+    }
+  },
   "miniboss_death_wax_z1": {
     "cell": [
       256,
