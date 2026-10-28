@@ -211,12 +211,21 @@ Cinder Wisp windup was documented in
 `d82b9553c612bd2575878ebee6416a7f4a2b27f9` on `origin/main`.
 The Snapper prototype was documented in
 `1858b014a2bba936e89271822f172078d974fa6f` on `origin/main`.
+Snapper direction-candidate review followed in
+`5c1751c0f6546da97fb566cccb2fb0e02760f5c7` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Mirror Shade World audit, 2026-10-28:** Actual `cave_5_1` with natural AI,
+a placed, protected player, real Glow Jar and player hook produced
+`/var/tmp/wick-m5-shade/unlit.png`, `revealed.png` and `echo.png` in that
+directory. State confirms an active echo for 0.12 seconds, but no strike effect
+is visible; two shadows and overlap limit the observation. Painted source poses
+exist uncut and pipeline work is in progress. No runtime change or human play.
 
 **Rejected Snapper up candidate, 2026-10-28:** The ImageGen candidate
 `/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-a0629151-d909-4eec-be52-46417083e334.png`
