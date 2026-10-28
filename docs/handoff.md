@@ -298,12 +298,24 @@ Cinder cue documentation followed in `8d5d529`; the Mirror Warden active slash
 landed in `f8da3e52f667c9439cf5509b30eed1de4be388cb` on `origin/main`.
 Mirror slash documentation followed in `c7a6408`; painted takeoff dust landed
 in `7d7ba77f83667467dedddf3e83fb6f2ae8cdc779` on `origin/main`.
+Skitter Boots documentation followed in `a7aec9f`; the painted sling cast cue
+landed in `bd2ab68222c29b8e5e9d4dde17ea1d40b9fc4d85` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Tallow Sling cast cue, committed in `bd2ab68`:** The cue reuses the existing
+documented Cinder image with a shader for a neutral soft trail; game mechanics
+are unchanged and missing art falls back. The lead passed ten relevant test
+files; the agent reports lint PASS. Controlled captures at
+`/var/tmp/wick-sling-review/integrated/contact.png` cover four directions in
+actual `ow_1_1` and `cave_1_5` with a protected, placed player. They do not
+verify human play or motion; upward can resemble smoke and capture reported
+resource warnings. A clean full `make check` on exact `bd2ab68` passed (exit 0);
+log `/var/tmp/wick-clean-bd2ab68-ex84r0kl/check.log`. It is the latest full check.
 
 **Skitter Boots takeoff dust, committed in `7d7ba77`:** The geometric cue is
 replaced by painted start-only dust fixed in World, fading over 0.3 seconds when
@@ -313,7 +325,8 @@ and lead passed six targeted suites and `art-test` (25); the agent reports lint
 PASS. Controlled actual `cave_7_4` stills show a subtle puff in darkness, not
 human or motion verification; capture reported ObjectDB and resource warnings.
 A clean full `make check` on exact `7d7ba77` passed; log
-`/var/tmp/wick-clean-7d7ba77-zypvp3aq/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-7d7ba77-zypvp3aq/check.log`. The later clean `bd2ab68`
+full check is recorded above.
 
 **Mirror Warden active slash, committed in `f8da3e5`:** The active slash reuses
 painted `mirror_tell_z1`, with a broader glint than TELL and a thin geometric

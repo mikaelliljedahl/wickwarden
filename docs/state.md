@@ -1,5 +1,15 @@
 # Current status
 
+**Tallow Sling cast cue, 2026-10-28 (committed in `bd2ab68`):** The cue reuses
+the existing documented Cinder image with a shader for a neutral soft trail;
+game mechanics are unchanged and missing art falls back. The lead passed ten
+relevant test files; the agent reports lint PASS. Controlled captures at
+`/var/tmp/wick-sling-review/integrated/contact.png` cover four directions in
+actual `ow_1_1` and `cave_1_5` with a protected, placed player. They do not
+verify human play or motion; upward can resemble smoke and capture reported
+resource warnings. A clean full `make check` on exact `bd2ab68` passed (exit 0);
+log `/var/tmp/wick-clean-bd2ab68-ex84r0kl/check.log`. It is the latest full check.
+
 **Skitter Boots takeoff dust, 2026-10-28 (committed in `7d7ba77`):** The
 geometric cue is replaced by painted start-only dust fixed in World, fading over
 0.3 seconds when actual motion starts. Denied jumps and artificial landings do
@@ -8,7 +18,8 @@ are included. Agent and lead passed six targeted suites and `art-test` (25);
 the agent reports lint PASS. Controlled actual `cave_7_4` stills show a subtle
 puff in darkness, not human or motion verification; capture reported ObjectDB
 and resource warnings. A clean full `make check` on exact `7d7ba77` passed; log
-`/var/tmp/wick-clean-7d7ba77-zypvp3aq/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-7d7ba77-zypvp3aq/check.log`. The later clean `bd2ab68`
+full check is recorded above.
 
 **Mirror Warden active slash, 2026-10-28 (committed in `f8da3e5`):** The active
 slash reuses painted `mirror_tell_z1`, with a broader glint than TELL and a thin
@@ -2704,7 +2715,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `7d7ba77f83667467dedddf3e83fb6f2ae8cdc779` on `origin/main`, including painted Skitter Boots takeoff dust above. The latest clean full check is at `7d7ba77`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `bd2ab68222c29b8e5e9d4dde17ea1d40b9fc4d85` on `origin/main`, including the painted Tallow Sling cast cue above. The latest clean full check is at `bd2ab68`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
