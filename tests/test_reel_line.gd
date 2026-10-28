@@ -7,9 +7,12 @@ const RING_SCENE := "res://scenes/world/anchor_ring.tscn"
 const PIT_SCENE := "res://scenes/world/pit.tscn"
 const REELABLE_SCENE := "res://scenes/world/reelable.tscn"
 const START := Vector2(300, 500)
+const TIP_SCENE := "res://scenes/items/reel_tip.tscn"
 
 
 func run() -> void:
+	await _tip_accent_tracks_art()
+	await _tip_accent_missing_art()
 	await _rope_texture_and_fallback()
 	await _held_rope_tracks_origin()
 	await _refuses_a_second_line()
@@ -48,6 +51,51 @@ func _make(parent: Node, scene_path: String, at: Vector2) -> Variant:
 	return node
 
 
+func _tip_accent_tracks_art() -> void:
+	reset_state()
+	var arena := make_arena()
+	var tip: Variant = _make(arena, TIP_SCENE, START)
+	await frames(2)
+	var visual := tip.get_node_or_null("Visual") as SpriteVisual
+	check(visual != null, "tip uses painted art")
+	if visual == null:
+		await dispose(arena)
+		return
+	var accent := visual.get_node_or_null("TipAccent") as Sprite2D
+	check(accent != null, "painted tip has an accent")
+	if accent == null:
+		await dispose(arena)
+		return
+	visual.pause()
+	for frame_index in range(visual.sprite_frames.get_frame_count(visual.animation)):
+		visual.frame = frame_index
+		check_eq(
+			accent.texture,
+			visual.sprite_frames.get_frame_texture(visual.animation, frame_index),
+			"accent follows each painted frame"
+		)
+		check_eq(accent.offset, visual.offset, "accent matches the painted anchor")
+	tip.launch(make_player(arena, START), Vector2(1, 1))
+	check_near(visual.rotation, PI * 0.5, 0.001, "accent inherits tip direction")
+	check_eq(accent.get_parent(), visual, "accent rotates with the painted visual")
+	await dispose(arena)
+
+
+func _tip_accent_missing_art() -> void:
+	reset_state()
+	SpriteVisual.use_manifest("res://tests/missing_tip_manifest.json")
+	var arena := make_arena()
+	var tip: Variant = _make(arena, TIP_SCENE, START)
+	await frames(2)
+	var visual: Node = tip.get_node_or_null("Visual")
+	check(visual != null, "missing art keeps the placeholder visual")
+	check(not visual is SpriteVisual, "missing art does not create a painted accent")
+	if visual != null:
+		check(visual.get_node_or_null("TipAccent") == null, "no accent is drawn over a placeholder")
+	await dispose(arena)
+	SpriteVisual.use_manifest(SpriteVisual.DEFAULT_MANIFEST)
+
+
 func _rope_texture_and_fallback() -> void:
 	reset_state()
 	var arena := make_arena()
@@ -79,9 +127,7 @@ func _held_rope_tracks_origin() -> void:
 	var arena := make_arena()
 	var player := make_player(arena, START)
 	_make(arena, RING_SCENE, START + Vector2(300, 0))
-	var scene := load("res://scenes/items/reel_tip.tscn") as PackedScene
-	var tip: Variant = scene.instantiate()
-	arena.add_child(tip)
+	var tip: Variant = _make(arena, TIP_SCENE, START)
 	await frames(2)
 	tip.launch(player, Vector2.RIGHT)
 	await seconds(0.3)

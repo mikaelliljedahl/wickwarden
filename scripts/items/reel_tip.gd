@@ -29,6 +29,24 @@ class RopeAccent extends Node2D:
 			x += width
 		draw_set_transform(Vector2.ZERO)
 
+
+# Follow the painted animation rather than drawing a separate geometric marker.
+class TipAccent extends Sprite2D:
+	var source: AnimatedSprite2D
+
+	func _ready() -> void:
+		source = get_parent() as AnimatedSprite2D
+		source.frame_changed.connect(_sync)
+		source.animation_changed.connect(_sync)
+		_sync()
+
+	func _sync() -> void:
+		texture = source.sprite_frames.get_frame_texture(source.animation, source.frame)
+		centered = source.centered
+		offset = source.offset
+		flip_h = source.flip_h
+		flip_v = source.flip_v
+
 signal anchored(ring: Node)
 signal returned
 
@@ -86,7 +104,15 @@ func _ready() -> void:
 	add_to_group(&"reel_tips")
 	add_circle(RADIUS)
 	_register_kinds()
-	SpriteVisual.attach(self, &"reel_tip", RADIUS)
+	var visual := SpriteVisual.attach(self, &"reel_tip", RADIUS) as SpriteVisual
+	if visual != null:
+		var accent := TipAccent.new()
+		accent.name = "TipAccent"
+		var tip_material := CanvasItemMaterial.new()
+		tip_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		accent.material = tip_material
+		accent.modulate = Color(1.0, 1.0, 1.0, 0.35)
+		visual.add_child(accent)
 	hit_landed.connect(_on_hit_landed)
 	_placed_pending = place_dir != Vector2.ZERO
 
