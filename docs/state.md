@@ -1,6 +1,22 @@
 # Current status
 
-**E1 ending-flow verification, 2026-10-28 (isolated fixtures):** Two separate
+**Cinder Wisp active attack, 2026-10-28 (committed in `7b25985`):** The attack
+reuses a painted fire ring with an outline marking its radius; mechanics are
+unchanged. The isolated `cinder_wisp` test and lint passed. Controlled-position
+captures were reviewed in a bright room and a dark cave, not human play. The
+Fen Leech placeholder remains and the full placeholder inventory is incomplete.
+
+**Placeholder census, 2026-10-28 (read-only):** An isolated scan of 222
+standalone room targets after four physics frames found 35 Placeholder nodes:
+31 visible in the tree and four hidden, including generic puffs. Tree visibility
+is not pixel proof, and this is not coverage of every state. At that census,
+Fen Leech bubble and Cinder Wisp `flame_ring` were visually confirmed; the later
+Wisp change is recorded above. Previously identified effects have been fixed or remain fallbacks, not
+a guarantee that all placeholders are resolved. Active phases, HUD, in-place
+pockets and human play are not fully reviewed. The temporary census is
+`/tmp/wick-placeholder-audit/report.json`.
+
+**E1 ending-flow verification, 2026-10-28 (fixtures; documented in `b59388c`):** Two separate
 fixture saves with boss flag and checkpoint used actual player inputs under the
 current confirm behavior through World → actual `ending.tscn` → credits → title
 → Continue → World. Each retained its correct exclusive ending flag, completed
@@ -1495,7 +1511,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `338e41fc9939b2b9d5ee1f3df4ea2f9832975e80` on `origin/main`, documenting the `make playthrough` evidence above. Credits, title return and the other ending remain unverified in the continuous route; the user response on the ending-choice conflict remains pending. The Fen Leech placeholder, Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `7b25985f52a6ea08663734e487c77636b8444a69` on `origin/main`, including the Cinder Wisp active attack presentation above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Fen Leech placeholder, Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
