@@ -1,12 +1,19 @@
 # Current status
 
+**Tidewick direct reset guard, 2026-10-28 (committed in `32b8654`):** Tests
+verify setup, living reset and dying reset/flag behavior. The lead passed
+`boss_base` and `boss_tidewick`; the agent reports lint PASS. A clean full
+`make check` on exact `03f0acf` passed (log
+`/var/tmp/wick-clean-03f0acf-xn2ihyou/check.log`); `32b8654` has not yet had a
+full check. MB3 source-art work has no confirmed delivery or current run status.
+
 **Briar Mother direct reset guard, 2026-10-28 (committed in `2b9dc05`):**
 Direct reset during death is guarded so eyes do not revive; the test uses real
 sling eye combat and a lethal hook hitbox, preserving two embers and living
 reset behavior. Lead and agent targeted tests passed; the agent reports lint
 PASS. The static B02 gallery is not a death-sequence review. The latest clean
-full check remains `c8465bc`; new MB3 source-art investigation is ongoing in
-scratch.
+later clean full check at `03f0acf` is recorded above. MB3 source-art delivery
+is not confirmed.
 
 **Choir Warden MB3 scratch review, 2026-10-28:** Inhale/recover-only body art
 shrinks versus walk: 230 px for walk and 177/178 px for action at 10% alpha.
@@ -34,11 +41,12 @@ dispatch and guards direct base-class reset; tests cover death progression,
 reward and Briar Mother. MB1 restores Captain bash/contact damage immediately
 and guards death; B01 guards Kilnkeeper direct reset and splits tests. All three
 targeted tests passed. A clean full `make check` on exact `c8465bc` passed;
-log `/var/tmp/wick-clean-c8465bc-z9f7ikmz/check.log`. This is the latest clean
-full check. Earlier documentation commit `59ac8d3` was also pushed.
+log `/var/tmp/wick-clean-c8465bc-z9f7ikmz/check.log`. The later clean `03f0acf`
+check is recorded above. Earlier documentation commit `59ac8d3` was also pushed.
 
 Direct subclass reset during death can still mutate subclass state in other
-overrides; no production use was found except Tidewick init. Thorn Warden hazard
+overrides; at that audit no production use was found except Tidewick init. The
+subsequent Tidewick guard is recorded above. Thorn Warden hazard
 remains active until `queue_free`, but damage has not been demonstrated; this
 remains open.
 
@@ -2480,7 +2488,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `2b9dc057f2fc417034bc5f840059f002179e5065` on `origin/main`, including the Briar Mother direct reset guard above. The latest clean full check is at `c8465bc`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `32b8654affef5425acde5978428b4235fdadadb9` on `origin/main`, including the Tidewick direct reset guard above. The latest clean full check is at `03f0acf`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

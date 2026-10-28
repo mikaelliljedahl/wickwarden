@@ -253,6 +253,8 @@ Streaming lifecycle review was documented in
 `e279442b1188d252961ce2974e6e116c73d82926` on `origin/main`.
 Choir Warden scale review followed in `0d15234`; B02's direct reset guard landed
 in `2b9dc057f2fc417034bc5f840059f002179e5065` on `origin/main`.
+Briar reset documentation followed in `03f0acf`; Tidewick's direct reset guard
+landed in `32b8654affef5425acde5978428b4235fdadadb9` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -260,12 +262,19 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Tidewick direct reset guard, committed in `32b8654`:** Tests verify setup,
+living reset and dying reset/flag behavior. The lead passed `boss_base` and
+`boss_tidewick`; the agent reports lint PASS. A clean full `make check` on exact
+`03f0acf` passed (log `/var/tmp/wick-clean-03f0acf-xn2ihyou/check.log`);
+`32b8654` has not yet had a full check. MB3 source-art work has no confirmed
+delivery or current run status.
+
 **Briar Mother direct reset guard, committed in `2b9dc05`:** Direct reset
 during death is guarded so eyes do not revive; the test uses real sling eye
 combat and a lethal hook hitbox, preserving two embers and living reset behavior.
 Lead and agent targeted tests passed; the agent reports lint PASS. The static B02
-gallery is not a death-sequence review. The latest clean full check remains
-`c8465bc`; new MB3 source-art investigation is ongoing in scratch.
+gallery is not a death-sequence review. The later clean full check at `03f0acf`
+is recorded above. MB3 source-art delivery is not confirmed.
 
 **Choir Warden MB3 scratch review, 2026-10-28:** Inhale/recover-only body art
 shrinks versus walk: 230 px for walk and 177/178 px for action at 10% alpha.
@@ -293,11 +302,12 @@ guards direct base-class reset; tests cover death progression, reward and Briar
 Mother. MB1 restores Captain bash/contact damage immediately and guards death;
 B01 guards Kilnkeeper direct reset and splits tests. All three targeted tests
 passed. A clean full `make check` on exact `c8465bc` passed; log
-`/var/tmp/wick-clean-c8465bc-z9f7ikmz/check.log`. This is the latest clean full
-check. Earlier documentation commit `59ac8d3` was also pushed.
+`/var/tmp/wick-clean-c8465bc-z9f7ikmz/check.log`. The later clean `03f0acf`
+check is recorded above. Earlier documentation commit `59ac8d3` was also pushed.
 
 Direct subclass reset during death can still mutate subclass state in other
-overrides; no production use was found except Tidewick init. Thorn Warden hazard
+overrides; at that audit no production use was found except Tidewick init. The
+subsequent Tidewick guard is recorded above. Thorn Warden hazard
 remains active until `queue_free`, but damage has not been demonstrated; this
 remains open.
 
