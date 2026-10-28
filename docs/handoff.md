@@ -191,12 +191,22 @@ Beam documentation followed in `93ad466`; Watcher Eye warning is at
 `0a2bffe11dd03b3dc782d361eb6d43344227d43a` on `origin/main`.
 Warning documentation followed in `1221684`; integrated Z1 test isolation is
 at `70d229d257737f0d8f302bdb54ee242448028006` on `origin/main`.
+Z1 verification documentation followed in
+`a82f678c6701fcd2aaad67b148f62cb76c273970` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Watcher Eye open-state review, 2026-10-28:** The open state looks closed in
+actual AI gameplay at `ow_5_6` (`/var/tmp/wick-regular-audit/eye-open-overworld.png`).
+Down/side cutting proofs in `/var/tmp/wick-watcher-proof-HkQk0n/` are promising,
+but the animation has not been reviewed during play and an up-facing source is
+missing. A new ImageGen candidate at
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-65898650-1ca0-4938-8be0-a2cc6a492966.png`
+was independently rejected: its gaze is frontal, not upward. It is not used.
 
 **Integrated Z1 test isolation and clean check, 2026-10-28 (committed in
 `70d229d`):** A clean git archive of exact
