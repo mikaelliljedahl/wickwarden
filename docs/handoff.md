@@ -340,14 +340,31 @@ passed a clean full check. Final playthrough documentation `fc14d7a` is on
 `45bf2e6`, Hollow Captain poses `8487acf` and documentation `f8ad56a` are on
 `origin/main`. Choir Warden poses `aa0f9a2` and their documentation `aa0361c`
 are on `origin/main`; their clean full check passed. Shell animation-gap
-documentation `3bcabd3` and Coinwyrm study `4fbed38` are on `origin/main`.
-Verify the remote before push.
+documentation `3bcabd3`, Coinwyrm study `4fbed38` and shell-study documentation
+`c298322` are on `origin/main`. Q7 test `070bfe3` is locally committed; its
+clean full check passed. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 B10 tool victory, locally committed in `070bfe3`:** Real tools and natural
+phases lead through three Reel contacts and hook attacks to the victory flag;
+the isolated matrix passed 2104 checks. The player is placed and invulnerable,
+ammunition is granted, and this is not human play. A clean full `make check`
+passed on exact `070bfe3` (exit 0): 161 Godot test files, lint, world-check and
+175 Python tests. Log `/var/tmp/wick-clean-070bfe3-kg54dsw0/check.log`; this is
+the latest clean full PASS.
+
+**Q6 C10 longer soak, isolated scratch:** Two runs passed 5221 checks, each
+sampling 30 simulated seconds per room across 15 C10 targets with a protected
+player. Enemy centres are sampled every 0.5 seconds against room boundaries and
+known solids; the Unlit eye orbit is checked separately. Room starts are
+controlled; this does not prove continuous full-body containment, economy or
+human balance/play. Log `/var/tmp/wick-q6-long-Ox5mkZ/soak-verbose.log`; this
+scratch result is not a committed production change.
 
 **Coinwyrm directional bite scratch study, `3bcabd3`:** Side and upward bite
 poses and image trials remain isolated scratch, not approved or integrated.
@@ -384,8 +401,8 @@ IDs and hashes are recorded in `docs/art-provenance.md` and
 `route_cave_6`, `sprite_visual`, lint and 26 art tests passed with the known
 ResourceWarning; 18 PNGs recut byte-identically. A clean full `make check` on
 exact `aa0f9a2` passed (exit 0): 161 Godot test files, lint, world-check and
-175 Python tests. Log `/var/tmp/wick-clean-aa0f9a2-ld761w0b/check.log`; this
-is the latest clean full PASS.
+175 Python tests. Log `/var/tmp/wick-clean-aa0f9a2-ld761w0b/check.log`; the
+later clean full PASS at `070bfe3` is recorded above.
 
 Actual `cave_6_4` stills at
 `/var/tmp/wick-choir-z1-final/{down,up,left,right}-{1,2,3}.png` used a placed,
