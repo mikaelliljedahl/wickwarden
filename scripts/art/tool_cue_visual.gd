@@ -4,7 +4,12 @@ extends Node2D
 
 const SEGMENTS := 48
 const BANDS := 8
+const CINDER_ART := "res://assets/sprites/fx_cinder_cast_z1.png"
+const CINDER_WIDTH := 82.0
 
+var art_path: String = CINDER_ART
+var _kind: StringName
+var _painted: Sprite2D
 var _shape: String = "arc"
 var _radius: float = 28.0
 var _colour: Color = Color.WHITE
@@ -19,6 +24,7 @@ static func attach(parent: Node, kind: StringName, facing: Vector2) -> Node2D:
 	var visual := script.new() as Node2D
 	var definition := Placeholder.definition_of(kind)
 	visual.name = Placeholder.VISUAL_NAME
+	visual.set(&"_kind", kind)
 	visual.set(&"_shape", String(definition.get("shape", "arc")))
 	visual.set(&"_radius", float(definition.get("radius", 28.0)))
 	visual.set(&"_colour", definition.get("color", Color.WHITE))
@@ -35,12 +41,33 @@ func _ready() -> void:
 	var blend := CanvasItemMaterial.new()
 	blend.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	material = blend
+	if _kind == &"cinder_wick" and ResourceLoader.exists(art_path):
+		var texture := load(art_path) as Texture2D
+		if texture != null and texture.get_width() > 0:
+			_painted = Sprite2D.new()
+			_painted.name = "CinderCast"
+			_painted.texture = texture
+			_painted.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			_painted.scale = Vector2.ONE * CINDER_WIDTH / float(texture.get_width())
+			add_child(_painted)
+			_place_painted()
 
 
 func set_facing(direction: Vector2) -> void:
 	if direction != Vector2.ZERO:
 		_facing = direction.normalized()
+	_place_painted()
 	queue_redraw()
+
+
+func _place_painted() -> void:
+	if _painted == null:
+		return
+	var hand := Vector2(38.0 if _facing == Vector2.UP else -38.0, -88.0)
+	if _facing.x != 0.0:
+		hand = Vector2(42.0 * signf(_facing.x), -88.0)
+	_painted.position = hand + _facing * 25.0
+	_painted.rotation = _facing.angle()
 
 
 func _process(delta: float) -> void:
@@ -51,6 +78,8 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
+	if _painted != null:
+		return
 	# Nested bands feather both radial edges; vertex alpha feathers the arc ends.
 	var span := deg_to_rad(110.0) if _shape == "arc" else TAU
 	var start := _facing.angle() - span * 0.5

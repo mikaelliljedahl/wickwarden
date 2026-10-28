@@ -8,6 +8,7 @@ const START := Vector2(300, 500)
 
 
 func run() -> void:
+	await _cast_visual_and_fallback()
 	await _refuses_a_second_flame()
 	await _rolls_its_full_reach_on_open_ground()
 	await _stops_at_a_wall()
@@ -28,6 +29,50 @@ func _flames() -> Array:
 func _use(player: Player) -> void:
 	player.facing = Vector2.RIGHT
 	GameState.acquire_item(&"cinder_wick")
+
+
+func _cast_visual_and_fallback() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, START)
+	await frames(2)
+	_use(player)
+	check(player.use_item(), "the painted cue starts with a real cast")
+	var item := _items()[0] as Node2D
+	var cue := item.get_node_or_null("Visual") as Node2D
+	check(cue != null, "the cast has a visual")
+	if cue != null:
+		var painted := cue.get_node_or_null("CinderCast") as Sprite2D
+		check(painted != null and painted.texture != null, "the cast loads its painted cue")
+		if painted != null:
+			for direction in [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]:
+				cue.call(&"set_facing", direction)
+				check_near(painted.rotation, direction.angle(), 0.001, "cue follows cast facing")
+		check(cue.visible, "cue is visible during the root")
+	await seconds(0.1)
+	check_eq(_flames().size(), 0, "the cue precedes the flame")
+	await seconds(0.2)
+	check_eq(_flames().size(), 1, "the flame launches after the root")
+	if cue != null:
+		check(not cue.visible, "the cue hides when the flame launches")
+	await dispose(arena)
+
+	var cue_script := load("res://scripts/art/tool_cue_visual.gd") as GDScript
+	if cue_script == null:
+		check(false, "tool cue script loads for fallback")
+		return
+	var fallback := cue_script.new() as Node2D
+	fallback.set(&"_kind", &"cinder_wick")
+	fallback.set(&"art_path", "res://missing-cinder-cast.png")
+	add_child(fallback)
+	check(fallback.get_node_or_null("CinderCast") == null, "missing art retains geometric fallback")
+	check(fallback.visible, "fallback visual remains visible")
+	fallback.queue_free()
+	var other := cue_script.new() as Node2D
+	other.set(&"_kind", &"tallow_sling")
+	add_child(other)
+	check(other.get_node_or_null("CinderCast") == null, "other tools keep their own cue")
+	other.queue_free()
 
 
 func _refuses_a_second_flame() -> void:

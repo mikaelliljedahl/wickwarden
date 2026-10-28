@@ -1412,6 +1412,7 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"fx_cinder_cast_z1": {"cell": [1086, 362], "align": "center", "texture": true},
 "chime_notes_z1": {"cell": [512, 512], "align": "center", "texture": true},
 "mirror_tell_z1": {"cell": [1086, 362], "align": "center", "texture": true},
 "reel_line_rope": {"cell": [96, 16], "align": "center", "texture": true},
@@ -2161,6 +2162,7 @@
  }
  },
  "sheets": {
+"fx_cinder_cast_z1": {"type": "texture", "output": "fx_cinder_cast_z1", "input_mode": "native_alpha", "size": [1086, 362]},
 "chime_notes_z1": {"type": "texture", "output": "chime_notes_z1", "input_mode": "native_alpha", "size": [512, 512]},
 "mirror_tell_z1": {"type": "texture", "output": "mirror_tell_z1", "input_mode": "native_alpha", "size": [1086, 362]},
 "reel_line_rope_v1": {"type": "texture", "output": "reel_line_rope", "input_mode": "keyed_crop", "key": "magenta", "crop": [380, 421, 1472, 603], "size": [96, 16], "seam_tolerance": 4},

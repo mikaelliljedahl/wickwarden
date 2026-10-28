@@ -1608,3 +1608,9 @@ The jet is cut through `tools/art_manifest.json` into the cutter-generated `asse
 | Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
 |---|---|---|---|---|---|
 | `mirror_tell_z1.png` | 2172×724 | `01a1822f-57bc-7273-9f4b-3845c421cee4` | `exec-44dcfc43-836a-444c-abb2-92aa800ed95f.png` | `3e41be7a0a390f48` | [mirror_tell_z1-log.md](../tools/source_art/mirror_tell_z1-log.md) |
+
+### Cinder cast, 2026-10-28
+
+| Source | Size | Session | ImageGen output | SHA-256 prefix | Log |
+|---|---|---|---|---|---|
+| `fx_cinder_cast_z1.png` | 2172×724 | `01a1822f-5808-7c52-a278-6bcdc4715bf1` | `exec-5b77914a-a8c2-4328-be36-30de7c4cacd2.png` | `05311a78c79ce164` | [fx_cinder_cast_z1-log.md](../tools/source_art/fx_cinder_cast_z1-log.md) |

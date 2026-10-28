@@ -1,0 +1,7 @@
+Source: built-in image_gen.imagegen, native transparent background.
+Session: 01a1822f-5808-7c52-a278-6bcdc4715bf1
+Original output: /home/mikael/.codex/generated_images/01a1822f-5808-7c52-a278-6bcdc4715bf1/exec-5b77914a-a8c2-4328-be36-30de7c4cacd2.png
+Original and source: PNG RGBA 2172 x 724; SHA-256 05311a78c79ce16494e504d3e6e4f4d58d53057a1324fe6831e2449c1a550c7e. Source copied byte-for-byte.
+Prompt: Use case: stylized-concept. Single VFX game asset on true transparent background. A short delicate brush-painted amber-gold casting glimmer: several thin wispy brushstrokes and a few tiny sparks, sweeping clearly from left to right, slightly tapering to the right. Very low, slender horizontally elongated streak with soft broken edges, like a brief glow near a lantern hand. Painterly natural fantasy game art, soft edges and subtly luminous, restrained brightness. Completely transparent surrounding area, one isolated effect. No flame shape, no fireball, no projectile, no solid glowing orb, no ring, no crescent, no geometric arrow, no character, no environment, no lettering, no checkerboard.
+Cut: `make art SHEETS=fx_cinder_cast_z1`; full canvas native_alpha texture, 1086 x 362, default seam tolerance 3, one uniform scale 0.5, no crop or alpha threshold. Runtime scales uniformly to 82 px canvas width and rotates along cast direction. The cue's lifetime is controlled by existing Cinder Wick code.
+Cut output SHA-256 10092018a59e27c2edbe894da6ead91dc4f59015b948650d79098b853dfc8ecc.
