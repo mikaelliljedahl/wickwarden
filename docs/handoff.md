@@ -195,12 +195,21 @@ Z1 verification documentation followed in
 `a82f678c6701fcd2aaad67b148f62cb76c273970` on `origin/main`.
 Watcher Eye animation investigation was documented in
 `534a812f20a5ba7e3598aee4040d3191be67342d` on `origin/main`.
+The Brine Crab visual audit followed in
+`a5fb2171f0f7c9c3fad556f25f21f736359c0ad9` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Rejected Brine Crab ImageGen candidate, 2026-10-28:** Independent proof in
+`/var/tmp/wick-crab-candidate-aCvf0g/` found idle 198 px and lunge 220 px wide
+against the binding 192 px cell, warning edge clipping and 17 px displacement,
+and body mismatch. The candidate
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-0ed57e65-d182-48d2-a79e-bfa5ac5ac171.png`
+was rejected, not integrated or verified as animation; up/down art remains absent.
 
 **Brine Crab action-art review, 2026-10-28:** State-confirmed actual World
 captures `/var/tmp/wick-m3-survey/warning.png` and `lunge.png` in that directory

@@ -1,5 +1,12 @@
 # Current status
 
+**Rejected Brine Crab ImageGen candidate, 2026-10-28:** Independent proof in
+`/var/tmp/wick-crab-candidate-aCvf0g/` found idle 198 px and lunge 220 px wide
+against the binding 192 px cell, warning edge clipping and 17 px displacement,
+and body mismatch. The candidate
+`/home/mikael/.codex/generated_images/01a17dc5-6801-7be1-b963-170ed1dc4e82/exec-0ed57e65-d182-48d2-a79e-bfa5ac5ac171.png`
+was rejected, not integrated or verified as animation; up/down art remains absent.
+
 **Brine Crab action-art review, 2026-10-28:** State-confirmed actual World
 captures `/var/tmp/wick-m3-survey/warning.png` and `lunge.png` in that directory
 show scaled idle with the same low claw. Scratch proofs in
@@ -2168,7 +2175,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `534a812f20a5ba7e3598aee4040d3191be67342d` on `origin/main`, documenting the Watcher Eye investigation above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `a5fb2171f0f7c9c3fad556f25f21f736359c0ad9` on `origin/main`, documenting the Brine Crab visual audit above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
