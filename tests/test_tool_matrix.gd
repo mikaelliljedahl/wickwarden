@@ -116,6 +116,7 @@ func run() -> void:
 	await _colossus_shard()
 	await _mirror_braziers()
 	await _dirge_chime()
+	await _dirge_natural_chime()
 	await _archivist_jar()
 	await _tidewick_raft()
 	await _unlit_tools()
@@ -2393,6 +2394,82 @@ func _dirge_chime() -> void:
 	await frames(8)
 	Input.action_release(&"attack")
 	check_eq(head.hp, 10, "Dirge: actual hook deals two to open head")
+	await dispose(arena)
+
+
+func _dirge_natural_chime() -> void:
+	reset_state()
+	var arena := make_arena()
+	var boss = make_enemy(arena, "res://scenes/enemies/bosses/dirge_choir.tscn", Vector2.ZERO)
+	var player := make_player(arena, Vector2(336, 620))
+	player.set_hurtbox_enabled(self, false)
+	for i in range(180):
+		if boss.heads.size() == 3 and boss.heads_active():
+			break
+		await frames(1)
+	check_eq(boss.heads.size(), 3, "Dirge: real three heads spawned")
+	check(boss.heads_active(), "Dirge: natural intro finishes")
+	if boss.heads.size() != 3:
+		await dispose(arena)
+		return
+	var head = boss.heads[0]
+	var hits: Array[StringName] = []
+	var damage: Array[int] = []
+	head.hurtbox.hurt.connect(func(hit: Hitbox) -> void: hits.append(hit.kind))
+	head.damaged.connect(func(amount: int) -> void: damage.append(amount))
+	for i in range(60):
+		if head.song_age >= 0.0:
+			break
+		await frames(1)
+	check(head.song_age >= 0.0 and head.song_age < 0.8, "Dirge: bass naturally begins warning")
+	check_eq(head.open_left, 0.0, "Dirge: humming head starts protected")
+	player.facing = Vector2.DOWN
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check(&"hook" in hits, "Dirge: actual hook contacts protected bass")
+	check_eq(head.hp, 12, "Dirge: protected bass rejects real hook damage")
+	for i in range(20):
+		if player.state == player.State.NORMAL:
+			break
+		await frames(1)
+	check_eq(player.state, player.State.NORMAL, "Dirge: hook recovery ends before chime")
+	_equip(player, &"lantern_chime")
+	check(player.use_item(), "Dirge: actual chime rings during natural warning")
+	for i in range(30):
+		if &"chime" in hits:
+			break
+		await frames(1)
+	check(&"chime" in hits, "Dirge: real wave contacts singing bass")
+	check(head.open_left > 3.8, "Dirge: timely chime opens bass")
+	check_eq(head.song_age, -1.0, "Dirge: real chime interrupts natural song")
+	check(head.songs.is_empty(), "Dirge: interrupted song hazards removed")
+	await frames(25)
+	player.facing = Vector2.DOWN
+	Input.action_press(&"attack")
+	await frames(8)
+	Input.action_release(&"attack")
+	check_eq(hits.count(&"hook"), 2, "Dirge: second real hook contacts open bass")
+	check_eq(damage, [2], "Dirge: only open hook deals two damage")
+	check_eq(head.hp, 10, "Dirge: opened bass takes actual hook damage")
+	for i in range(360):
+		if head.song_age >= 0.0 and head.deaf_left > 0.0:
+			break
+		await frames(1)
+	check(head.song_age >= 0.0, "Dirge: bass naturally sings again")
+	check(head.deaf_left > 0.0 and head.open_left == 0.0, "Dirge: repeat song occurs while deaf")
+	check(player.use_item(), "Dirge: actual chime rings during deaf song")
+	for i in range(35):
+		if hits.count(&"chime") >= 2:
+			break
+		await frames(1)
+	check_eq(hits.count(&"chime"), 2, "Dirge: second travelling chime contacts bass")
+	check(head.deaf_left > 0.0, "Dirge: deaf period remains during second contact")
+	check_eq(head.open_left, 0.0, "Dirge: deaf bass does not reopen")
+	check(head.song_age >= 0.0, "Dirge: deaf song is not interrupted")
+	check_eq(head.hp, 10, "Dirge: chime itself deals no damage")
+	print("MATRIX Dirge natural cycle: contacts=", hits, " damage=", damage,
+		" deaf_left=", head.deaf_left, " song_age=", head.song_age)
 	await dispose(arena)
 
 
