@@ -1,5 +1,14 @@
 # Current status
 
+**Reel Line tip readability, 2026-10-28 (committed in `32301d2`):** The existing
+tip `SpriteVisual` gains a faint alpha 0.35 unshaded copy of its current painted
+frame, synced and rotated; no copy is made for a placeholder. Controlled stills
+show actual flight, contact, HELD and RETRACT in light and dark with a placed
+player, not human or motion verification. The lead passed `reel_line` and
+`tool_matrix`; the agent reports lint PASS. A clean full `make check` on exact
+`32301d2` passed; log `/var/tmp/wick-clean-32301d2-2uc8jp9_/check.log`. It is
+the latest full check.
+
 **Reel Line painted rope, 2026-10-28 (committed in `5e51998`):** The geometric
 line is replaced by a 96×16 painted rope, with null fallback and unshaded 0.28
 painted accent for darkness. It reuses documented `reel_line_rope_v1` source
@@ -10,11 +19,13 @@ come through the cutter; no new generated source or provenance edit.
 Targeted `reel_line` and `tool_matrix` passed, as did `art-test` (25 tests, old
 ResourceWarning); the agent reports lint PASS. Agent time-step images show real
 ring-contact HELD, actual item drag and denied RETRACT in light/dark with placed
-player. The hook tip is weak in darkness; human play and full motion remain
-unverified. The lead's first pre-import test had null/script error/timeout;
+player. The hook tip was weak in darkness at that checkpoint; its subsequent
+readability change is above. Human play and full motion remain unverified. The
+lead's first pre-import test had null/script error/timeout;
 the test now has a null guard and import plus retest passed. A clean full
 `make check` on exact `5e51998` passed; log
-`/var/tmp/wick-clean-5e51998-gvu30wjn/check.log`. It is the latest full check.
+`/var/tmp/wick-clean-5e51998-gvu30wjn/check.log`. The later `32301d2` full check
+is recorded above.
 
 **Reel rope source review, 2026-10-28:** Original v1/v3 are RGB magenta,
 while the new native-alpha cutter requires RGBA and 6:1. Diagnostic keyed crops
@@ -2604,7 +2615,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `5e5199892151f898ecaf5bea54fbf30364da378b` on `origin/main`, including the painted Reel rope above. The latest clean full check is at `5e51998`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `32301d2a16f2118481a3a1a7be2e742e0fb029f3` on `origin/main`, including Reel tip readability above. The latest clean full check is at `32301d2`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
