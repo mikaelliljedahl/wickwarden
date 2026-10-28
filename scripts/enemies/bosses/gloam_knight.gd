@@ -38,19 +38,61 @@ class ArenaPit:
 
 class AttackVisual:
 	extends Node2D
+	var impact_texture: Texture2D
+	var wave_texture: Texture2D
+
+	func _ready() -> void:
+		var path := ""
+		if get_parent().kind == &"impact":
+			path = "res://assets/sprites/colossus_quake_z1_idle.png"
+		elif get_parent().kind == &"ring":
+			path = "res://assets/sprites/unlit_wax_wave_z1_idle.png"
+		if path != "" and ResourceLoader.exists(path):
+			var texture := load(path) as Texture2D
+			if get_parent().kind == &"impact":
+				impact_texture = texture
+			else:
+				wave_texture = texture
 
 	func _draw() -> void:
 		var attack = get_parent()
 		var color := Color(0.65, 0.5, 0.9, 0.65)
+		var edge := Color(0.83, 0.75, 1.0, 0.9)
 		if attack.kind == &"ring":
-			draw_arc(Vector2.ZERO, attack.radius(), 0, TAU, 64, color, 12)
+			var radius: float = attack.radius()
+			var inner := maxf(0.0, radius - 12.0)
+			var outer := radius + 12.0
+			if wave_texture != null and radius > 1.0:
+				for i in range(96):
+					var a := Vector2.from_angle(TAU * i / 96.0)
+					var b := Vector2.from_angle(TAU * (i + 1) / 96.0)
+					var points := PackedVector2Array([a * inner, b * inner, b * outer, a * outer])
+					var u := float(i) / 96.0
+					var v := float(i + 1) / 96.0
+					var uv := PackedVector2Array(
+						[Vector2(u, 0), Vector2(v, 0), Vector2(v, 1), Vector2(u, 1)]
+					)
+					draw_polygon(
+						points, PackedColorArray([Color(0.65, 0.53, 1.0)]), uv, wave_texture
+					)
+			else:
+				draw_arc(Vector2.ZERO, radius, 0, TAU, 64, color, 24)
+			if inner > 0.0:
+				draw_arc(Vector2.ZERO, inner, 0, TAU, 96, edge, 2.0)
+			draw_arc(Vector2.ZERO, outer, 0, TAU, 96, edge, 2.0)
 		elif attack.kind == &"slash":
 			var points := PackedVector2Array([Vector2.ZERO])
 			for i in range(25):
 				points.append(attack.direction.rotated(deg_to_rad(-60 + i * 5)) * 150)
 			draw_colored_polygon(points, color)
 		else:
-			draw_circle(Vector2.ZERO, 130, color)
+			if impact_texture != null:
+				draw_texture_rect(
+					impact_texture, Rect2(-130, -130, 260, 260), false, Color(0.65, 0.53, 1.0)
+				)
+			else:
+				draw_circle(Vector2.ZERO, 130, color)
+			draw_arc(Vector2.ZERO, 130, 0, TAU, 96, edge, 2.0)
 
 
 class Attack:

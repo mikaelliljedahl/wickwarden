@@ -138,6 +138,15 @@ class Note:
 
 class SongVisual:
 	extends Node2D
+	var note_texture: Texture2D
+
+	func _ready() -> void:
+		if get_parent().voice == 1:
+			note_texture = load("res://assets/sprites/treble_note_fly.png") as Texture2D
+			texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			var light := CanvasItemMaterial.new()
+			light.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+			material = light
 
 	func _draw() -> void:
 		var song: Node2D = get_parent()
@@ -154,10 +163,23 @@ class SongVisual:
 				64 if song.age >= 0.8 else 5
 			)
 		elif song.voice == 1:
-			var points := PackedVector2Array([Vector2.ZERO])
-			for step in range(17):
-				points.append(Vector2.from_angle(song.angle() - PI / 12 + step * PI / 96) * 720)
-			draw_colored_polygon(points, color)
+			var angle: float = song.angle()
+			if note_texture != null:
+				for i in range(5):
+					var distance := 120.0 + i * 140.0
+					var size := 60.0 + i * 32.0
+					draw_set_transform(Vector2.from_angle(angle) * distance, angle)
+					draw_texture_rect_region(
+						note_texture, Rect2(-size / 2, -size / 2, size, size),
+						Rect2(0, 0, 96, 96), Color(1, 1, 1, 0.85 if song.fired else 0.45)
+					)
+				draw_set_transform(Vector2.ZERO)
+			var edge := Color(1.0, 0.78, 0.43, 0.75 if song.fired else 0.45)
+			var left := angle - PI / 12
+			var right := angle + PI / 12
+			draw_line(Vector2.ZERO, Vector2.from_angle(left) * 720, edge, 2.0)
+			draw_line(Vector2.ZERO, Vector2.from_angle(right) * 720, edge, 2.0)
+			draw_arc(Vector2.ZERO, 720, left, right, 16, edge, 2.0)
 		else:
 			draw_arc(Vector2.ZERO, 64, 0, TAU, 48, color, 5)
 
