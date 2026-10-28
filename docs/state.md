@@ -1,12 +1,22 @@
 # Current status
 
+**Cinder Wisp windup, 2026-10-28 (committed in `0a1c45d`):** The white warning
+disc is replaced by a painted buildup and light-independent 150 px outline. The
+0.5-second duration, damage and mechanics are unchanged; the active attack stays
+separate. Isolated `test_cinder_wisp` and lint passed, including fallback and
+stun. Bright and dark actual-room captures froze a natural windup with a placed
+player; this is not human playtesting. An isolated `make check` passed on
+`0a1c45d`: 157 Godot test files including four playthrough shards, lint,
+world-check and 175 Python tests. A completed route is verified by test input
+using internal information, not human balance play. Full visual coverage of all
+possible states and E1's touch-versus-confirm specification conflict remain open.
+
 **Snapper and Choirling warnings, 2026-10-28 (committed in `19acc05`):** Both
 use painted warnings with clear edges; attack areas and timing are unchanged.
 Isolated `bramble_snapper`, `choirling`, `area_cave_6` and lint passed. Images
 used actual rooms with a placed player; Choirling was in a natural state, not
 human play. The Snapper capture reported resource warnings at exit, cause
-unknown. The Wisp warning is still being worked on. The latest full check was
-at `5536695` before this change.
+unknown. The later Wisp warning change and full check are recorded above.
 
 **Gloam Knight and Dirge Choir effects, 2026-10-28 (committed in `5536695`):**
 The Knight's landing and ring and the Choir's alto sector use painted effects
@@ -1593,7 +1603,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `19acc0541182b29cf42daa1db96e6ebbeefa8929` on `origin/main`, including the Snapper and Choirling warnings above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0a1c45de95a93fc45dd585fbb5b6d8b92163250f` on `origin/main`, including the Cinder Wisp windup above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

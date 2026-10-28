@@ -108,6 +108,8 @@ The Gloam Knight and Dirge Choir effects followed in
 `553669501f7d9d0b309fa0b4b12d482108195aed` on `origin/main`.
 The Snapper and Choirling warnings followed in
 `19acc0541182b29cf42daa1db96e6ebbeefa8929` on `origin/main`.
+The Cinder Wisp windup followed in
+`0a1c45de95a93fc45dd585fbb5b6d8b92163250f` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -115,13 +117,23 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Cinder Wisp windup, committed in `0a1c45d`:** The white warning disc is
+replaced by a painted buildup and light-independent 150 px outline. The
+0.5-second duration, damage and mechanics are unchanged; the active attack stays
+separate. Isolated `test_cinder_wisp` and lint passed, including fallback and
+stun. Bright and dark actual-room captures froze a natural windup with a placed
+player; this is not human playtesting. An isolated `make check` passed on
+`0a1c45d`: 157 Godot test files including four playthrough shards, lint,
+world-check and 175 Python tests. A completed route is verified by test input
+using internal information, not human balance play. Full visual coverage of all
+possible states and E1's touch-versus-confirm specification conflict remain open.
+
 **Snapper and Choirling warnings, committed in `19acc05`:** Both use painted
 warnings with clear edges; attack areas and timing are unchanged. Isolated
 `bramble_snapper`, `choirling`, `area_cave_6` and lint passed. Images used actual
 rooms with a placed player; Choirling was in a natural state, not human play.
-The Snapper capture reported resource warnings at exit, cause unknown. The Wisp
-warning is still being worked on. The latest full check was at `5536695` before
-this change.
+The Snapper capture reported resource warnings at exit, cause unknown. The later
+Wisp warning change and full check are recorded above.
 
 **Gloam Knight and Dirge Choir effects, committed in `5536695`:** The Knight's
 landing and ring and the Choir's alto sector use painted effects with thin
