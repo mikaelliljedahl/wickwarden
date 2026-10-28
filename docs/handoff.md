@@ -110,12 +110,32 @@ The Snapper and Choirling warnings followed in
 `19acc0541182b29cf42daa1db96e6ebbeefa8929` on `origin/main`.
 The Cinder Wisp windup followed in
 `0a1c45de95a93fc45dd585fbb5b6d8b92163250f` on `origin/main`.
+The intro art and Thorn Warden projectile presentation followed in
+`0b6f9ca46c990020dd87c48eb8f568b8de6e6ec8` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Intro and Thorn Warden presentation, committed in `0b6f9ca`:** Six previously
+missing active intro images were completed from earlier generated candidates,
+with provenance in `docs/art-provenance.md`; the actual intro was visually
+reviewed at accelerated speed. Thorn Warden projectiles use a painted lance
+instead of a diamond; natural emission in `cave_2_4` was reviewed with a placed
+player. Isolated import, `intro`, `thorn_warden`, `area_cave_2` and lint passed;
+this is not human play. A static asset audit found file resources for all 200
+manifest kinds, without covering all dynamic states. Isolated `make check`
+passed on `0b6f9ca`: 157 Godot test files including the full playthrough
+shards, lint, world-check and 175 Python tests. Human play, complete dynamic
+visual coverage and the ending-choice conflict remain open. A clean Linux export
+on `0b6f9ca` using official Godot 4.7.2 passed import, export and headless
+startup; its log includes all six intro PNG `.import` and ctex files, intro JSON
+and scene. The project intro was visually reviewed, not the exported intro, and
+audio was not tested. A direct scene override exited 1 because the release
+template does not support path overrides; this limits that method, not the
+headless startup result.
 
 **Cinder Wisp windup, committed in `0a1c45d`:** The white warning disc is
 replaced by a painted buildup and light-independent 150 px outline. The

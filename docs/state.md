@@ -1,5 +1,23 @@
 # Current status
 
+**Intro and Thorn Warden presentation, 2026-10-28 (committed in `0b6f9ca`):**
+Six previously missing active intro images were completed from earlier generated
+candidates, with provenance in `docs/art-provenance.md`; the actual intro was
+visually reviewed at accelerated speed. Thorn Warden projectiles use a painted
+lance instead of a diamond; natural emission in `cave_2_4` was reviewed with a
+placed player. Isolated import, `intro`, `thorn_warden`, `area_cave_2` and lint
+passed; this is not human play. A static asset audit found file resources for all
+200 manifest kinds, without covering all dynamic states. Isolated `make check`
+passed on `0b6f9ca`: 157 Godot test files including the full playthrough
+shards, lint, world-check and 175 Python tests. Human play, complete dynamic
+visual coverage and the ending-choice conflict remain open. A clean Linux export
+on `0b6f9ca` using official Godot 4.7.2 passed import, export and headless
+startup; its log includes all six intro PNG `.import` and ctex files, intro JSON
+and scene. The project intro was visually reviewed, not the exported intro, and
+audio was not tested. A direct scene override exited 1 because the release
+template does not support path overrides; this limits that method, not the
+headless startup result.
+
 **Cinder Wisp windup, 2026-10-28 (committed in `0a1c45d`):** The white warning
 disc is replaced by a painted buildup and light-independent 150 px outline. The
 0.5-second duration, damage and mechanics are unchanged; the active attack stays
@@ -1603,7 +1621,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `0a1c45de95a93fc45dd585fbb5b6d8b92163250f` on `origin/main`, including the Cinder Wisp windup above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `0b6f9ca46c990020dd87c48eb8f568b8de6e6ec8` on `origin/main`, including the intro and Thorn Warden presentation above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
