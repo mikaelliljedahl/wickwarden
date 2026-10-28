@@ -1,5 +1,39 @@
 # Current status
 
+**Lull sweep and Dirge bass ring, 2026-10-28 (committed in `f794562`):** Warm
+painted Lull active sweep and violet note-based Dirge ring reuse documented
+existing art with original geometric fallbacks; hitboxes and timing are
+unchanged. Lull retains exact 180°/140 px outline; Choir retains its 50° safe
+wedge and both ring edges. Lead and agent passed `lull_mauler` and
+`boss_dirge_choir`; the agent reports targeted lint PASS.
+
+Eight controlled dark Lull stills at `/dev/shm/wick-lull-integrated/*-active.png`
+used a placed, protected player and moved boss; warning lasted 36 physics frames
+and the geometric edge can overlap. First color conversion in scratch took
+about 27–28 ms and was then cached; no room-transition timing was measured.
+Choir natural attack stills at
+`/var/tmp/wick-bass-study/integrated-paint-dark-north-{0,1,2,3}.png` show four
+radii in `cave_6_11` with a placed, protected player. Chime resemblance, overlap
+and motion are not human-verified; fallback is very dark. Human play and motion
+remain unverified for both. A clean full `make check` on exact `f794562` passed
+(exit 0); log `/var/tmp/wick-clean-f794562-xy13nqw2/check.log`. It is the latest
+full check.
+
+**The Unlit chain-lash warning, 2026-10-28 (committed in `e205edb`):** A faint
+existing documented painted chain image replaces the warning color block, with
+the original block as fallback. The 96×768 boundary, 0.8-second timing and
+attack mechanics are unchanged. Lead and agent passed four matched test files
+for `boss_the_unlit`, `route_cave_10` and `reel_line`; the agent reports targeted
+lint PASS.
+
+Controlled actual `cave_10_14` stills at
+`/var/tmp/wick-lash-warning-study/integrated-{24,46,48}.png` use forced P3 and
+timer, a placed player and paused boss in one column; the dark warning may be
+confused with other chains. Fallback stills are `fallback-24/48` in that
+directory. Human play and motion are not verified. A clean full `make check` on
+exact `e205edb` passed; log `/var/tmp/wick-clean-e205edb-7xchgq3g/check.log`.
+The later clean full check at `f794562` is recorded above.
+
 **The Unlit lantern chains, 2026-10-28 (committed in `90c3e94`):** Painted
 links reuse a new documented ImageGen source, spaced from wall anchors with a
 clipped end link; fade remains and original lines are fallback. Gameplay is
@@ -13,8 +47,8 @@ show forced P3 with a placed, protected player and lantern y=288→576. P2/P3 we
 forced and death manually stepped; anchors and partial links are approximations.
 Some captures emitted resource warnings. This is not human play or continuous
 motion verification. A clean full `make check` on exact `90c3e94` passed (exit
-0); log `/var/tmp/wick-clean-90c3e94-0g6ef31_/check.log`. It is the latest full
-check.
+0); log `/var/tmp/wick-clean-90c3e94-0g6ef31_/check.log`. The later clean
+`e205edb` full check is recorded above.
 
 **Thorn Warden warning wreath, 2026-10-28 (committed in `0ed1b72`):** WALK and
 TELEGRAPH use a painted wreath and subtle warning light, with old lines as image
@@ -2772,7 +2806,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `90c3e949c427036ad287a63e51a6e41813f1be4f` on `origin/main`, including The Unlit lantern chains above. The latest clean full check is at `90c3e94`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `f7945622c08aecb1525c975424d0389414d29997` on `origin/main`, including Lull and Choir effects above. The latest clean full check is at `f794562`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
