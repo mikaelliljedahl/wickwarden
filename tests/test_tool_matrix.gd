@@ -2839,6 +2839,16 @@ func _unlit_tools() -> void:
 	check_eq(boss.phase, 3, "Unlit: three real flames burn shell away")
 	check_eq(boss.hp, 24, "Unlit: heart starts at 24 HP")
 	await seconds(1.3)
+	var heart_contacts: Array[bool] = []
+	var heart_damage: Array[int] = []
+	var reel_contacts: Array[StringName] = []
+	boss.hurtbox.hurt.connect(
+		func(hit: Hitbox) -> void:
+			if hit.kind == &"hook":
+				heart_contacts.append(boss.exposed_left > 0.0)
+	)
+	boss.damaged.connect(func(amount: int) -> void: heart_damage.append(amount))
+	boss.lantern.reeled.connect(func(hit: Hitbox) -> void: reel_contacts.append(hit.kind))
 	player.place_at(boss.global_position + Vector2(0, 108))
 	player.facing = Vector2.UP
 	Input.action_press(&"attack")
@@ -2860,5 +2870,39 @@ func _unlit_tools() -> void:
 	await frames(10)
 	Input.action_release(&"attack")
 	check_eq(boss.hp, 22, "Unlit: actual hook damages exposed heart")
-	print("MATRIX Unlit: sling eyes, wick shell, reel and hook heart")
+	check_eq(heart_contacts, [false, true], "Unlit: hooks contact shielded and exposed heart")
+	check_eq(heart_damage, [2], "Unlit: only exposed hook causes damage")
+	# Let the first pull expire without altering the fight's timer or phase.
+	for i in range(420):
+		if boss.exposed_left <= 0.0:
+			break
+		await frames(1)
+	check_eq(boss.exposed_left, 0.0, "Unlit: heart naturally reshields")
+	check_near(boss.lantern.global_position.distance_to(Vector2(960, 288)), 0.0, 0.5,
+		"Unlit: lantern returns to its hanging position")
+	player.place_at(boss.global_position + Vector2(0, 108))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(10)
+	Input.action_release(&"attack")
+	check_eq(heart_contacts, [false, true, false], "Unlit: hook contacts reshielded heart")
+	check_eq(boss.hp, 22, "Unlit: reshielded heart takes no hook damage")
+	check_eq(heart_damage, [2], "Unlit: reshielded contact adds no damage")
+	await seconds(0.4)
+	player.place_at(Vector2(960, 720))
+	player.facing = Vector2.UP
+	check(player.use_item(), "Unlit: second real reel launches")
+	await seconds(0.9)
+	check_eq(reel_contacts, [&"reel", &"reel"], "Unlit: both reel tips reach lantern")
+	check(boss.exposed_left > 0.0, "Unlit: second pull exposes heart again")
+	player.place_at(boss.global_position + Vector2(0, 108))
+	player.facing = Vector2.UP
+	Input.action_press(&"attack")
+	await frames(10)
+	Input.action_release(&"attack")
+	check_eq(heart_contacts, [false, true, false, true], "Unlit: hook contacts second exposure")
+	check_eq(heart_damage, [2, 2], "Unlit: each exposed hook causes two damage")
+	check_eq(boss.hp, 20, "Unlit: second exposure permits hook damage")
+	print("MATRIX Unlit heart: hook exposed=", heart_contacts, " damage=", heart_damage,
+		" reel contacts=", reel_contacts, " HP=", boss.hp)
 	await dispose(room)
