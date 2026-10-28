@@ -125,6 +125,10 @@ func _start_windup() -> void:
 	add_child(telegraph)
 	telegraph.connect(&"finished", _on_windup_finished)
 	telegraph.call(&"start")
+	if visual is SpriteVisual:
+		var sprite := visual as SpriteVisual
+		sprite.auto_motion = false
+		sprite.play_anim(&"swell")
 	# Keep the shared timer and its finished signal, but replace only its drawing.
 	telegraph.visible = false
 	_telegraph = telegraph
@@ -159,6 +163,10 @@ func _cancel_windup() -> void:
 	if visual != null:
 		visual.scale = Vector2.ONE
 		visual.modulate = Color.WHITE
+		if visual is SpriteVisual:
+			var sprite := visual as SpriteVisual
+			sprite.play_anim(&"idle")
+			sprite.auto_motion = true
 
 
 func _clear_warning_visual() -> void:

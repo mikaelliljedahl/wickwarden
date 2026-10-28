@@ -161,7 +161,11 @@ func _stun_cancels_the_windup() -> void:
 	await frames(2)
 	var before := GameState.health
 	await seconds(0.2)
+	var sprite := wisp.visual as SpriteVisual
+	check(sprite != null and sprite.animation == &"swell", "windup plays painted swell")
 	wisp.stun(1.5)
+	check(sprite != null and sprite.auto_motion, "stun restores automatic motion")
+	check(sprite != null and sprite.animation == &"idle", "stun restores idle animation")
 	await seconds(0.6)
 	check(
 		is_instance_valid(wisp) and not wisp.is_dead,
