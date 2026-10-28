@@ -106,6 +106,7 @@ func run() -> void:
 	await _kiln_wick()
 	await _choir_warden_moth()
 	await _automaton_moth()
+	await _automaton_live_jet_tools()
 	await _lurker_moth()
 	await _captain_moth()
 	await _lock_plate_tools()
@@ -1934,6 +1935,83 @@ func _automaton_moth() -> void:
 	await frames(8)
 	Input.action_release(&"attack")
 	check_eq(enemy.hp, 27, "Automaton: real hook deals two during stun")
+	await dispose(arena)
+
+
+func _automaton_live_jet_tools() -> void:
+	reset_state()
+	var arena := make_arena()
+	var enemy = make_enemy(
+		arena, "res://scenes/enemies/minibosses/wick_automaton.tscn", Vector2(800, 480)
+	)
+	var player := make_player(arena, Vector2(1200, 480))
+	player.set_hurtbox_enabled(self, false)
+	enemy.move_speed = 0
+	var hits: Array[StringName] = []
+	var hit_states: Array[int] = []
+	var stun_states: Array[int] = []
+	var damage: Array[int] = []
+	enemy.hurtbox.hurt.connect(func(hit: Hitbox) -> void:
+		hits.append(hit.kind)
+		hit_states.append(enemy.state)
+	)
+	enemy.stunned.connect(func(_seconds: float) -> void: stun_states.append(enemy.state))
+	enemy.damaged.connect(func(amount: int) -> void: damage.append(amount))
+	for i in range(300):
+		if enemy.state == enemy.State.TELL:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.TELL, "Automaton: natural jet warning begins")
+	player.place_at(enemy.global_position + Vector2(140, 0))
+	_equip(player, &"pitch_pot")
+	player.facing = Vector2.LEFT
+	GameState.add_pitch_pots(1)
+	check(player.use_item(), "Automaton: real pot placed during warning")
+	check_eq(GameState.pitch_pots, 0, "Automaton: real pot spends ammo")
+	for i in range(60):
+		if enemy.state == enemy.State.JET and is_instance_valid(enemy._jet) and enemy._jet.active:
+			break
+		await frames(1)
+	check_eq(enemy.state, enemy.State.JET, "Automaton: warning reaches natural live jet")
+	check(is_instance_valid(enemy._jet) and enemy._jet.active, "Automaton: real jet is active")
+	_equip(player, &"lantern_chime")
+	check(player.use_item(), "Automaton: actual chime rings into jet")
+	for i in range(25):
+		if &"chime" in hits:
+			break
+		await frames(1)
+	check(&"chime" in hits, "Automaton: travelling chime contacts hurtbox")
+	if &"chime" in hits:
+		check_eq(hit_states[hits.find(&"chime")], enemy.State.JET, "Automaton: chime hits live jet")
+	check_eq(enemy.state, enemy.State.JET, "Automaton: chime does not interrupt jet")
+	check(not enemy.is_stunned(), "Automaton: chime does not stun")
+	check_eq(enemy.hp, 30, "Automaton: chime deals no damage")
+	player.place_at(enemy.global_position + Vector2(190, 0))
+	_equip(player, &"tether_moth")
+	player.facing = Vector2.LEFT
+	check(player.use_item(), "Automaton: actual moth launched into live jet")
+	for i in range(35):
+		if enemy.is_stunned():
+			break
+		await frames(1)
+	check(&"stun" in hits, "Automaton: travelling moth contacts hurtbox")
+	check(enemy.is_stunned(), "Automaton: moth stuns during jet")
+	check_eq(stun_states, [enemy.State.JET], "Automaton: stun starts in live jet state")
+	check_eq(enemy.state, enemy.State.VENT, "Automaton: moth opens vent")
+	check(not is_instance_valid(enemy._jet), "Automaton: moth removes active jet")
+	check_near(enemy._stun_time, 1.5, 0.08, "Automaton: moth stun is clamped")
+	for i in range(100):
+		if &"explosion" in hits:
+			break
+		await frames(1)
+	check(&"explosion" in hits, "Automaton: placed pot explosion contacts hurtbox")
+	if &"explosion" in hits:
+		check_eq(hit_states[hits.find(&"explosion")], enemy.State.VENT, "Automaton: explosion hits open vent")
+	check(enemy.is_stunned(), "Automaton: pot lands during moth opening")
+	check_eq(damage, [4], "Automaton: actual pot deals four damage")
+	check_eq(enemy.hp, 26, "Automaton: real explosion damages brass")
+	check(not is_instance_valid(enemy._jet), "Automaton: interrupted jet does not resume")
+	print("MATRIX Automaton live jet: contacts=", hits, " states=", hit_states, " damage=", damage)
 	await dispose(arena)
 
 
