@@ -201,12 +201,25 @@ The rejected crab candidate was documented in `12a8ce1`; Fen Leech direction
 landed in `b8c8a4c2856ec027eb2fd4b72149ad9fad4abc58` on `origin/main`.
 Fen Leech and streaming results were documented in
 `95c72ae88d7c10dcbbae3b8616609dcd3149a95b` on `origin/main`.
+Clean-check documentation followed in `afc3c39`; Bramble Snapper's active bite
+is at `1cd150cac9d2f22977096adc68d77affcc8b6529` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Bramble Snapper active bite, committed in `1cd150c`:** The previously
+invisible active bite retains the existing painted `thorn_hedge` warning for
+0.15 seconds, with an orange sector boundary and unshaded rendering; timing,
+damage and hitbox are unchanged. `bramble_snapper`, `wickling`, lint and M1
+ownership passed. State-confirmed actual World images in `ow_6_1`,
+`/var/tmp/wick-m1-snap/snap-before.png` and `snap-after.png` in that directory,
+used ticking AI and a placed, protected player. Only upward direction in a light
+room was reviewed, not human play. The reused warning and geometric outline are
+provisional; dedicated animated jaws remain missing. The latest full check is
+the earlier `95c72ae` run below.
 
 **Clean full check at `95c72ae`, 2026-10-28:** A clean git archive of exact
 `95c72ae88d7c10dcbbae3b8616609dcd3149a95b` in
