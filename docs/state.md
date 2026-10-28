@@ -1,5 +1,17 @@
 # Current status
 
+**Moss wall fragments, 2026-10-28 (committed in `b1f6c34`):** `moss_wall`
+reuses documented `bush_cut_z1` with tint (0.65, 0.78, 0.56), at 180 px for
+0.25 seconds with fallback; other vegetation, signals, drops and collision are
+unchanged. Lead and agent passed bush/`tool_matrix`/`route_cave_3`; the agent
+reports targeted lint PASS. Actual `cave_3_2` hook stills at
+`/var/tmp/wick-screen-study/cave_3_2-prototype-integrated-{dark,bright-bright}-during.png`
+used a placed, protected player, forced drop, darkness and artificial light.
+Leaves may be hidden by the swing; captures had resource warnings. Human play
+and motion are unverified. A clean full `make check` on exact `b1f6c34` passed
+(exit 0); log `/var/tmp/wick-clean-b1f6c34-r46drggk/check.log`. It is the latest
+full check.
+
 **Default bush fragments, 2026-10-28 (committed in `db8d49e`):** Painted leaves
 and petals use 180 px, 0.65 and 0.25 seconds. Existing reeds, other variants,
 fallback, cut behavior and drops are unchanged; source and cutter are documented.
@@ -11,8 +23,8 @@ Real-hook stills at `/var/tmp/wick-bush-z1/integrated-comparison.jpg` use a
 placed, protected player in `ow_1_1`/`cave_3_7` and include fallback; darkness
 or swing can obscure leaves. Capture reported a resource warning. Human play
 and motion are unverified; a clean full `make check` on exact `db8d49e` passed
-(exit 0), log `/var/tmp/wick-clean-db8d49e-s_fu600y/check.log`. This is the latest
-full check.
+(exit 0), log `/var/tmp/wick-clean-db8d49e-s_fu600y/check.log`. The later clean
+`b1f6c34` full check is recorded above.
 
 **Watcher Eye open poses, 2026-10-28 (committed in `91c3f65`):** Existing
 documented sources supply direct open poses during OPEN/stun; the opening strip
@@ -2885,7 +2897,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `db8d49e2d9026083c769b051585fa37591fa34c8` on `origin/main`, including default bush fragments above. The latest clean full PASS is at `db8d49e`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `b1f6c346966e7d80015ef99ab9f165fa8dfc0b1e` on `origin/main`, including moss wall fragments above. The latest clean full PASS is at `b1f6c34`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

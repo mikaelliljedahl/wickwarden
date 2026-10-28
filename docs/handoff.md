@@ -319,12 +319,26 @@ Vegetation documentation followed in `d3db757`; Watcher Eye open poses landed
 in `91c3f652b69891fae982628f87450249ee681aed` on `origin/main`.
 Painted default bush fragments followed in
 `db8d49e2d9026083c769b051585fa37591fa34c8` on `origin/main`.
+Watcher and bush documentation followed in `4d6c188`; moss wall fragments
+landed in `b1f6c346966e7d80015ef99ab9f165fa8dfc0b1e` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Moss wall fragments, committed in `b1f6c34`:** `moss_wall` reuses documented
+`bush_cut_z1` with tint (0.65, 0.78, 0.56), at 180 px for 0.25 seconds with
+fallback; other vegetation, signals, drops and collision are unchanged. Lead
+and agent passed bush/`tool_matrix`/`route_cave_3`; the agent reports targeted
+lint PASS. Actual `cave_3_2` hook stills at
+`/var/tmp/wick-screen-study/cave_3_2-prototype-integrated-{dark,bright-bright}-during.png`
+used a placed, protected player, forced drop, darkness and artificial light.
+Leaves may be hidden by the swing; captures had resource warnings. Human play
+and motion are unverified. A clean full `make check` on exact `b1f6c34` passed
+(exit 0); log `/var/tmp/wick-clean-b1f6c34-r46drggk/check.log`. It is the latest
+full check.
 
 **Default bush fragments, committed in `db8d49e`:** Painted leaves and petals
 use 180 px, 0.65 and 0.25 seconds. Existing reeds, other variants, fallback, cut
@@ -337,8 +351,8 @@ Real-hook stills at `/var/tmp/wick-bush-z1/integrated-comparison.jpg` use a
 placed, protected player in `ow_1_1`/`cave_3_7` and include fallback; darkness
 or swing can obscure leaves. Capture reported a resource warning. Human play
 and motion are unverified; a clean full `make check` on exact `db8d49e` passed
-(exit 0), log `/var/tmp/wick-clean-db8d49e-s_fu600y/check.log`. This is the latest
-full check.
+(exit 0), log `/var/tmp/wick-clean-db8d49e-s_fu600y/check.log`. The later clean
+`b1f6c34` full check is recorded above.
 
 **Watcher Eye open poses, committed in `91c3f65`:** Existing documented sources
 supply direct open poses during OPEN/stun; the opening strip is registered but
