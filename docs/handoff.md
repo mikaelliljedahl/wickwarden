@@ -9,6 +9,29 @@ Read this file first, then [state.md](state.md). The rules for agents are in [..
 
 ## Status (update at every push)
 
+**Pause handoff, 2026-10-28:** The owner wants to pause after this round. HEAD
+and `origin/main` are `afc9383`; C10 lighting/mounts `1c6afe5` and the
+single-generation lantern loop `95b939c` are published. A clean full
+`make check` passed on exact `95b939c` (161 Godot files, lint, world-check,
+175 Python; `/var/tmp/wick-clean-95b939c-tbstjcai/check.log`). Isolated
+`make playthrough` passed on exact `c22abc4`: the normal-damage/AI bot uses
+internal state, farms and respawns, and later probes use fixtures; other seeds
+and human play are not proven.
+
+Open on resume: the heart still alternates separately generated images; the
+phase-2 shell lacks a compliant walk cycle; visual/real-time human verification
+and the user's exact difficult C9 room remain open. The latest shell attempt
+(`/var/tmp/wick-shell-support-20261028/report.md`) was rejected: contact poses
+alternate but intermediate poses repeat; it was not integrated. The heart study
+is complete: a promising single-generation candidate in
+`/var/tmp/wick-heart-template-study/provenance.md` shares the 242×261 scale of
+the shielded heart; cutter and headless boss test passed. A B10 gallery run with
+real Reel passed 55 checks with a placed, protected player. It remains scratch,
+not integrated or committed; continuous human motion and actual C10 lighting
+were not reviewed. Next review those conditions, and integrate only if the candidate passes review,
+with explicit Owns and preserved provenance. Preserve the 77 staged paths and
+all other work; review actual git state before any integration.
+
 **Working-tree handoff, 2026-10-27:** This snapshot supersedes the older
 checkpoint descriptions below where they describe current status. Progress
 checkpoint `aa6fc158087e4a5be21be22acf948f1f69c9cf8b` was pushed and verified
@@ -345,8 +368,9 @@ documentation `3bcabd3`, Coinwyrm study `4fbed38` and shell-study documentation
 `origin/main`; runtime fallback audit `8017926` and full placeholder/ammo audit
 documentation `c602813` and visual-check documentation `62b8416` are published.
 C10 lighting/mounts `1c6afe5` and documentation `dd5f7d0`, `c22abc4` and
-`cbaeb5a` are on `origin/main`. Lantern flicker `95b939c` is locally committed
-and passed a clean full check. Verify the remote before push.
+`cbaeb5a`, lantern flicker `95b939c` and documentation `afc9383` are on
+`origin/main`; the lantern change passed a clean full check. Verify the remote
+before any future push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -354,7 +378,7 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Final lantern flicker, locally committed in `95b939c`:** A single-generation
+**Final lantern flicker, committed in `95b939c`:** A single-generation
 two-frame strip at 2 fps replaces alternation between separately generated
 images during the physical Reel/hook fight and after death. Isolated import,
 `boss_the_unlit`, `sprite_visual`, lint, 26 art tests and recut passed. A
@@ -385,8 +409,8 @@ generated single-image states every half second: functional animation loops
 that did not meet asset-contract §10's one-generation-per-animation rule. The
 lantern change is recorded above; the heart loop remains open. See
 `scripts/enemies/bosses/the_unlit.gd:335` and `:679` and
-`docs/asset-contract.md` §10. A compliant art study is in progress; no normative
-document was changed.
+`docs/asset-contract.md` §10. The completed scratch heart study and its remaining
+review are described in the pause handoff above; no normative document changed.
 
 **Isolated visual and geometry audits, `dd5f7d0`:** A production scene census
 of 356 `.tscn` files found no serialized Polygon2D or ColorRect; scripts contain
