@@ -2872,6 +2872,22 @@ func _unlit_tools() -> void:
 	check_eq(boss.hp, 22, "Unlit: actual hook damages exposed heart")
 	check_eq(heart_contacts, [false, true], "Unlit: hooks contact shielded and exposed heart")
 	check_eq(heart_damage, [2], "Unlit: only exposed hook causes damage")
+	# Four real swings total reach eight damage; a fifth must contact without damage
+	# while this same exposure remains open. Allow ordinary boss i-frames to expire.
+	for swing in range(4):
+		await seconds(0.4)
+		check(boss.exposed_left > 0.0, "Unlit: first exposure still open for swing %d" % (swing + 2))
+		player.place_at(boss.global_position + Vector2(0, 108))
+		player.facing = Vector2.UP
+		Input.action_press(&"attack")
+		await frames(10)
+		Input.action_release(&"attack")
+		check_eq(heart_contacts.size(), swing + 3,
+			"Unlit: real hook contacts heart on swing %d" % (swing + 2))
+		check(heart_contacts.back(), "Unlit: contact occurs while exposed")
+		check_eq(boss.hp, 22 - 2 * mini(swing + 1, 3),
+			"Unlit: first exposure is capped at eight damage")
+	check_eq(heart_damage, [2, 2, 2, 2], "Unlit: fifth contact adds no damage")
 	# Let the first pull expire without altering the fight's timer or phase.
 	for i in range(420):
 		if boss.exposed_left <= 0.0:
@@ -2885,9 +2901,10 @@ func _unlit_tools() -> void:
 	Input.action_press(&"attack")
 	await frames(10)
 	Input.action_release(&"attack")
-	check_eq(heart_contacts, [false, true, false], "Unlit: hook contacts reshielded heart")
-	check_eq(boss.hp, 22, "Unlit: reshielded heart takes no hook damage")
-	check_eq(heart_damage, [2], "Unlit: reshielded contact adds no damage")
+	check_eq(heart_contacts, [false, true, true, true, true, true, false],
+		"Unlit: hook contacts reshielded heart")
+	check_eq(boss.hp, 16, "Unlit: reshielded heart takes no hook damage")
+	check_eq(heart_damage, [2, 2, 2, 2], "Unlit: reshielded contact adds no damage")
 	await seconds(0.4)
 	player.place_at(Vector2(960, 720))
 	player.facing = Vector2.UP
@@ -2900,9 +2917,10 @@ func _unlit_tools() -> void:
 	Input.action_press(&"attack")
 	await frames(10)
 	Input.action_release(&"attack")
-	check_eq(heart_contacts, [false, true, false, true], "Unlit: hook contacts second exposure")
-	check_eq(heart_damage, [2, 2], "Unlit: each exposed hook causes two damage")
-	check_eq(boss.hp, 20, "Unlit: second exposure permits hook damage")
+	check_eq(heart_contacts, [false, true, true, true, true, true, false, true],
+		"Unlit: hook contacts second exposure")
+	check_eq(heart_damage, [2, 2, 2, 2, 2], "Unlit: new exposure resets damage cap")
+	check_eq(boss.hp, 14, "Unlit: second exposure permits hook damage")
 	print("MATRIX Unlit heart: hook exposed=", heart_contacts, " damage=", heart_damage,
 		" reel contacts=", reel_contacts, " HP=", boss.hp)
 	await dispose(room)
