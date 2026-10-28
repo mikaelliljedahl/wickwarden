@@ -1,5 +1,12 @@
 # Current status
 
+**Clean full check at `95c72ae`, 2026-10-28:** A clean git archive of exact
+`95c72ae88d7c10dcbbae3b8616609dcd3149a95b` in
+`/var/tmp/wick-clean-95c72ae-c_oztizi/` with isolated HOME/XDG and
+`TMPDIR=/var/tmp` passed `make check` (exit 0), including Fen Leech. The log is
+`/var/tmp/wick-clean-95c72ae-c_oztizi/check.log`. This is the latest clean full
+check; human play and the other recorded coverage limitations remain open.
+
 **Fen Leech lunge direction, 2026-10-28 (committed in `b8c8a4c`):** A
 leftward lunge that previously appeared rightward is now mirrored, with the
 warning bubble at the correct head. Its own logic state controls direction
@@ -41,7 +48,7 @@ was independently rejected: its gaze is frontal, not upward. It is not used.
 `/var/tmp/wick-clean-70d229d-afalxh3d/` passed `make check` (exit 0): 158
 Godot files, lint, world-check and 175 Python tests. Eleven root unit tests ran
 separately and passed (`root-tests.log`); they are not part of `make check`.
-This is the latest clean full check.
+A later clean full check at `95c72ae` is recorded above.
 
 Agent evidence includes 12 negative separate Godot processes and positive
 save/load probes at `/var/tmp/wick-profile-audit-Qx20RO/`, plus a real `/tmp`
@@ -2195,7 +2202,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `b8c8a4c2856ec027eb2fd4b72149ad9fad4abc58` on `origin/main`, including Fen Leech direction above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `95c72ae88d7c10dcbbae3b8616609dcd3149a95b` on `origin/main`, with its subsequent clean full check recorded above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

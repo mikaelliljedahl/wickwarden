@@ -199,12 +199,21 @@ The Brine Crab visual audit followed in
 `a5fb2171f0f7c9c3fad556f25f21f736359c0ad9` on `origin/main`.
 The rejected crab candidate was documented in `12a8ce1`; Fen Leech direction
 landed in `b8c8a4c2856ec027eb2fd4b72149ad9fad4abc58` on `origin/main`.
+Fen Leech and streaming results were documented in
+`95c72ae88d7c10dcbbae3b8616609dcd3149a95b` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Clean full check at `95c72ae`, 2026-10-28:** A clean git archive of exact
+`95c72ae88d7c10dcbbae3b8616609dcd3149a95b` in
+`/var/tmp/wick-clean-95c72ae-c_oztizi/` with isolated HOME/XDG and
+`TMPDIR=/var/tmp` passed `make check` (exit 0), including Fen Leech. The log is
+`/var/tmp/wick-clean-95c72ae-c_oztizi/check.log`. This is the latest clean full
+check; human play and the other recorded coverage limitations remain open.
 
 **Fen Leech lunge direction, committed in `b8c8a4c`:** A leftward lunge that
 previously appeared rightward is now mirrored, with the warning bubble at the
@@ -247,7 +256,7 @@ was independently rejected: its gaze is frontal, not upward. It is not used.
 `/var/tmp/wick-clean-70d229d-afalxh3d/` passed `make check` (exit 0): 158
 Godot files, lint, world-check and 175 Python tests. Eleven root unit tests ran
 separately and passed (`root-tests.log`); they are not part of `make check`.
-This is the latest clean full check.
+A later clean full check at `95c72ae` is recorded above.
 
 Agent evidence includes 12 negative separate Godot processes and positive
 save/load probes at `/var/tmp/wick-profile-audit-Qx20RO/`, plus a real `/tmp`
