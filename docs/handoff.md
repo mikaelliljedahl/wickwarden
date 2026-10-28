@@ -306,12 +306,29 @@ Mitts effect documentation followed in `74950b3`; Gloam's active slash landed in
 `5999b74277177bf01b745a103e58a0f49f00f24a` on `origin/main`.
 Gloam slash documentation followed in `a9d2a57`; Thorn Warden's painted wreath
 landed in `0ed1b72819b271f3702ea7ef1886b05a858e8668` on `origin/main`.
+Thorn Warden documentation followed in `1e768f9`; Unlit lantern chains landed
+in `90c3e949c427036ad287a63e51a6e41813f1be4f` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**The Unlit lantern chains, committed in `90c3e94`:** Painted links reuse a new
+documented ImageGen source, spaced from wall anchors with a clipped end link;
+fade remains and original lines are fallback. Gameplay is unchanged. Lead and
+agent passed four matched tests for `boss_the_unlit`, `route_cave_10` and
+`reel_line` after import; the agent reports gdlint and `art-test` (25) PASS. An
+initial GDScript inference compile failure was corrected before retest.
+
+Six actual Reel-pull stills at `/var/tmp/wick-unlit-integration/motion-contact.png`
+show forced P3 with a placed, protected player and lantern y=288→576. P2/P3 were
+forced and death manually stepped; anchors and partial links are approximations.
+Some captures emitted resource warnings. This is not human play or continuous
+motion verification. A clean full `make check` on exact `90c3e94` passed (exit
+0); log `/var/tmp/wick-clean-90c3e94-0g6ef31_/check.log`. It is the latest full
+check.
 
 **Thorn Warden warning wreath, committed in `0ed1b72`:** WALK and TELEGRAPH use
 a painted wreath and subtle warning light, with old lines as image fallback;
@@ -325,8 +342,8 @@ Controlled actual `cave_2_4` time-separated stills at
 boss and placed, unprotected stationary player whose health falls 6→4→2 as
 needles fire. Close play can obscure the wreath. These are not human play or
 continuous motion verification. A clean full `make check` on exact `0ed1b72`
-passed (exit 0); log `/var/tmp/wick-clean-0ed1b72-5wb3xfe3/check.log`. It is
-the latest full check.
+passed (exit 0); log `/var/tmp/wick-clean-0ed1b72-5wb3xfe3/check.log`. The
+later clean `90c3e94` full check is recorded above.
 
 **Gloam Knight active slash, committed in `5999b74`:** The active slash uses
 existing documented `mirror_tell_z1` in its own unshaded child; the original
