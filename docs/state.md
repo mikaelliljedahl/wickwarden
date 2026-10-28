@@ -1,5 +1,13 @@
 # Current status
 
+**Q7 heavy obstacles, 2026-10-28 (committed in `26713bf`):** Twelve negative
+cases use actual hook, flare and pitch-pot explosion against four heavy variants,
+verifying contact and that each obstacle remains solid, undisturbed and unflagged
+after revisit. Existing positive Mitts cases remain. Isolated `tool_matrix` and
+lint passed; other gate families, tools and combinations remain incomplete and
+this is not human gameplay. The latest full `make check` was at `c31b391`, before
+this test change.
+
 **Unlit heart states, 2026-10-28 (committed in `c31b391`):** Shielded and
 exposed pulse states use two provenance-recorded ImageGen edits of the accepted
 heart, shown on the existing timer with a small light. Gameplay and hitboxes are
@@ -1664,7 +1672,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `c31b391d690fc2002e949b832e2b8ff638d940a8` on `origin/main`, including the Unlit heart states above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `26713bf764a958aca9ca4b57785488c3dae5a8ce` on `origin/main`, including the Q7 heavy-obstacle cases above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

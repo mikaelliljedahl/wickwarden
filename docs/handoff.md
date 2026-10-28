@@ -118,12 +118,22 @@ The Gloam Knight animation followed in
 `cea4152e3cd0ca9074466184528f7e9cd48b4f4f` on `origin/main`.
 The Unlit heart states followed in
 `c31b391d690fc2002e949b832e2b8ff638d940a8` on `origin/main`.
+The Q7 heavy-obstacle negative cases followed in
+`26713bf764a958aca9ca4b57785488c3dae5a8ce` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q7 heavy obstacles, committed in `26713bf`:** Twelve negative cases use actual
+hook, flare and pitch-pot explosion against four heavy variants, verifying
+contact and that each obstacle remains solid, undisturbed and unflagged after
+revisit. Existing positive Mitts cases remain. Isolated `tool_matrix` and lint
+passed; other gate families, tools and combinations remain incomplete and this
+is not human gameplay. The latest full `make check` was at `c31b391`, before
+this test change.
 
 **Unlit heart states, committed in `c31b391`:** Shielded and exposed pulse
 states use two provenance-recorded ImageGen edits of the accepted heart, shown
