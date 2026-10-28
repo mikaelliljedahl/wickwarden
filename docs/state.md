@@ -1,14 +1,28 @@
 # Current status
 
+**Boss and Captain reset fixes, 2026-10-28 (committed in `c8465bc`):** M0
+prevents `player_died` from resetting defeated/dying bosses before override
+dispatch and guards direct base-class reset; tests cover death progression,
+reward and Briar Mother. MB1 restores Captain bash/contact damage immediately
+and guards death; B01 guards Kilnkeeper direct reset and splits tests. All three
+targeted tests passed. A clean full `make check` on exact `c8465bc` passed;
+log `/var/tmp/wick-clean-c8465bc-z9f7ikmz/check.log`. This is the latest clean
+full check. Earlier documentation commit `59ac8d3` was also pushed.
+
+Direct subclass reset during death can still mutate subclass state in other
+overrides; no production use was found except Tidewick init. Thorn Warden hazard
+remains active until `queue_free`, but damage has not been demonstrated; this
+remains open.
+
 **Read-only reset audit, 2026-10-28:** Hollow Captain reset failure and defeated
-bosses reviving during death throes were reproduced. Separate M0 and MB1 fixes
-are in progress; neither issue is resolved by this audit.
+bosses reviving during death throes were reproduced. Subsequent M0, MB1 and B01
+fixes and their remaining limits are recorded above.
 
 **Lull Mauler reset, 2026-10-28 (committed in `a8f06c7`):** Reset closes active
 slam/sweep hitboxes and resets the attack cycle; regression tests cover reset,
 stun and death. `make test T=lull_mauler` passed. A clean full `make check` on
 exact `a8f06c7` passed; log `/var/tmp/wick-clean-a8f06c7-j71imz6t/check.log`.
-This is the latest clean full check. A sweep art prototype
+The later clean `c8465bc` check is recorded above. A sweep art prototype
 was rejected because it misrepresents the hit area or is obscured; the geometric
 placeholder remains.
 
@@ -2436,7 +2450,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `a8f06c7b700f559b4493e04105350dfeb9ea9545` on `origin/main`, including the Lull Mauler reset above. The latest clean full check is at `a8f06c7`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `c8465bc14911bdf1de60a8fab47375b8fe905464` on `origin/main`, including the boss and Captain reset fixes above. The latest clean full check is at `c8465bc`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 

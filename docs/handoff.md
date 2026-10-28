@@ -243,6 +243,8 @@ Unlit cap and loader-failure documentation followed in `12f58f3`; Q7 Lock Warden
 is at `1bbb94cc401f685848522ee616580ac0df1e6734` on `origin/main`.
 Lock Warden test documentation followed in `f5cc279`; Lull Mauler reset landed
 in `a8f06c7b700f559b4493e04105350dfeb9ea9545` on `origin/main`.
+Reset audit documentation followed in `59ac8d3`; M0/MB1/B01 reset fixes landed
+in `c8465bc14911bdf1de60a8fab47375b8fe905464` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -250,15 +252,29 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
+**Boss and Captain reset fixes, committed in `c8465bc`:** M0 prevents
+`player_died` from resetting defeated/dying bosses before override dispatch and
+guards direct base-class reset; tests cover death progression, reward and Briar
+Mother. MB1 restores Captain bash/contact damage immediately and guards death;
+B01 guards Kilnkeeper direct reset and splits tests. All three targeted tests
+passed. A clean full `make check` on exact `c8465bc` passed; log
+`/var/tmp/wick-clean-c8465bc-z9f7ikmz/check.log`. This is the latest clean full
+check. Earlier documentation commit `59ac8d3` was also pushed.
+
+Direct subclass reset during death can still mutate subclass state in other
+overrides; no production use was found except Tidewick init. Thorn Warden hazard
+remains active until `queue_free`, but damage has not been demonstrated; this
+remains open.
+
 **Read-only reset audit, 2026-10-28:** Hollow Captain reset failure and defeated
-bosses reviving during death throes were reproduced. Separate M0 and MB1 fixes
-are in progress; neither issue is resolved by this audit.
+bosses reviving during death throes were reproduced. Subsequent M0, MB1 and B01
+fixes and their remaining limits are recorded above.
 
 **Lull Mauler reset, committed in `a8f06c7`:** Reset closes active slam/sweep
 hitboxes and resets the attack cycle; regression tests cover reset, stun and
 death. `make test T=lull_mauler` passed. A clean full `make check` on exact
 `a8f06c7` passed; log `/var/tmp/wick-clean-a8f06c7-j71imz6t/check.log`. This is
-the latest clean full check. A sweep art prototype was rejected
+followed by the clean `c8465bc` check above. A sweep art prototype was rejected
 because it misrepresents the hit area or is obscured; the geometric placeholder
 remains.
 
