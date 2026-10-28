@@ -6,6 +6,29 @@ extends Hitbox
 ## Small pickups it touches are carried back and handed over with take_carried(). The tip draws the line from its
 ## origin to itself. Placed tips (`place_dir`, gallery fixtures) have no owner and launch on their first frame.
 
+# A faint unlit copy of the painted fibres keeps the rope legible beyond the lamp's pool.
+# It uses the same texture and geometry as the lit rope, so it adds no separate outline.
+class RopeAccent extends Node2D:
+	var texture: Texture2D
+	var start := Vector2.ZERO
+	var end := Vector2.ZERO
+
+	func _draw() -> void:
+		if texture == null:
+			return
+		var delta := end - start
+		var length := delta.length()
+		if length <= 0.0:
+			return
+		var tile := texture.get_size()
+		draw_set_transform(start, delta.angle())
+		var x := 0.0
+		while x < length:
+			var width := minf(tile.x, length - x)
+			draw_texture_rect_region(texture, Rect2(x, -tile.y / 2.0, width, tile.y), Rect2(0, 0, width, tile.y))
+			x += width
+		draw_set_transform(Vector2.ZERO)
+
 signal anchored(ring: Node)
 signal returned
 
@@ -16,6 +39,7 @@ const RETRACT_SPEED := 1400.0
 const RANGE := 576.0
 const RADIUS := 12.0
 const DAMAGE := 1
+const ROPE_PATH := "res://assets/sprites/reel_line_rope.png"
 const LINE_WIDTH := 2.0
 const LINE_COLOR := Color(0.85, 0.8, 0.6, 0.9)
 const ANCHOR_GROUP := &"anchor_ring"
@@ -28,6 +52,8 @@ const CARRY_KINDS: Array[StringName] = [
 ## The reel line calls launch() instead.
 @export var place_dir: Vector2 = Vector2.ZERO
 
+var _rope_texture: Texture2D
+var _rope_accent: RopeAccent
 var _state: State = State.OUT
 var _origin_node: Node2D
 var _origin_pos: Vector2 = Vector2.ZERO
@@ -48,6 +74,14 @@ func _init() -> void:
 
 func _ready() -> void:
 	super()
+	_rope_texture = _load_rope_texture(ROPE_PATH)
+	_rope_accent = RopeAccent.new()
+	_rope_accent.name = "RopeAccent"
+	var accent_material := CanvasItemMaterial.new()
+	accent_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	_rope_accent.material = accent_material
+	_rope_accent.modulate = Color(1.0, 1.0, 1.0, 0.28)
+	add_child(_rope_accent)
 	top_level = true
 	add_to_group(&"reel_tips")
 	add_circle(RADIUS)
@@ -55,6 +89,10 @@ func _ready() -> void:
 	SpriteVisual.attach(self, &"reel_tip", RADIUS)
 	hit_landed.connect(_on_hit_landed)
 	_placed_pending = place_dir != Vector2.ZERO
+
+
+static func _load_rope_texture(path: String) -> Texture2D:
+	return load(path) as Texture2D if ResourceLoader.exists(path) else null
 
 
 ## Starts the flight from `origin` (the player, who is followed on the way back) along `dir`.
@@ -84,7 +122,10 @@ func _physics_process(delta: float) -> void:
 		_placed_pending = false
 		_begin(null, global_position, place_dir)
 		return
-	if not active or _state == State.HELD:
+	if not active:
+		return
+	if _state == State.HELD:
+		queue_redraw()
 		return
 	if _state == State.OUT:
 		_fly(delta)
@@ -98,9 +139,29 @@ func _physics_process(delta: float) -> void:
 
 
 func _draw() -> void:
+	if _rope_accent != null:
+		_rope_accent.texture = _rope_texture if active else null
+		_rope_accent.start = to_local(_origin_point())
+		_rope_accent.end = Vector2.ZERO
+		_rope_accent.queue_redraw()
 	if not active:
 		return
-	draw_line(to_local(_origin_point()), Vector2.ZERO, LINE_COLOR, LINE_WIDTH)
+	var start := to_local(_origin_point())
+	var delta := -start
+	if _rope_texture == null:
+		draw_line(start, Vector2.ZERO, LINE_COLOR, LINE_WIDTH)
+		return
+	var length := delta.length()
+	if length <= 0.0:
+		return
+	var tile := _rope_texture.get_size()
+	draw_set_transform(start, delta.angle())
+	var x := 0.0
+	while x < length:
+		var width := minf(tile.x, length - x)
+		draw_texture_rect_region(_rope_texture, Rect2(x, -tile.y / 2.0, width, tile.y), Rect2(0, 0, width, tile.y))
+		x += width
+	draw_set_transform(Vector2.ZERO)
 
 
 func _begin(origin_node: Node2D, origin_pos: Vector2, dir: Vector2) -> void:

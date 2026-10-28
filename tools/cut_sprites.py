@@ -1038,26 +1038,45 @@ def cut_texture(name: str, sdef: dict, manifest: dict, source_dir: Path, out_dir
     if not path.exists():
         raise CutError(f"sheet {name}: source image missing ({path})")
     params = merged_params(manifest, sdef)
-    if sdef.get("input_mode", "key") == "native_alpha":
-        # An already seamless horizontal texture: preserve the full canvas and its alpha.
+    if sdef.get("input_mode", "key") in {"native_alpha", "keyed_crop"}:
+        # Horizontal alpha texture; keyed_crop explicitly selects a region of a keyed original.
         size = sdef.get("size")
         if (not isinstance(size, list) or len(size) != 2
                 or any(type(v) is not int or v <= 0 for v in size)):
             raise CutError(f"sheet {name}: native alpha texture size must be [width, height]")
         w, h = size
+        mode = sdef["input_mode"]
         with Image.open(path) as img:
-            if img.format != "PNG" or img.mode != "RGBA":
-                raise CutError(f"sheet {name}: native alpha texture must be RGBA PNG")
-            sw, sh = img.size
+            if mode == "native_alpha":
+                if img.format != "PNG" or img.mode != "RGBA":
+                    raise CutError(f"sheet {name}: native alpha texture must be RGBA PNG")
+                rgba = np.asarray(img, dtype=np.float32).copy()
+                rgba[..., 3] /= 255.0
+            else:
+                crop = sdef.get("crop")
+                if (not isinstance(crop, list) or len(crop) != 4
+                        or any(type(v) is not int for v in crop)
+                        or not (0 <= crop[0] < crop[2] <= img.width
+                                and 0 <= crop[1] < crop[3] <= img.height)):
+                    raise CutError(f"sheet {name}: invalid keyed crop")
+                rgb = np.asarray(img.convert("RGB"), dtype=np.float32)
+                key = estimate_key(rgb, params["key_border"])
+                colour, alpha = matte(rgb, key, params, sdef["key"])
+                x0, y0, x1, y1 = crop
+                if np.any(alpha[:y0, x0:x1]) or np.any(alpha[y1:, x0:x1]):
+                    raise CutError(f"sheet {name}: keyed crop excludes vertical alpha")
+                rgba = np.concatenate([colour[y0:y1, x0:x1], alpha[y0:y1, x0:x1, None]], axis=2)
+            sh, sw = rgba.shape[:2]
             if sw * h != sh * w or sw < w or sh < h:
                 raise CutError(f"sheet {name}: source must match target proportions and be at least target size")
-            rgba = np.asarray(img, dtype=np.float32).copy()
-        rgba[..., 3] /= 255.0
         arr = to_uint8(resize_rgba(rgba, w / sw))
         # Compare visible premultiplied colours as well as alpha; RGB under zero alpha is irrelevant.
         edges = arr[:, [0, -1]].astype(np.float32)
         edges[..., :3] *= edges[..., 3:4] / 255.0
-        if np.max(np.abs(edges[:, 0] - edges[:, 1])) > 3.0:
+        tolerance = sdef.get("seam_tolerance", 3)
+        if type(tolerance) not in (int, float) or not 0 <= tolerance <= 255:
+            raise CutError(f"sheet {name}: invalid seam tolerance")
+        if np.max(np.abs(edges[:, 0] - edges[:, 1])) > tolerance:
             raise CutError(f"sheet {name}: horizontal texture edges do not match")
         write_png(out_dir / f"{sdef['output']}.png", arr, "RGBA")
         proof_dir.mkdir(parents=True, exist_ok=True)

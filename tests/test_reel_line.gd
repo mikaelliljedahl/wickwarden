@@ -10,6 +10,8 @@ const START := Vector2(300, 500)
 
 
 func run() -> void:
+	await _rope_texture_and_fallback()
+	await _held_rope_tracks_origin()
 	await _refuses_a_second_line()
 	await _pulls_to_a_ring()
 	await _refuses_a_pull_onto_a_pit()
@@ -44,6 +46,55 @@ func _make(parent: Node, scene_path: String, at: Vector2) -> Variant:
 	parent.add_child(node)
 	(node as Node2D).global_position = at
 	return node
+
+
+func _rope_texture_and_fallback() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, START)
+	await frames(2)
+	_use(player)
+	check(player.use_item(), "rope texture test fires")
+	await frames(4)
+	var tip: Variant = _tips()[0]
+	check(tip._rope_texture != null, "painted rope texture loads")
+	check(tip._load_rope_texture("res://missing_reel_rope.png") == null, "missing art loads as null")
+	if tip._rope_texture == null:
+		await dispose(arena)
+		return
+	check_eq(tip._rope_texture.get_size(), Vector2(96, 16), "rope has the contracted tile size")
+	tip._rope_texture = null
+	tip.queue_redraw()
+	await frames(2)
+	check(tip._rope_accent.texture == null, "fallback hides the painted accent")
+	check(tip.active, "missing rope texture leaves the tip active")
+	tip.retract()
+	await seconds(1.0)
+	check_eq(_tips().size(), 0, "fallback still retracts and finishes")
+	await dispose(arena)
+
+
+func _held_rope_tracks_origin() -> void:
+	reset_state()
+	var arena := make_arena()
+	var player := make_player(arena, START)
+	_make(arena, RING_SCENE, START + Vector2(300, 0))
+	var scene := load("res://scenes/items/reel_tip.tscn") as PackedScene
+	var tip: Variant = scene.instantiate()
+	arena.add_child(tip)
+	await frames(2)
+	tip.launch(player, Vector2.RIGHT)
+	await seconds(0.3)
+	check_eq(tip._state, tip.State.HELD, "real ring contact holds a standalone tip")
+	var held_position: Vector2 = tip.global_position
+	player.global_position += Vector2(0, 40)
+	await frames(3)
+	check_eq(tip.global_position, held_position, "held tip stays at the anchor")
+	check_eq(tip._rope_accent.start, tip.to_local(player.global_position), "held rope tracks the moving origin")
+	tip.retract()
+	await seconds(0.4)
+	check(not tip.active, "held tip retracts to the moving origin")
+	await dispose(arena)
 
 
 func _refuses_a_second_line() -> void:

@@ -488,6 +488,43 @@ class TextureCase(unittest.TestCase):
             Image.fromarray(pixels, "RGBA").save(root / "line.png")
             self.assertIn("at least target size", cut.run(manifest, root, out, proof)[2][0])
 
+    def test_keyed_crop_preserves_original_matte_and_validates_recipe(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            pixels = np.full((36, 200, 3), (255, 0, 255), np.uint8)
+            pixels[12:24, 4:196] = (180, 100, 50)
+            Image.fromarray(pixels, "RGB").save(root / "line.png")
+            sheet = {"type": "texture", "output": "line", "input_mode": "keyed_crop",
+                     "key": "magenta", "crop": [4, 10, 196, 26], "size": [96, 8]}
+            manifest = {"defaults": {}, "scale_groups": {}, "kinds": {}, "sheets": {"line": sheet}}
+            out, proof = root / "out", root / "proof"
+            self.assertEqual(cut.run(manifest, root, out, proof)[2], [])
+            with Image.open(out / "line.png") as image:
+                result = np.asarray(image)
+                self.assertEqual(image.size, (96, 8))
+            self.assertLess(result[0, 20, 3], 32)
+            self.assertGreaterEqual(result[4, 20, 3], 254)
+            sheet["crop"] = [4, 13, 196, 29]
+            self.assertIn("excludes vertical alpha", cut.run(manifest, root, out, proof)[2][0])
+            sheet["crop"] = [4, 10, 197, 26]
+            self.assertIn("proportions", cut.run(manifest, root, out, proof)[2][0])
+            sheet["crop"] = [-1, 10, 191, 26]
+            self.assertIn("invalid keyed crop", cut.run(manifest, root, out, proof)[2][0])
+
+    def test_keyed_rope_original_and_tolerance(self):
+        manifest = json.loads(cut.DEFAULT_MANIFEST.read_text())
+        sheet = manifest["sheets"]["reel_line_rope_v1"].copy()
+        self.assertEqual(sheet["crop"], [380, 421, 1472, 603])
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            args = ("reel_line_rope_v1", sheet, manifest, cut.DEFAULT_SOURCE, root / "out", root / "proof")
+            cut.cut_texture(*args)
+            with Image.open(root / "out/reel_line_rope.png") as image:
+                self.assertEqual((image.mode, image.size), ("RGBA", (96, 16)))
+            sheet["seam_tolerance"] = 3
+            with self.assertRaisesRegex(cut.CutError, "edges do not match"):
+                cut.cut_texture(*args)
+
     def test_texture_tiles_seamlessly(self):
         rng = np.random.default_rng(3)
         n = 512
