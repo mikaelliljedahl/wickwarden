@@ -336,7 +336,8 @@ and documentation `995488c` are on `origin/main`; The Unlit wax collapse
 Placeholder inventory documentation `6148f58`, C4 difficulty changes
 `bc7330f` and documentation `f1a34f2` are on `origin/main`; the C4 change
 passed a clean full check. Final playthrough documentation `fc14d7a` is on
-`origin/main`. Verify the remote before integration or push.
+`origin/main`; pocket and tool check documentation `2f343c1` is the latest
+published checkpoint. Verify the remote before integration or push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -381,6 +382,17 @@ unverified. A read-only procedural-drawing review on `fc14d7a` found no
 confirmed placeholders in the code paths inspected. These headless
 visibility-tree checks are not pixel evidence and do not cover all phases or
 frames or human play.
+
+**C9 access report and isolated audit, `2f343c1`:** The user reports difficulty
+reaching a room in C9; the exact location is unknown and the image was reused.
+An isolated archive-copy `route_cave_9` passed 202 checks, with its `persistence()`
+portion excluded because of SaveGame. It exercised real input/`Player.use_item`
+for boots, reel in both directions, Lockpick, mitts and doors, but used
+placement and fixtures and lacked normal enemies. A separate
+`_streamed_c09_throws` test passed 51 checks in all directions including DOWN:
+`/var/tmp/wick-c9-audit/stone.log`. An older unreconciled report remains
+unexplained. No softlock was confirmed in these tests; the user's specific save
+state and location have not been tested, and human play is unverified.
 
 **C4 difficulty, committed in `bc7330f`:** The owner explicitly reports
 C4 is too difficult and requests clear safe zones; this owner direction overrides

@@ -1,5 +1,16 @@
 # Current status
 
+**C9 access report and isolated audit, `2f343c1`:** The user reports difficulty
+reaching a room in C9; the exact location is unknown and the image was reused.
+An isolated archive-copy `route_cave_9` passed 202 checks, with its `persistence()`
+portion excluded because of SaveGame. It exercised real input/`Player.use_item`
+for boots, reel in both directions, Lockpick, mitts and doors, but used
+placement and fixtures and lacked normal enemies. A separate
+`_streamed_c09_throws` test passed 51 checks in all directions including DOWN:
+`/var/tmp/wick-c9-audit/stone.log`. An older unreconciled report remains
+unexplained. No softlock was confirmed in these tests; the user's specific save
+state and location have not been tested, and human play is unverified.
+
 **Cave boss death light, 2026-10-28 (committed in `b70049e`):** Nine
 cave bosses release painted golden light in eight 768 px frames at 8 fps;
 miniboss and C10 effects remain as before. Missing or incomplete art and wrong
@@ -3114,7 +3125,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `fc14d7a` on `origin/main`, documenting final playthrough verification; C4 difficulty changes `bc7330f` passed their clean full check. The latest clean full PASS is `bc7330f`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `2f343c1` on `origin/main`, documenting pocket and tool visual checks; C4 difficulty changes `bc7330f` passed their clean full check. The latest clean full PASS is `bc7330f`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
