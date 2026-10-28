@@ -243,7 +243,16 @@ func _ward_and_slash() -> void:
 	boss.global_position = Vector2(720, 480)
 	boss.aim = Vector2.LEFT
 	boss._attack(&"slash", boss.global_position)
+	var slash = boss._hazards[-1]
+	var slash_ref: WeakRef = weakref(slash)
+	check_eq(slash.box.damage, 3, "slash damage remains three")
+	check(not slash.box.blockable, "slash stays unblockable")
+	var shape := slash.box.get_child(0) as CollisionShape2D
+	var polygon := shape.shape as ConvexPolygonShape2D
+	check_eq(polygon.points.size(), 26, "slash collision sector keeps its points")
+	check_near(polygon.points[1].length(), 150.0, 0.01, "slash reach remains 150")
 	await frames(5)
+	check(slash_ref.get_ref() == null, "slash expires after its short active window")
 	check_eq(GameState.health, health - 3, "real slash pierces ward")
 	check_near(player.global_position.x, 600, 1, "slash never knocks toward pit")
 	release_inputs()

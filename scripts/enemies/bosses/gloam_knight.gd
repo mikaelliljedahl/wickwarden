@@ -81,10 +81,16 @@ class AttackVisual:
 				draw_arc(Vector2.ZERO, inner, 0, TAU, 96, edge, 2.0)
 			draw_arc(Vector2.ZERO, outer, 0, TAU, 96, edge, 2.0)
 		elif attack.kind == &"slash":
-			var points := PackedVector2Array([Vector2.ZERO])
-			for i in range(25):
-				points.append(attack.direction.rotated(deg_to_rad(-60 + i * 5)) * 150)
-			draw_colored_polygon(points, color)
+			var start: float = attack.direction.angle() - PI / 3.0
+			var finish: float = attack.direction.angle() + PI / 3.0
+			# A brief blade glint keeps the attack readable without a solid filled sector.
+			draw_arc(Vector2.ZERO, 130.0, start, finish, 48, Color(0.42, 0.32, 0.68, 0.45), 36.0)
+			draw_arc(Vector2.ZERO, 130.0, start, finish, 48, Color(0.72, 0.68, 0.94, 0.75), 12.0)
+			draw_arc(Vector2.ZERO, 130.0, start, finish, 48, Color(0.96, 0.94, 1.0, 0.9), 3.0)
+			# Trace the full 120-degree collision sector without obscuring the floor.
+			draw_line(Vector2.ZERO, Vector2.from_angle(start) * 150.0, edge, 2.0)
+			draw_line(Vector2.ZERO, Vector2.from_angle(finish) * 150.0, edge, 2.0)
+			draw_arc(Vector2.ZERO, 150.0, start, finish, 48, edge, 2.0)
 		else:
 			if impact_texture != null:
 				draw_texture_rect(
