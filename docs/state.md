@@ -1,5 +1,33 @@
 # Current status
 
+**Kilnkeeper wax splash, 2026-10-28 (committed in `9343092`):** A standalone
+painted five-frame splash uses a verified ImageGen source, import and provenance,
+with a thin active 150 px outline. The animation outlasts the three-frame
+hitbox and is cleared on reset, phase change or death; damage and timing are
+unchanged. The lead's import, `boss_kilnkeeper` and `route_cave_1` passed, along
+with ten additional filter-matched tests; the agent reports lint, B01 ownership
+and `art-test` PASS. Actual C1 captures at `/var/tmp/wick-c1-audit/phase1-active.png`,
+`phase1-later.png`, `phase2-active.png` and `phase2-later.png` in that directory
+used a placed, protected player, molten set and forced phase two, not human play.
+Capture exit reported four ObjectDB and two resource warnings; a separate export
+has not been verified.
+
+**Lazy ending presentation and Q7 Reel, 2026-10-28 (committed in `a65cec2`
+and `42b6327`):** Ending choice zones are created immediately; presentation is
+created when the boss flag is set during the fade, or immediately if already
+saved. Choice, save and fade behaviour is unchanged. The lead passed `ending`,
+`boss_the_unlit`, `area_cave_10` and `tool_matrix`; the agent reports lint and
+GUI fixture PASS. Captures are in `/var/tmp/wick-z1-ending-visual/`.
+
+Isolated add-child-only measurements were 9.57–10.16 ms before and 0.15–0.19 ms
+after, with work moved to the flag. Whole-switch times were 57.3–62.1 ms before
+and 54.1–63.8 ms after, so no reliable overall improvement is demonstrated.
+These runs were headless with warm disk; Q8 and the 50 ms limit remain open.
+
+Q7 uses the real Reel Line against three thorn variants and the eye switch;
+controlled contact is negative and flags and blockers are checked on recreation
+with in-memory state. This is not a complete matrix or human play.
+
 **Gloam and Coinwyrm attack presentation, 2026-10-28 (committed in
 `df7de44` and `501765e`):** Gloam Knight's filled slash is replaced with a
 procedural multilayer blade glint and 120° outline, without changes to damage,
@@ -28,7 +56,8 @@ timing overhead mean these figures cannot be summed. Logs are
 `/var/tmp/wick-q8-repeat{1,2,3}.log` and
 `/var/tmp/wick-q8-profile-run{1,2,3}.log`. The shared machine was unstable, disk
 was warm and runs were headless; calibrated CI, GPU and physical traversal are
-not covered. Q8 and the 50 ms limit remain open; ending Z1 is under investigation.
+not covered. Q8 and the 50 ms limit remain open; the later ending Z1 change is
+recorded above.
 
 **Q8 broad survey, 2026-10-28 (committed in `20acebe`):** Three passes over
 222 scene targets made 666 direct warps. Matched passes two to three showed
@@ -1846,7 +1875,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `501765e4a5928f07711744fa46b86ca1e0ac0404` on `origin/main`, including the Gloam and Coinwyrm presentation changes above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `934309234dc498fa8e2d8507dc67bada2fa7ae08` on `origin/main`, including Kilnkeeper's wax splash above. Credits, title return and the other ending remain unverified in the continuous earned route; the user response on the ending-choice conflict remains pending. The Q3 `/tmp` guard and shared runner guard remain open. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
