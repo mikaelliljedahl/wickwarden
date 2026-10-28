@@ -14,6 +14,8 @@ func run() -> void:
 	await _faces_nearest_wall()
 	await _lid_closed_ignores_sling()
 	await _warning_clears_on_stun()
+	await _open_presentation()
+	await _missing_open_art()
 	await _fires_beam_on_axis()
 	await _no_fire_off_axis_or_out_of_range()
 	await _ward_blocks_beam()
@@ -80,7 +82,11 @@ func _fires_beam_on_axis() -> void:
 			light != null and light.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED,
 			"beam remains visible outside the lamp light"
 		)
-		check(eye.visual.material == null, "eye returns to normal lighting after firing")
+		var eye_light := eye.visual.material as CanvasItemMaterial
+		check(
+			eye_light != null and eye_light.light_mode == CanvasItemMaterial.LIGHT_MODE_UNSHADED,
+			"open eye remains visible outside the lamp light"
+		)
 	await dispose(arena)
 
 
@@ -97,7 +103,62 @@ func _warning_clears_on_stun() -> void:
 		"natural warning is visible outside the lamp light"
 	)
 	eye.stun(1.5)
-	check(eye.visual.material == null, "stun clears warning lighting")
+	check_eq(eye.visual.modulate, Color.WHITE, "stun clears the warning tint")
+	check_eq(eye.visual.animation, &"open_side", "stun opens the painted lid")
+	check(not eye.invulnerable, "stunned eye is vulnerable")
+	await seconds(1.6)
+	check(eye.invulnerable, "eye closes after stun")
+	check_eq(eye.visual.animation, &"idle_side", "closed lid returns after stun")
+	check(eye.visual.material == null, "closed eye returns to normal lighting")
+	await dispose(arena)
+
+
+func _open_presentation() -> void:
+	reset_state()
+	var arena := make_arena()
+	var eye := make_enemy(arena, EYE_SCENE, EYE_AT)
+	eye.room_rect = INTERIOR
+	make_player(arena, EYE_AT + Vector2(300, 0))
+	await frames(2)
+	var beam := await _wait_for_beam(arena, 3.0)
+	check(beam != null, "natural attack reaches its open state")
+	check(not eye.invulnerable, "firing opens the vulnerable window")
+	var painted := eye.visual as SpriteVisual
+	check(painted != null, "watcher has painted art")
+	if painted != null:
+		for pair in [[Vector2.DOWN, &"open_down"], [Vector2.UP, &"open_up"],
+			[Vector2.RIGHT, &"open_side"], [Vector2.LEFT, &"open_side"]]:
+			eye.set_facing_dir(pair[0])
+			check_eq(painted.animation, pair[1], "open art follows facing")
+			check_eq(painted.flip_h, pair[0] == Vector2.LEFT, "left side alone is mirrored")
+		check_eq(painted.modulate, Color.WHITE, "open art retains natural colour")
+		await seconds(1.1)
+		check(eye.invulnerable, "open window closes on its original timer")
+		check_eq(painted.animation, &"idle_side", "closed art returns after the open window")
+	await dispose(arena)
+
+
+func _missing_open_art() -> void:
+	reset_state()
+	var arena := make_arena()
+	var eye := make_enemy(arena, EYE_SCENE, EYE_AT)
+	eye.room_rect = INTERIOR
+	await frames(2)
+	var painted := eye.visual as SpriteVisual
+	if painted != null:
+		painted.sprite_frames = painted.sprite_frames.duplicate()
+		painted.sprite_frames.remove_animation(&"open_side")
+		eye.stun(0.2)
+		check(not eye.invulnerable, "missing open art does not change vulnerability")
+		check_eq(painted.animation, &"idle_side", "missing open art keeps the idle pose")
+		await seconds(0.3)
+		check(eye.invulnerable, "missing art does not change stun recovery")
+	eye.visual = Placeholder.attach(eye, &"watcher_eye", 24.0)
+	eye.stun(0.2)
+	check(not eye.invulnerable, "placeholder fallback remains vulnerable during stun")
+	check(eye.visual is Placeholder, "placeholder fallback remains available")
+	await seconds(0.3)
+	check(eye.invulnerable, "placeholder fallback closes after stun")
 	await dispose(arena)
 
 

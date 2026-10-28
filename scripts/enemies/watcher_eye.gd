@@ -55,6 +55,8 @@ static func _register_kinds() -> void:
 func _enemy_ready() -> void:
 	_beam_scene = load(BEAM_SCENE_PATH) as PackedScene  # null is fine: plain projectile
 	if visual != null:
+		if visual is SpriteVisual:
+			(visual as SpriteVisual).auto_motion = false
 		_normal_material = visual.material
 		_warning_material = CanvasItemMaterial.new()
 		_warning_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
@@ -84,6 +86,7 @@ func _on_stunned(_seconds: float) -> void:
 	_timer = REST_TIME
 	_glow(false)
 	invulnerable = false
+	_show_lid(true)
 
 
 func _on_stun_end() -> void:
@@ -148,6 +151,18 @@ func _set_state(state: State, seconds: float) -> void:
 	_timer = seconds
 	invulnerable = state != State.OPEN
 	_glow(state == State.TELEGRAPH)
+	_show_lid(state == State.OPEN)
+
+
+## Switch only presentation; missing animation or placeholder art keeps the closed look.
+func _show_lid(open: bool) -> void:
+	if visual is SpriteVisual:
+		var painted := visual as SpriteVisual
+		painted.play_anim(&"idle")
+		if open:
+			painted.play_anim(&"open")
+			# Keep the vulnerable eye readable beyond the player's lamp in dark rooms.
+			painted.material = _warning_material
 
 
 ## Presentation only: the glow of the telegraph on the Visual.

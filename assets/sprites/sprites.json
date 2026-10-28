@@ -4031,14 +4031,50 @@
         "fps": 1.0,
         "loop": true
       },
+      "opening_down": {
+        "file": "res://assets/sprites/watcher_eye_opening_down.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": false
+      },
+      "open_down": {
+        "file": "res://assets/sprites/watcher_eye_open_down.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
       "idle_up": {
         "file": "res://assets/sprites/watcher_eye_idle_up.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true
       },
+      "opening_up": {
+        "file": "res://assets/sprites/watcher_eye_opening_up.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": false
+      },
+      "open_up": {
+        "file": "res://assets/sprites/watcher_eye_open_up.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
       "idle_side": {
         "file": "res://assets/sprites/watcher_eye_idle_side.png",
+        "frames": 1,
+        "fps": 1.0,
+        "loop": true
+      },
+      "opening_side": {
+        "file": "res://assets/sprites/watcher_eye_opening_side.png",
+        "frames": 3,
+        "fps": 6.0,
+        "loop": false
+      },
+      "open_side": {
+        "file": "res://assets/sprites/watcher_eye_open_side.png",
         "frames": 1,
         "fps": 1.0,
         "loop": true
