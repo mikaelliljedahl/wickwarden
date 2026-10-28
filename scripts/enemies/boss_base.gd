@@ -158,9 +158,52 @@ func _on_death() -> void:
 		spawn_pickup(death_drops[i], ARENA_CENTRE + offset, false)
 
 
-## Minibosses share a wax dissolve; other bosses retain the base explosion.
+## Minibosses share wax; the nine lantern bosses release painted light.
 func _spawn_death_effect(parent: Node) -> void:
 	if not miniboss:
+		if (
+			boss_id
+			in [
+				&"kilnkeeper",
+				&"briar_mother",
+				&"tidewick",
+				&"hushed_colossus",
+				&"archivist",
+				&"dirge_choir",
+				&"gloam_knight",
+				&"coinwyrm",
+				&"lock_warden"
+			]
+		):
+			var light := (
+				SpriteVisual.spawn_effect(parent, &"fx_boss_death_light_z1", global_position)
+				as SpriteVisual
+			)
+			if light != null:
+				var frames := light.sprite_frames
+				var valid := frames != null and frames.has_animation(&"idle")
+				if valid:
+					valid = (
+						frames.get_frame_count(&"idle") == 8
+						and frames.get_animation_speed(&"idle") == 8.0
+					)
+				if valid:
+					for i in 8:
+						var frame := frames.get_frame_texture(&"idle", i) as AtlasTexture
+						if (
+							frame == null
+							or frame.atlas == null
+							or frame.region.end.x > frame.atlas.get_width()
+							or frame.region.end.y > frame.atlas.get_height()
+						):
+							valid = false
+							break
+				if valid:
+					var unshaded := CanvasItemMaterial.new()
+					unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+					light.material = unshaded
+					return
+				light.free()
 		super(parent)
 		return
 	var fx := SpriteVisual.spawn_effect(parent, &"miniboss_death_wax_z1", global_position)

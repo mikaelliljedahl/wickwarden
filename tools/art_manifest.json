@@ -2,6 +2,7 @@
  "_comment": "Input of tools/cut_sprites.py. Schema: defaults (cut parameters), scale_groups (one factor per group: measure height|width|extent|fit of the tallest/widest reference pose, value in px), kinds (cell, align foot|center, foot row, radius, prop, mirror_side, shadow -> sprites.json), sheets (key colour, rows -> pose count and outputs). Output poses are [from,to) in the row. ground 'row' keeps the row's shared ground line instead of putting every pose's soles on the foot row.",
  "defaults": {},
  "scale_groups": {
+"fx_boss_death_light_z1": {"measure": "fit", "value": [500, 500], "ref": [{"sheet": "fx_boss_death_light_z1", "row": 0}, {"sheet": "fx_boss_death_light_z1", "row": 1}]},
 "fx_boss_death_wax_z1": {"measure": "fit", "value": [500, 500], "ref": [{"sheet": "fx_boss_death_wax_z1", "row": 0}, {"sheet": "fx_boss_death_wax_z1", "row": 1}]},
 "mirror_shade": {"measure": "height", "value": 140, "ref": [{"sheet": "mirror_shade_walk_down_v1", "row": 0}, {"sheet": "mirror_shade_walk_up_v1", "row": 0}, {"sheet": "mirror_shade_walk_side_v3", "row": 0}]},
 "lock_plate": {"measure": "fit", "value": [100, 112], "ref": [{"sheet": "lock_plate_v1", "row": 0}, {"sheet": "lock_plate_v1", "row": 1}, {"sheet": "lock_plate_v1", "row": 2}]},
@@ -1413,6 +1414,7 @@
   "brazier": {"measure": "fit", "value": [120, 183], "ref": [{"sheet": "braziers", "row": 0, "poses": [1, 5]}]}
  },
  "kinds": {
+"fx_boss_death_light_z1": {"cell": [768, 768], "align": "center", "anchor": [384, 384], "radius": 0},
 "fx_boss_death_wax_z1": {"cell": [768, 768], "align": "center", "anchor": [384, 384], "radius": 0},
 "miniboss_death_wax_z1": {"cell": [256, 256], "align": "center", "anchor": [128, 128], "radius": 0},
 "fx_enemy_poof_z1": {"cell": [192, 192], "align": "center", "anchor": [96, 96], "radius": 0},
@@ -2174,6 +2176,7 @@
  }
  },
  "sheets": {
+"fx_boss_death_light_z1": {"key": "green", "params": {"ramp": [28, 220], "rim_despill_px": 5, "crop_pad": 20, "speck_area": 0}, "rows": [{"poses": 4, "outputs": []}, {"poses": 4, "outputs": []}], "joined_outputs": [{"rows": [0, 1], "kind": "fx_boss_death_light_z1", "anim": "idle", "file": "fx_boss_death_light_z1_idle", "scale": "fx_boss_death_light_z1", "fps": 8, "loop": false}]},
 "fx_boss_death_wax_z1": {"key": "green", "params": {"crop_pad": 20, "speck_area": 0}, "rows": [{"poses": 4, "outputs": []}, {"poses": 4, "outputs": []}], "joined_outputs": [{"rows": [0, 1], "kind": "fx_boss_death_wax_z1", "anim": "idle", "file": "fx_boss_death_wax_z1_idle", "scale": "fx_boss_death_wax_z1", "fps": 4, "loop": false}]},
 "miniboss_death_wax_z1": {"input_mode": "native_alpha", "params": {"crop_pad": 12}, "rows": [{"poses": 6, "outputs": [{"kind": "miniboss_death_wax_z1", "anim": "idle", "file": "miniboss_death_wax_z1_idle", "scale": {"measure": "fit", "value": [180, 180]}, "fps": 8, "loop": false}]}]},
 "fx_enemy_poof_z1": {"input_mode": "native_alpha", "params": {"crop_pad": 20}, "rows": [{"poses": 5, "outputs": [{"kind": "fx_enemy_poof_z1", "anim": "idle", "file": "fx_enemy_poof_z1_idle", "scale": {"measure": "fit", "value": [160, 160]}, "fps": 12, "loop": false}]}]},

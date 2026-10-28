@@ -1787,3 +1787,27 @@ lantern can obscure the effect. The exact prompt follows.
 ```text
 Original game art for Wickwarden, a painterly top-down action-adventure. Asset: eight sequential frames of one abstract boss-death wax collapse on a perfectly flat uniform solid pure green #00FF00 background, with no variation, texture, shadows, checkerboard or gradient in the background. Arrange exactly 8 separate complete poses as 4 columns by 2 rows, time order left to right on top row then left to right on bottom row. Place each pose comfortably inside its own area, with very wide clear uninterrupted green gutters between every neighboring pose and between rows, nothing touching, overlapping or clipped. Same three-quarter top-down viewpoint and shared scale throughout. A low soft irregular mass of pale ivory and muted dusk-violet wax, no rocks, no stone, no figure, no face, no candles, no fire, no blood. Frame 1 a rounded cohesive wax mound; 2 visibly drooping; 3 sagging and spreading; 4 halfway melted; 5 low wide slumped wax; 6 spreading puddle; 7 thinning puddle; 8 fading tiny remnants. Hand-painted storybook brushwork with soft edges, gentle warm upper-left lamplight and cool violet shadows. The green is only the background and never appears in the wax. No cast shadows on the background, no text, grid lines, borders, symbols, watermark or extra objects.
 ```
+
+## Boss death light Z1
+
+`tools/source_art/fx_boss_death_light_z1.png` is the unchanged 1536×1024 RGB
+built-in image_gen output, transparent_background=false, without references; session
+`01a18352-f72a-7000-9c62-23c80ed1bada`, output
+`exec-c89a3eac-b7fd-4706-b581-ec772685336f.png`, SHA-256
+`24076c63e05b84ce8dc60c9f05be3fddbaaefc66f6a7aa208af6ae42a25fdac7`.
+The exact prompt was:
+
+Original game art for "Wickwarden", a painterly top-down adventure. Hand-painted storybook illustration style with visible brush strokes and soft edges, high detail, warm lamp light against deep dusk colours, low saturation except for light sources. NOT pixel art, no pixel grid, no dithering, no thick black outlines. Three-quarter top-down view, camera about 50 degrees above the ground, key light from the upper left. No text, no letters, no numbers, no labels, no frame borders, no grid lines, no watermark.
+
+A sprite sheet on a perfectly flat, uniform pure green #00FF00 background that fills the whole image, with no gradient, no texture, no vignette, no floor and no cast shadow on the background. Eight separate complete effect poses in two rows of four, ordered left-to-right and then top-to-bottom. Huge clean green gaps around every pose, no touching or overlap and nothing at image borders. Same scale across all poses.
+
+Show the release of lantern light when a great creature dies, from a tiny glow to an expanding organic glow, then loosening into rising sparks and fading. Compact painterly, cloudy wisps of soft rich orange-amber and warm cream light; loose sparks float upward. Preserve warm orange and cream tones throughout every shape, with complete separation from the green background. Do not paint any green or yellow-green in the effect. Avoid green blended into or contaminating the subject, transparent haze tinted by the background, geometric stars, spokes, crosses, symbols, thick outlines, fire, smoke, characters, ground, text, borders.
+
+The green-key cutter uses the soft ramp [28, 220], the permitted five-pixel
+rim despill for a subject with no intentional green, crop padding 20 and no
+speck removal. Both rows share one 500×500 fit scale; joined output is eight
+768×768 frames at 8 fps. The strip SHA-256 is
+`35524e7ade4cb8e1e72177804164d42effc4beea96567468966e715bf4105ed7`.
+The measured keyed matte has no nonzero pixels outside the crops and all
+output cell perimeters have zero alpha. Keyed green contamination and loss of
+some warm coverage cannot be ruled out; the source has no independent alpha.
