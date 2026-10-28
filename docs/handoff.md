@@ -231,12 +231,24 @@ Clean-check documentation followed in `9125aaf`; Q7 Kilnkeeper phase two is at
 `f257ebca8ec25f98ccf7b9a2bb6839317633ca84` on `origin/main`.
 Kilnkeeper test documentation followed in `171fcf2`; Q7 Coinwyrm and Q6 drops
 are at `403ec8b1b25ba0aaf23dfe768ec81a4efebb5311` on `origin/main`.
+Coinwyrm and drop documentation followed in `ea58756`; Q6 room slides are at
+`6c92d13f6e24140b5dcc1e63baf1a1d07ea33f66` on `origin/main`.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Q6 enemy room slides, committed in `6c92d13`:** Real World input traverses
+`ow_0_0↔ow_1_0` and back. Two Spitcaps and three Skitterwicks pause and remain
+still during slides; outgoing enemies are freed, revisiting recreates them,
+destination enemies resume and their centres stay in the room. At least one
+Skitterwick moves within 1.5 simulated seconds; the initial 0.5-second window was
+insufficient because of natural initial rest. The agent reports three runs PASS
+and the lead passed `soak_brackwater`. This is one route with position sampling
+and a placed, protected player, not human or full-body coverage. The latest
+clean full check remains `afdaead`.
 
 **Q7 Coinwyrm and Q6 gated drops, committed in `403ec8b`:** In the actual B08
 gallery, natural phase-one rear has three plates: real hook does no damage,
