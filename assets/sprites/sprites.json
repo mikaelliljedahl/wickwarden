@@ -1169,6 +1169,18 @@
         "fps": 1.0,
         "loop": true
       },
+      "walk_side": {
+        "file": "res://assets/sprites/gloam_knight_walk_side.png",
+        "frames": 4,
+        "fps": 8.0,
+        "loop": true
+      },
+      "crouch_side": {
+        "file": "res://assets/sprites/gloam_knight_crouch_side.png",
+        "frames": 2,
+        "fps": 8.0,
+        "loop": false
+      },
       "idle_up": {
         "file": "res://assets/sprites/gloam_knight_idle_up.png",
         "frames": 1,

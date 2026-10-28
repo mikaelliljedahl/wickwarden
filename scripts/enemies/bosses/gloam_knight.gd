@@ -210,6 +210,8 @@ func _ready() -> void:
 
 
 func _boss_ready() -> void:
+	if visual is SpriteVisual:
+		visual.auto_motion = false
 	_home = global_position
 	contact_hitbox.knockback = 0
 
@@ -270,6 +272,23 @@ func _boss_physics(delta: float) -> void:
 				mode_left = 0.5
 				lance_left = 3
 				_warning(global_position, 0.5, &"cone", 150)
+	_sync_visual()
+
+
+func _sync_visual() -> void:
+	if not visual is SpriteVisual:
+		return
+	var painted := visual as SpriteVisual
+	if mode == &"crouch" and painted.sprite_frames.has_animation(&"crouch_side"):
+		var dir := direction_to_player()
+		painted.set_facing(Vector2.LEFT if dir.x < 0.0 else Vector2.RIGHT)
+		if painted.animation != &"crouch_side":
+			painted.play_anim(&"crouch_side")
+	elif mode == &"ready" and velocity.length() > 1.0:
+		painted.set_facing(velocity)
+		painted.play_anim(&"walk_side")
+	else:
+		painted.play_anim(&"idle")
 
 
 func _start_dive() -> void:
@@ -277,7 +296,8 @@ func _start_dive() -> void:
 	mode_left = 0.5
 	dive_left = 4.0 if phase == 2 else 6.0
 	combos = 0
-	visual.scale = Vector2(1.2, 0.7)
+	if not visual is SpriteVisual or not visual.sprite_frames.has_animation(&"crouch_side"):
+		visual.scale = Vector2(1.2, 0.7)
 
 
 func _takeoff() -> void:

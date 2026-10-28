@@ -7,6 +7,7 @@ const SCENE := "res://scenes/enemies/bosses/gloam_knight.tscn"
 func run() -> void:
 	await _geometry_and_boots()
 	await _dive_and_phases()
+	await _presentation_poses()
 	await _warning_light()
 	await _ward_and_slash()
 	await _real_dodge()
@@ -154,6 +155,46 @@ func _dive_and_phases() -> void:
 	room.get_node("Enemies").add_child(retired)
 	check(retired.is_dead and not retired.visible, "persistent boss stays dead")
 	check(retired.death_drops.is_empty(), "no persistent rewards embedded")
+	await dispose(room)
+
+
+func _presentation_poses() -> void:
+	reset_state()
+	var room := _fixture()
+	var boss = room.get_node("Enemies/GloamKnight")
+	var player := make_player(room, Vector2(700, 480))
+	player.set_hurtbox_enabled(self, false)
+	await seconds(1.6)
+	var look := boss.visual as SpriteVisual
+	check(look != null, "Knight: painted body exists")
+	if look == null:
+		await dispose(room)
+		return
+	check_eq(look.sprite_frames.get_frame_count(&"walk_side"), 4, "walk has four frames")
+	check_eq(look.sprite_frames.get_frame_count(&"crouch_side"), 2, "crouch has two frames")
+	# Current fight has no walking movement. Probe the visual-only velocity branch.
+	boss.mode = &"ready"
+	boss.velocity = Vector2.LEFT * 100
+	boss._sync_visual()
+	check_eq(look.animation, &"walk_side", "moving uses walk strip")
+	check(look.flip_h, "leftward walk mirrors side art")
+	boss.velocity = Vector2.ZERO
+	boss._sync_visual()
+	check_eq(look.animation, &"idle_side", "stationary returns to idle")
+	boss.dive_left = 0
+	await frames(2)
+	check_eq(boss.mode, &"crouch", "dive starts crouch")
+	check_eq(look.animation, &"crouch_side", "dive plays crouch strip")
+	check(look.flip_h, "crouch faces left toward player")
+	check_eq(look.scale, Vector2.ONE, "painted crouch is not squashed")
+	await seconds(0.3)
+	check_eq(boss.mode, &"crouch", "crouch retains half-second duration")
+	check_eq(look.frame, 1, "crouch holds its final pose until takeoff")
+	await seconds(0.25)
+	check_eq(boss.mode, &"air", "takeoff follows original crouch timer")
+	await seconds(0.55)
+	check_eq(boss.mode, &"recover", "normal landing still follows")
+	check(look.animation != &"crouch_side", "landing exits crouch pose")
 	await dispose(room)
 
 
