@@ -342,14 +342,26 @@ passed a clean full check. Final playthrough documentation `fc14d7a` is on
 are on `origin/main`; their clean full check passed. Shell animation-gap
 documentation `3bcabd3`, Coinwyrm study `4fbed38` and shell-study documentation
 `c298322`, Q7 test `070bfe3` and documentation `0d82e90`/`ea98d94` are on
-`origin/main`; runtime fallback audit documentation `8017926` is the latest
-published checkpoint. The Q7 clean full check passed. Verify the remote before push.
+`origin/main`; runtime fallback audit `8017926` and full placeholder/ammo audit
+documentation `c602813` are published. The Q7 clean full check passed. Verify
+the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
 `.git/index.lock.preserved-20261027` to sync the index; preserve that file.
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
+
+**Isolated C9/C10 visual study, `c602813`:** Four active effects use painted
+sprites with thin indicator boundaries; no filled square placeholders were
+confirmed in `/var/tmp/wick-primitive-c602/{deadbolt,lash,wax,pulse}.png`. The
+C10 scenes are dark. Phases and effects were forced with a placed, protected
+player; stills are not a continuous human fight. Some captures produced
+ObjectDB/resource warnings at exit.
+
+A separate shell march attempt (`/var/tmp/wick-shell-march-20261028/report.md`)
+had alternating main steps but repeated intermediate poses and a deformed foot;
+it was rejected without repository changes or integration.
 
 **Isolated zero-ammo C10 probe, `c298322`:** Scratch
 `/var/tmp/wick-q6-long-Ox5mkZ/project/tests/test_zero_ammo_probe.gd` used real

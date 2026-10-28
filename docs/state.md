@@ -1,5 +1,16 @@
 # Current status
 
+**Isolated C9/C10 visual study, `c602813`:** Four active effects use painted
+sprites with thin indicator boundaries; no filled square placeholders were
+confirmed in `/var/tmp/wick-primitive-c602/{deadbolt,lash,wax,pulse}.png`. The
+C10 scenes are dark. Phases and effects were forced with a placed, protected
+player; stills are not a continuous human fight. Some captures produced
+ObjectDB/resource warnings at exit.
+
+A separate shell march attempt (`/var/tmp/wick-shell-march-20261028/report.md`)
+had alternating main steps but repeated intermediate poses and a deformed foot;
+it was rejected without repository changes or integration.
+
 **Isolated zero-ammo C10 probe, `c298322`:** Scratch
 `/var/tmp/wick-q6-long-Ox5mkZ/project/tests/test_zero_ammo_probe.gd` used real
 hook kills, room crossings, natural drops and physical pickups, then the real
@@ -3258,7 +3269,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `8017926` on `origin/main`, documenting the runtime fallback audit; Q7 test `070bfe3` passed its clean full check; Choir Warden poses `aa0f9a2` passed their clean full check; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `070bfe3`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `c602813` on `origin/main`, documenting the full placeholder and ammo audits; Q7 test `070bfe3` passed its clean full check; Choir Warden poses `aa0f9a2` passed their clean full check; C4 difficulty changes `bc7330f` also passed their clean full check. The latest clean full PASS is `070bfe3`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
