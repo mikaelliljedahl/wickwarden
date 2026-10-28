@@ -1,5 +1,11 @@
 # Current status
 
+**Clean full check at `afdaead`, 2026-10-28:** A clean git archive of exact
+`afdaead5a2b43da5b61a1cabb7df50618b07730b`, with isolated HOME/XDG and
+`TMPDIR=/var/tmp`, passed `make check`, including the newer Q7 tests. Log:
+`/var/tmp/wick-clean-afdaead-kxq8q92_/check.log`. This is the latest clean full
+check; all recorded human, art, coverage and performance limits remain open.
+
 **Q7 Hollow Captain recovery, 2026-10-28 (committed in `4b5f4ff`):** Real
 patrol, telegraph, bash and recovery run in a controlled arena. A real sling
 shot is blocked from the front during patrol and hits for one damage during
@@ -26,8 +32,8 @@ Chime interrupts and opens the head, and real hook deals damage (12→10). Durin
 a natural second song within three-second deafness, Chime makes contact but does
 not open or interrupt. Agent and lead passed `tool_matrix`; the agent reports
 1,962 checks and lint PASS. Only bass phase one is covered in a controlled arena
-with a placed, protected player, not human play or a real room. The latest clean
-full check remains `1a34e23`.
+with a placed, protected player, not human play or a real room. The later clean
+full check at `afdaead` is recorded above.
 
 **Q7 Sump Lurker natural weakness, 2026-10-28 (committed in `67f4340`):**
 With normal physics in a controlled `shallow_zone` arena, real Moth physically
@@ -40,8 +46,8 @@ remain open.
 
 **Clean full check at `1a34e23`, 2026-10-28:** A clean archive of exact
 `1a34e23` with isolated HOME/XDG and `TMPDIR=/var/tmp` passed `make check`.
-Log: `/var/tmp/wick-clean-1a34e23-uk_zij8_/check.log`. This is the latest clean
-full check, preceding the Sump test commit.
+Log: `/var/tmp/wick-clean-1a34e23-uk_zij8_/check.log`. This preceded the Sump
+test commit; the later clean full check at `afdaead` is recorded above.
 
 **Q7 Wick Automaton jet, 2026-10-28 (committed in `6d72c5c`):** In a controlled
 arena with the actual natural warning and active jet, a real Chime hit has no
@@ -2332,7 +2338,7 @@ Runtime presentation is not complete. Body and transient-tool fallbacks/placehol
 
 The shared index contains **77 foreign staged paths** (binary diff fingerprint `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`); this docs update preserves them and all other foreign work. The user's game audio remains enabled; headless gates use Dummy audio.
 
-The latest published checkpoint is `4b5f4ff32f54e6e3c47b0a159aad4646c44a6d67` on `origin/main`, including the Q7 Hollow Captain test above. The latest clean full check is at `1a34e23`. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
+The latest published checkpoint is `afdaead5a2b43da5b61a1cabb7df50618b07730b` on `origin/main`, with its subsequent clean full check recorded above. The continuous Wickwarden bot route through credits, title and Continue is recorded above; human and broad-seed coverage remain open, and the user response on the ending-choice conflict remains pending. Test-isolation limitations remain as recorded above. Preserve the staged paths and other dirty/untracked work. The guide and README link landed in `d83944f`, with route correction `bb0821b` independently reviewed PASS and owner-rule update `aaf7d65`; the guide does not itself prove Q3 completion. Q5 has recorded room-by-room still reviews, but action states and human visual approval remain open. Human balance and playthrough, Q6 soak/economy, complete Q7 phase/tool/survival coverage, Q8 performance/memory, and release/export acceptance remain open.
 
 ## All-ten tool-menu and HUD icon checkpoint
 
