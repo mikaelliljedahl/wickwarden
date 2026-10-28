@@ -341,8 +341,8 @@ passed a clean full check. Final playthrough documentation `fc14d7a` is on
 `origin/main`. Choir Warden poses `aa0f9a2` and their documentation `aa0361c`
 are on `origin/main`; their clean full check passed. Shell animation-gap
 documentation `3bcabd3`, Coinwyrm study `4fbed38` and shell-study documentation
-`c298322` are on `origin/main`. Q7 test `070bfe3` is locally committed; its
-clean full check passed. Verify the remote before push.
+`c298322`, Q7 test `070bfe3` and documentation `0d82e90` are on `origin/main`;
+its clean full check passed. Verify the remote before push.
 Those 77 staged paths retain fingerprint
 `cc7b8baf06d7e79c8d9ed63e5c68b4e971422c0795514e2e8381c9c1771cf4a3`.
 An old empty `index.lock` from 16:21 without an active holder was moved to
@@ -350,7 +350,18 @@ An old empty `index.lock` from 16:21 without an active holder was moved to
 Other tracked and untracked work may change concurrently; preserve it and
 review the actual index, dependencies and remote before integration or push.
 
-**Q7 B10 tool victory, locally committed in `070bfe3`:** Real tools and natural
+**Isolated active-effect studies, `0d82e90`:** In
+`/var/tmp/wick-active-audit-0d82/loot.log`, five forced drop types and the enemy
+death puff had visible textures in headless checks using synthetic damage and
+random rolls. This is not a general placeholder guarantee.
+
+A separate actual C10 phase-2 shell study at `/var/tmp/wick-shell-motion-study/`
+examined 32 isolated frames of bobbing/rocking: legs remained locked and the
+foot anchor shifted. Frame intervals varied, and playback could not be verified
+because of a quota error. Neither study changed the repository; the shell motion
+was not integrated.
+
+**Q7 B10 tool victory, committed in `070bfe3`:** Real tools and natural
 phases lead through three Reel contacts and hook attacks to the victory flag;
 the isolated matrix passed 2104 checks. The player is placed and invulnerable,
 ammunition is granted, and this is not human play. A clean full `make check`
