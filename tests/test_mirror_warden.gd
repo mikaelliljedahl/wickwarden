@@ -172,6 +172,7 @@ func _real_combo() -> void:
 		await _wait_state(enemy, enemy.State.TELEGRAPH)
 		var warning = enemy.get_node("SlashWarning")
 		check(warning.showing_warning(), "painted cue follows actual telegraph")
+		check(not warning.showing_active(), "no active slash during the tell")
 		check(warning.texture != null, "painted cue loads")
 		var image: Texture2D = warning.texture
 		warning.texture = null
@@ -190,6 +191,12 @@ func _real_combo() -> void:
 		var elapsed := await _wait_state(enemy, enemy.State.COMBO)
 		check_near(elapsed + 11, 30, 2, "combo warns .5s")
 		check(not warning.showing_warning(), "warning ends at the active combo")
+		check(warning.showing_active(), "painted slash begins with the real combo")
+		warning.texture = null
+		warning.queue_redraw()
+		await frames(1)
+		check(warning.showing_active(), "missing texture retains the active fallback")
+		warning.texture = image
 		await frames(4)
 		check_eq(
 			GameState.health,
@@ -256,7 +263,10 @@ func _live_reset() -> void:
 	make_player(arena, Vector2(1500, 480))
 	await _wait_state(enemy, enemy.State.COMBO)
 	check(enemy._slash.active, "reset scenario starts during actual live slash")
+	var warning = enemy.get_node("SlashWarning")
+	check(warning.showing_active(), "active visual follows live slash")
 	enemy.reset_fight()
+	check(not warning.showing_active(), "reset immediately clears the active visual")
 	check(not enemy._slash.active, "reset immediately disables live slash")
 	check_eq(enemy.decoys.size(), 2, "live reset keeps exactly two reflections")
 	await dispose(arena)

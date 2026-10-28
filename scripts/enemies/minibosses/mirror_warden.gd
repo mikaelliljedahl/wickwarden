@@ -46,10 +46,16 @@ class SlashWarning:
 		var enemy = get_parent()
 		return not enemy.is_dead and not enemy.is_dying() and enemy.state == State.TELEGRAPH
 
+	func showing_active() -> bool:
+		var enemy = get_parent()
+		return not enemy.is_dead and not enemy.is_dying() and enemy._slash_left > 0.0
+
 	func _draw() -> void:
+		var enemy = get_parent()
+		if showing_active():
+			_draw_active(enemy._aim)
 		if not showing_warning():
 			return
-		var enemy = get_parent()
 		var start: float = enemy._aim.angle() - deg_to_rad(50)
 		var finish: float = enemy._aim.angle() + deg_to_rad(50)
 		if texture == null:
@@ -67,6 +73,34 @@ class SlashWarning:
 				[Vector2(u, 0), Vector2(v, 0), Vector2(v, 1), Vector2(u, 1)]
 			)
 			draw_polygon(points, PackedColorArray([Color.WHITE]), uv, texture)
+
+	func _draw_active(aim: Vector2) -> void:
+		var start := aim.angle() - deg_to_rad(SLASH_ARC / 2.0)
+		var finish := aim.angle() + deg_to_rad(SLASH_ARC / 2.0)
+		if texture == null:
+			draw_arc(Vector2.ZERO, 114.0, start, finish, 32, Color(0.45, 0.61, 0.72, 0.45), 24.0, true)
+			draw_arc(Vector2.ZERO, 114.0, start, finish, 32, Color(0.75, 0.87, 0.95, 0.8), 8.0, true)
+		else:
+			# Stretch the glint's central band within the hit sector while sampling the
+			# entire texture, including its faint alpha. This is a painted effect, not a hitbox.
+			var uv_y := [0.0, 160.0 / 362.0, 200.0 / 362.0, 1.0]
+			var radii := [0.01, 84.0, 125.0, SLASH_REACH]
+			for i in range(32):
+				var u := float(i) / 32.0
+				var v := float(i + 1) / 32.0
+				var a := Vector2.from_angle(lerpf(start, finish, u))
+				var b := Vector2.from_angle(lerpf(start, finish, v))
+				for j in range(3):
+					var points := PackedVector2Array(
+						[a * radii[j], b * radii[j], b * radii[j + 1], a * radii[j + 1]]
+					)
+					var uv := PackedVector2Array(
+						[Vector2(u, uv_y[j]), Vector2(v, uv_y[j]),
+						Vector2(v, uv_y[j + 1]), Vector2(u, uv_y[j + 1])]
+					)
+					draw_polygon(points, PackedColorArray([Color.WHITE]), uv, texture)
+		# The rim continues to indicate the actual extent of the active attack.
+		draw_arc(Vector2.ZERO, SLASH_REACH, start, finish, 32, Color(0.9, 0.96, 1.0, 0.9), 2.0, true)
 
 
 class Reflection:
@@ -347,12 +381,5 @@ func _on_death() -> void:
 func _draw() -> void:
 	if is_dead or is_dying():
 		return
-	if _slash_left > 0.0:
-		var start := _aim.angle() - deg_to_rad(SLASH_ARC / 2.0)
-		var finish := _aim.angle() + deg_to_rad(SLASH_ARC / 2.0)
-		# A short blade glint and outer edge show the active cone without filling it.
-		draw_arc(Vector2.ZERO, 114.0, start, finish, 32, Color(0.45, 0.61, 0.72, 0.45), 24.0, true)
-		draw_arc(Vector2.ZERO, 114.0, start, finish, 32, Color(0.75, 0.87, 0.95, 0.8), 8.0, true)
-		draw_arc(Vector2.ZERO, SLASH_REACH, start, finish, 32, Color(0.9, 0.96, 1.0, 0.9), 2.0, true)
 	if _reveal_left > 0.0 or _flash_left > 0.0:
 		draw_arc(Vector2.ZERO, 45.0, 0, TAU, 32, Color(0.7, 0.9, 1), 5.0)
